@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/logs">
+
+    <include app:graph="@navigation/logs" />
+    <include app:graph="@navigation/crashes" />
+    <include app:graph="@navigation/settings" />
+
+    <fragment
+        android:id="@+id/setupFragment"
+        android:name="com.f0x1d.logfox.ui.fragment.SetupFragment"
+        android:label="SetupFragment" />
+</navigation>

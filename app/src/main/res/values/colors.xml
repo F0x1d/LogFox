@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="orange_200">#FFC55C</color>
+    <color name="orange_500">#FFB52E</color>
+    <color name="orange_700">#FFA500</color>
+
+    <color name="orange_100">#ffddab</color>
+    <color name="orange_1000">#281800</color>
+
+    <color name="light_secondary_container">#FFDDAA</color>
+    <color name="light_on_secondary_container">#291800</color>
+
+    <color name="dark_secondary_container">#624000</color>
+    <color name="dark_on_secondary_container">#FFDDAA</color>
+
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="amoled">#ff020202</color>
+
+    <color name="noteStrokeColor">#ffdadce0</color>
+    <color name="noteStrokeColorDark">#3a3c3e</color>
+</resources>

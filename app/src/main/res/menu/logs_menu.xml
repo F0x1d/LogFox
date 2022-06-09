@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/pause_item"
+        android:icon="@drawable/ic_pause"
+        android:title="@string/pause"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/search_item"
+        android:icon="@drawable/ic_search"
+        android:title="@string/search"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/filter_log_levels_item"
+        android:icon="@drawable/ic_filter"
+        android:title="@string/filter"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/clear_item"
+        android:icon="@drawable/ic_clear_all"
+        android:title="@string/clear"
+        app:showAsAction="ifRoom" />
+
+</menu>

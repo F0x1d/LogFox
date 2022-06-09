@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory android:title="@string/service" app:iconSpaceReserved="false">
+        <SwitchPreferenceCompat
+            android:title="@string/start_on_boot"
+            android:key="pref_start_on_boot"
+            android:defaultValue="true"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/about_app" app:iconSpaceReserved="false">
+        <Preference
+            android:title="@string/developer"
+            app:iconSpaceReserved="false">
+
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="https://t.me/f0x1d" />
+        </Preference>
+        <Preference
+            android:title="@string/source_code"
+            app:iconSpaceReserved="false">
+
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="https://github.com/F0x1d/LogFox" />
+        </Preference>
+    </PreferenceCategory>
+</PreferenceScreen>

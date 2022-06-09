@@ -1,0 +1,30 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.LogFox" parent="Theme.Material3.Light.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/orange_500</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimaryContainer">@color/orange_100</item>
+        <item name="colorOnPrimaryContainer">@color/black</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/orange_200</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="colorSecondaryContainer">@color/light_secondary_container</item>
+        <item name="colorOnSecondaryContainer">@color/light_on_secondary_container</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" >@android:color/transparent</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
+        <!-- Customize your theme here. -->
+        <item name="enableEdgeToEdge">true</item>
+        <item name="switchStyle">@style/LogFox.Switches</item>
+    </style>
+
+    <style name="LogFox.Switches" parent="Widget.Material3.CompoundButton.Switch">
+        <item name="android:switchMinWidth">52dp</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="track">@drawable/switch_track</item>
+        <item name="android:thumb">@drawable/switch_thumb</item>
+    </style>
+</resources>

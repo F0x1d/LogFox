@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/logs"
+    app:startDestination="@id/logsFragment">
+
+    <fragment
+        android:id="@+id/logsFragment"
+        android:name="com.f0x1d.logfox.ui.fragment.LogsFragment"
+        android:label="LogsFragment" />
+</navigation>
