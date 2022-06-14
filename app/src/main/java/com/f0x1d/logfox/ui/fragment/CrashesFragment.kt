@@ -1,35 +1,31 @@
 package com.f0x1d.logfox.ui.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.asLiveData
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.adapter.CrashesAdapter
 import com.f0x1d.logfox.databinding.FragmentCrashesBinding
-import com.f0x1d.logfox.extensions.copyText
-import com.f0x1d.logfox.logging.Logging
-import com.f0x1d.logfox.ui.fragment.base.BaseFragment
+import com.f0x1d.logfox.ui.activity.CrashDetailsActivity
+import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
 import com.f0x1d.logfox.utils.RecyclerViewDivider
 import com.f0x1d.logfox.utils.toPx
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.f0x1d.logfox.viewmodel.CrashesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class CrashesFragment: BaseFragment<FragmentCrashesBinding>() {
+class CrashesFragment: BaseViewModelFragment<CrashesViewModel, FragmentCrashesBinding>() {
+
+    override val viewModel by viewModels<CrashesViewModel>()
 
     private val adapter = CrashesAdapter {
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle(it.packageName)
-            .setMessage(it.log)
-            .setPositiveButton(android.R.string.ok, null)
-            .setNeutralButton(android.R.string.copy) { dialog, which ->
-                requireContext().copyText(it.log)
-                dialog.cancel()
-            }
-            .show()
+        requireContext().startActivity(Intent(requireContext(), CrashDetailsActivity::class.java).apply {
+            putExtra("crash_id", it.id)
+        })
     }
 
     override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) = FragmentCrashesBinding.inflate(inflater, container, false)
@@ -39,7 +35,7 @@ class CrashesFragment: BaseFragment<FragmentCrashesBinding>() {
 
         binding.toolbar.inflateMenu(R.menu.crashes_menu)
         binding.toolbar.menu.findItem(R.id.clear_item).setOnMenuItemClickListener {
-            Logging.clearCrashes()
+            viewModel.clearCrashes()
             return@setOnMenuItemClickListener true
         }
 
@@ -47,6 +43,6 @@ class CrashesFragment: BaseFragment<FragmentCrashesBinding>() {
         binding.crashesRecycler.addItemDecoration(RecyclerViewDivider(requireContext(), 80.toPx.toInt()))
         binding.crashesRecycler.adapter = adapter
 
-        Logging.crashesFlow.asLiveData().observe(viewLifecycleOwner) { adapter.elements = it }
+        viewModel.data.observe(viewLifecycleOwner) { adapter.elements = it ?: return@observe }
     }
 }

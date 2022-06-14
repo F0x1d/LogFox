@@ -47,6 +47,7 @@ class MainActivity: BaseViewModelActivity<MainViewModel, ActivityMainBinding>(),
     override fun onDestinationChanged(controller: NavController, destination: NavDestination, arguments: Bundle?) {
         val barShown = when (destination.id) {
             R.id.setupFragment -> false
+            R.id.logsExtendedCopyFragment -> false
             else -> true
         }
 

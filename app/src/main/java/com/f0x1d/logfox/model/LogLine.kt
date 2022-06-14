@@ -1,7 +1,7 @@
-package com.f0x1d.logfox.logging.model
+package com.f0x1d.logfox.model
 
 import androidx.annotation.Keep
-import com.f0x1d.logfox.extensions.formatForLogs
+import com.f0x1d.logfox.extensions.logsFormatted
 
 data class LogLine(val id: Long,
                    val dateAndTime: Long,
@@ -11,7 +11,7 @@ data class LogLine(val id: Long,
                    val tag: String,
                    val content: String) {
     val original
-        get() = "${dateAndTime.formatForLogs()} ${level.letter} $tag: $content"
+        get() = "${dateAndTime.logsFormatted} ${level.letter} $tag: $content"
 }
 
 @Keep

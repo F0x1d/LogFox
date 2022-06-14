@@ -1,9 +1,9 @@
-package com.f0x1d.logfox.logging.readers.detectors
+package com.f0x1d.logfox.repository.readers.crashes
 
 import com.f0x1d.logfox.database.AppCrash
 import com.f0x1d.logfox.database.CrashType
-import com.f0x1d.logfox.logging.model.LogLine
-import com.f0x1d.logfox.logging.readers.detectors.base.BaseCrashDetector
+import com.f0x1d.logfox.model.LogLine
+import com.f0x1d.logfox.repository.readers.crashes.base.BaseCrashDetector
 
 class JNICrashDetector(collected: suspend (AppCrash) -> Unit): BaseCrashDetector(collected) {
 
@@ -20,7 +20,7 @@ class JNICrashDetector(collected: suspend (AppCrash) -> Unit): BaseCrashDetector
         if (line.debugTag && line.content == "backtrace:")
             wasBacktrace = true
 
-        return if (line.pid == collectedFirstLine?.pid && line.tid == collectedFirstLine?.tid)
+        return if (super.stillCollecting(line))
             true
         else !wasBacktrace
     }
@@ -28,7 +28,7 @@ class JNICrashDetector(collected: suspend (AppCrash) -> Unit): BaseCrashDetector
     override fun packageFromCollected(lines: List<LogLine>) = lines[5].content.substring(
         lines[5].content.indexOf(">>> "),
         lines[5].content.indexOf(" <<<")
-    ).drop(4).also { wasBacktrace = false }
+    ).drop(4)
 
     private val LogLine.debugTag
         get() = tag.startsWith("DEBUG")

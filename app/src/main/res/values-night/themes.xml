@@ -20,5 +20,6 @@
         <item name="android:colorBackground">@color/amoled</item>
         <item name="enableEdgeToEdge">true</item>
         <item name="switchStyle">@style/LogFox.Switches</item>
+        <item name="noteStrokeColor">@color/noteStrokeColorDark</item>
     </style>
 </resources>

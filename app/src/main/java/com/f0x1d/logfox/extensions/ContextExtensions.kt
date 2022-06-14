@@ -1,6 +1,7 @@
 package com.f0x1d.logfox.extensions
 
 import android.Manifest
+import android.app.Activity
 import android.app.ActivityManager
 import android.app.PendingIntent
 import android.app.Service
@@ -12,14 +13,14 @@ import android.widget.Toast
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import com.f0x1d.logfox.R
-import com.f0x1d.logfox.logging.Logging
+import com.f0x1d.logfox.repository.LoggingRepository
 import com.f0x1d.logfox.service.LoggingService
 import kotlin.system.exitProcess
 
 fun Context.copyText(text: String) = (getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager)
     .setPrimaryClip(ClipData.newPlainText("FoxCat", text))
     .apply {
-        Toast.makeText(this@copyText, R.string.text_copied, Toast.LENGTH_SHORT).show()
+        toast(R.string.text_copied)
     }
 
 fun Context.hasPermissionToReadLogs() = ContextCompat.checkSelfPermission(
@@ -56,8 +57,20 @@ fun <T : Service> Context.makeServicePendingIntent(id: Int, clazz: Class<T>, ext
     clazz
 ) { putExtras(extras) }
 
-fun Context.startLoggingAndService() {
-    Logging.startLoggingIfNot()
+fun <T : Activity> Context.makeActivityPendingIntent(id: Int, clazz: Class<T>, setup: Intent.() -> Unit) = PendingIntent.getActivity(
+    this,
+    id,
+    Intent(this, clazz).also { setup.invoke(it) },
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT else PendingIntent.FLAG_UPDATE_CURRENT
+)
+
+fun <T : Activity> Context.makeActivityPendingIntent(id: Int, clazz: Class<T>, extras: Bundle = Bundle.EMPTY) = makeActivityPendingIntent(
+    id,
+    clazz
+) { putExtras(extras) }
+
+fun Context.startLoggingAndService(loggingRepository: LoggingRepository) {
+    loggingRepository.startLoggingIfNot()
 
     Intent(this, LoggingService::class.java).also {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
@@ -67,9 +80,9 @@ fun Context.startLoggingAndService() {
     }
 }
 
-fun Context.startLoggingAndServiceIfCan() {
+fun Context.startLoggingAndServiceIfCan(loggingRepository: LoggingRepository) {
     if (hasPermissionToReadLogs()) {
-        startLoggingAndService()
+        startLoggingAndService(loggingRepository)
     }
 }
 
@@ -80,3 +93,5 @@ fun Context.hardRestartApp() {
     startActivity(intent)
     exitProcess(0)
 }
+
+fun Context.toast(text: Int) = Toast.makeText(this, text, Toast.LENGTH_SHORT).show()

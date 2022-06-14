@@ -2,11 +2,11 @@ package com.f0x1d.logfox.viewmodel
 
 import android.Manifest
 import android.app.Application
-import android.widget.Toast
 import com.f0x1d.logfox.BuildConfig
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.extensions.hasPermissionToReadLogs
 import com.f0x1d.logfox.extensions.sendEvent
+import com.f0x1d.logfox.extensions.toast
 import com.f0x1d.logfox.viewmodel.base.BaseViewModel
 import com.topjohnwu.superuser.Shell
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -31,7 +31,7 @@ class SetupViewModel @Inject constructor(application: Application): BaseViewMode
                 return@getShell
             }
 
-            Toast.makeText(ctx, R.string.no_root, Toast.LENGTH_SHORT).show()
+            ctx.toast(R.string.no_root)
         }
     }
 

@@ -20,4 +20,11 @@
     <string name="developer">Разработчик</string>
     <string name="service">Сервис</string>
     <string name="source_code">Исходный код</string>
+    <string name="unknown">Неизвестно</string>
+    <string name="share">Поделиться</string>
+    <string name="zip">Сжать</string>
+    <string name="selected">Выбранное</string>
+    <string name="clear_selected">Очистить выбранное</string>
+    <string name="nothing_is_selected">Ничего не выбрано</string>
+    <string name="extended_copy">Расширенное копирование</string>
 </resources>

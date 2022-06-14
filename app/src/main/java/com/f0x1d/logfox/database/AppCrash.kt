@@ -1,6 +1,7 @@
 package com.f0x1d.logfox.database
 
 import androidx.room.*
+import kotlinx.coroutines.flow.Flow
 
 @Entity
 data class AppCrash(@ColumnInfo(name = "app_name") val appName: String?,
@@ -16,8 +17,11 @@ interface AppCrashDao {
     @Query("SELECT * FROM AppCrash ORDER BY date_and_time DESC")
     fun getAll(): List<AppCrash>
 
+    @Query("SELECT * FROM AppCrash WHERE id = :id")
+    fun get(id: Long): Flow<AppCrash?>
+
     @Insert
-    fun insert(appCrash: AppCrash)
+    fun insert(appCrash: AppCrash): Long
 
     @Query("DELETE FROM AppCrash")
     fun deleteAll()

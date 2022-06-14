@@ -1,4 +1,4 @@
-package com.f0x1d.logfox.viewholder.base
+package com.f0x1d.logfox.ui.viewholder.base
 
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding

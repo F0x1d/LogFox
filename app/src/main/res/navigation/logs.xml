@@ -7,5 +7,13 @@
     <fragment
         android:id="@+id/logsFragment"
         android:name="com.f0x1d.logfox.ui.fragment.LogsFragment"
-        android:label="LogsFragment" />
+        android:label="LogsFragment" >
+        <action
+            android:id="@+id/action_logsFragment_to_logsExtendedCopyFragment"
+            app:destination="@id/logsExtendedCopyFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/logsExtendedCopyFragment"
+        android:name="com.f0x1d.logfox.ui.fragment.ExtendedCopyFragment"
+        android:label="ExtendedCopyFragment" />
 </navigation>

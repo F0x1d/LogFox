@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
-import com.f0x1d.logfox.viewholder.base.BaseViewHolder
+import com.f0x1d.logfox.ui.viewholder.base.BaseViewHolder
 
 abstract class BaseAdapter<T, D : ViewBinding>: RecyclerView.Adapter<BaseViewHolder<T, D>>() {
 

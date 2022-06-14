@@ -1,19 +1,9 @@
-package com.f0x1d.logfox.logging
+package com.f0x1d.logfox.repository
 
 import com.f0x1d.logfox.LogFoxApp
-import com.f0x1d.logfox.database.AppCrash
-import com.f0x1d.logfox.database.AppDatabase
 import com.f0x1d.logfox.extensions.LogLine
-import com.f0x1d.logfox.extensions.sendErrorNotification
-import com.f0x1d.logfox.logging.model.LogLine
-import com.f0x1d.logfox.logging.readers.base.BaseReader
-import com.f0x1d.logfox.logging.readers.detectors.ANRDetector
-import com.f0x1d.logfox.logging.readers.detectors.JNICrashDetector
-import com.f0x1d.logfox.logging.readers.detectors.JavaCrashDetector
-import dagger.hilt.EntryPoint
-import dagger.hilt.InstallIn
-import dagger.hilt.android.EntryPointAccessors
-import dagger.hilt.components.SingletonComponent
+import com.f0x1d.logfox.model.LogLine
+import com.f0x1d.logfox.repository.base.BaseRepository
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -21,42 +11,31 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import java.io.BufferedReader
 import java.io.InputStreamReader
+import javax.inject.Inject
+import javax.inject.Singleton
 
-object Logging {
+@Singleton
+class LoggingRepository @Inject constructor(crashesRepository: CrashesRepository): BaseRepository() {
 
-    const val LOGS_LIMIT = 10000
-    const val LOGS_INTERVAL = 200L
+    companion object {
+        const val LOGS_LIMIT = 10000
+        const val LOGS_INTERVAL = 150L
+    }
 
     val logsFlow = MutableStateFlow(emptyList<LogLine>())
-    val crashesFlow = MutableStateFlow(emptyList<AppCrash>())
 
     private var loggingJob: Job? = null
-    private lateinit var database: AppDatabase
-    private var inited = false
     private var idsCounter = -1L
 
-    private val crashCollected: suspend (AppCrash) -> Unit = { appCrash ->
-        crashesFlow.update {
-            database.appCrashDao().insert(appCrash)
-
-            it.toMutableList().apply {
-                add(0, appCrash)
-            }
-        }
-
-        LogFoxApp.instance.sendErrorNotification(appCrash)
-    }
-    private val additionalReaders = listOf<BaseReader>(
-        JavaCrashDetector(crashCollected),
-        JNICrashDetector(crashCollected),
-        ANRDetector(crashCollected)
-    )
+    private val helpers = listOf(crashesRepository)
 
     fun startLoggingIfNot() {
         if (loggingJob?.isActive == true) return
 
         loggingJob = LogFoxApp.applicationScope.launch(Dispatchers.Default) {
-            if (!inited) init()
+            helpers.forEach {
+                it.setup()
+            }
 
             while (isActive) {
                 readLogs()
@@ -68,29 +47,12 @@ object Logging {
         loggingJob?.cancel()
 
         clearLogs()
+
+        helpers.forEach { it.stop() }
     }
 
     fun clearLogs() {
         logsFlow.update { emptyList() }
-    }
-
-    fun clearCrashes() {
-        LogFoxApp.applicationScope.launch(Dispatchers.Default) {
-            crashesFlow.update {
-                database.appCrashDao().deleteAll()
-                emptyList()
-            }
-        }
-    }
-
-    private fun init() {
-        database = EntryPointAccessors.fromApplication(LogFoxApp.instance, LoggingEntryPoint::class.java).appDatabase()
-
-        crashesFlow.update {
-            database.appCrashDao().getAll()
-        }
-
-        inited = true
     }
 
     private suspend fun readLogs() = coroutineScope {
@@ -132,18 +94,15 @@ object Logging {
             mutex.withLock {
                 updateLines.add(logLine)
             }
-            additionalReaders.forEach {
-                it.readLine(logLine)
+
+            helpers.forEach { helper ->
+                helper.readers.forEach {
+                    it.readLine(logLine)
+                }
             }
         }
 
         reader.close()
         updater.cancel()
-    }
-
-    @EntryPoint
-    @InstallIn(SingletonComponent::class)
-    interface LoggingEntryPoint {
-        fun appDatabase(): AppDatabase
     }
 }

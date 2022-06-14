@@ -4,17 +4,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.adapter.LogsAdapter
 import com.f0x1d.logfox.databinding.FragmentLogsBinding
 import com.f0x1d.logfox.extensions.copyText
-import com.f0x1d.logfox.logging.Logging
-import com.f0x1d.logfox.logging.model.LogLevel
+import com.f0x1d.logfox.extensions.toast
+import com.f0x1d.logfox.model.LogLevel
 import com.f0x1d.logfox.ui.dialog.SearchBottomSheet
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
+import com.f0x1d.logfox.utils.fillWithStrings
 import com.f0x1d.logfox.viewmodel.LogsViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,9 +27,7 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
 
     override val viewModel by viewModels<LogsViewModel>()
 
-    private val adapter = LogsAdapter {
-        requireContext().copyText(it.original)
-    }
+    private val adapter = LogsAdapter()
     private var changingState = false
 
     override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) = FragmentLogsBinding.inflate(inflater, container, false)
@@ -48,10 +49,18 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
                 showFilterDialog()
                 return@setOnMenuItemClickListener true
             }
+            findItem(R.id.selected).setOnMenuItemClickListener {
+                showSelectedDialog()
+                return@setOnMenuItemClickListener true
+            }
+            findItem(R.id.clear_selected).setOnMenuItemClickListener {
+                adapter.clearSelected()
+                return@setOnMenuItemClickListener true
+            }
             findItem(R.id.clear_item).setOnMenuItemClickListener {
-                Logging.clearLogs()
-                if (viewModel.paused())
-                    viewModel.resume()
+                viewModel.clearLogs()
+                adapter.elements = emptyList()
+                adapter.clearSelected()
                 return@setOnMenuItemClickListener true
             }
         }
@@ -73,8 +82,8 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
 
         binding.scrollFab.setOnClickListener { viewModel.resume() }
 
-        viewModel.distinctiveLogsData.observe(viewLifecycleOwner) {
-            if (!viewModel.paused()) {
+        viewModel.distinctiveData.observe(viewLifecycleOwner) {
+            if (it != null) {
                 adapter.elements = it
                 scrollLogToBottom()
             }
@@ -94,10 +103,7 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
     }
 
     override fun search(query: String?) {
-        if (viewModel.paused())
-            viewModel.resume()
-
-        viewModel.query = query
+        viewModel.query(query)
     }
 
     private fun scrollLogToBottom() {
@@ -111,7 +117,26 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
             .setMultiChoiceItems(LogLevel.values().map { it.name }.toTypedArray(), viewModel.currentEnabledLogLevels.checkedItems) { dialog, which, checked ->
                 viewModel.filterLevel(which, checked)
             }
-            .setPositiveButton(android.R.string.ok, null)
+            .setNeutralButton(android.R.string.cancel, null)
+            .show()
+    }
+
+    private fun showSelectedDialog() {
+        if (adapter.selectedItems.isEmpty()) {
+            requireContext().toast(R.string.nothing_is_selected)
+            return
+        }
+
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(R.string.selected)
+            .setItems(intArrayOf(android.R.string.copy, R.string.extended_copy).fillWithStrings(requireContext())) { dialog, which ->
+                val textToCopy = adapter.selectedItems.joinToString("\n") { it.original }
+                when (which) {
+                    0 -> requireContext().copyText(textToCopy)
+                    1 -> findNavController().navigate(R.id.action_logsFragment_to_logsExtendedCopyFragment, bundleOf("content" to textToCopy))
+                }
+            }
+            .setNeutralButton(android.R.string.cancel, null)
             .show()
     }
 }

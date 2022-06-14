@@ -1,8 +1,15 @@
 package com.f0x1d.logfox.extensions
 
-import com.f0x1d.logfox.logging.model.LogLevel
-import com.f0x1d.logfox.logging.model.LogLine
+import com.f0x1d.logfox.model.LogLevel
+import com.f0x1d.logfox.model.LogLine
 import com.f0x1d.logfox.utils.preferences.EnabledLogLevels
+
+fun List<LogLine>.filterAndSearch(query: String?, currentEnabledLogLevels: EnabledLogLevels) = filterEnabledLines(currentEnabledLogLevels).let {
+    if (query == null)
+        it
+    else
+        it.filter { it.tag.contains(query) || it.content.contains(query) }
+}
 
 fun List<LogLine>.filterEnabledLines(currentEnabledLogLevels: EnabledLogLevels) = filter {
     when {
@@ -17,7 +24,7 @@ fun List<LogLine>.filterEnabledLines(currentEnabledLogLevels: EnabledLogLevels) 
     }
 }
 
-private val logRegex = "(.{23}) (.{5}) (.{5}) (.) (.+): (.+)".toRegex()
+private val logRegex = "(.{23}) (.{5}) (.{5}) (.) (.+?): (.+)".toRegex()
 
 fun LogLine(id: Long, line: String): LogLine? {
     val result = logRegex.find(line) ?: return null

@@ -23,4 +23,11 @@
     <string name="developer">Developer</string>
     <string name="service">Service</string>
     <string name="source_code">Source code</string>
+    <string name="unknown">Unknown</string>
+    <string name="share">Share</string>
+    <string name="zip">Zip</string>
+    <string name="selected">Selected</string>
+    <string name="clear_selected">Clear selected</string>
+    <string name="nothing_is_selected">Nothing is selected</string>
+    <string name="extended_copy">Extended copy</string>
 </resources>

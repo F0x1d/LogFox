@@ -2,58 +2,40 @@ package com.f0x1d.logfox.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.distinctUntilChanged
-import androidx.lifecycle.viewModelScope
-import com.f0x1d.logfox.extensions.filterEnabledLines
-import com.f0x1d.logfox.logging.Logging
-import com.f0x1d.logfox.logging.model.LogLine
+import com.f0x1d.logfox.extensions.filterAndSearch
+import com.f0x1d.logfox.model.LogLine
+import com.f0x1d.logfox.repository.LoggingRepository
+import com.f0x1d.logfox.utils.preferences.EnabledLogLevels
 import com.f0x1d.logfox.utils.preferences.LogFilterPreferences
-import com.f0x1d.logfox.viewmodel.base.BaseViewModel
+import com.f0x1d.logfox.viewmodel.base.BaseFlowProxyViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class LogsViewModel @Inject constructor(application: Application, private val logFilterPreferences: LogFilterPreferences): BaseViewModel(application) {
+class LogsViewModel(application: Application,
+                    private val logFilterPreferences: LogFilterPreferences,
+                    private val loggingRepository: LoggingRepository,
+                    var query: String?,
+                    val currentEnabledLogLevels: EnabledLogLevels): BaseFlowProxyViewModel<List<LogLine>, List<LogLine>>(
+    application,
+    loggingRepository.logsFlow
+) {
+
+    @Inject constructor(application: Application, logFilterPreferences: LogFilterPreferences, loggingRepository: LoggingRepository):
+            this(application, logFilterPreferences, loggingRepository, null, logFilterPreferences.currentEnabledLogLevels)
 
     val pausedData = MutableLiveData(false)
-    val logsData = MutableLiveData<List<LogLine>>()
-    val distinctiveLogsData = logsData.distinctUntilChanged()
 
-    var query: String? = null
-        set(value) {
-            field = value
-            startCollector()
-        }
+    override fun map(data: List<LogLine>?) = data?.filterAndSearch(query, currentEnabledLogLevels)
 
-    private var currentJob: Job? = null
-    val currentEnabledLogLevels = logFilterPreferences.currentEnabledLogLevels
-
-    init {
-        startCollector()
-    }
-
-    private fun startCollector() {
-        currentJob?.cancel()
-
-        currentJob = viewModelScope.launch(Dispatchers.Default) {
-            Logging.logsFlow.map {
-                it.filterEnabledLines(currentEnabledLogLevels).let {
-                    if (query == null)
-                        it
-                    else
-                        it.filter { it.tag.contains(query ?: "") || it.content.contains(query ?: "") }
-                }
-            }.collect {
-                logsData.postValue(it)
-            }
-        }
+    fun query(query: String?) {
+        stopCollector()
+        this.query = query
+        recollect()
     }
 
     fun filterLevel(which: Int, filtering: Boolean) {
+        stopCollector()
         when (which) {
             0 -> logFilterPreferences.verboseEnabled = filtering.also { currentEnabledLogLevels.verboseEnabled = it }
             1 -> logFilterPreferences.debugEnabled = filtering.also { currentEnabledLogLevels.debugEnabled = it }
@@ -63,17 +45,32 @@ class LogsViewModel @Inject constructor(application: Application, private val lo
             5 -> logFilterPreferences.fatalEnabled = filtering.also { currentEnabledLogLevels.fatalEnabled = it }
             6 -> logFilterPreferences.silentEnabled = filtering.also { currentEnabledLogLevels.silentEnabled = it }
         }
-        startCollector()
+        recollect()
+    }
+
+    fun clearLogs() {
+        loggingRepository.clearLogs()
+    }
+
+    private fun recollect() {
+        if (paused())
+            collectOneValue()
+        else
+            restartCollector()
     }
 
     fun paused() = pausedData.value == true
-    fun switchState() {
-        pausedData.value = !pausedData.value!!
-    }
+    fun switchState() = if (!pausedData.value!!)
+        pause()
+    else
+        resume()
+
     fun pause() {
+        stopCollector()
         pausedData.value = true
     }
     fun resume() {
+        restartCollector()
         pausedData.value = false
     }
 }

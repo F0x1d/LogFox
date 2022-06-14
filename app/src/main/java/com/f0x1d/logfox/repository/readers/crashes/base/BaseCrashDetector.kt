@@ -1,22 +1,28 @@
-package com.f0x1d.logfox.logging.readers.detectors.base
+package com.f0x1d.logfox.repository.readers.crashes.base
 
 import com.f0x1d.logfox.LogFoxApp
 import com.f0x1d.logfox.database.AppCrash
 import com.f0x1d.logfox.database.CrashType
-import com.f0x1d.logfox.logging.model.LogLine
-import com.f0x1d.logfox.logging.readers.base.BaseReader
+import com.f0x1d.logfox.model.LogLine
+import com.f0x1d.logfox.repository.readers.base.BaseReader
 
 abstract class BaseCrashDetector(private val collected: suspend (AppCrash) -> Unit): BaseReader {
 
     protected abstract val crashType: CrashType
-    protected open val linesModifier: MutableList<LogLine>.() -> Unit = {  }
+    protected open val commonTag: String? = null
+    protected open val linesModifier: MutableList<LogLine>.() -> Unit = {
+        commonTag?.apply {
+            removeAll { it.tag != this }
+        }
+    }
 
     private var collecting = false
     protected var collectedFirstLine: LogLine? = null
     private val collectedLines = mutableListOf<LogLine>()
+    private val defaultChecker = DefaultChecker()
 
     abstract fun foundFirstLine(line: LogLine): Boolean
-    abstract fun stillCollecting(line: LogLine): Boolean
+    open fun stillCollecting(line: LogLine) = defaultChecker.collecting(collectedFirstLine, line)
     abstract fun packageFromCollected(lines: List<LogLine>): String
 
     override suspend fun readLine(line: LogLine) {

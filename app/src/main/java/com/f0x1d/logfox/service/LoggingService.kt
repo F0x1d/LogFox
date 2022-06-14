@@ -8,13 +8,19 @@ import com.f0x1d.logfox.LogFoxApp
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.extensions.activityManager
 import com.f0x1d.logfox.extensions.makeServicePendingIntent
-import com.f0x1d.logfox.logging.Logging
+import com.f0x1d.logfox.repository.LoggingRepository
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class LoggingService: Service() {
 
     companion object {
         const val ACTION_KILL_SERVICE = "${BuildConfig.APPLICATION_ID}.KILL_SERVICE"
     }
+
+    @Inject
+    lateinit var loggingRepository: LoggingRepository
 
     override fun onCreate() {
         super.onCreate()
@@ -40,7 +46,7 @@ class LoggingService: Service() {
         activityManager.appTasks.forEach {
             it.finishAndRemoveTask()
         }
-        Logging.stopLogging()
+        loggingRepository.stopLogging()
 
         stopForeground(true)
         stopSelf()
