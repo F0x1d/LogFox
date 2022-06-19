@@ -1,3 +1,13 @@
 package com.f0x1d.logfox.repository.base
 
-abstract class BaseRepository
+import com.f0x1d.logfox.LogFoxApp
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+
+abstract class BaseRepository {
+    protected fun onAppScope(block: suspend CoroutineScope.() -> Unit) = LogFoxApp.applicationScope.launch(
+        Dispatchers.Default) {
+        block.invoke(this)
+    }
+}

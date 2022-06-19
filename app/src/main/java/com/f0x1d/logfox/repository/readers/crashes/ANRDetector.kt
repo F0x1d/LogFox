@@ -12,8 +12,8 @@ class ANRDetector(collected: suspend (AppCrash) -> Unit): BaseCrashDetector(coll
 
     override fun foundFirstLine(line: LogLine) = line.tag == commonTag && line.content.startsWith("ANR in ")
 
-    override fun packageFromCollected(lines: List<LogLine>) = lines[0].content.substring(
+    override fun packageFromCollected(lines: List<LogLine>) = lines.first().content.substring(
         7,
-        lines[0].content.indexOf(" (")
+        lines.first().content.indexOf(" (")
     )
 }

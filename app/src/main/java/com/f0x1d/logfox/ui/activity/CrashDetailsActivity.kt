@@ -1,15 +1,12 @@
 package com.f0x1d.logfox.ui.activity
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.database.AppCrash
 import com.f0x1d.logfox.databinding.ActivityCrashDetailsBinding
-import com.f0x1d.logfox.extensions.copyText
-import com.f0x1d.logfox.extensions.exportFormatted
-import com.f0x1d.logfox.extensions.loadIcon
+import com.f0x1d.logfox.extensions.*
 import com.f0x1d.logfox.ui.activity.base.BaseViewModelActivity
 import com.f0x1d.logfox.utils.viewModelFactory
 import com.f0x1d.logfox.viewmodel.CrashDetailsViewModel
@@ -31,7 +28,7 @@ class CrashDetailsActivity: BaseViewModelActivity<CrashDetailsViewModel, Activit
 
     private val zipCrashLauncher = registerForActivityResult(ActivityResultContracts.CreateDocument()) {
         it?.apply {
-            viewModel.zip(this)
+            viewModel.logToZip(this) { log }
         }
     }
 
@@ -52,7 +49,6 @@ class CrashDetailsActivity: BaseViewModelActivity<CrashDetailsViewModel, Activit
     private fun setupFor(appCrash: AppCrash) {
         val appName = appCrash.appName ?: getString(R.string.unknown)
 
-        binding.toolbar.title = appName
         binding.appLogo.loadIcon(appCrash.packageName)
         binding.appName.text = appName
         binding.appPackage.text = appCrash.packageName
@@ -60,12 +56,18 @@ class CrashDetailsActivity: BaseViewModelActivity<CrashDetailsViewModel, Activit
         binding.copyLayout.setOnClickListener {
             copyText(appCrash.log)
         }
-        binding.shareLayout.setOnClickListener {
-            val intent = Intent(Intent.ACTION_SEND)
-            intent.putExtra(Intent.EXTRA_TEXT, appCrash.log)
-            intent.type = "text/plain"
+        isOmnibinInstalled().also {
+            binding.shareImage.setImageResource(if (it) R.drawable.ic_add_link else R.drawable.ic_share)
+            binding.shareText.setText(if (it) R.string.omnibin else R.string.share)
 
-            startActivity(Intent.createChooser(intent, getString(R.string.share)))
+            binding.shareLayout.setOnClickListener { view ->
+                appCrash.log.apply {
+                    if (it)
+                        uploadToFoxBin(this)
+                    else
+                        shareIntent(this)
+                }
+            }
         }
         binding.zipLayout.setOnClickListener {
             zipCrashLauncher.launch("crash-${appCrash.packageName.replace(".", "-")}-${appCrash.dateAndTime.exportFormatted}.zip")

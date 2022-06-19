@@ -30,4 +30,10 @@
     <string name="clear_selected">Clear selected</string>
     <string name="nothing_is_selected">Nothing is selected</string>
     <string name="extended_copy">Extended copy</string>
+    <string name="record">Record</string>
+    <string name="stop">Stop</string>
+    <string name="recordings">Recordings</string>
+    <string name="delete">Delete</string>
+    <string name="resume">Resume</string>
+    <string name="omnibin" translatable="false">omnibin</string>
 </resources>

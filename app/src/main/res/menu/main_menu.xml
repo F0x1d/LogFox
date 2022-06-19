@@ -12,6 +12,11 @@
         android:icon="@drawable/ic_android" />
 
     <item
+        android:id="@+id/recordings"
+        android:title="@string/recordings"
+        android:icon="@drawable/ic_recording" />
+
+    <item
         android:id="@+id/settings"
         android:title="@string/settings"
         android:icon="@drawable/ic_settings" />

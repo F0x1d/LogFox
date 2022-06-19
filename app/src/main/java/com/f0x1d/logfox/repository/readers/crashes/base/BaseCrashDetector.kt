@@ -61,11 +61,11 @@ abstract class BaseCrashDetector(private val collected: suspend (AppCrash) -> Un
                 packageManager.getApplicationLabel(appInfo).toString(),
                 crashedAppPackageName,
                 crashType,
-                lines[0].dateAndTime,
+                lines.first().dateAndTime,
                 lines.joinToString("\n") { it.content }
             )
         } catch (e: Exception) {
-            AppCrash(null, crashedAppPackageName, crashType, lines[0].dateAndTime, lines.joinToString("\n") { it.content })
+            AppCrash(null, crashedAppPackageName, crashType, lines.first().dateAndTime, lines.joinToString("\n") { it.content })
         }
     }
 }

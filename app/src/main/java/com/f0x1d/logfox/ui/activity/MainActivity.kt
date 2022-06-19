@@ -48,6 +48,7 @@ class MainActivity: BaseViewModelActivity<MainViewModel, ActivityMainBinding>(),
         val barShown = when (destination.id) {
             R.id.setupFragment -> false
             R.id.logsExtendedCopyFragment -> false
+            R.id.recordingExtendedCopyFragment -> false
             else -> true
         }
 

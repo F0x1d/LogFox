@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/recordings"
+    app:startDestination="@id/recordingsFragment">
+
+    <fragment
+        android:id="@+id/recordingsFragment"
+        android:name="com.f0x1d.logfox.ui.fragment.RecordingsFragment"
+        android:label="RecordingsFragment" >
+        <action
+            android:id="@+id/action_recordingsFragment_to_recordingExtendedCopyFragment"
+            app:destination="@id/recordingExtendedCopyFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/recordingExtendedCopyFragment"
+        android:name="com.f0x1d.logfox.ui.fragment.ExtendedCopyFragment"
+        android:label="ExtendedCopyFragment" />
+</navigation>

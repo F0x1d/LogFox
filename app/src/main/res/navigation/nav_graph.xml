@@ -6,6 +6,7 @@
 
     <include app:graph="@navigation/logs" />
     <include app:graph="@navigation/crashes" />
+    <include app:graph="@navigation/recordings" />
     <include app:graph="@navigation/settings" />
 
     <fragment

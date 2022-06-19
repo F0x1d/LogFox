@@ -33,7 +33,7 @@ class SearchBottomSheet: BaseBottomSheet<SheetSearchBinding>() {
 
         binding.clearSearchButton.visibility = if (query == null) View.GONE else View.VISIBLE
         binding.clearSearchButton.setOnClickListener {
-            searchClicked.search(null)
+            searchClicked.searchClicked(null)
             dismiss()
         }
 
@@ -53,11 +53,11 @@ class SearchBottomSheet: BaseBottomSheet<SheetSearchBinding>() {
         if (text == null) return
         if (text.isEmpty()) return
 
-        searchClicked.search(text)
+        searchClicked.searchClicked(text)
         dismiss()
     }
 
     interface OnSearchClicked {
-        fun search(query: String?)
+        fun searchClicked(query: String?)
     }
 }

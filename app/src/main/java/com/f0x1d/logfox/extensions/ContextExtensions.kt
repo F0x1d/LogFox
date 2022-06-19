@@ -15,7 +15,9 @@ import androidx.core.content.ContextCompat
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.repository.LoggingRepository
 import com.f0x1d.logfox.service.LoggingService
+import com.f0x1d.logfox.utils.pendingIntentFlags
 import kotlin.system.exitProcess
+
 
 fun Context.copyText(text: String) = (getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager)
     .setPrimaryClip(ClipData.newPlainText("FoxCat", text))
@@ -37,7 +39,7 @@ fun <T : BroadcastReceiver> Context.makeBroadcastPendingIntent(id: Int, clazz: C
     this,
     id,
     Intent(this, clazz).also { setup.invoke(it) },
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT else PendingIntent.FLAG_UPDATE_CURRENT
+    pendingIntentFlags
 )
 
 fun <T : BroadcastReceiver> Context.makeBroadcastPendingIntent(id: Int, clazz: Class<T>, extras: Bundle = Bundle.EMPTY) = makeBroadcastPendingIntent(
@@ -49,7 +51,7 @@ fun <T : Service> Context.makeServicePendingIntent(id: Int, clazz: Class<T>, set
     this,
     id,
     Intent(this, clazz).also { setup.invoke(it) },
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT else PendingIntent.FLAG_UPDATE_CURRENT
+    pendingIntentFlags
 )
 
 fun <T : Service> Context.makeServicePendingIntent(id: Int, clazz: Class<T>, extras: Bundle = Bundle.EMPTY) = makeServicePendingIntent(
@@ -61,7 +63,7 @@ fun <T : Activity> Context.makeActivityPendingIntent(id: Int, clazz: Class<T>, s
     this,
     id,
     Intent(this, clazz).also { setup.invoke(it) },
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT else PendingIntent.FLAG_UPDATE_CURRENT
+    pendingIntentFlags
 )
 
 fun <T : Activity> Context.makeActivityPendingIntent(id: Int, clazz: Class<T>, extras: Bundle = Bundle.EMPTY) = makeActivityPendingIntent(
@@ -95,3 +97,24 @@ fun Context.hardRestartApp() {
 }
 
 fun Context.toast(text: Int) = Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
+
+fun Context.shareIntent(text: String) {
+    val intent = Intent(Intent.ACTION_SEND)
+    intent.putExtra(Intent.EXTRA_TEXT, text)
+    intent.type = "text/plain"
+
+    startActivity(Intent.createChooser(intent, getString(R.string.share)))
+}
+
+fun Context.isOmnibinInstalled() = try {
+    packageManager.getPackageInfo("com.f0x1d.dogbin", 0)
+    true
+} catch (e: PackageManager.NameNotFoundException) {
+    false
+}
+
+fun uploadToFoxBinIntent(content: String) = Intent("com.f0x1d.dogbin.ACTION_UPLOAD_TO_FOXBIN").apply {
+    putExtra(Intent.EXTRA_TEXT, content)
+    type = "text/plain"
+}
+fun Context.uploadToFoxBin(content: String) = startActivity(uploadToFoxBinIntent(content))

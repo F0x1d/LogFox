@@ -12,31 +12,20 @@ class LogViewHolder(binding: ItemLogBinding): BaseViewHolder<LogLine, ItemLogBin
 
     private val currentColorPrimary = MaterialColors.getColor(binding.root, com.google.android.material.R.attr.colorPrimary)
     private val background = binding.container.background
-    private val selectedBackground = ColorDrawable(ColorUtils.blendARGB((background as ColorDrawable).color, currentColorPrimary, 0.1f))
-
-    private val currentItem: LogLine
-        get() = elements[bindingAdapterPosition]
+    private val selectedBackground = ColorDrawable(ColorUtils.blendARGB((background as ColorDrawable).color, currentColorPrimary, 0.2f))
 
     init {
         binding.root.setOnClickListener {
-            adapter<LogsAdapter>().expandedStates.apply {
-                currentItem.also {
-                    put(it.id, !getOrPut(it.id) { false })
-                    changeExpandedAndSelected(it)
-                }
-            }
+            if (adapter<LogsAdapter>().selectedItems.isNotEmpty())
+                selectItem()
+            else
+                expandOrCollapseItem()
         }
         binding.root.setOnLongClickListener {
-            adapter<LogsAdapter>().selectedItems.apply {
-                currentItem.also {
-                    if (any { logLine -> it.id == logLine.id })
-                        remove(it)
-                    else
-                        add(it)
-
-                    changeExpandedAndSelected(it)
-                }
-            }
+            if (adapter<LogsAdapter>().selectedItems.isNotEmpty())
+                expandOrCollapseItem()
+            else
+                selectItem()
             return@setOnLongClickListener true
         }
     }
@@ -44,6 +33,28 @@ class LogViewHolder(binding: ItemLogBinding): BaseViewHolder<LogLine, ItemLogBin
     override fun bindTo(data: LogLine) {
         binding.logText.text = data.original
         changeExpandedAndSelected(data)
+    }
+
+    private fun selectItem() {
+        adapter<LogsAdapter>().selectedItems.apply {
+            currentItem.also {
+                if (any { logLine -> it.id == logLine.id })
+                    remove(it)
+                else
+                    add(it)
+
+                changeExpandedAndSelected(it)
+            }
+        }
+    }
+
+    private fun expandOrCollapseItem() {
+        adapter<LogsAdapter>().expandedStates.apply {
+            currentItem.also {
+                put(it.id, !getOrPut(it.id) { false })
+                changeExpandedAndSelected(it)
+            }
+        }
     }
 
     private fun changeExpandedAndSelected(logLine: LogLine) {

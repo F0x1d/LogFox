@@ -8,7 +8,7 @@ import com.f0x1d.logfox.utils.event.Event
 
 abstract class BaseViewModel(application: Application): AndroidViewModel(application) {
 
-    protected val ctx: Context
+    val ctx: Context
         get() = getApplication()
 
     val eventsData = MutableLiveData<Event>()

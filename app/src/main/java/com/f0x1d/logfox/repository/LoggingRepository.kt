@@ -1,7 +1,7 @@
 package com.f0x1d.logfox.repository
 
-import com.f0x1d.logfox.LogFoxApp
 import com.f0x1d.logfox.extensions.LogLine
+import com.f0x1d.logfox.extensions.updateList
 import com.f0x1d.logfox.model.LogLine
 import com.f0x1d.logfox.repository.base.BaseRepository
 import kotlinx.coroutines.*
@@ -15,7 +15,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class LoggingRepository @Inject constructor(crashesRepository: CrashesRepository): BaseRepository() {
+class LoggingRepository @Inject constructor(crashesRepository: CrashesRepository, recordsRepository: RecordsRepository): BaseRepository() {
 
     companion object {
         const val LOGS_LIMIT = 10000
@@ -27,12 +27,15 @@ class LoggingRepository @Inject constructor(crashesRepository: CrashesRepository
     private var loggingJob: Job? = null
     private var idsCounter = -1L
 
-    private val helpers = listOf(crashesRepository)
+    private val helpers = listOf(
+        crashesRepository,
+        recordsRepository
+    )
 
     fun startLoggingIfNot() {
         if (loggingJob?.isActive == true) return
 
-        loggingJob = LogFoxApp.applicationScope.launch(Dispatchers.Default) {
+        loggingJob = onAppScope {
             helpers.forEach {
                 it.setup()
             }
@@ -68,16 +71,14 @@ class LoggingRepository @Inject constructor(crashesRepository: CrashesRepository
             while (isActive) {
                 delay(LOGS_INTERVAL)
 
-                logsFlow.update {
-                    it.toMutableList().apply {
-                        mutex.withLock {
-                            addAll(updateLines)
-                            updateLines.clear()
-                        }
+                logsFlow.updateList {
+                    mutex.withLock {
+                        addAll(updateLines)
+                        updateLines.clear()
+                    }
 
-                        while (size > LOGS_LIMIT) {
-                            removeAt(0)
-                        }
+                    while (size > LOGS_LIMIT) {
+                        removeAt(0)
                     }
                 }
             }

@@ -27,4 +27,9 @@
     <string name="clear_selected">Очистить выбранное</string>
     <string name="nothing_is_selected">Ничего не выбрано</string>
     <string name="extended_copy">Расширенное копирование</string>
+    <string name="record">Записать</string>
+    <string name="stop">Остановить</string>
+    <string name="recordings">Записи</string>
+    <string name="delete">Удалить</string>
+    <string name="resume">Возобновить</string>
 </resources>

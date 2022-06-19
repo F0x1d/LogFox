@@ -6,10 +6,12 @@ import com.f0x1d.logfox.adapter.base.BaseAdapter
 
 abstract class BaseViewHolder<T, D : ViewBinding>(protected val binding: D): RecyclerView.ViewHolder(binding.root) {
 
-    val baseAdapter
+    protected val baseAdapter
         get() = bindingAdapter as BaseAdapter<T, D>
-    val elements
+    protected val elements
         get() = baseAdapter.elements
+    protected val currentItem: T
+        get() = elements[bindingAdapterPosition]
 
     abstract fun bindTo(data: T)
     open fun recycle() {}

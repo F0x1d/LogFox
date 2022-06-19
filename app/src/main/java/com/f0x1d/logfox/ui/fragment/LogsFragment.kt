@@ -49,11 +49,11 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
                 showFilterDialog()
                 return@setOnMenuItemClickListener true
             }
-            findItem(R.id.selected).setOnMenuItemClickListener {
+            findItem(R.id.selected_item).setOnMenuItemClickListener {
                 showSelectedDialog()
                 return@setOnMenuItemClickListener true
             }
-            findItem(R.id.clear_selected).setOnMenuItemClickListener {
+            findItem(R.id.clear_selected_item).setOnMenuItemClickListener {
                 adapter.clearSelected()
                 return@setOnMenuItemClickListener true
             }
@@ -102,7 +102,7 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
         }
     }
 
-    override fun search(query: String?) {
+    override fun searchClicked(query: String?) {
         viewModel.query(query)
     }
 
