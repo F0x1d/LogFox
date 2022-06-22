@@ -1,4 +1,4 @@
-package com.f0x1d.logfox.viewmodel
+package com.f0x1d.logfox.viewmodel.recordings
 
 import android.app.Application
 import androidx.lifecycle.asLiveData
@@ -39,5 +39,5 @@ class RecordingsViewModel @Inject constructor(application: Application,
             recordsRepository.pause()
     }
 
-    fun clearRecordings() = recordsRepository.clearRecording()
+    fun clearRecordings() = recordsRepository.clearRecordings()
 }

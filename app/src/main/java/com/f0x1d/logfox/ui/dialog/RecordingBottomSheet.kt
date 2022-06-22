@@ -11,8 +11,8 @@ import com.f0x1d.logfox.databinding.SheetRecordingBinding
 import com.f0x1d.logfox.extensions.*
 import com.f0x1d.logfox.ui.dialog.base.BaseViewModelBottomSheet
 import com.f0x1d.logfox.utils.viewModelFactory
-import com.f0x1d.logfox.viewmodel.RecordingViewModel
-import com.f0x1d.logfox.viewmodel.RecordingViewModelAssistedFactory
+import com.f0x1d.logfox.viewmodel.recordings.RecordingViewModel
+import com.f0x1d.logfox.viewmodel.recordings.RecordingViewModelAssistedFactory
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

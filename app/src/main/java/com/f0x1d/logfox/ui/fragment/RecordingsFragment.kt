@@ -20,7 +20,7 @@ import com.f0x1d.logfox.utils.event.Event
 import com.f0x1d.logfox.utils.toDrawable
 import com.f0x1d.logfox.utils.toPx
 import com.f0x1d.logfox.utils.toString
-import com.f0x1d.logfox.viewmodel.RecordingsViewModel
+import com.f0x1d.logfox.viewmodel.recordings.RecordingsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

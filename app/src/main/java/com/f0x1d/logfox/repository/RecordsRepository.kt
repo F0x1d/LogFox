@@ -62,7 +62,7 @@ class RecordsRepository @Inject constructor(private val database: AppDatabase): 
         }
     }
 
-    fun clearRecording() {
+    fun clearRecordings() {
         onAppScope {
             recordingsFlow.update {
                 database.logRecordingDao().deleteAll()
