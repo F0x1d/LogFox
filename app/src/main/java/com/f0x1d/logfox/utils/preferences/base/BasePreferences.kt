@@ -5,11 +5,16 @@ import android.content.SharedPreferences
 import androidx.core.content.edit
 
 abstract class BasePreferences(context: Context) {
-    protected val sharedPreferences = providePreferences(context)
+
+    val sharedPreferences = providePreferences(context)
 
     abstract fun providePreferences(context: Context): SharedPreferences
 
-    protected inline fun <reified T> put(key: String, value: T?) = sharedPreferences.edit {
+    inline fun <reified T> asLiveData(key: String, defValue: T) = object : SharedPreferenceLiveData<T>(sharedPreferences, key, defValue) {
+        override fun fromPreferences(key: String, defValue: T) = get(key, defValue)
+    }
+
+    inline fun <reified T> put(key: String, value: T?) = sharedPreferences.edit {
         when (value) {
             null -> putString(key, null)
 
@@ -22,7 +27,7 @@ abstract class BasePreferences(context: Context) {
         }
     }
 
-    protected inline fun <reified T> get(key: String, defaultValue: T): T = when (defaultValue) {
+    inline fun <reified T> get(key: String, defaultValue: T): T = when (defaultValue) {
         is Boolean -> sharedPreferences.getBoolean(key, defaultValue) as T
         is Int -> sharedPreferences.getInt(key, defaultValue) as T
         is Long -> sharedPreferences.getLong(key, defaultValue) as T
@@ -31,7 +36,7 @@ abstract class BasePreferences(context: Context) {
         else -> throw RuntimeException("Type ${defaultValue!!::class.java.canonicalName} is nullable or unknown")
     }
 
-    protected inline fun <reified T> getNullable(key: String, defaultValue: T?): T? = when (defaultValue) {
+    inline fun <reified T> getNullable(key: String, defaultValue: T?): T? = when (defaultValue) {
         null -> sharedPreferences.getString(key, defaultValue) as T?
 
         is String -> sharedPreferences.getString(key, defaultValue) as T?

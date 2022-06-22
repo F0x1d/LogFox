@@ -36,4 +36,9 @@
     <string name="delete">Delete</string>
     <string name="resume">Resume</string>
     <string name="omnibin" translatable="false">omnibin</string>
+    <string name="ui" translatable="false">UI</string>
+    <string name="logs_update_interval">Logs update interval</string>
+    <string name="in_ms">In ms</string>
+    <string name="this_is_not_a_number">This is not a number</string>
+    <string name="logs_text_size">Logs text size</string>
 </resources>

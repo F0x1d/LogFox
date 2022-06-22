@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import androidx.core.os.bundleOf
 import com.f0x1d.logfox.databinding.SheetSearchBinding
@@ -47,6 +48,12 @@ class SearchBottomSheet: BaseBottomSheet<SheetSearchBinding>() {
             } else
                 false
         }
+
+        binding.queryText.requestFocus()
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?) = super.onCreateDialog(savedInstanceState).apply {
+        window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
     }
 
     private fun search(text: String?) {

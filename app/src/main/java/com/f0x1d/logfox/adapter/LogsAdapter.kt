@@ -12,6 +12,12 @@ class LogsAdapter: BaseAdapter<LogLine, ItemLogBinding>() {
     val expandedStates = mutableMapOf<Long, Boolean>()
     val selectedItems = mutableListOf<LogLine>()
 
+    var textSize = 14f
+        set(value) {
+            field = value
+            notifyItemRangeChanged(0, itemCount)
+        }
+
     override fun createHolder(layoutInflater: LayoutInflater, parent: ViewGroup) = LogViewHolder(
         ItemLogBinding.inflate(layoutInflater, parent, false)
     )

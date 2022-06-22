@@ -31,6 +31,7 @@ class LogViewHolder(binding: ItemLogBinding): BaseViewHolder<LogLine, ItemLogBin
     }
 
     override fun bindTo(data: LogLine) {
+        binding.logText.textSize = adapter<LogsAdapter>().textSize
         binding.logText.text = data.original
         changeExpandedAndSelected(data)
     }

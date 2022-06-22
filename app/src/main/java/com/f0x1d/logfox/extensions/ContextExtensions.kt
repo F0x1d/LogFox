@@ -30,10 +30,8 @@ fun Context.hasPermissionToReadLogs() = ContextCompat.checkSelfPermission(
     Manifest.permission.READ_LOGS
 ) == PackageManager.PERMISSION_GRANTED
 
-val Context.notificationManagerCompat
-    get() = NotificationManagerCompat.from(this)
-val Context.activityManager
-    get() = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+val Context.notificationManagerCompat get() = NotificationManagerCompat.from(this)
+val Context.activityManager get() = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
 
 fun <T : BroadcastReceiver> Context.makeBroadcastPendingIntent(id: Int, clazz: Class<T>, setup: Intent.() -> Unit) = PendingIntent.getBroadcast(
     this,
@@ -118,3 +116,9 @@ fun uploadToFoxBinIntent(content: String) = Intent("com.f0x1d.dogbin.ACTION_UPLO
     type = "text/plain"
 }
 fun Context.uploadToFoxBin(content: String) = startActivity(uploadToFoxBinIntent(content))
+
+fun Context.catchingNotNumber(block: () -> Unit) = try {
+    block.invoke()
+} catch (e: NumberFormatException) {
+    toast(R.string.this_is_not_a_number)
+}

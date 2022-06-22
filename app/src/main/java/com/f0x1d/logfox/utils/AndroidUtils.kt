@@ -13,7 +13,9 @@ val pendingIntentFlags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
 else
     PendingIntent.FLAG_UPDATE_CURRENT
 
-val Number.toPx get() = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this.toFloat(), Resources.getSystem().displayMetrics)
+val Number.dpToPx get() = toPx(TypedValue.COMPLEX_UNIT_DIP)
+val Number.spToPx get() = toPx(TypedValue.COMPLEX_UNIT_SP)
+fun Number.toPx(what: Int) = TypedValue.applyDimension(what, this.toFloat(), Resources.getSystem().displayMetrics)
 
 fun IntArray.fillWithStrings(ctx: Context) = map { ctx.getString(it) }.toTypedArray()
 

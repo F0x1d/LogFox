@@ -2,6 +2,17 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <PreferenceCategory android:title="@string/ui" app:iconSpaceReserved="false">
+        <Preference
+            android:title="@string/logs_update_interval"
+            android:key="pref_logs_update_interval"
+            app:iconSpaceReserved="false" />
+        <Preference
+            android:title="@string/logs_text_size"
+            android:key="pref_logs_text_size"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+
     <PreferenceCategory android:title="@string/service" app:iconSpaceReserved="false">
         <SwitchPreferenceCompat
             android:title="@string/start_on_boot"

@@ -32,4 +32,8 @@
     <string name="recordings">Записи</string>
     <string name="delete">Удалить</string>
     <string name="resume">Возобновить</string>
+    <string name="logs_update_interval">Интервал обновления логов</string>
+    <string name="in_ms">В мс</string>
+    <string name="this_is_not_a_number">Это не число</string>
+    <string name="logs_text_size">Размер текста логов</string>
 </resources>

@@ -18,9 +18,11 @@ import com.f0x1d.logfox.model.LogLevel
 import com.f0x1d.logfox.ui.dialog.SearchBottomSheet
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
 import com.f0x1d.logfox.utils.fillWithStrings
+import com.f0x1d.logfox.utils.preferences.AppPreferences
 import com.f0x1d.logfox.viewmodel.LogsViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(), SearchBottomSheet.OnSearchClicked {
@@ -29,6 +31,9 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
 
     private val adapter = LogsAdapter()
     private var changingState = false
+
+    @Inject
+    lateinit var appPreferences: AppPreferences
 
     override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) = FragmentLogsBinding.inflate(inflater, container, false)
 
@@ -81,6 +86,10 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
         })
 
         binding.scrollFab.setOnClickListener { viewModel.resume() }
+
+        appPreferences.asLiveData("pref_logs_text_size", 14).observe(viewLifecycleOwner) {
+            adapter.textSize = it.toFloat()
+        }
 
         viewModel.distinctiveData.observe(viewLifecycleOwner) {
             if (it != null) {

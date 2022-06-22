@@ -1,9 +1,11 @@
 package com.f0x1d.logfox.repository
 
+import android.content.SharedPreferences
 import com.f0x1d.logfox.extensions.LogLine
 import com.f0x1d.logfox.extensions.updateList
 import com.f0x1d.logfox.model.LogLine
 import com.f0x1d.logfox.repository.base.BaseRepository
+import com.f0x1d.logfox.utils.preferences.AppPreferences
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -15,16 +17,18 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class LoggingRepository @Inject constructor(crashesRepository: CrashesRepository, recordsRepository: RecordsRepository): BaseRepository() {
+class LoggingRepository @Inject constructor(crashesRepository: CrashesRepository,
+                                            recordsRepository: RecordsRepository,
+                                            private val appPreferences: AppPreferences): BaseRepository(), SharedPreferences.OnSharedPreferenceChangeListener {
 
     companion object {
         const val LOGS_LIMIT = 10000
-        const val LOGS_INTERVAL = 150L
     }
 
     val logsFlow = MutableStateFlow(emptyList<LogLine>())
 
     private var loggingJob: Job? = null
+    private var loggingInterval = 150L
     private var idsCounter = -1L
 
     private val helpers = listOf(
@@ -34,6 +38,9 @@ class LoggingRepository @Inject constructor(crashesRepository: CrashesRepository
 
     fun startLoggingIfNot() {
         if (loggingJob?.isActive == true) return
+
+        loggingInterval = appPreferences.logsUpdateInterval
+        appPreferences.registerListener(this)
 
         loggingJob = onAppScope {
             helpers.forEach {
@@ -50,6 +57,7 @@ class LoggingRepository @Inject constructor(crashesRepository: CrashesRepository
         loggingJob?.cancel()
 
         clearLogs()
+        appPreferences.unregisterListener(this)
 
         helpers.forEach { it.stop() }
     }
@@ -69,7 +77,7 @@ class LoggingRepository @Inject constructor(crashesRepository: CrashesRepository
 
         val updater = launch {
             while (isActive) {
-                delay(LOGS_INTERVAL)
+                delay(loggingInterval)
 
                 logsFlow.updateList {
                     mutex.withLock {
@@ -105,5 +113,11 @@ class LoggingRepository @Inject constructor(crashesRepository: CrashesRepository
 
         reader.close()
         updater.cancel()
+    }
+
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+        if (key == "pref_logs_update_interval") {
+            loggingInterval = appPreferences.logsUpdateInterval
+        }
     }
 }

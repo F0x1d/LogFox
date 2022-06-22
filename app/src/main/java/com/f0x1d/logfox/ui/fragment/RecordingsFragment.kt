@@ -16,9 +16,9 @@ import com.f0x1d.logfox.repository.RecordingState
 import com.f0x1d.logfox.ui.dialog.RecordingBottomSheet
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
 import com.f0x1d.logfox.utils.RecyclerViewDivider
+import com.f0x1d.logfox.utils.dpToPx
 import com.f0x1d.logfox.utils.event.Event
 import com.f0x1d.logfox.utils.toDrawable
-import com.f0x1d.logfox.utils.toPx
 import com.f0x1d.logfox.utils.toString
 import com.f0x1d.logfox.viewmodel.recordings.RecordingsViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -47,7 +47,7 @@ class RecordingsFragment: BaseViewModelFragment<RecordingsViewModel, FragmentRec
         binding.pauseButton.setOnClickListener { viewModel.togglePauseResume() }
 
         binding.recordingsRecycler.layoutManager = LinearLayoutManager(requireContext())
-        binding.recordingsRecycler.addItemDecoration(RecyclerViewDivider(requireContext(), 10.toPx.toInt(), 10.toPx.toInt()))
+        binding.recordingsRecycler.addItemDecoration(RecyclerViewDivider(requireContext(), 10.dpToPx.toInt(), 10.dpToPx.toInt()))
         binding.recordingsRecycler.adapter = adapter
 
         viewModel.data.observe(viewLifecycleOwner) {
