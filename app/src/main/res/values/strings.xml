@@ -41,4 +41,10 @@
     <string name="in_ms">In ms</string>
     <string name="this_is_not_a_number">This is not a number</string>
     <string name="logs_text_size">Logs text size</string>
+    <string name="collect_java_crashes">Collect Java crashes</string>
+    <string name="show_java_crashes_notifications">Show Java crashes notifications</string>
+    <string name="collect_jni_crashes">Collect JNI crashes</string>
+    <string name="show_jni_crashes_notifications">Show JNI crashes notifications</string>
+    <string name="collect_anr">Collect ANR</string>
+    <string name="show_anr_notifications">Show ANR notifications</string>
 </resources>

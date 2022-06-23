@@ -10,6 +10,7 @@ import com.f0x1d.logfox.repository.readers.base.BaseReader
 import com.f0x1d.logfox.repository.readers.crashes.ANRDetector
 import com.f0x1d.logfox.repository.readers.crashes.JNICrashDetector
 import com.f0x1d.logfox.repository.readers.crashes.JavaCrashDetector
+import com.f0x1d.logfox.utils.preferences.AppPreferences
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -18,17 +19,24 @@ import javax.inject.Singleton
 
 @Singleton
 class CrashesRepository @Inject constructor(@ApplicationContext private val context: Context,
-                                            private val database: AppDatabase): LoggingHelperRepository() {
+                                            private val database: AppDatabase,
+                                            private val appPreferences: AppPreferences): LoggingHelperRepository() {
 
     val crashesFlow = MutableStateFlow(listOf<AppCrash>())
 
     private val crashCollected: suspend (AppCrash) -> Unit = { appCrash ->
-        crashesFlow.updateList {
-            appCrash.copy(id = database.appCrashDao().insert(appCrash)).run {
-                context.sendErrorNotification(this)
+        if (appPreferences.collectingFor(appCrash.crashType)) {
+            crashesFlow.updateList {
+                appCrash.copy(id = database.appCrashDao().insert(appCrash)).apply {
+                    if (appPreferences.showingNotificationsFor(appCrash.crashType)) {
+                        context.sendErrorNotification(this, true)
+                    }
 
-                add(0, this@run)
+                    add(0, this@apply)
+                }
             }
+        } else if (appPreferences.showingNotificationsFor(appCrash.crashType)) {
+            context.sendErrorNotification(appCrash, false)
         }
     }
 

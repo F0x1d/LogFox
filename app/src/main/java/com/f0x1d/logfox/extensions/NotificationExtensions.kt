@@ -12,7 +12,7 @@ import com.f0x1d.logfox.receiver.CopyReceiver
 import com.f0x1d.logfox.ui.activity.CrashDetailsActivity
 import com.f0x1d.logfox.utils.pendingIntentFlags
 
-fun Context.sendErrorNotification(appCrash: AppCrash) = notificationManagerCompat.notify(
+fun Context.sendErrorNotification(appCrash: AppCrash, hasContentIntent: Boolean) = notificationManagerCompat.notify(
     appCrash.packageName,
     appCrash.dateAndTime.toInt(),
     NotificationCompat.Builder(this, LogFoxApp.CRASHES_CHANNEL_ID)
@@ -20,9 +20,11 @@ fun Context.sendErrorNotification(appCrash: AppCrash) = notificationManagerCompa
         .setContentText(appCrash.log)
         .setSmallIcon(R.drawable.ic_android)
         .setStyle(NotificationCompat.BigTextStyle().bigText(appCrash.log))
-        .setContentIntent(makeActivityPendingIntent(-3, CrashDetailsActivity::class.java, bundleOf(
-            "crash_id" to appCrash.id
-        )))
+        .apply {
+            if (hasContentIntent) setContentIntent(makeActivityPendingIntent(-3, CrashDetailsActivity::class.java, bundleOf(
+                "crash_id" to appCrash.id
+            )))
+        }
         .setAutoCancel(true)
         .addAction(
             R.drawable.ic_copy,

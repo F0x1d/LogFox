@@ -36,4 +36,10 @@
     <string name="in_ms">В мс</string>
     <string name="this_is_not_a_number">Это не число</string>
     <string name="logs_text_size">Размер текста логов</string>
+    <string name="collect_java_crashes">Собирать Java сбои</string>
+    <string name="show_java_crashes_notifications">Показывать уведомления о Java сбоях</string>
+    <string name="collect_jni_crashes">Собирать JNI сбои</string>
+    <string name="show_jni_crashes_notifications">Показывать уведомления о JNI сбоях</string>
+    <string name="collect_anr">Собирать ANR</string>
+    <string name="show_anr_notifications">Показывать уведомления о ANR</string>
 </resources>

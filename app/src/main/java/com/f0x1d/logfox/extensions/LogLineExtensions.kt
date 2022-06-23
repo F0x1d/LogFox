@@ -26,21 +26,19 @@ fun List<LogLine>.filterEnabledLines(currentEnabledLogLevels: EnabledLogLevels) 
 
 private val logRegex = "(.{23}) (.{5}) (.{5}) (.) (.+?): (.+)".toRegex()
 
-fun LogLine(id: Long, line: String): LogLine? {
-    val result = logRegex.find(line) ?: return null
-
-    return LogLine(
+fun LogLine(id: Long, line: String) = logRegex.find(line)?.run {
+    LogLine(
         id,
-        result.groupValues[1].replace(" ", "").run {
+        groupValues[1].replace(" ", "").run {
             indexOf(".").let {
                 substring(0, it).toLong() * 1000 + substring(it + 1).toLong()
             }
         },
-        result.groupValues[2].replace(" ", ""),
-        result.groupValues[3].replace(" ", ""),
-        mapLevel(result.groupValues[4]),
-        result.groupValues[5],
-        result.groupValues[6]
+        groupValues[2].replace(" ", ""),
+        groupValues[3].replace(" ", ""),
+        mapLevel(groupValues[4]),
+        groupValues[5],
+        groupValues[6]
     )
 }
 

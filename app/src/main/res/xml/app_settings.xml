@@ -21,6 +21,45 @@
             app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
+    <PreferenceCategory android:title="Java" app:iconSpaceReserved="false">
+        <SwitchPreferenceCompat
+            android:title="@string/collect_java_crashes"
+            android:key="pref_collect_java"
+            android:defaultValue="true"
+            app:iconSpaceReserved="false" />
+        <SwitchPreferenceCompat
+            android:title="@string/show_java_crashes_notifications"
+            android:key="pref_notifications_java"
+            android:defaultValue="true"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="JNI" app:iconSpaceReserved="false">
+        <SwitchPreferenceCompat
+            android:title="@string/collect_jni_crashes"
+            android:key="pref_collect_jni"
+            android:defaultValue="true"
+            app:iconSpaceReserved="false" />
+        <SwitchPreferenceCompat
+            android:title="@string/show_jni_crashes_notifications"
+            android:key="pref_notifications_jni"
+            android:defaultValue="true"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="ANR" app:iconSpaceReserved="false">
+        <SwitchPreferenceCompat
+            android:title="@string/collect_anr"
+            android:key="pref_collect_anr"
+            android:defaultValue="true"
+            app:iconSpaceReserved="false" />
+        <SwitchPreferenceCompat
+            android:title="@string/show_anr_notifications"
+            android:key="pref_notifications_anr"
+            android:defaultValue="true"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+
     <PreferenceCategory android:title="@string/about_app" app:iconSpaceReserved="false">
         <Preference
             android:title="@string/developer"

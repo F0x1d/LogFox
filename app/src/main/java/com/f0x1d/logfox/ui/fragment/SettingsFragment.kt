@@ -53,7 +53,7 @@ class SettingsFragment: BaseFragment<FragmentSettingsBinding>() {
                     }
                 })
 
-                observeAndUpdateValues(150L)
+                observeAndUpdateSummary(150L)
             }
 
             findPreference<Preference>("pref_logs_text_size")?.apply {
@@ -67,11 +67,11 @@ class SettingsFragment: BaseFragment<FragmentSettingsBinding>() {
                     }
                 })
 
-                observeAndUpdateValues(14)
+                observeAndUpdateSummary(14)
             }
         }
 
-        private inline fun <reified T> Preference.observeAndUpdateValues(defValue: T) = apply {
+        private inline fun <reified T> Preference.observeAndUpdateSummary(defValue: T) {
             appPreferences.asLiveData(key, defValue).observe(this@SettingsWrapperFragment) {
                 summary = it.toString()
             }
