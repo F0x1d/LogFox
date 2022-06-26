@@ -29,6 +29,10 @@ class RecordsRepository @Inject constructor(private val database: AppDatabase): 
         }
     }
 
+    override fun stop() {
+        end()
+    }
+
     fun record() {
         onAppScope {
             recordingStateFlow.update { RecordingState.RECORDING }
