@@ -6,16 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.navArgs
+import com.f0x1d.logfox.R
 import com.f0x1d.logfox.databinding.SheetSearchBinding
 import com.f0x1d.logfox.ui.dialog.base.BaseBottomSheet
+import com.f0x1d.logfox.viewmodel.LogsViewModel
 
 class SearchBottomSheet: BaseBottomSheet<SheetSearchBinding>() {
 
     private val navArgs by navArgs<SearchBottomSheetArgs>()
-    private val searchClicked by lazy {
-        parentFragment as OnSearchClicked
-    }
+    private val parentViewModel by hiltNavGraphViewModels<LogsViewModel>(R.id.logsFragment)
 
     override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) = SheetSearchBinding.inflate(inflater, container, false)
 
@@ -26,7 +27,7 @@ class SearchBottomSheet: BaseBottomSheet<SheetSearchBinding>() {
 
         binding.clearSearchButton.visibility = if (navArgs.query == null) View.GONE else View.VISIBLE
         binding.clearSearchButton.setOnClickListener {
-            searchClicked.searchClicked(null)
+            parentViewModel.query(null)
             dismiss()
         }
 
@@ -52,11 +53,7 @@ class SearchBottomSheet: BaseBottomSheet<SheetSearchBinding>() {
         if (text == null) return
         if (text.isEmpty()) return
 
-        searchClicked.searchClicked(text)
+        parentViewModel.query(text)
         dismiss()
-    }
-
-    interface OnSearchClicked {
-        fun searchClicked(query: String?)
     }
 }

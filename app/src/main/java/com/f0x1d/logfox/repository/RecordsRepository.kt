@@ -29,8 +29,9 @@ class RecordsRepository @Inject constructor(private val database: AppDatabase): 
         }
     }
 
-    override fun stop() {
-        end()
+    override suspend fun stop() {
+        recordingStateFlow.update { RecordingState.IDLE }
+        recordedLines.clear()
     }
 
     fun record() {
@@ -47,8 +48,8 @@ class RecordsRepository @Inject constructor(private val database: AppDatabase): 
 
     fun end(recordingSaved: (LogRecording) -> Unit = {}) {
         onAppScope {
-            recordingStateFlow.update { RecordingState.SAVING }
             if (recordedLines.isEmpty()) return@onAppScope
+            recordingStateFlow.update { RecordingState.SAVING }
 
             recordingsFlow.updateList {
                 val logRecording = LogRecording(recordedLines.first().dateAndTime, recordedLines.joinToString("\n") { it.original }).run {

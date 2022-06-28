@@ -19,6 +19,7 @@ class RecordingsViewModel @Inject constructor(application: Application,
 
     companion object {
         const val EVENT_TYPE_RECORDING_SAVED = "recording_saved"
+        const val EVENT_TYPE_EXTENDED_COPY_CLICKED = "extended_copy_clicked"
     }
 
     val recordingStateData = recordsRepository.recordingStateFlow.asLiveData()
@@ -28,7 +29,7 @@ class RecordingsViewModel @Inject constructor(application: Application,
             recordsRepository.record()
         else
             recordsRepository.end {
-                eventsData.sendEvent(EVENT_TYPE_RECORDING_SAVED, it)
+                sendEvent(EVENT_TYPE_RECORDING_SAVED, it)
             }
     }
 
@@ -40,4 +41,6 @@ class RecordingsViewModel @Inject constructor(application: Application,
     }
 
     fun clearRecordings() = recordsRepository.clearRecordings()
+
+    fun extendedCopyClicked(content: String) = sendEvent(EVENT_TYPE_EXTENDED_COPY_CLICKED, content)
 }

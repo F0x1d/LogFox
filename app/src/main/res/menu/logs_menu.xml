@@ -35,4 +35,9 @@
         android:title="@string/clear"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/exit_item"
+        android:title="@string/exit"
+        app:showAsAction="never" />
+
 </menu>

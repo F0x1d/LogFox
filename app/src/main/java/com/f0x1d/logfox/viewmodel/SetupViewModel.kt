@@ -39,7 +39,7 @@ class SetupViewModel @Inject constructor(application: Application): BaseViewMode
         if (ctx.hasPermissionToReadLogs())
             gotPermission()
         else
-            eventsData.sendEvent(EVENT_TYPE_SHOW_ADB_DIALOG)
+            sendEvent(EVENT_TYPE_SHOW_ADB_DIALOG)
     }
 
     fun checkPermission() {
@@ -48,6 +48,6 @@ class SetupViewModel @Inject constructor(application: Application): BaseViewMode
     }
 
     private fun gotPermission() {
-        eventsData.sendEvent(EVENT_TYPE_GOT_PERMISSION)
+        sendEvent(EVENT_TYPE_GOT_PERMISSION)
     }
 }

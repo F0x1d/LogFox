@@ -6,13 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.navArgs
+import com.f0x1d.logfox.R
 import com.f0x1d.logfox.databinding.SheetRecordingBinding
 import com.f0x1d.logfox.extensions.*
 import com.f0x1d.logfox.ui.dialog.base.BaseViewModelBottomSheet
 import com.f0x1d.logfox.utils.viewModelFactory
 import com.f0x1d.logfox.viewmodel.recordings.RecordingViewModel
 import com.f0x1d.logfox.viewmodel.recordings.RecordingViewModelAssistedFactory
+import com.f0x1d.logfox.viewmodel.recordings.RecordingsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -27,6 +30,7 @@ class RecordingBottomSheet: BaseViewModelBottomSheet<RecordingViewModel, SheetRe
             assistedFactory.create(navArgs.recordingId)
         }
     }
+    private val parentViewModel by hiltNavGraphViewModels<RecordingsViewModel>(R.id.recordingsFragment)
 
     private val zipCrashLauncher = registerForActivityResult(ActivityResultContracts.CreateDocument()) {
         it?.apply {
@@ -34,9 +38,6 @@ class RecordingBottomSheet: BaseViewModelBottomSheet<RecordingViewModel, SheetRe
         }
     }
     private val navArgs by navArgs<RecordingBottomSheetArgs>()
-    private val extendedCopyListener by lazy {
-        parentFragment as OnExtendedCopyListener
-    }
 
     override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) = SheetRecordingBinding.inflate(inflater, container, false)
 
@@ -52,8 +53,7 @@ class RecordingBottomSheet: BaseViewModelBottomSheet<RecordingViewModel, SheetRe
                 requireContext().copyText(logRecording.log)
             }
             binding.copyLayout.setOnLongClickListener {
-                extendedCopyListener.extendedCopyClicked(logRecording.log)
-                dismiss()
+                parentViewModel.extendedCopyClicked(logRecording.log)
                 return@setOnLongClickListener true
             }
             binding.shareLayout.setOnClickListener {
@@ -68,9 +68,5 @@ class RecordingBottomSheet: BaseViewModelBottomSheet<RecordingViewModel, SheetRe
                 dismiss()
             }
         }
-    }
-
-    interface OnExtendedCopyListener {
-        fun extendedCopyClicked(content: String)
     }
 }

@@ -7,5 +7,5 @@ abstract class LoggingHelperRepository: BaseRepository() {
     open val readers = emptyList<BaseReader>()
 
     abstract suspend fun setup()
-    open fun stop() {}
+    open suspend fun stop() {}
 }

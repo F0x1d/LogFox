@@ -59,7 +59,11 @@ class LoggingRepository @Inject constructor(crashesRepository: CrashesRepository
         clearLogs()
         appPreferences.unregisterListener(this)
 
-        helpers.forEach { it.stop() }
+        onAppScope {
+            helpers.forEach {
+                it.stop()
+            }
+        }
     }
 
     fun clearLogs() {

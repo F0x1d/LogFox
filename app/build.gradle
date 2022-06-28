@@ -56,6 +56,7 @@ dependencies {
 
     implementation "com.google.dagger:hilt-android:2.41"
     kapt "com.google.dagger:hilt-compiler:2.41"
+    implementation 'androidx.hilt:hilt-navigation-fragment:1.0.0'
 
     implementation "androidx.core:core-ktx:1.8.0"
     implementation "androidx.collection:collection-ktx:1.2.0"

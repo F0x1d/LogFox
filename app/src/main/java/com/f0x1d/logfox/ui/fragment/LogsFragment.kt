@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -12,9 +12,9 @@ import com.f0x1d.logfox.R
 import com.f0x1d.logfox.adapter.LogsAdapter
 import com.f0x1d.logfox.databinding.FragmentLogsBinding
 import com.f0x1d.logfox.extensions.copyText
+import com.f0x1d.logfox.extensions.sendKillApp
 import com.f0x1d.logfox.extensions.toast
 import com.f0x1d.logfox.model.LogLevel
-import com.f0x1d.logfox.ui.dialog.SearchBottomSheet
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
 import com.f0x1d.logfox.utils.fillWithStrings
 import com.f0x1d.logfox.utils.preferences.AppPreferences
@@ -24,9 +24,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(), SearchBottomSheet.OnSearchClicked {
+class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>() {
 
-    override val viewModel by viewModels<LogsViewModel>()
+    override val viewModel by hiltNavGraphViewModels<LogsViewModel>(R.id.logsFragment)
 
     private val adapter = LogsAdapter()
     private var changingState = false
@@ -65,6 +65,10 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
                 viewModel.clearLogs()
                 adapter.elements = emptyList()
                 adapter.clearSelected()
+                return@setOnMenuItemClickListener true
+            }
+            findItem(R.id.exit_item).setOnMenuItemClickListener {
+                requireContext().sendKillApp()
                 return@setOnMenuItemClickListener true
             }
         }
@@ -106,10 +110,6 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
             }
             changingState = false
         }
-    }
-
-    override fun searchClicked(query: String?) {
-        viewModel.query(query)
     }
 
     private fun scrollLogToBottom() {

@@ -24,6 +24,6 @@ class MainViewModel @Inject constructor(application: Application, private val lo
         if (ctx.hasPermissionToReadLogs())
             ctx.startLoggingAndService(loggingRepository)
         else
-            eventsData.sendEvent(EVENT_TYPE_SETUP)
+            sendEvent(EVENT_TYPE_SETUP)
     }
 }

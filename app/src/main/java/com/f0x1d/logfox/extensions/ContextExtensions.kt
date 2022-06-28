@@ -122,3 +122,5 @@ fun Context.catchingNotNumber(block: () -> Unit) = try {
 } catch (e: NumberFormatException) {
     toast(R.string.this_is_not_a_number)
 }
+
+fun Context.sendKillApp() = startService(Intent(this, LoggingService::class.java).setAction(LoggingService.ACTION_KILL_SERVICE))

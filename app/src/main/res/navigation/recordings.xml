@@ -9,9 +9,6 @@
         android:name="com.f0x1d.logfox.ui.fragment.RecordingsFragment"
         android:label="RecordingsFragment" >
         <action
-            android:id="@+id/action_recordingsFragment_to_recordingExtendedCopyFragment"
-            app:destination="@id/recordingExtendedCopyFragment" />
-        <action
             android:id="@+id/action_recordingsFragment_to_recordingBottomSheet"
             app:destination="@id/recordingBottomSheet" />
     </fragment>
@@ -30,5 +27,8 @@
         <argument
             android:name="recording_id"
             app:argType="long" />
+        <action
+            android:id="@+id/action_recordingBottomSheet_to_recordingExtendedCopyFragment"
+            app:destination="@id/recordingExtendedCopyFragment" />
     </dialog>
 </navigation>

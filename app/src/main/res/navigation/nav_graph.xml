@@ -17,6 +17,6 @@
     <action
         android:id="@+id/action_global_setupFragment"
         app:destination="@id/setupFragment"
-        app:popUpTo="@id/setupFragment"
+        app:popUpTo="@id/nav_graph"
         app:popUpToInclusive="true" />
 </navigation>
