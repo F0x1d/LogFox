@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.f0x1d.logfox.R
@@ -12,7 +12,6 @@ import com.f0x1d.logfox.adapter.RecordingsAdapter
 import com.f0x1d.logfox.database.LogRecording
 import com.f0x1d.logfox.databinding.FragmentRecordingsBinding
 import com.f0x1d.logfox.repository.RecordingState
-import com.f0x1d.logfox.ui.dialog.RecordingBottomSheetDirections
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
 import com.f0x1d.logfox.utils.RecyclerViewDivider
 import com.f0x1d.logfox.utils.dpToPx
@@ -25,7 +24,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class RecordingsFragment: BaseViewModelFragment<RecordingsViewModel, FragmentRecordingsBinding>() {
 
-    override val viewModel by hiltNavGraphViewModels<RecordingsViewModel>(R.id.recordingsFragment)
+    override val viewModel by viewModels<RecordingsViewModel>()
 
     private val adapter = RecordingsAdapter {
         openDetails(it)
@@ -102,9 +101,6 @@ class RecordingsFragment: BaseViewModelFragment<RecordingsViewModel, FragmentRec
     override fun onEvent(event: Event) {
         when (event.type) {
             RecordingsViewModel.EVENT_TYPE_RECORDING_SAVED -> openDetails(event.consume<LogRecording>())
-            RecordingsViewModel.EVENT_TYPE_EXTENDED_COPY_CLICKED -> findNavController().navigate(
-                RecordingBottomSheetDirections.actionRecordingBottomSheetToRecordingExtendedCopyFragment(event.consume() ?: return)
-            )
         }
     }
 
