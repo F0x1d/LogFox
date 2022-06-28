@@ -6,21 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
-import androidx.core.os.bundleOf
+import androidx.navigation.fragment.navArgs
 import com.f0x1d.logfox.databinding.SheetSearchBinding
 import com.f0x1d.logfox.ui.dialog.base.BaseBottomSheet
 
 class SearchBottomSheet: BaseBottomSheet<SheetSearchBinding>() {
 
-    companion object {
-        fun newInstance(query: String?) = SearchBottomSheet().apply {
-            arguments = bundleOf("query" to query)
-        }
-    }
-
-    private val query by lazy {
-        requireArguments().getString("query")
-    }
+    private val navArgs by navArgs<SearchBottomSheetArgs>()
     private val searchClicked by lazy {
         parentFragment as OnSearchClicked
     }
@@ -30,9 +22,9 @@ class SearchBottomSheet: BaseBottomSheet<SheetSearchBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.queryText.setText(query ?: "")
+        binding.queryText.setText(navArgs.query)
 
-        binding.clearSearchButton.visibility = if (query == null) View.GONE else View.VISIBLE
+        binding.clearSearchButton.visibility = if (navArgs.query == null) View.GONE else View.VISIBLE
         binding.clearSearchButton.setOnClickListener {
             searchClicked.searchClicked(null)
             dismiss()

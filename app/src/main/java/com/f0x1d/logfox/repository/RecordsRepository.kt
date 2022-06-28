@@ -47,7 +47,7 @@ class RecordsRepository @Inject constructor(private val database: AppDatabase): 
 
     fun end(recordingSaved: (LogRecording) -> Unit = {}) {
         onAppScope {
-            recordingStateFlow.update { RecordingState.IDLE }
+            recordingStateFlow.update { RecordingState.SAVING }
             if (recordedLines.isEmpty()) return@onAppScope
 
             recordingsFlow.updateList {
@@ -63,6 +63,7 @@ class RecordsRepository @Inject constructor(private val database: AppDatabase): 
             }
 
             recordedLines.clear()
+            recordingStateFlow.update { RecordingState.IDLE }
         }
     }
 
@@ -94,5 +95,5 @@ class RecordsRepository @Inject constructor(private val database: AppDatabase): 
 }
 
 enum class RecordingState {
-    IDLE, RECORDING, PAUSED
+    IDLE, RECORDING, PAUSED, SAVING
 }

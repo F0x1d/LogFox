@@ -5,8 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
 import com.f0x1d.logfox.databinding.SheetRecordingBinding
 import com.f0x1d.logfox.extensions.*
 import com.f0x1d.logfox.ui.dialog.base.BaseViewModelBottomSheet
@@ -19,18 +19,12 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class RecordingBottomSheet: BaseViewModelBottomSheet<RecordingViewModel, SheetRecordingBinding>() {
 
-    companion object {
-        fun newInstance(recordingId: Long) = RecordingBottomSheet().apply {
-            arguments = bundleOf("recording_id" to recordingId)
-        }
-    }
-
     @Inject
     lateinit var assistedFactory: RecordingViewModelAssistedFactory
 
     override val viewModel by viewModels<RecordingViewModel> {
         viewModelFactory {
-            assistedFactory.create(requireArguments().getLong("recording_id"))
+            assistedFactory.create(navArgs.recordingId)
         }
     }
 
@@ -39,7 +33,7 @@ class RecordingBottomSheet: BaseViewModelBottomSheet<RecordingViewModel, SheetRe
             viewModel.logToZip(this) { log }
         }
     }
-
+    private val navArgs by navArgs<RecordingBottomSheetArgs>()
     private val extendedCopyListener by lazy {
         parentFragment as OnExtendedCopyListener
     }

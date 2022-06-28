@@ -11,9 +11,24 @@
         <action
             android:id="@+id/action_recordingsFragment_to_recordingExtendedCopyFragment"
             app:destination="@id/recordingExtendedCopyFragment" />
+        <action
+            android:id="@+id/action_recordingsFragment_to_recordingBottomSheet"
+            app:destination="@id/recordingBottomSheet" />
     </fragment>
     <fragment
         android:id="@+id/recordingExtendedCopyFragment"
         android:name="com.f0x1d.logfox.ui.fragment.ExtendedCopyFragment"
-        android:label="ExtendedCopyFragment" />
+        android:label="ExtendedCopyFragment" >
+        <argument
+            android:name="content"
+            app:argType="string" />
+    </fragment>
+    <dialog
+        android:id="@+id/recordingBottomSheet"
+        android:name="com.f0x1d.logfox.ui.dialog.RecordingBottomSheet"
+        android:label="RecordingBottomSheet" >
+        <argument
+            android:name="recording_id"
+            app:argType="long" />
+    </dialog>
 </navigation>

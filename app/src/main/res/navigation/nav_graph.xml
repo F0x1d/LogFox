@@ -13,4 +13,10 @@
         android:id="@+id/setupFragment"
         android:name="com.f0x1d.logfox.ui.fragment.SetupFragment"
         android:label="SetupFragment" />
+
+    <action
+        android:id="@+id/action_global_setupFragment"
+        app:destination="@id/setupFragment"
+        app:popUpTo="@id/setupFragment"
+        app:popUpToInclusive="true" />
 </navigation>

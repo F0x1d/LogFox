@@ -7,5 +7,18 @@
     <fragment
         android:id="@+id/crashesFragment"
         android:name="com.f0x1d.logfox.ui.fragment.CrashesFragment"
-        android:label="CrashesFragment" />
+        android:label="CrashesFragment" >
+        <action
+            android:id="@+id/action_crashesFragment_to_crashDetailsActivity"
+            app:destination="@id/crashDetailsActivity" />
+    </fragment>
+    <activity
+        android:id="@+id/crashDetailsActivity"
+        android:name="com.f0x1d.logfox.ui.activity.CrashDetailsActivity"
+        android:label="CrashDetailsActivity" >
+        <argument
+            android:name="crash_id"
+            app:argType="long"
+            android:defaultValue="-1L" />
+    </activity>
 </navigation>

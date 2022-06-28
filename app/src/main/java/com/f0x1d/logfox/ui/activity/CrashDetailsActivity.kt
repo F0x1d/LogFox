@@ -3,6 +3,7 @@ package com.f0x1d.logfox.ui.activity
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.navigation.navArgs
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.database.AppCrash
 import com.f0x1d.logfox.databinding.ActivityCrashDetailsBinding
@@ -22,7 +23,7 @@ class CrashDetailsActivity: BaseViewModelActivity<CrashDetailsViewModel, Activit
 
     override val viewModel by viewModels<CrashDetailsViewModel> {
         viewModelFactory {
-            assistedFactory.create(intent.getLongExtra("crash_id", -1))
+            assistedFactory.create(navArgs.crashId)
         }
     }
 
@@ -31,6 +32,7 @@ class CrashDetailsActivity: BaseViewModelActivity<CrashDetailsViewModel, Activit
             viewModel.logToZip(this) { log }
         }
     }
+    private val navArgs by navArgs<CrashDetailsActivityArgs>()
 
     override fun inflateBinding() = ActivityCrashDetailsBinding.inflate(layoutInflater)
 
@@ -42,7 +44,7 @@ class CrashDetailsActivity: BaseViewModelActivity<CrashDetailsViewModel, Activit
         }
 
         viewModel.data.observe(this) {
-            if (it != null) setupFor(it)
+            setupFor(it ?: return@observe)
         }
     }
 

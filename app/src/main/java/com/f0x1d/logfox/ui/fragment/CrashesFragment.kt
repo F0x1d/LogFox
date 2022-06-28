@@ -1,16 +1,15 @@
 package com.f0x1d.logfox.ui.fragment
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.adapter.CrashesAdapter
 import com.f0x1d.logfox.databinding.FragmentCrashesBinding
-import com.f0x1d.logfox.ui.activity.CrashDetailsActivity
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
 import com.f0x1d.logfox.utils.RecyclerViewDivider
 import com.f0x1d.logfox.utils.dpToPx
@@ -23,9 +22,7 @@ class CrashesFragment: BaseViewModelFragment<CrashesViewModel, FragmentCrashesBi
     override val viewModel by viewModels<CrashesViewModel>()
 
     private val adapter = CrashesAdapter {
-        requireContext().startActivity(Intent(requireContext(), CrashDetailsActivity::class.java).apply {
-            putExtra("crash_id", it.id)
-        })
+        findNavController().navigate(CrashesFragmentDirections.actionCrashesFragmentToCrashDetailsActivity(it.id))
     }
 
     override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) = FragmentCrashesBinding.inflate(inflater, container, false)
@@ -40,9 +37,11 @@ class CrashesFragment: BaseViewModelFragment<CrashesViewModel, FragmentCrashesBi
         }
 
         binding.crashesRecycler.layoutManager = LinearLayoutManager(requireContext())
-        binding.crashesRecycler.addItemDecoration(RecyclerViewDivider(requireContext(), 80.dpToPx.toInt()))
+        binding.crashesRecycler.addItemDecoration(RecyclerViewDivider(requireContext(), 80.dpToPx.toInt(), 10.dpToPx.toInt()))
         binding.crashesRecycler.adapter = adapter
 
-        viewModel.data.observe(viewLifecycleOwner) { adapter.elements = it ?: return@observe }
+        viewModel.data.observe(viewLifecycleOwner) {
+            adapter.elements = it ?: return@observe
+        }
     }
 }

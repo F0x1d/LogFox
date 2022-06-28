@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -61,6 +60,7 @@ class RecordingsFragment: BaseViewModelFragment<RecordingsViewModel, FragmentRec
                         icon = R.drawable.ic_recording.toDrawable(requireContext())
                         text = R.string.record.toString(requireContext())
                     }
+                    binding.recordButton.isEnabled = true
                     binding.pauseButton.visibility = View.GONE
                 }
                 RecordingState.RECORDING -> {
@@ -68,6 +68,7 @@ class RecordingsFragment: BaseViewModelFragment<RecordingsViewModel, FragmentRec
                         icon = R.drawable.ic_stop.toDrawable(requireContext())
                         text = R.string.stop.toString(requireContext())
                     }
+                    binding.recordButton.isEnabled = true
                     binding.pauseButton.apply {
                         icon = R.drawable.ic_pause.toDrawable(requireContext())
                         text = R.string.pause.toString(requireContext())
@@ -79,11 +80,20 @@ class RecordingsFragment: BaseViewModelFragment<RecordingsViewModel, FragmentRec
                         icon = R.drawable.ic_stop.toDrawable(requireContext())
                         text = R.string.stop.toString(requireContext())
                     }
+                    binding.recordButton.isEnabled = true
                     binding.pauseButton.apply {
                         icon = R.drawable.ic_play.toDrawable(requireContext())
                         text = R.string.resume.toString(requireContext())
                     }
                     binding.pauseButton.visibility = View.VISIBLE
+                }
+                RecordingState.SAVING -> {
+                    binding.recordButton.apply {
+                        icon = R.drawable.ic_recording.toDrawable(requireContext())
+                        text = R.string.record.toString(requireContext())
+                    }
+                    binding.recordButton.isEnabled = false
+                    binding.pauseButton.visibility = View.GONE
                 }
             }
         }
@@ -96,12 +106,12 @@ class RecordingsFragment: BaseViewModelFragment<RecordingsViewModel, FragmentRec
     }
 
     override fun extendedCopyClicked(content: String) {
-        findNavController().navigate(R.id.action_recordingsFragment_to_recordingExtendedCopyFragment, bundleOf("content" to content))
+        findNavController().navigate(RecordingsFragmentDirections.actionRecordingsFragmentToRecordingExtendedCopyFragment(content))
     }
 
     private fun openDetails(recording: LogRecording?) {
         recording?.id?.apply {
-            RecordingBottomSheet.newInstance(this).show(childFragmentManager, "RecordingBottomSheet")
+            findNavController().navigate(RecordingsFragmentDirections.actionRecordingsFragmentToRecordingBottomSheet(this))
         }
     }
 }

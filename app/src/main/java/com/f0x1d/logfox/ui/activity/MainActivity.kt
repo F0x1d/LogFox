@@ -6,9 +6,9 @@ import android.view.View
 import androidx.activity.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
-import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
+import com.f0x1d.logfox.NavGraphDirections
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.databinding.ActivityMainBinding
 import com.f0x1d.logfox.ui.activity.base.BaseViewModelActivity
@@ -37,9 +37,7 @@ class MainActivity: BaseViewModelActivity<MainViewModel, ActivityMainBinding>(),
     override fun onEvent(event: Event) {
         when (event.type) {
             MainViewModel.EVENT_TYPE_SETUP -> {
-                navController.navigate(R.id.setupFragment, null, NavOptions.Builder().apply {
-                    if (navController.currentDestination != null) setPopUpTo(navController.currentDestination!!.id, true)
-                }.build())
+                navController.navigate(NavGraphDirections.actionGlobalSetupFragment())
             }
         }
     }

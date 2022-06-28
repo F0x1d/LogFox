@@ -11,9 +11,25 @@
         <action
             android:id="@+id/action_logsFragment_to_logsExtendedCopyFragment"
             app:destination="@id/logsExtendedCopyFragment" />
+        <action
+            android:id="@+id/action_logsFragment_to_searchBottomSheet"
+            app:destination="@id/searchBottomSheet" />
     </fragment>
     <fragment
         android:id="@+id/logsExtendedCopyFragment"
         android:name="com.f0x1d.logfox.ui.fragment.ExtendedCopyFragment"
-        android:label="ExtendedCopyFragment" />
+        android:label="ExtendedCopyFragment" >
+        <argument
+            android:name="content"
+            app:argType="string" />
+    </fragment>
+    <dialog
+        android:id="@+id/searchBottomSheet"
+        android:name="com.f0x1d.logfox.ui.dialog.SearchBottomSheet"
+        android:label="SearchBottomSheet" >
+        <argument
+            android:name="query"
+            app:argType="string"
+            app:nullable="true" />
+    </dialog>
 </navigation>

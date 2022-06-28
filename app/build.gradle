@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
+    id 'androidx.navigation.safeargs.kotlin'
 }
 
 android {
@@ -12,8 +13,8 @@ android {
         applicationId "com.f0x1d.logfox"
         minSdk 21
         targetSdk 32
-        versionCode 10
-        versionName "1.0.9"
+        versionCode 11
+        versionName "1.1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -60,9 +61,9 @@ dependencies {
     implementation "androidx.collection:collection-ktx:1.2.0"
     implementation "androidx.fragment:fragment-ktx:1.4.1"
     implementation "androidx.preference:preference-ktx:1.2.0"
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.5.0-rc01"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.5.0-rc01"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.0-rc01"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.5.0-rc02"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.5.0-rc02"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.0-rc02"
 
     implementation 'androidx.appcompat:appcompat:1.4.2'
     implementation 'com.google.android.material:material:1.6.1'

@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -47,7 +46,7 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
                 return@setOnMenuItemClickListener true
             }
             findItem(R.id.search_item).setOnMenuItemClickListener {
-                SearchBottomSheet.newInstance(viewModel.query).show(childFragmentManager, "SearchBottomSheet")
+                findNavController().navigate(LogsFragmentDirections.actionLogsFragmentToSearchBottomSheet(viewModel.query))
                 return@setOnMenuItemClickListener true
             }
             findItem(R.id.filter_log_levels_item).setOnMenuItemClickListener {
@@ -92,10 +91,8 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
         }
 
         viewModel.distinctiveData.observe(viewLifecycleOwner) {
-            if (it != null) {
-                adapter.elements = it
-                scrollLogToBottom()
-            }
+            adapter.elements = it ?: return@observe
+            scrollLogToBottom()
         }
 
         viewModel.pausedData.observe(viewLifecycleOwner) { paused ->
@@ -142,7 +139,7 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
                 val textToCopy = adapter.selectedItems.joinToString("\n") { it.original }
                 when (which) {
                     0 -> requireContext().copyText(textToCopy)
-                    1 -> findNavController().navigate(R.id.action_logsFragment_to_logsExtendedCopyFragment, bundleOf("content" to textToCopy))
+                    1 -> findNavController().navigate(LogsFragmentDirections.actionLogsFragmentToLogsExtendedCopyFragment(textToCopy))
                 }
             }
             .setNeutralButton(android.R.string.cancel, null)
