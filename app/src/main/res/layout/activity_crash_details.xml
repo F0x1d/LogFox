@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <com.google.android.material.appbar.MaterialToolbar
+    <com.f0x1d.logfox.ui.view.OpenSansToolbar
         android:id="@+id/toolbar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -18,10 +18,11 @@
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -32,56 +33,57 @@
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_marginTop="30dp"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/app_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:maxLines="1"
                 android:ellipsize="end"
-                android:textColor="?android:textColorPrimary"
-                android:textStyle="bold"
-                android:textSize="20sp"
-                android:includeFontPadding="false"
                 android:gravity="center"
-                android:layout_marginTop="20dp"
+                android:includeFontPadding="false"
+                android:maxLines="1"
+                android:textColor="?android:textColorPrimary"
+                android:textSize="20sp"
+                android:fontFamily="@font/google_sans_medium"
                 android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginEnd="10dp"
-                app:layout_constraintTop_toBottomOf="@id/app_logo"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintTop_toBottomOf="@id/app_logo" />
 
             <TextView
                 android:id="@+id/app_package"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:maxLines="1"
                 android:ellipsize="end"
                 android:gravity="center"
+                android:maxLines="1"
+                android:fontFamily="@font/google_sans"
                 android:layout_marginTop="5dp"
-                app:layout_constraintTop_toBottomOf="@id/app_name"
+                app:layout_constraintEnd_toEndOf="@id/app_name"
                 app:layout_constraintStart_toStartOf="@id/app_name"
-                app:layout_constraintEnd_toEndOf="@id/app_name"/>
+                app:layout_constraintTop_toBottomOf="@id/app_name" />
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/actions_card"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:cardElevation="0dp"
-                app:strokeWidth="1dp"
-                app:strokeColor="?attr/noteStrokeColor"
-                app:cardCornerRadius="10dp"
                 app:cardBackgroundColor="?android:windowBackground"
-                android:layout_marginTop="20dp"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="0dp"
+                app:strokeColor="?attr/noteStrokeColor"
+                app:strokeWidth="1dp"
                 android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginEnd="10dp"
-                app:layout_constraintTop_toBottomOf="@id/app_package"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/log_card"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/log_card">
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/app_package">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -91,13 +93,13 @@
                         android:id="@+id/copy_layout"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:focusable="true"
-                        android:clickable="true"
                         android:background="?selectableItemBackground"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
+                        android:clickable="true"
+                        android:focusable="true"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@id/share_layout"
-                        app:layout_constraintBottom_toBottomOf="parent">
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
 
                         <ImageView
                             android:id="@+id/copy_image"
@@ -106,41 +108,42 @@
                             android:src="@drawable/ic_copy"
                             app:tint="?colorPrimary"
                             android:layout_marginTop="15dp"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintStart_toStartOf="@id/copy_text"
+                            app:layout_constraintBottom_toTopOf="@id/copy_text"
                             app:layout_constraintEnd_toEndOf="@id/copy_text"
-                            app:layout_constraintBottom_toTopOf="@id/copy_text"/>
+                            app:layout_constraintStart_toStartOf="@id/copy_text"
+                            app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
                             android:id="@+id/copy_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/google_sans"
+                            android:includeFontPadding="false"
+                            android:maxLines="1"
                             android:text="@android:string/copy"
                             android:textColor="?colorPrimary"
-                            android:textSize="16sp"
+                            android:textSize="14sp"
                             android:textStyle="bold"
-                            android:ellipsize="end"
-                            android:maxLines="1"
-                            android:includeFontPadding="false"
                             android:layout_marginTop="10dp"
                             android:layout_marginBottom="15dp"
-                            app:layout_constraintTop_toBottomOf="@id/copy_image"
-                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"/>
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/copy_image" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/share_layout"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:focusable="true"
-                        android:clickable="true"
                         android:background="?selectableItemBackground"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/copy_layout"
+                        android:clickable="true"
+                        android:focusable="true"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@id/zip_layout"
-                        app:layout_constraintBottom_toBottomOf="parent">
+                        app:layout_constraintStart_toEndOf="@id/copy_layout"
+                        app:layout_constraintTop_toTopOf="parent">
 
                         <ImageView
                             android:id="@+id/share_image"
@@ -149,41 +152,42 @@
                             android:src="@drawable/ic_share"
                             app:tint="?colorPrimary"
                             android:layout_marginTop="15dp"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintStart_toStartOf="@id/share_text"
+                            app:layout_constraintBottom_toTopOf="@id/share_text"
                             app:layout_constraintEnd_toEndOf="@id/share_text"
-                            app:layout_constraintBottom_toTopOf="@id/share_text"/>
+                            app:layout_constraintStart_toStartOf="@id/share_text"
+                            app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
                             android:id="@+id/share_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/google_sans"
+                            android:includeFontPadding="false"
+                            android:maxLines="1"
                             android:text="@string/share"
                             android:textColor="?colorPrimary"
-                            android:textSize="16sp"
+                            android:textSize="14sp"
                             android:textStyle="bold"
-                            android:ellipsize="end"
-                            android:maxLines="1"
-                            android:includeFontPadding="false"
                             android:layout_marginTop="10dp"
                             android:layout_marginBottom="15dp"
-                            app:layout_constraintTop_toBottomOf="@id/share_image"
-                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"/>
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/share_image" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/zip_layout"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:focusable="true"
-                        android:clickable="true"
                         android:background="?selectableItemBackground"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/share_layout"
+                        android:clickable="true"
+                        android:focusable="true"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent">
+                        app:layout_constraintStart_toEndOf="@id/share_layout"
+                        app:layout_constraintTop_toTopOf="parent">
 
                         <ImageView
                             android:id="@+id/zip_image"
@@ -192,28 +196,29 @@
                             android:src="@drawable/ic_archive"
                             app:tint="?colorPrimary"
                             android:layout_marginTop="15dp"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintStart_toStartOf="@id/zip_text"
+                            app:layout_constraintBottom_toTopOf="@id/zip_text"
                             app:layout_constraintEnd_toEndOf="@id/zip_text"
-                            app:layout_constraintBottom_toTopOf="@id/zip_text"/>
+                            app:layout_constraintStart_toStartOf="@id/zip_text"
+                            app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
                             android:id="@+id/zip_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/google_sans"
+                            android:includeFontPadding="false"
+                            android:maxLines="1"
                             android:text="@string/zip"
                             android:textColor="?colorPrimary"
-                            android:textSize="16sp"
+                            android:textSize="14sp"
                             android:textStyle="bold"
-                            android:ellipsize="end"
-                            android:maxLines="1"
-                            android:includeFontPadding="false"
                             android:layout_marginTop="10dp"
                             android:layout_marginBottom="15dp"
-                            app:layout_constraintTop_toBottomOf="@id/zip_image"
-                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"/>
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/zip_image" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -222,16 +227,16 @@
                 android:id="@+id/log_card"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:cardElevation="0dp"
-                app:strokeWidth="1dp"
-                app:strokeColor="?attr/noteStrokeColor"
-                app:cardCornerRadius="10dp"
-                app:cardBackgroundColor="?android:windowBackground"
                 android:layout_margin="10dp"
-                app:layout_constraintTop_toBottomOf="@id/actions_card"
-                app:layout_constraintStart_toStartOf="parent"
+                app:cardBackgroundColor="?android:windowBackground"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="0dp"
+                app:strokeColor="?attr/noteStrokeColor"
+                app:strokeWidth="1dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent">
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/actions_card">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -241,13 +246,13 @@
                         android:id="@+id/log_text"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_margin="15dp"
                         android:fontFamily="monospace"
                         android:textIsSelectable="true"
-                        android:layout_margin="15dp"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
         </androidx.constraintlayout.widget.ConstraintLayout>

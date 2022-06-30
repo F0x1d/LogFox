@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <com.google.android.material.appbar.MaterialToolbar
+    <com.f0x1d.logfox.ui.view.OpenSansToolbar
         android:id="@+id/toolbar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -27,6 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/root"
+            android:fontFamily="@font/google_sans_medium"
             app:icon="@drawable/ic_square_root"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -38,6 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/adb"
+            android:fontFamily="@font/google_sans_medium"
             app:icon="@drawable/ic_adb"
             app:layout_constraintTop_toBottomOf="@id/root_button"
             app:layout_constraintStart_toStartOf="parent"
