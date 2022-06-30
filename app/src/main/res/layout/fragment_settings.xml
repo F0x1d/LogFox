@@ -8,11 +8,11 @@
         android:id="@+id/toolbar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:title="@string/settings"
-        app:titleCentered="true"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="@string/settings"
+        app:titleCentered="true" />
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/container"

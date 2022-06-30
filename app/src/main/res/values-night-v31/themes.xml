@@ -1,16 +1,16 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.LogFox" parent="Theme.Material3.Dark.NoActionBar">
+    <style name="Theme.LogFox" parent="Theme.Material3.DynamicColors.DayNight">
         <!-- Primary brand color. -->
-        <!-- <item name="colorPrimary">@color/orange_200</item> -->
-        <!-- <item name="colorOnPrimary">@color/black</item> -->
-        <!-- <item name="colorPrimaryContainer">@color/orange_700</item> -->
-        <!-- <item name="colorOnPrimaryContainer">@color/black</item> -->
+         <item name="colorPrimary">@color/system_accent1_200</item>
+         <item name="colorOnPrimary">@color/black</item>
+         <item name="colorPrimaryContainer">@color/system_accent1_700</item>
+         <item name="colorOnPrimaryContainer">@color/black</item>
         <!-- Secondary brand color. -->
-        <!-- <item name="colorSecondary">@color/orange_200</item> -->
-        <!-- <item name="colorOnSecondary">@color/black</item> -->
-        <!-- <item name="colorSecondaryContainer">@color/dark_secondary_container</item> -->
-        <!-- <item name="colorOnSecondaryContainer">@color/dark_on_secondary_container</item> -->
+         <item name="colorSecondary">@color/system_accent1_200</item>
+         <item name="colorOnSecondary">@color/black</item>
+         <item name="colorSecondaryContainer">@color/system_accent1_800</item>
+         <item name="colorOnSecondaryContainer">@color/system_accent1_100</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" >@android:color/transparent</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>

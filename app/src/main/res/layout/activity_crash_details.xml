@@ -115,19 +115,20 @@
                             android:id="@+id/copy_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@android:string/copy"
-                            android:textColor="?colorPrimary"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
-                            android:ellipsize="end"
-                            android:maxLines="1"
-                            android:includeFontPadding="false"
                             android:layout_marginTop="10dp"
                             android:layout_marginBottom="15dp"
-                            app:layout_constraintTop_toBottomOf="@id/copy_image"
-                            app:layout_constraintStart_toStartOf="parent"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/google_sans"
+                            android:includeFontPadding="false"
+                            android:maxLines="1"
+                            android:text="@android:string/copy"
+                            android:textColor="?colorPrimary"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"/>
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/copy_image" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -158,19 +159,20 @@
                             android:id="@+id/share_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/share"
-                            android:textColor="?colorPrimary"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
-                            android:ellipsize="end"
-                            android:maxLines="1"
-                            android:includeFontPadding="false"
                             android:layout_marginTop="10dp"
                             android:layout_marginBottom="15dp"
-                            app:layout_constraintTop_toBottomOf="@id/share_image"
-                            app:layout_constraintStart_toStartOf="parent"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/google_sans"
+                            android:includeFontPadding="false"
+                            android:maxLines="1"
+                            android:text="@string/share"
+                            android:textColor="?colorPrimary"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"/>
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/share_image" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -201,19 +203,20 @@
                             android:id="@+id/zip_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/zip"
-                            android:textColor="?colorPrimary"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
-                            android:ellipsize="end"
-                            android:maxLines="1"
-                            android:includeFontPadding="false"
                             android:layout_marginTop="10dp"
                             android:layout_marginBottom="15dp"
-                            app:layout_constraintTop_toBottomOf="@id/zip_image"
-                            app:layout_constraintStart_toStartOf="parent"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/google_sans"
+                            android:includeFontPadding="false"
+                            android:maxLines="1"
+                            android:text="@string/zip"
+                            android:textColor="?colorPrimary"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"/>
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/zip_image" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>

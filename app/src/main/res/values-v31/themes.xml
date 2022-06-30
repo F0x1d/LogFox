@@ -1,16 +1,16 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.LogFox" parent="Theme.Material3.Light.NoActionBar">
+    <style name="Theme.LogFox" parent="Theme.Material3.DynamicColors.DayNight">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/orange_500</item>
+        <item name="colorPrimary">@color/system_accent1_500</item>
         <item name="colorOnPrimary">@color/white</item>
-        <item name="colorPrimaryContainer">@color/orange_100</item>
+        <item name="colorPrimaryContainer">@color/system_accent1_100</item>
         <item name="colorOnPrimaryContainer">@color/black</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/orange_200</item>
+        <item name="colorSecondary">@color/system_accent1_200</item>
         <item name="colorOnSecondary">@color/white</item>
-        <item name="colorSecondaryContainer">@color/light_secondary_container</item>
-        <item name="colorOnSecondaryContainer">@color/light_on_secondary_container</item>
+        <item name="colorSecondaryContainer">@color/system_accent1_100</item>
+        <item name="colorOnSecondaryContainer">@color/system_accent1_900</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" >@android:color/transparent</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
@@ -24,18 +24,5 @@
         <!-- ActionBar -->
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
-
-        <item name="appBarLayoutStyle">@style/LogFox.Toolbar</item>
-    </style>
-
-    <style name="LogFox.Switches" parent="Widget.Material3.CompoundButton.Switch">
-        <item name="android:switchMinWidth">52dp</item>
-        <item name="android:minHeight">48dp</item>
-        <item name="track">@drawable/switch_track</item>
-        <item name="android:thumb">@drawable/switch_thumb</item>
-    </style>
-
-    <style name="LogFox.Toolbar" parent="@style/Widget.Material3.ActionBar.Solid">
-        <item name="fontFamily">sans-serif-black</item>
     </style>
 </resources>
