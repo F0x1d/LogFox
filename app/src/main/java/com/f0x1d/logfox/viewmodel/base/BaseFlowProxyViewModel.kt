@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.viewModelScope
+import com.f0x1d.logfox.extensions.suspendAndPostValue
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
@@ -27,7 +28,7 @@ abstract class BaseFlowProxyViewModel<T, R>(application: Application, private va
         stopCollector()
 
         startCollector {
-            data.postValue(it)
+            data.suspendAndPostValue(it)
         }
     }
 
@@ -35,7 +36,7 @@ abstract class BaseFlowProxyViewModel<T, R>(application: Application, private va
         stopCollector()
 
         startCollector {
-            data.postValue(it)
+            data.suspendAndPostValue(it)
             stopCollector()
         }
     }

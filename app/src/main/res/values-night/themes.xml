@@ -2,15 +2,15 @@
     <!-- Base application theme. -->
     <style name="Theme.LogFox" parent="Theme.Material3.Dark.NoActionBar">
         <!-- Primary brand color. -->
-        <!-- <item name="colorPrimary">@color/orange_200</item> -->
-        <!-- <item name="colorOnPrimary">@color/black</item> -->
-        <!-- <item name="colorPrimaryContainer">@color/orange_700</item> -->
-        <!-- <item name="colorOnPrimaryContainer">@color/black</item> -->
+        <item name="colorPrimary">@color/orange_200</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorPrimaryContainer">@color/orange_700</item>
+        <item name="colorOnPrimaryContainer">@color/black</item>
         <!-- Secondary brand color. -->
-        <!-- <item name="colorSecondary">@color/orange_200</item> -->
-        <!-- <item name="colorOnSecondary">@color/black</item> -->
-        <!-- <item name="colorSecondaryContainer">@color/dark_secondary_container</item> -->
-        <!-- <item name="colorOnSecondaryContainer">@color/dark_on_secondary_container</item> -->
+        <item name="colorSecondary">@color/orange_200</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorSecondaryContainer">@color/dark_secondary_container</item>
+        <item name="colorOnSecondaryContainer">@color/dark_on_secondary_container</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" >@android:color/transparent</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
@@ -21,9 +21,6 @@
         <item name="enableEdgeToEdge">true</item>
         <item name="switchStyle">@style/LogFox.Switches</item>
         <item name="noteStrokeColor">@color/noteStrokeColorDark</item>
-
-        <!-- ActionBar -->
-        <item name="windowNoTitle">true</item>
-        <item name="windowActionBar">false</item>
+        <item name="preferenceTheme">@style/LogFox.PreferenceTheme</item>
     </style>
 </resources>

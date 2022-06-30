@@ -12,7 +12,7 @@
         <item name="colorSecondaryContainer">@color/light_secondary_container</item>
         <item name="colorOnSecondaryContainer">@color/light_on_secondary_container</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" >@android:color/transparent</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
@@ -20,22 +20,10 @@
         <item name="enableEdgeToEdge">true</item>
         <item name="switchStyle">@style/LogFox.Switches</item>
         <item name="noteStrokeColor">@color/noteStrokeColor</item>
-
-        <!-- ActionBar -->
-        <item name="windowNoTitle">true</item>
-        <item name="windowActionBar">false</item>
-
-        <item name="appBarLayoutStyle">@style/LogFox.Toolbar</item>
+        <item name="preferenceTheme">@style/LogFox.PreferenceTheme</item>
     </style>
 
-    <style name="LogFox.Switches" parent="Widget.Material3.CompoundButton.Switch">
-        <item name="android:switchMinWidth">52dp</item>
-        <item name="android:minHeight">48dp</item>
-        <item name="track">@drawable/switch_track</item>
-        <item name="android:thumb">@drawable/switch_thumb</item>
-    </style>
-
-    <style name="LogFox.Toolbar" parent="@style/Widget.Material3.ActionBar.Solid">
-        <item name="fontFamily">sans-serif-black</item>
+    <style name="LogFox.PreferenceTheme" parent="PreferenceThemeOverlay">
+        <item name="android:fontFamily">@font/google_sans</item>
     </style>
 </resources>

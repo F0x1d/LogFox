@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationManagerCompat
 import com.f0x1d.logfox.extensions.notificationManagerCompat
+import com.google.android.material.color.DynamicColors
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.MainScope
 
@@ -21,6 +22,8 @@ class LogFoxApp: Application() {
     override fun onCreate() {
         super.onCreate()
         instance = this
+
+        DynamicColors.applyToActivitiesIfAvailable(this)
 
         notificationManagerCompat.apply {
             val loggingStatusChannel = NotificationChannelCompat.Builder(LOGGING_STATUS_CHANNEL_ID, NotificationManagerCompat.IMPORTANCE_MIN)

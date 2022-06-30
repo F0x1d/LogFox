@@ -1,21 +1,19 @@
 package com.f0x1d.logfox.extensions
 
 import android.Manifest
-import android.app.Activity
 import android.app.ActivityManager
-import android.app.PendingIntent
-import android.app.Service
-import android.content.*
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
-import android.os.Bundle
 import android.widget.Toast
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.repository.LoggingRepository
 import com.f0x1d.logfox.service.LoggingService
-import com.f0x1d.logfox.utils.pendingIntentFlags
 import kotlin.system.exitProcess
 
 
@@ -32,42 +30,6 @@ fun Context.hasPermissionToReadLogs() = ContextCompat.checkSelfPermission(
 
 val Context.notificationManagerCompat get() = NotificationManagerCompat.from(this)
 val Context.activityManager get() = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
-
-fun <T : BroadcastReceiver> Context.makeBroadcastPendingIntent(id: Int, clazz: Class<T>, setup: Intent.() -> Unit) = PendingIntent.getBroadcast(
-    this,
-    id,
-    Intent(this, clazz).also { setup.invoke(it) },
-    pendingIntentFlags
-)
-
-fun <T : BroadcastReceiver> Context.makeBroadcastPendingIntent(id: Int, clazz: Class<T>, extras: Bundle = Bundle.EMPTY) = makeBroadcastPendingIntent(
-    id,
-    clazz
-) { putExtras(extras) }
-
-fun <T : Service> Context.makeServicePendingIntent(id: Int, clazz: Class<T>, setup: Intent.() -> Unit) = PendingIntent.getService(
-    this,
-    id,
-    Intent(this, clazz).also { setup.invoke(it) },
-    pendingIntentFlags
-)
-
-fun <T : Service> Context.makeServicePendingIntent(id: Int, clazz: Class<T>, extras: Bundle = Bundle.EMPTY) = makeServicePendingIntent(
-    id,
-    clazz
-) { putExtras(extras) }
-
-fun <T : Activity> Context.makeActivityPendingIntent(id: Int, clazz: Class<T>, setup: Intent.() -> Unit) = PendingIntent.getActivity(
-    this,
-    id,
-    Intent(this, clazz).also { setup.invoke(it) },
-    pendingIntentFlags
-)
-
-fun <T : Activity> Context.makeActivityPendingIntent(id: Int, clazz: Class<T>, extras: Bundle = Bundle.EMPTY) = makeActivityPendingIntent(
-    id,
-    clazz
-) { putExtras(extras) }
 
 fun Context.startLoggingAndService(loggingRepository: LoggingRepository) {
     loggingRepository.startLoggingIfNot()
@@ -103,19 +65,6 @@ fun Context.shareIntent(text: String) {
 
     startActivity(Intent.createChooser(intent, getString(R.string.share)))
 }
-
-fun Context.isOmnibinInstalled() = try {
-    packageManager.getPackageInfo("com.f0x1d.dogbin", 0)
-    true
-} catch (e: PackageManager.NameNotFoundException) {
-    false
-}
-
-fun uploadToFoxBinIntent(content: String) = Intent("com.f0x1d.dogbin.ACTION_UPLOAD_TO_FOXBIN").apply {
-    putExtra(Intent.EXTRA_TEXT, content)
-    type = "text/plain"
-}
-fun Context.uploadToFoxBin(content: String) = startActivity(uploadToFoxBinIntent(content))
 
 fun Context.catchingNotNumber(block: () -> Unit) = try {
     block.invoke()
