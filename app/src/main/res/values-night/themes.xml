@@ -21,6 +21,8 @@
         <item name="enableEdgeToEdge">true</item>
         <item name="switchStyle">@style/LogFox.Switches</item>
         <item name="noteStrokeColor">@color/noteStrokeColorDark</item>
-        <item name="preferenceTheme">@style/LogFox.PreferenceTheme</item>
+
+        <item name="fontFamily">@font/google_sans</item>
+        <item name="android:fontFamily">@font/google_sans</item>
     </style>
 </resources>

@@ -22,6 +22,6 @@ class ExtendedCopyFragment: BaseFragment<FragmentExtendedCopyBinding>() {
             findNavController().popBackStack()
         }
 
-        binding.text.text = navArgs.content
+        binding.logText.text = navArgs.content
     }
 }

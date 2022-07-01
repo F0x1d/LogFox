@@ -1,6 +1,7 @@
 package com.f0x1d.logfox.ui.activity
 
 import android.os.Bundle
+import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.navigation.navArgs
@@ -9,6 +10,7 @@ import com.f0x1d.logfox.database.AppCrash
 import com.f0x1d.logfox.databinding.ActivityCrashDetailsBinding
 import com.f0x1d.logfox.extensions.*
 import com.f0x1d.logfox.ui.activity.base.BaseViewModelActivity
+import com.f0x1d.logfox.utils.event.Event
 import com.f0x1d.logfox.utils.viewModelFactory
 import com.f0x1d.logfox.viewmodel.CrashDetailsViewModel
 import com.f0x1d.logfox.viewmodel.CrashDetailsViewModelAssistedFactory
@@ -46,6 +48,20 @@ class CrashDetailsActivity: BaseViewModelActivity<CrashDetailsViewModel, Activit
         viewModel.data.observe(this) {
             setupFor(it ?: return@observe)
         }
+
+        viewModel.uploadingStateData.observe(this) {
+            binding.omnibinLayout.isEnabled = !it
+
+            binding.omnibinImage.visibility = if (it) View.INVISIBLE else View.VISIBLE
+            binding.omnibinText.visibility = if (it) View.INVISIBLE else View.VISIBLE
+
+            binding.omnibinLoadingProgress.visibility = if (it) View.VISIBLE else View.INVISIBLE
+        }
+    }
+
+    override fun onEvent(event: Event) {
+        if (event.type == CrashDetailsViewModel.EVENT_TYPE_COPY_LINK)
+            copyText(event.consume() ?: return)
     }
 
     private fun setupFor(appCrash: AppCrash) {
@@ -58,19 +74,17 @@ class CrashDetailsActivity: BaseViewModelActivity<CrashDetailsViewModel, Activit
         binding.copyLayout.setOnClickListener {
             copyText(appCrash.log)
         }
-        isOmnibinInstalled().also {
-            binding.shareImage.setImageResource(if (it) R.drawable.ic_add_link else R.drawable.ic_share)
-            binding.shareText.setText(if (it) R.string.omnibin else R.string.share)
 
-            binding.shareLayout.setOnClickListener { view ->
-                appCrash.log.apply {
-                    if (it)
-                        uploadToFoxBin(this)
-                    else
-                        shareIntent(this)
-                }
+        binding.omnibinLayout.setOnClickListener {
+            appCrash.log.apply {
+                if (isOmnibinInstalled())
+                    uploadToFoxBin(this)
+                else
+                    viewModel.uploadCrash(this)
             }
         }
+        binding.omnibinText.setText(if (isOmnibinInstalled()) R.string.omnibin else R.string.foxbin)
+
         binding.zipLayout.setOnClickListener {
             zipCrashLauncher.launch("crash-${appCrash.packageName.replace(".", "-")}-${appCrash.dateAndTime.exportFormatted}.zip")
         }

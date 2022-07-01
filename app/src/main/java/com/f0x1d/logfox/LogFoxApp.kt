@@ -4,8 +4,10 @@ import android.app.Application
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationManagerCompat
 import com.f0x1d.logfox.extensions.notificationManagerCompat
+import com.f0x1d.logfox.utils.FontsInterceptor
 import com.google.android.material.color.DynamicColors
 import dagger.hilt.android.HiltAndroidApp
+import io.github.inflationx.viewpump.ViewPump
 import kotlinx.coroutines.MainScope
 
 @HiltAndroidApp
@@ -22,6 +24,12 @@ class LogFoxApp: Application() {
     override fun onCreate() {
         super.onCreate()
         instance = this
+
+        ViewPump.init(
+            ViewPump.builder()
+                .addInterceptor(FontsInterceptor(this))
+                .build()
+        )
 
         DynamicColors.applyToActivitiesIfAvailable(this)
 

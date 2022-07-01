@@ -6,8 +6,4 @@
         <item name="track">@drawable/switch_track</item>
         <item name="android:thumb">@drawable/switch_thumb</item>
     </style>
-
-    <style name="BottomNavTextStyle">
-        <item name="android:fontFamily">@font/google_sans_medium</item>
-    </style>
 </resources>

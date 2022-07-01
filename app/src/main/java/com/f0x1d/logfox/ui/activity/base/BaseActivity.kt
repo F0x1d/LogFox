@@ -1,8 +1,10 @@
 package com.f0x1d.logfox.ui.activity.base
 
+import android.content.Context
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewbinding.ViewBinding
+import io.github.inflationx.viewpump.ViewPumpContextWrapper
 
 abstract class BaseActivity<T : ViewBinding>: AppCompatActivity() {
 
@@ -17,5 +19,9 @@ abstract class BaseActivity<T : ViewBinding>: AppCompatActivity() {
             binding = it
             setContentView(it.root)
         }
+    }
+
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase))
     }
 }

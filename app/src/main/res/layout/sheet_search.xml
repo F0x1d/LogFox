@@ -12,7 +12,6 @@
         android:textColor="?android:textColorPrimary"
         android:textStyle="bold"
         android:textSize="28sp"
-        android:fontFamily="@font/google_sans_medium"
         android:layout_marginTop="20dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -38,7 +37,6 @@
             android:id="@+id/query_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fontFamily="@font/google_sans_medium"
             android:inputType="text"
             android:imeOptions="actionSearch"/>
     </com.google.android.material.textfield.TextInputLayout>
@@ -63,7 +61,6 @@
             app:icon="@drawable/ic_clear"
             app:strokeColor="?colorPrimary"
             app:strokeWidth="2dp"
-            android:fontFamily="@font/google_sans_medium"
             android:layout_marginStart="20dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -77,7 +74,6 @@
             android:layout_height="wrap_content"
             android:text="@string/search"
             app:icon="@drawable/ic_search"
-            android:fontFamily="@font/google_sans_medium"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             app:layout_constraintTop_toTopOf="parent"

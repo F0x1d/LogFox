@@ -35,6 +35,7 @@
     <string name="recordings">Recordings</string>
     <string name="delete">Delete</string>
     <string name="resume">Resume</string>
+    <string name="foxbin" translatable="false">foxbin</string>
     <string name="omnibin" translatable="false">omnibin</string>
     <string name="ui" translatable="false">UI</string>
     <string name="logs_update_interval">Logs update interval</string>
@@ -47,4 +48,7 @@
     <string name="show_jni_crashes_notifications">Show JNI crashes notifications</string>
     <string name="collect_anr">Collect ANR</string>
     <string name="show_anr_notifications">Show ANR notifications</string>
+    <string name="error">Error: %s</string>
+    <string name="integrations">Integrations</string>
+    <string name="omnibin_integration_desc">Easily view and manage your pastes</string>
 </resources>

@@ -60,6 +60,19 @@
             app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
+    <PreferenceCategory android:title="@string/integrations" app:iconSpaceReserved="false">
+        <Preference
+            android:title="@string/omnibin"
+            android:summary="@string/omnibin_integration_desc"
+            android:key="pref_omnibin_integration"
+            app:iconSpaceReserved="false">
+
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="https://play.google.com/store/apps/details?id=com.f0x1d.dogbin" />
+        </Preference>
+    </PreferenceCategory>
+
     <PreferenceCategory android:title="@string/about_app" app:iconSpaceReserved="false">
         <Preference
             android:title="@string/developer"

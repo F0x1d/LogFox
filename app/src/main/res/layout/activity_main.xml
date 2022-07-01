@@ -20,8 +20,6 @@
         android:id="@+id/bottom_navigation"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:itemTextAppearanceActive="@style/BottomNavTextStyle"
-        app:itemTextAppearanceInactive="@style/BottomNavTextStyle"
         app:menu="@menu/main_menu"
         app:layout_constraintTop_toBottomOf="@id/nav_host_fragment_content_main"
         app:layout_constraintStart_toStartOf="parent"

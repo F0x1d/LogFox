@@ -26,7 +26,6 @@
         android:textSize="20sp"
         android:textStyle="bold"
         android:includeFontPadding="false"
-        android:fontFamily="@font/google_sans_medium"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"

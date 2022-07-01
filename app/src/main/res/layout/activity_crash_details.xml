@@ -47,7 +47,6 @@
                 android:maxLines="1"
                 android:textColor="?android:textColorPrimary"
                 android:textSize="20sp"
-                android:fontFamily="@font/google_sans_medium"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="10dp"
@@ -62,7 +61,6 @@
                 android:ellipsize="end"
                 android:gravity="center"
                 android:maxLines="1"
-                android:fontFamily="@font/google_sans"
                 android:layout_marginTop="5dp"
                 app:layout_constraintEnd_toEndOf="@id/app_name"
                 app:layout_constraintStart_toStartOf="@id/app_name"
@@ -97,7 +95,7 @@
                         android:clickable="true"
                         android:focusable="true"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/share_layout"
+                        app:layout_constraintEnd_toStartOf="@id/omnibin_layout"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
 
@@ -118,7 +116,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:ellipsize="end"
-                            android:fontFamily="@font/google_sans"
                             android:includeFontPadding="false"
                             android:maxLines="1"
                             android:text="@android:string/copy"
@@ -134,7 +131,7 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/share_layout"
+                        android:id="@+id/omnibin_layout"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:background="?selectableItemBackground"
@@ -146,26 +143,25 @@
                         app:layout_constraintTop_toTopOf="parent">
 
                         <ImageView
-                            android:id="@+id/share_image"
+                            android:id="@+id/omnibin_image"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/ic_share"
+                            android:src="@drawable/ic_add_link"
                             app:tint="?colorPrimary"
                             android:layout_marginTop="15dp"
-                            app:layout_constraintBottom_toTopOf="@id/share_text"
-                            app:layout_constraintEnd_toEndOf="@id/share_text"
-                            app:layout_constraintStart_toStartOf="@id/share_text"
+                            app:layout_constraintBottom_toTopOf="@id/omnibin_text"
+                            app:layout_constraintEnd_toEndOf="@id/omnibin_text"
+                            app:layout_constraintStart_toStartOf="@id/omnibin_text"
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
-                            android:id="@+id/share_text"
+                            android:id="@+id/omnibin_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:ellipsize="end"
-                            android:fontFamily="@font/google_sans"
                             android:includeFontPadding="false"
                             android:maxLines="1"
-                            android:text="@string/share"
+                            android:text="@string/omnibin"
                             android:textColor="?colorPrimary"
                             android:textSize="14sp"
                             android:textStyle="bold"
@@ -174,7 +170,18 @@
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/share_image" />
+                            app:layout_constraintTop_toBottomOf="@id/omnibin_image" />
+
+                        <ProgressBar
+                            android:id="@+id/omnibin_loading_progress"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:visibility="invisible"
+                            android:indeterminate="true"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -186,7 +193,7 @@
                         android:focusable="true"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/share_layout"
+                        app:layout_constraintStart_toEndOf="@id/omnibin_layout"
                         app:layout_constraintTop_toTopOf="parent">
 
                         <ImageView
@@ -206,7 +213,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:ellipsize="end"
-                            android:fontFamily="@font/google_sans"
                             android:includeFontPadding="false"
                             android:maxLines="1"
                             android:text="@string/zip"
@@ -247,7 +253,6 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_margin="15dp"
-                        android:fontFamily="monospace"
                         android:textIsSelectable="true"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"

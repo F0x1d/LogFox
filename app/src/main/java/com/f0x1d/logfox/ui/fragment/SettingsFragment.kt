@@ -10,6 +10,7 @@ import androidx.preference.PreferenceFragmentCompat
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.databinding.FragmentSettingsBinding
 import com.f0x1d.logfox.extensions.catchingNotNumber
+import com.f0x1d.logfox.extensions.isOmnibinInstalled
 import com.f0x1d.logfox.extensions.setupAsEditTextPreference
 import com.f0x1d.logfox.ui.fragment.base.BaseFragment
 import com.f0x1d.logfox.utils.preferences.AppPreferences
@@ -69,6 +70,12 @@ class SettingsFragment: BaseFragment<FragmentSettingsBinding>() {
 
                 observeAndUpdateSummary(14)
             }
+        }
+
+        override fun onStart() {
+            super.onStart()
+
+            findPreference<Preference>("pref_omnibin_integration")?.isEnabled = !requireContext().isOmnibinInstalled()
         }
 
         private inline fun <reified T> Preference.observeAndUpdateSummary(defValue: T) {
