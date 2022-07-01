@@ -18,13 +18,17 @@ abstract class BaseViewModel(application: Application): AndroidViewModel(applica
 
     val eventsData = MutableLiveData<Event>()
 
-    protected fun launchCatching(context: CoroutineContext, block: suspend CoroutineScope.() -> Unit) = viewModelScope.launch(context) {
+    protected fun launchCatching(context: CoroutineContext,
+                                 errorBlock: suspend CoroutineScope.() -> Unit = {},
+                                 block: suspend CoroutineScope.() -> Unit) = viewModelScope.launch(context) {
         try {
             coroutineScope {
                 block.invoke(this)
             }
         } catch (e: Exception) {
             if (e is CancellationException) return@launch
+
+            errorBlock.invoke(this)
 
             e.printStackTrace()
 

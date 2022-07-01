@@ -1,6 +1,7 @@
 package com.f0x1d.logfox.repository
 
 import com.f0x1d.logfox.network.model.request.FoxBinCreateDocumentRequest
+import com.f0x1d.logfox.network.model.response.FoxBinErrorResponse
 import com.f0x1d.logfox.network.service.FoxBinApiService
 import com.f0x1d.logfox.repository.base.BaseRepository
 import com.google.gson.Gson
@@ -21,6 +22,14 @@ class FoxBinRepository @Inject constructor(private val foxBinApiService: FoxBinA
             gson.toJson(FoxBinCreateDocumentRequest(content)).toRequestBody("application/json".toMediaType())
         ).execute()
 
-        return@withContext FOXBIN_DOMAIN + (response.body()?.slug ?: throw Exception(response.message()))
+        response.errorBody()?.apply {
+            throw Exception(gson.fromJson(string(), FoxBinErrorResponse::class.java).error).also { close() }
+        }
+
+        response.body()?.apply {
+            return@withContext FOXBIN_DOMAIN + slug
+        }
+
+        throw Exception(response.toString())
     }
 }

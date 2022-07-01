@@ -14,6 +14,7 @@ class FontsInterceptor(context: Context): Interceptor {
     private val fontsMap = hashMapOf(
         R.id.log_text to Typeface.MONOSPACE,
         R.id.title to boldSansTypeface,
+        R.id.app_name to boldSansTypeface,
         android.R.id.title to boldSansTypeface,
         R.id.recording_text to boldSansTypeface,
         R.id.delete_button to boldSansTypeface,

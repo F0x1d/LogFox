@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import com.f0x1d.logfox.extensions.filterAndSearch
 import com.f0x1d.logfox.model.LogLine
-import com.f0x1d.logfox.repository.LoggingRepository
+import com.f0x1d.logfox.repository.logging.LoggingRepository
 import com.f0x1d.logfox.utils.preferences.EnabledLogLevels
 import com.f0x1d.logfox.utils.preferences.LogFilterPreferences
 import com.f0x1d.logfox.viewmodel.base.BaseSameFlowProxyViewModel

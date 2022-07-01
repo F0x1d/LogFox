@@ -12,7 +12,7 @@ import android.widget.Toast
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import com.f0x1d.logfox.R
-import com.f0x1d.logfox.repository.LoggingRepository
+import com.f0x1d.logfox.repository.logging.LoggingRepository
 import com.f0x1d.logfox.service.LoggingService
 import kotlin.system.exitProcess
 

@@ -1,11 +1,11 @@
-package com.f0x1d.logfox.repository
+package com.f0x1d.logfox.repository.logging
 
 import com.f0x1d.logfox.database.AppDatabase
 import com.f0x1d.logfox.database.LogRecording
 import com.f0x1d.logfox.extensions.updateList
 import com.f0x1d.logfox.model.LogLine
-import com.f0x1d.logfox.repository.base.LoggingHelperRepository
-import com.f0x1d.logfox.repository.readers.base.BaseReader
+import com.f0x1d.logfox.repository.logging.base.LoggingHelperRepository
+import com.f0x1d.logfox.repository.logging.readers.base.BaseReader
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update

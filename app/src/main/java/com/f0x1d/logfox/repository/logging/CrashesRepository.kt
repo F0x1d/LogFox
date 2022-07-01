@@ -1,15 +1,15 @@
-package com.f0x1d.logfox.repository
+package com.f0x1d.logfox.repository.logging
 
 import android.content.Context
 import com.f0x1d.logfox.database.AppCrash
 import com.f0x1d.logfox.database.AppDatabase
 import com.f0x1d.logfox.extensions.sendErrorNotification
 import com.f0x1d.logfox.extensions.updateList
-import com.f0x1d.logfox.repository.base.LoggingHelperRepository
-import com.f0x1d.logfox.repository.readers.base.BaseReader
-import com.f0x1d.logfox.repository.readers.crashes.ANRDetector
-import com.f0x1d.logfox.repository.readers.crashes.JNICrashDetector
-import com.f0x1d.logfox.repository.readers.crashes.JavaCrashDetector
+import com.f0x1d.logfox.repository.logging.base.LoggingHelperRepository
+import com.f0x1d.logfox.repository.logging.readers.base.BaseReader
+import com.f0x1d.logfox.repository.logging.readers.crashes.ANRDetector
+import com.f0x1d.logfox.repository.logging.readers.crashes.JNICrashDetector
+import com.f0x1d.logfox.repository.logging.readers.crashes.JavaCrashDetector
 import com.f0x1d.logfox.utils.preferences.AppPreferences
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow

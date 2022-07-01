@@ -2,7 +2,7 @@ package com.f0x1d.logfox.viewmodel
 
 import android.app.Application
 import com.f0x1d.logfox.database.AppCrash
-import com.f0x1d.logfox.repository.CrashesRepository
+import com.f0x1d.logfox.repository.logging.CrashesRepository
 import com.f0x1d.logfox.viewmodel.base.BaseSameFlowProxyViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject

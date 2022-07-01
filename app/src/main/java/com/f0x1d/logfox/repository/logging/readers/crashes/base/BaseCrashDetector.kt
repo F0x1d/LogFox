@@ -1,10 +1,10 @@
-package com.f0x1d.logfox.repository.readers.crashes.base
+package com.f0x1d.logfox.repository.logging.readers.crashes.base
 
 import com.f0x1d.logfox.LogFoxApp
 import com.f0x1d.logfox.database.AppCrash
 import com.f0x1d.logfox.database.CrashType
 import com.f0x1d.logfox.model.LogLine
-import com.f0x1d.logfox.repository.readers.base.BaseReader
+import com.f0x1d.logfox.repository.logging.readers.base.BaseReader
 
 abstract class BaseCrashDetector(private val collected: suspend (AppCrash) -> Unit): BaseReader {
 

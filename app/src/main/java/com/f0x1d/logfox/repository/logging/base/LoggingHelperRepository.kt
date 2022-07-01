@@ -1,6 +1,7 @@
-package com.f0x1d.logfox.repository.base
+package com.f0x1d.logfox.repository.logging.base
 
-import com.f0x1d.logfox.repository.readers.base.BaseReader
+import com.f0x1d.logfox.repository.base.BaseRepository
+import com.f0x1d.logfox.repository.logging.readers.base.BaseReader
 
 abstract class LoggingHelperRepository: BaseRepository() {
 

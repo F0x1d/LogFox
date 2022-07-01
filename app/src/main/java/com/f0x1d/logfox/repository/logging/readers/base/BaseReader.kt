@@ -1,4 +1,4 @@
-package com.f0x1d.logfox.repository.readers.base
+package com.f0x1d.logfox.repository.logging.readers.base
 
 import com.f0x1d.logfox.model.LogLine
 

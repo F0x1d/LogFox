@@ -8,7 +8,7 @@ import com.f0x1d.logfox.LogFoxApp
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.extensions.activityManager
 import com.f0x1d.logfox.extensions.makeServicePendingIntent
-import com.f0x1d.logfox.repository.LoggingRepository
+import com.f0x1d.logfox.repository.logging.LoggingRepository
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

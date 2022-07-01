@@ -4,7 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import com.f0x1d.logfox.extensions.startLoggingAndServiceIfCan
-import com.f0x1d.logfox.repository.LoggingRepository
+import com.f0x1d.logfox.repository.logging.LoggingRepository
 import com.f0x1d.logfox.utils.preferences.AppPreferences
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject

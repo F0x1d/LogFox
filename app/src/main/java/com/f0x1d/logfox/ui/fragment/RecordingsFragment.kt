@@ -11,7 +11,7 @@ import com.f0x1d.logfox.R
 import com.f0x1d.logfox.adapter.RecordingsAdapter
 import com.f0x1d.logfox.database.LogRecording
 import com.f0x1d.logfox.databinding.FragmentRecordingsBinding
-import com.f0x1d.logfox.repository.RecordingState
+import com.f0x1d.logfox.repository.logging.RecordingState
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
 import com.f0x1d.logfox.utils.RecyclerViewDivider
 import com.f0x1d.logfox.utils.dpToPx

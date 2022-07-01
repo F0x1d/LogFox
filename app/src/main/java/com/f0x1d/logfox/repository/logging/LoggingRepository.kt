@@ -1,4 +1,4 @@
-package com.f0x1d.logfox.repository
+package com.f0x1d.logfox.repository.logging
 
 import android.content.SharedPreferences
 import com.f0x1d.logfox.extensions.LogLine

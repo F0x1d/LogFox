@@ -4,15 +4,16 @@ import android.app.Application
 import androidx.lifecycle.asLiveData
 import com.f0x1d.logfox.database.LogRecording
 import com.f0x1d.logfox.extensions.sendEvent
-import com.f0x1d.logfox.repository.RecordingState
-import com.f0x1d.logfox.repository.RecordsRepository
+import com.f0x1d.logfox.repository.logging.RecordingState
+import com.f0x1d.logfox.repository.logging.RecordsRepository
 import com.f0x1d.logfox.viewmodel.base.BaseSameFlowProxyViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class RecordingsViewModel @Inject constructor(application: Application,
-                                              private val recordsRepository: RecordsRepository): BaseSameFlowProxyViewModel<List<LogRecording>>(
+                                              private val recordsRepository: RecordsRepository
+): BaseSameFlowProxyViewModel<List<LogRecording>>(
     application,
     recordsRepository.recordingsFlow
 ) {

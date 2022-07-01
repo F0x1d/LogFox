@@ -75,6 +75,10 @@ class CrashDetailsActivity: BaseViewModelActivity<CrashDetailsViewModel, Activit
             copyText(appCrash.log)
         }
 
+        binding.shareLayout.setOnClickListener {
+            shareIntent(appCrash.log)
+        }
+
         binding.omnibinLayout.setOnClickListener {
             appCrash.log.apply {
                 if (isOmnibinInstalled())

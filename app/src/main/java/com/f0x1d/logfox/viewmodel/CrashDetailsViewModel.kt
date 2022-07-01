@@ -26,7 +26,7 @@ class CrashDetailsViewModel @AssistedInject constructor(application: Application
     val uploadingStateData = MutableLiveData<Boolean>()
 
     fun uploadCrash(content: String) {
-        launchCatching(Dispatchers.Main) {
+        launchCatching(Dispatchers.Main, { uploadingStateData.value = false }) {
             uploadingStateData.value = true
 
             val resultLink = foxBinRepository.uploadViaApi(content)
