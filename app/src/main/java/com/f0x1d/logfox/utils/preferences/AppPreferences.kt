@@ -9,14 +9,19 @@ import javax.inject.Inject
 
 class AppPreferences @Inject constructor(@ApplicationContext context: Context): BasePreferences(context) {
 
+    companion object {
+        const val LOGS_UPDATE_INTERVAL_DEFAULT = 300L
+        const val LOGS_TEXT_SIZE_DEFAULT = 14
+    }
+
     var startOnBoot
         get() = get("pref_start_on_boot", true)
         set(value) { put("pref_start_on_boot", value) }
     var logsUpdateInterval
-        get() = get("pref_logs_update_interval", 150L)
+        get() = get("pref_logs_update_interval", LOGS_UPDATE_INTERVAL_DEFAULT)
         set(value) { put("pref_logs_update_interval", value) }
     var logsTextSize
-        get() = get("pref_logs_text_size", 14)
+        get() = get("pref_logs_text_size", LOGS_TEXT_SIZE_DEFAULT)
         set(value) { put("pref_logs_text_size", value) }
     var logsExpanded
         get() = get("pref_logs_expanded", false)

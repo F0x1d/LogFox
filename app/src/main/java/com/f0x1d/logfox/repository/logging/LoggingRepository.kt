@@ -29,7 +29,7 @@ class LoggingRepository @Inject constructor(crashesRepository: CrashesRepository
     val logsFlow = MutableStateFlow(emptyList<LogLine>())
 
     private var loggingJob: Job? = null
-    private var loggingInterval = 150L
+    private var loggingInterval = AppPreferences.LOGS_UPDATE_INTERVAL_DEFAULT
     private var idsCounter = -1L
 
     private val helpers = listOf(
@@ -69,14 +69,13 @@ class LoggingRepository @Inject constructor(crashesRepository: CrashesRepository
     }
 
     fun clearLogs() {
-        logsFlow.update { emptyList() }
+        logsFlow.update {
+            emptyList()
+        }
     }
 
     private suspend fun readLogs() = coroutineScope {
-        val stream = Runtime.getRuntime().run {
-            exec("logcat -c").waitFor()
-            exec("logcat -v epoch").inputStream
-        }
+        val stream = Runtime.getRuntime().exec("logcat -v epoch -T 0").inputStream
 
         val updateLines = mutableListOf<LogLine>()
         val mutex = Mutex()

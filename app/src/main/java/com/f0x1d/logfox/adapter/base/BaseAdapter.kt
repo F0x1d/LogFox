@@ -8,10 +8,12 @@ import com.f0x1d.logfox.ui.viewholder.base.BaseViewHolder
 
 abstract class BaseAdapter<T, D : ViewBinding>: RecyclerView.Adapter<BaseViewHolder<T, D>>() {
 
+    open val updateWhenSet = true
+
     var elements = emptyList<T>()
         set(value) {
             field = value
-            notifyDataSetChanged()
+            if (updateWhenSet) notifyDataSetChanged()
         }
 
     protected var recyclerView: RecyclerView? = null

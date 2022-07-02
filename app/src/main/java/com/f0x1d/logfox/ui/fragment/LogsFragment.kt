@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.f0x1d.logfox.R
@@ -17,6 +18,7 @@ import com.f0x1d.logfox.extensions.sendKillApp
 import com.f0x1d.logfox.extensions.setClickListenerOn
 import com.f0x1d.logfox.extensions.toast
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
+import com.f0x1d.logfox.utils.LogLinesDiffUtilCallback
 import com.f0x1d.logfox.utils.fillWithStrings
 import com.f0x1d.logfox.utils.preferences.AppPreferences
 import com.f0x1d.logfox.viewmodel.LogsViewModel
@@ -71,6 +73,7 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
 
         binding.logsRecycler.layoutManager = LinearLayoutManager(requireContext())
         binding.logsRecycler.itemAnimator = null
+        binding.logsRecycler.recycledViewPool.setMaxRecycledViews(0, 40)
         binding.logsRecycler.adapter = adapter
         binding.logsRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -91,8 +94,12 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
         adapter.logsFormat = appPreferences.showLogValues
 
         viewModel.distinctiveData.observe(viewLifecycleOwner) {
-            adapter.elements = it ?: return@observe
-            scrollLogToBottom()
+            DiffUtil.calculateDiff(LogLinesDiffUtilCallback(adapter.elements, it ?: return@observe), false).apply {
+                adapter.elements = it
+                dispatchUpdatesTo(adapter)
+
+                scrollLogToBottom()
+            }
         }
 
         viewModel.pausedData.observe(viewLifecycleOwner) { paused ->

@@ -28,6 +28,8 @@ class FiltersFragment: BaseViewModelFragment<FiltersViewModel, FragmentFiltersBi
         findNavController().navigate(FiltersFragmentDirections.actionFiltersFragmentToFilterBottomSheet(it.id))
     }, {
         viewModel.delete(it)
+    }, { userFilter, checked ->
+        viewModel.switch(userFilter, checked)
     })
 
     private val importFiltersLauncher = registerForActivityResult(ActivityResultContracts.OpenDocument()) {
@@ -52,7 +54,7 @@ class FiltersFragment: BaseViewModelFragment<FiltersViewModel, FragmentFiltersBi
                 viewModel.clearAll()
             }
             setClickListenerOn(R.id.import_item) {
-                importFiltersLauncher.launch(arrayOf("application/json"))
+                importFiltersLauncher.launch(arrayOf("*/*"))
             }
             setClickListenerOn(R.id.export_all_item) {
                 exportFiltersLauncher.launch("filters.json")

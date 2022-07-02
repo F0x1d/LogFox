@@ -13,6 +13,7 @@ data class UserFilter(@ColumnInfo(name = "allowed_levels") val allowedLevels: Li
                       @ColumnInfo(name = "tid") val tid: String?,
                       @ColumnInfo(name = "tag") val tag: String?,
                       @ColumnInfo(name = "content") val content: String?,
+                      @ColumnInfo(name = "enabled") @GsonSkip val enabled: Boolean = true,
                       @PrimaryKey(autoGenerate = true) @GsonSkip val id: Long = 0)
 
 @Dao

@@ -72,11 +72,11 @@ class SettingsFragment: BaseFragment<FragmentSettingsBinding>() {
                     appPreferences.logsUpdateInterval.toString()
                 }, {
                     requireContext().catchingNotNumber {
-                        appPreferences.logsUpdateInterval = it?.toLong() ?: 150L
+                        appPreferences.logsUpdateInterval = it?.toLong() ?: AppPreferences.LOGS_UPDATE_INTERVAL_DEFAULT
                     }
                 })
 
-                observeAndUpdateSummary(150L)
+                observeAndUpdateSummary(AppPreferences.LOGS_UPDATE_INTERVAL_DEFAULT)
             }
 
             findPreference<Preference>("pref_logs_text_size")?.apply {
@@ -86,11 +86,11 @@ class SettingsFragment: BaseFragment<FragmentSettingsBinding>() {
                     appPreferences.logsTextSize.toString()
                 }, {
                     requireContext().catchingNotNumber {
-                        appPreferences.logsTextSize = it?.toInt() ?: 14
+                        appPreferences.logsTextSize = it?.toInt() ?: AppPreferences.LOGS_TEXT_SIZE_DEFAULT
                     }
                 })
 
-                observeAndUpdateSummary(14)
+                observeAndUpdateSummary(AppPreferences.LOGS_TEXT_SIZE_DEFAULT)
             }
         }
 

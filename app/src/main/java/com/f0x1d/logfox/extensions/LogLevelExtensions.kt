@@ -2,14 +2,13 @@ package com.f0x1d.logfox.extensions
 
 import android.graphics.Color
 import com.f0x1d.logfox.model.LogLevel
-import com.google.android.material.color.MaterialColors
 
-fun LogLevel.backgroundColorByLevel(primaryColor: Int) = when (this) {
-    LogLevel.VERBOSE -> MaterialColors.harmonize(Color.GRAY, primaryColor)
-    LogLevel.INFO -> MaterialColors.harmonize(Color.GREEN, primaryColor)
-    LogLevel.DEBUG -> MaterialColors.harmonize(Color.BLUE, primaryColor)
-    LogLevel.WARNING -> MaterialColors.harmonize(Color.YELLOW, primaryColor)
-    LogLevel.ERROR, LogLevel.FATAL, LogLevel.SILENT -> MaterialColors.harmonize(Color.RED, primaryColor)
+fun LogLevel.backgroundColorByLevel() = when (this) {
+    LogLevel.VERBOSE -> Color.GRAY
+    LogLevel.INFO -> Color.GREEN
+    LogLevel.DEBUG -> Color.BLUE
+    LogLevel.WARNING -> Color.YELLOW
+    LogLevel.ERROR, LogLevel.FATAL, LogLevel.SILENT -> Color.RED
 }
 
 fun LogLevel.foregroundColorByLevel() = when (this) {

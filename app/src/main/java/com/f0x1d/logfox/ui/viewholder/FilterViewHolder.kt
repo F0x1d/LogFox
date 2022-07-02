@@ -7,8 +7,16 @@ import com.f0x1d.logfox.R
 import com.f0x1d.logfox.database.UserFilter
 import com.f0x1d.logfox.databinding.ItemFilterBinding
 import com.f0x1d.logfox.ui.viewholder.base.BaseViewHolder
+import com.f0x1d.logfox.utils.view.OnlyUserCheckedChangeListener
 
-class FilterViewHolder(binding: ItemFilterBinding, click: (UserFilter) -> Unit, delete: (UserFilter) -> Unit): BaseViewHolder<UserFilter, ItemFilterBinding>(binding) {
+class FilterViewHolder(binding: ItemFilterBinding,
+                       click: (UserFilter) -> Unit,
+                       delete: (UserFilter) -> Unit,
+                       checked: (UserFilter, Boolean) -> Unit): BaseViewHolder<UserFilter, ItemFilterBinding>(binding) {
+
+    private val checkedListener = OnlyUserCheckedChangeListener(binding.enabledBox) { button, isChecked ->
+        checked.invoke(currentItem, isChecked)
+    }
 
     init {
         binding.root.setOnClickListener {
@@ -17,6 +25,7 @@ class FilterViewHolder(binding: ItemFilterBinding, click: (UserFilter) -> Unit, 
         binding.deleteButton.setOnClickListener {
             delete.invoke(currentItem)
         }
+        binding.enabledBox.setOnCheckedChangeListener(checkedListener)
     }
 
     override fun bindTo(data: UserFilter) {
@@ -25,6 +34,7 @@ class FilterViewHolder(binding: ItemFilterBinding, click: (UserFilter) -> Unit, 
         binding.tidText.setTextOrMakeGoneIfNull(R.string.tid, data.tid)
         binding.tagText.setTextOrMakeGoneIfNull(R.string.tag, data.tag)
         binding.contentText.setTextOrMakeGoneIfNull(R.string.content_contains, data.content)
+        checkedListener.check(data.enabled)
     }
 
     private fun TextView.setTextOrMakeGoneIfNull(prefix: Int, content: String?) {

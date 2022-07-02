@@ -38,7 +38,8 @@ class FiltersRepository @Inject constructor(private val database: AppDatabase): 
     fun createAll(userFilters: List<UserFilter>) {
         onAppScope {
             filtersFlow.updateList {
-                userFilters.forEach {
+                // GSON uses false by default :(
+                userFilters.map { if (it.enabled) it else it.copy(enabled = true) }.forEach {
                     add(
                         it.copy(id = database.userFilterDao().insert(it))
                     )
@@ -47,20 +48,27 @@ class FiltersRepository @Inject constructor(private val database: AppDatabase): 
         }
     }
 
-    fun update(userFilter: UserFilter, enabledLogLevels: List<LogLevel>, pid: String, tid: String, tag: String, content: String) {
+    fun switch(userFilter: UserFilter, checked: Boolean) = update {
+        userFilter.copy(enabled = checked).also {
+            database.userFilterDao().update(it)
+        }
+    }
+
+    fun update(userFilter: UserFilter, enabledLogLevels: List<LogLevel>, pid: String, tid: String, tag: String, content: String) = update {
+        userFilter.copy(
+            allowedLevels = enabledLogLevels,
+            pid = pid.nullIfEmpty(),
+            tid = tid.nullIfEmpty(),
+            tag = tag.nullIfEmpty(),
+            content = content.nullIfEmpty()
+        ).also { database.userFilterDao().update(it) }
+    }
+
+    fun update(block: () -> UserFilter) {
         onAppScope {
             filtersFlow.updateList {
-                remove(userFilter)
-
-                add(
-                    userFilter.copy(
-                        allowedLevels = enabledLogLevels,
-                        pid = pid.nullIfEmpty(),
-                        tid = tid.nullIfEmpty(),
-                        tag = tag.nullIfEmpty(),
-                        content = content.nullIfEmpty()
-                    ).also { database.userFilterDao().update(it) }
-                )
+                val newValue = block.invoke()
+                set(indexOfFirst { it.id == newValue.id }, newValue)
             }
         }
     }

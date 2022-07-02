@@ -1,4 +1,4 @@
-package com.f0x1d.logfox.utils
+package com.f0x1d.logfox.utils.view
 
 import android.content.Context
 import android.graphics.Typeface

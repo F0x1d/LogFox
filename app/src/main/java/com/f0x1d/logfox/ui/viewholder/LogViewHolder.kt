@@ -21,7 +21,6 @@ class LogViewHolder(binding: ItemLogBinding): BaseViewHolder<LogLine, ItemLogBin
     private val selectedBackground = ColorDrawable(ColorUtils.blendARGB((background as ColorDrawable).color, currentColorPrimary, 0.2f))
 
     private val radius = 6.dpToPx
-    private val colorPrimary = MaterialColors.getColor(binding.root, com.google.android.material.R.attr.colorPrimary)
 
     init {
         binding.root.setOnClickListener {
@@ -50,7 +49,7 @@ class LogViewHolder(binding: ItemLogBinding): BaseViewHolder<LogLine, ItemLogBin
                 if (it[0]) append(data.dateAndTime.logsFormatted + " ")
                 if (it[1]) append(data.pid + " ")
                 if (it[2]) append(data.tid + " ")
-                if (it[3]) append(data.tag + ": ")
+                if (it[3]) append(data.tag + if (it[4]) ": " else "")
                 if (it[4]) append(data.content)
             }
         }
@@ -58,7 +57,7 @@ class LogViewHolder(binding: ItemLogBinding): BaseViewHolder<LogLine, ItemLogBin
 
         binding.levelText.background = GradientDrawable().apply {
             cornerRadii = floatArrayOf(0f, 0f, radius, radius, radius, radius, 0f, 0f)
-            color = ColorStateList.valueOf(data.level.backgroundColorByLevel(colorPrimary))
+            color = ColorStateList.valueOf(data.level.backgroundColorByLevel())
         }
         binding.levelText.setTextColor(data.level.foregroundColorByLevel())
 

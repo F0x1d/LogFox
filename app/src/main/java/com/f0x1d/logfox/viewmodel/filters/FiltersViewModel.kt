@@ -27,7 +27,7 @@ class FiltersViewModel @Inject constructor(application: Application,
         ctx.contentResolver.openOutputStream(uri)?.exportFilters(ctx, filtersRepository.filtersFlow.value)
     }
 
+    fun switch(userFilter: UserFilter, checked: Boolean) = filtersRepository.switch(userFilter, checked)
     fun delete(userFilter: UserFilter) = filtersRepository.delete(userFilter)
-
     fun clearAll() = filtersRepository.clearFilters()
 }

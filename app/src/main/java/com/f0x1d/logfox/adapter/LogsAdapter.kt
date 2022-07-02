@@ -9,6 +9,8 @@ import com.f0x1d.logfox.ui.viewholder.LogViewHolder
 
 class LogsAdapter: BaseAdapter<LogLine, ItemLogBinding>() {
 
+    override val updateWhenSet = false
+
     val expandedStates = mutableMapOf<Long, Boolean>()
     val selectedItems = mutableListOf<LogLine>()
 
