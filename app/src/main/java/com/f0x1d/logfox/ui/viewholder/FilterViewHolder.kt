@@ -1,0 +1,36 @@
+package com.f0x1d.logfox.ui.viewholder
+
+import android.text.Html
+import android.view.View
+import android.widget.TextView
+import com.f0x1d.logfox.R
+import com.f0x1d.logfox.database.UserFilter
+import com.f0x1d.logfox.databinding.ItemFilterBinding
+import com.f0x1d.logfox.ui.viewholder.base.BaseViewHolder
+
+class FilterViewHolder(binding: ItemFilterBinding, click: (UserFilter) -> Unit, delete: (UserFilter) -> Unit): BaseViewHolder<UserFilter, ItemFilterBinding>(binding) {
+
+    init {
+        binding.root.setOnClickListener {
+            click.invoke(currentItem)
+        }
+        binding.deleteButton.setOnClickListener {
+            delete.invoke(currentItem)
+        }
+    }
+
+    override fun bindTo(data: UserFilter) {
+        binding.allowedLevelsText.setTextOrMakeGoneIfNull(R.string.log_levels, data.allowedLevels.joinToString { it.letter })
+        binding.pidText.setTextOrMakeGoneIfNull(R.string.pid, data.pid)
+        binding.tidText.setTextOrMakeGoneIfNull(R.string.tid, data.tid)
+        binding.tagText.setTextOrMakeGoneIfNull(R.string.tag, data.tag)
+        binding.contentText.setTextOrMakeGoneIfNull(R.string.content_contains, data.content)
+    }
+
+    private fun TextView.setTextOrMakeGoneIfNull(prefix: Int, content: String?) {
+        visibility = if (content == null) View.GONE else View.VISIBLE
+
+        if (content != null)
+            text = Html.fromHtml("<b>${context.getString(prefix)}:</b> $content")
+    }
+}

@@ -14,6 +14,9 @@
         <action
             android:id="@+id/action_logsFragment_to_searchBottomSheet"
             app:destination="@id/searchBottomSheet" />
+        <action
+            android:id="@+id/action_logsFragment_to_filtersFragment"
+            app:destination="@id/filtersFragment" />
     </fragment>
     <fragment
         android:id="@+id/logsExtendedCopyFragment"
@@ -32,4 +35,21 @@
             app:argType="string"
             app:nullable="true" />
     </dialog>
+    <dialog
+        android:id="@+id/filterBottomSheet"
+        android:name="com.f0x1d.logfox.ui.dialog.FilterBottomSheet"
+        android:label="FilterBottomSheet" >
+        <argument
+            android:name="filterId"
+            app:argType="long"
+            android:defaultValue="-1L" />
+    </dialog>
+    <fragment
+        android:id="@+id/filtersFragment"
+        android:name="com.f0x1d.logfox.ui.fragment.FiltersFragment"
+        android:label="FiltersFragment" >
+        <action
+            android:id="@+id/action_filtersFragment_to_filterBottomSheet"
+            app:destination="@id/filterBottomSheet" />
+    </fragment>
 </navigation>

@@ -4,30 +4,28 @@ import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import com.f0x1d.logfox.extensions.filterAndSearch
 import com.f0x1d.logfox.model.LogLine
+import com.f0x1d.logfox.repository.logging.FiltersRepository
 import com.f0x1d.logfox.repository.logging.LoggingRepository
-import com.f0x1d.logfox.utils.preferences.EnabledLogLevels
-import com.f0x1d.logfox.utils.preferences.LogFilterPreferences
 import com.f0x1d.logfox.viewmodel.base.BaseSameFlowProxyViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class LogsViewModel(application: Application,
-                    private val logFilterPreferences: LogFilterPreferences,
                     private val loggingRepository: LoggingRepository,
-                    var query: String?,
-                    val currentEnabledLogLevels: EnabledLogLevels): BaseSameFlowProxyViewModel<List<LogLine>>(
+                    private val filtersRepository: FiltersRepository,
+                    var query: String?): BaseSameFlowProxyViewModel<List<LogLine>>(
     application,
     loggingRepository.logsFlow
 ) {
 
     @Inject
-    constructor(application: Application, logFilterPreferences: LogFilterPreferences, loggingRepository: LoggingRepository):
-            this(application, logFilterPreferences, loggingRepository, null, logFilterPreferences.currentEnabledLogLevels)
+    constructor(application: Application, loggingRepository: LoggingRepository, filtersRepository: FiltersRepository):
+            this(application, loggingRepository, filtersRepository, null)
 
     val pausedData = MutableLiveData(false)
 
-    override fun map(data: List<LogLine>?) = data?.filterAndSearch(query, currentEnabledLogLevels)
+    override fun map(data: List<LogLine>?) = data?.filterAndSearch(filtersRepository, query)
 
     fun query(query: String?) {
         stopCollector()
@@ -35,25 +33,11 @@ class LogsViewModel(application: Application,
         recollect()
     }
 
-    fun filterLevel(which: Int, filtering: Boolean) {
-        stopCollector()
-        when (which) {
-            0 -> logFilterPreferences.verboseEnabled = filtering.also { currentEnabledLogLevels.verboseEnabled = it }
-            1 -> logFilterPreferences.debugEnabled = filtering.also { currentEnabledLogLevels.debugEnabled = it }
-            2 -> logFilterPreferences.infoEnabled = filtering.also { currentEnabledLogLevels.infoEnabled = it }
-            3 -> logFilterPreferences.warningEnabled = filtering.also { currentEnabledLogLevels.warningEnabled = it }
-            4 -> logFilterPreferences.errorEnabled = filtering.also { currentEnabledLogLevels.errorEnabled = it }
-            5 -> logFilterPreferences.fatalEnabled = filtering.also { currentEnabledLogLevels.fatalEnabled = it }
-            6 -> logFilterPreferences.silentEnabled = filtering.also { currentEnabledLogLevels.silentEnabled = it }
-        }
-        recollect()
-    }
-
     fun clearLogs() {
         loggingRepository.clearLogs()
     }
 
-    private fun recollect() {
+    fun recollect() {
         if (paused())
             collectOneValue()
         else

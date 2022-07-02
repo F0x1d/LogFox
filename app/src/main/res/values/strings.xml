@@ -51,4 +51,14 @@
     <string name="error">Error: %s</string>
     <string name="integrations">Integrations</string>
     <string name="omnibin_integration_desc">Easily view and manage your pastes</string>
+    <string name="log_levels">Log levels</string>
+    <string name="pid" translatable="false">PID</string>
+    <string name="tid" translatable="false">TID</string>
+    <string name="tag">Tag</string>
+    <string name="content_contains">Content contains</string>
+    <string name="save">Save</string>
+    <string name="filters">Filters</string>
+    <string name="create">Create</string>
+    <string name="empty_fields_desc">Empty fields will not be used during filtering</string>
+    <string name="expanded_logs">Expanded logs</string>
 </resources>

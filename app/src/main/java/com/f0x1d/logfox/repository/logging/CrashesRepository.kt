@@ -52,6 +52,15 @@ class CrashesRepository @Inject constructor(@ApplicationContext private val cont
         }
     }
 
+    fun deleteCrash(crash: AppCrash) {
+        onAppScope {
+            crashesFlow.updateList {
+                remove(crash)
+                database.appCrashDao().delete(crash)
+            }
+        }
+    }
+
     fun clearCrashes() {
         onAppScope {
             crashesFlow.update {

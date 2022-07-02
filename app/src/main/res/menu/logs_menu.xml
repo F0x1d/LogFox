@@ -15,9 +15,9 @@
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/filter_log_levels_item"
+        android:id="@+id/filters_item"
         android:icon="@drawable/ic_filter"
-        android:title="@string/filter"
+        android:title="@string/filters"
         app:showAsAction="ifRoom" />
 
     <item

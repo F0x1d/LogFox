@@ -14,7 +14,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class RecordsRepository @Inject constructor(private val database: AppDatabase): LoggingHelperRepository() {
+class RecordingsRepository @Inject constructor(private val database: AppDatabase): LoggingHelperRepository() {
 
     val recordingsFlow = MutableStateFlow(emptyList<LogRecording>())
     val recordingStateFlow = MutableStateFlow(RecordingState.IDLE)
@@ -68,20 +68,20 @@ class RecordsRepository @Inject constructor(private val database: AppDatabase): 
         }
     }
 
+    fun deleteRecording(logRecording: LogRecording) {
+        onAppScope {
+            recordingsFlow.updateList {
+                remove(logRecording)
+                database.logRecordingDao().delete(logRecording)
+            }
+        }
+    }
+
     fun clearRecordings() {
         onAppScope {
             recordingsFlow.update {
                 database.logRecordingDao().deleteAll()
                 emptyList()
-            }
-        }
-    }
-
-    fun deleteRecording(id: Long) {
-        onAppScope {
-            recordingsFlow.updateList {
-                database.logRecordingDao().delete(id)
-                removeAll { it.id == id }
             }
         }
     }

@@ -27,10 +27,9 @@
         android:textStyle="bold"
         android:textSize="20sp"
         android:includeFontPadding="false"
-        android:layout_marginEnd="10dp"
         app:layout_constraintTop_toTopOf="@id/icon"
         app:layout_constraintStart_toEndOf="@id/icon"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/delete_button"
         app:layout_constraintBottom_toTopOf="@id/date_text"/>
 
     <TextView
@@ -43,5 +42,17 @@
         app:layout_constraintStart_toStartOf="@id/title"
         app:layout_constraintEnd_toEndOf="@id/title"
         app:layout_constraintBottom_toBottomOf="@id/icon"/>
+
+    <com.google.android.material.button.MaterialButton
+        style="@style/Widget.Material3.Button.IconButton"
+        android:id="@+id/delete_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:icon="@drawable/ic_delete"
+        app:iconTint="?colorError"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

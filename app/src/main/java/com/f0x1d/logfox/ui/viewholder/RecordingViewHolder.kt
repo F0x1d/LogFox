@@ -5,11 +5,16 @@ import com.f0x1d.logfox.databinding.ItemRecordingBinding
 import com.f0x1d.logfox.extensions.toLocaleString
 import com.f0x1d.logfox.ui.viewholder.base.BaseViewHolder
 
-class RecordingViewHolder(binding: ItemRecordingBinding, private val block: (LogRecording) -> Unit): BaseViewHolder<LogRecording, ItemRecordingBinding>(binding) {
+class RecordingViewHolder(binding: ItemRecordingBinding,
+                          click: (LogRecording) -> Unit,
+                          delete: (LogRecording) -> Unit): BaseViewHolder<LogRecording, ItemRecordingBinding>(binding) {
 
     init {
-        itemView.setOnClickListener {
-            block.invoke(currentItem)
+        binding.root.setOnClickListener {
+            click.invoke(currentItem)
+        }
+        binding.deleteButton.setOnClickListener {
+            delete.invoke(currentItem)
         }
     }
 

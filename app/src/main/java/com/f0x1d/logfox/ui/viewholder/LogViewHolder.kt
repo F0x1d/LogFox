@@ -52,14 +52,14 @@ class LogViewHolder(binding: ItemLogBinding): BaseViewHolder<LogLine, ItemLogBin
     private fun expandOrCollapseItem() {
         adapter<LogsAdapter>().expandedStates.apply {
             currentItem.also {
-                put(it.id, !getOrPut(it.id) { false })
+                put(it.id, !getOrDefault(it.id, adapter<LogsAdapter>().logsExpanded))
                 changeExpandedAndSelected(it)
             }
         }
     }
 
     private fun changeExpandedAndSelected(logLine: LogLine) {
-        binding.logText.maxLines = if (adapter<LogsAdapter>().expandedStates.getOrPut(logLine.id) { false }) Int.MAX_VALUE else 1
+        binding.logText.maxLines = if (adapter<LogsAdapter>().expandedStates.getOrDefault(logLine.id, adapter<LogsAdapter>().logsExpanded)) Int.MAX_VALUE else 1
         binding.container.background = if (adapter<LogsAdapter>().selectedItems.contains(logLine)) selectedBackground else background
     }
 }

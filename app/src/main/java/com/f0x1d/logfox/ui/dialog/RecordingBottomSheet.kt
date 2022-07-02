@@ -59,11 +59,6 @@ class RecordingBottomSheet: BaseViewModelBottomSheet<RecordingViewModel, SheetRe
             binding.zipLayout.setOnClickListener {
                 zipCrashLauncher.launch("${logRecording.dateAndTime.exportFormatted}.zip")
             }
-
-            binding.deleteButton.setOnClickListener {
-                viewModel.delete()
-                dismiss()
-            }
         }
     }
 }

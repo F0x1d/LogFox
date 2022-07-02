@@ -29,10 +29,11 @@
         android:layout_marginTop="20dp"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
         app:layout_constraintTop_toBottomOf="@id/title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/delete_button">
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -168,22 +169,5 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
-
-    <com.google.android.material.button.MaterialButton
-        style="@style/Widget.Material3.Button.OutlinedButton.Icon"
-        android:id="@+id/delete_button"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/delete"
-        android:textColor="?colorError"
-        app:iconTint="?colorError"
-        app:icon="@drawable/ic_delete"
-        app:strokeColor="?colorError"
-        app:strokeWidth="2dp"
-        android:layout_margin="10dp"
-        app:layout_constraintTop_toBottomOf="@id/actions_card"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

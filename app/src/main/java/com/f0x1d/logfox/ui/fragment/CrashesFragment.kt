@@ -21,9 +21,11 @@ class CrashesFragment: BaseViewModelFragment<CrashesViewModel, FragmentCrashesBi
 
     override val viewModel by viewModels<CrashesViewModel>()
 
-    private val adapter = CrashesAdapter {
+    private val adapter = CrashesAdapter({
         findNavController().navigate(CrashesFragmentDirections.actionCrashesFragmentToCrashDetailsActivity(it.id))
-    }
+    }, {
+        viewModel.deleteCrash(it)
+    })
 
     override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) = FragmentCrashesBinding.inflate(inflater, container, false)
 

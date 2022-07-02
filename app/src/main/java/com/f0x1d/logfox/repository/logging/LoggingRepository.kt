@@ -18,7 +18,8 @@ import javax.inject.Singleton
 
 @Singleton
 class LoggingRepository @Inject constructor(crashesRepository: CrashesRepository,
-                                            recordsRepository: RecordsRepository,
+                                            recordingsRepository: RecordingsRepository,
+                                            filtersRepository: FiltersRepository,
                                             private val appPreferences: AppPreferences): BaseRepository(), SharedPreferences.OnSharedPreferenceChangeListener {
 
     companion object {
@@ -33,7 +34,8 @@ class LoggingRepository @Inject constructor(crashesRepository: CrashesRepository
 
     private val helpers = listOf(
         crashesRepository,
-        recordsRepository
+        recordingsRepository,
+        filtersRepository
     )
 
     fun startLoggingIfNot() {
@@ -71,9 +73,9 @@ class LoggingRepository @Inject constructor(crashesRepository: CrashesRepository
     }
 
     private suspend fun readLogs() = coroutineScope {
-        val stream = run {
-            Runtime.getRuntime().exec("logcat -c").waitFor()
-            Runtime.getRuntime().exec("logcat -v epoch").inputStream
+        val stream = Runtime.getRuntime().run {
+            exec("logcat -c").waitFor()
+            exec("logcat -v epoch").inputStream
         }
 
         val updateLines = mutableListOf<LogLine>()

@@ -14,7 +14,6 @@ import com.f0x1d.logfox.databinding.FragmentLogsBinding
 import com.f0x1d.logfox.extensions.copyText
 import com.f0x1d.logfox.extensions.sendKillApp
 import com.f0x1d.logfox.extensions.toast
-import com.f0x1d.logfox.model.LogLevel
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
 import com.f0x1d.logfox.utils.fillWithStrings
 import com.f0x1d.logfox.utils.preferences.AppPreferences
@@ -49,8 +48,9 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>() 
                 findNavController().navigate(LogsFragmentDirections.actionLogsFragmentToSearchBottomSheet(viewModel.query))
                 return@setOnMenuItemClickListener true
             }
-            findItem(R.id.filter_log_levels_item).setOnMenuItemClickListener {
-                showFilterDialog()
+            findItem(R.id.filters_item).setOnMenuItemClickListener {
+                //showFilterDialog()
+                findNavController().navigate(LogsFragmentDirections.actionLogsFragmentToFiltersFragment())
                 return@setOnMenuItemClickListener true
             }
             findItem(R.id.selected_item).setOnMenuItemClickListener {
@@ -93,6 +93,9 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>() 
         appPreferences.asLiveData("pref_logs_text_size", 14).observe(viewLifecycleOwner) {
             adapter.textSize = it.toFloat()
         }
+        appPreferences.asLiveData("pref_logs_expanded", false).observe(viewLifecycleOwner) {
+            adapter.logsExpanded = it
+        }
 
         viewModel.distinctiveData.observe(viewLifecycleOwner) {
             adapter.elements = it ?: return@observe
@@ -115,16 +118,6 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>() 
     private fun scrollLogToBottom() {
         binding.logsRecycler.stopScroll()
         binding.logsRecycler.scrollToPosition(adapter.itemCount - 1)
-    }
-
-    private fun showFilterDialog() {
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle(R.string.filter)
-            .setMultiChoiceItems(LogLevel.values().map { it.name }.toTypedArray(), viewModel.currentEnabledLogLevels.checkedItems) { dialog, which, checked ->
-                viewModel.filterLevel(which, checked)
-            }
-            .setNeutralButton(android.R.string.cancel, null)
-            .show()
     }
 
     private fun showSelectedDialog() {

@@ -24,10 +24,13 @@ abstract class BaseFlowProxyViewModel<T, R>(application: Application, private va
         restartCollector()
     }
 
+    protected open fun gotValue(data: R?) {}
+
     protected fun restartCollector() {
         stopCollector()
 
         startCollector {
+            gotValue(it)
             data.suspendAndPostValue(it)
         }
     }
@@ -36,6 +39,7 @@ abstract class BaseFlowProxyViewModel<T, R>(application: Application, private va
         stopCollector()
 
         startCollector {
+            gotValue(it)
             data.suspendAndPostValue(it)
             stopCollector()
         }

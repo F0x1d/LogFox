@@ -7,10 +7,17 @@ import com.f0x1d.logfox.database.LogRecording
 import com.f0x1d.logfox.databinding.ItemRecordingBinding
 import com.f0x1d.logfox.ui.viewholder.RecordingViewHolder
 
-class RecordingsAdapter(private val block: (LogRecording) -> Unit): BaseAdapter<LogRecording, ItemRecordingBinding>() {
+class RecordingsAdapter(private val click: (LogRecording) -> Unit, private val delete: (LogRecording) -> Unit): BaseAdapter<LogRecording, ItemRecordingBinding>() {
+
+    init {
+        setHasStableIds(true)
+    }
 
     override fun createHolder(layoutInflater: LayoutInflater, parent: ViewGroup) = RecordingViewHolder(
         ItemRecordingBinding.inflate(layoutInflater, parent, false),
-        block
+        click,
+        delete
     )
+
+    override fun getItemId(position: Int) = elements[position].id
 }

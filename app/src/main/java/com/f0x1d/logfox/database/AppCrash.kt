@@ -23,6 +23,9 @@ interface AppCrashDao {
     @Insert
     fun insert(appCrash: AppCrash): Long
 
+    @Delete
+    fun delete(appCrash: AppCrash)
+
     @Query("DELETE FROM AppCrash")
     fun deleteAll()
 }

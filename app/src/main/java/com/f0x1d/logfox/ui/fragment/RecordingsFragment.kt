@@ -26,9 +26,11 @@ class RecordingsFragment: BaseViewModelFragment<RecordingsViewModel, FragmentRec
 
     override val viewModel by viewModels<RecordingsViewModel>()
 
-    private val adapter = RecordingsAdapter {
+    private val adapter = RecordingsAdapter({
         openDetails(it)
-    }
+    }, {
+        viewModel.delete(it)
+    })
 
     override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) = FragmentRecordingsBinding.inflate(inflater, container, false)
 

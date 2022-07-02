@@ -20,8 +20,8 @@ interface LogRecordingDao {
     @Insert
     fun insert(logRecording: LogRecording): Long
 
-    @Query("DELETE FROM LogRecording WHERE id = :id")
-    fun delete(id: Long)
+    @Delete
+    fun delete(logRecording: LogRecording)
 
     @Query("DELETE FROM LogRecording")
     fun deleteAll()

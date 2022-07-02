@@ -12,5 +12,7 @@ class CrashesViewModel @Inject constructor(application: Application, private val
     application,
     crashesRepository.crashesFlow
 ) {
+    fun deleteCrash(appCrash: AppCrash) = crashesRepository.deleteCrash(appCrash)
+
     fun clearCrashes() = crashesRepository.clearCrashes()
 }
