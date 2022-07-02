@@ -2,6 +2,7 @@ package com.f0x1d.logfox.viewmodel
 
 import android.Manifest
 import android.app.Application
+import android.widget.Toast
 import com.f0x1d.logfox.BuildConfig
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.extensions.hasPermissionToReadLogs
@@ -45,6 +46,8 @@ class SetupViewModel @Inject constructor(application: Application): BaseViewMode
     fun checkPermission() {
         if (ctx.hasPermissionToReadLogs())
             gotPermission()
+        else
+            Toast.makeText(ctx, R.string.no_permission_detected, Toast.LENGTH_SHORT).show()
     }
 
     private fun gotPermission() {

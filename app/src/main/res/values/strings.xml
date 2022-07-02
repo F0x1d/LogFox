@@ -67,4 +67,5 @@
     <string name="time">Time</string>
     <string name="content">Content</string>
     <string name="logs_format">Logs format</string>
+    <string name="no_permission_detected">No permission detected</string>
 </resources>

@@ -59,4 +59,5 @@
     <string name="time">Время</string>
     <string name="content">Текст</string>
     <string name="logs_format">Формат логов</string>
+    <string name="no_permission_detected">Разрешение не найдено</string>
 </resources>
