@@ -18,6 +18,9 @@ class AppPreferences @Inject constructor(@ApplicationContext context: Context): 
     var logsTextSize
         get() = get("pref_logs_text_size", 14)
         set(value) { put("pref_logs_text_size", value) }
+    var logsExpanded
+        get() = get("pref_logs_expanded", false)
+        set(value) { put("pref_logs_expanded", value) }
 
     var showLogTime
         get() = get("pref_show_log_time", false)

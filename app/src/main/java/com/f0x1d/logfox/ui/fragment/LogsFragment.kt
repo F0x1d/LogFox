@@ -14,6 +14,7 @@ import com.f0x1d.logfox.adapter.LogsAdapter
 import com.f0x1d.logfox.databinding.FragmentLogsBinding
 import com.f0x1d.logfox.extensions.copyText
 import com.f0x1d.logfox.extensions.sendKillApp
+import com.f0x1d.logfox.extensions.setClickListenerOn
 import com.f0x1d.logfox.extensions.toast
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
 import com.f0x1d.logfox.utils.fillWithStrings
@@ -43,35 +44,28 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
 
         binding.toolbar.inflateMenu(R.menu.logs_menu)
         binding.toolbar.menu.apply {
-            findItem(R.id.pause_item).setOnMenuItemClickListener {
+            setClickListenerOn(R.id.pause_item) {
                 viewModel.switchState()
-                return@setOnMenuItemClickListener true
             }
-            findItem(R.id.search_item).setOnMenuItemClickListener {
+            setClickListenerOn(R.id.search_item) {
                 findNavController().navigate(LogsFragmentDirections.actionLogsFragmentToSearchBottomSheet(viewModel.query))
-                return@setOnMenuItemClickListener true
             }
-            findItem(R.id.filters_item).setOnMenuItemClickListener {
+            setClickListenerOn(R.id.filters_item) {
                 findNavController().navigate(LogsFragmentDirections.actionLogsFragmentToFiltersFragment())
-                return@setOnMenuItemClickListener true
             }
-            findItem(R.id.selected_item).setOnMenuItemClickListener {
+            setClickListenerOn(R.id.selected_item) {
                 showSelectedDialog()
-                return@setOnMenuItemClickListener true
             }
-            findItem(R.id.clear_selected_item).setOnMenuItemClickListener {
+            setClickListenerOn(R.id.clear_selected_item) {
                 adapter.clearSelected()
-                return@setOnMenuItemClickListener true
             }
-            findItem(R.id.clear_item).setOnMenuItemClickListener {
+            setClickListenerOn(R.id.clear_item) {
                 viewModel.clearLogs()
                 adapter.elements = emptyList()
                 adapter.clearSelected()
-                return@setOnMenuItemClickListener true
             }
-            findItem(R.id.exit_item).setOnMenuItemClickListener {
+            setClickListenerOn(R.id.exit_item) {
                 requireContext().sendKillApp()
-                return@setOnMenuItemClickListener true
             }
         }
 
@@ -92,12 +86,8 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
 
         binding.scrollFab.setOnClickListener { viewModel.resume() }
 
-        appPreferences.asLiveData("pref_logs_text_size", 14).observe(viewLifecycleOwner) {
-            adapter.textSize = it.toFloat()
-        }
-        appPreferences.asLiveData("pref_logs_expanded", false).observe(viewLifecycleOwner) {
-            adapter.logsExpanded = it
-        }
+        adapter.textSize = appPreferences.logsTextSize.toFloat()
+        adapter.logsExpanded = appPreferences.logsExpanded
         adapter.logsFormat = appPreferences.showLogValues
 
         viewModel.distinctiveData.observe(viewLifecycleOwner) {
@@ -119,9 +109,9 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String) {
-        if (key.startsWith("pref_show_log")) {
-            adapter.logsFormat = appPreferences.showLogValues
-        }
+        if (key == "pref_logs_text_size") adapter.textSize = appPreferences.logsTextSize.toFloat()
+        if (key == "pref_logs_expanded") adapter.logsExpanded = appPreferences.logsExpanded
+        if (key.startsWith("pref_show_log")) adapter.logsFormat = appPreferences.showLogValues
     }
 
     override fun onDestroy() {

@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.adapter.FiltersAdapter
 import com.f0x1d.logfox.databinding.FragmentFiltersBinding
+import com.f0x1d.logfox.extensions.setClickListenerOn
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
 import com.f0x1d.logfox.viewmodel.LogsViewModel
 import com.f0x1d.logfox.viewmodel.filters.FiltersViewModel
@@ -44,21 +45,17 @@ class FiltersFragment: BaseViewModelFragment<FiltersViewModel, FragmentFiltersBi
         binding.toolbar.setOnClickListener { findNavController().popBackStack() }
         binding.toolbar.inflateMenu(R.menu.filters_menu)
         binding.toolbar.menu.apply {
-            findItem(R.id.create_item).setOnMenuItemClickListener {
+            setClickListenerOn(R.id.create_item) {
                 findNavController().navigate(FiltersFragmentDirections.actionFiltersFragmentToFilterBottomSheet())
-                return@setOnMenuItemClickListener true
             }
-            findItem(R.id.clear_item).setOnMenuItemClickListener {
+            setClickListenerOn(R.id.clear_item) {
                 viewModel.clearAll()
-                return@setOnMenuItemClickListener true
             }
-            findItem(R.id.import_item).setOnMenuItemClickListener {
+            setClickListenerOn(R.id.import_item) {
                 importFiltersLauncher.launch(arrayOf("application/json"))
-                return@setOnMenuItemClickListener true
             }
-            findItem(R.id.export_all_item).setOnMenuItemClickListener {
+            setClickListenerOn(R.id.export_all_item) {
                 exportFiltersLauncher.launch("filters.json")
-                return@setOnMenuItemClickListener true
             }
         }
 

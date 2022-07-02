@@ -11,6 +11,7 @@ import com.f0x1d.logfox.R
 import com.f0x1d.logfox.adapter.RecordingsAdapter
 import com.f0x1d.logfox.database.LogRecording
 import com.f0x1d.logfox.databinding.FragmentRecordingsBinding
+import com.f0x1d.logfox.extensions.setClickListenerOn
 import com.f0x1d.logfox.repository.logging.RecordingState
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
 import com.f0x1d.logfox.utils.RecyclerViewDivider
@@ -38,9 +39,8 @@ class RecordingsFragment: BaseViewModelFragment<RecordingsViewModel, FragmentRec
         super.onViewCreated(view, savedInstanceState)
 
         binding.toolbar.inflateMenu(R.menu.recordings_menu)
-        binding.toolbar.menu.findItem(R.id.clear_item).setOnMenuItemClickListener {
+        binding.toolbar.menu.setClickListenerOn(R.id.clear_item) {
             viewModel.clearRecordings()
-            return@setOnMenuItemClickListener true
         }
 
         binding.recordButton.setOnClickListener { viewModel.toggleStartStop() }
