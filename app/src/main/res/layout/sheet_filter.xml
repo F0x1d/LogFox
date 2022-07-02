@@ -129,20 +129,48 @@
         app:layout_constraintTop_toBottomOf="@id/content_layout"
         app:layout_constraintStart_toStartOf="@id/content_layout"
         app:layout_constraintEnd_toEndOf="@id/content_layout"
-        app:layout_constraintBottom_toTopOf="@id/save_button"/>
+        app:layout_constraintBottom_toTopOf="@id/buttons_container"/>
 
-    <com.google.android.material.button.MaterialButton
-        style="@style/Widget.Material3.Button.Icon"
-        android:id="@+id/save_button"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/buttons_container"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/save"
-        app:icon="@drawable/ic_save"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="10dp"
         app:layout_constraintTop_toBottomOf="@id/empty_desc_text"
-        app:layout_constraintStart_toStartOf="@id/log_levels_button"
-        app:layout_constraintEnd_toEndOf="@id/log_levels_button"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.Material3.Button.OutlinedButton.Icon"
+            android:id="@+id/export_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/export"
+            app:icon="@drawable/ic_export"
+            app:strokeColor="?colorPrimary"
+            app:strokeWidth="2dp"
+            android:visibility="gone"
+            android:layout_marginStart="20dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/save_button"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.Material3.Button.Icon"
+            android:id="@+id/save_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/save"
+            app:icon="@drawable/ic_save"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/export_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

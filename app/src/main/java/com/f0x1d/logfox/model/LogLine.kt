@@ -10,8 +10,7 @@ data class LogLine(val id: Long,
                    val level: LogLevel,
                    val tag: String,
                    val content: String) {
-    val original
-        get() = "${dateAndTime.logsFormatted} ${level.letter} $tag: $content"
+    val original get() = "${dateAndTime.logsFormatted} $pid $tid ${level.letter}/$tag: $content"
 }
 
 @Keep

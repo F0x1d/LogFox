@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
@@ -28,6 +29,13 @@ class FiltersFragment: BaseViewModelFragment<FiltersViewModel, FragmentFiltersBi
         viewModel.delete(it)
     })
 
+    private val importFiltersLauncher = registerForActivityResult(ActivityResultContracts.OpenDocument()) {
+        viewModel.import(it ?: return@registerForActivityResult)
+    }
+    private val exportFiltersLauncher = registerForActivityResult(ActivityResultContracts.CreateDocument("application/json")) {
+        viewModel.exportAll(it ?: return@registerForActivityResult)
+    }
+
     override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) = FragmentFiltersBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -42,6 +50,14 @@ class FiltersFragment: BaseViewModelFragment<FiltersViewModel, FragmentFiltersBi
             }
             findItem(R.id.clear_item).setOnMenuItemClickListener {
                 viewModel.clearAll()
+                return@setOnMenuItemClickListener true
+            }
+            findItem(R.id.import_item).setOnMenuItemClickListener {
+                importFiltersLauncher.launch(arrayOf("application/json"))
+                return@setOnMenuItemClickListener true
+            }
+            findItem(R.id.export_all_item).setOnMenuItemClickListener {
+                exportFiltersLauncher.launch("filters.json")
                 return@setOnMenuItemClickListener true
             }
         }

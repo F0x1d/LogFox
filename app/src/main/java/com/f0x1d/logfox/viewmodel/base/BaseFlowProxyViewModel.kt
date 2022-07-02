@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
-abstract class BaseFlowProxyViewModel<T, R>(application: Application, private val flow: Flow<T?>): BaseViewModel(application) {
+abstract class BaseFlowProxyViewModel<T, R>(application: Application, protected val flow: Flow<T?>): BaseViewModel(application) {
 
     val data = MutableLiveData<R?>()
     val distinctiveData = data.distinctUntilChanged()

@@ -61,4 +61,10 @@
     <string name="create">Create</string>
     <string name="empty_fields_desc">Empty fields will not be used during filtering</string>
     <string name="expanded_logs">Expanded logs</string>
+    <string name="export">Export</string>
+    <string name="str_import">Import</string>
+    <string name="export_all">Export all</string>
+    <string name="time">Time</string>
+    <string name="content">Content</string>
+    <string name="logs_format">Logs format</string>
 </resources>

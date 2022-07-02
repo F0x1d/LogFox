@@ -19,6 +19,24 @@ class AppPreferences @Inject constructor(@ApplicationContext context: Context): 
         get() = get("pref_logs_text_size", 14)
         set(value) { put("pref_logs_text_size", value) }
 
+    var showLogTime
+        get() = get("pref_show_log_time", false)
+        set(value) { put("pref_show_log_time", value) }
+    var showLogPid
+        get() = get("pref_show_log_pid", false)
+        set(value) { put("pref_show_log_pid", value) }
+    var showLogTid
+        get() = get("pref_show_log_tid", false)
+        set(value) { put("pref_show_log_tid", value) }
+    var showLogTag
+        get() = get("pref_show_log_tag", true)
+        set(value) { put("pref_show_log_tag", value) }
+    var showLogContent
+        get() = get("pref_show_log_content", true)
+        set(value) { put("pref_show_log_content", value) }
+
+    val showLogValues get() = booleanArrayOf(showLogTime, showLogPid, showLogTid, showLogTag, showLogContent)
+
     fun collectingFor(crashType: CrashType) = get("pref_collect_${crashType.readableName.lowercase()}", true)
     fun showingNotificationsFor(crashType: CrashType) = get("pref_notifications_${crashType.readableName.lowercase()}", true)
 

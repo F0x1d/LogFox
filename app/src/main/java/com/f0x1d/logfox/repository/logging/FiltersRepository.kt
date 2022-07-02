@@ -21,20 +21,28 @@ class FiltersRepository @Inject constructor(private val database: AppDatabase): 
         }
     }
 
-    fun create(enabledLogLevels: List<LogLevel>, pid: String, tid: String, tag: String, content: String) {
+    fun create(enabledLogLevels: List<LogLevel>, pid: String, tid: String, tag: String, content: String) = create(
+        UserFilter(
+            enabledLogLevels,
+            pid.nullIfEmpty(),
+            tid.nullIfEmpty(),
+            tag.nullIfEmpty(),
+            content.nullIfEmpty()
+        )
+    )
+
+    fun create(userFilter: UserFilter) {
+        createAll(listOf(userFilter))
+    }
+
+    fun createAll(userFilters: List<UserFilter>) {
         onAppScope {
             filtersFlow.updateList {
-                val userFilter = UserFilter(
-                    enabledLogLevels,
-                    pid.nullIfEmpty(),
-                    tid.nullIfEmpty(),
-                    tag.nullIfEmpty(),
-                    content.nullIfEmpty()
-                )
-
-                add(
-                    userFilter.copy(id = database.userFilterDao().insert(userFilter))
-                )
+                userFilters.forEach {
+                    add(
+                        it.copy(id = database.userFilterDao().insert(it))
+                    )
+                }
             }
         }
     }

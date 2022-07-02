@@ -22,6 +22,11 @@ class LogsAdapter: BaseAdapter<LogLine, ItemLogBinding>() {
             field = value
             notifyItemRangeChanged(0, itemCount)
         }
+    var logsFormat = booleanArrayOf(false, false, false, true, true)
+        set(value) {
+            field = value
+            notifyItemRangeChanged(0, itemCount)
+        }
 
     override fun createHolder(layoutInflater: LayoutInflater, parent: ViewGroup) = LogViewHolder(
         ItemLogBinding.inflate(layoutInflater, parent, false)

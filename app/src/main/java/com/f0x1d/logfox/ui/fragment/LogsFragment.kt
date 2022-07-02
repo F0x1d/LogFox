@@ -1,5 +1,6 @@
 package com.f0x1d.logfox.ui.fragment
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -23,7 +24,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>() {
+class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(), SharedPreferences.OnSharedPreferenceChangeListener {
 
     override val viewModel by hiltNavGraphViewModels<LogsViewModel>(R.id.logsFragment)
 
@@ -38,6 +39,8 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>() 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        appPreferences.registerListener(this)
+
         binding.toolbar.inflateMenu(R.menu.logs_menu)
         binding.toolbar.menu.apply {
             findItem(R.id.pause_item).setOnMenuItemClickListener {
@@ -49,7 +52,6 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>() 
                 return@setOnMenuItemClickListener true
             }
             findItem(R.id.filters_item).setOnMenuItemClickListener {
-                //showFilterDialog()
                 findNavController().navigate(LogsFragmentDirections.actionLogsFragmentToFiltersFragment())
                 return@setOnMenuItemClickListener true
             }
@@ -96,6 +98,7 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>() 
         appPreferences.asLiveData("pref_logs_expanded", false).observe(viewLifecycleOwner) {
             adapter.logsExpanded = it
         }
+        adapter.logsFormat = appPreferences.showLogValues
 
         viewModel.distinctiveData.observe(viewLifecycleOwner) {
             adapter.elements = it ?: return@observe
@@ -113,6 +116,17 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>() 
             }
             changingState = false
         }
+    }
+
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String) {
+        if (key.startsWith("pref_show_log")) {
+            adapter.logsFormat = appPreferences.showLogValues
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        appPreferences.unregisterListener(this)
     }
 
     private fun scrollLogToBottom() {

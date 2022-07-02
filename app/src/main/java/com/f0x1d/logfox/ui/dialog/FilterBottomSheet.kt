@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.f0x1d.logfox.R
@@ -30,6 +31,9 @@ class FilterBottomSheet: BaseViewModelBottomSheet<FilterViewModel, SheetFilterBi
         }
     }
 
+    private val exportFilterLauncher = registerForActivityResult(ActivityResultContracts.CreateDocument("application/json")) {
+        viewModel.export(it ?: return@registerForActivityResult)
+    }
     private val navArgs by navArgs<FilterBottomSheetArgs>()
 
     override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) = SheetFilterBinding.inflate(inflater, container, false)
@@ -53,6 +57,13 @@ class FilterBottomSheet: BaseViewModelBottomSheet<FilterViewModel, SheetFilterBi
             binding.tidText.setText(it.tid)
             binding.tagText.setText(it.tag)
             binding.contentText.setText(it.content)
+
+            binding.exportButton.apply {
+                visibility = View.VISIBLE
+                setOnClickListener {
+                    exportFilterLauncher.launch("filter.json")
+                }
+            }
 
             binding.saveButton.setOnClickListener { view ->
                 viewModel.update(it, collectFilterTextData())

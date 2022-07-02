@@ -3,6 +3,7 @@ package com.f0x1d.logfox.database
 import androidx.annotation.Keep
 import androidx.room.*
 import com.f0x1d.logfox.model.LogLevel
+import com.f0x1d.logfox.utils.GsonSkip
 import kotlinx.coroutines.flow.Flow
 
 @Keep
@@ -12,7 +13,7 @@ data class UserFilter(@ColumnInfo(name = "allowed_levels") val allowedLevels: Li
                       @ColumnInfo(name = "tid") val tid: String?,
                       @ColumnInfo(name = "tag") val tag: String?,
                       @ColumnInfo(name = "content") val content: String?,
-                      @PrimaryKey(autoGenerate = true) val id: Long = 0)
+                      @PrimaryKey(autoGenerate = true) @GsonSkip val id: Long = 0)
 
 @Dao
 interface UserFilterDao {

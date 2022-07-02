@@ -1,14 +1,19 @@
 package com.f0x1d.logfox.viewmodel.filters
 
 import android.app.Application
+import android.net.Uri
+import androidx.lifecycle.viewModelScope
 import com.f0x1d.logfox.database.AppDatabase
 import com.f0x1d.logfox.database.UserFilter
 import com.f0x1d.logfox.model.LogLevel
 import com.f0x1d.logfox.repository.logging.FiltersRepository
+import com.f0x1d.logfox.utils.exportFilters
 import com.f0x1d.logfox.viewmodel.base.BaseSameFlowProxyViewModel
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class FilterViewModel @AssistedInject constructor(application: Application,
                                                   database: AppDatabase,
@@ -17,7 +22,7 @@ class FilterViewModel @AssistedInject constructor(application: Application,
     application,
     database.userFilterDao().get(filterId)
 ) {
-    val enabledLogLevels = listOf(true, true, true, true, true, true, true).toMutableList()
+    val enabledLogLevels = mutableListOf(true, true, true, true, true, true, true)
 
     override fun gotValue(data: UserFilter?) {
         val allowedLevels = data?.allowedLevels?.map { it.ordinal } ?: return
@@ -29,7 +34,7 @@ class FilterViewModel @AssistedInject constructor(application: Application,
 
     fun create(filterTextData: FilterTextData) {
         filtersRepository.create(
-            enabledLogLevels.mapIndexed { index, value -> if (value) enumValues<LogLevel>()[index] else null }.filterNotNull(),
+            enabledLogLevels.toEnabledLogLevels(),
             filterTextData.pid,
             filterTextData.tid,
             filterTextData.tag,
@@ -40,7 +45,7 @@ class FilterViewModel @AssistedInject constructor(application: Application,
     fun update(userFilter: UserFilter, filterTextData: FilterTextData) {
         filtersRepository.update(
             userFilter,
-            enabledLogLevels.mapIndexed { index, value -> if (value) enumValues<LogLevel>()[index] else null }.filterNotNull(),
+            enabledLogLevels.toEnabledLogLevels(),
             filterTextData.pid,
             filterTextData.tid,
             filterTextData.tag,
@@ -48,9 +53,15 @@ class FilterViewModel @AssistedInject constructor(application: Application,
         )
     }
 
+    fun export(uri: Uri) = viewModelScope.launch(Dispatchers.IO) {
+        ctx.contentResolver.openOutputStream(uri)?.exportFilters(ctx, data.value?.let { listOf(it) } ?: emptyList())
+    }
+
     fun filterLevel(which: Int, filtering: Boolean) {
         enabledLogLevels[which] = filtering
     }
+
+    private fun List<Boolean>.toEnabledLogLevels() = mapIndexed { index, value -> if (value) enumValues<LogLevel>()[index] else null }.filterNotNull()
 }
 
 data class FilterTextData(val pid: String, val tid: String, val tag: String, val content: String)

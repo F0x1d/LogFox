@@ -4,6 +4,10 @@
 
     <PreferenceCategory android:title="@string/ui" app:iconSpaceReserved="false">
         <Preference
+            android:title="@string/logs_format"
+            android:key="pref_logs_format"
+            app:iconSpaceReserved="false" />
+        <Preference
             android:title="@string/logs_update_interval"
             android:key="pref_logs_update_interval"
             app:iconSpaceReserved="false" />

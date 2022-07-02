@@ -53,4 +53,10 @@
     <string name="create">Создать</string>
     <string name="empty_fields_desc">Пустые поля не будут использоваться при фильтрации</string>
     <string name="expanded_logs">Раскрытые логи</string>
+    <string name="export">Экспорт</string>
+    <string name="str_import">Импорт</string>
+    <string name="export_all">Экспорт всего</string>
+    <string name="time">Время</string>
+    <string name="content">Текст</string>
+    <string name="logs_format">Формат логов</string>
 </resources>

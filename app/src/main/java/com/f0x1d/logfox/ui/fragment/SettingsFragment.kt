@@ -13,7 +13,9 @@ import com.f0x1d.logfox.extensions.catchingNotNumber
 import com.f0x1d.logfox.extensions.isOmnibinInstalled
 import com.f0x1d.logfox.extensions.setupAsEditTextPreference
 import com.f0x1d.logfox.ui.fragment.base.BaseFragment
+import com.f0x1d.logfox.utils.fillWithStrings
 import com.f0x1d.logfox.utils.preferences.AppPreferences
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -41,6 +43,26 @@ class SettingsFragment: BaseFragment<FragmentSettingsBinding>() {
 
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             addPreferencesFromResource(R.xml.app_settings)
+
+            findPreference<Preference>("pref_logs_format")?.setOnPreferenceClickListener {
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(R.string.logs_format)
+                    .setMultiChoiceItems(
+                        intArrayOf(R.string.time, R.string.pid, R.string.tid, R.string.tag, R.string.content).fillWithStrings(requireContext()),
+                        appPreferences.showLogValues
+                    ) { dialog, which, checked ->
+                        when (which) {
+                            0 -> appPreferences.showLogTime = checked
+                            1 -> appPreferences.showLogPid = checked
+                            2 -> appPreferences.showLogTid = checked
+                            3 -> appPreferences.showLogTag = checked
+                            4 -> appPreferences.showLogContent = checked
+                        }
+                    }
+                    .setNeutralButton(android.R.string.cancel, null)
+                    .show()
+                return@setOnPreferenceClickListener true
+            }
 
             findPreference<Preference>("pref_logs_update_interval")?.apply {
                 setupAsEditTextPreference({
