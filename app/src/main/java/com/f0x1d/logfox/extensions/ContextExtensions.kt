@@ -18,7 +18,7 @@ import kotlin.system.exitProcess
 
 
 fun Context.copyText(text: String) = (getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager)
-    .setPrimaryClip(ClipData.newPlainText("FoxCat", text))
+    .setPrimaryClip(ClipData.newPlainText(getString(R.string.app_name), text))
     .apply {
         toast(R.string.text_copied)
     }

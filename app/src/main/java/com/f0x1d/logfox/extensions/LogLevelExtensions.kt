@@ -12,9 +12,6 @@ fun LogLevel.backgroundColorByLevel() = when (this) {
 }
 
 fun LogLevel.foregroundColorByLevel() = when (this) {
-    LogLevel.VERBOSE -> Color.WHITE
-    LogLevel.INFO -> Color.WHITE
-    LogLevel.DEBUG -> Color.WHITE
-    LogLevel.WARNING -> Color.BLACK
-    LogLevel.ERROR, LogLevel.FATAL, LogLevel.SILENT -> Color.WHITE
+    LogLevel.VERBOSE, LogLevel.DEBUG, LogLevel.ERROR, LogLevel.FATAL, LogLevel.SILENT -> Color.WHITE
+    LogLevel.INFO, LogLevel.WARNING -> Color.BLACK
 }

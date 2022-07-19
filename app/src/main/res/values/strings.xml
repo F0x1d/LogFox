@@ -68,4 +68,5 @@
     <string name="content">Content</string>
     <string name="logs_format">Logs format</string>
     <string name="no_permission_detected">No permission detected</string>
+    <string name="logs_restart_required">All logs will be available only after restart</string>
 </resources>

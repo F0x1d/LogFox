@@ -1,5 +1,6 @@
 package com.f0x1d.logfox.ui.fragment
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -54,7 +55,7 @@ class FiltersFragment: BaseViewModelFragment<FiltersViewModel, FragmentFiltersBi
                 viewModel.clearAll()
             }
             setClickListenerOn(R.id.import_item) {
-                importFiltersLauncher.launch(arrayOf("*/*"))
+                importFiltersLauncher.launch(arrayOf(if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) "application/json" else "*/*"))
             }
             setClickListenerOn(R.id.export_all_item) {
                 exportFiltersLauncher.launch("filters.json")

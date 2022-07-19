@@ -94,11 +94,20 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
         adapter.logsFormat = appPreferences.showLogValues
 
         viewModel.distinctiveData.observe(viewLifecycleOwner) {
-            DiffUtil.calculateDiff(LogLinesDiffUtilCallback(adapter.elements, it ?: return@observe), false).apply {
-                adapter.elements = it
-                dispatchUpdatesTo(adapter)
+            if (it == null) return@observe
 
-                scrollLogToBottom()
+            val manyDiffs = it.size - adapter.elements.size >= 100
+
+            if (manyDiffs) {
+                adapter.elements = it
+                adapter.notifyDataSetChanged()
+            } else {
+                DiffUtil.calculateDiff(LogLinesDiffUtilCallback(adapter.elements, it ?: return@observe), false).apply {
+                    adapter.elements = it
+                    dispatchUpdatesTo(adapter)
+
+                    scrollLogToBottom()
+                }
             }
         }
 
