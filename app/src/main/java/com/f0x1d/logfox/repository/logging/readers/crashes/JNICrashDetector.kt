@@ -25,10 +25,18 @@ class JNICrashDetector(collected: suspend (AppCrash) -> Unit): BaseCrashDetector
         else !wasBacktrace
     }
 
-    override fun packageFromCollected(lines: List<LogLine>) = lines[5].content.substring(
-        lines[5].content.indexOf(">>> "),
-        lines[5].content.indexOf(" <<<")
-    ).drop(4)
+    override fun packageFromCollected(lines: List<LogLine>): String {
+        lines.forEach {
+            if (it.content.contains(">>> ") && it.content.contains(" <<<")) {
+                return it.content.substring(
+                    it.content.indexOf(">>> "),
+                    it.content.indexOf(" <<<")
+                ).drop(4)
+            }
+        }
+
+        return "???"
+    }
 
     private val LogLine.debugTag
         get() = tag.startsWith("DEBUG")

@@ -4,6 +4,10 @@
 
     <PreferenceCategory android:title="@string/ui" app:iconSpaceReserved="false">
         <Preference
+            android:title="@string/night_theme"
+            android:key="pref_night_theme"
+            app:iconSpaceReserved="false" />
+        <Preference
             android:title="@string/logs_format"
             android:key="pref_logs_format"
             app:iconSpaceReserved="false" />

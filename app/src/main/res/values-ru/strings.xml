@@ -61,4 +61,9 @@
     <string name="logs_format">Формат логов</string>
     <string name="no_permission_detected">Разрешение не найдено</string>
     <string name="logs_restart_required">Все логи будут доступны только после перезапуска</string>
+    <string name="too_big_log">Ошибка, возможно этот лог слишком большой, попробуйте архивировать его и отправить</string>
+    <string name="night_theme">Тема</string>
+    <string name="follow_system">Системная</string>
+    <string name="light">Светлая</string>
+    <string name="dark">Тёмная</string>
 </resources>

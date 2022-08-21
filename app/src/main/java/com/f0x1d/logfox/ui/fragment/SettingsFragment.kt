@@ -12,6 +12,7 @@ import com.f0x1d.logfox.databinding.FragmentSettingsBinding
 import com.f0x1d.logfox.extensions.catchingNotNumber
 import com.f0x1d.logfox.extensions.isOmnibinInstalled
 import com.f0x1d.logfox.extensions.setupAsEditTextPreference
+import com.f0x1d.logfox.extensions.setupAsListPreference
 import com.f0x1d.logfox.ui.fragment.base.BaseFragment
 import com.f0x1d.logfox.utils.fillWithStrings
 import com.f0x1d.logfox.utils.preferences.AppPreferences
@@ -43,6 +44,14 @@ class SettingsFragment: BaseFragment<FragmentSettingsBinding>() {
 
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             addPreferencesFromResource(R.xml.app_settings)
+
+            findPreference<Preference>("pref_night_theme")?.setupAsListPreference(
+                intArrayOf(R.string.follow_system, R.string.light, R.string.dark).fillWithStrings(requireContext()),
+                appPreferences.nightTheme
+            ) {
+                appPreferences.nightTheme = it
+                requireActivity().recreate()
+            }
 
             findPreference<Preference>("pref_logs_format")?.setOnPreferenceClickListener {
                 MaterialAlertDialogBuilder(requireContext())

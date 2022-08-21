@@ -29,3 +29,16 @@ fun Preference.setupAsEditTextPreference(setup: (DialogTextBinding) -> Unit, get
         return@setOnPreferenceClickListener true
     }
 }
+
+fun Preference.setupAsListPreference(items: Array<String>, selected: Int, onSelected: (Int) -> Unit) {
+    setOnPreferenceClickListener {
+        MaterialAlertDialogBuilder(context)
+            .setTitle(title)
+            .setSingleChoiceItems(items, selected) { dialog, which ->
+                onSelected.invoke(which)
+            }
+            .setNeutralButton(android.R.string.cancel, null)
+            .show()
+        return@setOnPreferenceClickListener true
+    }
+}

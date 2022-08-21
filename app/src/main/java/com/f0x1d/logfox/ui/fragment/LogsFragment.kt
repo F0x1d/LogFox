@@ -96,13 +96,13 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
         viewModel.distinctiveData.observe(viewLifecycleOwner) {
             if (it == null) return@observe
 
-            val manyDiffs = it.size - adapter.elements.size >= 100
+            val manyDiffs = it.size - adapter.elements.size >= 50
 
             if (manyDiffs) {
                 adapter.elements = it
                 adapter.notifyDataSetChanged()
             } else {
-                DiffUtil.calculateDiff(LogLinesDiffUtilCallback(adapter.elements, it ?: return@observe), false).apply {
+                DiffUtil.calculateDiff(LogLinesDiffUtilCallback(adapter.elements, it), false).apply {
                     adapter.elements = it
                     dispatchUpdatesTo(adapter)
 

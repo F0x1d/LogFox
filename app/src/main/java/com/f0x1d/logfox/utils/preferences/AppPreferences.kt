@@ -6,7 +6,9 @@ import com.f0x1d.logfox.database.CrashType
 import com.f0x1d.logfox.utils.preferences.base.BasePreferences
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class AppPreferences @Inject constructor(@ApplicationContext context: Context): BasePreferences(context) {
 
     companion object {
@@ -17,6 +19,9 @@ class AppPreferences @Inject constructor(@ApplicationContext context: Context): 
     var startOnBoot
         get() = get("pref_start_on_boot", true)
         set(value) { put("pref_start_on_boot", value) }
+    var nightTheme
+        get() = get("pref_night_theme", 0)
+        set(value) { put("pref_night_theme", value) }
     var logsUpdateInterval
         get() = get("pref_logs_update_interval", LOGS_UPDATE_INTERVAL_DEFAULT)
         set(value) { put("pref_logs_update_interval", value) }

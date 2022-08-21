@@ -59,11 +59,16 @@ fun Context.hardRestartApp() {
 fun Context.toast(text: Int) = Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
 
 fun Context.shareIntent(text: String) {
-    val intent = Intent(Intent.ACTION_SEND)
-    intent.putExtra(Intent.EXTRA_TEXT, text)
-    intent.type = "text/plain"
+    try {
+        val intent = Intent(Intent.ACTION_SEND)
+        intent.putExtra(Intent.EXTRA_TEXT, text)
+        intent.type = "text/plain"
 
-    startActivity(Intent.createChooser(intent, getString(R.string.share)))
+        startActivity(Intent.createChooser(intent, getString(R.string.share)))
+    } catch (e: Exception) {
+        e.printStackTrace()
+        toast(R.string.too_big_log)
+    }
 }
 
 fun Context.catchingNotNumber(block: () -> Unit) = try {
