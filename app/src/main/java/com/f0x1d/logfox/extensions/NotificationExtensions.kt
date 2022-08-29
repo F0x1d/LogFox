@@ -3,6 +3,7 @@ package com.f0x1d.logfox.extensions
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.os.bundleOf
 import com.f0x1d.logfox.LogFoxApp
@@ -49,3 +50,13 @@ fun Context.sendErrorNotification(appCrash: AppCrash, hasContentIntent: Boolean)
         }
         .build()
 )
+
+fun Context.cancelCrashNotificationForPackage(appCrash: AppCrash) = notificationManagerCompat.cancel(appCrash.packageName, appCrash.dateAndTime.toInt())
+
+fun Context.cancelAllCrashNotifications() = notificationManager.apply {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return@apply
+
+    activeNotifications.forEach {
+        if (it.tag != null) cancel(it.tag, it.id)
+    }
+}

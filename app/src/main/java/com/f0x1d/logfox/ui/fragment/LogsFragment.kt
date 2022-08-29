@@ -63,7 +63,12 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
             }
             setClickListenerOn(R.id.clear_item) {
                 viewModel.clearLogs()
+
+                val oldCount = adapter.elements.size
+
                 adapter.elements = emptyList()
+                if (viewModel.paused())
+                    adapter.notifyItemRangeRemoved(0, oldCount)
                 adapter.clearSelected()
             }
             setClickListenerOn(R.id.exit_item) {

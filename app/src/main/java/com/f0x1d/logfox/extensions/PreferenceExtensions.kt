@@ -35,6 +35,7 @@ fun Preference.setupAsListPreference(items: Array<String>, selected: Int, onSele
         MaterialAlertDialogBuilder(context)
             .setTitle(title)
             .setSingleChoiceItems(items, selected) { dialog, which ->
+                dialog.cancel()
                 onSelected.invoke(which)
             }
             .setNeutralButton(android.R.string.cancel, null)

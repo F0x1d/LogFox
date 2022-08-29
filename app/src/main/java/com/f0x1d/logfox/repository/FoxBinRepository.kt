@@ -10,7 +10,9 @@ import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class FoxBinRepository @Inject constructor(private val foxBinApiService: FoxBinApiService, private val gson: Gson): BaseRepository() {
 
     companion object {

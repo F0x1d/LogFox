@@ -2,6 +2,7 @@ package com.f0x1d.logfox.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
+import com.f0x1d.logfox.di.NullString
 import com.f0x1d.logfox.extensions.filterAndSearch
 import com.f0x1d.logfox.model.LogLine
 import com.f0x1d.logfox.repository.logging.FiltersRepository
@@ -11,19 +12,20 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class LogsViewModel(application: Application,
-                    private val loggingRepository: LoggingRepository,
-                    private val filtersRepository: FiltersRepository,
-                    var query: String?): BaseSameFlowProxyViewModel<List<LogLine>>(
+class LogsViewModel @Inject constructor(application: Application,
+                                        private val loggingRepository: LoggingRepository,
+                                        private val filtersRepository: FiltersRepository,
+                                        @NullString var query: String?): BaseSameFlowProxyViewModel<List<LogLine>>(
     application,
     loggingRepository.logsFlow
 ) {
-
-    @Inject
-    constructor(application: Application, loggingRepository: LoggingRepository, filtersRepository: FiltersRepository):
-            this(application, loggingRepository, filtersRepository, null)
+    override val autoStartCollector = false
 
     val pausedData = MutableLiveData(false)
+
+    init {
+        restartCollector() // java cool
+    }
 
     override fun map(data: List<LogLine>?) = data?.filterAndSearch(filtersRepository, query)
 

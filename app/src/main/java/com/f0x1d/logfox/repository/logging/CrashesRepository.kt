@@ -3,6 +3,8 @@ package com.f0x1d.logfox.repository.logging
 import android.content.Context
 import com.f0x1d.logfox.database.AppCrash
 import com.f0x1d.logfox.database.AppDatabase
+import com.f0x1d.logfox.extensions.cancelAllCrashNotifications
+import com.f0x1d.logfox.extensions.cancelCrashNotificationForPackage
 import com.f0x1d.logfox.extensions.sendErrorNotification
 import com.f0x1d.logfox.extensions.updateList
 import com.f0x1d.logfox.repository.logging.base.LoggingHelperRepository
@@ -58,6 +60,7 @@ class CrashesRepository @Inject constructor(@ApplicationContext private val cont
                 remove(crash)
                 database.appCrashDao().delete(crash)
             }
+            context.cancelCrashNotificationForPackage(crash)
         }
     }
 
@@ -67,6 +70,7 @@ class CrashesRepository @Inject constructor(@ApplicationContext private val cont
                 database.appCrashDao().deleteAll()
                 emptyList()
             }
+            context.cancelAllCrashNotifications()
         }
     }
 }

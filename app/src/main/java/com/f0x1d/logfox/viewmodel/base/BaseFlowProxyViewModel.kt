@@ -16,12 +16,14 @@ abstract class BaseFlowProxyViewModel<T, R>(application: Application, protected 
     val data = MutableLiveData<R?>()
     val distinctiveData = data.distinctUntilChanged()
 
+    protected open val autoStartCollector = true
+
     protected var currentJob: Job? = null
 
     abstract fun map(data: T?): R?
 
     init {
-        restartCollector()
+        if (autoStartCollector) restartCollector()
     }
 
     protected open fun gotValue(data: R?) {}

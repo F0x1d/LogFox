@@ -65,6 +65,14 @@ class CrashDetailsActivity: BaseViewModelActivity<CrashDetailsViewModel, Activit
     private fun setupFor(appCrash: AppCrash) {
         val appName = appCrash.appName ?: getString(R.string.unknown)
 
+        binding.toolbar.inflateMenu(R.menu.crash_details_menu)
+        binding.toolbar.menu.apply {
+            setClickListenerOn(R.id.delete_item) {
+                viewModel.deleteCrash(appCrash)
+                finish()
+            }
+        }
+
         binding.appLogo.loadIcon(appCrash.packageName)
         binding.appName.text = appName
         binding.appPackage.text = appCrash.packageName

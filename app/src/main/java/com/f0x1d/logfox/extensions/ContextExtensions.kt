@@ -2,6 +2,7 @@ package com.f0x1d.logfox.extensions
 
 import android.Manifest
 import android.app.ActivityManager
+import android.app.NotificationManager
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -29,6 +30,7 @@ fun Context.hasPermissionToReadLogs() = ContextCompat.checkSelfPermission(
 ) == PackageManager.PERMISSION_GRANTED
 
 val Context.notificationManagerCompat get() = NotificationManagerCompat.from(this)
+val Context.notificationManager get() = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 val Context.activityManager get() = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
 
 fun Context.startLoggingAndService(loggingRepository: LoggingRepository) {
