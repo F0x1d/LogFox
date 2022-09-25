@@ -48,6 +48,10 @@ class AppPreferences @Inject constructor(@ApplicationContext context: Context): 
         get() = get("pref_show_log_content", true)
         set(value) { put("pref_show_log_content", value) }
 
+    var askedNotificationsPermission
+        get() = get("pref_asked_notifications_permission", false)
+        set(value) { put("pref_asked_notifications_permission", value) }
+
     val showLogValues get() = booleanArrayOf(showLogTime, showLogPid, showLogTid, showLogTag, showLogContent)
 
     fun collectingFor(crashType: CrashType) = get("pref_collect_${crashType.readableName.lowercase()}", true)

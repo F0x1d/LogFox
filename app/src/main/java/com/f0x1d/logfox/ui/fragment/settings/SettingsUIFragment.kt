@@ -1,19 +1,12 @@
-package com.f0x1d.logfox.ui.fragment
+package com.f0x1d.logfox.ui.fragment.settings
 
 import android.os.Bundle
 import android.text.InputType
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.f0x1d.logfox.R
-import com.f0x1d.logfox.databinding.FragmentSettingsBinding
-import com.f0x1d.logfox.extensions.catchingNotNumber
-import com.f0x1d.logfox.extensions.isOmnibinInstalled
-import com.f0x1d.logfox.extensions.setupAsEditTextPreference
-import com.f0x1d.logfox.extensions.setupAsListPreference
-import com.f0x1d.logfox.ui.fragment.base.BaseFragment
+import com.f0x1d.logfox.extensions.*
+import com.f0x1d.logfox.ui.fragment.settings.base.BaseSettingsWrapperFragment
 import com.f0x1d.logfox.utils.fillWithStrings
 import com.f0x1d.logfox.utils.preferences.AppPreferences
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -21,36 +14,33 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class SettingsFragment: BaseFragment<FragmentSettingsBinding>() {
+class SettingsUIFragment: BaseSettingsWrapperFragment() {
 
-    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) = FragmentSettingsBinding.inflate(inflater, container, false)
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        if (savedInstanceState == null) {
-            childFragmentManager
-                .beginTransaction()
-                .add(R.id.container, SettingsWrapperFragment())
-                .commit()
-        }
-    }
+    override val wrappedFragment get() = SettingsUIWrappedFragment()
+    override val title = R.string.ui
+    override val showBackArrow = true
 
     @AndroidEntryPoint
-    class SettingsWrapperFragment: PreferenceFragmentCompat() {
+    class SettingsUIWrappedFragment: PreferenceFragmentCompat() {
 
         @Inject
         lateinit var appPreferences: AppPreferences
 
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-            addPreferencesFromResource(R.xml.app_settings)
+            addPreferencesFromResource(R.xml.settings_ui)
 
-            findPreference<Preference>("pref_night_theme")?.setupAsListPreference(
-                intArrayOf(R.string.follow_system, R.string.light, R.string.dark).fillWithStrings(requireContext()),
-                appPreferences.nightTheme
-            ) {
-                appPreferences.nightTheme = it
-                requireActivity().recreate()
+            findPreference<Preference>("pref_night_theme")?.apply {
+                val filledThemeSettings = intArrayOf(R.string.follow_system, R.string.light, R.string.dark).fillWithStrings(requireContext())
+
+                setupAsListPreference(
+                    filledThemeSettings,
+                    appPreferences.nightTheme
+                ) {
+                    appPreferences.nightTheme = it
+                    requireActivity().recreate()
+                }
+
+                observeAndUpdateSummaryForList(appPreferences, this@SettingsUIWrappedFragment, 0, filledThemeSettings)
             }
 
             findPreference<Preference>("pref_logs_format")?.setOnPreferenceClickListener {
@@ -68,7 +58,7 @@ class SettingsFragment: BaseFragment<FragmentSettingsBinding>() {
                             4 -> appPreferences.showLogContent = checked
                         }
                     }
-                    .setNeutralButton(android.R.string.cancel, null)
+                    .setPositiveButton(android.R.string.cancel, null)
                     .show()
                 return@setOnPreferenceClickListener true
             }
@@ -85,7 +75,7 @@ class SettingsFragment: BaseFragment<FragmentSettingsBinding>() {
                     }
                 })
 
-                observeAndUpdateSummary(AppPreferences.LOGS_UPDATE_INTERVAL_DEFAULT)
+                observeAndUpdateSummary(appPreferences, this@SettingsUIWrappedFragment, AppPreferences.LOGS_UPDATE_INTERVAL_DEFAULT)
             }
 
             findPreference<Preference>("pref_logs_text_size")?.apply {
@@ -99,19 +89,7 @@ class SettingsFragment: BaseFragment<FragmentSettingsBinding>() {
                     }
                 })
 
-                observeAndUpdateSummary(AppPreferences.LOGS_TEXT_SIZE_DEFAULT)
-            }
-        }
-
-        override fun onStart() {
-            super.onStart()
-
-            findPreference<Preference>("pref_omnibin_integration")?.isEnabled = !requireContext().isOmnibinInstalled()
-        }
-
-        private inline fun <reified T> Preference.observeAndUpdateSummary(defValue: T) {
-            appPreferences.asLiveData(key, defValue).observe(this@SettingsWrapperFragment) {
-                summary = it.toString()
+                observeAndUpdateSummary(appPreferences, this@SettingsUIWrappedFragment, AppPreferences.LOGS_TEXT_SIZE_DEFAULT)
             }
         }
     }

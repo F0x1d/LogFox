@@ -18,7 +18,6 @@
         <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
         <!-- Customize your theme here. -->
         <item name="enableEdgeToEdge">true</item>
-        <item name="switchStyle">@style/LogFox.Switches</item>
         <item name="noteStrokeColor">@color/noteStrokeColor</item>
 
         <item name="fontFamily">@font/google_sans</item>

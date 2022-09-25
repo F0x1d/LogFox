@@ -66,4 +66,8 @@
     <string name="follow_system">Системная</string>
     <string name="light">Светлая</string>
     <string name="dark">Тёмная</string>
+    <string name="notifications">Уведомления</string>
+    <string name="logs">Логи</string>
+    <string name="no_notification_permission">Нет разрешения для уведомлений</string>
+    <string name="notification_permission_is_required">Разрешение необходимо для отправки уведомлений со сбоями</string>
 </resources>

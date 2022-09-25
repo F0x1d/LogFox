@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory android:title="@string/settings" app:iconSpaceReserved="false">
+        <Preference
+            android:title="@string/ui"
+            android:key="pref_settings_ui"
+            android:icon="@drawable/ic_settings_ui" />
+        <Preference
+            android:title="@string/service"
+            android:key="pref_settings_service"
+            android:icon="@drawable/ic_settings_service" />
+        <Preference
+            android:title="@string/notifications"
+            android:key="pref_settings_notifications"
+            android:icon="@drawable/ic_settings_notifications" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/integrations"
+        app:iconSpaceReserved="false"
+        app:allowDividerAbove="false">
+
+        <Preference
+            android:title="@string/omnibin"
+            android:summary="@string/omnibin_integration_desc"
+            android:key="pref_omnibin_integration"
+            android:icon="@drawable/ic_settings_omnibin" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/about_app"
+        app:iconSpaceReserved="false"
+        app:allowDividerAbove="false">
+        <Preference
+            android:title="@string/developer"
+            android:icon="@drawable/ic_settings_person">
+
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="https://t.me/f0x1d" />
+        </Preference>
+        <Preference
+            android:title="@string/source_code"
+            android:icon="@drawable/ic_settings_code">
+
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="https://github.com/F0x1d/LogFox" />
+        </Preference>
+    </PreferenceCategory>
+
+</PreferenceScreen>

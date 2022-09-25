@@ -10,6 +10,7 @@
         android:layout_height="wrap_content"
         app:title="@string/settings"
         app:titleCentered="true"
+        app:navigationIconTint="?colorOnSurface"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

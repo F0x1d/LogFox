@@ -1,8 +1,11 @@
 package com.f0x1d.logfox.ui.activity
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
@@ -11,9 +14,11 @@ import androidx.navigation.ui.setupWithNavController
 import com.f0x1d.logfox.NavGraphDirections
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.databinding.ActivityMainBinding
+import com.f0x1d.logfox.extensions.hasNotificationsPermission
 import com.f0x1d.logfox.ui.activity.base.BaseViewModelActivity
 import com.f0x1d.logfox.utils.event.Event
 import com.f0x1d.logfox.viewmodel.MainViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.shape.MaterialShapeDrawable
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -23,8 +28,11 @@ class MainActivity: BaseViewModelActivity<MainViewModel, ActivityMainBinding>(),
     override val viewModel by viewModels<MainViewModel>()
     private lateinit var navController: NavController
 
+    private val requestNotificationPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) {}
+
     override fun inflateBinding() = ActivityMainBinding.inflate(layoutInflater)
 
+    @SuppressLint("InlinedApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -32,6 +40,18 @@ class MainActivity: BaseViewModelActivity<MainViewModel, ActivityMainBinding>(),
 
         binding.bottomNavigation.setupWithNavController(navController)
         navController.addOnDestinationChangedListener(this)
+
+        if (!hasNotificationsPermission() && !viewModel.askedForNotificationsPermission()) {
+            MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.no_notification_permission)
+                .setMessage(R.string.notification_permission_is_required)
+                .setCancelable(false)
+                .setPositiveButton(android.R.string.ok) { dialog, which -> requestNotificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)}
+                .setNegativeButton(android.R.string.cancel, null)
+                .show()
+
+            viewModel.askedNotificationsPermission()
+        }
     }
 
     override fun onEvent(event: Event) {

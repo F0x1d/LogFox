@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory android:title="@string/service" app:iconSpaceReserved="false">
+        <SwitchPreferenceCompat
+            android:title="@string/start_on_boot"
+            android:key="pref_start_on_boot"
+            android:defaultValue="true"
+            app:widgetLayout="@layout/preference_material_switch"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/crashes"
+        app:iconSpaceReserved="false"
+        app:allowDividerAbove="false">
+
+        <SwitchPreferenceCompat
+            android:title="@string/collect_java_crashes"
+            android:key="pref_collect_java"
+            android:defaultValue="true"
+            app:widgetLayout="@layout/preference_material_switch"
+            app:iconSpaceReserved="false" />
+        <SwitchPreferenceCompat
+            android:title="@string/collect_jni_crashes"
+            android:key="pref_collect_jni"
+            android:defaultValue="true"
+            app:widgetLayout="@layout/preference_material_switch"
+            app:iconSpaceReserved="false" />
+        <SwitchPreferenceCompat
+            android:title="@string/collect_anr"
+            android:key="pref_collect_anr"
+            android:defaultValue="true"
+            app:widgetLayout="@layout/preference_material_switch"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+</PreferenceScreen>

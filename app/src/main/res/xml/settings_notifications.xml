@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <Preference
+        android:title="@string/no_notification_permission"
+        android:summary="@string/notification_permission_is_required"
+        android:key="pref_notifications_permission"
+        app:widgetLayout="@layout/preference_warning"
+        app:isPreferenceVisible="false"
+        app:iconSpaceReserved="false"/>
+
+    <PreferenceCategory
+        android:title="@string/notifications"
+        app:iconSpaceReserved="false"
+        app:allowDividerAbove="false">
+
+        <SwitchPreferenceCompat
+            android:title="@string/show_java_crashes_notifications"
+            android:key="pref_notifications_java"
+            android:defaultValue="true"
+            app:widgetLayout="@layout/preference_material_switch"
+            app:iconSpaceReserved="false" />
+        <SwitchPreferenceCompat
+            android:title="@string/show_jni_crashes_notifications"
+            android:key="pref_notifications_jni"
+            android:defaultValue="true"
+            app:widgetLayout="@layout/preference_material_switch"
+            app:iconSpaceReserved="false" />
+        <SwitchPreferenceCompat
+            android:title="@string/show_anr_notifications"
+            android:key="pref_notifications_anr"
+            android:defaultValue="true"
+            app:widgetLayout="@layout/preference_material_switch"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

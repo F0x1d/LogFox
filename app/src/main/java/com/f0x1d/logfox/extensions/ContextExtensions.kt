@@ -80,3 +80,10 @@ fun Context.catchingNotNumber(block: () -> Unit) = try {
 }
 
 fun Context.sendKillApp() = startService(Intent(this, LoggingService::class.java).setAction(LoggingService.ACTION_KILL_SERVICE))
+
+fun Context.hasNotificationsPermission(): Boolean {
+    return if (Build.VERSION.SDK_INT >= 33)
+        checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
+    else
+        true
+}

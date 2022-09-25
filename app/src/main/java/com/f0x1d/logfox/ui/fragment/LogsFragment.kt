@@ -160,7 +160,7 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
                     1 -> findNavController().navigate(LogsFragmentDirections.actionLogsFragmentToLogsExtendedCopyFragment(textToCopy))
                 }
             }
-            .setNeutralButton(android.R.string.cancel, null)
+            .setPositiveButton(android.R.string.cancel, null)
             .show()
     }
 }

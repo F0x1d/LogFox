@@ -2,10 +2,32 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/settings"
-    app:startDestination="@id/settingsFragment">
+    app:startDestination="@id/settingsMenuFragment">
 
     <fragment
-        android:id="@+id/settingsFragment"
-        android:name="com.f0x1d.logfox.ui.fragment.SettingsFragment"
-        android:label="SettingsFragment" />
+        android:id="@+id/settingsMenuFragment"
+        android:name="com.f0x1d.logfox.ui.fragment.settings.SettingsMenuFragment"
+        android:label="SettingsMenuFragment" >
+        <action
+            android:id="@+id/action_settingsMenuFragment_to_settingsUIFragment"
+            app:destination="@id/settingsUIFragment" />
+        <action
+            android:id="@+id/action_settingsMenuFragment_to_settingsServiceFragment"
+            app:destination="@id/settingsServiceFragment" />
+        <action
+            android:id="@+id/action_settingsMenuFragment_to_settingsNotificationsFragment"
+            app:destination="@id/settingsNotificationsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsUIFragment"
+        android:name="com.f0x1d.logfox.ui.fragment.settings.SettingsUIFragment"
+        android:label="SettingsUIFragment" />
+    <fragment
+        android:id="@+id/settingsServiceFragment"
+        android:name="com.f0x1d.logfox.ui.fragment.settings.SettingsServiceFragment"
+        android:label="SettingsServiceFragment" />
+    <fragment
+        android:id="@+id/settingsNotificationsFragment"
+        android:name="com.f0x1d.logfox.ui.fragment.settings.SettingsNotificationsFragment"
+        android:label="SettingsNotificationsFragment" />
 </navigation>
