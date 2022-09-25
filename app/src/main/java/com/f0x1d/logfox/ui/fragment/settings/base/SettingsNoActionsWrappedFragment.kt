@@ -5,7 +5,7 @@ import androidx.preference.PreferenceFragmentCompat
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class NoActionsWrappedFragment(private val preferenceResource: Int): PreferenceFragmentCompat() {
+class SettingsNoActionsWrappedFragment(private val preferenceResource: Int): PreferenceFragmentCompat() {
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(preferenceResource)
