@@ -28,9 +28,17 @@ abstract class BaseSettingsWrapperFragment: BaseFragment<FragmentSettingsBinding
         }
 
         if (savedInstanceState == null) {
+            val tag = "wrapped_by_${javaClass.name}"
+            val fragment = childFragmentManager.findFragmentByTag(tag)
+
             childFragmentManager
                 .beginTransaction()
-                .add(R.id.container, wrappedFragment)
+                .apply {
+                    if (fragment == null)
+                        add(R.id.container, wrappedFragment, tag)
+                    else
+                        show(fragment)
+                }
                 .commit()
         }
     }
