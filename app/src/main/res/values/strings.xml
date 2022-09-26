@@ -78,4 +78,6 @@
     <string name="logs">Logs</string>
     <string name="no_notification_permission">No notifications permission</string>
     <string name="notification_permission_is_required">Permission is required to send notifications with crashes</string>
+    <string name="logging_notification">Notification about logging</string>
+    <string name="resume_logging_with_bottom_edge_touch">Resume logging with bottom edge touch</string>
 </resources>

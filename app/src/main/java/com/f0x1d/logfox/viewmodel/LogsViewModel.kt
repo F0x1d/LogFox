@@ -7,6 +7,7 @@ import com.f0x1d.logfox.extensions.filterAndSearch
 import com.f0x1d.logfox.model.LogLine
 import com.f0x1d.logfox.repository.logging.FiltersRepository
 import com.f0x1d.logfox.repository.logging.LoggingRepository
+import com.f0x1d.logfox.utils.preferences.AppPreferences
 import com.f0x1d.logfox.viewmodel.base.BaseSameFlowProxyViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -15,6 +16,7 @@ import javax.inject.Inject
 class LogsViewModel @Inject constructor(application: Application,
                                         private val loggingRepository: LoggingRepository,
                                         private val filtersRepository: FiltersRepository,
+                                        private val appPreferences: AppPreferences,
                                         @NullString var query: String?): BaseSameFlowProxyViewModel<List<LogLine>>(
     application,
     loggingRepository.logsFlow
@@ -22,6 +24,8 @@ class LogsViewModel @Inject constructor(application: Application,
     override val autoStartCollector = false
 
     val pausedData = MutableLiveData(false)
+
+    val resumeLoggingWithBottomTouch get() = appPreferences.resumeLoggingWithBottomTouch
 
     init {
         restartCollector() // java cool

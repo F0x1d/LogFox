@@ -29,6 +29,14 @@
         <SwitchPreferenceCompat
             android:title="@string/expanded_logs"
             android:key="pref_logs_expanded"
+            app:singleLineTitle="false"
+            app:widgetLayout="@layout/preference_material_switch"
+            app:iconSpaceReserved="false" />
+        <SwitchPreferenceCompat
+            android:title="@string/resume_logging_with_bottom_edge_touch"
+            android:key="pref_resume_logs_with_touch"
+            android:defaultValue="true"
+            app:singleLineTitle="false"
             app:widgetLayout="@layout/preference_material_switch"
             app:iconSpaceReserved="false" />
     </PreferenceCategory>

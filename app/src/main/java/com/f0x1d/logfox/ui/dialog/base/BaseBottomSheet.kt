@@ -1,10 +1,13 @@
 package com.f0x1d.logfox.ui.dialog.base
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.viewbinding.ViewBinding
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 abstract class BaseBottomSheet<T : ViewBinding>: BottomSheetDialogFragment() {
@@ -21,6 +24,13 @@ abstract class BaseBottomSheet<T : ViewBinding>: BottomSheetDialogFragment() {
             return it.root
         }
         return super.onCreateView(inflater, container, savedInstanceState)
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val dialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
+        dialog.behavior.skipCollapsed = true
+        dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+        return dialog
     }
 
     override fun onDestroyView() {

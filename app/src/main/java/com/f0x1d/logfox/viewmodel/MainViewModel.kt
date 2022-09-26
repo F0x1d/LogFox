@@ -19,6 +19,10 @@ class MainViewModel @Inject constructor(application: Application,
         const val EVENT_TYPE_SETUP = "setup"
     }
 
+    var askedNotificationsPermission
+        get() = appPreferences.askedNotificationsPermission
+        set(value) { appPreferences.askedNotificationsPermission = value }
+
     init {
         load()
     }
@@ -28,10 +32,5 @@ class MainViewModel @Inject constructor(application: Application,
             ctx.startLoggingAndService(loggingRepository)
         else
             sendEvent(EVENT_TYPE_SETUP)
-    }
-
-    fun askedForNotificationsPermission() = appPreferences.askedNotificationsPermission
-    fun askedNotificationsPermission() {
-        appPreferences.askedNotificationsPermission = true
     }
 }

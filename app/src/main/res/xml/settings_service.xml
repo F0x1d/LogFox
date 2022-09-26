@@ -7,6 +7,7 @@
             android:title="@string/start_on_boot"
             android:key="pref_start_on_boot"
             android:defaultValue="true"
+            app:singleLineTitle="false"
             app:widgetLayout="@layout/preference_material_switch"
             app:iconSpaceReserved="false" />
     </PreferenceCategory>
@@ -20,18 +21,21 @@
             android:title="@string/collect_java_crashes"
             android:key="pref_collect_java"
             android:defaultValue="true"
+            app:singleLineTitle="false"
             app:widgetLayout="@layout/preference_material_switch"
             app:iconSpaceReserved="false" />
         <SwitchPreferenceCompat
             android:title="@string/collect_jni_crashes"
             android:key="pref_collect_jni"
             android:defaultValue="true"
+            app:singleLineTitle="false"
             app:widgetLayout="@layout/preference_material_switch"
             app:iconSpaceReserved="false" />
         <SwitchPreferenceCompat
             android:title="@string/collect_anr"
             android:key="pref_collect_anr"
             android:defaultValue="true"
+            app:singleLineTitle="false"
             app:widgetLayout="@layout/preference_material_switch"
             app:iconSpaceReserved="false" />
     </PreferenceCategory>

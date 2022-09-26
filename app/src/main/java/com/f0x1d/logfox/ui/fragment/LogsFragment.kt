@@ -85,9 +85,9 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
                 if (changingState)
                     return
 
-                if (viewModel.paused() && !recyclerView.canScrollVertically(1))
-                    viewModel.resume()
-                else
+                if (viewModel.paused() && !recyclerView.canScrollVertically(1)) {
+                    if (viewModel.resumeLoggingWithBottomTouch) viewModel.resume()
+                } else
                     viewModel.pause()
             }
         })

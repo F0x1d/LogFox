@@ -31,6 +31,9 @@ class AppPreferences @Inject constructor(@ApplicationContext context: Context): 
     var logsExpanded
         get() = get("pref_logs_expanded", false)
         set(value) { put("pref_logs_expanded", value) }
+    var resumeLoggingWithBottomTouch
+        get() = get("pref_resume_logs_with_touch", true)
+        set(value) { put("pref_resume_logs_with_touch", value) }
 
     var showLogTime
         get() = get("pref_show_log_time", false)

@@ -41,7 +41,7 @@ class MainActivity: BaseViewModelActivity<MainViewModel, ActivityMainBinding>(),
         binding.bottomNavigation.setupWithNavController(navController)
         navController.addOnDestinationChangedListener(this)
 
-        if (!hasNotificationsPermission() && !viewModel.askedForNotificationsPermission()) {
+        if (!hasNotificationsPermission() && !viewModel.askedNotificationsPermission) {
             MaterialAlertDialogBuilder(this)
                 .setTitle(R.string.no_notification_permission)
                 .setMessage(R.string.notification_permission_is_required)
@@ -50,7 +50,7 @@ class MainActivity: BaseViewModelActivity<MainViewModel, ActivityMainBinding>(),
                 .setNegativeButton(android.R.string.cancel, null)
                 .show()
 
-            viewModel.askedNotificationsPermission()
+            viewModel.askedNotificationsPermission = true
         }
     }
 
