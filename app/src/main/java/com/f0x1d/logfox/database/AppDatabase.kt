@@ -6,7 +6,7 @@ import androidx.room.TypeConverters
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 
-@Database(entities = [AppCrash::class, LogRecording::class, UserFilter::class], version = 5)
+@Database(entities = [AppCrash::class, LogRecording::class, UserFilter::class], version = 6)
 @TypeConverters(CrashTypeConverter::class, AllowedLevelsConverter::class)
 abstract class AppDatabase: RoomDatabase() {
 
@@ -25,6 +25,12 @@ abstract class AppDatabase: RoomDatabase() {
         val MIGRATION_4_5 = object : Migration(4, 5) {
             override fun migrate(database: SupportSQLiteDatabase) {
                 database.execSQL("ALTER TABLE UserFilter ADD COLUMN enabled INTEGER NOT NULL DEFAULT 1")
+            }
+        }
+        val MIGRATION_5_6 = object : Migration(5, 6) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("DROP TABLE LogRecording")
+                database.execSQL("CREATE TABLE LogRecording(id INTEGER PRIMARY KEY ASC AUTOINCREMENT NOT NULL, date_and_time INTEGER NOT NULL, file TEXT NOT NULL)")
             }
         }
     }

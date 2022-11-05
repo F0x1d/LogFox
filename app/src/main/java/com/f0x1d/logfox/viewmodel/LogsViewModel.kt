@@ -2,6 +2,7 @@ package com.f0x1d.logfox.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.asLiveData
 import com.f0x1d.logfox.di.NullString
 import com.f0x1d.logfox.extensions.filterAndSearch
 import com.f0x1d.logfox.model.LogLine
@@ -24,6 +25,7 @@ class LogsViewModel @Inject constructor(application: Application,
     override val autoStartCollector = false
 
     val pausedData = MutableLiveData(false)
+    val serviceRunningData = loggingRepository.serviceRunningFlow.asLiveData()
 
     val resumeLoggingWithBottomTouch get() = appPreferences.resumeLoggingWithBottomTouch
 

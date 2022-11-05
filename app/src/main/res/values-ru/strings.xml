@@ -72,4 +72,8 @@
     <string name="notification_permission_is_required">Разрешение необходимо для отправки уведомлений со сбоями</string>
     <string name="logging_notification">Уведомление о логировании</string>
     <string name="resume_logging_with_bottom_edge_touch">Продолжать логирование при касании нижнего края</string>
+    <string name="start_on_launch">Запуск с приложением</string>
+    <string name="start_service">Запустить сервис</string>
+    <string name="stop_service">Остановить сервис</string>
+    <string name="service_required_desc">Сервис нужен для сбора сбоев в фоне, без него Android просто закроет LogFox</string>
 </resources>

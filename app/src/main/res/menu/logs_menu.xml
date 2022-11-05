@@ -36,6 +36,11 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/service_status_item"
+        android:title="@string/start_service"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/exit_item"
         android:title="@string/exit"
         app:showAsAction="never" />

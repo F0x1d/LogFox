@@ -29,7 +29,7 @@ class MainViewModel @Inject constructor(application: Application,
 
     private fun load() {
         if (ctx.hasPermissionToReadLogs())
-            ctx.startLoggingAndService(loggingRepository)
+            ctx.startLoggingAndService(loggingRepository, appPreferences)
         else
             sendEvent(EVENT_TYPE_SETUP)
     }

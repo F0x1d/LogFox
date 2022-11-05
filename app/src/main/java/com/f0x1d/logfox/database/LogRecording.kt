@@ -2,11 +2,15 @@ package com.f0x1d.logfox.database
 
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
+import java.io.File
 
 @Entity
 data class LogRecording(@ColumnInfo(name = "date_and_time") val dateAndTime: Long,
-                        @ColumnInfo(name = "log") val log: String,
-                        @PrimaryKey(autoGenerate = true) val id: Long = 0)
+                        @ColumnInfo(name = "file") val file: String,
+                        @PrimaryKey(autoGenerate = true) val id: Long = 0) {
+
+    fun deleteFile() = File(file).delete()
+}
 
 @Dao
 interface LogRecordingDao {

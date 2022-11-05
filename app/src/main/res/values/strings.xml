@@ -80,4 +80,8 @@
     <string name="notification_permission_is_required">Permission is required to send notifications with crashes</string>
     <string name="logging_notification">Notification about logging</string>
     <string name="resume_logging_with_bottom_edge_touch">Resume logging with bottom edge touch</string>
+    <string name="start_on_launch">Start on app launch</string>
+    <string name="start_service">Start service</string>
+    <string name="stop_service">Stop service</string>
+    <string name="service_required_desc">Service is required to observe crashes in background. Without service Android kills LogFox</string>
 </resources>

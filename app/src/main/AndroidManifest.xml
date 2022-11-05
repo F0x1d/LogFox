@@ -17,8 +17,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.LogFox"
-        tools:targetApi="31">
+        android:theme="@style/Theme.LogFox">
 
         <activity android:name=".ui.activity.MainActivity" android:exported="true">
             <intent-filter>
@@ -37,6 +36,18 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
         </receiver>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.f0x1d.logfox.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths">
+            </meta-data>
+        </provider>
     </application>
 
 </manifest>

@@ -27,6 +27,7 @@ class LoggingRepository @Inject constructor(crashesRepository: CrashesRepository
     }
 
     val logsFlow = MutableStateFlow(emptyList<LogLine>())
+    val serviceRunningFlow = MutableStateFlow(false)
 
     private var loggingJob: Job? = null
     private var loggingInterval = AppPreferences.LOGS_UPDATE_INTERVAL_DEFAULT

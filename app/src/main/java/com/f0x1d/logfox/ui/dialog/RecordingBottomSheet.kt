@@ -6,15 +6,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.f0x1d.logfox.databinding.SheetRecordingBinding
-import com.f0x1d.logfox.extensions.*
+import com.f0x1d.logfox.extensions.exportFormatted
+import com.f0x1d.logfox.extensions.logToZip
+import com.f0x1d.logfox.extensions.shareFileIntent
+import com.f0x1d.logfox.extensions.toLocaleString
 import com.f0x1d.logfox.ui.dialog.base.BaseViewModelBottomSheet
 import com.f0x1d.logfox.utils.viewModelFactory
 import com.f0x1d.logfox.viewmodel.recordings.RecordingViewModel
 import com.f0x1d.logfox.viewmodel.recordings.RecordingViewModelAssistedFactory
 import dagger.hilt.android.AndroidEntryPoint
+import java.io.File
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -29,8 +32,11 @@ class RecordingBottomSheet: BaseViewModelBottomSheet<RecordingViewModel, SheetRe
         }
     }
 
-    private val zipCrashLauncher = registerForActivityResult(ActivityResultContracts.CreateDocument("application/zip")) {
-        viewModel.logToZip(it ?: return@registerForActivityResult) { log }
+    private val zipLogLauncher = registerForActivityResult(ActivityResultContracts.CreateDocument("application/zip")) {
+        viewModel.logToZip(it ?: return@registerForActivityResult) { File(file).readText() }
+    }
+    private val logExportLauncher = registerForActivityResult(ActivityResultContracts.CreateDocument("text/plain")) {
+        viewModel.exportFile(it ?: return@registerForActivityResult)
     }
     private val navArgs by navArgs<RecordingBottomSheetArgs>()
 
@@ -44,18 +50,14 @@ class RecordingBottomSheet: BaseViewModelBottomSheet<RecordingViewModel, SheetRe
 
             binding.title.text = logRecording.dateAndTime.toLocaleString()
 
-            binding.copyLayout.setOnClickListener {
-                requireContext().copyText(logRecording.log)
-            }
-            binding.copyLayout.setOnLongClickListener {
-                findNavController().navigate(RecordingBottomSheetDirections.actionRecordingBottomSheetToRecordingExtendedCopyFragment(logRecording.log))
-                return@setOnLongClickListener true
+            binding.exportLayout.setOnClickListener {
+                logExportLauncher.launch("${logRecording.dateAndTime.exportFormatted}.txt")
             }
             binding.shareLayout.setOnClickListener {
-                requireContext().shareIntent(logRecording.log)
+                requireContext().shareFileIntent(File(logRecording.file))
             }
             binding.zipLayout.setOnClickListener {
-                zipCrashLauncher.launch("${logRecording.dateAndTime.exportFormatted}.zip")
+                zipLogLauncher.launch("${logRecording.dateAndTime.exportFormatted}.zip")
             }
         }
     }

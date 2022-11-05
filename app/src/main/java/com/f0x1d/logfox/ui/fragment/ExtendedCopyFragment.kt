@@ -13,7 +13,7 @@ class ExtendedCopyFragment: BaseFragment<FragmentExtendedCopyBinding>() {
 
     private val navArgs by navArgs<ExtendedCopyFragmentArgs>()
 
-    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) = FragmentExtendedCopyBinding.inflate(layoutInflater, container, false)
+    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) = FragmentExtendedCopyBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

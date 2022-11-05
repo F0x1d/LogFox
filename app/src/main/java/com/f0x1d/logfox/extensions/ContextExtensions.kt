@@ -12,9 +12,12 @@ import android.os.Build
 import android.widget.Toast
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.repository.logging.LoggingRepository
 import com.f0x1d.logfox.service.LoggingService
+import com.f0x1d.logfox.utils.preferences.AppPreferences
+import java.io.File
 import kotlin.system.exitProcess
 
 
@@ -33,20 +36,26 @@ val Context.notificationManagerCompat get() = NotificationManagerCompat.from(thi
 val Context.notificationManager get() = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 val Context.activityManager get() = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
 
-fun Context.startLoggingAndService(loggingRepository: LoggingRepository) {
+fun Context.startLoggingAndService(loggingRepository: LoggingRepository, appPreferences: AppPreferences, force: Boolean = false) {
     loggingRepository.startLoggingIfNot()
 
+    if (appPreferences.startOnLaunch || force) {
+        startLoggingService()
+    }
+}
+
+fun Context.startLoggingAndServiceIfCan(loggingRepository: LoggingRepository, appPreferences: AppPreferences, force: Boolean = false) {
+    if (hasPermissionToReadLogs()) {
+        startLoggingAndService(loggingRepository, appPreferences, force)
+    }
+}
+
+fun Context.startLoggingService() {
     Intent(this, LoggingService::class.java).also {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
             startForegroundService(it)
         else
             startService(it)
-    }
-}
-
-fun Context.startLoggingAndServiceIfCan(loggingRepository: LoggingRepository) {
-    if (hasPermissionToReadLogs()) {
-        startLoggingAndService(loggingRepository)
     }
 }
 
@@ -60,11 +69,22 @@ fun Context.hardRestartApp() {
 
 fun Context.toast(text: Int) = Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
 
-fun Context.shareIntent(text: String) {
+fun Context.shareIntent(text: String) = baseShareIntent {
+    it.putExtra(Intent.EXTRA_TEXT, text)
+    it.type = "text/plain"
+}
+
+fun Context.shareFileIntent(file: File) = baseShareIntent {
+    val uri = FileProvider.getUriForFile(this, "com.f0x1d.logfox.provider", file)
+
+    it.putExtra(Intent.EXTRA_STREAM, uri)
+    it.type = "text/plain"
+}
+
+private fun Context.baseShareIntent(block: (Intent) -> Unit) {
     try {
         val intent = Intent(Intent.ACTION_SEND)
-        intent.putExtra(Intent.EXTRA_TEXT, text)
-        intent.type = "text/plain"
+        block.invoke(intent)
 
         startActivity(Intent.createChooser(intent, getString(R.string.share)))
     } catch (e: Exception) {
@@ -79,7 +99,9 @@ fun Context.catchingNotNumber(block: () -> Unit) = try {
     toast(R.string.this_is_not_a_number)
 }
 
-fun Context.sendKillApp() = startService(Intent(this, LoggingService::class.java).setAction(LoggingService.ACTION_KILL_SERVICE))
+fun Context.sendKillApp() = sendService(LoggingService.ACTION_KILL_SERVICE)
+fun Context.sendStopService() = sendService(LoggingService.ACTION_STOP_SERVICE)
+private fun Context.sendService(action: String) = startService(Intent(this, LoggingService::class.java).setAction(action))
 
 fun Context.hasNotificationsPermission(): Boolean {
     return if (Build.VERSION.SDK_INT >= 33)

@@ -19,6 +19,10 @@ class AppPreferences @Inject constructor(@ApplicationContext context: Context): 
     var startOnBoot
         get() = get("pref_start_on_boot", true)
         set(value) { put("pref_start_on_boot", value) }
+    var startOnLaunch
+        get() = get("pref_start_on_launch", true)
+        set(value) { put("pref_start_on_launch", value) }
+
     var nightTheme
         get() = get("pref_night_theme", 0)
         set(value) { put("pref_night_theme", value) }

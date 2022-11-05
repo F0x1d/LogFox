@@ -13,10 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.adapter.LogsAdapter
 import com.f0x1d.logfox.databinding.FragmentLogsBinding
-import com.f0x1d.logfox.extensions.copyText
-import com.f0x1d.logfox.extensions.sendKillApp
-import com.f0x1d.logfox.extensions.setClickListenerOn
-import com.f0x1d.logfox.extensions.toast
+import com.f0x1d.logfox.extensions.*
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
 import com.f0x1d.logfox.utils.LogLinesDiffUtilCallback
 import com.f0x1d.logfox.utils.fillWithStrings
@@ -71,6 +68,14 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
                     adapter.notifyItemRangeRemoved(0, oldCount)
                 adapter.clearSelected()
             }
+            setClickListenerOn(R.id.service_status_item) {
+                requireContext().apply {
+                    if (viewModel.serviceRunningData.value == true)
+                        sendStopService()
+                    else
+                        startLoggingService()
+                }
+            }
             setClickListenerOn(R.id.exit_item) {
                 requireContext().sendKillApp()
             }
@@ -92,7 +97,12 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
             }
         })
 
-        binding.scrollFab.setOnClickListener { viewModel.resume() }
+        binding.scrollFab.setOnClickListener {
+            if (viewModel.resumeLoggingWithBottomTouch)
+                viewModel.resume()
+            else
+                scrollLogToBottom()
+        }
 
         adapter.textSize = appPreferences.logsTextSize.toFloat()
         adapter.logsExpanded = appPreferences.logsExpanded
@@ -127,11 +137,16 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
             }
             changingState = false
         }
+
+        viewModel.serviceRunningData.observe(viewLifecycleOwner) { running ->
+            binding.toolbar.menu.findItem(R.id.service_status_item).setTitle(if (running) R.string.stop_service else R.string.start_service)
+        }
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String) {
         if (key == "pref_logs_text_size") adapter.textSize = appPreferences.logsTextSize.toFloat()
         if (key == "pref_logs_expanded") adapter.logsExpanded = appPreferences.logsExpanded
+
         if (key.startsWith("pref_show_log")) adapter.logsFormat = appPreferences.showLogValues
     }
 

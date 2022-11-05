@@ -1,5 +1,6 @@
 package com.f0x1d.logfox.ui.dialog.base
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -26,10 +27,12 @@ abstract class BaseBottomSheet<T : ViewBinding>: BottomSheetDialogFragment() {
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
+    @SuppressLint("RestrictedApi")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
         dialog.behavior.skipCollapsed = true
         dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+        dialog.behavior.disableShapeAnimations() // i love google https://github.com/material-components/material-components-android/pull/437
         return dialog
     }
 

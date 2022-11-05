@@ -20,12 +20,15 @@ fun InputStream.importFilters(context: Context, filtersRepository: FiltersReposi
 
     val filters = gson.fromJson<List<UserFilter>>(String(readBytes()), object : TypeToken<List<UserFilter>>() {}.type)
     filtersRepository.createAll(filters)
+
+    close()
 }
 
 fun OutputStream.exportFilters(context: Context, filters: List<UserFilter>) {
     val gson = EntryPointAccessors.fromApplication(context, ExportImportUtilsEntryPoint::class.java).gson()
 
     write(gson.toJson(filters).encodeToByteArray())
+
     close()
 }
 
@@ -38,6 +41,8 @@ fun OutputStream.exportLogToZip(context: Context, log: String) {
 
         close()
     }
+
+    close()
 }
 
 private fun ZipOutputStream.putZipEntry(name: String, content: ByteArray) {
