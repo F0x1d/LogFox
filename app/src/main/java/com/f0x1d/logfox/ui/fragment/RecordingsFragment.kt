@@ -17,8 +17,6 @@ import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
 import com.f0x1d.logfox.utils.RecyclerViewDivider
 import com.f0x1d.logfox.utils.dpToPx
 import com.f0x1d.logfox.utils.event.Event
-import com.f0x1d.logfox.utils.toDrawable
-import com.f0x1d.logfox.utils.toString
 import com.f0x1d.logfox.viewmodel.recordings.RecordingsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -43,8 +41,8 @@ class RecordingsFragment: BaseViewModelFragment<RecordingsViewModel, FragmentRec
             viewModel.clearRecordings()
         }
 
-        binding.recordButton.setOnClickListener { viewModel.toggleStartStop() }
-        binding.pauseButton.setOnClickListener { viewModel.togglePauseResume() }
+        binding.recordFab.setOnClickListener { viewModel.toggleStartStop() }
+        binding.pauseFab.setOnClickListener { viewModel.togglePauseResume() }
 
         binding.recordingsRecycler.layoutManager = LinearLayoutManager(requireContext())
         binding.recordingsRecycler.addItemDecoration(RecyclerViewDivider(requireContext(), 10.dpToPx.toInt(), 10.dpToPx.toInt()))
@@ -57,44 +55,30 @@ class RecordingsFragment: BaseViewModelFragment<RecordingsViewModel, FragmentRec
         viewModel.recordingStateData.observe(viewLifecycleOwner) {
             when (it) {
                 RecordingState.IDLE -> {
-                    binding.recordButton.apply {
-                        icon = R.drawable.ic_recording.toDrawable(requireContext())
-                        text = R.string.record.toString(requireContext())
-                    }
-                    binding.recordButton.isEnabled = true
-                    binding.pauseButton.visibility = View.GONE
+                    binding.recordFab.setImageResource(R.drawable.ic_recording)
+                    binding.recordFab.isEnabled = true
+
+                    binding.pauseFab.hide()
                 }
                 RecordingState.RECORDING -> {
-                    binding.recordButton.apply {
-                        icon = R.drawable.ic_stop.toDrawable(requireContext())
-                        text = R.string.stop.toString(requireContext())
-                    }
-                    binding.recordButton.isEnabled = true
-                    binding.pauseButton.apply {
-                        icon = R.drawable.ic_pause.toDrawable(requireContext())
-                        text = R.string.pause.toString(requireContext())
-                    }
-                    binding.pauseButton.visibility = View.VISIBLE
+                    binding.recordFab.setImageResource(R.drawable.ic_stop)
+                    binding.recordFab.isEnabled = true
+
+                    binding.pauseFab.setImageResource(R.drawable.ic_pause)
+                    binding.pauseFab.show()
                 }
                 RecordingState.PAUSED -> {
-                    binding.recordButton.apply {
-                        icon = R.drawable.ic_stop.toDrawable(requireContext())
-                        text = R.string.stop.toString(requireContext())
-                    }
-                    binding.recordButton.isEnabled = true
-                    binding.pauseButton.apply {
-                        icon = R.drawable.ic_play.toDrawable(requireContext())
-                        text = R.string.resume.toString(requireContext())
-                    }
-                    binding.pauseButton.visibility = View.VISIBLE
+                    binding.recordFab.setImageResource(R.drawable.ic_stop)
+                    binding.recordFab.isEnabled = true
+
+                    binding.pauseFab.setImageResource(R.drawable.ic_play)
+                    binding.pauseFab.show()
                 }
                 RecordingState.SAVING -> {
-                    binding.recordButton.apply {
-                        icon = R.drawable.ic_recording.toDrawable(requireContext())
-                        text = R.string.record.toString(requireContext())
-                    }
-                    binding.recordButton.isEnabled = false
-                    binding.pauseButton.visibility = View.GONE
+                    binding.recordFab.setImageResource(R.drawable.ic_recording)
+                    binding.recordFab.isEnabled = false
+
+                    binding.pauseFab.hide()
                 }
             }
         }

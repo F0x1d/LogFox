@@ -17,6 +17,12 @@ abstract class BaseViewModelActivity<T : BaseViewModel, D : ViewBinding>: BaseAc
 
             onEvent(it)
         }
+
+        viewModel.snackbarEventsData.observe(this) {
+            if (it.isConsumed) return@observe
+
+            snackbar(it.consume<String>()!!)
+        }
     }
 
     open fun onEvent(event: Event) {}

@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.view.updatePadding
 import androidx.fragment.app.viewModels
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.adapter.FiltersAdapter
 import com.f0x1d.logfox.databinding.FragmentFiltersBinding
+import com.f0x1d.logfox.extensions.applyInsets
 import com.f0x1d.logfox.extensions.setClickListenerOn
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
 import com.f0x1d.logfox.viewmodel.LogsViewModel
@@ -44,6 +46,10 @@ class FiltersFragment: BaseViewModelFragment<FiltersViewModel, FragmentFiltersBi
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.filtersRecycler.applyInsets(view) { insets ->
+            updatePadding(bottom = insets.bottom)
+        }
 
         binding.toolbar.setOnClickListener { findNavController().popBackStack() }
         binding.toolbar.inflateMenu(R.menu.filters_menu)

@@ -33,6 +33,9 @@ class SettingsUIFragment: BaseSettingsWrapperFragment() {
                 val filledThemeSettings = intArrayOf(R.string.follow_system, R.string.light, R.string.dark).fillWithStrings(requireContext())
 
                 setupAsListPreference(
+                    {
+                        setIcon(R.drawable.ic_dialog_theme)
+                    },
                     filledThemeSettings,
                     appPreferences.nightTheme
                 ) {
@@ -46,6 +49,7 @@ class SettingsUIFragment: BaseSettingsWrapperFragment() {
             findPreference<Preference>("pref_logs_format")?.setOnPreferenceClickListener {
                 MaterialAlertDialogBuilder(requireContext())
                     .setTitle(R.string.logs_format)
+                    .setIcon(R.drawable.ic_dialog_list)
                     .setMultiChoiceItems(
                         intArrayOf(R.string.time, R.string.pid, R.string.tid, R.string.tag, R.string.content).fillWithStrings(requireContext()),
                         appPreferences.showLogValues
@@ -68,6 +72,8 @@ class SettingsUIFragment: BaseSettingsWrapperFragment() {
                     it.textLayout.setHint(R.string.in_ms)
                     it.text.inputType = InputType.TYPE_CLASS_NUMBER
                 }, {
+                   setIcon(R.drawable.ic_dialog_timer)
+                }, {
                     appPreferences.logsUpdateInterval.toString()
                 }, {
                     requireContext().catchingNotNumber {
@@ -81,6 +87,8 @@ class SettingsUIFragment: BaseSettingsWrapperFragment() {
             findPreference<Preference>("pref_logs_text_size")?.apply {
                 setupAsEditTextPreference({
                     it.text.inputType = InputType.TYPE_CLASS_NUMBER
+                }, {
+                   setIcon(R.drawable.ic_dialog_text_fields)
                 }, {
                     appPreferences.logsTextSize.toString()
                 }, {

@@ -12,17 +12,16 @@ class JNICrashDetector(collected: suspend (AppCrash) -> Unit): BaseCrashDetector
         removeAll { !it.debugTag }
     }
 
-    private var wasBacktrace = false
+    private var firstLineTime = 0L
 
-    override fun foundFirstLine(line: LogLine) = line.debugTag && line.content == "*** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***"
+    override fun foundFirstLine(line: LogLine) = line.firstJNICrashLine.also {
+        if (it) firstLineTime = System.currentTimeMillis()
+    }
 
     override fun stillCollecting(line: LogLine): Boolean {
-        if (line.debugTag && line.content == "backtrace:")
-            wasBacktrace = true
+        if (line.firstJNICrashLine) return false
 
-        return if (super.stillCollecting(line))
-            true
-        else !wasBacktrace
+        return super.stillCollecting(line) || firstLineTime + 1000 > System.currentTimeMillis()
     }
 
     override fun packageFromCollected(lines: List<LogLine>): String {
@@ -37,6 +36,9 @@ class JNICrashDetector(collected: suspend (AppCrash) -> Unit): BaseCrashDetector
 
         return "???"
     }
+
+    private val LogLine.firstJNICrashLine
+        get() = debugTag && content == "*** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***"
 
     private val LogLine.debugTag
         get() = tag.startsWith("DEBUG")

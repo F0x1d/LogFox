@@ -2,12 +2,12 @@ package com.f0x1d.logfox.viewmodel.base
 
 import android.app.Application
 import android.content.Context
-import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.utils.event.Event
+import com.f0x1d.logfox.utils.event.SnackbarEvent
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
@@ -17,6 +17,7 @@ abstract class BaseViewModel(application: Application): AndroidViewModel(applica
         get() = getApplication()
 
     val eventsData = MutableLiveData<Event>()
+    val snackbarEventsData = MutableLiveData<SnackbarEvent>()
 
     protected fun launchCatching(context: CoroutineContext,
                                  errorBlock: suspend CoroutineScope.() -> Unit = {},
@@ -32,9 +33,13 @@ abstract class BaseViewModel(application: Application): AndroidViewModel(applica
 
             e.printStackTrace()
 
-            withContext(Dispatchers.Main.immediate) {
-                Toast.makeText(ctx, ctx.getString(R.string.error, e.localizedMessage), Toast.LENGTH_SHORT).show()
-            }
+            snackbar(ctx.getString(R.string.error, e.localizedMessage))
         }
+    }
+
+    protected fun snackbar(id: Int) = snackbar(ctx.getString(id))
+
+    protected fun snackbar(text: String) = viewModelScope.launch(Dispatchers.Main.immediate) {
+        snackbarEventsData.value = SnackbarEvent(text)
     }
 }

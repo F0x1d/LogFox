@@ -19,7 +19,9 @@
         <!-- Customize your theme here. -->
         <item name="android:colorBackground">@color/amoled</item>
         <item name="enableEdgeToEdge">true</item>
-        <item name="noteStrokeColor">@color/noteStrokeColorDark</item>
+        <item name="logFoxCardStrokeColor">@color/card_stroke_color_dark</item>
+
+        <item name="materialAlertDialogTheme">@style/ThemeOverlay.LogFoxMaterialAlertDialog</item>
 
         <item name="fontFamily">@font/google_sans</item>
         <item name="android:fontFamily">@font/google_sans</item>

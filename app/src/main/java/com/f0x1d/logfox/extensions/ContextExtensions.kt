@@ -23,9 +23,6 @@ import kotlin.system.exitProcess
 
 fun Context.copyText(text: String) = (getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager)
     .setPrimaryClip(ClipData.newPlainText(getString(R.string.app_name), text))
-    .apply {
-        toast(R.string.text_copied)
-    }
 
 fun Context.hasPermissionToReadLogs() = ContextCompat.checkSelfPermission(
     this,

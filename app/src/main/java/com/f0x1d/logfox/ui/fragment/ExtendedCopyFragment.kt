@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.f0x1d.logfox.databinding.FragmentExtendedCopyBinding
+import com.f0x1d.logfox.extensions.applyBottomInsets
 import com.f0x1d.logfox.ui.fragment.base.BaseFragment
 
 class ExtendedCopyFragment: BaseFragment<FragmentExtendedCopyBinding>() {
@@ -17,6 +18,8 @@ class ExtendedCopyFragment: BaseFragment<FragmentExtendedCopyBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.logText.applyBottomInsets(view)
 
         binding.toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()

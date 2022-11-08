@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.databinding.FragmentSetupBinding
+import com.f0x1d.logfox.extensions.applyTopInsets
 import com.f0x1d.logfox.extensions.copyText
 import com.f0x1d.logfox.extensions.hardRestartApp
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
@@ -25,6 +26,8 @@ class SetupFragment: BaseViewModelFragment<SetupViewModel, FragmentSetupBinding>
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.toolbar.applyTopInsets(view)
+
         binding.rootButton.setOnClickListener {
             viewModel.root()
         }
@@ -38,10 +41,14 @@ class SetupFragment: BaseViewModelFragment<SetupViewModel, FragmentSetupBinding>
             SetupViewModel.EVENT_TYPE_GOT_PERMISSION -> requireContext().hardRestartApp()
             SetupViewModel.EVENT_TYPE_SHOW_ADB_DIALOG -> {
                 MaterialAlertDialogBuilder(requireContext())
+                    .setIcon(R.drawable.ic_dialog_adb)
                     .setTitle(R.string.adb)
                     .setMessage(getString(R.string.how_to_use_adb, viewModel.adbCommand))
                     .setPositiveButton(R.string.check) { dialog, which -> viewModel.checkPermission() }
-                    .setNeutralButton(android.R.string.copy) { dialog, which -> requireContext().copyText(viewModel.adbCommand) }
+                    .setNeutralButton(android.R.string.copy) { dialog, which ->
+                        requireContext().copyText(viewModel.adbCommand)
+                        snackbar(R.string.text_copied)
+                    }
                     .show()
             }
         }

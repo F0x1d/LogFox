@@ -1,3 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <style name="ThemeOverlay.LogFoxMaterialAlertDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog.Centered">
+        <item name="buttonBarPositiveButtonStyle">@style/LogFoxMaterialAlertDialog.Button</item>
+        <item name="buttonBarNegativeButtonStyle">@style/LogFoxMaterialAlertDialog.Button</item>
+        <item name="buttonBarNeutralButtonStyle">@style/LogFoxMaterialAlertDialog.Button</item>
+    </style>
+
+    <style name="LogFoxMaterialAlertDialog.Button" parent="Widget.Material3.Button.TextButton.Dialog">
+        <item name="android:textStyle">bold</item>
+    </style>
 </resources>

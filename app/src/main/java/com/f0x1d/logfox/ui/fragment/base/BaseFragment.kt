@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
+import com.f0x1d.logfox.extensions.snackbar
 
 abstract class BaseFragment<T : ViewBinding>: Fragment() {
 
@@ -27,4 +28,10 @@ abstract class BaseFragment<T : ViewBinding>: Fragment() {
         super.onDestroyView()
         mutableBinding = null
     }
+
+    protected fun snackbar(text: String) {
+        requireView().snackbar(text)
+    }
+
+    protected fun snackbar(id: Int) = snackbar(getString(id))
 }

@@ -82,6 +82,7 @@ class FilterBottomSheet: BaseViewModelBottomSheet<FilterViewModel, SheetFilterBi
     private fun showFilterDialog() {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(R.string.log_levels)
+            .setIcon(R.drawable.ic_dialog_list)
             .setMultiChoiceItems(LogLevel.values().map { it.name }.toTypedArray(), viewModel.enabledLogLevels.toTypedArray().toBooleanArray()) { dialog, which, checked ->
                 viewModel.filterLevel(which, checked)
             }

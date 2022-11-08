@@ -18,6 +18,12 @@ abstract class BaseViewModelFragment<T : BaseViewModel, D : ViewBinding>: BaseFr
 
             onEvent(it)
         }
+
+        viewModel.snackbarEventsData.observe(viewLifecycleOwner) {
+            if (it.isConsumed) return@observe
+
+            snackbar(it.consume<String>()!!)
+        }
     }
 
     open fun onEvent(event: Event) {}

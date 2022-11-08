@@ -43,6 +43,7 @@ class MainActivity: BaseViewModelActivity<MainViewModel, ActivityMainBinding>(),
 
         if (!hasNotificationsPermission() && !viewModel.askedNotificationsPermission) {
             MaterialAlertDialogBuilder(this)
+                .setIcon(R.drawable.ic_dialog_notification_important)
                 .setTitle(R.string.no_notification_permission)
                 .setMessage(R.string.notification_permission_is_required)
                 .setCancelable(false)

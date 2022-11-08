@@ -162,16 +162,20 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
 
     private fun showSelectedDialog() {
         if (adapter.selectedItems.isEmpty()) {
-            requireContext().toast(R.string.nothing_is_selected)
+            snackbar(R.string.nothing_is_selected)
             return
         }
 
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(R.string.selected)
+            .setIcon(R.drawable.ic_dialog_checklist)
             .setItems(intArrayOf(android.R.string.copy, R.string.extended_copy).fillWithStrings(requireContext())) { dialog, which ->
                 val textToCopy = adapter.selectedItems.joinToString("\n") { it.original }
                 when (which) {
-                    0 -> requireContext().copyText(textToCopy)
+                    0 -> {
+                        requireContext().copyText(textToCopy)
+                        snackbar(R.string.text_copied)
+                    }
                     1 -> findNavController().navigate(LogsFragmentDirections.actionLogsFragmentToLogsExtendedCopyFragment(textToCopy))
                 }
             }

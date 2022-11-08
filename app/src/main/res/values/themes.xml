@@ -18,7 +18,9 @@
         <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
         <!-- Customize your theme here. -->
         <item name="enableEdgeToEdge">true</item>
-        <item name="noteStrokeColor">@color/noteStrokeColor</item>
+        <item name="logFoxCardStrokeColor">@color/card_stroke_color</item>
+
+        <item name="materialAlertDialogTheme">@style/ThemeOverlay.LogFoxMaterialAlertDialog</item>
 
         <item name="fontFamily">@font/google_sans</item>
         <item name="android:fontFamily">@font/google_sans</item>

@@ -17,6 +17,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="amoled">#ff020202</color>
 
-    <color name="noteStrokeColor">#ffdadce0</color>
-    <color name="noteStrokeColorDark">#3a3c3e</color>
+    <color name="card_stroke_color">#ffdadce0</color>
+    <color name="card_stroke_color_dark">#3a3c3e</color>
 </resources>

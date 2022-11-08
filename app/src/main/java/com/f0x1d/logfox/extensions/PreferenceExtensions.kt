@@ -8,7 +8,7 @@ import com.f0x1d.logfox.databinding.DialogTextBinding
 import com.f0x1d.logfox.utils.preferences.AppPreferences
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
-fun Preference.setupAsEditTextPreference(setup: (DialogTextBinding) -> Unit, get: () -> String?, save: (String?) -> Unit) {
+fun Preference.setupAsEditTextPreference(setup: (DialogTextBinding) -> Unit, setupDialog: MaterialAlertDialogBuilder.() -> Unit, get: () -> String?, save: (String?) -> Unit) {
     setOnPreferenceClickListener {
         val dialogBinding = DialogTextBinding.inflate(LayoutInflater.from(context))
         setup.invoke(dialogBinding)
@@ -22,6 +22,7 @@ fun Preference.setupAsEditTextPreference(setup: (DialogTextBinding) -> Unit, get
                 save.invoke(dialogBinding.text.text?.toString())
             }
             .setNegativeButton(android.R.string.cancel, null)
+            .apply(setupDialog)
             .create()
             .apply {
                 window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
@@ -32,7 +33,7 @@ fun Preference.setupAsEditTextPreference(setup: (DialogTextBinding) -> Unit, get
     }
 }
 
-fun Preference.setupAsListPreference(items: Array<String>, selected: Int, onSelected: (Int) -> Unit) {
+fun Preference.setupAsListPreference(setupDialog: MaterialAlertDialogBuilder.() -> Unit, items: Array<String>, selected: Int, onSelected: (Int) -> Unit) {
     setOnPreferenceClickListener {
         MaterialAlertDialogBuilder(context)
             .setTitle(title)
@@ -41,6 +42,7 @@ fun Preference.setupAsListPreference(items: Array<String>, selected: Int, onSele
                 onSelected.invoke(which)
             }
             .setPositiveButton(android.R.string.cancel, null)
+            .apply(setupDialog)
             .show()
         return@setOnPreferenceClickListener true
     }

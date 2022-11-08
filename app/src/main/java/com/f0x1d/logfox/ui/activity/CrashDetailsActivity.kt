@@ -39,6 +39,8 @@ class CrashDetailsActivity: BaseViewModelActivity<CrashDetailsViewModel, Activit
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        binding.logCard.applyBottomInsets(window.decorView)
+
         binding.toolbar.setNavigationOnClickListener {
             onBackPressed()
         }
@@ -58,8 +60,10 @@ class CrashDetailsActivity: BaseViewModelActivity<CrashDetailsViewModel, Activit
     }
 
     override fun onEvent(event: Event) {
-        if (event.type == CrashDetailsViewModel.EVENT_TYPE_COPY_LINK)
+        if (event.type == CrashDetailsViewModel.EVENT_TYPE_COPY_LINK) {
             copyText(event.consume() ?: return)
+            snackbar(R.string.text_copied)
+        }
     }
 
     private fun setupFor(appCrash: AppCrash) {
@@ -79,6 +83,7 @@ class CrashDetailsActivity: BaseViewModelActivity<CrashDetailsViewModel, Activit
 
         binding.copyLayout.setOnClickListener {
             copyText(appCrash.log)
+            snackbar(R.string.text_copied)
         }
 
         binding.shareLayout.setOnClickListener {
