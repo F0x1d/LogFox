@@ -45,7 +45,7 @@ class RecordingsFragment: BaseViewModelFragment<RecordingsViewModel, FragmentRec
         binding.pauseFab.setOnClickListener { viewModel.togglePauseResume() }
 
         binding.recordingsRecycler.layoutManager = LinearLayoutManager(requireContext())
-        binding.recordingsRecycler.addItemDecoration(RecyclerViewDivider(requireContext(), 10.dpToPx.toInt(), 10.dpToPx.toInt()))
+        binding.recordingsRecycler.addItemDecoration(RecyclerViewDivider(requireContext(), 80.dpToPx.toInt(), 10.dpToPx.toInt()))
         binding.recordingsRecycler.adapter = adapter
 
         viewModel.data.observe(viewLifecycleOwner) {

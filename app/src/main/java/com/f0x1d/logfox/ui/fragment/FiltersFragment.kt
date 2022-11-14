@@ -5,7 +5,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewGroup.MarginLayoutParams
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
 import androidx.fragment.app.viewModels
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
@@ -17,6 +19,7 @@ import com.f0x1d.logfox.databinding.FragmentFiltersBinding
 import com.f0x1d.logfox.extensions.applyInsets
 import com.f0x1d.logfox.extensions.setClickListenerOn
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
+import com.f0x1d.logfox.utils.dpToPx
 import com.f0x1d.logfox.viewmodel.LogsViewModel
 import com.f0x1d.logfox.viewmodel.filters.FiltersViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -47,16 +50,17 @@ class FiltersFragment: BaseViewModelFragment<FiltersViewModel, FragmentFiltersBi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.filtersRecycler.applyInsets(view) { insets ->
-            updatePadding(bottom = insets.bottom)
+        applyInsets(view) { insets ->
+            binding.addFab.updateLayoutParams<MarginLayoutParams> {
+                bottomMargin = 10.dpToPx.toInt() + insets.bottom
+            }
+
+            binding.filtersRecycler.updatePadding(bottom = 71.dpToPx.toInt() + insets.bottom)
         }
 
         binding.toolbar.setOnClickListener { findNavController().popBackStack() }
         binding.toolbar.inflateMenu(R.menu.filters_menu)
         binding.toolbar.menu.apply {
-            setClickListenerOn(R.id.create_item) {
-                findNavController().navigate(FiltersFragmentDirections.actionFiltersFragmentToFilterBottomSheet())
-            }
             setClickListenerOn(R.id.clear_item) {
                 viewModel.clearAll()
             }
@@ -70,6 +74,10 @@ class FiltersFragment: BaseViewModelFragment<FiltersViewModel, FragmentFiltersBi
 
         binding.filtersRecycler.layoutManager = LinearLayoutManager(requireContext())
         binding.filtersRecycler.adapter = adapter
+
+        binding.addFab.setOnClickListener {
+            findNavController().navigate(FiltersFragmentDirections.actionFiltersFragmentToFilterBottomSheet())
+        }
 
         viewModel.data.observe(viewLifecycleOwner) {
             adapter.elements = it ?: return@observe

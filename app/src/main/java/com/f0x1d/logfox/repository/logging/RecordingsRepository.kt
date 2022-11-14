@@ -1,6 +1,7 @@
 package com.f0x1d.logfox.repository.logging
 
 import android.content.Context
+import com.f0x1d.logfox.R
 import com.f0x1d.logfox.database.AppDatabase
 import com.f0x1d.logfox.database.LogRecording
 import com.f0x1d.logfox.extensions.exportFormatted
@@ -118,7 +119,9 @@ class RecordingsRepository @Inject constructor(@ApplicationContext private val c
             writeLogsToFile()
 
             recordingsFlow.updateList {
-                val logRecording = LogRecording(recordingTime, recordingFile!!.absolutePath).run {
+                val title = "${context.getString(R.string.recording)} ${recordingsFlow.value.size + 1}"
+
+                val logRecording = LogRecording(title, recordingTime, recordingFile!!.absolutePath).run {
                     copy(id = database.logRecordingDao().insert(this))
                 }
 
@@ -130,6 +133,17 @@ class RecordingsRepository @Inject constructor(@ApplicationContext private val c
             }
 
             recordingStateFlow.update { RecordingState.IDLE }
+        }
+    }
+
+    fun updateTitle(logRecording: LogRecording, newTitle: String) {
+        onAppScope {
+            recordingsFlow.updateList {
+                val newValue = logRecording.copy(title = newTitle).also {
+                    database.logRecordingDao().update(it)
+                }
+                set(indexOfFirst { it.id == newValue.id }, newValue)
+            }
         }
     }
 

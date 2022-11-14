@@ -19,11 +19,15 @@ fun View.applyBottomInsets(view: View) = applyInsets(view) { insets ->
     }
 }
 
-fun View.applyInsets(view: View, block: View.(Insets) -> Unit) {
+fun View.applyInsets(view: View, block: View.(Insets) -> Unit) = com.f0x1d.logfox.extensions.applyInsets(view) {
+    block.invoke(this, it)
+}
+
+fun applyInsets(view: View, block: (Insets) -> Unit) {
     ViewCompat.setOnApplyWindowInsetsListener(view) { _, windowInsets ->
         val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
 
-        block.invoke(this, insets)
+        block.invoke(insets)
 
         windowInsets
     }

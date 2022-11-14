@@ -30,6 +30,10 @@ class LogsAdapter: BaseAdapter<LogLine, ItemLogBinding>() {
             notifyItemRangeChanged(0, itemCount)
         }
 
+    init {
+        setHasStableIds(false)
+    }
+
     override fun createHolder(layoutInflater: LayoutInflater, parent: ViewGroup) = LogViewHolder(
         ItemLogBinding.inflate(layoutInflater, parent, false)
     )

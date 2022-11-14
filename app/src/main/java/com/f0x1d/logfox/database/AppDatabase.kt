@@ -5,8 +5,10 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.f0x1d.logfox.LogFoxApp
+import com.f0x1d.logfox.R
 
-@Database(entities = [AppCrash::class, LogRecording::class, UserFilter::class], version = 6)
+@Database(entities = [AppCrash::class, LogRecording::class, UserFilter::class], version = 7)
 @TypeConverters(CrashTypeConverter::class, AllowedLevelsConverter::class)
 abstract class AppDatabase: RoomDatabase() {
 
@@ -31,6 +33,12 @@ abstract class AppDatabase: RoomDatabase() {
             override fun migrate(database: SupportSQLiteDatabase) {
                 database.execSQL("DROP TABLE LogRecording")
                 database.execSQL("CREATE TABLE LogRecording(id INTEGER PRIMARY KEY ASC AUTOINCREMENT NOT NULL, date_and_time INTEGER NOT NULL, file TEXT NOT NULL)")
+            }
+        }
+        val MIGRATION_6_7 = object : Migration(6, 7) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                val recordingString = LogFoxApp.instance.getString(R.string.recording)
+                database.execSQL("ALTER TABLE LogRecording ADD COLUMN title TEXT NOT NULL DEFAULT '${recordingString}'")
             }
         }
     }

@@ -13,6 +13,8 @@ import com.f0x1d.logfox.extensions.logToZip
 import com.f0x1d.logfox.extensions.shareFileIntent
 import com.f0x1d.logfox.extensions.toLocaleString
 import com.f0x1d.logfox.ui.dialog.base.BaseViewModelBottomSheet
+import com.f0x1d.logfox.utils.OneTimeAction
+import com.f0x1d.logfox.utils.view.PauseTextWatcher
 import com.f0x1d.logfox.utils.viewModelFactory
 import com.f0x1d.logfox.viewmodel.recordings.RecordingViewModel
 import com.f0x1d.logfox.viewmodel.recordings.RecordingViewModelAssistedFactory
@@ -33,7 +35,7 @@ class RecordingBottomSheet: BaseViewModelBottomSheet<RecordingViewModel, SheetRe
     }
 
     private val zipLogLauncher = registerForActivityResult(ActivityResultContracts.CreateDocument("application/zip")) {
-        viewModel.logToZip(it ?: return@registerForActivityResult) { File(file).readText() }
+        viewModel.logToZip(it ?: return@registerForActivityResult) { file }
     }
     private val logExportLauncher = registerForActivityResult(ActivityResultContracts.CreateDocument("text/plain")) {
         viewModel.exportFile(it ?: return@registerForActivityResult)
@@ -45,10 +47,24 @@ class RecordingBottomSheet: BaseViewModelBottomSheet<RecordingViewModel, SheetRe
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val pauseTextWatcher = PauseTextWatcher {
+            viewModel.updateTitle(it.toString())
+        }.also {
+            binding.title.addTextChangedListener(it)
+        }
+
+        val setTextAction = OneTimeAction()
+
         viewModel.data.observe(viewLifecycleOwner) { logRecording ->
             if (logRecording == null) return@observe
 
-            binding.title.text = logRecording.dateAndTime.toLocaleString()
+            setTextAction.doIfNotDone {
+                pauseTextWatcher.paused {
+                    binding.title.setText(logRecording.title)
+                }
+            }
+
+            binding.timeText.text = logRecording.dateAndTime.toLocaleString()
 
             binding.exportLayout.setOnClickListener {
                 logExportLauncher.launch("${logRecording.dateAndTime.exportFormatted}.txt")

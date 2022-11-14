@@ -19,6 +19,7 @@ class RecordingViewHolder(binding: ItemRecordingBinding,
     }
 
     override fun bindTo(data: LogRecording) {
-        binding.recordingText.text = data.dateAndTime.toLocaleString()
+        binding.title.text = data.title
+        binding.dateText.text = data.dateAndTime.toLocaleString()
     }
 }

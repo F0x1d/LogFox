@@ -76,4 +76,6 @@
     <string name="start_service">Запустить сервис</string>
     <string name="stop_service">Остановить сервис</string>
     <string name="service_required_desc">Сервис нужен для сбора сбоев в фоне, без него Android просто закроет LogFox</string>
+    <string name="recording">Запись</string>
+    <string name="title">Название</string>
 </resources>

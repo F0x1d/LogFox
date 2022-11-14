@@ -10,6 +10,8 @@ import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.android.EntryPointAccessors
 import dagger.hilt.components.SingletonComponent
+import java.io.File
+import java.io.FileInputStream
 import java.io.InputStream
 import java.io.OutputStream
 import java.util.zip.ZipEntry
@@ -32,11 +34,19 @@ fun OutputStream.exportFilters(context: Context, filters: List<UserFilter>) {
     close()
 }
 
-fun OutputStream.exportLogToZip(context: Context, log: String) {
+fun OutputStream.exportCrashToZip(context: Context, log: String) = exportToZip(context) {
+    putZipEntry("log.txt", log.encodeToByteArray())
+}
+
+fun OutputStream.exportLogToZip(context: Context, logFile: String) = exportToZip(context) {
+    putZipEntry("log.txt", File(logFile))
+}
+
+private fun OutputStream.exportToZip(context: Context, block: ZipOutputStream.() -> Unit) {
     val device = EntryPointAccessors.fromApplication(context, ExportImportUtilsEntryPoint::class.java).device()
 
     ZipOutputStream(this).apply {
-        putZipEntry("log.txt", log.encodeToByteArray())
+        block.invoke(this)
         putZipEntry("device.txt", device.toString().encodeToByteArray())
 
         close()
@@ -50,6 +60,18 @@ private fun ZipOutputStream.putZipEntry(name: String, content: ByteArray) {
     putNextEntry(entry)
 
     write(content, 0, content.size)
+    closeEntry()
+}
+
+private fun ZipOutputStream.putZipEntry(name: String, file: File) {
+    val entry = ZipEntry(name)
+    putNextEntry(entry)
+
+    with(FileInputStream(file)) {
+        copyTo(this@putZipEntry)
+        close()
+    }
+
     closeEntry()
 }
 

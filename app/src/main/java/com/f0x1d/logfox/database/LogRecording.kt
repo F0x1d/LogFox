@@ -5,7 +5,8 @@ import kotlinx.coroutines.flow.Flow
 import java.io.File
 
 @Entity
-data class LogRecording(@ColumnInfo(name = "date_and_time") val dateAndTime: Long,
+data class LogRecording(@ColumnInfo(name = "title") val title: String,
+                        @ColumnInfo(name = "date_and_time") val dateAndTime: Long,
                         @ColumnInfo(name = "file") val file: String,
                         @PrimaryKey(autoGenerate = true) val id: Long = 0) {
 
@@ -23,6 +24,9 @@ interface LogRecordingDao {
 
     @Insert
     fun insert(logRecording: LogRecording): Long
+
+    @Update
+    fun update(logRecording: LogRecording)
 
     @Delete
     fun delete(logRecording: LogRecording)

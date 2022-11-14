@@ -9,10 +9,6 @@ import com.f0x1d.logfox.ui.viewholder.CrashViewHolder
 
 class CrashesAdapter(private val click: (AppCrash) -> Unit, private val delete: (AppCrash) -> Unit): BaseAdapter<AppCrash, ItemCrashBinding>() {
 
-    init {
-        setHasStableIds(true)
-    }
-
     override fun createHolder(layoutInflater: LayoutInflater, parent: ViewGroup) = CrashViewHolder(
         ItemCrashBinding.inflate(layoutInflater, parent, false),
         click,

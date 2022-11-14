@@ -18,6 +18,10 @@ abstract class BaseAdapter<T, D : ViewBinding>: RecyclerView.Adapter<BaseViewHol
 
     protected var recyclerView: RecyclerView? = null
 
+    init {
+        setHasStableIds(true)
+    }
+
     abstract fun createHolder(layoutInflater: LayoutInflater, parent: ViewGroup): BaseViewHolder<T, D>
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = createHolder(

@@ -26,7 +26,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
-        android:paddingBottom="10dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/add_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_add"
+        android:layout_margin="10dp"
+        app:layout_anchorGravity="bottom|right|end"
+        android:layout_gravity="end|bottom"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

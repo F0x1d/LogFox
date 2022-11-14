@@ -30,7 +30,7 @@ class CrashDetailsActivity: BaseViewModelActivity<CrashDetailsViewModel, Activit
     }
 
     private val zipCrashLauncher = registerForActivityResult(ActivityResultContracts.CreateDocument("application/zip")) {
-        viewModel.logToZip(it ?: return@registerForActivityResult) { log }
+        viewModel.crashToZip(it ?: return@registerForActivityResult) { log }
     }
     private val navArgs by navArgs<CrashDetailsActivityArgs>()
 
