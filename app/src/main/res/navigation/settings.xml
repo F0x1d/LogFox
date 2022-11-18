@@ -17,6 +17,9 @@
         <action
             android:id="@+id/action_settingsMenuFragment_to_settingsNotificationsFragment"
             app:destination="@id/settingsNotificationsFragment" />
+        <action
+            android:id="@+id/action_settingsMenuFragment_to_settingsCrashesFragment"
+            app:destination="@id/settingsCrashesFragment" />
     </fragment>
     <fragment
         android:id="@+id/settingsUIFragment"
@@ -30,4 +33,8 @@
         android:id="@+id/settingsNotificationsFragment"
         android:name="com.f0x1d.logfox.ui.fragment.settings.SettingsNotificationsFragment"
         android:label="SettingsNotificationsFragment" />
+    <fragment
+        android:id="@+id/settingsCrashesFragment"
+        android:name="com.f0x1d.logfox.ui.fragment.settings.SettingsCrashesFragment"
+        android:label="SettingsCrashesFragment" />
 </navigation>

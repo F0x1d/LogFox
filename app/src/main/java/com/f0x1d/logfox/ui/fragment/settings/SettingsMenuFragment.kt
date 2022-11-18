@@ -30,6 +30,10 @@ class SettingsMenuFragment: BaseSettingsWrapperFragment() {
                 findNavController().navigate(SettingsMenuFragmentDirections.actionSettingsMenuFragmentToSettingsServiceFragment())
                 return@setOnPreferenceClickListener true
             }
+            findPreference<Preference>("pref_settings_crashes")?.setOnPreferenceClickListener {
+                findNavController().navigate(SettingsMenuFragmentDirections.actionSettingsMenuFragmentToSettingsCrashesFragment())
+                return@setOnPreferenceClickListener true
+            }
             findPreference<Preference>("pref_settings_notifications")?.setOnPreferenceClickListener {
                 findNavController().navigate(SettingsMenuFragmentDirections.actionSettingsMenuFragmentToSettingsNotificationsFragment())
                 return@setOnPreferenceClickListener true

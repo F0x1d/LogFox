@@ -12,6 +12,10 @@
             android:key="pref_settings_service"
             android:icon="@drawable/ic_settings_service" />
         <Preference
+            android:title="@string/crashes"
+            android:key="pref_settings_crashes"
+            android:icon="@drawable/ic_settings_crashes" />
+        <Preference
             android:title="@string/notifications"
             android:key="pref_settings_notifications"
             android:icon="@drawable/ic_settings_notifications" />

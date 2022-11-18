@@ -1,27 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
-    <Preference
-        android:summary="@string/service_required_desc"
-        android:selectable="false"
-        app:iconSpaceReserved="false" />
-
     <PreferenceCategory
-        android:title="@string/service"
+        android:title="@string/crashes"
         app:iconSpaceReserved="false"
         app:allowDividerAbove="false">
 
         <SwitchPreferenceCompat
-            android:title="@string/start_on_boot"
-            android:key="pref_start_on_boot"
+            android:title="@string/collect_java_crashes"
+            android:key="pref_collect_java"
             android:defaultValue="true"
             app:singleLineTitle="false"
             app:widgetLayout="@layout/preference_material_switch"
             app:iconSpaceReserved="false" />
         <SwitchPreferenceCompat
-            android:title="@string/start_on_launch"
-            android:key="pref_start_on_launch"
+            android:title="@string/collect_jni_crashes"
+            android:key="pref_collect_jni"
+            android:defaultValue="true"
+            app:singleLineTitle="false"
+            app:widgetLayout="@layout/preference_material_switch"
+            app:iconSpaceReserved="false" />
+        <SwitchPreferenceCompat
+            android:title="@string/collect_anr"
+            android:key="pref_collect_anr"
             android:defaultValue="true"
             app:singleLineTitle="false"
             app:widgetLayout="@layout/preference_material_switch"
