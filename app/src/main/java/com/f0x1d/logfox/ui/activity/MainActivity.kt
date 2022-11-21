@@ -57,9 +57,7 @@ class MainActivity: BaseViewModelActivity<MainViewModel, ActivityMainBinding>(),
 
     override fun onEvent(event: Event) {
         when (event.type) {
-            MainViewModel.EVENT_TYPE_SETUP -> {
-                navController.navigate(NavGraphDirections.actionGlobalSetupFragment())
-            }
+            MainViewModel.EVENT_TYPE_SETUP -> navController.navigate(NavGraphDirections.actionGlobalSetupFragment())
         }
     }
 
