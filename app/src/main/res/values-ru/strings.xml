@@ -43,8 +43,6 @@
     <string name="collect_anr">Собирать ANR</string>
     <string name="show_anr_notifications">Показывать уведомления о ANR</string>
     <string name="error">Ошибка: %s</string>
-    <string name="integrations">Интеграции</string>
-    <string name="omnibin_integration_desc">Легко просматривайте и управляйте вашими записями</string>
     <string name="log_levels">Уровни логов</string>
     <string name="tag">Тэг</string>
     <string name="content_contains">Текст содержит</string>

@@ -36,7 +36,6 @@
     <string name="delete">Delete</string>
     <string name="resume">Resume</string>
     <string name="foxbin" translatable="false">foxbin</string>
-    <string name="omnibin" translatable="false">omnibin</string>
     <string name="ui" translatable="false">UI</string>
     <string name="logs_update_interval">Logs update interval</string>
     <string name="in_ms">In ms</string>
@@ -49,8 +48,6 @@
     <string name="collect_anr">Collect ANR</string>
     <string name="show_anr_notifications">Show ANR notifications</string>
     <string name="error">Error: %s</string>
-    <string name="integrations">Integrations</string>
-    <string name="omnibin_integration_desc">Easily view and manage your pastes</string>
     <string name="log_levels">Log levels</string>
     <string name="pid" translatable="false">PID</string>
     <string name="tid" translatable="false">TID</string>

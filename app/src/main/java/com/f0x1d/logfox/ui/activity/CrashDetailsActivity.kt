@@ -42,7 +42,7 @@ class CrashDetailsActivity: BaseViewModelActivity<CrashDetailsViewModel, Activit
         binding.logCard.applyBottomInsets(window.decorView)
 
         binding.toolbar.setNavigationOnClickListener {
-            onBackPressed()
+            onBackPressedDispatcher.onBackPressed()
         }
 
         viewModel.data.observe(this) {
@@ -50,12 +50,14 @@ class CrashDetailsActivity: BaseViewModelActivity<CrashDetailsViewModel, Activit
         }
 
         viewModel.uploadingStateData.observe(this) {
-            binding.omnibinLayout.isEnabled = !it
+            binding.foxbinLayout.isEnabled = !it
 
-            binding.omnibinImage.visibility = if (it) View.INVISIBLE else View.VISIBLE
-            binding.omnibinText.visibility = if (it) View.INVISIBLE else View.VISIBLE
+            (if (it) View.INVISIBLE else View.VISIBLE).also { visibility ->
+                binding.foxbinImage.visibility = visibility
+                binding.foxbinText.visibility = visibility
+            }
 
-            binding.omnibinLoadingProgress.visibility = if (it) View.VISIBLE else View.INVISIBLE
+            binding.foxbinLoadingProgress.visibility = if (it) View.VISIBLE else View.INVISIBLE
         }
     }
 
@@ -90,15 +92,9 @@ class CrashDetailsActivity: BaseViewModelActivity<CrashDetailsViewModel, Activit
             shareIntent(appCrash.log)
         }
 
-        binding.omnibinLayout.setOnClickListener {
-            appCrash.log.apply {
-                if (isOmnibinInstalled())
-                    uploadToFoxBin(this)
-                else
-                    viewModel.uploadCrash(this)
-            }
+        binding.foxbinLayout.setOnClickListener {
+            viewModel.uploadCrash(appCrash.log)
         }
-        binding.omnibinText.setText(if (isOmnibinInstalled()) R.string.omnibin else R.string.foxbin)
 
         binding.zipLayout.setOnClickListener {
             zipCrashLauncher.launch("crash-${appCrash.packageName.replace(".", "-")}-${appCrash.dateAndTime.exportFormatted}.zip")

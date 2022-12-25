@@ -22,18 +22,6 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="@string/integrations"
-        app:iconSpaceReserved="false"
-        app:allowDividerAbove="false">
-
-        <Preference
-            android:title="@string/omnibin"
-            android:summary="@string/omnibin_integration_desc"
-            android:key="pref_omnibin_integration"
-            android:icon="@drawable/ic_settings_omnibin" />
-    </PreferenceCategory>
-
-    <PreferenceCategory
         android:title="@string/about_app"
         app:iconSpaceReserved="false"
         app:allowDividerAbove="false">
