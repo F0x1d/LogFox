@@ -42,7 +42,8 @@ class FilterViewHolder(
     private fun TextView.setTextOrMakeGoneIfNull(prefix: Int, content: String?) {
         visibility = if (content == null) View.GONE else View.VISIBLE
 
-        if (content != null)
+        if (content != null) {
             text = Html.fromHtml("<b>${context.getString(prefix)}:</b> $content")
+        }
     }
 }

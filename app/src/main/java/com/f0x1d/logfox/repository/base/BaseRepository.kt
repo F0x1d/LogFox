@@ -9,4 +9,8 @@ abstract class BaseRepository {
     protected fun onAppScope(block: suspend CoroutineScope.() -> Unit) = LogFoxApp.applicationScope.launch(Dispatchers.Default) {
         block.invoke(this)
     }
+
+    protected fun runOnAppScope(block: suspend CoroutineScope.() -> Unit) {
+        onAppScope(block)
+    }
 }

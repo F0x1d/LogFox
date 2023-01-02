@@ -22,33 +22,25 @@ class SetupViewModel @Inject constructor(application: Application): BaseViewMode
         const val EVENT_TYPE_SHOW_ADB_DIALOG = "adb_dialog"
     }
 
-    fun root() {
-        Shell.getShell { shell ->
-            if (shell.isRoot) {
-                Shell.cmd(command).exec()
-                gotPermission()
-                return@getShell
-            }
-
-            snackbar(R.string.no_root)
+    fun root() = Shell.getShell { shell ->
+        if (shell.isRoot) {
+            Shell.cmd(command).exec()
+            gotPermission()
+            return@getShell
         }
+
+        snackbar(R.string.no_root)
     }
 
-    fun adb() {
-        if (ctx.hasPermissionToReadLogs())
-            gotPermission()
-        else
-            sendEvent(EVENT_TYPE_SHOW_ADB_DIALOG)
-    }
+    fun adb() = if (ctx.hasPermissionToReadLogs())
+        gotPermission()
+    else
+        sendEvent(EVENT_TYPE_SHOW_ADB_DIALOG)
 
-    fun checkPermission() {
-        if (ctx.hasPermissionToReadLogs())
-            gotPermission()
-        else
-            snackbar(R.string.no_root)
-    }
+    fun checkPermission() = if (ctx.hasPermissionToReadLogs())
+        gotPermission()
+    else
+        snackbar(R.string.no_root)
 
-    private fun gotPermission() {
-        sendEvent(EVENT_TYPE_GOT_PERMISSION)
-    }
+    private fun gotPermission() = sendEvent(EVENT_TYPE_GOT_PERMISSION)
 }

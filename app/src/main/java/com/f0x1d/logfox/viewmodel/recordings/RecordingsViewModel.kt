@@ -16,7 +16,7 @@ class RecordingsViewModel @Inject constructor(
     application: Application,
     private val loggingRepository: LoggingRepository,
     private val recordingsRepository: RecordingsRepository
-): BaseSameFlowProxyViewModel<List<LogRecording>>(application, recordingsRepository.recordingsFlow) {
+): BaseSameFlowProxyViewModel<List<LogRecording>>(application, recordingsRepository.itemsFlow) {
 
     companion object {
         const val EVENT_TYPE_RECORDING_SAVED = "recording_saved"
@@ -42,7 +42,7 @@ class RecordingsViewModel @Inject constructor(
             recordingsRepository.pause()
     }
 
-    fun clearRecordings() = recordingsRepository.clearRecordings()
+    fun clearRecordings() = recordingsRepository.clear()
 
-    fun delete(logRecording: LogRecording) = recordingsRepository.deleteRecording(logRecording)
+    fun delete(logRecording: LogRecording) = recordingsRepository.delete(logRecording)
 }

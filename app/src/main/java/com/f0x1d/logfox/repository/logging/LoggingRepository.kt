@@ -71,7 +71,7 @@ class LoggingRepository @Inject constructor(
         }
     }
 
-    fun clearLogs() {
+    fun clearLogs() = runOnAppScope {
         logsFlow.update {
             emptyList()
         }

@@ -29,9 +29,7 @@ abstract class BaseFragment<T : ViewBinding>: Fragment() {
         mutableBinding = null
     }
 
-    protected fun snackbar(text: String) {
-        requireView().snackbar(text)
-    }
+    protected fun snackbar(text: String) = requireView().snackbar(text)
 
     protected fun snackbar(id: Int) = snackbar(getString(id))
 }

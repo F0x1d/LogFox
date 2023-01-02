@@ -47,9 +47,7 @@ abstract class BaseFlowProxyViewModel<T, R>(application: Application, protected 
         }
     }
 
-    protected fun stopCollector() {
-        currentJob?.cancel()
-    }
+    protected fun stopCollector() = currentJob?.cancel()
 
     private fun startCollector(block: suspend (R?) -> Unit) {
         currentJob = viewModelScope.launch(Dispatchers.Default) {

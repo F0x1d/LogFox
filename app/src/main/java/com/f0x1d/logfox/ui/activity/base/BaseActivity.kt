@@ -40,9 +40,7 @@ abstract class BaseActivity<T : ViewBinding>: AppCompatActivity() {
         super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase))
     }
 
-    protected fun snackbar(text: String) {
-        findViewById<View>(android.R.id.content).snackbar(text)
-    }
+    protected fun snackbar(text: String) = findViewById<View>(android.R.id.content).snackbar(text)
 
     protected fun snackbar(id: Int) = snackbar(getString(id))
 }

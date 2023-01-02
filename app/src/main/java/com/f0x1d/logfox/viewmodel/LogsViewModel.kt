@@ -14,14 +14,14 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class LogsViewModel @Inject constructor(application: Application,
-                                        private val loggingRepository: LoggingRepository,
-                                        private val filtersRepository: FiltersRepository,
-                                        private val appPreferences: AppPreferences,
-                                        @NullString var query: String?): BaseSameFlowProxyViewModel<List<LogLine>>(
-    application,
-    loggingRepository.logsFlow
-) {
+class LogsViewModel @Inject constructor(
+    application: Application,
+    private val loggingRepository: LoggingRepository,
+    private val filtersRepository: FiltersRepository,
+    private val appPreferences: AppPreferences,
+    @NullString var query: String?
+): BaseSameFlowProxyViewModel<List<LogLine>>(application, loggingRepository.logsFlow) {
+
     override val autoStartCollector = false
 
     val pausedData = MutableLiveData(false)
@@ -30,7 +30,7 @@ class LogsViewModel @Inject constructor(application: Application,
     val resumeLoggingWithBottomTouch get() = appPreferences.resumeLoggingWithBottomTouch
 
     init {
-        restartCollector() // java cool
+        restartCollector() // cool
     }
 
     override fun map(data: List<LogLine>?) = data?.filterAndSearch(filtersRepository, query)
@@ -41,9 +41,7 @@ class LogsViewModel @Inject constructor(application: Application,
         recollect()
     }
 
-    fun clearLogs() {
-        loggingRepository.clearLogs()
-    }
+    fun clearLogs() = loggingRepository.clearLogs()
 
     fun recollect() {
         if (paused())

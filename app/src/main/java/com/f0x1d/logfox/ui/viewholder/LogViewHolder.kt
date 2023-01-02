@@ -64,25 +64,21 @@ class LogViewHolder(binding: ItemLogBinding): BaseViewHolder<LogLine, ItemLogBin
         changeExpandedAndSelected(data)
     }
 
-    private fun selectItem() {
-        adapter<LogsAdapter>().selectedItems.apply {
-            currentItem.also {
-                if (any { logLine -> it.id == logLine.id })
-                    remove(it)
-                else
-                    add(it)
+    private fun selectItem() = adapter<LogsAdapter>().selectedItems.apply {
+        currentItem.also {
+            if (any { logLine -> it.id == logLine.id })
+                remove(it)
+            else
+                add(it)
 
-                changeExpandedAndSelected(it)
-            }
+            changeExpandedAndSelected(it)
         }
     }
 
-    private fun expandOrCollapseItem() {
-        adapter<LogsAdapter>().expandedStates.apply {
-            currentItem.also {
-                put(it.id, !getOrElse(it.id) { adapter<LogsAdapter>().logsExpanded })
-                changeExpandedAndSelected(it)
-            }
+    private fun expandOrCollapseItem() = adapter<LogsAdapter>().expandedStates.apply {
+        currentItem.also {
+            put(it.id, !getOrElse(it.id) { adapter<LogsAdapter>().logsExpanded })
+            changeExpandedAndSelected(it)
         }
     }
 

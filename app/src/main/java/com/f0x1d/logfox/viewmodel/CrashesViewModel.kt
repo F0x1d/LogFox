@@ -10,9 +10,9 @@ import javax.inject.Inject
 @HiltViewModel
 class CrashesViewModel @Inject constructor(application: Application, private val crashesRepository: CrashesRepository): BaseSameFlowProxyViewModel<List<AppCrash>>(
     application,
-    crashesRepository.crashesFlow
+    crashesRepository.itemsFlow
 ) {
-    fun deleteCrash(appCrash: AppCrash) = crashesRepository.deleteCrash(appCrash)
+    fun deleteCrash(appCrash: AppCrash) = crashesRepository.delete(appCrash)
 
-    fun clearCrashes() = crashesRepository.clearCrashes()
+    fun clearCrashes() = crashesRepository.clear()
 }

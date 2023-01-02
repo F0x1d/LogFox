@@ -13,20 +13,25 @@ import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
+import java.io.FileInputStream
 
 class RecordingViewModel @AssistedInject constructor(
+    @Assisted private val recordingId: Long,
     application: Application,
     database: AppDatabase,
-    @Assisted private val recordingId: Long,
     private val recordingsRepository: RecordingsRepository
 ): BaseSameFlowProxyViewModel<LogRecording>(application, database.logRecordingDao().get(recordingId)) {
 
     fun exportFile(uri: Uri) = viewModelScope.launch(Dispatchers.IO) {
-        ctx.contentResolver.openOutputStream(uri)?.apply {
+        ctx.contentResolver.openOutputStream(uri)?.also {
             data.value?.apply {
-                write(File(file).readBytes())
+                with(FileInputStream(File(file))) {
+                    copyTo(it)
+
+                    close()
+                    it.close()
+                }
             }
-            close()
         }
     }
 

@@ -36,6 +36,7 @@ class RecordingBottomSheet: BaseViewModelBottomSheet<RecordingViewModel, SheetRe
     private val logExportLauncher = registerForActivityResult(ActivityResultContracts.CreateDocument("text/plain")) {
         viewModel.exportFile(it ?: return@registerForActivityResult)
     }
+
     private val navArgs by navArgs<RecordingBottomSheetArgs>()
 
     override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) = SheetRecordingBinding.inflate(inflater, container, false)

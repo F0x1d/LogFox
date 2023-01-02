@@ -13,8 +13,7 @@ import kotlin.coroutines.CoroutineContext
 
 abstract class BaseViewModel(application: Application): AndroidViewModel(application) {
 
-    val ctx: Context
-        get() = getApplication()
+    val ctx: Context get() = getApplication()
 
     val eventsData = MutableLiveData<Event>()
     val snackbarEventsData = MutableLiveData<SnackbarEvent>()
@@ -41,7 +40,9 @@ abstract class BaseViewModel(application: Application): AndroidViewModel(applica
 
     protected fun snackbar(id: Int) = snackbar(ctx.getString(id))
 
-    protected fun snackbar(text: String) = viewModelScope.launch(Dispatchers.Main.immediate) {
-        snackbarEventsData.value = SnackbarEvent(text)
+    protected fun snackbar(text: String) {
+        viewModelScope.launch(Dispatchers.Main.immediate) {
+            snackbarEventsData.value = SnackbarEvent(text)
+        }
     }
 }

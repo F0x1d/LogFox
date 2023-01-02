@@ -14,9 +14,9 @@ import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers
 
 class CrashDetailsViewModel @AssistedInject constructor(
+    @Assisted crashId: Long,
     application: Application,
     database: AppDatabase,
-    @Assisted crashId: Long,
     private val foxBinRepository: FoxBinRepository,
     private val crashesRepository: CrashesRepository
 ): BaseSameFlowProxyViewModel<AppCrash>(application, database.appCrashDao().get(crashId)) {
@@ -27,20 +27,16 @@ class CrashDetailsViewModel @AssistedInject constructor(
 
     val uploadingStateData = MutableLiveData<Boolean>()
 
-    fun uploadCrash(content: String) {
-        launchCatching(Dispatchers.Main, { uploadingStateData.value = false }) {
-            uploadingStateData.value = true
+    fun uploadCrash(content: String) = launchCatching(Dispatchers.Main, { uploadingStateData.value = false }) {
+        uploadingStateData.value = true
 
-            val resultLink = foxBinRepository.uploadViaApi(content)
-            sendEvent(EVENT_TYPE_COPY_LINK, resultLink)
+        val resultLink = foxBinRepository.uploadViaApi(content)
+        sendEvent(EVENT_TYPE_COPY_LINK, resultLink)
 
-            uploadingStateData.value = false
-        }
+        uploadingStateData.value = false
     }
 
-    fun deleteCrash(appCrash: AppCrash) {
-        crashesRepository.deleteCrash(appCrash)
-    }
+    fun deleteCrash(appCrash: AppCrash) = crashesRepository.delete(appCrash)
 }
 
 @AssistedFactory

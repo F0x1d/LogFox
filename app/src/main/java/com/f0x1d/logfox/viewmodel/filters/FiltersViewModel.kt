@@ -17,17 +17,17 @@ import javax.inject.Inject
 class FiltersViewModel @Inject constructor(
     application: Application,
     private val filtersRepository: FiltersRepository
-): BaseSameFlowProxyViewModel<List<UserFilter>>(application, filtersRepository.filtersFlow) {
+): BaseSameFlowProxyViewModel<List<UserFilter>>(application, filtersRepository.itemsFlow) {
 
     fun import(uri: Uri) = viewModelScope.launch(Dispatchers.IO) {
         ctx.contentResolver.openInputStream(uri)?.importFilters(ctx, filtersRepository)
     }
 
     fun exportAll(uri: Uri) = viewModelScope.launch(Dispatchers.IO) {
-        ctx.contentResolver.openOutputStream(uri)?.exportFilters(ctx, filtersRepository.filtersFlow.value)
+        ctx.contentResolver.openOutputStream(uri)?.exportFilters(ctx, filtersRepository.itemsFlow.value)
     }
 
     fun switch(userFilter: UserFilter, checked: Boolean) = filtersRepository.switch(userFilter, checked)
     fun delete(userFilter: UserFilter) = filtersRepository.delete(userFilter)
-    fun clearAll() = filtersRepository.clearFilters()
+    fun clearAll() = filtersRepository.clear()
 }

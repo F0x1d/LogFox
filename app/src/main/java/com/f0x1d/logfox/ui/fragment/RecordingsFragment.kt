@@ -102,9 +102,7 @@ class RecordingsFragment: BaseViewModelFragment<RecordingsViewModel, FragmentRec
         }
     }
 
-    private fun openDetails(recording: LogRecording?) {
-        recording?.id?.apply {
-            findNavController().navigate(RecordingsFragmentDirections.actionRecordingsFragmentToRecordingBottomSheet(this))
-        }
+    private fun openDetails(recording: LogRecording?) = recording?.id?.apply {
+        findNavController().navigate(RecordingsFragmentDirections.actionRecordingsFragmentToRecordingBottomSheet(this))
     }
 }

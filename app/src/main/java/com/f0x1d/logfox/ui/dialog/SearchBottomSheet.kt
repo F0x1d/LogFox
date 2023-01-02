@@ -16,6 +16,7 @@ import com.f0x1d.logfox.viewmodel.LogsViewModel
 class SearchBottomSheet: BaseBottomSheet<SheetSearchBinding>() {
 
     private val logsViewModel by hiltNavGraphViewModels<LogsViewModel>(R.id.logsFragment)
+
     private val navArgs by navArgs<SearchBottomSheetArgs>()
 
     override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) = SheetSearchBinding.inflate(inflater, container, false)
@@ -27,8 +28,7 @@ class SearchBottomSheet: BaseBottomSheet<SheetSearchBinding>() {
 
         binding.clearSearchButton.visibility = if (navArgs.query == null) View.GONE else View.VISIBLE
         binding.clearSearchButton.setOnClickListener {
-            logsViewModel.query(null)
-            dismiss()
+            search(null)
         }
 
         binding.searchButton.setOnClickListener {
@@ -50,8 +50,7 @@ class SearchBottomSheet: BaseBottomSheet<SheetSearchBinding>() {
     }
 
     private fun search(text: String?) {
-        if (text == null) return
-        if (text.isEmpty()) return
+        if (text?.isEmpty() == true) return
 
         logsViewModel.query(text)
         dismiss()

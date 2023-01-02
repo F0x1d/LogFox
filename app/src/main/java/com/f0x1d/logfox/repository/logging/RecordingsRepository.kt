@@ -10,7 +10,7 @@ import com.f0x1d.logfox.extensions.notifications.sendRecordingNotification
 import com.f0x1d.logfox.extensions.notifications.sendRecordingPausedNotification
 import com.f0x1d.logfox.extensions.updateList
 import com.f0x1d.logfox.model.LogLine
-import com.f0x1d.logfox.repository.logging.base.LoggingHelperRepository
+import com.f0x1d.logfox.repository.logging.base.LoggingHelperItemsRepository
 import com.f0x1d.logfox.repository.logging.readers.base.BaseReader
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.*
@@ -26,9 +26,8 @@ import javax.inject.Singleton
 class RecordingsRepository @Inject constructor(
     @ApplicationContext private val context: Context,
     private val database: AppDatabase
-): LoggingHelperRepository() {
+): LoggingHelperItemsRepository<LogRecording>() {
 
-    val recordingsFlow = MutableStateFlow(emptyList<LogRecording>())
     val recordingStateFlow = MutableStateFlow(RecordingState.IDLE)
 
     override val readers = listOf(RecordingReader())
@@ -45,7 +44,7 @@ class RecordingsRepository @Inject constructor(
     private var recordingJob: Job? = null
 
     override suspend fun setup() {
-        recordingsFlow.update {
+        itemsFlow.update {
             database.logRecordingDao().getAll()
         }
 
@@ -68,28 +67,85 @@ class RecordingsRepository @Inject constructor(
         }
     }
 
-    fun record() {
-        onAppScope {
-            recordingStateFlow.update { RecordingState.RECORDING }
+    fun record() = runOnAppScope {
+        recordingStateFlow.update { RecordingState.RECORDING }
 
-            recordingTime = System.currentTimeMillis()
-            fileMutex.withLock {
-                recordingFile = File(recordingDir, "${recordingTime.exportFormatted}.txt").apply {
-                    withContext(Dispatchers.IO) {
-                        createNewFile()
-                    }
+        recordingTime = System.currentTimeMillis()
+        fileMutex.withLock {
+            recordingFile = File(recordingDir, "${recordingTime.exportFormatted}.txt").apply {
+                withContext(Dispatchers.IO) {
+                    createNewFile()
                 }
             }
+        }
 
-            recordingJob = onAppScope {
-                while (isActive) {
-                    delay(1000)
+        recordingJob = onAppScope {
+            while (isActive) {
+                delay(1000)
 
-                    writeLogsToFile()
-                }
+                writeLogsToFile()
+            }
+        }
+
+        context.sendRecordingNotification()
+    }
+
+    fun pause() = runOnAppScope {
+        recordingStateFlow.update { RecordingState.PAUSED }
+        context.sendRecordingPausedNotification()
+    }
+
+    fun resume() = runOnAppScope {
+        recordingStateFlow.update { RecordingState.RECORDING }
+        context.sendRecordingNotification()
+    }
+
+    fun end(recordingSaved: (LogRecording) -> Unit = {}) = runOnAppScope {
+        recordingStateFlow.update { RecordingState.SAVING }
+        context.removeRecordingNotification()
+
+        recordingJob?.cancel()
+
+        writeLogsToFile()
+
+        itemsFlow.updateList {
+            val title = "${context.getString(R.string.recording)} ${itemsFlow.value.size + 1}"
+
+            val logRecording = LogRecording(title, recordingTime, recordingFile!!.absolutePath).run {
+                copy(id = database.logRecordingDao().insert(this))
             }
 
-            context.sendRecordingNotification()
+            add(0, logRecording)
+
+            withContext(Dispatchers.Main) {
+                recordingSaved.invoke(logRecording)
+            }
+        }
+
+        recordingStateFlow.update { RecordingState.IDLE }
+    }
+
+    fun updateTitle(logRecording: LogRecording, newTitle: String) = updateInternal(
+        { logRecording.copy(title = newTitle) },
+        { database.logRecordingDao().update(it) },
+        { it.id }
+    )
+
+    override fun deleteInternal(item: LogRecording) {
+        itemsFlow.updateList {
+            item.deleteFile()
+
+            remove(item)
+            database.logRecordingDao().delete(item)
+        }
+    }
+
+    override fun clearInternal() {
+        itemsFlow.update {
+            it.forEach { recording -> recording.deleteFile() }
+
+            database.logRecordingDao().deleteAll()
+            emptyList()
         }
     }
 
@@ -107,80 +163,6 @@ class RecordingsRepository @Inject constructor(
         if (content.isNotEmpty()) {
             fileMutex.withLock {
                 recordingFile?.appendText(content + "\n")
-            }
-        }
-    }
-
-    fun pause() {
-        onAppScope {
-            recordingStateFlow.update { RecordingState.PAUSED }
-            context.sendRecordingPausedNotification()
-        }
-    }
-
-    fun resume() {
-        onAppScope {
-            recordingStateFlow.update { RecordingState.RECORDING }
-            context.sendRecordingNotification()
-        }
-    }
-
-    fun end(recordingSaved: (LogRecording) -> Unit = {}) {
-        onAppScope {
-            recordingStateFlow.update { RecordingState.SAVING }
-            context.removeRecordingNotification()
-
-            recordingJob?.cancel()
-
-            writeLogsToFile()
-
-            recordingsFlow.updateList {
-                val title = "${context.getString(R.string.recording)} ${recordingsFlow.value.size + 1}"
-
-                val logRecording = LogRecording(title, recordingTime, recordingFile!!.absolutePath).run {
-                    copy(id = database.logRecordingDao().insert(this))
-                }
-
-                add(0, logRecording)
-
-                withContext(Dispatchers.Main) {
-                    recordingSaved.invoke(logRecording)
-                }
-            }
-
-            recordingStateFlow.update { RecordingState.IDLE }
-        }
-    }
-
-    fun updateTitle(logRecording: LogRecording, newTitle: String) {
-        onAppScope {
-            recordingsFlow.updateList {
-                val newValue = logRecording.copy(title = newTitle).also {
-                    database.logRecordingDao().update(it)
-                }
-                set(indexOfFirst { it.id == newValue.id }, newValue)
-            }
-        }
-    }
-
-    fun deleteRecording(logRecording: LogRecording) {
-        onAppScope {
-            recordingsFlow.updateList {
-                logRecording.deleteFile()
-
-                remove(logRecording)
-                database.logRecordingDao().delete(logRecording)
-            }
-        }
-    }
-
-    fun clearRecordings() {
-        onAppScope {
-            recordingsFlow.update {
-                it.forEach { recording -> recording.deleteFile() }
-
-                database.logRecordingDao().deleteAll()
-                emptyList()
             }
         }
     }

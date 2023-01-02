@@ -31,6 +31,7 @@ class CrashDetailsActivity: BaseViewModelActivity<CrashDetailsViewModel, Activit
     private val zipCrashLauncher = registerForActivityResult(ActivityResultContracts.CreateDocument("application/zip")) {
         viewModel.crashToZip(it ?: return@registerForActivityResult) { log }
     }
+
     private val navArgs by navArgs<CrashDetailsActivityArgs>()
 
     override fun inflateBinding() = ActivityCrashDetailsBinding.inflate(layoutInflater)

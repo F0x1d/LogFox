@@ -16,10 +16,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class FilterViewModel @AssistedInject constructor(
+    @Assisted filterId: Long,
     application: Application,
     database: AppDatabase,
-    private val filtersRepository: FiltersRepository,
-    @Assisted filterId: Long
+    private val filtersRepository: FiltersRepository
 ): BaseSameFlowProxyViewModel<UserFilter>(application, database.userFilterDao().get(filterId)) {
 
     val enabledLogLevels = mutableListOf(true, true, true, true, true, true, true)
@@ -32,26 +32,22 @@ class FilterViewModel @AssistedInject constructor(
         }
     }
 
-    fun create(filterTextData: FilterTextData) {
-        filtersRepository.create(
-            enabledLogLevels.toEnabledLogLevels(),
-            filterTextData.pid,
-            filterTextData.tid,
-            filterTextData.tag,
-            filterTextData.content
-        )
-    }
+    fun create(filterTextData: FilterTextData) = filtersRepository.create(
+        enabledLogLevels.toEnabledLogLevels(),
+        filterTextData.pid,
+        filterTextData.tid,
+        filterTextData.tag,
+        filterTextData.content
+    )
 
-    fun update(userFilter: UserFilter, filterTextData: FilterTextData) {
-        filtersRepository.update(
-            userFilter,
-            enabledLogLevels.toEnabledLogLevels(),
-            filterTextData.pid,
-            filterTextData.tid,
-            filterTextData.tag,
-            filterTextData.content
-        )
-    }
+    fun update(userFilter: UserFilter, filterTextData: FilterTextData) = filtersRepository.update(
+        userFilter,
+        enabledLogLevels.toEnabledLogLevels(),
+        filterTextData.pid,
+        filterTextData.tid,
+        filterTextData.tag,
+        filterTextData.content
+    )
 
     fun export(uri: Uri) = viewModelScope.launch(Dispatchers.IO) {
         ctx.contentResolver.openOutputStream(uri)?.exportFilters(ctx, data.value?.let { listOf(it) } ?: emptyList())
