@@ -38,8 +38,7 @@ class FiltersRepository @Inject constructor(private val database: AppDatabase): 
     fun createAll(userFilters: List<UserFilter>) {
         onAppScope {
             filtersFlow.updateList {
-                // GSON uses false by default :(
-                userFilters.map { if (it.enabled) it else it.copy(enabled = true) }.forEach {
+                userFilters.forEach {
                     add(
                         it.copy(id = database.userFilterDao().insert(it))
                     )

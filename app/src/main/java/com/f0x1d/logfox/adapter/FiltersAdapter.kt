@@ -7,9 +7,11 @@ import com.f0x1d.logfox.database.UserFilter
 import com.f0x1d.logfox.databinding.ItemFilterBinding
 import com.f0x1d.logfox.ui.viewholder.FilterViewHolder
 
-class FiltersAdapter(private val click: (UserFilter) -> Unit,
-                     private val delete: (UserFilter) -> Unit,
-                     private val checked: (UserFilter, Boolean) -> Unit): BaseAdapter<UserFilter, ItemFilterBinding>() {
+class FiltersAdapter(
+    private val click: (UserFilter) -> Unit,
+    private val delete: (UserFilter) -> Unit,
+    private val checked: (UserFilter, Boolean) -> Unit
+): BaseAdapter<UserFilter, ItemFilterBinding>() {
 
     override fun createHolder(layoutInflater: LayoutInflater, parent: ViewGroup) = FilterViewHolder(
         ItemFilterBinding.inflate(layoutInflater, parent, false),

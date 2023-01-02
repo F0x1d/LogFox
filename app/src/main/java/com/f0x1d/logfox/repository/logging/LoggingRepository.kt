@@ -1,7 +1,7 @@
 package com.f0x1d.logfox.repository.logging
 
 import android.content.SharedPreferences
-import com.f0x1d.logfox.extensions.LogLine
+import com.f0x1d.logfox.extensions.logline.LogLine
 import com.f0x1d.logfox.extensions.updateList
 import com.f0x1d.logfox.model.LogLine
 import com.f0x1d.logfox.repository.base.BaseRepository
@@ -17,10 +17,12 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class LoggingRepository @Inject constructor(crashesRepository: CrashesRepository,
-                                            recordingsRepository: RecordingsRepository,
-                                            filtersRepository: FiltersRepository,
-                                            private val appPreferences: AppPreferences): BaseRepository(), SharedPreferences.OnSharedPreferenceChangeListener {
+class LoggingRepository @Inject constructor(
+    crashesRepository: CrashesRepository,
+    recordingsRepository: RecordingsRepository,
+    filtersRepository: FiltersRepository,
+    private val appPreferences: AppPreferences
+): BaseRepository(), SharedPreferences.OnSharedPreferenceChangeListener {
 
     companion object {
         const val LOGS_LIMIT = 10000

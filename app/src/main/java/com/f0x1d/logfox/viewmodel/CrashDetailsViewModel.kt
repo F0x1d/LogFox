@@ -13,14 +13,14 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers
 
-class CrashDetailsViewModel @AssistedInject constructor(application: Application,
-                                                        database: AppDatabase,
-                                                        @Assisted crashId: Long,
-                                                        private val foxBinRepository: FoxBinRepository,
-                                                        private val crashesRepository: CrashesRepository): BaseSameFlowProxyViewModel<AppCrash>(
-    application,
-    database.appCrashDao().get(crashId)
-) {
+class CrashDetailsViewModel @AssistedInject constructor(
+    application: Application,
+    database: AppDatabase,
+    @Assisted crashId: Long,
+    private val foxBinRepository: FoxBinRepository,
+    private val crashesRepository: CrashesRepository
+): BaseSameFlowProxyViewModel<AppCrash>(application, database.appCrashDao().get(crashId)) {
+
     companion object {
         const val EVENT_TYPE_COPY_LINK = "copy_link"
     }

@@ -4,12 +4,14 @@ import androidx.room.*
 import kotlinx.coroutines.flow.Flow
 
 @Entity
-data class AppCrash(@ColumnInfo(name = "app_name") val appName: String?,
-                    @ColumnInfo(name = "package_name") val packageName: String,
-                    @ColumnInfo(name = "crash_type") val crashType: CrashType,
-                    @ColumnInfo(name = "date_and_time") val dateAndTime: Long,
-                    @ColumnInfo(name = "log") val log: String,
-                    @PrimaryKey(autoGenerate = true) val id: Long = 0)
+data class AppCrash(
+    @ColumnInfo(name = "app_name") val appName: String?,
+    @ColumnInfo(name = "package_name") val packageName: String,
+    @ColumnInfo(name = "crash_type") val crashType: CrashType,
+    @ColumnInfo(name = "date_and_time") val dateAndTime: Long,
+    @ColumnInfo(name = "log") val log: String,
+    @PrimaryKey(autoGenerate = true) val id: Long = 0
+)
 
 @Dao
 interface AppCrashDao {
@@ -31,7 +33,9 @@ interface AppCrashDao {
 }
 
 enum class CrashType(val readableName: String) {
-    JAVA("Java"), JNI("JNI"), ANR("ANR")
+    JAVA("Java"),
+    JNI("JNI"),
+    ANR("ANR")
 }
 
 class CrashTypeConverter {

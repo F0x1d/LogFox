@@ -19,9 +19,11 @@ abstract class BaseViewModel(application: Application): AndroidViewModel(applica
     val eventsData = MutableLiveData<Event>()
     val snackbarEventsData = MutableLiveData<SnackbarEvent>()
 
-    protected fun launchCatching(context: CoroutineContext,
-                                 errorBlock: suspend CoroutineScope.() -> Unit = {},
-                                 block: suspend CoroutineScope.() -> Unit) = viewModelScope.launch(context) {
+    protected fun launchCatching(
+        context: CoroutineContext,
+        errorBlock: suspend CoroutineScope.() -> Unit = {},
+        block: suspend CoroutineScope.() -> Unit
+    ) = viewModelScope.launch(context) {
         try {
             coroutineScope {
                 block.invoke(this)

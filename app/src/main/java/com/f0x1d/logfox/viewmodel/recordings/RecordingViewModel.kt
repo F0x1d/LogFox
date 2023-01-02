@@ -14,13 +14,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
 
-class RecordingViewModel @AssistedInject constructor(application: Application,
-                                                     database: AppDatabase,
-                                                     @Assisted private val recordingId: Long,
-                                                     private val recordingsRepository: RecordingsRepository): BaseSameFlowProxyViewModel<LogRecording>(
-    application,
-    database.logRecordingDao().get(recordingId)
-) {
+class RecordingViewModel @AssistedInject constructor(
+    application: Application,
+    database: AppDatabase,
+    @Assisted private val recordingId: Long,
+    private val recordingsRepository: RecordingsRepository
+): BaseSameFlowProxyViewModel<LogRecording>(application, database.logRecordingDao().get(recordingId)) {
+
     fun exportFile(uri: Uri) = viewModelScope.launch(Dispatchers.IO) {
         ctx.contentResolver.openOutputStream(uri)?.apply {
             data.value?.apply {

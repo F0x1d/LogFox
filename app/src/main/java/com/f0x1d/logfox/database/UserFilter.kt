@@ -8,13 +8,15 @@ import kotlinx.coroutines.flow.Flow
 
 @Keep
 @Entity
-data class UserFilter(@ColumnInfo(name = "allowed_levels") val allowedLevels: List<LogLevel>,
-                      @ColumnInfo(name = "pid") val pid: String?,
-                      @ColumnInfo(name = "tid") val tid: String?,
-                      @ColumnInfo(name = "tag") val tag: String?,
-                      @ColumnInfo(name = "content") val content: String?,
-                      @ColumnInfo(name = "enabled") @GsonSkip val enabled: Boolean = true,
-                      @PrimaryKey(autoGenerate = true) @GsonSkip val id: Long = 0)
+data class UserFilter(
+    @ColumnInfo(name = "allowed_levels") val allowedLevels: List<LogLevel> = emptyList(),
+    @ColumnInfo(name = "pid") val pid: String? = null,
+    @ColumnInfo(name = "tid") val tid: String? = null,
+    @ColumnInfo(name = "tag") val tag: String? = null,
+    @ColumnInfo(name = "content") val content: String? = null,
+    @ColumnInfo(name = "enabled") @GsonSkip val enabled: Boolean = true,
+    @PrimaryKey(autoGenerate = true) @GsonSkip val id: Long = 0
+)
 
 @Dao
 interface UserFilterDao {

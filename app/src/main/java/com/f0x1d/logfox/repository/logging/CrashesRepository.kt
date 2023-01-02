@@ -20,9 +20,11 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class CrashesRepository @Inject constructor(@ApplicationContext private val context: Context,
-                                            private val database: AppDatabase,
-                                            private val appPreferences: AppPreferences): LoggingHelperRepository() {
+class CrashesRepository @Inject constructor(
+    @ApplicationContext private val context: Context,
+    private val database: AppDatabase,
+    private val appPreferences: AppPreferences
+): LoggingHelperRepository() {
 
     val crashesFlow = MutableStateFlow(listOf<AppCrash>())
 

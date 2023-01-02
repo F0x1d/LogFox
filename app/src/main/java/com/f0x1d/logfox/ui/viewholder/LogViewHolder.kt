@@ -6,8 +6,8 @@ import android.graphics.drawable.GradientDrawable
 import androidx.core.graphics.ColorUtils
 import com.f0x1d.logfox.adapter.LogsAdapter
 import com.f0x1d.logfox.databinding.ItemLogBinding
-import com.f0x1d.logfox.extensions.backgroundColorByLevel
-import com.f0x1d.logfox.extensions.foregroundColorByLevel
+import com.f0x1d.logfox.extensions.logline.backgroundColorByLevel
+import com.f0x1d.logfox.extensions.logline.foregroundColorByLevel
 import com.f0x1d.logfox.extensions.logsFormatted
 import com.f0x1d.logfox.model.LogLine
 import com.f0x1d.logfox.ui.viewholder.base.BaseViewHolder
@@ -80,14 +80,14 @@ class LogViewHolder(binding: ItemLogBinding): BaseViewHolder<LogLine, ItemLogBin
     private fun expandOrCollapseItem() {
         adapter<LogsAdapter>().expandedStates.apply {
             currentItem.also {
-                put(it.id, !getOrDefault(it.id, adapter<LogsAdapter>().logsExpanded))
+                put(it.id, !getOrElse(it.id) { adapter<LogsAdapter>().logsExpanded })
                 changeExpandedAndSelected(it)
             }
         }
     }
 
     private fun changeExpandedAndSelected(logLine: LogLine) {
-        binding.logText.maxLines = if (adapter<LogsAdapter>().expandedStates.getOrDefault(logLine.id, adapter<LogsAdapter>().logsExpanded)) Int.MAX_VALUE else 1
+        binding.logText.maxLines = if (adapter<LogsAdapter>().expandedStates.getOrElse(logLine.id) { adapter<LogsAdapter>().logsExpanded }) Int.MAX_VALUE else 1
         binding.container.background = if (adapter<LogsAdapter>().selectedItems.contains(logLine)) selectedBackground else background
     }
 }

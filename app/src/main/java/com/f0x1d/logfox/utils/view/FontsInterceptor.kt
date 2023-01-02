@@ -33,12 +33,14 @@ class FontsInterceptor(context: Context): Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): InflateResult {
         val result = chain.proceed(chain.request())
+
         result.view?.apply {
             fontsMap[id]?.also {
                 if (this is TextView)
                     typeface = it
             }
         }
+
         return result
     }
 }

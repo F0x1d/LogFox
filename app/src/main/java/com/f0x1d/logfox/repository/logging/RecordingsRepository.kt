@@ -23,8 +23,10 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class RecordingsRepository @Inject constructor(@ApplicationContext private val context: Context,
-                                               private val database: AppDatabase): LoggingHelperRepository() {
+class RecordingsRepository @Inject constructor(
+    @ApplicationContext private val context: Context,
+    private val database: AppDatabase
+): LoggingHelperRepository() {
 
     val recordingsFlow = MutableStateFlow(emptyList<LogRecording>())
     val recordingStateFlow = MutableStateFlow(RecordingState.IDLE)

@@ -6,8 +6,8 @@ import android.app.Service
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
-import com.f0x1d.logfox.utils.pendingIntentFlags
 
 const val CRASH_DETAILS_INTENT_ID = 0
 const val COPY_CRASH_INTENT_ID = 1
@@ -16,6 +16,11 @@ const val EXIT_APP_INTENT_ID = 3
 const val PAUSE_RECORDING_INTENT_ID = 4
 const val RESUME_RECORDING_INTENT_ID = 5
 const val STOP_RECORDING_INTENT_ID = 6
+
+val pendingIntentFlags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+    PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+else
+    PendingIntent.FLAG_UPDATE_CURRENT
 
 fun <T : BroadcastReceiver> Context.makeBroadcastPendingIntent(id: Int, clazz: Class<T>, setup: Intent.() -> Unit) = PendingIntent.getBroadcast(
     this,

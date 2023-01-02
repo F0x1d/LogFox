@@ -11,9 +11,11 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(application: Application,
-                                        private val loggingRepository: LoggingRepository,
-                                        private val appPreferences: AppPreferences): BaseViewModel(application) {
+class MainViewModel @Inject constructor(
+    application: Application,
+    private val loggingRepository: LoggingRepository,
+    private val appPreferences: AppPreferences
+): BaseViewModel(application) {
 
     companion object {
         const val EVENT_TYPE_SETUP = "setup"

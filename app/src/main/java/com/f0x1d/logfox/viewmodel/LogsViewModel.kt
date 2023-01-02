@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
 import com.f0x1d.logfox.di.NullString
-import com.f0x1d.logfox.extensions.filterAndSearch
+import com.f0x1d.logfox.extensions.logline.filterAndSearch
 import com.f0x1d.logfox.model.LogLine
 import com.f0x1d.logfox.repository.logging.FiltersRepository
 import com.f0x1d.logfox.repository.logging.LoggingRepository

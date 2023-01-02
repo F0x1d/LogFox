@@ -11,7 +11,6 @@ import com.f0x1d.logfox.databinding.ActivityCrashDetailsBinding
 import com.f0x1d.logfox.extensions.*
 import com.f0x1d.logfox.ui.activity.base.BaseViewModelActivity
 import com.f0x1d.logfox.utils.event.Event
-import com.f0x1d.logfox.utils.viewModelFactory
 import com.f0x1d.logfox.viewmodel.CrashDetailsViewModel
 import com.f0x1d.logfox.viewmodel.CrashDetailsViewModelAssistedFactory
 import dagger.hilt.android.AndroidEntryPoint

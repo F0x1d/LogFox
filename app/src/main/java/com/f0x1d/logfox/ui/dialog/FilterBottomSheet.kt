@@ -9,9 +9,9 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.databinding.SheetFilterBinding
+import com.f0x1d.logfox.extensions.viewModelFactory
 import com.f0x1d.logfox.model.LogLevel
 import com.f0x1d.logfox.ui.dialog.base.BaseViewModelBottomSheet
-import com.f0x1d.logfox.utils.viewModelFactory
 import com.f0x1d.logfox.viewmodel.filters.FilterTextData
 import com.f0x1d.logfox.viewmodel.filters.FilterViewModel
 import com.f0x1d.logfox.viewmodel.filters.FilterViewModelAssistedFactory
@@ -60,6 +60,7 @@ class FilterBottomSheet: BaseViewModelBottomSheet<FilterViewModel, SheetFilterBi
 
             binding.exportButton.apply {
                 visibility = View.VISIBLE
+
                 setOnClickListener {
                     exportFilterLauncher.launch("filter.json")
                 }

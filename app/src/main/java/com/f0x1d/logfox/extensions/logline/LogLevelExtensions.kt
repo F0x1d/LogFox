@@ -1,4 +1,4 @@
-package com.f0x1d.logfox.extensions
+package com.f0x1d.logfox.extensions.logline
 
 import android.graphics.Color
 import com.f0x1d.logfox.model.LogLevel

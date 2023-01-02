@@ -1,6 +1,8 @@
 package com.f0x1d.logfox.extensions
 
 import android.net.Uri
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.f0x1d.logfox.utils.exportCrashToZip
 import com.f0x1d.logfox.utils.exportLogToZip
@@ -25,4 +27,8 @@ inline fun <T, R> BaseFlowProxyViewModel<T, R>.toZip(uri: Uri, crossinline block
             }
         }
     }
+}
+
+inline fun <T : ViewModel> viewModelFactory(crossinline block: () -> T) = object : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>) = block.invoke() as T
 }

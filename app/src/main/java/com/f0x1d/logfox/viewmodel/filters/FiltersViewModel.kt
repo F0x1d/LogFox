@@ -14,11 +14,11 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class FiltersViewModel @Inject constructor(application: Application,
-                                           private val filtersRepository: FiltersRepository): BaseSameFlowProxyViewModel<List<UserFilter>>(
-    application,
-    filtersRepository.filtersFlow
-) {
+class FiltersViewModel @Inject constructor(
+    application: Application,
+    private val filtersRepository: FiltersRepository
+): BaseSameFlowProxyViewModel<List<UserFilter>>(application, filtersRepository.filtersFlow) {
+
     fun import(uri: Uri) = viewModelScope.launch(Dispatchers.IO) {
         ctx.contentResolver.openInputStream(uri)?.importFilters(ctx, filtersRepository)
     }

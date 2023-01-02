@@ -13,7 +13,10 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class FoxBinRepository @Inject constructor(private val foxBinApiService: FoxBinApiService, private val gson: Gson): BaseRepository() {
+class FoxBinRepository @Inject constructor(
+    private val foxBinApiService: FoxBinApiService,
+    private val gson: Gson
+): BaseRepository() {
 
     companion object {
         const val FOXBIN_DOMAIN = "https://foxbin.f0x1d.com/"

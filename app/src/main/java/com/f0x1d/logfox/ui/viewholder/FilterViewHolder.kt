@@ -9,10 +9,12 @@ import com.f0x1d.logfox.databinding.ItemFilterBinding
 import com.f0x1d.logfox.ui.viewholder.base.BaseViewHolder
 import com.f0x1d.logfox.utils.view.OnlyUserCheckedChangeListener
 
-class FilterViewHolder(binding: ItemFilterBinding,
-                       click: (UserFilter) -> Unit,
-                       delete: (UserFilter) -> Unit,
-                       checked: (UserFilter, Boolean) -> Unit): BaseViewHolder<UserFilter, ItemFilterBinding>(binding) {
+class FilterViewHolder(
+    binding: ItemFilterBinding,
+    click: (UserFilter) -> Unit,
+    delete: (UserFilter) -> Unit,
+    checked: (UserFilter, Boolean) -> Unit
+): BaseViewHolder<UserFilter, ItemFilterBinding>(binding) {
 
     private val checkedListener = OnlyUserCheckedChangeListener(binding.enabledBox) { button, isChecked ->
         checked.invoke(currentItem, isChecked)

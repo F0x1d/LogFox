@@ -2,8 +2,10 @@ package com.f0x1d.logfox.utils.view
 
 import android.widget.CompoundButton
 
-class OnlyUserCheckedChangeListener(private val buttonView: CompoundButton,
-                                    private val listener: CompoundButton.OnCheckedChangeListener): CompoundButton.OnCheckedChangeListener {
+class OnlyUserCheckedChangeListener(
+    private val buttonView: CompoundButton,
+    private val listener: CompoundButton.OnCheckedChangeListener
+): CompoundButton.OnCheckedChangeListener {
 
     var enabled = true
 

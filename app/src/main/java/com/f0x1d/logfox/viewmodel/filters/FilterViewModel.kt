@@ -15,13 +15,13 @@ import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class FilterViewModel @AssistedInject constructor(application: Application,
-                                                  database: AppDatabase,
-                                                  private val filtersRepository: FiltersRepository,
-                                                  @Assisted filterId: Long): BaseSameFlowProxyViewModel<UserFilter>(
-    application,
-    database.userFilterDao().get(filterId)
-) {
+class FilterViewModel @AssistedInject constructor(
+    application: Application,
+    database: AppDatabase,
+    private val filtersRepository: FiltersRepository,
+    @Assisted filterId: Long
+): BaseSameFlowProxyViewModel<UserFilter>(application, database.userFilterDao().get(filterId)) {
+
     val enabledLogLevels = mutableListOf(true, true, true, true, true, true, true)
 
     override fun gotValue(data: UserFilter?) {

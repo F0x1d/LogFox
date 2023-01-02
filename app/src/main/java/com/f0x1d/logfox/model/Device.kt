@@ -16,7 +16,9 @@ class Device @Inject constructor() {
         "MANUFACTURER" to Build.MANUFACTURER,
         "BRAND" to Build.BRAND,
         "MODEL" to Build.MODEL
-    ).map { "${it.key}: ${it.value}" }.joinToString("\n")
+    )
+        .map { "${it.key}: ${it.value}" }
+        .joinToString("\n")
 
     override fun toString() = data
 }

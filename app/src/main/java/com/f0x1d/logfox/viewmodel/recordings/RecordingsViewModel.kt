@@ -12,12 +12,11 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class RecordingsViewModel @Inject constructor(application: Application,
-                                              private val loggingRepository: LoggingRepository,
-                                              private val recordingsRepository: RecordingsRepository): BaseSameFlowProxyViewModel<List<LogRecording>>(
-    application,
-    recordingsRepository.recordingsFlow
-) {
+class RecordingsViewModel @Inject constructor(
+    application: Application,
+    private val loggingRepository: LoggingRepository,
+    private val recordingsRepository: RecordingsRepository
+): BaseSameFlowProxyViewModel<List<LogRecording>>(application, recordingsRepository.recordingsFlow) {
 
     companion object {
         const val EVENT_TYPE_RECORDING_SAVED = "recording_saved"

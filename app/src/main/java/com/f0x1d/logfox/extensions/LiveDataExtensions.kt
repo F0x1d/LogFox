@@ -4,6 +4,6 @@ import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-suspend fun <T> MutableLiveData<T>.suspendAndPostValue(data: T) = withContext(Dispatchers.Main.immediate) {
+suspend fun <T> MutableLiveData<T>.suspendSetValue(data: T) = withContext(Dispatchers.Main.immediate) {
     value = data
 }
