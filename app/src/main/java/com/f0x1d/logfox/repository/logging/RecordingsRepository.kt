@@ -5,6 +5,9 @@ import com.f0x1d.logfox.R
 import com.f0x1d.logfox.database.AppDatabase
 import com.f0x1d.logfox.database.LogRecording
 import com.f0x1d.logfox.extensions.exportFormatted
+import com.f0x1d.logfox.extensions.notifications.removeRecordingNotification
+import com.f0x1d.logfox.extensions.notifications.sendRecordingNotification
+import com.f0x1d.logfox.extensions.notifications.sendRecordingPausedNotification
 import com.f0x1d.logfox.extensions.updateList
 import com.f0x1d.logfox.model.LogLine
 import com.f0x1d.logfox.repository.logging.base.LoggingHelperRepository
@@ -21,7 +24,7 @@ import javax.inject.Singleton
 
 @Singleton
 class RecordingsRepository @Inject constructor(@ApplicationContext private val context: Context,
-                                               private val database: AppDatabase, ): LoggingHelperRepository() {
+                                               private val database: AppDatabase): LoggingHelperRepository() {
 
     val recordingsFlow = MutableStateFlow(emptyList<LogRecording>())
     val recordingStateFlow = MutableStateFlow(RecordingState.IDLE)
@@ -33,11 +36,11 @@ class RecordingsRepository @Inject constructor(@ApplicationContext private val c
     private val linesMutex = Mutex()
     private val fileMutex = Mutex()
 
+    private var recordingDir: File? = null
+
     private var recordingTime = 0L
     private var recordingFile: File? = null
-
     private var recordingJob: Job? = null
-    private var recordingDir: File? = null
 
     override suspend fun setup() {
         recordingsFlow.update {
@@ -83,6 +86,8 @@ class RecordingsRepository @Inject constructor(@ApplicationContext private val c
                     writeLogsToFile()
                 }
             }
+
+            context.sendRecordingNotification()
         }
     }
 
@@ -107,12 +112,21 @@ class RecordingsRepository @Inject constructor(@ApplicationContext private val c
     fun pause() {
         onAppScope {
             recordingStateFlow.update { RecordingState.PAUSED }
+            context.sendRecordingPausedNotification()
+        }
+    }
+
+    fun resume() {
+        onAppScope {
+            recordingStateFlow.update { RecordingState.RECORDING }
+            context.sendRecordingNotification()
         }
     }
 
     fun end(recordingSaved: (LogRecording) -> Unit = {}) {
         onAppScope {
             recordingStateFlow.update { RecordingState.SAVING }
+            context.removeRecordingNotification()
 
             recordingJob?.cancel()
 

@@ -1,4 +1,4 @@
-package com.f0x1d.logfox.extensions
+package com.f0x1d.logfox.extensions.notifications
 
 import android.content.Context
 import android.content.Intent
@@ -8,6 +8,7 @@ import androidx.core.os.bundleOf
 import com.f0x1d.logfox.LogFoxApp
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.database.AppCrash
+import com.f0x1d.logfox.extensions.*
 import com.f0x1d.logfox.receiver.CopyReceiver
 import com.f0x1d.logfox.ui.activity.CrashDetailsActivity
 
@@ -20,7 +21,7 @@ fun Context.sendErrorNotification(appCrash: AppCrash, hasContentIntent: Boolean)
         .setSmallIcon(R.drawable.ic_android)
         .setStyle(NotificationCompat.BigTextStyle().bigText(appCrash.log))
         .apply {
-            if (hasContentIntent) setContentIntent(makeActivityPendingIntent(-3, CrashDetailsActivity::class.java, bundleOf(
+            if (hasContentIntent) setContentIntent(makeActivityPendingIntent(CRASH_DETAILS_INTENT_ID, CrashDetailsActivity::class.java, bundleOf(
                 "crash_id" to appCrash.id
             )))
         }
@@ -28,7 +29,7 @@ fun Context.sendErrorNotification(appCrash: AppCrash, hasContentIntent: Boolean)
         .addAction(
             R.drawable.ic_copy,
             getString(android.R.string.copy),
-            makeBroadcastPendingIntent(-2, CopyReceiver::class.java, bundleOf(
+            makeBroadcastPendingIntent(COPY_CRASH_INTENT_ID, CopyReceiver::class.java, bundleOf(
                 Intent.EXTRA_TEXT to appCrash.log,
                 CopyReceiver.EXTRA_PACKAGE_NAME to appCrash.packageName,
                 CopyReceiver.EXTRA_NOTIFICATION_ID to appCrash.dateAndTime.toInt()
@@ -43,6 +44,6 @@ fun Context.cancelAllCrashNotifications() = notificationManager.apply {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return@apply
 
     activeNotifications.forEach {
-        if (it.tag != null) cancel(it.tag, it.id)
+        if (it.tag != null && it.tag.contains(".")) cancel(it.tag, it.id)
     }
 }

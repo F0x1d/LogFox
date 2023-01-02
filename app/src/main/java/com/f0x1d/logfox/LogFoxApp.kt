@@ -14,8 +14,9 @@ import kotlinx.coroutines.MainScope
 class LogFoxApp: Application() {
 
     companion object {
-        const val LOGGING_STATUS_CHANNEL_ID = "status"
+        const val LOGGING_STATUS_CHANNEL_ID = "logging"
         const val CRASHES_CHANNEL_ID = "crashes"
+        const val RECORDING_STATUS_CHANNEL_ID = "recording"
 
         val applicationScope = MainScope()
         lateinit var instance: LogFoxApp
@@ -35,7 +36,7 @@ class LogFoxApp: Application() {
 
         notificationManagerCompat.apply {
             val loggingStatusChannel = NotificationChannelCompat.Builder(LOGGING_STATUS_CHANNEL_ID, NotificationManagerCompat.IMPORTANCE_MIN)
-                .setName(getString(R.string.status))
+                .setName(getString(R.string.logging_status))
                 .setShowBadge(false)
                 .build()
 
@@ -45,7 +46,14 @@ class LogFoxApp: Application() {
                 .setVibrationEnabled(true)
                 .build()
 
-            createNotificationChannelsCompat(listOf(loggingStatusChannel, crashesChannel))
+            val recordingStatusChannel = NotificationChannelCompat.Builder(RECORDING_STATUS_CHANNEL_ID, NotificationManagerCompat.IMPORTANCE_DEFAULT)
+                .setName(getString(R.string.recording_status))
+                .setLightsEnabled(false)
+                .setVibrationEnabled(false)
+                .setSound(null, null)
+                .build()
+
+            createNotificationChannelsCompat(listOf(loggingStatusChannel, crashesChannel, recordingStatusChannel))
         }
     }
 }

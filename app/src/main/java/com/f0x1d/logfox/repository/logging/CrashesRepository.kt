@@ -3,9 +3,9 @@ package com.f0x1d.logfox.repository.logging
 import android.content.Context
 import com.f0x1d.logfox.database.AppCrash
 import com.f0x1d.logfox.database.AppDatabase
-import com.f0x1d.logfox.extensions.cancelAllCrashNotifications
-import com.f0x1d.logfox.extensions.cancelCrashNotificationForPackage
-import com.f0x1d.logfox.extensions.sendErrorNotification
+import com.f0x1d.logfox.extensions.notifications.cancelAllCrashNotifications
+import com.f0x1d.logfox.extensions.notifications.cancelCrashNotificationForPackage
+import com.f0x1d.logfox.extensions.notifications.sendErrorNotification
 import com.f0x1d.logfox.extensions.updateList
 import com.f0x1d.logfox.repository.logging.base.LoggingHelperRepository
 import com.f0x1d.logfox.repository.logging.readers.base.BaseReader

@@ -36,6 +36,7 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
         </receiver>
+        <receiver android:name=".receiver.RecordingReceiver" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

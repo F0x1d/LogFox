@@ -8,7 +8,7 @@
     <string name="search">Search</string>
     <string name="clear">Clear</string>
     <string name="query">Query</string>
-    <string name="status">Status</string>
+    <string name="logging_status">Logging status</string>
     <string name="logging">Logging</string>
     <string name="exit">Exit</string>
     <string name="app_crashed">%s crashed</string>
@@ -83,4 +83,9 @@
     <string name="service_required_desc">Service is required to observe crashes in background. Without service Android kills LogFox</string>
     <string name="recording">Recording</string>
     <string name="title">Title</string>
+    <string name="recording_status">Recording status</string>
+    <string name="warning">Warning</string>
+    <string name="recording_with_no_service_warning">You are trying to record with no logging service running. This can result in not saved recording due to Android background apps restrictions. Better to start logging service while recording.</string>
+    <string name="links">Links</string>
+    <string name="recording_paused">Recording paused</string>
 </resources>

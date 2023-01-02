@@ -2,7 +2,6 @@ package com.f0x1d.logfox.ui.activity
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
@@ -19,7 +18,6 @@ import com.f0x1d.logfox.ui.activity.base.BaseViewModelActivity
 import com.f0x1d.logfox.utils.event.Event
 import com.f0x1d.logfox.viewmodel.MainViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.shape.MaterialShapeDrawable
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -71,7 +69,6 @@ class MainActivity: BaseViewModelActivity<MainViewModel, ActivityMainBinding>(),
         }
 
         binding.bottomNavigation.visibility = if (barShown) View.VISIBLE else View.GONE
-        window.navigationBarColor = if (barShown) (binding.bottomNavigation.background as MaterialShapeDrawable).resolvedTintColor else Color.TRANSPARENT
     }
 
     override fun onDestroy() {

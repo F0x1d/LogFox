@@ -18,6 +18,7 @@ import com.f0x1d.logfox.utils.RecyclerViewDivider
 import com.f0x1d.logfox.utils.dpToPx
 import com.f0x1d.logfox.utils.event.Event
 import com.f0x1d.logfox.viewmodel.recordings.RecordingsViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -41,7 +42,18 @@ class RecordingsFragment: BaseViewModelFragment<RecordingsViewModel, FragmentRec
             viewModel.clearRecordings()
         }
 
-        binding.recordFab.setOnClickListener { viewModel.toggleStartStop() }
+        binding.recordFab.setOnClickListener {
+            if (!viewModel.loggingServiceOrRecordingActive) {
+                MaterialAlertDialogBuilder(requireContext())
+                    .setIcon(R.drawable.ic_dialog_warning)
+                    .setTitle(R.string.warning)
+                    .setMessage(R.string.recording_with_no_service_warning)
+                    .setPositiveButton(android.R.string.ok, null)
+                    .show()
+            }
+
+            viewModel.toggleStartStop()
+        }
         binding.pauseFab.setOnClickListener { viewModel.togglePauseResume() }
 
         binding.recordingsRecycler.layoutManager = LinearLayoutManager(requireContext())

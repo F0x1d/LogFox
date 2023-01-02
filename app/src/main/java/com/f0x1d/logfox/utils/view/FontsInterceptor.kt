@@ -23,7 +23,12 @@ class FontsInterceptor(context: Context): Interceptor {
         R.id.clear_search_button to boldSansTypeface,
         R.id.log_levels_button to boldSansTypeface,
         R.id.save_button to boldSansTypeface,
-        R.id.time_text to boldSansTypeface
+        R.id.time_text to boldSansTypeface,
+        R.id.copy_text to boldSansTypeface,
+        R.id.share_text to boldSansTypeface,
+        R.id.foxbin_text to boldSansTypeface,
+        R.id.zip_text to boldSansTypeface,
+        R.id.export_text to boldSansTypeface
     )
 
     override fun intercept(chain: Interceptor.Chain): InflateResult {

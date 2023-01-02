@@ -26,6 +26,17 @@
         app:iconSpaceReserved="false"
         app:allowDividerAbove="false">
         <Preference
+            android:title="1.0.0 (1)"
+            android:key="pref_settings_app_version"
+            android:icon="@drawable/ic_settings_info"
+            android:selectable="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/links"
+        app:iconSpaceReserved="false"
+        app:allowDividerAbove="false">
+        <Preference
             android:title="@string/developer"
             android:icon="@drawable/ic_settings_person">
 

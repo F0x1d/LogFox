@@ -1,21 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="orange_100">#ffddb0</color>
-    <color name="orange_200">#ffc77d</color>
-    <color name="orange_500">#ff8d00</color>
-    <color name="orange_700">#f47100</color>
-    <color name="orange_1000">#e54304</color>
-
-
-    <color name="light_secondary_container">#FFDDAA</color>
-    <color name="light_on_secondary_container">#291800</color>
-
-    <color name="dark_secondary_container">#624000</color>
-    <color name="dark_on_secondary_container">#FFDDAA</color>
-
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="amoled">#ff020202</color>
 
     <color name="card_stroke_color">#ffdadce0</color>
     <color name="card_stroke_color_dark">#3a3c3e</color>
