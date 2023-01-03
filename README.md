@@ -1,2 +1,2 @@
 # LogFox
-Yet another LogCat for Android
+Yet another LogCat reader for Android

@@ -12,6 +12,7 @@ import com.f0x1d.logfox.adapter.RecordingsAdapter
 import com.f0x1d.logfox.database.LogRecording
 import com.f0x1d.logfox.databinding.FragmentRecordingsBinding
 import com.f0x1d.logfox.extensions.setClickListenerOn
+import com.f0x1d.logfox.extensions.startLoggingService
 import com.f0x1d.logfox.repository.logging.RecordingState
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
 import com.f0x1d.logfox.utils.RecyclerViewDivider
@@ -49,6 +50,7 @@ class RecordingsFragment: BaseViewModelFragment<RecordingsViewModel, FragmentRec
                     .setTitle(R.string.warning)
                     .setMessage(R.string.recording_with_no_service_warning)
                     .setPositiveButton(android.R.string.ok, null)
+                    .setNeutralButton(R.string.start_service) { dialog, which -> requireContext().startLoggingService() }
                     .show()
             }
 
