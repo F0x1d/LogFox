@@ -10,16 +10,32 @@
         android:label="SettingsMenuFragment" >
         <action
             android:id="@+id/action_settingsMenuFragment_to_settingsUIFragment"
-            app:destination="@id/settingsUIFragment" />
+            app:destination="@id/settingsUIFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
         <action
             android:id="@+id/action_settingsMenuFragment_to_settingsServiceFragment"
-            app:destination="@id/settingsServiceFragment" />
+            app:destination="@id/settingsServiceFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
         <action
             android:id="@+id/action_settingsMenuFragment_to_settingsNotificationsFragment"
-            app:destination="@id/settingsNotificationsFragment" />
+            app:destination="@id/settingsNotificationsFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
         <action
             android:id="@+id/action_settingsMenuFragment_to_settingsCrashesFragment"
-            app:destination="@id/settingsCrashesFragment" />
+            app:destination="@id/settingsCrashesFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
     <fragment
         android:id="@+id/settingsUIFragment"

@@ -27,7 +27,7 @@ abstract class BaseSettingsWrapperFragment: BaseFragment<FragmentSettingsBinding
         binding.toolbar.setTitle(title)
         if (showBackArrow) {
             binding.toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
-            binding.toolbar.setOnClickListener { findNavController().popBackStack() }
+            binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
         }
 
         if (savedInstanceState == null) {

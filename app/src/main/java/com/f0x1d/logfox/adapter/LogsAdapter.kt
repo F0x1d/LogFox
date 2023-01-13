@@ -6,25 +6,26 @@ import com.f0x1d.logfox.adapter.base.BaseAdapter
 import com.f0x1d.logfox.databinding.ItemLogBinding
 import com.f0x1d.logfox.model.LogLine
 import com.f0x1d.logfox.ui.viewholder.LogViewHolder
+import com.f0x1d.logfox.utils.preferences.AppPreferences
 
-class LogsAdapter: BaseAdapter<LogLine, ItemLogBinding>() {
+class LogsAdapter(private val appPreferences: AppPreferences): BaseAdapter<LogLine, ItemLogBinding>() {
 
     override val updateWhenSet = false
 
     val expandedStates = mutableMapOf<Long, Boolean>()
     val selectedItems = mutableListOf<LogLine>()
 
-    var textSize = 14f
+    var textSize = appPreferences.logsTextSize.toFloat()
         set(value) {
             field = value
             notifyItemRangeChanged(0, itemCount)
         }
-    var logsExpanded = false
+    var logsExpanded = appPreferences.logsExpanded
         set(value) {
             field = value
             notifyItemRangeChanged(0, itemCount)
         }
-    var logsFormat = booleanArrayOf(false, false, false, true, true)
+    var logsFormat = appPreferences.showLogValues
         set(value) {
             field = value
             notifyItemRangeChanged(0, itemCount)

@@ -26,13 +26,15 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(), SharedPreferences.OnSharedPreferenceChangeListener {
 
-    override val viewModel by hiltNavGraphViewModels<LogsViewModel>(R.id.logsFragment)
-
-    private val adapter = LogsAdapter()
-    private var changingState = false
-
     @Inject
     lateinit var appPreferences: AppPreferences
+
+    override val viewModel by hiltNavGraphViewModels<LogsViewModel>(R.id.logsFragment)
+
+    private val adapter by lazy {
+        LogsAdapter(appPreferences)
+    }
+    private var changingState = false
 
     override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) = FragmentLogsBinding.inflate(inflater, container, false)
 
@@ -104,14 +106,15 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
                 scrollLogToBottom()
         }
 
-        adapter.textSize = appPreferences.logsTextSize.toFloat()
-        adapter.logsExpanded = appPreferences.logsExpanded
-        adapter.logsFormat = appPreferences.showLogValues
-
-        viewModel.distinctiveData.observe(viewLifecycleOwner) {
+        viewModel.data.observe(viewLifecycleOwner) {
             if (it == null) return@observe
 
-            val manyDiffs = it.size - adapter.elements.size >= 50
+            val manyDiffs = (it.size - adapter.elements.size).let { diffs ->
+                if (diffs == 0)
+                    return@observe
+                else
+                    return@let diffs >= 50
+            }
 
             if (manyDiffs) {
                 adapter.elements = it
@@ -145,7 +148,7 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String) {
         if (key == "pref_logs_text_size") adapter.textSize = appPreferences.logsTextSize.toFloat()
-        if (key == "pref_logs_expanded") adapter.logsExpanded = appPreferences.logsExpanded
+        else if (key == "pref_logs_expanded") adapter.logsExpanded = appPreferences.logsExpanded
 
         if (key.startsWith("pref_show_log")) adapter.logsFormat = appPreferences.showLogValues
     }
