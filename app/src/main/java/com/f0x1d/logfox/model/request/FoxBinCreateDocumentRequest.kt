@@ -1,4 +1,4 @@
-package com.f0x1d.logfox.network.model.request
+package com.f0x1d.logfox.model.request
 
 import com.google.gson.annotations.SerializedName
 

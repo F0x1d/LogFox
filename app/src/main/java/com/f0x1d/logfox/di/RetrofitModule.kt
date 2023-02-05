@@ -1,7 +1,7 @@
 package com.f0x1d.logfox.di
 
-import com.f0x1d.logfox.network.service.FoxBinApiService
-import com.f0x1d.logfox.repository.FoxBinRepository
+import com.f0x1d.logfox.repository.network.FoxBinRepository
+import com.f0x1d.logfox.repository.network.retrofit.FoxBinApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

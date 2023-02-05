@@ -1,9 +1,9 @@
-package com.f0x1d.logfox.repository
+package com.f0x1d.logfox.repository.network
 
-import com.f0x1d.logfox.network.model.request.FoxBinCreateDocumentRequest
-import com.f0x1d.logfox.network.model.response.FoxBinErrorResponse
-import com.f0x1d.logfox.network.service.FoxBinApiService
+import com.f0x1d.logfox.model.request.FoxBinCreateDocumentRequest
+import com.f0x1d.logfox.model.response.FoxBinErrorResponse
 import com.f0x1d.logfox.repository.base.BaseRepository
+import com.f0x1d.logfox.repository.network.retrofit.FoxBinApiService
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

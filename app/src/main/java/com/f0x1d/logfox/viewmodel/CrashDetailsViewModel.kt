@@ -5,8 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import com.f0x1d.logfox.database.AppCrash
 import com.f0x1d.logfox.database.AppDatabase
 import com.f0x1d.logfox.extensions.sendEvent
-import com.f0x1d.logfox.repository.FoxBinRepository
 import com.f0x1d.logfox.repository.logging.CrashesRepository
+import com.f0x1d.logfox.repository.network.FoxBinRepository
 import com.f0x1d.logfox.viewmodel.base.BaseSameFlowProxyViewModel
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
