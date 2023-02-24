@@ -100,9 +100,12 @@ fun Context.sendKillApp() = sendService(LoggingService.ACTION_KILL_SERVICE)
 fun Context.sendStopService() = sendService(LoggingService.ACTION_STOP_SERVICE)
 private fun Context.sendService(action: String) = startService(Intent(this, LoggingService::class.java).setAction(action))
 
-fun Context.hasNotificationsPermission(): Boolean {
-    return if (Build.VERSION.SDK_INT >= 33)
-        checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
-    else
-        true
-}
+fun Context.hasNotificationsPermission() = if (Build.VERSION.SDK_INT >= 33)
+    ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
+else
+    true
+
+fun Context.doIfPermitted(block: NotificationManagerCompat.() -> Unit) = if (hasNotificationsPermission())
+    block.invoke(notificationManagerCompat)
+else
+    Unit

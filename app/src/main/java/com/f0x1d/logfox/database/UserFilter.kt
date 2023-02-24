@@ -22,22 +22,22 @@ data class UserFilter(
 interface UserFilterDao {
 
     @Query("SELECT * FROM UserFilter")
-    fun getAll(): List<UserFilter>
+    suspend fun getAll(): List<UserFilter>
 
     @Query("SELECT * FROM UserFilter WHERE id = :id")
     fun get(id: Long): Flow<UserFilter?>
 
     @Insert
-    fun insert(userFilter: UserFilter): Long
+    suspend fun insert(userFilter: UserFilter): Long
 
     @Update
-    fun update(userFilter: UserFilter)
+    suspend fun update(userFilter: UserFilter)
 
     @Delete
-    fun delete(userFilter: UserFilter)
+    suspend fun delete(userFilter: UserFilter)
 
     @Query("DELETE FROM UserFilter")
-    fun deleteAll()
+    suspend fun deleteAll()
 }
 
 class AllowedLevelsConverter {

@@ -18,20 +18,20 @@ data class LogRecording(
 interface LogRecordingDao {
 
     @Query("SELECT * FROM LogRecording ORDER BY date_and_time DESC")
-    fun getAll(): List<LogRecording>
+    suspend fun getAll(): List<LogRecording>
 
     @Query("SELECT * FROM LogRecording WHERE id = :id")
     fun get(id: Long): Flow<LogRecording?>
 
     @Insert
-    fun insert(logRecording: LogRecording): Long
+    suspend fun insert(logRecording: LogRecording): Long
 
     @Update
-    fun update(logRecording: LogRecording)
+    suspend fun update(logRecording: LogRecording)
 
     @Delete
-    fun delete(logRecording: LogRecording)
+    suspend fun delete(logRecording: LogRecording)
 
     @Query("DELETE FROM LogRecording")
-    fun deleteAll()
+    suspend fun deleteAll()
 }

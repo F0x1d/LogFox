@@ -131,7 +131,7 @@ class RecordingsRepository @Inject constructor(
         { it.id }
     )
 
-    override fun deleteInternal(item: LogRecording) {
+    override suspend fun deleteInternal(item: LogRecording) {
         itemsFlow.updateList {
             item.deleteFile()
 
@@ -140,7 +140,7 @@ class RecordingsRepository @Inject constructor(
         }
     }
 
-    override fun clearInternal() {
+    override suspend fun clearInternal() {
         itemsFlow.update {
             it.forEach { recording -> recording.deleteFile() }
 

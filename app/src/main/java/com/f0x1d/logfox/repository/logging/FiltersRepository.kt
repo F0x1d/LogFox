@@ -58,14 +58,14 @@ class FiltersRepository @Inject constructor(private val database: AppDatabase): 
         { it.id }
     )
 
-    override fun deleteInternal(item: UserFilter) {
+    override suspend fun deleteInternal(item: UserFilter) {
         itemsFlow.updateList {
             remove(item)
             database.userFilterDao().delete(item)
         }
     }
 
-    override fun clearInternal() {
+    override suspend fun clearInternal() {
         itemsFlow.update {
             database.userFilterDao().deleteAll()
             emptyList()

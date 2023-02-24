@@ -9,6 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
+import retrofit2.HttpException
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -23,18 +24,20 @@ class FoxBinRepository @Inject constructor(
     }
 
     suspend fun uploadViaApi(content: String) = withContext(Dispatchers.IO) {
-        val response = foxBinApiService.createDocument(
-            gson.toJson(FoxBinCreateDocumentRequest(content)).toRequestBody("application/json".toMediaType())
-        ).execute()
+        try {
+            val response = foxBinApiService.createDocument(
+                gson.toJson(FoxBinCreateDocumentRequest(content)).toRequestBody("application/json".toMediaType())
+            )
 
-        response.errorBody()?.apply {
-            throw Exception(gson.fromJson(string(), FoxBinErrorResponse::class.java).error).also { close() }
+            return@withContext FOXBIN_DOMAIN + response.slug
+        } catch (e: Exception) {
+            if (e is HttpException) {
+                e.response()?.errorBody()?.apply {
+                    throw Exception(gson.fromJson(string(), FoxBinErrorResponse::class.java).error.also { close() })
+                }
+            }
+
+            throw e
         }
-
-        response.body()?.apply {
-            return@withContext FOXBIN_DOMAIN + slug
-        }
-
-        throw Exception(response.toString())
     }
 }

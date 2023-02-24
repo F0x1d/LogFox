@@ -52,7 +52,7 @@ class RecordingBottomSheet: BaseViewModelBottomSheet<RecordingViewModel, SheetRe
 
         val setTextAction = OneTimeAction()
 
-        viewModel.data.observe(viewLifecycleOwner) { logRecording ->
+        viewModel.distinctiveData.observe(viewLifecycleOwner) { logRecording ->
             if (logRecording == null) return@observe
 
             setTextAction.doIfNotDone {

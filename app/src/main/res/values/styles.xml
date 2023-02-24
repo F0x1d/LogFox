@@ -9,4 +9,8 @@
     <style name="LogFoxMaterialAlertDialog.Button" parent="Widget.Material3.Button.TextButton.Dialog">
         <item name="android:textStyle">bold</item>
     </style>
+
+    <style name="LogFoxBottomNavigationViewTextStyle">
+        <item name="android:fontFamily">@font/google_sans</item>
+    </style>
 </resources>

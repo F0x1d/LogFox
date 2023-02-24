@@ -16,7 +16,7 @@ import java.io.File
 import java.io.FileInputStream
 
 class RecordingViewModel @AssistedInject constructor(
-    @Assisted private val recordingId: Long,
+    @Assisted recordingId: Long,
     application: Application,
     database: AppDatabase,
     private val recordingsRepository: RecordingsRepository

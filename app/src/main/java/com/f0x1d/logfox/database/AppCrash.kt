@@ -11,25 +11,27 @@ data class AppCrash(
     @ColumnInfo(name = "date_and_time") val dateAndTime: Long,
     @ColumnInfo(name = "log") val log: String,
     @PrimaryKey(autoGenerate = true) val id: Long = 0
-)
+) {
+    val notificationId get() = (if (id == 0L) dateAndTime else id).toInt()
+}
 
 @Dao
 interface AppCrashDao {
 
     @Query("SELECT * FROM AppCrash ORDER BY date_and_time DESC")
-    fun getAll(): List<AppCrash>
+    suspend fun getAll(): List<AppCrash>
 
     @Query("SELECT * FROM AppCrash WHERE id = :id")
     fun get(id: Long): Flow<AppCrash?>
 
     @Insert
-    fun insert(appCrash: AppCrash): Long
+    suspend fun insert(appCrash: AppCrash): Long
 
     @Delete
-    fun delete(appCrash: AppCrash)
+    suspend fun delete(appCrash: AppCrash)
 
     @Query("DELETE FROM AppCrash")
-    fun deleteAll()
+    suspend fun deleteAll()
 }
 
 enum class CrashType(val readableName: String) {

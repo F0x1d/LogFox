@@ -29,15 +29,15 @@ class CrashesRepository @Inject constructor(
         if (appPreferences.collectingFor(appCrash.crashType)) {
             itemsFlow.updateList {
                 appCrash.copy(id = database.appCrashDao().insert(appCrash)).apply {
-                    if (appPreferences.showingNotificationsFor(appCrash.crashType)) {
-                        context.sendErrorNotification(this, true)
+                    if (appPreferences.showingNotificationsFor(crashType)) {
+                        context.sendErrorNotification(this)
                     }
 
                     add(0, this)
                 }
             }
         } else if (appPreferences.showingNotificationsFor(appCrash.crashType)) {
-            context.sendErrorNotification(appCrash, false)
+            context.sendErrorNotification(appCrash)
         }
     }
 
@@ -51,7 +51,7 @@ class CrashesRepository @Inject constructor(
         database.appCrashDao().getAll()
     }
 
-    override fun deleteInternal(item: AppCrash) {
+    override suspend fun deleteInternal(item: AppCrash) {
         itemsFlow.updateList {
             remove(item)
             database.appCrashDao().delete(item)
@@ -60,7 +60,7 @@ class CrashesRepository @Inject constructor(
         context.cancelCrashNotificationForPackage(item)
     }
 
-    override fun clearInternal() {
+    override suspend fun clearInternal() {
         itemsFlow.update {
             database.appCrashDao().deleteAll()
             emptyList()

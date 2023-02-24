@@ -45,7 +45,7 @@ class CrashDetailsActivity: BaseViewModelActivity<CrashDetailsViewModel, Activit
             onBackPressedDispatcher.onBackPressed()
         }
 
-        viewModel.data.observe(this) {
+        viewModel.distinctiveData.observe(this) {
             setupFor(it ?: return@observe)
         }
 

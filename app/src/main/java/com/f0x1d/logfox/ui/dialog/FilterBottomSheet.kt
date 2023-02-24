@@ -50,7 +50,7 @@ class FilterBottomSheet: BaseViewModelBottomSheet<FilterViewModel, SheetFilterBi
             dismiss()
         }
 
-        viewModel.data.observe(viewLifecycleOwner) {
+        viewModel.distinctiveData.observe(viewLifecycleOwner) {
             if (it == null) return@observe
 
             binding.pidText.setText(it.pid)
