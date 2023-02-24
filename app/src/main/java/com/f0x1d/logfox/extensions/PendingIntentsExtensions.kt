@@ -16,6 +16,7 @@ const val EXIT_APP_INTENT_ID = 3
 const val PAUSE_RECORDING_INTENT_ID = 4
 const val RESUME_RECORDING_INTENT_ID = 5
 const val STOP_RECORDING_INTENT_ID = 6
+const val OPEN_APP_INTENT_ID = 7
 
 val pendingIntentFlags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
     PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT

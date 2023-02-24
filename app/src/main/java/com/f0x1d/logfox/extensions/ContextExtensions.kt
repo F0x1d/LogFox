@@ -3,6 +3,7 @@ package com.f0x1d.logfox.extensions
 import android.Manifest
 import android.app.ActivityManager
 import android.app.NotificationManager
+import android.app.UiModeManager
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -10,6 +11,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -32,6 +34,7 @@ fun Context.hasPermissionToReadLogs() = ContextCompat.checkSelfPermission(
 val Context.notificationManagerCompat get() = NotificationManagerCompat.from(this)
 val Context.notificationManager get() = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 val Context.activityManager get() = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+val Context.uiModeManager get() = getSystemService(Context.UI_MODE_SERVICE) as UiModeManager
 
 fun Context.startLoggingAndService(loggingRepository: LoggingRepository, appPreferences: AppPreferences, force: Boolean = false) {
     loggingRepository.startLoggingIfNot()
@@ -109,3 +112,12 @@ fun Context.doIfPermitted(block: NotificationManagerCompat.() -> Unit) = if (has
     block.invoke(notificationManagerCompat)
 else
     Unit
+
+fun Context.applyTheme(nightMode: Int, force: Boolean = false) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        if (force) uiModeManager.setApplicationNightMode(
+            if (nightMode != 0) nightMode else UiModeManager.MODE_NIGHT_CUSTOM
+        )
+    } else
+        AppCompatDelegate.setDefaultNightMode(if (nightMode != 0) nightMode else AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+}

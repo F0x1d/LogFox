@@ -40,7 +40,7 @@ class SettingsUIFragment: BaseSettingsWrapperFragment() {
                     appPreferences.nightTheme
                 ) {
                     appPreferences.nightTheme = it
-                    requireActivity().recreate()
+                    requireActivity().applyTheme(it, true)
                 }
 
                 observeAndUpdateSummaryForList(appPreferences, this@SettingsUIWrappedFragment, 0, filledThemeSettings)

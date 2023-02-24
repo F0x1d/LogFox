@@ -3,12 +3,15 @@ package com.f0x1d.logfox
 import android.app.Application
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationManagerCompat
+import com.f0x1d.logfox.extensions.applyTheme
 import com.f0x1d.logfox.extensions.notificationManagerCompat
+import com.f0x1d.logfox.utils.preferences.AppPreferences
 import com.f0x1d.logfox.utils.view.FontsInterceptor
 import com.google.android.material.color.DynamicColors
 import dagger.hilt.android.HiltAndroidApp
 import io.github.inflationx.viewpump.ViewPump
 import kotlinx.coroutines.MainScope
+import javax.inject.Inject
 
 @HiltAndroidApp
 class LogFoxApp: Application() {
@@ -22,9 +25,14 @@ class LogFoxApp: Application() {
         lateinit var instance: LogFoxApp
     }
 
+    @Inject
+    lateinit var appPreferences: AppPreferences
+
     override fun onCreate() {
         super.onCreate()
         instance = this
+
+        applyTheme(appPreferences.nightTheme)
 
         ViewPump.init(
             ViewPump.builder()
