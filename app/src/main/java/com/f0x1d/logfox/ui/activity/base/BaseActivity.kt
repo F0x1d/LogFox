@@ -7,10 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.viewbinding.ViewBinding
 import com.f0x1d.logfox.extensions.snackbar
-import com.f0x1d.logfox.utils.preferences.AppPreferences
-import dagger.hilt.EntryPoint
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
 
 abstract class BaseActivity<T : ViewBinding>: AppCompatActivity() {
@@ -37,10 +33,4 @@ abstract class BaseActivity<T : ViewBinding>: AppCompatActivity() {
     protected fun snackbar(text: String) = findViewById<View>(android.R.id.content).snackbar(text)
 
     protected fun snackbar(id: Int) = snackbar(getString(id))
-}
-
-@EntryPoint
-@InstallIn(SingletonComponent::class)
-interface BaseActivityEntryPoint {
-    fun appPreferences(): AppPreferences
 }
