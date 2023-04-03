@@ -39,6 +39,9 @@ class AppPreferences @Inject constructor(@ApplicationContext context: Context): 
         get() = get("pref_resume_logs_with_touch", true)
         set(value) { put("pref_resume_logs_with_touch", value) }
 
+    var showLogDate
+        get() = get("pref_show_log_date", false)
+        set(value) { put("pref_show_log_date", value) }
     var showLogTime
         get() = get("pref_show_log_time", false)
         set(value) { put("pref_show_log_time", value) }
@@ -59,7 +62,7 @@ class AppPreferences @Inject constructor(@ApplicationContext context: Context): 
         get() = get("pref_asked_notifications_permission", false)
         set(value) { put("pref_asked_notifications_permission", value) }
 
-    val showLogValues get() = booleanArrayOf(showLogTime, showLogPid, showLogTid, showLogTag, showLogContent)
+    val showLogValues get() = booleanArrayOf(showLogDate, showLogTime, showLogPid, showLogTid, showLogTag, showLogContent)
 
     fun collectingFor(crashType: CrashType) = get("pref_collect_${crashType.readableName.lowercase()}", true)
     fun showingNotificationsFor(crashType: CrashType) = get("pref_notifications_${crashType.readableName.lowercase()}", true)

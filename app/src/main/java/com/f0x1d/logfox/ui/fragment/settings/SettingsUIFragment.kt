@@ -51,15 +51,16 @@ class SettingsUIFragment: BaseSettingsWrapperFragment() {
                     .setTitle(R.string.logs_format)
                     .setIcon(R.drawable.ic_dialog_list)
                     .setMultiChoiceItems(
-                        intArrayOf(R.string.time, R.string.pid, R.string.tid, R.string.tag, R.string.content).fillWithStrings(requireContext()),
+                        intArrayOf(R.string.date, R.string.time, R.string.pid, R.string.tid, R.string.tag, R.string.content).fillWithStrings(requireContext()),
                         appPreferences.showLogValues
                     ) { dialog, which, checked ->
                         when (which) {
-                            0 -> appPreferences.showLogTime = checked
-                            1 -> appPreferences.showLogPid = checked
-                            2 -> appPreferences.showLogTid = checked
-                            3 -> appPreferences.showLogTag = checked
-                            4 -> appPreferences.showLogContent = checked
+                            0 -> appPreferences.showLogDate = checked
+                            1 -> appPreferences.showLogTime = checked
+                            2 -> appPreferences.showLogPid = checked
+                            3 -> appPreferences.showLogTid = checked
+                            4 -> appPreferences.showLogTag = checked
+                            5 -> appPreferences.showLogContent = checked
                         }
                     }
                     .setPositiveButton(android.R.string.cancel, null)

@@ -61,6 +61,7 @@
     <string name="export">Export</string>
     <string name="str_import">Import</string>
     <string name="export_all">Export all</string>
+    <string name="date">Date</string>
     <string name="time">Time</string>
     <string name="content">Content</string>
     <string name="logs_format">Logs format</string>

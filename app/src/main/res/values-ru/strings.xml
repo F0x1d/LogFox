@@ -54,6 +54,7 @@
     <string name="export">Экспорт</string>
     <string name="str_import">Импорт</string>
     <string name="export_all">Экспорт всего</string>
+    <string name="date">Дата</string>
     <string name="time">Время</string>
     <string name="content">Текст</string>
     <string name="logs_format">Формат логов</string>

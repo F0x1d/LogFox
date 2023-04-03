@@ -9,7 +9,7 @@ fun List<LogLine>.filterAndSearch(filtersRepository: FiltersRepository, query: S
         if (query == null)
             it
         else
-            it.filter { it.tag.contains(query) || it.content.contains(query) }
+            it.filter { logLine -> logLine.tag.contains(query) || logLine.content.contains(query) }
     }
 
 fun List<LogLine>.filterByExtendedFilters(filters: List<UserFilter>) = filter { logLine ->
