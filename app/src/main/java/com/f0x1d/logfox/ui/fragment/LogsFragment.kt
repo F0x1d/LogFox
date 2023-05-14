@@ -13,7 +13,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.adapter.LogsAdapter
 import com.f0x1d.logfox.databinding.FragmentLogsBinding
-import com.f0x1d.logfox.extensions.*
+import com.f0x1d.logfox.extensions.copyText
+import com.f0x1d.logfox.extensions.sendKillApp
+import com.f0x1d.logfox.extensions.sendStopService
+import com.f0x1d.logfox.extensions.setClickListenerOn
+import com.f0x1d.logfox.extensions.startLoggingService
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
 import com.f0x1d.logfox.utils.LogLinesDiffUtilCallback
 import com.f0x1d.logfox.utils.fillWithStrings
@@ -182,7 +186,7 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
                     1 -> findNavController().navigate(LogsFragmentDirections.actionLogsFragmentToLogsExtendedCopyFragment(textToCopy))
                 }
             }
-            .setPositiveButton(android.R.string.cancel, null)
+            .setPositiveButton(R.string.close, null)
             .show()
     }
 }

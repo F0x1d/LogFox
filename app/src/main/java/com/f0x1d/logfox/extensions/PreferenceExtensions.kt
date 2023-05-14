@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.WindowManager
 import androidx.lifecycle.LifecycleOwner
 import androidx.preference.Preference
+import com.f0x1d.logfox.R
 import com.f0x1d.logfox.databinding.DialogTextBinding
 import com.f0x1d.logfox.utils.preferences.AppPreferences
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -21,7 +22,7 @@ fun Preference.setupAsEditTextPreference(setup: (DialogTextBinding) -> Unit, set
             .setPositiveButton(android.R.string.ok) { dialog, which ->
                 save.invoke(dialogBinding.text.text?.toString())
             }
-            .setNegativeButton(android.R.string.cancel, null)
+            .setNegativeButton(R.string.close, null)
             .apply(setupDialog)
             .create()
             .apply {
@@ -41,7 +42,7 @@ fun Preference.setupAsListPreference(setupDialog: MaterialAlertDialogBuilder.() 
                 dialog.cancel()
                 onSelected.invoke(which)
             }
-            .setPositiveButton(android.R.string.cancel, null)
+            .setPositiveButton(R.string.close, null)
             .apply(setupDialog)
             .show()
         return@setOnPreferenceClickListener true

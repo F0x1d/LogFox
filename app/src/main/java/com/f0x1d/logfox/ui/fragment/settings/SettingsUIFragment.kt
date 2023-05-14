@@ -5,7 +5,12 @@ import android.text.InputType
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.f0x1d.logfox.R
-import com.f0x1d.logfox.extensions.*
+import com.f0x1d.logfox.extensions.applyTheme
+import com.f0x1d.logfox.extensions.catchingNotNumber
+import com.f0x1d.logfox.extensions.observeAndUpdateSummary
+import com.f0x1d.logfox.extensions.observeAndUpdateSummaryForList
+import com.f0x1d.logfox.extensions.setupAsEditTextPreference
+import com.f0x1d.logfox.extensions.setupAsListPreference
 import com.f0x1d.logfox.ui.fragment.settings.base.BaseSettingsWrapperFragment
 import com.f0x1d.logfox.utils.fillWithStrings
 import com.f0x1d.logfox.utils.preferences.AppPreferences
@@ -63,7 +68,7 @@ class SettingsUIFragment: BaseSettingsWrapperFragment() {
                             5 -> appPreferences.showLogContent = checked
                         }
                     }
-                    .setPositiveButton(android.R.string.cancel, null)
+                    .setPositiveButton(R.string.close, null)
                     .show()
                 return@setOnPreferenceClickListener true
             }

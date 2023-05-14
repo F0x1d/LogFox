@@ -83,4 +83,5 @@
     <string name="recording_with_no_service_warning">Вы пытаетесь запустить запись с остановленным сервисом логирования. Из-за этого ваша запись может оборваться и не сохраниться, это всё из-за ограничений Android. Так что лучше запустите сервис логирования на время записи.</string>
     <string name="links">Ссылки</string>
     <string name="recording_paused">Запись на паузе</string>
+    <string name="close">Закрыть</string>
 </resources>

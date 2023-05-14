@@ -90,4 +90,5 @@
     <string name="recording_with_no_service_warning">You are trying to record with no logging service running. This can result in not saved recording due to Android background apps restrictions. Better to start logging service while recording.</string>
     <string name="links">Links</string>
     <string name="recording_paused">Recording paused</string>
+    <string name="close">Close</string>
 </resources>
