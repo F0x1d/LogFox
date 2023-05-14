@@ -33,10 +33,10 @@
     <string name="recordings">录制</string>
     <string name="delete">删除</string>
     <string name="resume">继续</string>
-    <string name="logs_update_interval">Logs 更新间隔</string>
+    <string name="logs_update_interval">更新间隔</string>
     <string name="in_ms">单位: 毫秒</string>
     <string name="this_is_not_a_number">这不是一个数字</string>
-    <string name="logs_text_size">Logs 字体大小</string>
+    <string name="logs_text_size">字体大小</string>
     <string name="collect_java_crashes">收集 Java 崩溃</string>
     <string name="show_java_crashes_notifications">显示 Java 崩溃消息</string>
     <string name="collect_jni_crashes">收集 JNI 崩溃</string>
@@ -58,10 +58,10 @@
     <string name="date">日期</string>
     <string name="time">时间</string>
     <string name="content">内容</string>
-    <string name="logs_format">Logs 格式</string>
+    <string name="logs_format">日志格式</string>
     <string name="no_permission_detected">未获取权限</string>
     <string name="logs_restart_required">所有日志在重启后才能获得</string>
-    <string name="too_big_log">错误,可能这个日志太大,尝试压缩后发送</string>
+    <string name="too_big_log">日志太大,尝试压缩后发送</string>
     <string name="night_theme">主题</string>
     <string name="follow_system">跟随系统</string>
     <string name="light">亮色</string>
@@ -71,7 +71,7 @@
     <string name="no_notification_permission">没有通知权限</string>
     <string name="notification_permission_is_required">发送崩溃通知需要通知权限</string>
     <string name="logging_notification">日志的通知</string>
-    <string name="resume_logging_with_bottom_edge_touch">滚动到底部时恢复录制</string>
+    <string name="resume_logging_with_bottom_edge_touch">跳转到底部时恢复录制</string>
     <string name="start_on_launch">跟随 App 启动</string>
     <string name="start_service">启动服务</string>
     <string name="stop_service">停止服务</string>
