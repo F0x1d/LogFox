@@ -64,7 +64,7 @@ class MainActivity: BaseViewModelActivity<MainViewModel, ActivityMainBinding>(),
             R.id.setupFragment -> false
             R.id.logsExtendedCopyFragment -> false
             R.id.filtersFragment -> false
-            R.id.filterBottomSheet -> false
+            R.id.editFilterFragment -> false
             else -> true
         }
 

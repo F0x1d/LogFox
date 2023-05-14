@@ -1,4 +1,4 @@
-package com.f0x1d.logfox.ui.fragment
+package com.f0x1d.logfox.ui.fragment.filters
 
 import android.os.Build
 import android.os.Bundle
@@ -31,7 +31,11 @@ class FiltersFragment: BaseViewModelFragment<FiltersViewModel, FragmentFiltersBi
     private val logsViewModel by hiltNavGraphViewModels<LogsViewModel>(R.id.logsFragment)
 
     private val adapter = FiltersAdapter({
-        findNavController().navigate(FiltersFragmentDirections.actionFiltersFragmentToFilterBottomSheet(it.id))
+        findNavController().navigate(
+            FiltersFragmentDirections.actionFiltersFragmentToEditFilterFragment(
+                it.id
+            )
+        )
     }, {
         viewModel.delete(it)
     }, { userFilter, checked ->
@@ -58,7 +62,7 @@ class FiltersFragment: BaseViewModelFragment<FiltersViewModel, FragmentFiltersBi
             binding.filtersRecycler.updatePadding(bottom = 71.dpToPx.toInt() + insets.bottom)
         }
 
-        binding.toolbar.setOnClickListener { findNavController().popBackStack() }
+        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
         binding.toolbar.inflateMenu(R.menu.filters_menu)
         binding.toolbar.menu.apply {
             setClickListenerOn(R.id.clear_item) {
@@ -76,7 +80,7 @@ class FiltersFragment: BaseViewModelFragment<FiltersViewModel, FragmentFiltersBi
         binding.filtersRecycler.adapter = adapter
 
         binding.addFab.setOnClickListener {
-            findNavController().navigate(FiltersFragmentDirections.actionFiltersFragmentToFilterBottomSheet())
+            findNavController().navigate(FiltersFragmentDirections.actionFiltersFragmentToEditFilterFragment())
         }
 
         viewModel.data.observe(viewLifecycleOwner) {

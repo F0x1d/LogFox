@@ -10,6 +10,7 @@
         <item name="logFoxCardStrokeColor">@color/card_stroke_color</item>
 
         <item name="materialAlertDialogTheme">@style/ThemeOverlay.LogFoxMaterialAlertDialog</item>
+        <item name="bottomSheetDialogTheme">@style/LogFoxBottomSheetDialogStyle</item>
 
         <item name="fontFamily">@font/google_sans</item>
         <item name="android:fontFamily">@font/google_sans</item>

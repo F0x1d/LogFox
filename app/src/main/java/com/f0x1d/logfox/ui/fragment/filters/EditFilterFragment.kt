@@ -1,17 +1,23 @@
-package com.f0x1d.logfox.ui.dialog
+package com.f0x1d.logfox.ui.fragment.filters
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.view.updateLayoutParams
+import androidx.core.view.updatePadding
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.f0x1d.logfox.R
-import com.f0x1d.logfox.databinding.SheetFilterBinding
+import com.f0x1d.logfox.databinding.FragmentEditFilterBinding
+import com.f0x1d.logfox.extensions.applyInsets
+import com.f0x1d.logfox.extensions.setClickListenerOn
 import com.f0x1d.logfox.extensions.viewModelFactory
 import com.f0x1d.logfox.model.LogLevel
-import com.f0x1d.logfox.ui.dialog.base.BaseViewModelBottomSheet
+import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
+import com.f0x1d.logfox.utils.dpToPx
 import com.f0x1d.logfox.viewmodel.filters.FilterTextData
 import com.f0x1d.logfox.viewmodel.filters.FilterViewModel
 import com.f0x1d.logfox.viewmodel.filters.FilterViewModelAssistedFactory
@@ -20,7 +26,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class FilterBottomSheet: BaseViewModelBottomSheet<FilterViewModel, SheetFilterBinding>() {
+class EditFilterFragment: BaseViewModelFragment<FilterViewModel, FragmentEditFilterBinding>() {
 
     @Inject
     lateinit var assistedFactory: FilterViewModelAssistedFactory
@@ -34,20 +40,30 @@ class FilterBottomSheet: BaseViewModelBottomSheet<FilterViewModel, SheetFilterBi
     private val exportFilterLauncher = registerForActivityResult(ActivityResultContracts.CreateDocument("application/json")) {
         viewModel.export(it ?: return@registerForActivityResult)
     }
-    private val navArgs by navArgs<FilterBottomSheetArgs>()
+    private val navArgs by navArgs<EditFilterFragmentArgs>()
 
-    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) = SheetFilterBinding.inflate(inflater, container, false)
+    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) = FragmentEditFilterBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        applyInsets(view) { insets ->
+            binding.saveFab.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                bottomMargin = 10.dpToPx.toInt() + insets.bottom
+            }
+
+            binding.scrollView.updatePadding(bottom = 71.dpToPx.toInt() + insets.bottom)
+        }
+
+        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
 
         binding.logLevelsButton.setOnClickListener {
             showFilterDialog()
         }
 
-        binding.saveButton.setOnClickListener {
+        binding.saveFab.setOnClickListener {
             viewModel.create(collectFilterTextData())
-            dismiss()
+            findNavController().popBackStack()
         }
 
         viewModel.distinctiveData.observe(viewLifecycleOwner) {
@@ -58,17 +74,14 @@ class FilterBottomSheet: BaseViewModelBottomSheet<FilterViewModel, SheetFilterBi
             binding.tagText.setText(it.tag)
             binding.contentText.setText(it.content)
 
-            binding.exportButton.apply {
-                visibility = View.VISIBLE
-
-                setOnClickListener {
-                    exportFilterLauncher.launch("filter.json")
-                }
+            binding.toolbar.inflateMenu(R.menu.edit_filter_menu)
+            binding.toolbar.menu.setClickListenerOn(R.id.export_item) {
+                exportFilterLauncher.launch("filter.json")
             }
 
-            binding.saveButton.setOnClickListener { view ->
+            binding.saveFab.setOnClickListener { view ->
                 viewModel.update(it, collectFilterTextData())
-                dismiss()
+                findNavController().popBackStack()
             }
         }
     }

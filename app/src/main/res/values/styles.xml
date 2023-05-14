@@ -13,4 +13,11 @@
     <style name="LogFoxBottomNavigationViewTextStyle">
         <item name="android:fontFamily">@font/google_sans</item>
     </style>
+
+    <style name="LogFoxBottomSheetDialogStyle" parent="Theme.Material3.DayNight.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+    </style>
 </resources>

@@ -43,21 +43,25 @@
             app:argType="string"
             app:nullable="true" />
     </dialog>
-    <dialog
-        android:id="@+id/filterBottomSheet"
-        android:name="com.f0x1d.logfox.ui.dialog.FilterBottomSheet"
-        android:label="FilterBottomSheet" >
+    <fragment
+        android:id="@+id/filtersFragment"
+        android:name="com.f0x1d.logfox.ui.fragment.filters.FiltersFragment"
+        android:label="FiltersFragment" >
+        <action
+            android:id="@+id/action_filtersFragment_to_editFilterFragment"
+            app:destination="@id/editFilterFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
+    <fragment
+        android:id="@+id/editFilterFragment"
+        android:name="com.f0x1d.logfox.ui.fragment.filters.EditFilterFragment"
+        android:label="EditFilterFragment">
         <argument
             android:name="filterId"
             app:argType="long"
             android:defaultValue="-1L" />
-    </dialog>
-    <fragment
-        android:id="@+id/filtersFragment"
-        android:name="com.f0x1d.logfox.ui.fragment.FiltersFragment"
-        android:label="FiltersFragment" >
-        <action
-            android:id="@+id/action_filtersFragment_to_filterBottomSheet"
-            app:destination="@id/filterBottomSheet" />
     </fragment>
 </navigation>
