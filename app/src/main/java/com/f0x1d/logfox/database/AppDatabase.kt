@@ -37,7 +37,7 @@ abstract class AppDatabase: RoomDatabase() {
         }
         val MIGRATION_6_7 = object : Migration(6, 7) {
             override fun migrate(database: SupportSQLiteDatabase) {
-                val recordingString = LogFoxApp.instance.getString(R.string.recording)
+                val recordingString = LogFoxApp.instance.getString(R.string.record_file)
                 database.execSQL("ALTER TABLE LogRecording ADD COLUMN title TEXT NOT NULL DEFAULT '${recordingString}'")
             }
         }

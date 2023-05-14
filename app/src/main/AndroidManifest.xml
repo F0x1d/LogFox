@@ -15,7 +15,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.LogFox">
+        android:theme="@style/Theme.LogFox"
+        android:localeConfig="@xml/locales_config">
 
         <activity android:name=".ui.activity.MainActivity" android:exported="true">
             <intent-filter>

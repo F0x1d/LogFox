@@ -109,7 +109,7 @@ class RecordingsRepository @Inject constructor(
         writeLogsToFile()
 
         itemsFlow.updateList {
-            val title = "${context.getString(R.string.recording)} ${itemsFlow.value.size + 1}"
+            val title = "${context.getString(R.string.record_file)} ${itemsFlow.value.size + 1}"
 
             val logRecording = LogRecording(title, recordingTime, recordingFile!!.absolutePath).run {
                 copy(id = database.logRecordingDao().insert(this))

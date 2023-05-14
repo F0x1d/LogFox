@@ -16,6 +16,7 @@ android {
         targetSdk 33
         versionCode 29
         versionName "1.2.7"
+        resourceConfigurations += ["en", "ru", "zh_CN"]
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

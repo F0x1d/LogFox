@@ -87,7 +87,7 @@ class FilterBottomSheet: BaseViewModelBottomSheet<FilterViewModel, SheetFilterBi
             .setMultiChoiceItems(LogLevel.values().map { it.name }.toTypedArray(), viewModel.enabledLogLevels.toTypedArray().toBooleanArray()) { dialog, which, checked ->
                 viewModel.filterLevel(which, checked)
             }
-            .setPositiveButton(android.R.string.cancel, null)
+            .setPositiveButton(R.string.close, null)
             .show()
     }
 }
