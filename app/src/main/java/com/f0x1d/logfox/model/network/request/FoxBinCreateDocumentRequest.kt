@@ -1,4 +1,4 @@
-package com.f0x1d.logfox.model.request
+package com.f0x1d.logfox.model.network.request
 
 import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName

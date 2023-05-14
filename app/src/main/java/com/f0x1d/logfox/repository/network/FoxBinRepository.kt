@@ -1,7 +1,7 @@
 package com.f0x1d.logfox.repository.network
 
-import com.f0x1d.logfox.model.request.FoxBinCreateDocumentRequest
-import com.f0x1d.logfox.model.response.FoxBinErrorResponse
+import com.f0x1d.logfox.model.network.request.FoxBinCreateDocumentRequest
+import com.f0x1d.logfox.model.network.response.FoxBinErrorResponse
 import com.f0x1d.logfox.repository.base.BaseRepository
 import com.f0x1d.logfox.repository.network.retrofit.FoxBinApiService
 import com.google.gson.Gson
