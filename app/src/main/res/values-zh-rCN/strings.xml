@@ -31,6 +31,7 @@
     <string name="record">录制</string>
     <string name="stop">停止</string>
     <string name="recordings">录制</string>
+    <string name="record_file">录制</string>
     <string name="delete">删除</string>
     <string name="resume">继续</string>
     <string name="logs_update_interval">更新间隔</string>
@@ -76,7 +77,7 @@
     <string name="start_service">启动服务</string>
     <string name="stop_service">停止服务</string>
     <string name="service_required_desc">需要日志服务以在后台获取崩溃情况,如果没有服务, Android 会杀死 LogFox</string>
-    <string name="recording">录制</string>
+    <string name="recording">录制中</string>
     <string name="title">标题</string>
     <string name="recording_status">录制状态</string>
     <string name="warning">警告</string>

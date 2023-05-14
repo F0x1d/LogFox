@@ -30,6 +30,7 @@
     <string name="record">Записать</string>
     <string name="stop">Остановить</string>
     <string name="recordings">Записи</string>
+    <string name="record_file">Запись</string>
     <string name="delete">Удалить</string>
     <string name="resume">Возобновить</string>
     <string name="logs_update_interval">Интервал обновления логов</string>

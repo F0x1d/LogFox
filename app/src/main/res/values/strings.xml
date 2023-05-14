@@ -33,6 +33,7 @@
     <string name="record">Record</string>
     <string name="stop">Stop</string>
     <string name="recordings">Recordings</string>
+    <string name="record_file">Recordings</string>
     <string name="delete">Delete</string>
     <string name="resume">Resume</string>
     <string name="foxbin" translatable="false">foxbin</string>
