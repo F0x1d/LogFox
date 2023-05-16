@@ -1,18 +1,22 @@
 package com.f0x1d.logfox.repository.logging
 
 import android.content.SharedPreferences
+import com.f0x1d.logfox.extensions.RootState
 import com.f0x1d.logfox.extensions.logline.LogLine
 import com.f0x1d.logfox.extensions.updateList
 import com.f0x1d.logfox.model.LogLine
 import com.f0x1d.logfox.repository.base.BaseRepository
 import com.f0x1d.logfox.utils.preferences.AppPreferences
-import kotlinx.coroutines.*
+import com.topjohnwu.superuser.Shell
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import java.io.BufferedReader
-import java.io.InputStreamReader
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -26,10 +30,13 @@ class LoggingRepository @Inject constructor(
 
     companion object {
         const val LOGS_LIMIT = 10000
+
+        private const val COMMAND = "logcat -v epoch -T 0"
     }
 
     val logsFlow = MutableStateFlow(emptyList<LogLine>())
     val serviceRunningFlow = MutableStateFlow(false)
+    val rootStateFlow = MutableStateFlow(RootState.UNKNOWN)
 
     private var loggingJob: Job? = null
     private var loggingInterval = AppPreferences.LOGS_UPDATE_INTERVAL_DEFAULT
@@ -78,7 +85,10 @@ class LoggingRepository @Inject constructor(
     }
 
     private suspend fun readLogs() = coroutineScope {
-        val stream = Runtime.getRuntime().exec("logcat -v epoch -T 0").inputStream
+        val haveRoot = Shell.getShell().isRoot
+        rootStateFlow.update { if (haveRoot) RootState.YES else RootState.NO }
+
+        val stream = Runtime.getRuntime().exec("${if (haveRoot) "su -c " else ""}$COMMAND").inputStream
 
         val updateLines = mutableListOf<LogLine>()
         val mutex = Mutex()
@@ -100,7 +110,7 @@ class LoggingRepository @Inject constructor(
             }
         }
 
-        val reader = BufferedReader(InputStreamReader(stream))
+        val reader = stream.bufferedReader()
         var line: String?
         while (isActive) {
             line = reader.readLine()

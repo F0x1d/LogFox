@@ -49,6 +49,11 @@
         app:iconSpaceReserved="false"
         app:allowDividerAbove="false">
 
+        <Preference
+            android:summary="@string/recommended_for_non_root_users"
+            android:selectable="false"
+            app:iconSpaceReserved="false" />
+
         <SwitchPreferenceCompat
             android:title="@string/show_start_service_reminder_notification_on_boot"
             android:key="pref_show_start_service_notification_on_boot"

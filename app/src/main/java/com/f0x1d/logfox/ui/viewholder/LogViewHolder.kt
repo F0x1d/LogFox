@@ -3,7 +3,10 @@ package com.f0x1d.logfox.ui.viewholder
 import android.content.res.ColorStateList
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.GradientDrawable
+import android.view.Gravity
+import androidx.appcompat.widget.PopupMenu
 import androidx.core.graphics.ColorUtils
+import com.f0x1d.logfox.R
 import com.f0x1d.logfox.adapter.LogsAdapter
 import com.f0x1d.logfox.databinding.ItemLogBinding
 import com.f0x1d.logfox.extensions.logline.backgroundColorByLevel
@@ -15,7 +18,10 @@ import com.f0x1d.logfox.ui.viewholder.base.BaseViewHolder
 import com.f0x1d.logfox.utils.dpToPx
 import com.google.android.material.color.MaterialColors
 
-class LogViewHolder(binding: ItemLogBinding): BaseViewHolder<LogLine, ItemLogBinding>(binding) {
+class LogViewHolder(
+    binding: ItemLogBinding,
+    private val copyLog: (LogLine) -> Unit
+): BaseViewHolder<LogLine, ItemLogBinding>(binding) {
 
     private val currentColorPrimary = MaterialColors.getColor(binding.root, com.google.android.material.R.attr.colorPrimary)
     private val background = binding.container.background
@@ -34,7 +40,7 @@ class LogViewHolder(binding: ItemLogBinding): BaseViewHolder<LogLine, ItemLogBin
             if (adapter<LogsAdapter>().selectedItems.isNotEmpty())
                 expandOrCollapseItem()
             else
-                selectItem()
+                showPopupMenu()
             return@setOnLongClickListener true
         }
     }
@@ -82,6 +88,27 @@ class LogViewHolder(binding: ItemLogBinding): BaseViewHolder<LogLine, ItemLogBin
             put(it.id, !getOrElse(it.id) { adapter<LogsAdapter>().logsExpanded })
             changeExpandedAndSelected(it)
         }
+    }
+
+    private fun showPopupMenu() {
+        val popupMenu = PopupMenu(binding.root.context, binding.root, Gravity.END)
+        popupMenu.inflate(R.menu.log_menu)
+        popupMenu.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.select_item -> {
+                    selectItem()
+                    true
+                }
+                R.id.copy_item -> {
+                    copyLog.invoke(currentItem)
+                    true
+                }
+
+                else -> false
+            }
+        }
+        popupMenu.setForceShowIcon(true)
+        popupMenu.show()
     }
 
     private fun changeExpandedAndSelected(logLine: LogLine) {

@@ -21,22 +21,20 @@ import com.f0x1d.logfox.extensions.startLoggingService
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
 import com.f0x1d.logfox.utils.LogLinesDiffUtilCallback
 import com.f0x1d.logfox.utils.fillWithStrings
-import com.f0x1d.logfox.utils.preferences.AppPreferences
 import com.f0x1d.logfox.viewmodel.LogsViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(), SharedPreferences.OnSharedPreferenceChangeListener {
 
-    @Inject
-    lateinit var appPreferences: AppPreferences
-
     override val viewModel by hiltNavGraphViewModels<LogsViewModel>(R.id.logsFragment)
 
     private val adapter by lazy {
-        LogsAdapter(appPreferences)
+        LogsAdapter(viewModel.appPreferences) { logLine ->
+            requireContext().copyText(logLine.original)
+            snackbar(R.string.text_copied)
+        }
     }
     private var changingState = false
 
@@ -45,7 +43,7 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        appPreferences.registerListener(this)
+        viewModel.appPreferences.registerListener(this)
 
         binding.toolbar.inflateMenu(R.menu.logs_menu)
         binding.toolbar.menu.apply {
@@ -151,15 +149,15 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String) {
-        if (key == "pref_logs_text_size") adapter.textSize = appPreferences.logsTextSize.toFloat()
-        else if (key == "pref_logs_expanded") adapter.logsExpanded = appPreferences.logsExpanded
+        if (key == "pref_logs_text_size") adapter.textSize = viewModel.appPreferences.logsTextSize.toFloat()
+        else if (key == "pref_logs_expanded") adapter.logsExpanded = viewModel.appPreferences.logsExpanded
 
-        if (key.startsWith("pref_show_log")) adapter.logsFormat = appPreferences.showLogValues
+        if (key.startsWith("pref_show_log")) adapter.logsFormat = viewModel.appPreferences.showLogValues
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        appPreferences.unregisterListener(this)
+        viewModel.appPreferences.unregisterListener(this)
     }
 
     private fun scrollLogToBottom() {

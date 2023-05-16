@@ -8,7 +8,11 @@ import androidx.lifecycle.viewModelScope
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.utils.event.Event
 import com.f0x1d.logfox.utils.event.SnackbarEvent
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
 abstract class BaseViewModel(application: Application): AndroidViewModel(application) {

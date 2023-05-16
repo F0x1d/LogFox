@@ -8,7 +8,14 @@ import androidx.navigation.navArgs
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.database.AppCrash
 import com.f0x1d.logfox.databinding.ActivityCrashDetailsBinding
-import com.f0x1d.logfox.extensions.*
+import com.f0x1d.logfox.extensions.applyBottomInsets
+import com.f0x1d.logfox.extensions.copyText
+import com.f0x1d.logfox.extensions.crashToZip
+import com.f0x1d.logfox.extensions.exportFormatted
+import com.f0x1d.logfox.extensions.loadIcon
+import com.f0x1d.logfox.extensions.setClickListenerOn
+import com.f0x1d.logfox.extensions.shareIntent
+import com.f0x1d.logfox.extensions.viewModelFactory
 import com.f0x1d.logfox.ui.activity.base.BaseViewModelActivity
 import com.f0x1d.logfox.utils.event.Event
 import com.f0x1d.logfox.viewmodel.CrashDetailsViewModel

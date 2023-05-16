@@ -1,7 +1,8 @@
 package com.f0x1d.logfox.extensions
 
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 private val logDateFormat = SimpleDateFormat("dd.MM", Locale.US)
 private val logTimeFormat = SimpleDateFormat("HH:mm:ss.SSS", Locale.US)

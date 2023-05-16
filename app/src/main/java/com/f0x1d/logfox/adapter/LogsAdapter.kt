@@ -8,7 +8,10 @@ import com.f0x1d.logfox.model.LogLine
 import com.f0x1d.logfox.ui.viewholder.LogViewHolder
 import com.f0x1d.logfox.utils.preferences.AppPreferences
 
-class LogsAdapter(private val appPreferences: AppPreferences): BaseAdapter<LogLine, ItemLogBinding>() {
+class LogsAdapter(
+    private val appPreferences: AppPreferences,
+    private val copyLog: (LogLine) -> Unit
+): BaseAdapter<LogLine, ItemLogBinding>() {
 
     override val updateWhenSet = false
 
@@ -32,7 +35,8 @@ class LogsAdapter(private val appPreferences: AppPreferences): BaseAdapter<LogLi
         }
 
     override fun createHolder(layoutInflater: LayoutInflater, parent: ViewGroup) = LogViewHolder(
-        ItemLogBinding.inflate(layoutInflater, parent, false)
+        ItemLogBinding.inflate(layoutInflater, parent, false),
+        copyLog
     )
 
     override fun getItemId(position: Int) = elements[position].id

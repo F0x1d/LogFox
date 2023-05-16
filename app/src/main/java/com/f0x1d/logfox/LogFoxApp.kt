@@ -5,7 +5,6 @@ import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationManagerCompat
 import com.f0x1d.logfox.extensions.applyTheme
 import com.f0x1d.logfox.extensions.notificationManagerCompat
-import com.f0x1d.logfox.receiver.isAtLeastAndroid13
 import com.f0x1d.logfox.utils.preferences.AppPreferences
 import com.f0x1d.logfox.utils.view.FontsInterceptor
 import com.google.android.material.color.DynamicColors
@@ -89,20 +88,6 @@ class LogFoxApp: Application() {
                     startServiceNotificationsChannel
                 )
             )
-        }
-
-        disableStartServiceOnBootForAndroid13OnFirstLaunch()
-    }
-
-    private fun disableStartServiceOnBootForAndroid13OnFirstLaunch() {
-        // 1.2.9
-        if (appPreferences.firstLaunchForCode(31)) {
-            if (isAtLeastAndroid13) {
-                appPreferences.startOnBoot = false
-                appPreferences.showStartServiceNotificationOnBoot = true
-            } else {
-                appPreferences.showStartServiceNotificationOnBoot = false
-            }
         }
     }
 }

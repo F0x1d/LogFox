@@ -3,7 +3,6 @@ package com.f0x1d.logfox.utils.preferences
 import android.content.Context
 import androidx.preference.PreferenceManager
 import com.f0x1d.logfox.database.CrashType
-import com.f0x1d.logfox.receiver.isAtLeastAndroid13
 import com.f0x1d.logfox.utils.preferences.base.BasePreferences
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
@@ -64,17 +63,13 @@ class AppPreferences @Inject constructor(@ApplicationContext context: Context): 
         set(value) { put("pref_asked_notifications_permission", value) }
 
     var showStartServiceNotificationOnBoot
-        get() = get("pref_show_start_service_notification_on_boot", isAtLeastAndroid13)
+        get() = get("pref_show_start_service_notification_on_boot", false)
         set(value) { put("pref_show_start_service_notification_on_boot", value) }
 
     val showLogValues get() = booleanArrayOf(showLogDate, showLogTime, showLogPid, showLogTid, showLogTag, showLogContent)
 
     fun collectingFor(crashType: CrashType) = get("pref_collect_${crashType.readableName.lowercase()}", true)
     fun showingNotificationsFor(crashType: CrashType) = get("pref_notifications_${crashType.readableName.lowercase()}", true)
-
-    fun firstLaunchForCode(versionCode: Int) = get("first_launch_for_$versionCode", true).also {
-        put("first_launch_for_$versionCode", false)
-    }
 
     override fun providePreferences(context: Context) = PreferenceManager.getDefaultSharedPreferences(context)
 }

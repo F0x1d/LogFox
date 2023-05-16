@@ -18,7 +18,7 @@ class LogsViewModel @Inject constructor(
     application: Application,
     private val loggingRepository: LoggingRepository,
     private val filtersRepository: FiltersRepository,
-    private val appPreferences: AppPreferences,
+    val appPreferences: AppPreferences,
     @NullString var query: String?
 ): BaseSameFlowProxyViewModel<List<LogLine>>(application, loggingRepository.logsFlow) {
 

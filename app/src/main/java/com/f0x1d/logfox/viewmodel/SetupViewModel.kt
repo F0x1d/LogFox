@@ -40,7 +40,7 @@ class SetupViewModel @Inject constructor(application: Application): BaseViewMode
     fun checkPermission() = if (ctx.hasPermissionToReadLogs())
         gotPermission()
     else
-        snackbar(R.string.no_root)
+        snackbar(R.string.no_permission_detected)
 
     private fun gotPermission() = sendEvent(EVENT_TYPE_GOT_PERMISSION)
 }

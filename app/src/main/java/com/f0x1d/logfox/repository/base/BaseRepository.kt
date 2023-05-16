@@ -6,7 +6,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 abstract class BaseRepository {
-    protected fun onAppScope(block: suspend CoroutineScope.() -> Unit) = LogFoxApp.applicationScope.launch(Dispatchers.Default) {
+    protected fun onAppScope(block: suspend CoroutineScope.() -> Unit) = LogFoxApp.applicationScope.launch(Dispatchers.IO) {
         block.invoke(this)
     }
 

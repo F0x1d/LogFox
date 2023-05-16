@@ -91,4 +91,6 @@
     <string name="tap_here_to_start">Нажмите сюда для старта</string>
     <string name="disable_start_on_boot">Отключите запуск сервиса при загрузке устройства</string>
     <string name="disable_reminder_notification_on_boot">Отключите уведомление с напоминанием о запуске сервиса при загрузке устройства</string>
+    <string name="recommended_for_non_root_users">Рекомендуется для пользователей без Root при желании запускать сервис при загрузке устройства</string>
+    <string name="select">Выбрать</string>
 </resources>

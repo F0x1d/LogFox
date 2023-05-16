@@ -4,7 +4,9 @@ import android.os.Bundle
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
 import com.f0x1d.logfox.R
+import com.f0x1d.logfox.extensions.haveRoot
 import com.f0x1d.logfox.receiver.isAtLeastAndroid13
+import com.f0x1d.logfox.repository.logging.LoggingRepository
 import com.f0x1d.logfox.ui.fragment.settings.base.BaseSettingsWrapperFragment
 import com.f0x1d.logfox.utils.preferences.AppPreferences
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -22,6 +24,9 @@ class SettingsServiceFragment: BaseSettingsWrapperFragment() {
     class SettingsServiceWrappedFragment: PreferenceFragmentCompat() {
 
         @Inject
+        lateinit var loggingRepository: LoggingRepository
+
+        @Inject
         lateinit var appPreferences: AppPreferences
 
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -34,7 +39,7 @@ class SettingsServiceFragment: BaseSettingsWrapperFragment() {
                 }
 
                 setOnPreferenceChangeListener { preference, newValue ->
-                    if (isAtLeastAndroid13 && newValue as Boolean) {
+                    if (isAtLeastAndroid13 && newValue as Boolean && !loggingRepository.rootStateFlow.value.haveRoot) {
                         showAndroid13WarningDialog()
                     }
                     return@setOnPreferenceChangeListener true

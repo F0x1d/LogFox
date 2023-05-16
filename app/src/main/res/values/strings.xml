@@ -98,4 +98,6 @@
     <string name="tap_here_to_start">Tap here to start</string>
     <string name="disable_start_on_boot">Disable service start on boot</string>
     <string name="disable_reminder_notification_on_boot">Disable start service reminder notification on boot</string>
+    <string name="recommended_for_non_root_users">Recommended for non-root users if you want to start service on boot</string>
+    <string name="select">Select</string>
 </resources>

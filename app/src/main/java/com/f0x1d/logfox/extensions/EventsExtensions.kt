@@ -9,8 +9,8 @@ fun BaseViewModel.sendEvent(type: String, data: Any) = eventsData.sendEvent(type
 fun BaseViewModel.sendEvent(type: String) = eventsData.sendEvent(type)
 
 fun MutableLiveData<Event>.sendEvent(type: String, data: Any) {
-    value = Event(type, data)
+    postValue(Event(type, data))
 }
 fun MutableLiveData<Event>.sendEvent(type: String) {
-    value = NoDataEvent(type)
+    postValue(NoDataEvent(type))
 }
