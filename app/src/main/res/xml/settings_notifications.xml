@@ -56,7 +56,7 @@
 
         <SwitchPreferenceCompat
             android:title="@string/show_start_service_reminder_notification_on_boot"
-            android:key="pref_show_start_service_notification_on_boot"
+            android:key="pref_show_start_service_reminder_notification_on_boot"
             app:singleLineTitle="false"
             app:widgetLayout="@layout/preference_material_switch"
             app:iconSpaceReserved="false" />

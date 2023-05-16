@@ -63,8 +63,8 @@ class AppPreferences @Inject constructor(@ApplicationContext context: Context): 
         set(value) { put("pref_asked_notifications_permission", value) }
 
     var showStartServiceNotificationOnBoot
-        get() = get("pref_show_start_service_notification_on_boot", false)
-        set(value) { put("pref_show_start_service_notification_on_boot", value) }
+        get() = get("pref_show_start_service_reminder_notification_on_boot", false)
+        set(value) { put("pref_show_start_service_reminder_notification_on_boot", value) }
 
     val showLogValues get() = booleanArrayOf(showLogDate, showLogTime, showLogPid, showLogTid, showLogTag, showLogContent)
 
