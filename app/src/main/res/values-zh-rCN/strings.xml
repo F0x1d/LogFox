@@ -92,4 +92,6 @@
     <string name="tap_here_to_start">点此启动</string>
     <string name="disable_start_on_boot">禁用服务在开机时自启</string>
     <string name="disable_reminder_notification_on_boot">开机时关闭启动服务提醒通知</string>
+    <string name="recommended_for_non_root_users">建议想开机自启的非root用户使用</string>
+    <string name="select">选择</string>
 </resources>
