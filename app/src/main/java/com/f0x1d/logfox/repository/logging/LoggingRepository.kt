@@ -2,12 +2,12 @@ package com.f0x1d.logfox.repository.logging
 
 import android.content.SharedPreferences
 import com.f0x1d.logfox.extensions.RootState
+import com.f0x1d.logfox.extensions.haveRoot
 import com.f0x1d.logfox.extensions.logline.LogLine
 import com.f0x1d.logfox.extensions.updateList
 import com.f0x1d.logfox.model.LogLine
 import com.f0x1d.logfox.repository.base.BaseRepository
 import com.f0x1d.logfox.utils.preferences.AppPreferences
-import com.topjohnwu.superuser.Shell
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
@@ -85,10 +85,11 @@ class LoggingRepository @Inject constructor(
     }
 
     private suspend fun readLogs() = coroutineScope {
-        val haveRoot = Shell.getShell().isRoot
-        rootStateFlow.update { if (haveRoot) RootState.YES else RootState.NO }
+        val stream = haveRoot.let { haveRoot ->
+            rootStateFlow.update { if (haveRoot) RootState.YES else RootState.NO }
 
-        val stream = Runtime.getRuntime().exec("${if (haveRoot) "su -c " else ""}$COMMAND").inputStream
+            Runtime.getRuntime().exec("${if (haveRoot) "su -c " else ""}$COMMAND").inputStream
+        }
 
         val updateLines = mutableListOf<LogLine>()
         val mutex = Mutex()

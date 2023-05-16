@@ -2,13 +2,16 @@ package com.f0x1d.logfox.viewmodel
 
 import android.Manifest
 import android.app.Application
+import androidx.lifecycle.viewModelScope
 import com.f0x1d.logfox.BuildConfig
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.extensions.hasPermissionToReadLogs
+import com.f0x1d.logfox.extensions.haveRoot
 import com.f0x1d.logfox.extensions.sendEvent
 import com.f0x1d.logfox.viewmodel.base.BaseViewModel
-import com.topjohnwu.superuser.Shell
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,14 +25,12 @@ class SetupViewModel @Inject constructor(application: Application): BaseViewMode
         const val EVENT_TYPE_SHOW_ADB_DIALOG = "adb_dialog"
     }
 
-    fun root() = Shell.getShell { shell ->
-        if (shell.isRoot) {
-            Shell.cmd(command).exec()
+    fun root() = viewModelScope.launch(Dispatchers.IO) {
+        if (haveRoot) {
+            Runtime.getRuntime().exec("su -c $command").waitFor()
             gotPermission()
-            return@getShell
-        }
-
-        snackbar(R.string.no_root)
+        } else
+            snackbar(R.string.no_root)
     }
 
     fun adb() = if (ctx.hasPermissionToReadLogs())
