@@ -75,7 +75,7 @@
     <string name="start_on_launch">Запуск с приложением</string>
     <string name="start_service">Запустить сервис</string>
     <string name="stop_service">Остановить сервис</string>
-    <string name="service_required_desc">Сервис нужен для сбора сбоев в фоне, без него Android просто закроет LogFox</string>
+    <string name="service_required_desc">Сервис-заглушка нужен для сбора сбоев в фоне, без него Android просто закроет LogFox</string>
     <string name="recording">Запись</string>
     <string name="title">Название</string>
     <string name="recording_status">Статус записи</string>
@@ -84,4 +84,11 @@
     <string name="links">Ссылки</string>
     <string name="recording_paused">Запись на паузе</string>
     <string name="close">Закрыть</string>
+    <string name="service_start">Запуск сервиса</string>
+    <string name="android13_start_on_boot_warning">С Android 13 Google запретили запуск сбора логов в фоне, поэтому эта настройка может не работать. Лучше используйте уведомление с напоминанием о запуске сервиса при загрузке устройства.</string>
+    <string name="show_start_service_reminder_notification_on_boot">Показывать уведомление с напоминанием о запуске сервиса при загрузке устройства</string>
+    <string name="reminder_to_start_service">Напоминание о запуске сервиса</string>
+    <string name="tap_here_to_start">Нажмите сюда для старта</string>
+    <string name="disable_start_on_boot">Отключите запуск сервиса при загрузке устройства</string>
+    <string name="disable_reminder_notification_on_boot">Отключите уведомление с напоминанием о запуске сервиса при загрузке устройства</string>
 </resources>

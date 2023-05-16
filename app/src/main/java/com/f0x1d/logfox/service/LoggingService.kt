@@ -7,9 +7,12 @@ import androidx.core.app.NotificationCompat
 import com.f0x1d.logfox.BuildConfig
 import com.f0x1d.logfox.LogFoxApp
 import com.f0x1d.logfox.R
-import com.f0x1d.logfox.extensions.*
+import com.f0x1d.logfox.extensions.EXIT_APP_INTENT_ID
+import com.f0x1d.logfox.extensions.STOP_LOGGING_SERVICE_INTENT_ID
+import com.f0x1d.logfox.extensions.activityManager
+import com.f0x1d.logfox.extensions.makeOpenAppPendingIntent
+import com.f0x1d.logfox.extensions.makeServicePendingIntent
 import com.f0x1d.logfox.repository.logging.LoggingRepository
-import com.f0x1d.logfox.ui.activity.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
@@ -45,7 +48,7 @@ class LoggingService: Service() {
     private fun notification() = NotificationCompat.Builder(this, LogFoxApp.LOGGING_STATUS_CHANNEL_ID)
         .setContentTitle(getString(R.string.logging))
         .setSmallIcon(R.drawable.ic_bug_notification)
-        .setContentIntent(makeActivityPendingIntent(OPEN_APP_INTENT_ID, MainActivity::class.java))
+        .setContentIntent(makeOpenAppPendingIntent())
         .addAction(R.drawable.ic_stop, getString(R.string.stop_service), makeServicePendingIntent(STOP_LOGGING_SERVICE_INTENT_ID, LoggingService::class.java) {
             action = ACTION_STOP_SERVICE
         })

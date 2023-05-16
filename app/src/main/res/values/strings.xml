@@ -82,7 +82,7 @@
     <string name="start_on_launch">Start on app launch</string>
     <string name="start_service">Start service</string>
     <string name="stop_service">Stop service</string>
-    <string name="service_required_desc">Service is required to observe crashes in background. Without service Android kills LogFox</string>
+    <string name="service_required_desc">Service is just a stub to observe crashes in background. Without service Android kills LogFox</string>
     <string name="recording">Recording</string>
     <string name="title">Title</string>
     <string name="recording_status">Recording status</string>
@@ -91,4 +91,11 @@
     <string name="links">Links</string>
     <string name="recording_paused">Recording paused</string>
     <string name="close">Close</string>
+    <string name="service_start">Service start</string>
+    <string name="android13_start_on_boot_warning">Since Android 13 Google has limited logcat launch from background. So, this toggle may not work. Consider using start service reminder notification on boot.</string>
+    <string name="show_start_service_reminder_notification_on_boot">Show start service reminder notification on boot</string>
+    <string name="reminder_to_start_service">Reminder to start service</string>
+    <string name="tap_here_to_start">Tap here to start</string>
+    <string name="disable_start_on_boot">Disable service start on boot</string>
+    <string name="disable_reminder_notification_on_boot">Disable start service reminder notification on boot</string>
 </resources>

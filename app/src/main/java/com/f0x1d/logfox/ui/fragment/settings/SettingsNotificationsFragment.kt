@@ -6,13 +6,18 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import androidx.preference.Preference
+import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.SwitchPreferenceCompat
 import com.f0x1d.logfox.BuildConfig
 import com.f0x1d.logfox.LogFoxApp
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.extensions.hasNotificationsPermission
+import com.f0x1d.logfox.receiver.isAtLeastAndroid13
 import com.f0x1d.logfox.ui.fragment.settings.base.BaseSettingsWrapperFragment
+import com.f0x1d.logfox.utils.preferences.AppPreferences
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class SettingsNotificationsFragment: BaseSettingsWrapperFragment() {
@@ -23,6 +28,10 @@ class SettingsNotificationsFragment: BaseSettingsWrapperFragment() {
 
     @AndroidEntryPoint
     class SettingsNotificationWrappedFragment: PreferenceFragmentCompat() {
+
+        @Inject
+        lateinit var appPreferences: AppPreferences
+
         @SuppressLint("InlinedApi")
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             addPreferencesFromResource(R.xml.settings_notifications)
@@ -45,6 +54,14 @@ class SettingsNotificationsFragment: BaseSettingsWrapperFragment() {
                         putExtra(Settings.EXTRA_CHANNEL_ID, LogFoxApp.LOGGING_STATUS_CHANNEL_ID)
                     })
                     return@setOnPreferenceClickListener true
+                }
+            }
+
+            findPreference<PreferenceCategory>("pref_category_service_start")?.isVisible = isAtLeastAndroid13
+            findPreference<SwitchPreferenceCompat>("pref_show_start_service_notification_on_boot")?.apply {
+                if (appPreferences.startOnBoot) {
+                    isEnabled = false
+                    setSummary(R.string.disable_start_on_boot)
                 }
             }
         }

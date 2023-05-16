@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import com.f0x1d.logfox.ui.activity.MainActivity
 
 const val CRASH_DETAILS_INTENT_ID = 0
 const val COPY_CRASH_INTENT_ID = 1
@@ -58,3 +59,5 @@ fun <T : Activity> Context.makeActivityPendingIntent(id: Int, clazz: Class<T>, e
     id,
     clazz
 ) { putExtras(extras) }
+
+fun Context.makeOpenAppPendingIntent() = makeActivityPendingIntent(OPEN_APP_INTENT_ID, MainActivity::class.java)

@@ -5,6 +5,7 @@ import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationManagerCompat
 import com.f0x1d.logfox.extensions.applyTheme
 import com.f0x1d.logfox.extensions.notificationManagerCompat
+import com.f0x1d.logfox.receiver.isAtLeastAndroid13
 import com.f0x1d.logfox.utils.preferences.AppPreferences
 import com.f0x1d.logfox.utils.view.FontsInterceptor
 import com.google.android.material.color.DynamicColors
@@ -20,6 +21,7 @@ class LogFoxApp: Application() {
         const val LOGGING_STATUS_CHANNEL_ID = "logging"
         const val CRASHES_CHANNEL_ID = "crashes"
         const val RECORDING_STATUS_CHANNEL_ID = "recording"
+        const val START_SERVICE_NOTIFICATIONS_CHANNEL_ID = "start_service"
 
         val applicationScope = MainScope()
         lateinit var instance: LogFoxApp
@@ -43,25 +45,64 @@ class LogFoxApp: Application() {
         DynamicColors.applyToActivitiesIfAvailable(this)
 
         notificationManagerCompat.apply {
-            val loggingStatusChannel = NotificationChannelCompat.Builder(LOGGING_STATUS_CHANNEL_ID, NotificationManagerCompat.IMPORTANCE_MIN)
+            val loggingStatusChannel = NotificationChannelCompat.Builder(
+                LOGGING_STATUS_CHANNEL_ID,
+                NotificationManagerCompat.IMPORTANCE_MIN
+            )
                 .setName(getString(R.string.logging_status))
                 .setShowBadge(false)
                 .build()
 
-            val crashesChannel = NotificationChannelCompat.Builder(CRASHES_CHANNEL_ID, NotificationManagerCompat.IMPORTANCE_HIGH)
+            val crashesChannel = NotificationChannelCompat.Builder(
+                CRASHES_CHANNEL_ID,
+                NotificationManagerCompat.IMPORTANCE_HIGH
+            )
                 .setName(getString(R.string.crashes))
                 .setLightsEnabled(true)
                 .setVibrationEnabled(true)
                 .build()
 
-            val recordingStatusChannel = NotificationChannelCompat.Builder(RECORDING_STATUS_CHANNEL_ID, NotificationManagerCompat.IMPORTANCE_DEFAULT)
+            val recordingStatusChannel = NotificationChannelCompat.Builder(
+                RECORDING_STATUS_CHANNEL_ID,
+                NotificationManagerCompat.IMPORTANCE_DEFAULT
+            )
                 .setName(getString(R.string.recording_status))
                 .setLightsEnabled(false)
                 .setVibrationEnabled(false)
                 .setSound(null, null)
                 .build()
 
-            createNotificationChannelsCompat(listOf(loggingStatusChannel, crashesChannel, recordingStatusChannel))
+            val startServiceNotificationsChannel = NotificationChannelCompat.Builder(
+                START_SERVICE_NOTIFICATIONS_CHANNEL_ID,
+                NotificationManagerCompat.IMPORTANCE_HIGH
+            )
+                .setName(getString(R.string.service_start))
+                .setLightsEnabled(true)
+                .setVibrationEnabled(true)
+                .build()
+
+            createNotificationChannelsCompat(
+                listOf(
+                    loggingStatusChannel,
+                    crashesChannel,
+                    recordingStatusChannel,
+                    startServiceNotificationsChannel
+                )
+            )
+        }
+
+        disableStartServiceOnBootForAndroid13OnFirstLaunch()
+    }
+
+    private fun disableStartServiceOnBootForAndroid13OnFirstLaunch() {
+        // 1.2.9
+        if (appPreferences.firstLaunchForCode(31)) {
+            if (isAtLeastAndroid13) {
+                appPreferences.startOnBoot = false
+                appPreferences.showStartServiceNotificationOnBoot = true
+            } else {
+                appPreferences.showStartServiceNotificationOnBoot = false
+            }
         }
     }
 }
