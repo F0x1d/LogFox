@@ -29,7 +29,27 @@ class LogViewHolder(
 
     private val radius = 6.dpToPx
 
+    private val popupMenu: PopupMenu
+
     init {
+        popupMenu = PopupMenu(binding.root.context, binding.root, Gravity.END)
+        popupMenu.inflate(R.menu.log_menu)
+        popupMenu.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.select_item -> {
+                    selectItem()
+                    true
+                }
+                R.id.copy_item -> {
+                    copyLog.invoke(currentItem)
+                    true
+                }
+
+                else -> false
+            }
+        }
+        popupMenu.setForceShowIcon(true)
+
         binding.root.setOnClickListener {
             if (adapter<LogsAdapter>().selectedItems.isNotEmpty())
                 selectItem()
@@ -40,7 +60,7 @@ class LogViewHolder(
             if (adapter<LogsAdapter>().selectedItems.isNotEmpty())
                 expandOrCollapseItem()
             else
-                showPopupMenu()
+                popupMenu.show()
             return@setOnLongClickListener true
         }
     }
@@ -72,6 +92,10 @@ class LogViewHolder(
         changeExpandedAndSelected(data)
     }
 
+    override fun recycle() {
+        popupMenu.dismiss()
+    }
+
     private fun selectItem() = adapter<LogsAdapter>().selectedItems.apply {
         currentItem.also {
             if (any { logLine -> it.id == logLine.id })
@@ -88,27 +112,6 @@ class LogViewHolder(
             put(it.id, !getOrElse(it.id) { adapter<LogsAdapter>().logsExpanded })
             changeExpandedAndSelected(it)
         }
-    }
-
-    private fun showPopupMenu() {
-        val popupMenu = PopupMenu(binding.root.context, binding.root, Gravity.END)
-        popupMenu.inflate(R.menu.log_menu)
-        popupMenu.setOnMenuItemClickListener {
-            when (it.itemId) {
-                R.id.select_item -> {
-                    selectItem()
-                    true
-                }
-                R.id.copy_item -> {
-                    copyLog.invoke(currentItem)
-                    true
-                }
-
-                else -> false
-            }
-        }
-        popupMenu.setForceShowIcon(true)
-        popupMenu.show()
     }
 
     private fun changeExpandedAndSelected(logLine: LogLine) {
