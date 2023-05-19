@@ -34,8 +34,11 @@ abstract class BaseAdapter<T, D : ViewBinding>: RecyclerView.Adapter<BaseViewHol
     override fun getItemCount() = elements.size
 
     override fun onViewRecycled(holder: BaseViewHolder<T, D>) {
-        super.onViewRecycled(holder)
         holder.recycle()
+    }
+
+    override fun onViewDetachedFromWindow(holder: BaseViewHolder<T, D>) {
+        holder.detach()
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {

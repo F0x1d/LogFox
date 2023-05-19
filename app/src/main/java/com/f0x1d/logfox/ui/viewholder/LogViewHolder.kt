@@ -92,7 +92,7 @@ class LogViewHolder(
         changeExpandedAndSelected(data)
     }
 
-    override fun recycle() {
+    override fun detach() {
         popupMenu.dismiss()
     }
 
