@@ -4,5 +4,5 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 
 inline fun <T> MutableStateFlow<List<T>>.updateList(block: MutableList<T>.() -> Unit) = update {
-    it.toMutableList().apply { block.invoke(this) }
+    it.toMutableList().apply(block)
 }

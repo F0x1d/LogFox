@@ -14,8 +14,8 @@ abstract class BaseViewHolder<T, D : ViewBinding>(protected val binding: D): Rec
         get() = elements[bindingAdapterPosition]
 
     abstract fun bindTo(data: T)
-    open fun detach() {}
     open fun recycle() {}
+    open fun detach() {}
 
     fun <R> adapter() = bindingAdapter as R
 }

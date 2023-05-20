@@ -111,12 +111,7 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
         viewModel.data.observe(viewLifecycleOwner) {
             if (it == null) return@observe
 
-            val manyDiffs = (it.size - adapter.elements.size).let { diffs ->
-                if (diffs == 0)
-                    return@observe
-                else
-                    return@let diffs >= 50
-            }
+            val manyDiffs = (it.size - adapter.elements.size) >= 50
 
             if (manyDiffs) {
                 adapter.elements = it

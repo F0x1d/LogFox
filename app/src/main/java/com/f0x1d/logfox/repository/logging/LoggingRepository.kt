@@ -105,7 +105,7 @@ class LoggingRepository @Inject constructor(
                     }
 
                     while (size > LOGS_LIMIT) {
-                        removeAt(0)
+                        removeFirst()
                     }
                 }
             }
