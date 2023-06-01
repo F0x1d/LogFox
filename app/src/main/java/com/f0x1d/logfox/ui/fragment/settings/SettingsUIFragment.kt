@@ -105,6 +105,23 @@ class SettingsUIFragment: BaseSettingsWrapperFragment() {
 
                 observeAndUpdateSummary(appPreferences, this@SettingsUIWrappedFragment, AppPreferences.LOGS_TEXT_SIZE_DEFAULT)
             }
+
+            findPreference<Preference>("pref_logs_display_limit")?.apply {
+                setupAsEditTextPreference({
+                    it.textLayout.setHint(R.string.lines)
+                    it.text.inputType = InputType.TYPE_CLASS_NUMBER
+                }, {
+                   setIcon(R.drawable.ic_dialog_eye)
+                }, {
+                   appPreferences.logsDisplayLimit.toString()
+                }, {
+                    requireContext().catchingNotNumber {
+                        appPreferences.logsDisplayLimit = it?.toInt() ?: AppPreferences.LOGS_DISPLAY_LIMIT_DEFAULT
+                    }
+                })
+
+                observeAndUpdateSummary(appPreferences, this@SettingsUIWrappedFragment, AppPreferences.LOGS_DISPLAY_LIMIT_DEFAULT)
+            }
         }
     }
 }

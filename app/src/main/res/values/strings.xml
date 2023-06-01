@@ -100,4 +100,6 @@
     <string name="disable_reminder_notification_on_boot">Disable start service reminder notification on boot</string>
     <string name="recommended_for_non_root_users">Recommended for non-root users if you want to start service on boot</string>
     <string name="select">Select</string>
+    <string name="logs_display_limit">Logs display limit</string>
+    <string name="lines">Lines</string>
 </resources>

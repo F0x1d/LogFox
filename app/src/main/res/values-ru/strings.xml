@@ -93,4 +93,6 @@
     <string name="disable_reminder_notification_on_boot">Отключите уведомление с напоминанием о запуске сервиса при загрузке устройства</string>
     <string name="recommended_for_non_root_users">Рекомендуется для пользователей без Root при желании запускать сервис при загрузке устройства</string>
     <string name="select">Выбрать</string>
+    <string name="logs_display_limit">Лимит отображения логов</string>
+    <string name="lines">Строки</string>
 </resources>

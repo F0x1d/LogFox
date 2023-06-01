@@ -26,6 +26,10 @@
             android:title="@string/logs_text_size"
             android:key="pref_logs_text_size"
             app:iconSpaceReserved="false" />
+        <Preference
+            android:title="@string/logs_display_limit"
+            android:key="pref_logs_display_limit"
+            app:iconSpaceReserved="false" />
         <SwitchPreferenceCompat
             android:title="@string/expanded_logs"
             android:key="pref_logs_expanded"

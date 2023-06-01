@@ -29,8 +29,6 @@ class LoggingRepository @Inject constructor(
 ): BaseRepository(), SharedPreferences.OnSharedPreferenceChangeListener {
 
     companion object {
-        const val LOGS_LIMIT = 10000
-
         private const val COMMAND = "logcat -v epoch -T 0"
     }
 
@@ -39,7 +37,10 @@ class LoggingRepository @Inject constructor(
     val rootStateFlow = MutableStateFlow(RootState.UNKNOWN)
 
     private var loggingJob: Job? = null
+
     private var loggingInterval = AppPreferences.LOGS_UPDATE_INTERVAL_DEFAULT
+    private var logsDisplayLimit = AppPreferences.LOGS_DISPLAY_LIMIT_DEFAULT
+
     private var idsCounter = -1L
 
     private val helpers = listOf(
@@ -52,6 +53,7 @@ class LoggingRepository @Inject constructor(
         if (loggingJob?.isActive == true) return
 
         loggingInterval = appPreferences.logsUpdateInterval
+        logsDisplayLimit = appPreferences.logsDisplayLimit
         appPreferences.registerListener(this)
 
         loggingJob = onAppScope {
@@ -104,7 +106,7 @@ class LoggingRepository @Inject constructor(
                         updateLines.clear()
                     }
 
-                    while (size > LOGS_LIMIT) {
+                    while (size > logsDisplayLimit) {
                         removeFirst()
                     }
                 }
@@ -135,8 +137,9 @@ class LoggingRepository @Inject constructor(
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
-        if (key == "pref_logs_update_interval") {
-            loggingInterval = appPreferences.logsUpdateInterval
+        when (key) {
+            "pref_logs_update_interval" -> loggingInterval = appPreferences.logsUpdateInterval
+            "pref_logs_display_limit" -> logsDisplayLimit = appPreferences.logsDisplayLimit
         }
     }
 }
