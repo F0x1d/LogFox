@@ -143,11 +143,11 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
         }
     }
 
-    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String) {
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         if (key == "pref_logs_text_size") adapter.textSize = viewModel.appPreferences.logsTextSize.toFloat()
         else if (key == "pref_logs_expanded") adapter.logsExpanded = viewModel.appPreferences.logsExpanded
 
-        if (key.startsWith("pref_show_log")) adapter.logsFormat = viewModel.appPreferences.showLogValues
+        if (key?.startsWith("pref_show_log") == true) adapter.logsFormat = viewModel.appPreferences.showLogValues
     }
 
     override fun onDestroy() {
