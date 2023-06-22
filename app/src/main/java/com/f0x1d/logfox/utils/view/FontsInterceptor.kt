@@ -25,7 +25,6 @@ class FontsInterceptor(context: Context): Interceptor {
         R.id.time_text to boldSansTypeface,
         R.id.copy_text to boldSansTypeface,
         R.id.share_text to boldSansTypeface,
-        R.id.foxbin_text to boldSansTypeface,
         R.id.zip_text to boldSansTypeface,
         R.id.export_text to boldSansTypeface
     )

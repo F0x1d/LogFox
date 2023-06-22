@@ -29,10 +29,9 @@ class RecordingsViewModel @Inject constructor(
     fun toggleStartStop() {
         if (recordingsRepository.recordingStateFlow.value == RecordingState.IDLE)
             recordingsRepository.record()
-        else
-            recordingsRepository.end {
-                sendEvent(EVENT_TYPE_RECORDING_SAVED, it)
-            }
+        else recordingsRepository.end {
+            sendEvent(EVENT_TYPE_RECORDING_SAVED, it)
+        }
     }
 
     fun togglePauseResume() {

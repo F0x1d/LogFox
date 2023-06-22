@@ -1,4 +1,4 @@
-package com.f0x1d.logfox.viewmodel
+package com.f0x1d.logfox.viewmodel.crashes
 
 import android.app.Application
 import com.f0x1d.logfox.database.AppCrash

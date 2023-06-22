@@ -1,7 +1,6 @@
 package com.f0x1d.logfox.ui.activity
 
 import android.os.Bundle
-import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.navigation.navArgs
@@ -18,8 +17,8 @@ import com.f0x1d.logfox.extensions.shareIntent
 import com.f0x1d.logfox.extensions.viewModelFactory
 import com.f0x1d.logfox.ui.activity.base.BaseViewModelActivity
 import com.f0x1d.logfox.utils.event.Event
-import com.f0x1d.logfox.viewmodel.CrashDetailsViewModel
-import com.f0x1d.logfox.viewmodel.CrashDetailsViewModelAssistedFactory
+import com.f0x1d.logfox.viewmodel.crashes.CrashDetailsViewModel
+import com.f0x1d.logfox.viewmodel.crashes.CrashDetailsViewModelAssistedFactory
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -55,17 +54,6 @@ class CrashDetailsActivity: BaseViewModelActivity<CrashDetailsViewModel, Activit
         viewModel.distinctiveData.observe(this) {
             setupFor(it ?: return@observe)
         }
-
-        viewModel.uploadingStateData.observe(this) {
-            binding.foxbinLayout.isEnabled = !it
-
-            (if (it) View.INVISIBLE else View.VISIBLE).also { visibility ->
-                binding.foxbinImage.visibility = visibility
-                binding.foxbinText.visibility = visibility
-            }
-
-            binding.foxbinLoadingProgress.visibility = if (it) View.VISIBLE else View.INVISIBLE
-        }
     }
 
     override fun onEvent(event: Event) {
@@ -97,10 +85,6 @@ class CrashDetailsActivity: BaseViewModelActivity<CrashDetailsViewModel, Activit
 
         binding.shareLayout.setOnClickListener {
             shareIntent(appCrash.log)
-        }
-
-        binding.foxbinLayout.setOnClickListener {
-            viewModel.uploadCrash(appCrash.log)
         }
 
         binding.zipLayout.setOnClickListener {

@@ -14,7 +14,7 @@ import com.f0x1d.logfox.extensions.setClickListenerOn
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
 import com.f0x1d.logfox.utils.RecyclerViewDivider
 import com.f0x1d.logfox.utils.dpToPx
-import com.f0x1d.logfox.viewmodel.CrashesViewModel
+import com.f0x1d.logfox.viewmodel.crashes.CrashesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

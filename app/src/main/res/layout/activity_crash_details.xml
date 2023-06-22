@@ -138,7 +138,7 @@
                         android:clickable="true"
                         android:focusable="true"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/foxbin_layout"
+                        app:layout_constraintEnd_toStartOf="@id/zip_layout"
                         app:layout_constraintStart_toEndOf="@id/copy_layout"
                         app:layout_constraintTop_toTopOf="parent">
 
@@ -173,59 +173,6 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/foxbin_layout"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:background="?selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/zip_layout"
-                        app:layout_constraintStart_toEndOf="@id/share_layout"
-                        app:layout_constraintTop_toTopOf="parent">
-
-                        <ImageView
-                            android:id="@+id/foxbin_image"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/ic_add_link"
-                            app:tint="?colorPrimary"
-                            android:layout_marginTop="15dp"
-                            app:layout_constraintBottom_toTopOf="@id/foxbin_text"
-                            app:layout_constraintEnd_toEndOf="@id/foxbin_text"
-                            app:layout_constraintStart_toStartOf="@id/foxbin_text"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:id="@+id/foxbin_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:ellipsize="end"
-                            android:includeFontPadding="false"
-                            android:maxLines="1"
-                            android:text="@string/foxbin"
-                            android:textColor="?colorPrimary"
-                            android:textSize="14sp"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginBottom="15dp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/foxbin_image" />
-
-                        <ProgressBar
-                            android:id="@+id/foxbin_loading_progress"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:visibility="invisible"
-                            android:indeterminate="true"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"/>
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/zip_layout"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -234,7 +181,7 @@
                         android:focusable="true"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/foxbin_layout"
+                        app:layout_constraintStart_toEndOf="@id/share_layout"
                         app:layout_constraintTop_toTopOf="parent">
 
                         <ImageView
