@@ -58,7 +58,7 @@ class SettingsNotificationsFragment: BaseSettingsWrapperFragment() {
             }
 
             findPreference<PreferenceCategory>("pref_category_service_start")?.isVisible = isAtLeastAndroid13
-            findPreference<SwitchPreferenceCompat>("pref_show_start_service_notification_on_boot")?.apply {
+            findPreference<SwitchPreferenceCompat>("pref_show_start_service_reminder_notification_on_boot")?.apply {
                 if (appPreferences.startOnBoot) {
                     isEnabled = false
                     setSummary(R.string.disable_start_on_boot)
