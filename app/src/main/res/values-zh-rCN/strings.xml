@@ -94,4 +94,6 @@
     <string name="disable_reminder_notification_on_boot">开机时关闭启动服务提醒通知</string>
     <string name="recommended_for_non_root_users">建议想开机自启的非root用户使用</string>
     <string name="select">选择</string>
+    <string name="logs_display_limit">日志显示行数限制</string>
+    <string name="lines">行</string>
 </resources>
