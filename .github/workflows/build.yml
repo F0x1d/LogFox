@@ -1,0 +1,54 @@
+on:
+  workflow_dispatch:
+
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: Build, sign and deploy APK
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: oracle
+          cache: 'gradle'
+
+      - name: Build APK
+        run: bash ./gradlew assemble --stacktrace --no-daemon
+
+      - name: Sign APK
+        id: sign_apk
+        uses: noriban/sign-android-release@v3
+        with:
+          releaseDirectory: app/build/outputs/apk/release
+          signingKeyBase64: ${{ secrets.SIGNING_KEY }}
+          alias: ${{ secrets.ALIAS }}
+          keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
+          keyPassword: ${{ secrets.KEY_PASSWORD }}
+        env:
+          BUILD_TOOLS_VERSION: "34.0.0"
+
+      - name: Upload signed APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: Signed APK
+          path: ${{steps.sign_apk.outputs.signedReleaseFile}}
+
+      - name: Send signed APK to my Telegram channel
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          format: markdown
+          document: ${{steps.sign_apk.outputs.signedReleaseFile}}
+          message: |
+            New commit to *${{ github.repository }}*!
+            
+            Commit message: `${{ github.event.commits[0].message }}`
