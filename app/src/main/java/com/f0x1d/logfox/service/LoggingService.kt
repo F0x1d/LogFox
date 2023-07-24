@@ -2,8 +2,8 @@ package com.f0x1d.logfox.service
 
 import android.app.Service
 import android.content.Intent
-import android.os.Build
 import androidx.core.app.NotificationCompat
+import androidx.core.app.ServiceCompat
 import com.f0x1d.logfox.BuildConfig
 import com.f0x1d.logfox.LogFoxApp
 import com.f0x1d.logfox.R
@@ -62,11 +62,7 @@ class LoggingService: Service() {
             false
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-            stopForeground(STOP_FOREGROUND_REMOVE)
-        else
-            stopForeground(true)
-
+        ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_REMOVE)
         stopSelf()
     }
 

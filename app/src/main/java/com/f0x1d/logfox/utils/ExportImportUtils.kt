@@ -11,27 +11,22 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.EntryPointAccessors
 import dagger.hilt.components.SingletonComponent
 import java.io.File
-import java.io.FileInputStream
 import java.io.InputStream
 import java.io.OutputStream
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
 
-fun InputStream.importFilters(context: Context, filtersRepository: FiltersRepository) {
+fun InputStream.importFilters(context: Context, filtersRepository: FiltersRepository) = use {
     val gson = EntryPointAccessors.fromApplication(context, ExportImportUtilsEntryPoint::class.java).gson()
 
-    val filters = gson.fromJson<List<UserFilter>>(String(readBytes()), object : TypeToken<List<UserFilter>>() {}.type)
+    val filters = gson.fromJson<List<UserFilter>>(String(it.readBytes()), object : TypeToken<List<UserFilter>>() {}.type)
     filtersRepository.createAll(filters)
-
-    close()
 }
 
-fun OutputStream.exportFilters(context: Context, filters: List<UserFilter>) {
+fun OutputStream.exportFilters(context: Context, filters: List<UserFilter>) = use {
     val gson = EntryPointAccessors.fromApplication(context, ExportImportUtilsEntryPoint::class.java).gson()
 
-    write(gson.toJson(filters).encodeToByteArray())
-
-    close()
+    it.write(gson.toJson(filters).encodeToByteArray())
 }
 
 fun OutputStream.exportCrashToZip(context: Context, log: String) = exportToZip(context) {
@@ -42,17 +37,13 @@ fun OutputStream.exportLogToZip(context: Context, logFile: String) = exportToZip
     putZipEntry("log.txt", File(logFile))
 }
 
-private fun OutputStream.exportToZip(context: Context, block: ZipOutputStream.() -> Unit) {
+private fun OutputStream.exportToZip(context: Context, block: ZipOutputStream.() -> Unit) = use {
     val device = EntryPointAccessors.fromApplication(context, ExportImportUtilsEntryPoint::class.java).device()
 
-    ZipOutputStream(this).apply {
-        block.invoke(this)
-        putZipEntry("device.txt", device.toString().encodeToByteArray())
-
-        close()
+    ZipOutputStream(this).use { zipOutputStream ->
+        block.invoke(zipOutputStream)
+        zipOutputStream.putZipEntry("device.txt", device.toString().encodeToByteArray())
     }
-
-    close()
 }
 
 private fun ZipOutputStream.putZipEntry(name: String, content: ByteArray) {
@@ -67,9 +58,8 @@ private fun ZipOutputStream.putZipEntry(name: String, file: File) {
     val entry = ZipEntry(name)
     putNextEntry(entry)
 
-    with(FileInputStream(file)) {
-        copyTo(this@putZipEntry)
-        close()
+    file.inputStream().use {
+        it.copyTo(this)
     }
 
     closeEntry()

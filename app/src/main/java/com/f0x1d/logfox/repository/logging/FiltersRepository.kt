@@ -53,9 +53,9 @@ class FiltersRepository @Inject constructor(private val database: AppDatabase): 
     }
 
     fun update(newValue: () -> UserFilter) = updateInternal(
-        newValue,
-        { database.userFilterDao().update(it) },
-        { it.id }
+        newItem = newValue,
+        databaseUpdate = { database.userFilterDao().update(it) },
+        idGet = { it.id }
     )
 
     override suspend fun deleteInternal(item: UserFilter) {

@@ -8,7 +8,11 @@ import com.f0x1d.logfox.extensions.loadIcon
 import com.f0x1d.logfox.extensions.toLocaleString
 import com.f0x1d.logfox.ui.viewholder.base.BaseViewHolder
 
-class CrashViewHolder(binding: ItemCrashBinding, click: (AppCrash) -> Unit, delete: (AppCrash) -> Unit): BaseViewHolder<AppCrash, ItemCrashBinding>(binding) {
+class CrashViewHolder(
+    binding: ItemCrashBinding,
+    click: (AppCrash) -> Unit,
+    delete: (AppCrash) -> Unit
+): BaseViewHolder<AppCrash, ItemCrashBinding>(binding) {
 
     init {
         binding.root.setOnClickListener {

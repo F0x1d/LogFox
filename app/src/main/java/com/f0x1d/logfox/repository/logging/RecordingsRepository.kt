@@ -130,9 +130,9 @@ class RecordingsRepository @Inject constructor(
     }
 
     fun updateTitle(logRecording: LogRecording, newTitle: String) = updateInternal(
-        { logRecording.copy(title = newTitle) },
-        { database.logRecordingDao().update(it) },
-        { it.id }
+        newItem = { logRecording.copy(title = newTitle) },
+        databaseUpdate = { database.logRecordingDao().update(it) },
+        idGet = { it.id }
     )
 
     override suspend fun deleteInternal(item: LogRecording) {

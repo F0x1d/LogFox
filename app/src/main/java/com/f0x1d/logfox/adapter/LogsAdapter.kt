@@ -35,8 +35,8 @@ class LogsAdapter(
         }
 
     override fun createHolder(layoutInflater: LayoutInflater, parent: ViewGroup) = LogViewHolder(
-        ItemLogBinding.inflate(layoutInflater, parent, false),
-        copyLog
+        binding = ItemLogBinding.inflate(layoutInflater, parent, false),
+        copyLog = copyLog
     )
 
     override fun getItemId(position: Int) = elements[position].id

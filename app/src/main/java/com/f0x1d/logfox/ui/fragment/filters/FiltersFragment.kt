@@ -30,15 +30,15 @@ class FiltersFragment: BaseViewModelFragment<FiltersViewModel, FragmentFiltersBi
     override val viewModel by viewModels<FiltersViewModel>()
     private val logsViewModel by hiltNavGraphViewModels<LogsViewModel>(R.id.logsFragment)
 
-    private val adapter = FiltersAdapter({
+    private val adapter = FiltersAdapter(click = {
         findNavController().navigate(
             FiltersFragmentDirections.actionFiltersFragmentToEditFilterFragment(
                 it.id
             )
         )
-    }, {
+    }, delete = {
         viewModel.delete(it)
-    }, { userFilter, checked ->
+    }, checked = { userFilter, checked ->
         viewModel.switch(userFilter, checked)
     })
 

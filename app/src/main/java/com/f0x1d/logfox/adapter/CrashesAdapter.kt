@@ -13,9 +13,9 @@ class CrashesAdapter(
 ): BaseAdapter<AppCrash, ItemCrashBinding>() {
 
     override fun createHolder(layoutInflater: LayoutInflater, parent: ViewGroup) = CrashViewHolder(
-        ItemCrashBinding.inflate(layoutInflater, parent, false),
-        click,
-        delete
+        binding = ItemCrashBinding.inflate(layoutInflater, parent, false),
+        click = click,
+        delete = delete
     )
 
     override fun getItemId(position: Int) = elements[position].id

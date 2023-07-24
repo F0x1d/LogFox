@@ -13,9 +13,9 @@ class RecordingsAdapter(
 ): BaseAdapter<LogRecording, ItemRecordingBinding>() {
 
     override fun createHolder(layoutInflater: LayoutInflater, parent: ViewGroup) = RecordingViewHolder(
-        ItemRecordingBinding.inflate(layoutInflater, parent, false),
-        click,
-        delete
+        binding = ItemRecordingBinding.inflate(layoutInflater, parent, false),
+        click = click,
+        delete = delete
     )
 
     override fun getItemId(position: Int) = elements[position].id

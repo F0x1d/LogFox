@@ -14,10 +14,10 @@ class FiltersAdapter(
 ): BaseAdapter<UserFilter, ItemFilterBinding>() {
 
     override fun createHolder(layoutInflater: LayoutInflater, parent: ViewGroup) = FilterViewHolder(
-        ItemFilterBinding.inflate(layoutInflater, parent, false),
-        click,
-        delete,
-        checked
+        binding = ItemFilterBinding.inflate(layoutInflater, parent, false),
+        click = click,
+        delete = delete,
+        checked = checked
     )
 
     override fun getItemId(position: Int) = elements[position].id

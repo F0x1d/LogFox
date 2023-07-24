@@ -27,9 +27,9 @@ class RecordingsFragment: BaseViewModelFragment<RecordingsViewModel, FragmentRec
 
     override val viewModel by viewModels<RecordingsViewModel>()
 
-    private val adapter = RecordingsAdapter({
+    private val adapter = RecordingsAdapter(click = {
         openDetails(it)
-    }, {
+    }, delete = {
         viewModel.delete(it)
     })
 

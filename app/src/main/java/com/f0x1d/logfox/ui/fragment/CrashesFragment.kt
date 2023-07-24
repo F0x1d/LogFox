@@ -22,9 +22,9 @@ class CrashesFragment: BaseViewModelFragment<CrashesViewModel, FragmentCrashesBi
 
     override val viewModel by viewModels<CrashesViewModel>()
 
-    private val adapter = CrashesAdapter({
+    private val adapter = CrashesAdapter(click = {
         findNavController().navigate(CrashesFragmentDirections.actionCrashesFragmentToCrashDetailsActivity(it.id))
-    }, {
+    }, delete = {
         viewModel.deleteCrash(it)
     })
 

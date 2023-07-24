@@ -113,26 +113,24 @@ class LoggingRepository @Inject constructor(
             }
         }
 
-        val reader = stream.bufferedReader()
-        var line: String?
-        while (isActive) {
-            line = reader.readLine()
-            if (line == null) break
+        stream.bufferedReader().useLines {
+            for (line in it) {
+                if (!isActive) break
 
-            val logLine = LogLine(idsCounter++, line) ?: continue
+                val logLine = LogLine(idsCounter++, line) ?: continue
 
-            mutex.withLock {
-                updateLines.add(logLine)
-            }
+                mutex.withLock {
+                    updateLines.add(logLine)
+                }
 
-            helpers.forEach { helper ->
-                helper.readers.forEach {
-                    it.readLine(logLine)
+                helpers.forEach { helper ->
+                    helper.readers.forEach { reader ->
+                        reader.readLine(logLine)
+                    }
                 }
             }
         }
 
-        reader.close()
         updater.cancel()
     }
 
