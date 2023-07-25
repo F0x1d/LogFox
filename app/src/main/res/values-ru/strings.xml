@@ -15,7 +15,7 @@
     <string name="filter">Фильтр</string>
     <string name="about_app">О приложении</string>
     <string name="setup">Настройка</string>
-    <string name="how_to_use_adb">Запустите эту команду в Android Debug Bridge:\n\n%s</string>
+    <string name="how_to_use_adb">С Android 13 Google ограничили сбор логов через ADB. Вы сможете видеть логи только в течение нескольких минут, потом надо будет перезапустить логирование.\n\nЗапустите эту команду в Android Debug Bridge:\n\n%s</string>
     <string name="check">Проверить</string>
     <string name="developer">Разработчик</string>
     <string name="service">Сервис</string>
@@ -95,4 +95,12 @@
     <string name="select">Выбрать</string>
     <string name="logs_display_limit">Лимит отображения логов</string>
     <string name="lines">Строки</string>
+    <string name="terminal">Терминал</string>
+    <string name="terminal_unavailable">Терминал недоступен</string>
+    <string name="terminal_unavailable_falling_back">Терминал недоступен, использую ADB</string>
+    <string name="new_terminal_selected">Новый терминал выбран</string>
+    <string name="new_terminal_selected_question">Перезапустить логирование с помощью него?</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
+    <string name="restart_logging">Перезапуск логирования</string>
 </resources>

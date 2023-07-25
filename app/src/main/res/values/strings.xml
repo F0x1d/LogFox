@@ -18,7 +18,7 @@
     <string name="root" translatable="false">Root</string>
     <string name="adb" translatable="false">ADB</string>
     <string name="setup">Setup</string>
-    <string name="how_to_use_adb">Run this command in Android Debug Bridge:\n\n%s</string>
+    <string name="how_to_use_adb">Since Android 13 Google has limited logcat access via ADB. You will be able to see logs only for several minutes, then you will need to restart logging.\n\nRun this command in Android Debug Bridge:\n\n%s</string>
     <string name="check">Check</string>
     <string name="developer">Developer</string>
     <string name="service">Service</string>
@@ -102,4 +102,12 @@
     <string name="select">Select</string>
     <string name="logs_display_limit">Logs display limit</string>
     <string name="lines">Lines</string>
+    <string name="terminal">Terminal</string>
+    <string name="terminal_unavailable">Terminal is unavailable</string>
+    <string name="terminal_unavailable_falling_back">Terminal is unavailable, falling back to ADB</string>
+    <string name="new_terminal_selected">New terminal selected</string>
+    <string name="new_terminal_selected_question">Would you like to restart logging using it?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="restart_logging">Restart logging</string>
 </resources>

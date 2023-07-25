@@ -3,7 +3,7 @@ on:
 
   push:
     branches:
-      - master
+      - '**'
 
 jobs:
   build:
@@ -49,4 +49,4 @@ jobs:
           format: markdown
           document: ${{steps.sign_apk.outputs.signedReleaseFile}}
           message: |
-            *${{ github.repository }}*: `${{ github.event.commits[0].message }}`
+            *${{ github.repository }}* -> ${{ github.ref_name }}: `${{ github.event.commits[0].message }}`

@@ -8,6 +8,17 @@
         app:iconSpaceReserved="false" />
 
     <PreferenceCategory
+        android:title="@string/terminal"
+        app:iconSpaceReserved="false"
+        app:allowDividerAbove="false">
+
+        <Preference
+            android:title="@string/terminal"
+            android:key="pref_selected_terminal_index"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:title="@string/service"
         app:iconSpaceReserved="false"
         app:allowDividerAbove="false">
