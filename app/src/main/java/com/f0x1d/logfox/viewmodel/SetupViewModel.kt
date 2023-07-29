@@ -39,7 +39,7 @@ class SetupViewModel @Inject constructor(
             appPreferences.selectTerminal(RootTerminal.INDEX)
 
             rootTerminal.executeNow(*command)
-            gotPermission()
+            checkPermission()
         } else
             snackbar(R.string.no_root)
     }
@@ -56,13 +56,10 @@ class SetupViewModel @Inject constructor(
     fun shizuku() = viewModelScope.launch(Dispatchers.IO) {
         appPreferences.selectTerminal(ShizukuTerminal.INDEX)
 
-        if (shizukuAvailable && shizukuTerminal.isSupported()) {
-            if (shizukuTerminal.executeNow(*command).isSuccessful)
-                gotPermission()
-            else
-                snackbar(R.string.shizuku_error)
-        } else
-            snackbar(R.string.no_permission_detected)
+        if (shizukuAvailable && shizukuTerminal.isSupported() && shizukuTerminal.executeNow(*command).isSuccessful)
+            gotPermission()
+        else
+            snackbar(R.string.shizuku_error)
     }
 
     fun checkPermission() = if (ctx.hasPermissionToReadLogs())
