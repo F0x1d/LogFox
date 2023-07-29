@@ -106,4 +106,7 @@
     <string name="restart_logging">Restart logging</string>
     <string name="shizuku" translatable="false">Shizuku</string>
     <string name="shizuku_error">Error using Shizuku</string>
+    <string name="shizuku_reminder">Don\'t forget to start Shizuku!</string>
+    <string name="fallback_to_default_terminal">Fallback to default terminal</string>
+    <string name="fallback_to_default_terminal_desc">When selected one is not available. Otherwise LogFox will infinitely try to use selected one</string>
 </resources>

@@ -98,4 +98,8 @@
     <string name="no">Нет</string>
     <string name="restart_logging">Перезапуск логирования</string>
     <string name="shizuku_error">Ошибка при использовании Shizuku</string>
+    <string name="shizuku_reminder">Не забудьте запустить Shizuku!</string>
+    <string name="fallback_to_default_terminal">Использовать обычный терминал</string>
+    <string name="fallback_to_default_terminal_desc">Когда выбранный терминал недоступен. Иначе LogFox будет бесконечно пытаться его использовать</string>
+
 </resources>

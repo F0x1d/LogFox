@@ -105,11 +105,14 @@ class LoggingRepository @Inject constructor(
         }
     }
 
-    private suspend fun fallbackToDefaultTerminal() = withContext(Dispatchers.Main) {
-        context.toast(R.string.terminal_unavailable_falling_back)
+    private suspend fun fallbackToDefaultTerminal() {
+        if (appPreferences.fallbackToDefaultTerminal) withContext(Dispatchers.Main) {
+            context.toast(R.string.terminal_unavailable_falling_back)
 
-        loggingTerminal = terminals.first()
-        restartLogging(updateTerminal = false)
+            loggingTerminal = terminals.first()
+            restartLogging(updateTerminal = false)
+        } else
+            delay(10000) // waiting for 10sec before new attempt
     }
 
     private suspend fun readLogs() = coroutineScope {

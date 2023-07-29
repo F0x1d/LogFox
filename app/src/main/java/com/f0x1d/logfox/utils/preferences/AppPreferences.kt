@@ -27,6 +27,9 @@ class AppPreferences @Inject constructor(@ApplicationContext context: Context): 
     var selectedTerminalIndex
         get() = get("pref_selected_terminal_index", 0)
         set(value) { put("pref_selected_terminal_index", value) }
+    var fallbackToDefaultTerminal
+        get() = get("pref_fallback_to_default_terminal", true)
+        set(value) { put("pref_fallback_to_default_terminal", value) }
 
     var nightTheme
         get() = get("pref_night_theme", 0)
