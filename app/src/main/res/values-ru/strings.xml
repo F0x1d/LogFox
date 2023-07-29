@@ -84,7 +84,7 @@
     <string name="links">Ссылки</string>
     <string name="recording_paused">Запись на паузе</string>
     <string name="close">Закрыть</string>
-    <string name="android13_start_on_boot_warning">С Android 13 Google запретили запуск сбора логов в фоне, поэтому эта настройка может не работать. Используйте терминал Root или Shizuku.</string>
+    <string name="android13_start_on_boot_warning">С Android 13 Google запретили запуск сбора логов в фоне, поэтому эта настройка может не работать. Используйте логгер Root или Shizuku.</string>
     <string name="select">Выбрать</string>
     <string name="logs_display_limit">Лимит отображения логов</string>
     <string name="lines">Строки</string>
@@ -101,5 +101,4 @@
     <string name="shizuku_reminder">Не забудьте запустить Shizuku!</string>
     <string name="fallback_to_default_terminal">Использовать обычный логгер</string>
     <string name="fallback_to_default_terminal_desc">Когда выбранный логгер недоступен. Иначе LogFox будет бесконечно пытаться его использовать</string>
-
 </resources>
