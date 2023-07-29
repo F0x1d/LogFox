@@ -43,23 +43,4 @@
             app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
-    <PreferenceCategory
-        android:title="@string/service_start"
-        android:key="pref_category_service_start"
-        app:iconSpaceReserved="false"
-        app:allowDividerAbove="false">
-
-        <Preference
-            android:summary="@string/recommended_for_non_root_users"
-            android:selectable="false"
-            app:iconSpaceReserved="false" />
-
-        <SwitchPreferenceCompat
-            android:title="@string/show_start_service_reminder_notification_on_boot"
-            android:key="pref_show_start_service_reminder_notification_on_boot"
-            app:singleLineTitle="false"
-            app:widgetLayout="@layout/preference_material_switch"
-            app:iconSpaceReserved="false" />
-    </PreferenceCategory>
-
 </PreferenceScreen>

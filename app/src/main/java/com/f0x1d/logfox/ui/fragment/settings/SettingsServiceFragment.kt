@@ -1,5 +1,6 @@
 package com.f0x1d.logfox.ui.fragment.settings
 
+import android.os.Build
 import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
@@ -9,12 +10,11 @@ import com.f0x1d.logfox.R
 import com.f0x1d.logfox.extensions.observeAndUpdateSummaryForList
 import com.f0x1d.logfox.extensions.setupAsListPreference
 import com.f0x1d.logfox.extensions.toast
-import com.f0x1d.logfox.receiver.isAtLeastAndroid13
 import com.f0x1d.logfox.repository.logging.LoggingRepository
 import com.f0x1d.logfox.ui.fragment.settings.base.BaseSettingsWrapperFragment
 import com.f0x1d.logfox.utils.fillWithStrings
 import com.f0x1d.logfox.utils.preferences.AppPreferences
-import com.f0x1d.logfox.utils.terminal.RootTerminal
+import com.f0x1d.logfox.utils.terminal.DefaultTerminal
 import com.f0x1d.logfox.utils.terminal.base.Terminal
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
@@ -51,9 +51,12 @@ class SettingsServiceFragment: BaseSettingsWrapperFragment() {
                         setIcon(R.drawable.ic_dialog_terminal)
                     },
                     filledTerminalSettings,
-                    appPreferences.selectedTerminalIndex
+                    { appPreferences.selectedTerminalIndex }
                 ) {
-                    if (appPreferences.selectedTerminalIndex == it) return@setupAsListPreference
+                    if (appPreferences.selectedTerminalIndex == it) {
+                        loggingRepository.restartLogging()
+                        return@setupAsListPreference
+                    }
 
                     lifecycleScope.launch {
                         val selectedTerminal = terminals[it]
@@ -69,15 +72,10 @@ class SettingsServiceFragment: BaseSettingsWrapperFragment() {
             }
 
             findPreference<SwitchPreferenceCompat>("pref_start_on_boot")?.apply {
-                if (appPreferences.showStartServiceNotificationOnBoot) {
-                    isEnabled = false
-                    setSummary(R.string.disable_reminder_notification_on_boot)
-                }
-
                 setOnPreferenceChangeListener { preference, newValue ->
-                    val haveRoot = appPreferences.selectedTerminalIndex == RootTerminal.INDEX
+                    val badTerminal = appPreferences.selectedTerminalIndex == DefaultTerminal.INDEX
 
-                    if (isAtLeastAndroid13 && newValue as Boolean && !haveRoot) {
+                    if (isAtLeastAndroid13 && newValue as Boolean && badTerminal) {
                         showAndroid13WarningDialog()
                     }
                     return@setOnPreferenceChangeListener true
@@ -91,7 +89,7 @@ class SettingsServiceFragment: BaseSettingsWrapperFragment() {
                 .setTitle(R.string.new_terminal_selected)
                 .setMessage(R.string.new_terminal_selected_question)
                 .setPositiveButton(R.string.yes) { dialog, _ ->
-                    loggingRepository.restartLoggingOnNewTerminal()
+                    loggingRepository.restartLogging()
                 }
                 .setNeutralButton(R.string.no, null)
                 .show()
@@ -108,3 +106,5 @@ class SettingsServiceFragment: BaseSettingsWrapperFragment() {
         }
     }
 }
+
+val isAtLeastAndroid13 = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU

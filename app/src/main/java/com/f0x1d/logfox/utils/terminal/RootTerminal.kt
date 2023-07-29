@@ -15,5 +15,9 @@ class RootTerminal @Inject constructor(): DefaultTerminal() {
 
     override val commandPrefix = arrayOf("su", "-c")
 
-    override suspend fun isSupported() = executeNow("exit").isSuccessful
+    override suspend fun isSupported() = try {
+        executeNow("exit").isSuccessful
+    } catch (e: Exception) {
+        false
+    }
 }

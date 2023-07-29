@@ -1,6 +1,7 @@
 package com.f0x1d.logfox.utils.preferences
 
 import android.content.Context
+import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import com.f0x1d.logfox.database.CrashType
 import com.f0x1d.logfox.utils.preferences.base.BasePreferences
@@ -69,14 +70,14 @@ class AppPreferences @Inject constructor(@ApplicationContext context: Context): 
         get() = get("pref_asked_notifications_permission", false)
         set(value) { put("pref_asked_notifications_permission", value) }
 
-    var showStartServiceNotificationOnBoot
-        get() = get("pref_show_start_service_reminder_notification_on_boot", false)
-        set(value) { put("pref_show_start_service_reminder_notification_on_boot", value) }
-
     val showLogValues get() = booleanArrayOf(showLogDate, showLogTime, showLogPid, showLogTid, showLogTag, showLogContent)
 
     fun collectingFor(crashType: CrashType) = get("pref_collect_${crashType.readableName.lowercase()}", true)
     fun showingNotificationsFor(crashType: CrashType) = get("pref_notifications_${crashType.readableName.lowercase()}", true)
+
+    fun selectTerminal(index: Int) = sharedPreferences.edit(commit = true) {
+        putInt("pref_selected_terminal_index", index)
+    }
 
     override fun providePreferences(context: Context) = PreferenceManager.getDefaultSharedPreferences(context)
 }

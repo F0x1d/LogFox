@@ -75,8 +75,8 @@ class LoggingRepository @Inject constructor(
         }
     }
 
-    fun restartLoggingOnNewTerminal() {
-        loggingTerminal = terminals[appPreferences.selectedTerminalIndex]
+    fun restartLogging(updateTerminal: Boolean = true) {
+        if (updateTerminal) loggingTerminal = terminals[appPreferences.selectedTerminalIndex]
 
         loggingJob?.cancel()
         loggingJob = onAppScope {
@@ -105,17 +105,24 @@ class LoggingRepository @Inject constructor(
         }
     }
 
+    private suspend fun fallbackToDefaultTerminal() = withContext(Dispatchers.Main) {
+        context.toast(R.string.terminal_unavailable_falling_back)
+
+        loggingTerminal = terminals.first()
+        restartLogging(updateTerminal = false)
+    }
+
     private suspend fun readLogs() = coroutineScope {
         if (!loggingTerminal.isSupported()) {
-            withContext(Dispatchers.Main) {
-                context.toast(R.string.terminal_unavailable_falling_back)
-                appPreferences.selectedTerminalIndex = 0
-                restartLoggingOnNewTerminal()
-            }
+            fallbackToDefaultTerminal()
             return@coroutineScope
         }
 
-        val stream = loggingTerminal.execute(*COMMAND).output
+        val process = loggingTerminal.execute(*COMMAND)
+        if (process == null) {
+            fallbackToDefaultTerminal()
+            return@coroutineScope
+        }
 
         val updateLines = mutableListOf<LogLine>()
         val mutex = Mutex()
@@ -137,19 +144,18 @@ class LoggingRepository @Inject constructor(
             }
         }
 
-        stream.bufferedReader().useLines {
+        process.output.bufferedReader().useLines {
             var droppedFirst = false
             // avoiding getting the same line after logging restart because of
             // WARNING: -T 0 invalid, setting to 1
             for (line in it) {
+                if (!isActive) break
+
+                val logLine = LogLine(idsCounter++, line) ?: continue
                 if (!droppedFirst) {
                     droppedFirst = true
                     continue
                 }
-
-                if (!isActive) break
-
-                val logLine = LogLine(idsCounter++, line) ?: continue
 
                 mutex.withLock {
                     updateLines.add(logLine)
@@ -164,6 +170,7 @@ class LoggingRepository @Inject constructor(
         }
 
         updater.cancel()
+        process.destroy()
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {

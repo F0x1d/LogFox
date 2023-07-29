@@ -85,14 +85,7 @@
     <string name="links">链接</string>
     <string name="recording_paused">录制暂停</string>
     <string name="close">关闭</string>
-    <string name="service_start">服务启动</string>
     <string name="android13_start_on_boot_warning">自 Android 13,Google 限制在后台启动 Logcat,该开关可能无效,建议使用开机时启动服务的提醒通知</string>
-    <string name="show_start_service_reminder_notification_on_boot">开机时显示启动服务提醒通知</string>
-    <string name="reminder_to_start_service">启动服务提醒</string>
-    <string name="tap_here_to_start">点此启动</string>
-    <string name="disable_start_on_boot">禁用服务在开机时自启</string>
-    <string name="disable_reminder_notification_on_boot">开机时关闭启动服务提醒通知</string>
-    <string name="recommended_for_non_root_users">建议想开机自启的非root用户使用</string>
     <string name="select">选择</string>
     <string name="logs_display_limit">日志显示行数限制</string>
     <string name="lines">行</string>

@@ -48,8 +48,10 @@ jobs:
           token: ${{ secrets.TELEGRAM_TOKEN }}
           format: markdown
           document: ${{steps.sign_apk.outputs.signedReleaseFile}}
+          disable_web_page_preview: true
           message: |
             *${{ github.actor }}* committed to *${{ github.repository }}*
+            
             Branch: *${{ github.ref_name }}*
             Commit message: `${{ github.event.commits[0].message }}`
             

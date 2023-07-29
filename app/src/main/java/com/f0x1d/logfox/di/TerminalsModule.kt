@@ -2,6 +2,7 @@ package com.f0x1d.logfox.di
 
 import com.f0x1d.logfox.utils.terminal.DefaultTerminal
 import com.f0x1d.logfox.utils.terminal.RootTerminal
+import com.f0x1d.logfox.utils.terminal.ShizukuTerminal
 import com.f0x1d.logfox.utils.terminal.base.Terminal
 import dagger.Module
 import dagger.Provides
@@ -17,9 +18,11 @@ object TerminalsModule {
     @Singleton
     fun provideTerminals(
         defaultTerminal: DefaultTerminal,
-        rootTerminal: RootTerminal
+        rootTerminal: RootTerminal,
+        shizukuTerminal: ShizukuTerminal
     ): Array<Terminal> = arrayOf(
         defaultTerminal,
-        rootTerminal
+        rootTerminal,
+        shizukuTerminal
     )
 }

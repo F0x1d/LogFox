@@ -10,7 +10,7 @@ interface Terminal {
 
     suspend fun executeNow(vararg command: String): TerminalResult
 
-    fun execute(vararg command: String): TerminalProcess
+    fun execute(vararg command: String): TerminalProcess?
 }
 
 data class TerminalResult(
@@ -24,5 +24,6 @@ data class TerminalResult(
 data class TerminalProcess(
     val output: InputStream,
     val error: InputStream,
-    val input: OutputStream
+    val input: OutputStream,
+    val destroy: () -> Unit
 )

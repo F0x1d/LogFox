@@ -17,7 +17,7 @@ open class DefaultTerminal @Inject constructor(): Terminal {
         const val INDEX = 0
     }
 
-    override val title = R.string.adb
+    override val title = R.string.terminal_default
 
     protected open val commandPrefix: Array<String>? = null
 
@@ -45,7 +45,8 @@ open class DefaultTerminal @Inject constructor(): Terminal {
         TerminalProcess(
             inputStream,
             errorStream,
-            outputStream
+            outputStream,
+            this::destroy
         )
     }
 }
