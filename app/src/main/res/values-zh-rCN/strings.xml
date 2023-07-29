@@ -16,7 +16,7 @@
     <string name="filter">过滤器</string>
     <string name="about_app">关于本App</string>
     <string name="setup">设置</string>
-    <string name="how_to_use_adb">在 ADB 中运行该命令:\n\n%s</string>
+    <string name="how_to_use_adb">自从 Android 13 Google 限制了在 ADB 中获取日志,你只能在几分钟内看到日志,之后你需要重启日志服务\n\n在 ADB 中运行该命令:\n\n%s</string>
     <string name="check">检查</string>
     <string name="developer">开发者</string>
     <string name="service">服务</string>
@@ -85,7 +85,7 @@
     <string name="links">链接</string>
     <string name="recording_paused">录制暂停</string>
     <string name="close">关闭</string>
-    <string name="android13_start_on_boot_warning">自 Android 13,Google 限制在后台启动 Logcat,该开关可能无效,建议使用开机时启动服务的提醒通知</string>
+    <string name="android13_start_on_boot_warning">自 Android 13,Google 限制在后台启动 Logcat,该开关可能无效,使用 Root 或 Shizuku 后端</string>
     <string name="select">选择</string>
     <string name="logs_display_limit">日志显示行数限制</string>
     <string name="lines">行</string>
