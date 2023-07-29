@@ -14,9 +14,9 @@ interface Terminal {
 }
 
 data class TerminalResult(
-    val exitCode: Int,
-    val output: String,
-    val errorOutput: String
+    val exitCode: Int = 0,
+    val output: String = "",
+    val errorOutput: String = ""
 ) {
     val isSuccessful get() = exitCode == 0
 }

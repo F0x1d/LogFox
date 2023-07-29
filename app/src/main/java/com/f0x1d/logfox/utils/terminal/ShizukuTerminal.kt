@@ -80,14 +80,10 @@ class ShizukuTerminal @Inject constructor(): Terminal {
 
     override suspend fun executeNow(vararg command: String) = withContext(Dispatchers.IO) {
         if (!Shizuku.pingBinder()) {
-            return@withContext TerminalResult(3, "", "")
+            return@withContext TerminalResult(3)
         }
 
-        val process = createProcess(command) ?: return@withContext TerminalResult(
-            3,
-            "",
-            ""
-        )
+        val process = createProcess(command) ?: return@withContext TerminalResult(3)
 
         val output = async(Dispatchers.IO) {
             process.inputStream.readBytes().decodeToString()

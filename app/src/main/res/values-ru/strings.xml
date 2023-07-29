@@ -88,18 +88,18 @@
     <string name="select">Выбрать</string>
     <string name="logs_display_limit">Лимит отображения логов</string>
     <string name="lines">Строки</string>
-    <string name="terminal">Терминал</string>
+    <string name="terminal">Логгер</string>
     <string name="terminal_default">Обычный</string>
-    <string name="terminal_unavailable">Терминал недоступен</string>
-    <string name="terminal_unavailable_falling_back">Терминал недоступен, использую обычный</string>
-    <string name="new_terminal_selected">Новый терминал выбран</string>
+    <string name="terminal_unavailable">Логгер недоступен</string>
+    <string name="terminal_unavailable_falling_back">Логгер недоступен, использую обычный</string>
+    <string name="new_terminal_selected">Новый логгер выбран</string>
     <string name="new_terminal_selected_question">Перезапустить логирование с помощью него?</string>
     <string name="yes">Да</string>
     <string name="no">Нет</string>
     <string name="restart_logging">Перезапуск логирования</string>
     <string name="shizuku_error">Ошибка при использовании Shizuku</string>
     <string name="shizuku_reminder">Не забудьте запустить Shizuku!</string>
-    <string name="fallback_to_default_terminal">Использовать обычный терминал</string>
-    <string name="fallback_to_default_terminal_desc">Когда выбранный терминал недоступен. Иначе LogFox будет бесконечно пытаться его использовать</string>
+    <string name="fallback_to_default_terminal">Использовать обычный логгер</string>
+    <string name="fallback_to_default_terminal_desc">Когда выбранный логгер недоступен. Иначе LogFox будет бесконечно пытаться его использовать</string>
 
 </resources>
