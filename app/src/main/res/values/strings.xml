@@ -91,7 +91,7 @@
     <string name="links">Links</string>
     <string name="recording_paused">Recording paused</string>
     <string name="close">Close</string>
-    <string name="android13_start_on_boot_warning">Since Android 13 Google has limited logcat launch from background. So, this toggle may not work. Use Root or Shizuku terminal.</string>
+    <string name="android13_start_on_boot_warning">Since Android 13 Google has limited logcat launch from background. So, this toggle may not work. Use Root or Shizuku backend.</string>
     <string name="select">Select</string>
     <string name="logs_display_limit">Logs display limit</string>
     <string name="lines">Lines</string>
