@@ -170,7 +170,11 @@ class LoggingRepository @Inject constructor(
         }
 
         updater.cancel()
-        process.destroy()
+        try {
+            process.destroy()
+        } catch (e: Exception) {
+            // Already dead
+        }
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
