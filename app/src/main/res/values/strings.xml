@@ -95,11 +95,11 @@
     <string name="select">Select</string>
     <string name="logs_display_limit">Logs display limit</string>
     <string name="lines">Lines</string>
-    <string name="terminal">Terminal</string>
+    <string name="terminal">Backend</string>
     <string name="terminal_default">Default</string>
-    <string name="terminal_unavailable">Terminal is unavailable</string>
-    <string name="terminal_unavailable_falling_back">Terminal is unavailable, falling back to default</string>
-    <string name="new_terminal_selected">New terminal selected</string>
+    <string name="terminal_unavailable">Backend is unavailable</string>
+    <string name="terminal_unavailable_falling_back">Backend is unavailable, falling back to default</string>
+    <string name="new_terminal_selected">New backend selected</string>
     <string name="new_terminal_selected_question">Would you like to restart logging using it?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
@@ -107,6 +107,6 @@
     <string name="shizuku" translatable="false">Shizuku</string>
     <string name="shizuku_error">Error using Shizuku</string>
     <string name="shizuku_reminder">Don\'t forget to start Shizuku!</string>
-    <string name="fallback_to_default_terminal">Fallback to default terminal</string>
+    <string name="fallback_to_default_terminal">Fallback to default backend</string>
     <string name="fallback_to_default_terminal_desc">When selected one is not available. Otherwise LogFox will infinitely try to use it</string>
 </resources>
