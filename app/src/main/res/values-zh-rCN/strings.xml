@@ -89,4 +89,17 @@
     <string name="select">选择</string>
     <string name="logs_display_limit">日志显示行数限制</string>
     <string name="lines">行</string>
+    <string name="terminal">后端</string>
+    <string name="terminal_default">默认</string>
+    <string name="terminal_unavailable">后端不可用</string>
+    <string name="terminal_unavailable_falling_back">后端不可用,回退到默认后端</string>
+    <string name="new_terminal_selected">选择了新的后端</string>
+    <string name="new_terminal_selected_question">是否使用该后端重启日志记录?</string>
+    <string name="yes">是</string>
+    <string name="no">否</string>
+    <string name="restart_logging">重启日志记录</string>
+    <string name="shizuku_error">使用 Shizuku 时遇到错误</string>
+    <string name="shizuku_reminder">别忘了启动 Shizuku!</string>
+    <string name="fallback_to_default_terminal">回退到默认后端</string>
+    <string name="fallback_to_default_terminal_desc">仅当所选后端不可用时,否则 LogFox 将一直尝试使用所选的</string>
 </resources>
