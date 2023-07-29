@@ -20,7 +20,6 @@ class LogFoxApp: Application() {
         const val LOGGING_STATUS_CHANNEL_ID = "logging"
         const val CRASHES_CHANNEL_ID = "crashes"
         const val RECORDING_STATUS_CHANNEL_ID = "recording"
-        const val START_SERVICE_NOTIFICATIONS_CHANNEL_ID = "start_service"
 
         val applicationScope = MainScope()
         lateinit var instance: LogFoxApp
@@ -71,21 +70,11 @@ class LogFoxApp: Application() {
                 .setSound(null, null)
                 .build()
 
-            val startServiceNotificationsChannel = NotificationChannelCompat.Builder(
-                START_SERVICE_NOTIFICATIONS_CHANNEL_ID,
-                NotificationManagerCompat.IMPORTANCE_HIGH
-            )
-                .setName(getString(R.string.service_start))
-                .setLightsEnabled(true)
-                .setVibrationEnabled(true)
-                .build()
-
             createNotificationChannelsCompat(
                 listOf(
                     loggingStatusChannel,
                     crashesChannel,
-                    recordingStatusChannel,
-                    startServiceNotificationsChannel
+                    recordingStatusChannel
                 )
             )
         }

@@ -6,8 +6,12 @@ import androidx.lifecycle.viewModelScope
 import com.f0x1d.logfox.BuildConfig
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.extensions.hasPermissionToReadLogs
-import com.f0x1d.logfox.extensions.haveRoot
 import com.f0x1d.logfox.extensions.sendEvent
+import com.f0x1d.logfox.utils.preferences.AppPreferences
+import com.f0x1d.logfox.utils.terminal.DefaultTerminal
+import com.f0x1d.logfox.utils.terminal.RootTerminal
+import com.f0x1d.logfox.utils.terminal.ShizukuTerminal
+import com.f0x1d.logfox.utils.terminal.shizukuAvailable
 import com.f0x1d.logfox.viewmodel.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -15,10 +19,15 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SetupViewModel @Inject constructor(application: Application): BaseViewModel(application) {
+class SetupViewModel @Inject constructor(
+    application: Application,
+    private val appPreferences: AppPreferences,
+    private val rootTerminal: RootTerminal,
+    private val shizukuTerminal: ShizukuTerminal
+): BaseViewModel(application) {
 
-    private val command = "pm grant ${BuildConfig.APPLICATION_ID} ${Manifest.permission.READ_LOGS}"
-    val adbCommand = "adb shell $command"
+    private val command = arrayOf("pm", "grant", BuildConfig.APPLICATION_ID, Manifest.permission.READ_LOGS)
+    val adbCommand = "adb shell ${command.joinToString(" ")}"
 
     companion object {
         const val EVENT_TYPE_GOT_PERMISSION = "got_permission"
@@ -26,17 +35,32 @@ class SetupViewModel @Inject constructor(application: Application): BaseViewMode
     }
 
     fun root() = viewModelScope.launch(Dispatchers.IO) {
-        if (haveRoot) {
-            Runtime.getRuntime().exec("su -c $command").waitFor()
-            gotPermission()
+        if (rootTerminal.isSupported()) {
+            appPreferences.selectTerminal(RootTerminal.INDEX)
+
+            rootTerminal.executeNow(*command)
+            checkPermission()
         } else
             snackbar(R.string.no_root)
     }
 
-    fun adb() = if (ctx.hasPermissionToReadLogs())
-        gotPermission()
-    else
-        sendEvent(EVENT_TYPE_SHOW_ADB_DIALOG)
+    fun adb() = viewModelScope.launch(Dispatchers.IO) {
+        if (ctx.hasPermissionToReadLogs())
+            gotPermission()
+        else {
+            sendEvent(EVENT_TYPE_SHOW_ADB_DIALOG)
+            appPreferences.selectTerminal(DefaultTerminal.INDEX)
+        }
+    }
+
+    fun shizuku() = viewModelScope.launch(Dispatchers.IO) {
+        appPreferences.selectTerminal(ShizukuTerminal.INDEX)
+
+        if (shizukuAvailable && shizukuTerminal.isSupported() && shizukuTerminal.executeNow(*command).isSuccessful)
+            gotPermission()
+        else
+            snackbar(R.string.shizuku_error)
+    }
 
     fun checkPermission() = if (ctx.hasPermissionToReadLogs())
         gotPermission()

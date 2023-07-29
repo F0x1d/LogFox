@@ -15,7 +15,7 @@
     <string name="filter">Фильтр</string>
     <string name="about_app">О приложении</string>
     <string name="setup">Настройка</string>
-    <string name="how_to_use_adb">Запустите эту команду в Android Debug Bridge:\n\n%s</string>
+    <string name="how_to_use_adb">С Android 13 Google ограничили сбор логов через ADB. Вы сможете видеть логи только в течение нескольких минут, потом надо будет перезапустить логирование.\n\nЗапустите эту команду в Android Debug Bridge:\n\n%s</string>
     <string name="check">Проверить</string>
     <string name="developer">Разработчик</string>
     <string name="service">Сервис</string>
@@ -84,15 +84,22 @@
     <string name="links">Ссылки</string>
     <string name="recording_paused">Запись на паузе</string>
     <string name="close">Закрыть</string>
-    <string name="service_start">Запуск сервиса</string>
-    <string name="android13_start_on_boot_warning">С Android 13 Google запретили запуск сбора логов в фоне, поэтому эта настройка может не работать. Лучше используйте уведомление с напоминанием о запуске сервиса при загрузке устройства.</string>
-    <string name="show_start_service_reminder_notification_on_boot">Показывать уведомление с напоминанием о запуске сервиса при загрузке устройства</string>
-    <string name="reminder_to_start_service">Напоминание о запуске сервиса</string>
-    <string name="tap_here_to_start">Нажмите сюда для старта</string>
-    <string name="disable_start_on_boot">Отключите запуск сервиса при загрузке устройства</string>
-    <string name="disable_reminder_notification_on_boot">Отключите уведомление с напоминанием о запуске сервиса при загрузке устройства</string>
-    <string name="recommended_for_non_root_users">Рекомендуется для пользователей без Root при желании запускать сервис при загрузке устройства</string>
+    <string name="android13_start_on_boot_warning">С Android 13 Google запретили запуск сбора логов в фоне, поэтому эта настройка может не работать. Используйте терминал Root или Shizuku.</string>
     <string name="select">Выбрать</string>
     <string name="logs_display_limit">Лимит отображения логов</string>
     <string name="lines">Строки</string>
+    <string name="terminal">Терминал</string>
+    <string name="terminal_default">Обычный</string>
+    <string name="terminal_unavailable">Терминал недоступен</string>
+    <string name="terminal_unavailable_falling_back">Терминал недоступен, использую обычный</string>
+    <string name="new_terminal_selected">Новый терминал выбран</string>
+    <string name="new_terminal_selected_question">Перезапустить логирование с помощью него?</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
+    <string name="restart_logging">Перезапуск логирования</string>
+    <string name="shizuku_error">Ошибка при использовании Shizuku</string>
+    <string name="shizuku_reminder">Не забудьте запустить Shizuku!</string>
+    <string name="fallback_to_default_terminal">Использовать обычный терминал</string>
+    <string name="fallback_to_default_terminal_desc">Когда выбранный терминал недоступен. Иначе LogFox будет бесконечно пытаться его использовать</string>
+
 </resources>

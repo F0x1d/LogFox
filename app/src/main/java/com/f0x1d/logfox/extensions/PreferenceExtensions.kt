@@ -34,11 +34,11 @@ fun Preference.setupAsEditTextPreference(setup: (DialogTextBinding) -> Unit, set
     }
 }
 
-fun Preference.setupAsListPreference(setupDialog: MaterialAlertDialogBuilder.() -> Unit, items: Array<String>, selected: Int, onSelected: (Int) -> Unit) {
+fun Preference.setupAsListPreference(setupDialog: MaterialAlertDialogBuilder.() -> Unit, items: Array<String>, selected: () -> Int, onSelected: (Int) -> Unit) {
     setOnPreferenceClickListener {
         MaterialAlertDialogBuilder(context)
             .setTitle(title)
-            .setSingleChoiceItems(items, selected) { dialog, which ->
+            .setSingleChoiceItems(items, selected()) { dialog, which ->
                 dialog.cancel()
                 onSelected.invoke(which)
             }

@@ -18,7 +18,7 @@
     <string name="root" translatable="false">Root</string>
     <string name="adb" translatable="false">ADB</string>
     <string name="setup">Setup</string>
-    <string name="how_to_use_adb">Run this command in Android Debug Bridge:\n\n%s</string>
+    <string name="how_to_use_adb">Since Android 13 Google has limited logcat access via ADB. You will be able to see logs only for several minutes, then you will need to restart logging.\n\nRun this command in Android Debug Bridge:\n\n%s</string>
     <string name="check">Check</string>
     <string name="developer">Developer</string>
     <string name="service">Service</string>
@@ -91,15 +91,22 @@
     <string name="links">Links</string>
     <string name="recording_paused">Recording paused</string>
     <string name="close">Close</string>
-    <string name="service_start">Service start</string>
-    <string name="android13_start_on_boot_warning">Since Android 13 Google has limited logcat launch from background. So, this toggle may not work. Consider using start service reminder notification on boot.</string>
-    <string name="show_start_service_reminder_notification_on_boot">Show start service reminder notification on boot</string>
-    <string name="reminder_to_start_service">Reminder to start service</string>
-    <string name="tap_here_to_start">Tap here to start</string>
-    <string name="disable_start_on_boot">Disable service start on boot</string>
-    <string name="disable_reminder_notification_on_boot">Disable start service reminder notification on boot</string>
-    <string name="recommended_for_non_root_users">Recommended for non-root users if you want to start service on boot</string>
+    <string name="android13_start_on_boot_warning">Since Android 13 Google has limited logcat launch from background. So, this toggle may not work. Use Root or Shizuku terminal.</string>
     <string name="select">Select</string>
     <string name="logs_display_limit">Logs display limit</string>
     <string name="lines">Lines</string>
+    <string name="terminal">Terminal</string>
+    <string name="terminal_default">Default</string>
+    <string name="terminal_unavailable">Terminal is unavailable</string>
+    <string name="terminal_unavailable_falling_back">Terminal is unavailable, falling back to default</string>
+    <string name="new_terminal_selected">New terminal selected</string>
+    <string name="new_terminal_selected_question">Would you like to restart logging using it?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="restart_logging">Restart logging</string>
+    <string name="shizuku" translatable="false">Shizuku</string>
+    <string name="shizuku_error">Error using Shizuku</string>
+    <string name="shizuku_reminder">Don\'t forget to start Shizuku!</string>
+    <string name="fallback_to_default_terminal">Fallback to default terminal</string>
+    <string name="fallback_to_default_terminal_desc">When selected one is not available. Otherwise LogFox will infinitely try to use it</string>
 </resources>

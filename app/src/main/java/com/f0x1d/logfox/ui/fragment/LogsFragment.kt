@@ -80,6 +80,9 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
                         startLoggingService()
                 }
             }
+            setClickListenerOn(R.id.restart_logging_item) {
+                viewModel.restartLogging()
+            }
             setClickListenerOn(R.id.exit_item) {
                 requireContext().sendKillApp()
             }

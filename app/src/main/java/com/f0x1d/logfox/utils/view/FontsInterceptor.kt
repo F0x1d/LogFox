@@ -19,6 +19,7 @@ class FontsInterceptor(context: Context): Interceptor {
         R.id.delete_button to boldSansTypeface,
         R.id.root_button to boldSansTypeface,
         R.id.adb_button to boldSansTypeface,
+        R.id.shizuku_button to boldSansTypeface,
         R.id.search_button to boldSansTypeface,
         R.id.clear_search_button to boldSansTypeface,
         R.id.log_levels_button to boldSansTypeface,

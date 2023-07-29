@@ -43,6 +43,8 @@ class LogsViewModel @Inject constructor(
 
     fun clearLogs() = loggingRepository.clearLogs()
 
+    fun restartLogging() = loggingRepository.restartLogging()
+
     fun recollect() = if (paused())
         collectOneValue()
     else

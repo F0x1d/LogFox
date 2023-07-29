@@ -12,6 +12,7 @@ import com.f0x1d.logfox.extensions.copyText
 import com.f0x1d.logfox.extensions.hardRestartApp
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
 import com.f0x1d.logfox.utils.event.Event
+import com.f0x1d.logfox.utils.terminal.shizukuAvailable
 import com.f0x1d.logfox.viewmodel.SetupViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
@@ -34,6 +35,11 @@ class SetupFragment: BaseViewModelFragment<SetupViewModel, FragmentSetupBinding>
         binding.adbButton.setOnClickListener {
             viewModel.adb()
         }
+        binding.shizukuButton.setOnClickListener {
+            viewModel.shizuku()
+        }
+
+        if (!shizukuAvailable) binding.shizukuButton.isEnabled = false
     }
 
     override fun onEvent(event: Event) {

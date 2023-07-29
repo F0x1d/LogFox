@@ -43,6 +43,17 @@
             app:layout_constraintTop_toBottomOf="@id/root_button"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/shizuku_button"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/shizuku_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/shizuku"
+            app:icon="@drawable/ic_terminal"
+            app:layout_constraintTop_toBottomOf="@id/adb_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 

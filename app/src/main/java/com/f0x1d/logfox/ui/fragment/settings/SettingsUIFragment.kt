@@ -42,7 +42,7 @@ class SettingsUIFragment: BaseSettingsWrapperFragment() {
                         setIcon(R.drawable.ic_dialog_theme)
                     },
                     filledThemeSettings,
-                    appPreferences.nightTheme
+                    { appPreferences.nightTheme }
                 ) {
                     appPreferences.nightTheme = it
                     requireActivity().applyTheme(it, true)
