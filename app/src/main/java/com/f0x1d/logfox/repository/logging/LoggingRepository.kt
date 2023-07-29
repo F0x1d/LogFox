@@ -9,6 +9,7 @@ import com.f0x1d.logfox.extensions.updateList
 import com.f0x1d.logfox.model.LogLine
 import com.f0x1d.logfox.repository.base.BaseRepository
 import com.f0x1d.logfox.utils.preferences.AppPreferences
+import com.f0x1d.logfox.utils.terminal.DefaultTerminal
 import com.f0x1d.logfox.utils.terminal.base.Terminal
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
@@ -109,7 +110,7 @@ class LoggingRepository @Inject constructor(
         if (appPreferences.fallbackToDefaultTerminal) withContext(Dispatchers.Main) {
             context.toast(R.string.terminal_unavailable_falling_back)
 
-            loggingTerminal = terminals.first()
+            loggingTerminal = terminals[DefaultTerminal.INDEX]
             restartLogging(updateTerminal = false)
         } else
             delay(10000) // waiting for 10sec before new attempt
