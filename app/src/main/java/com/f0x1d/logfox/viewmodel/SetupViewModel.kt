@@ -8,6 +8,7 @@ import com.f0x1d.logfox.R
 import com.f0x1d.logfox.extensions.hasPermissionToReadLogs
 import com.f0x1d.logfox.extensions.sendEvent
 import com.f0x1d.logfox.utils.preferences.AppPreferences
+import com.f0x1d.logfox.utils.terminal.DefaultTerminal
 import com.f0x1d.logfox.utils.terminal.RootTerminal
 import com.f0x1d.logfox.utils.terminal.ShizukuTerminal
 import com.f0x1d.logfox.utils.terminal.shizukuAvailable
@@ -43,10 +44,14 @@ class SetupViewModel @Inject constructor(
             snackbar(R.string.no_root)
     }
 
-    fun adb() = if (ctx.hasPermissionToReadLogs())
-        gotPermission()
-    else
-        sendEvent(EVENT_TYPE_SHOW_ADB_DIALOG)
+    fun adb() = viewModelScope.launch(Dispatchers.IO) {
+        if (ctx.hasPermissionToReadLogs())
+            gotPermission()
+        else {
+            sendEvent(EVENT_TYPE_SHOW_ADB_DIALOG)
+            appPreferences.selectTerminal(DefaultTerminal.INDEX)
+        }
+    }
 
     fun shizuku() = viewModelScope.launch(Dispatchers.IO) {
         appPreferences.selectTerminal(ShizukuTerminal.INDEX)
