@@ -43,7 +43,7 @@ class CrashesFragment: BaseViewModelFragment<CrashesViewModel, FragmentCrashesBi
         binding.crashesRecycler.adapter = adapter
 
         viewModel.data.observe(viewLifecycleOwner) {
-            adapter.elements = it ?: return@observe
+            adapter.submitList(it ?: return@observe)
         }
     }
 }

@@ -2,25 +2,17 @@ package com.f0x1d.logfox.adapter.base
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.f0x1d.logfox.ui.viewholder.base.BaseViewHolder
 
-abstract class BaseAdapter<T, D : ViewBinding>: RecyclerView.Adapter<BaseViewHolder<T, D>>() {
-
-    open val updateWhenSet = true
-
-    var elements = emptyList<T>()
-        set(value) {
-            field = value
-            if (updateWhenSet) notifyDataSetChanged()
-        }
+abstract class BaseListAdapter<T, D : ViewBinding>(
+    diffUtil: DiffUtil.ItemCallback<T>
+): ListAdapter<T, BaseViewHolder<T, D>>(diffUtil) {
 
     protected var recyclerView: RecyclerView? = null
-
-    init {
-        setHasStableIds(true)
-    }
 
     abstract fun createHolder(layoutInflater: LayoutInflater, parent: ViewGroup): BaseViewHolder<T, D>
 
@@ -29,9 +21,7 @@ abstract class BaseAdapter<T, D : ViewBinding>: RecyclerView.Adapter<BaseViewHol
         parent
     )
 
-    override fun onBindViewHolder(holder: BaseViewHolder<T, D>, position: Int) = holder.bindTo(elements[position])
-
-    override fun getItemCount() = elements.size
+    override fun onBindViewHolder(holder: BaseViewHolder<T, D>, position: Int) = holder.bindTo(getItem(position))
 
     override fun onViewRecycled(holder: BaseViewHolder<T, D>) {
         holder.recycle()

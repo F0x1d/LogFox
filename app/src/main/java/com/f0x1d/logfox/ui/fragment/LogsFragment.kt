@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.f0x1d.logfox.R
@@ -19,7 +18,6 @@ import com.f0x1d.logfox.extensions.sendStopService
 import com.f0x1d.logfox.extensions.setClickListenerOn
 import com.f0x1d.logfox.extensions.startLoggingService
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
-import com.f0x1d.logfox.utils.LogLinesDiffUtilCallback
 import com.f0x1d.logfox.utils.fillWithStrings
 import com.f0x1d.logfox.viewmodel.LogsViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -65,11 +63,7 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
             setClickListenerOn(R.id.clear_item) {
                 viewModel.clearLogs()
 
-                val oldCount = adapter.elements.size
-
-                adapter.elements = emptyList()
-                if (viewModel.paused())
-                    adapter.notifyItemRangeRemoved(0, oldCount)
+                adapter.submitList(null)
                 adapter.clearSelected()
             }
             setClickListenerOn(R.id.service_status_item) {
@@ -90,7 +84,7 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
 
         binding.logsRecycler.layoutManager = LinearLayoutManager(requireContext())
         binding.logsRecycler.itemAnimator = null
-        binding.logsRecycler.recycledViewPool.setMaxRecycledViews(0, 40)
+        binding.logsRecycler.recycledViewPool.setMaxRecycledViews(0, 50)
         binding.logsRecycler.adapter = adapter
         binding.logsRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -112,20 +106,9 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
         }
 
         viewModel.data.observe(viewLifecycleOwner) {
-            if (it == null) return@observe
-
-            val manyDiffs = (it.size - adapter.elements.size) >= 50
-
-            if (manyDiffs) {
-                adapter.elements = it
-                adapter.notifyDataSetChanged()
-            } else {
-                DiffUtil.calculateDiff(LogLinesDiffUtilCallback(adapter.elements, it), false).apply {
-                    adapter.elements = it
-                    dispatchUpdatesTo(adapter)
-
-                    scrollLogToBottom()
-                }
+            //adapter.submitList(null)
+            adapter.submitList(it ?: return@observe) {
+                scrollLogToBottom()
             }
         }
 

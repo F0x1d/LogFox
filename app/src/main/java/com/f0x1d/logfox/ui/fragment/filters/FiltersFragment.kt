@@ -84,7 +84,7 @@ class FiltersFragment: BaseViewModelFragment<FiltersViewModel, FragmentFiltersBi
         }
 
         viewModel.data.observe(viewLifecycleOwner) {
-            adapter.elements = it ?: return@observe
+            adapter.submitList(it ?: return@observe)
             logsViewModel.recollect()
         }
     }
