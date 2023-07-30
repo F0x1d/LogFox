@@ -29,8 +29,8 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
     override val viewModel by hiltNavGraphViewModels<LogsViewModel>(R.id.logsFragment)
 
     private val adapter by lazy {
-        LogsAdapter(viewModel.appPreferences) { logLine ->
-            requireContext().copyText(logLine.original)
+        LogsAdapter(viewModel.appPreferences) {
+            requireContext().copyText(it.original)
             snackbar(R.string.text_copied)
         }
     }
@@ -106,7 +106,7 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
         }
 
         viewModel.data.observe(viewLifecycleOwner) {
-            //adapter.submitList(null)
+            adapter.submitList(null)
             adapter.submitList(it ?: return@observe) {
                 scrollLogToBottom()
             }
