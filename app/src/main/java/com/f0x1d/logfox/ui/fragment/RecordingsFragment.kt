@@ -63,7 +63,7 @@ class RecordingsFragment: BaseViewModelFragment<RecordingsViewModel, FragmentRec
         binding.recordingsRecycler.adapter = adapter
 
         viewModel.data.observe(viewLifecycleOwner) {
-            adapter.elements = it ?: return@observe
+            adapter.submitList(it ?: return@observe)
         }
 
         viewModel.recordingStateData.observe(viewLifecycleOwner) {

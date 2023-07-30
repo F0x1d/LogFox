@@ -4,13 +4,14 @@ import com.f0x1d.logfox.database.UserFilter
 import com.f0x1d.logfox.model.LogLine
 import com.f0x1d.logfox.repository.logging.FiltersRepository
 
-fun List<LogLine>.filterAndSearch(filtersRepository: FiltersRepository, query: String?) = filterByExtendedFilters(filtersRepository.itemsFlow.value.filter { it.enabled })
-    .let {
-        if (query == null)
-            it
-        else
-            it.filter { logLine -> logLine.tag.contains(query) || logLine.content.contains(query) }
-    }
+fun List<LogLine>.filterAndSearch(filtersRepository: FiltersRepository, query: String?) = filterByExtendedFilters(
+    filtersRepository.itemsFlow.value.filter { it.enabled }
+).let {
+    if (query == null)
+        it
+    else
+        it.filter { logLine -> logLine.tag.contains(query) || logLine.content.contains(query) }
+}
 
 fun List<LogLine>.filterByExtendedFilters(filters: List<UserFilter>) = filter { logLine ->
     if (filters.isEmpty())

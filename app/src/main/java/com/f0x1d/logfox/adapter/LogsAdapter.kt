@@ -2,7 +2,8 @@ package com.f0x1d.logfox.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.f0x1d.logfox.adapter.base.BaseAdapter
+import androidx.recyclerview.widget.DiffUtil
+import com.f0x1d.logfox.adapter.base.BaseListAdapter
 import com.f0x1d.logfox.databinding.ItemLogBinding
 import com.f0x1d.logfox.model.LogLine
 import com.f0x1d.logfox.ui.viewholder.LogViewHolder
@@ -11,9 +12,15 @@ import com.f0x1d.logfox.utils.preferences.AppPreferences
 class LogsAdapter(
     private val appPreferences: AppPreferences,
     private val copyLog: (LogLine) -> Unit
-): BaseAdapter<LogLine, ItemLogBinding>() {
+): BaseListAdapter<LogLine, ItemLogBinding>(LOGLINE_DIFF) {
 
-    override val updateWhenSet = false
+    companion object {
+        private val LOGLINE_DIFF = object : DiffUtil.ItemCallback<LogLine>() {
+            override fun areItemsTheSame(oldItem: LogLine, newItem: LogLine) = oldItem.id == newItem.id
+
+            override fun areContentsTheSame(oldItem: LogLine, newItem: LogLine) = oldItem == newItem
+        }
+    }
 
     val expandedStates = mutableMapOf<Long, Boolean>()
     val selectedItems = mutableListOf<LogLine>()
@@ -38,8 +45,6 @@ class LogsAdapter(
         binding = ItemLogBinding.inflate(layoutInflater, parent, false),
         copyLog = copyLog
     )
-
-    override fun getItemId(position: Int) = elements[position].id
 
     fun clearSelected() {
         selectedItems.clear()
