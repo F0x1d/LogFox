@@ -5,6 +5,7 @@
 .gradle
 .idea
 /build
+/app/release
 /captures
 /local.properties
 local.properties
