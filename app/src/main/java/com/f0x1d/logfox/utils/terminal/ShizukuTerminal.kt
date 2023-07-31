@@ -117,7 +117,7 @@ class ShizukuTerminal @Inject constructor(
         }
     }
 
-    override suspend fun exit() {
+    override suspend fun exit() = withContext(Dispatchers.IO) {
         if (shizukuAvailable) Shizuku.unbindUserService(userServiceArgs, null, true)
     }
 }

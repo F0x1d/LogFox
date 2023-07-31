@@ -7,6 +7,7 @@ import android.os.ParcelFileDescriptor.AutoCloseOutputStream
 import androidx.annotation.Keep
 import com.f0x1d.logfox.IUserService
 import com.f0x1d.logfox.model.terminal.TerminalResult
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
@@ -15,24 +16,20 @@ import kotlinx.coroutines.runBlocking
 import java.io.InputStream
 import kotlin.system.exitProcess
 
+@OptIn(DelicateCoroutinesApi::class)
 class UserService(): IUserService.Stub() {
 
     private var latestId = 0L
     private val currentProcesses = HashMap<Long, Process>()
 
     @Keep
-    constructor(context: Context): this() {
-
-    }
+    constructor(context: Context): this()
 
     override fun destroy() {
         currentProcesses.values.forEach { process ->
-            try {
-                process.destroy()
-            } catch (e: Exception) {
-                // can't destroy, maybe already dead?
-            }
+            process.tryDestroy()
         }
+
         exitProcess(0)
     }
 
@@ -108,10 +105,12 @@ class UserService(): IUserService.Stub() {
     }
 
     override fun destroyProcess(processId: Long) {
-        try {
-            currentProcesses.remove(processId)?.destroy()
-        } catch (e: Exception) {
-            // can't destroy, maybe already dead?
-        }
+        currentProcesses.remove(processId)?.tryDestroy()
+    }
+
+    private fun Process.tryDestroy() = try {
+        destroy()
+    } catch (e: Exception) {
+        // can't destroy, maybe already dead?
     }
 }
