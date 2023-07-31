@@ -2,29 +2,37 @@ package com.f0x1d.logfox.viewmodel.filters
 
 import android.app.Application
 import android.net.Uri
-import androidx.lifecycle.viewModelScope
-import com.f0x1d.logfox.database.UserFilter
+import androidx.lifecycle.asLiveData
+import com.f0x1d.logfox.database.AppDatabase
+import com.f0x1d.logfox.database.entity.UserFilter
 import com.f0x1d.logfox.repository.logging.FiltersRepository
 import com.f0x1d.logfox.utils.exportFilters
 import com.f0x1d.logfox.utils.importFilters
-import com.f0x1d.logfox.viewmodel.base.BaseSameFlowProxyViewModel
+import com.f0x1d.logfox.viewmodel.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 @HiltViewModel
 class FiltersViewModel @Inject constructor(
     application: Application,
+    private val database: AppDatabase,
     private val filtersRepository: FiltersRepository
-): BaseSameFlowProxyViewModel<List<UserFilter>>(application, filtersRepository.itemsFlow) {
+): BaseViewModel(application) {
 
-    fun import(uri: Uri) = viewModelScope.launch(Dispatchers.IO) {
+    val filters = database.userFilterDao().getAllAsFlow()
+        .distinctUntilChanged()
+        .flowOn(Dispatchers.IO)
+        .asLiveData()
+
+    fun import(uri: Uri) = launchCatching(Dispatchers.IO) {
         ctx.contentResolver.openInputStream(uri)?.importFilters(ctx, filtersRepository)
     }
 
-    fun exportAll(uri: Uri) = viewModelScope.launch(Dispatchers.IO) {
-        ctx.contentResolver.openOutputStream(uri)?.exportFilters(ctx, filtersRepository.itemsFlow.value)
+    fun exportAll(uri: Uri) = launchCatching(Dispatchers.IO) {
+        ctx.contentResolver.openOutputStream(uri)?.exportFilters(ctx, filters.value ?: return@launchCatching)
     }
 
     fun switch(userFilter: UserFilter, checked: Boolean) = filtersRepository.switch(userFilter, checked)

@@ -6,13 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.fragment.navArgs
 import com.f0x1d.logfox.databinding.SheetRecordingBinding
 import com.f0x1d.logfox.extensions.exportFormatted
 import com.f0x1d.logfox.extensions.logToZip
 import com.f0x1d.logfox.extensions.shareFileIntent
 import com.f0x1d.logfox.extensions.toLocaleString
-import com.f0x1d.logfox.extensions.viewModelFactory
 import com.f0x1d.logfox.ui.dialog.base.BaseViewModelBottomSheet
 import com.f0x1d.logfox.utils.OneTimeAction
 import com.f0x1d.logfox.utils.view.PauseTextWatcher
@@ -30,12 +31,17 @@ class RecordingBottomSheet: BaseViewModelBottomSheet<RecordingViewModel, SheetRe
 
     override val viewModel by viewModels<RecordingViewModel> {
         viewModelFactory {
-            assistedFactory.create(navArgs.recordingId)
+            initializer {
+                assistedFactory.create(navArgs.recordingId)
+            }
         }
     }
 
     private val zipLogLauncher = registerForActivityResult(ActivityResultContracts.CreateDocument("application/zip")) {
-        viewModel.logToZip(it ?: return@registerForActivityResult) { file }
+        viewModel.logToZip(
+            it ?: return@registerForActivityResult,
+            viewModel.recording.value ?: return@registerForActivityResult
+        )
     }
     private val logExportLauncher = registerForActivityResult(ActivityResultContracts.CreateDocument("text/plain")) {
         viewModel.exportFile(it ?: return@registerForActivityResult)
@@ -56,7 +62,7 @@ class RecordingBottomSheet: BaseViewModelBottomSheet<RecordingViewModel, SheetRe
 
         val setTextAction = OneTimeAction()
 
-        viewModel.distinctiveData.observe(viewLifecycleOwner) { logRecording ->
+        viewModel.recording.observe(viewLifecycleOwner) { logRecording ->
             if (logRecording == null) return@observe
 
             setTextAction.doIfNotDone {

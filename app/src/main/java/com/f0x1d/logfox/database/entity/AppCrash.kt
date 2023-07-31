@@ -1,4 +1,4 @@
-package com.f0x1d.logfox.database
+package com.f0x1d.logfox.database.entity
 
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
@@ -19,13 +19,16 @@ data class AppCrash(
 interface AppCrashDao {
 
     @Query("SELECT * FROM AppCrash ORDER BY date_and_time DESC")
-    suspend fun getAll(): List<AppCrash>
+    fun getAllAsFlow(): Flow<List<AppCrash>>
 
     @Query("SELECT * FROM AppCrash WHERE id = :id")
     fun get(id: Long): Flow<AppCrash?>
 
     @Insert
     suspend fun insert(appCrash: AppCrash): Long
+
+    @Update
+    suspend fun update(appCrash: AppCrash)
 
     @Delete
     suspend fun delete(appCrash: AppCrash)

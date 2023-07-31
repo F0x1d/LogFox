@@ -10,7 +10,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
 import androidx.fragment.app.viewModels
-import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.f0x1d.logfox.R
@@ -20,7 +19,6 @@ import com.f0x1d.logfox.extensions.applyInsets
 import com.f0x1d.logfox.extensions.setClickListenerOn
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
 import com.f0x1d.logfox.utils.dpToPx
-import com.f0x1d.logfox.viewmodel.LogsViewModel
 import com.f0x1d.logfox.viewmodel.filters.FiltersViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -28,13 +26,10 @@ import dagger.hilt.android.AndroidEntryPoint
 class FiltersFragment: BaseViewModelFragment<FiltersViewModel, FragmentFiltersBinding>() {
 
     override val viewModel by viewModels<FiltersViewModel>()
-    private val logsViewModel by hiltNavGraphViewModels<LogsViewModel>(R.id.logsFragment)
 
     private val adapter = FiltersAdapter(click = {
         findNavController().navigate(
-            FiltersFragmentDirections.actionFiltersFragmentToEditFilterFragment(
-                it.id
-            )
+            FiltersFragmentDirections.actionFiltersFragmentToEditFilterFragment(it.id)
         )
     }, delete = {
         viewModel.delete(it)
@@ -83,9 +78,8 @@ class FiltersFragment: BaseViewModelFragment<FiltersViewModel, FragmentFiltersBi
             findNavController().navigate(FiltersFragmentDirections.actionFiltersFragmentToEditFilterFragment())
         }
 
-        viewModel.data.observe(viewLifecycleOwner) {
-            adapter.submitList(it ?: return@observe)
-            logsViewModel.recollect()
+        viewModel.filters.observe(viewLifecycleOwner) {
+            adapter.submitList(it)
         }
     }
 }

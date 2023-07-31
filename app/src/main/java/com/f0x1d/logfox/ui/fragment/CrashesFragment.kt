@@ -12,9 +12,9 @@ import com.f0x1d.logfox.adapter.CrashesAdapter
 import com.f0x1d.logfox.databinding.FragmentCrashesBinding
 import com.f0x1d.logfox.extensions.setClickListenerOn
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
-import com.f0x1d.logfox.utils.RecyclerViewDivider
 import com.f0x1d.logfox.utils.dpToPx
 import com.f0x1d.logfox.viewmodel.crashes.CrashesViewModel
+import com.google.android.material.divider.MaterialDividerItemDecoration
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -39,11 +39,15 @@ class CrashesFragment: BaseViewModelFragment<CrashesViewModel, FragmentCrashesBi
         }
 
         binding.crashesRecycler.layoutManager = LinearLayoutManager(requireContext())
-        binding.crashesRecycler.addItemDecoration(RecyclerViewDivider(requireContext(), 80.dpToPx.toInt(), 10.dpToPx.toInt()))
+        binding.crashesRecycler.addItemDecoration(MaterialDividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL).apply {
+            dividerInsetStart = 80.dpToPx.toInt()
+            dividerInsetEnd = 10.dpToPx.toInt()
+            isLastItemDecorated = false
+        })
         binding.crashesRecycler.adapter = adapter
 
-        viewModel.data.observe(viewLifecycleOwner) {
-            adapter.submitList(it ?: return@observe)
+        viewModel.crashes.observe(viewLifecycleOwner) {
+            adapter.submitList(it)
         }
     }
 }

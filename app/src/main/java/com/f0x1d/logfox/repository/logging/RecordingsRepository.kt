@@ -3,15 +3,14 @@ package com.f0x1d.logfox.repository.logging
 import android.content.Context
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.database.AppDatabase
-import com.f0x1d.logfox.database.LogRecording
+import com.f0x1d.logfox.database.entity.LogRecording
 import com.f0x1d.logfox.extensions.exportFormatted
 import com.f0x1d.logfox.extensions.notifications.removeRecordingNotification
 import com.f0x1d.logfox.extensions.notifications.sendRecordingNotification
 import com.f0x1d.logfox.extensions.notifications.sendRecordingPausedNotification
-import com.f0x1d.logfox.extensions.updateList
 import com.f0x1d.logfox.model.LogLine
 import com.f0x1d.logfox.repository.logging.base.LoggingHelperItemsRepository
-import com.f0x1d.logfox.repository.logging.readers.base.BaseReader
+import com.f0x1d.logfox.repository.logging.readers.base.LogsReader
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -48,10 +47,6 @@ class RecordingsRepository @Inject constructor(
     private var recordingJob: Job? = null
 
     override suspend fun setup() {
-        itemsFlow.update {
-            database.logRecordingDao().getAll()
-        }
-
         recordingDir = File("${context.filesDir.absolutePath}/recordings").apply {
             if (!exists()) mkdirs()
         }
@@ -77,9 +72,7 @@ class RecordingsRepository @Inject constructor(
         recordingTime = System.currentTimeMillis()
         fileMutex.withLock {
             recordingFile = File(recordingDir, "${recordingTime.exportFormatted}.txt").apply {
-                withContext(Dispatchers.IO) {
-                    createNewFile()
-                }
+                createNewFile()
             }
         }
 
@@ -94,12 +87,12 @@ class RecordingsRepository @Inject constructor(
         context.sendRecordingNotification()
     }
 
-    fun pause() = runOnAppScope {
+    fun pause() {
         recordingStateFlow.update { RecordingState.PAUSED }
         context.sendRecordingPausedNotification()
     }
 
-    fun resume() = runOnAppScope {
+    fun resume() {
         recordingStateFlow.update { RecordingState.RECORDING }
         context.sendRecordingNotification()
     }
@@ -112,45 +105,33 @@ class RecordingsRepository @Inject constructor(
 
         writeLogsToFile()
 
-        itemsFlow.updateList {
-            val title = "${context.getString(R.string.record_file)} ${itemsFlow.value.size + 1}"
+        val title = "${context.getString(R.string.record_file)} ${database.logRecordingDao().count() + 1}"
 
-            val logRecording = LogRecording(title, recordingTime, recordingFile!!.absolutePath).run {
-                copy(id = database.logRecordingDao().insert(this))
-            }
+        val logRecording = LogRecording(title, recordingTime, recordingFile!!.absolutePath).run {
+            copy(id = database.logRecordingDao().insert(this))
+        }
 
-            add(0, logRecording)
-
-            withContext(Dispatchers.Main) {
-                recordingSaved.invoke(logRecording)
-            }
+        withContext(Dispatchers.Main) {
+            recordingSaved.invoke(logRecording)
         }
 
         recordingStateFlow.update { RecordingState.IDLE }
     }
 
-    fun updateTitle(logRecording: LogRecording, newTitle: String) = updateInternal(
-        newItem = { logRecording.copy(title = newTitle) },
-        databaseUpdate = { database.logRecordingDao().update(it) },
-        idGet = { it.id }
-    )
+    fun updateTitle(logRecording: LogRecording, newTitle: String) = update(logRecording.copy(title = newTitle))
+
+    override suspend fun updateInternal(item: LogRecording) = database.logRecordingDao().update(item)
 
     override suspend fun deleteInternal(item: LogRecording) {
-        itemsFlow.updateList {
-            item.deleteFile()
-
-            remove(item)
-            database.logRecordingDao().delete(item)
-        }
+        item.deleteFile()
+        database.logRecordingDao().delete(item)
     }
 
     override suspend fun clearInternal() {
-        itemsFlow.update {
-            it.forEach { recording -> recording.deleteFile() }
-
-            database.logRecordingDao().deleteAll()
-            emptyList()
+        database.logRecordingDao().getAll().forEach {
+            it.deleteFile()
         }
+        database.logRecordingDao().deleteAll()
     }
 
     private suspend fun writeLogsToFile() {
@@ -171,7 +152,7 @@ class RecordingsRepository @Inject constructor(
         }
     }
 
-    inner class RecordingReader: BaseReader {
+    inner class RecordingReader: LogsReader {
         override suspend fun readLine(line: LogLine) {
             if (recordingStateFlow.value == RecordingState.RECORDING) {
                 linesMutex.withLock {

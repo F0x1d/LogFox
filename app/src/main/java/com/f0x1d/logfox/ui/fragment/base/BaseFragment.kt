@@ -11,8 +11,7 @@ import com.f0x1d.logfox.extensions.snackbar
 abstract class BaseFragment<T : ViewBinding>: Fragment() {
 
     private var mutableBinding: T? = null
-    protected val binding: T
-        get() = mutableBinding!!
+    protected val binding: T get() = mutableBinding!!
 
     abstract fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?): T?
 

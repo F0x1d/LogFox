@@ -45,6 +45,7 @@ class SetupFragment: BaseViewModelFragment<SetupViewModel, FragmentSetupBinding>
     override fun onEvent(event: Event) {
         when (event.type) {
             SetupViewModel.EVENT_TYPE_GOT_PERMISSION -> requireContext().hardRestartApp()
+
             SetupViewModel.EVENT_TYPE_SHOW_ADB_DIALOG -> {
                 MaterialAlertDialogBuilder(requireContext())
                     .setIcon(R.drawable.ic_dialog_adb)

@@ -14,8 +14,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 abstract class BaseBottomSheet<T : ViewBinding>: BottomSheetDialogFragment() {
 
     private var mutableBinding: T? = null
-    protected val binding: T
-        get() = mutableBinding!!
+    protected val binding: T get() = mutableBinding!!
 
     abstract fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?): T?
 

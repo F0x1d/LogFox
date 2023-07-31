@@ -7,6 +7,14 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.f0x1d.logfox.LogFoxApp
 import com.f0x1d.logfox.R
+import com.f0x1d.logfox.database.entity.AllowedLevelsConverter
+import com.f0x1d.logfox.database.entity.AppCrash
+import com.f0x1d.logfox.database.entity.AppCrashDao
+import com.f0x1d.logfox.database.entity.CrashTypeConverter
+import com.f0x1d.logfox.database.entity.LogRecording
+import com.f0x1d.logfox.database.entity.LogRecordingDao
+import com.f0x1d.logfox.database.entity.UserFilter
+import com.f0x1d.logfox.database.entity.UserFilterDao
 
 @Database(entities = [AppCrash::class, LogRecording::class, UserFilter::class], version = 7)
 @TypeConverters(CrashTypeConverter::class, AllowedLevelsConverter::class)

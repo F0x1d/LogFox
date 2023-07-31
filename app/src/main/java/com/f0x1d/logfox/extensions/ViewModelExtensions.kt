@@ -1,34 +1,26 @@
 package com.f0x1d.logfox.extensions
 
 import android.net.Uri
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
+import com.f0x1d.logfox.database.entity.AppCrash
+import com.f0x1d.logfox.database.entity.LogRecording
 import com.f0x1d.logfox.utils.exportCrashToZip
 import com.f0x1d.logfox.utils.exportLogToZip
-import com.f0x1d.logfox.viewmodel.base.BaseFlowProxyViewModel
+import com.f0x1d.logfox.viewmodel.base.BaseViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.io.OutputStream
 
-inline fun <T, R> BaseFlowProxyViewModel<T, R>.logToZip(uri: Uri, crossinline block: R.() -> String) = toZip(uri) {
-    exportLogToZip(ctx, block.invoke(it))
+fun BaseViewModel.logToZip(uri: Uri, logRecording: LogRecording) = toZip(uri) {
+    exportLogToZip(ctx, logRecording.file)
 }
 
-inline fun <T, R> BaseFlowProxyViewModel<T, R>.crashToZip(uri: Uri, crossinline block: R.() -> String) = toZip(uri) {
-    exportCrashToZip(ctx, block.invoke(it))
+fun BaseViewModel.crashToZip(uri: Uri, appCrash: AppCrash) = toZip(uri) {
+    exportCrashToZip(ctx, appCrash.log)
 }
 
-inline fun <T, R> BaseFlowProxyViewModel<T, R>.toZip(uri: Uri, crossinline block: OutputStream.(R) -> Unit) {
-    viewModelScope.launch(Dispatchers.IO) {
-        data.value?.apply {
-            ctx.contentResolver.openOutputStream(uri)?.also {
-                block.invoke(it, this)
-            }
+inline fun BaseViewModel.toZip(uri: Uri, crossinline block: OutputStream.() -> Unit) {
+    launchCatching(Dispatchers.IO) {
+        ctx.contentResolver.openOutputStream(uri)?.also {
+            block.invoke(it)
         }
     }
-}
-
-inline fun <T : ViewModel> viewModelFactory(crossinline block: () -> T) = object : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>) = block.invoke() as T
 }

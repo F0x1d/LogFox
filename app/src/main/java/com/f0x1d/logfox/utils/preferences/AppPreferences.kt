@@ -3,7 +3,7 @@ package com.f0x1d.logfox.utils.preferences
 import android.content.Context
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
-import com.f0x1d.logfox.database.CrashType
+import com.f0x1d.logfox.database.entity.CrashType
 import com.f0x1d.logfox.utils.preferences.base.BasePreferences
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject

@@ -1,12 +1,12 @@
 package com.f0x1d.logfox.repository.logging.readers.crashes.base
 
 import com.f0x1d.logfox.LogFoxApp
-import com.f0x1d.logfox.database.AppCrash
-import com.f0x1d.logfox.database.CrashType
+import com.f0x1d.logfox.database.entity.AppCrash
+import com.f0x1d.logfox.database.entity.CrashType
 import com.f0x1d.logfox.model.LogLine
-import com.f0x1d.logfox.repository.logging.readers.base.BaseReader
+import com.f0x1d.logfox.repository.logging.readers.base.LogsReader
 
-abstract class BaseCrashDetector(private val collected: suspend (AppCrash) -> Unit): BaseReader {
+abstract class BaseCrashDetector(private val collected: suspend (AppCrash) -> Unit): LogsReader {
 
     protected abstract val crashType: CrashType
     protected open val commonTag: String? = null

@@ -1,7 +1,7 @@
 package com.f0x1d.logfox.utils
 
 import android.content.Context
-import com.f0x1d.logfox.database.UserFilter
+import com.f0x1d.logfox.database.entity.UserFilter
 import com.f0x1d.logfox.model.Device
 import com.f0x1d.logfox.repository.logging.FiltersRepository
 import com.google.gson.Gson
