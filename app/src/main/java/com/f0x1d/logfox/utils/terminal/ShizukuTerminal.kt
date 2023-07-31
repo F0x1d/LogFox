@@ -109,9 +109,9 @@ class ShizukuTerminal @Inject constructor(
         val processId = execute(command.joinToString(" "))
 
         TerminalProcess(
-            AutoCloseInputStream(processOutput(processId)),
-            AutoCloseInputStream(processError(processId)),
-            AutoCloseOutputStream(processInput(processId))
+            AutoCloseInputStream(processOutput(processId) ?: return@run null),
+            AutoCloseInputStream(processError(processId) ?: return@run null),
+            AutoCloseOutputStream(processInput(processId) ?: return@run null)
         ) {
             destroyProcess(processId)
         }
