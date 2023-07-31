@@ -1,8 +1,10 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+
     id 'kotlin-kapt'
     id 'kotlin-parcelize'
+
     id 'com.google.devtools.ksp'
     id 'dagger.hilt.android.plugin'
     id 'androidx.navigation.safeargs.kotlin'
@@ -55,46 +57,46 @@ android {
 }
 
 dependencies {
-    implementation "dev.rikka.shizuku:api:13.1.4"
-    implementation "dev.rikka.shizuku:provider:13.1.4"
+    implementation "dev.rikka.shizuku:api:$shizuku_version"
+    implementation "dev.rikka.shizuku:provider:$shizuku_version"
 
-    implementation 'io.github.inflationx:viewpump:2.0.3'
+    implementation "io.github.inflationx:viewpump:$viewpump_version"
 
-    implementation 'com.google.code.gson:gson:2.10.1'
-    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation "com.squareup.okhttp3:okhttp:4.10.0"
+    implementation "com.google.code.gson:gson:$gson_version"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.okhttp3:okhttp:$okhttp_version"
 
-    implementation 'com.github.bumptech.glide:glide:4.14.2'
-    ksp 'com.github.bumptech.glide:ksp:4.14.2'
+    implementation "com.github.bumptech.glide:glide:$glide_version"
+    ksp "com.github.bumptech.glide:ksp:$glide_version"
 
-    implementation "androidx.room:room-runtime:2.5.2"
-    implementation "androidx.room:room-ktx:2.5.2"
-    ksp "androidx.room:room-compiler:2.5.2"
+    implementation "androidx.room:room-runtime:$room_version"
+    implementation "androidx.room:room-ktx:$room_version"
+    ksp "androidx.room:room-compiler:$room_version"
 
-    implementation "com.google.dagger:hilt-android:2.45"
-    kapt "com.google.dagger:hilt-compiler:2.45"
-    implementation 'androidx.hilt:hilt-navigation-fragment:1.0.0'
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "com.google.dagger:hilt-compiler:$hilt_version"
+    implementation "androidx.hilt:hilt-navigation-fragment:$hilt_navigation_version"
 
-    implementation "androidx.core:core-ktx:1.10.1"
-    implementation "androidx.collection:collection-ktx:1.2.0"
-    implementation "androidx.fragment:fragment-ktx:1.6.1"
-    implementation "androidx.preference:preference-ktx:1.2.0"
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.6.1"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.6.1"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1"
+    implementation "androidx.core:core-ktx:$androidx_core_version"
+    implementation "androidx.collection:collection-ktx:$androidx_collection_version"
+    implementation "androidx.fragment:fragment-ktx:$androidx_fragment_version"
+    implementation "androidx.preference:preference-ktx:$androidx_preference_version"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$androidx_lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$androidx_lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$androidx_lifecycle_version"
 
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.9.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
-    implementation "androidx.recyclerview:recyclerview:1.3.1"
+    implementation "androidx.appcompat:appcompat:$androidx_appcompat_version"
+    implementation "androidx.constraintlayout:constraintlayout:$androidx_constraint_version"
+    implementation "androidx.recyclerview:recyclerview:$androidx_recycler_version"
 
-    implementation "androidx.navigation:navigation-runtime-ktx:2.6.0"
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.6.0'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.6.0'
+    implementation "com.google.android.material:material:$material_version"
 
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    implementation "androidx.navigation:navigation-runtime-ktx:$navigation_version"
+    implementation "androidx.navigation:navigation-fragment-ktx:$navigation_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$navigation_version"
+
+    testImplementation "junit:junit:$junit_version"
+    androidTestImplementation "androidx.test.ext:junit:$androidx_junit_version"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$androidx_espresso_version"
 }
