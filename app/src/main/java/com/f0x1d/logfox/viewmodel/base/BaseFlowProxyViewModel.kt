@@ -3,13 +3,11 @@ package com.f0x1d.logfox.viewmodel.base
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.distinctUntilChanged
-import androidx.lifecycle.viewModelScope
 import com.f0x1d.logfox.extensions.suspendSetValue
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 
 abstract class BaseFlowProxyViewModel<T, R>(application: Application, protected val flow: Flow<T?>): BaseViewModel(application) {
 
@@ -50,7 +48,7 @@ abstract class BaseFlowProxyViewModel<T, R>(application: Application, protected 
     protected fun stopCollector() = currentJob?.cancel()
 
     private fun startCollector(block: suspend (R?) -> Unit) {
-        currentJob = viewModelScope.launch(Dispatchers.Default) {
+        currentJob = launchCatching(Dispatchers.IO) {
             flow.map { map(it) }.collect {
                 block.invoke(it)
             }

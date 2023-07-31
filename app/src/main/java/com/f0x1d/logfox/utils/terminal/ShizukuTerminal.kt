@@ -1,27 +1,37 @@
 package com.f0x1d.logfox.utils.terminal
 
+import android.content.ComponentName
+import android.content.Context
+import android.content.ServiceConnection
 import android.content.pm.PackageManager
 import android.os.Build
+import android.os.IBinder
+import android.os.ParcelFileDescriptor.AutoCloseInputStream
+import android.os.ParcelFileDescriptor.AutoCloseOutputStream
 import androidx.annotation.RequiresApi
+import com.f0x1d.logfox.BuildConfig
+import com.f0x1d.logfox.IUserService
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.extensions.SHIZUKU_PERMISSION_REQUEST_ID
+import com.f0x1d.logfox.model.terminal.TerminalProcess
+import com.f0x1d.logfox.model.terminal.TerminalResult
+import com.f0x1d.logfox.service.shizuku.UserService
 import com.f0x1d.logfox.utils.terminal.base.Terminal
-import com.f0x1d.logfox.utils.terminal.base.TerminalProcess
-import com.f0x1d.logfox.utils.terminal.base.TerminalResult
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
 import rikka.shizuku.Shizuku
-import rikka.shizuku.ShizukuRemoteProcess
-import java.lang.reflect.Method
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 @RequiresApi(23)
 @Singleton
-class ShizukuTerminal @Inject constructor(): Terminal {
+class ShizukuTerminal @Inject constructor(
+    @ApplicationContext private val context: Context
+): Terminal {
 
     companion object {
         const val INDEX = 2
@@ -29,27 +39,13 @@ class ShizukuTerminal @Inject constructor(): Terminal {
 
     override val title = R.string.shizuku
 
-    private var newProcessMethod: Method? = null
-
-    // I know this is bad, but why would they remove newProcess? Am i supposed to copy their code?
-    private fun createProcess(command: Array<out String>) = try {
-        if (newProcessMethod == null) {
-            newProcessMethod = Shizuku::class.java.getDeclaredMethod(
-                "newProcess",
-                Array<String>::class.java,
-                Array<String>::class.java,
-                String::class.java
-            ).also { it.isAccessible = true }
-        }
-
-        newProcessMethod!!.invoke(
-            null,
-            arrayOf("sh", "-c", command.joinToString(" ")),
-            null,
-            null
-        ) as ShizukuRemoteProcess
-    } catch (e: Exception) {
-        null
+    private var userService: IUserService? = null
+    private val userServiceArgs by lazy {
+        Shizuku.UserServiceArgs(ComponentName(context, UserService::class.java))
+            .daemon(false)
+            .processNameSuffix("service")
+            .debuggable(BuildConfig.DEBUG)
+            .version(BuildConfig.VERSION_CODE)
     }
 
     override suspend fun isSupported() = suspendCoroutine {
@@ -59,7 +55,7 @@ class ShizukuTerminal @Inject constructor(): Terminal {
             !Shizuku.pingBinder() -> it.resume(false)
             Shizuku.isPreV11() -> it.resume(false)
 
-            Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED -> it.resume(true)
+            Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED -> it.resumeWithServiceBinding()
             Shizuku.shouldShowRequestPermissionRationale() -> it.resume(false)
 
             else -> {
@@ -67,7 +63,12 @@ class ShizukuTerminal @Inject constructor(): Terminal {
                     override fun onRequestPermissionResult(requestCode: Int, grantResult: Int) {
                         if (requestCode != SHIZUKU_PERMISSION_REQUEST_ID) return
 
-                        it.resume(grantResult == PackageManager.PERMISSION_GRANTED)
+                        when (grantResult == PackageManager.PERMISSION_GRANTED) {
+                            true -> it.resumeWithServiceBinding()
+
+                            else -> it.resume(false)
+                        }
+
                         Shizuku.removeRequestPermissionResultListener(this)
                     }
                 }
@@ -78,37 +79,46 @@ class ShizukuTerminal @Inject constructor(): Terminal {
         }
     }
 
-    override suspend fun executeNow(vararg command: String) = withContext(Dispatchers.IO) {
-        if (!Shizuku.pingBinder()) {
-            return@withContext TerminalResult(3)
+    private fun Continuation<Boolean>.resumeWithServiceBinding() {
+        if (userService != null) {
+            resume(true)
+            return
         }
 
-        val process = createProcess(command) ?: return@withContext TerminalResult(3)
+        val userServiceConnection = object : ServiceConnection {
+            override fun onServiceConnected(componentName: ComponentName?, binder: IBinder?) {
+                if (binder == null || !binder.pingBinder()) return
 
-        val output = async(Dispatchers.IO) {
-            process.inputStream.readBytes().decodeToString()
-        }
-        val error = async(Dispatchers.IO) {
-            process.errorStream.readBytes().decodeToString()
-        }
-        val exitCode = process.waitFor()
+                userService = IUserService.Stub.asInterface(binder)
+                resume(true)
+            }
 
-        TerminalResult(exitCode, output.await(), error.await())
+            override fun onServiceDisconnected(componentName: ComponentName?) {
+                userService = null
+            }
+        }
+
+        Shizuku.bindUserService(userServiceArgs, userServiceConnection)
     }
 
-    override fun execute(vararg command: String): TerminalProcess? {
-        if (!Shizuku.pingBinder()) {
-            return null
-        }
+    override suspend fun executeNow(vararg command: String) = withContext(Dispatchers.IO) {
+        userService?.executeNow(command.joinToString(" ")) ?: TerminalResult(3)
+    }
 
-        return createProcess(command)?.run {
-            TerminalProcess(
-                inputStream,
-                errorStream,
-                outputStream,
-                this::destroy
-            )
+    override fun execute(vararg command: String) = userService?.run {
+        val processId = execute(command.joinToString(" "))
+
+        TerminalProcess(
+            AutoCloseInputStream(processOutput(processId)),
+            AutoCloseInputStream(processError(processId)),
+            AutoCloseOutputStream(processInput(processId))
+        ) {
+            destroyProcess(processId)
         }
+    }
+
+    override suspend fun exit() {
+        if (shizukuAvailable) Shizuku.unbindUserService(userServiceArgs, null, true)
     }
 }
 

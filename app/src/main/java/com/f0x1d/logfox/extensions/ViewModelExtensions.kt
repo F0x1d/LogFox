@@ -2,13 +2,11 @@ package com.f0x1d.logfox.extensions
 
 import android.net.Uri
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.initializer
 import com.f0x1d.logfox.utils.exportCrashToZip
 import com.f0x1d.logfox.utils.exportLogToZip
 import com.f0x1d.logfox.viewmodel.base.BaseFlowProxyViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.io.OutputStream
 
 inline fun <T, R> BaseFlowProxyViewModel<T, R>.logToZip(uri: Uri, crossinline block: R.() -> String) = toZip(uri) {
@@ -20,7 +18,7 @@ inline fun <T, R> BaseFlowProxyViewModel<T, R>.crashToZip(uri: Uri, crossinline 
 }
 
 inline fun <T, R> BaseFlowProxyViewModel<T, R>.toZip(uri: Uri, crossinline block: OutputStream.(R) -> Unit) {
-    viewModelScope.launch(Dispatchers.IO) {
+    launchCatching(Dispatchers.IO) {
         data.value?.apply {
             ctx.contentResolver.openOutputStream(uri)?.also {
                 block.invoke(it, this)
@@ -29,6 +27,8 @@ inline fun <T, R> BaseFlowProxyViewModel<T, R>.toZip(uri: Uri, crossinline block
     }
 }
 
-inline fun <T : ViewModel> viewModelFactory(crossinline block: () -> T) = object : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>) = block.invoke() as T
+inline fun <reified T : ViewModel> viewModelFactory(crossinline block: () -> T) = androidx.lifecycle.viewmodel.viewModelFactory {
+    initializer {
+        block()
+    }
 }

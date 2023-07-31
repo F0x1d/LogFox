@@ -1,9 +1,9 @@
 package com.f0x1d.logfox.utils.terminal
 
 import com.f0x1d.logfox.R
+import com.f0x1d.logfox.model.terminal.TerminalProcess
+import com.f0x1d.logfox.model.terminal.TerminalResult
 import com.f0x1d.logfox.utils.terminal.base.Terminal
-import com.f0x1d.logfox.utils.terminal.base.TerminalProcess
-import com.f0x1d.logfox.utils.terminal.base.TerminalResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext

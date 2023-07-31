@@ -2,7 +2,6 @@ package com.f0x1d.logfox.viewmodel
 
 import android.Manifest
 import android.app.Application
-import androidx.lifecycle.viewModelScope
 import com.f0x1d.logfox.BuildConfig
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.extensions.hasPermissionToReadLogs
@@ -15,7 +14,6 @@ import com.f0x1d.logfox.utils.terminal.shizukuAvailable
 import com.f0x1d.logfox.viewmodel.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -34,7 +32,7 @@ class SetupViewModel @Inject constructor(
         const val EVENT_TYPE_SHOW_ADB_DIALOG = "adb_dialog"
     }
 
-    fun root() = viewModelScope.launch(Dispatchers.IO) {
+    fun root() = launchCatching(Dispatchers.IO) {
         if (rootTerminal.isSupported()) {
             appPreferences.selectTerminal(RootTerminal.INDEX)
 
@@ -44,7 +42,7 @@ class SetupViewModel @Inject constructor(
             snackbar(R.string.no_root)
     }
 
-    fun adb() = viewModelScope.launch(Dispatchers.IO) {
+    fun adb() = launchCatching(Dispatchers.IO) {
         if (ctx.hasPermissionToReadLogs())
             gotPermission()
         else {
@@ -53,7 +51,7 @@ class SetupViewModel @Inject constructor(
         }
     }
 
-    fun shizuku() = viewModelScope.launch(Dispatchers.IO) {
+    fun shizuku() = launchCatching(Dispatchers.IO) {
         appPreferences.selectTerminal(ShizukuTerminal.INDEX)
 
         if (shizukuAvailable && shizukuTerminal.isSupported() && shizukuTerminal.executeNow(*command).isSuccessful)

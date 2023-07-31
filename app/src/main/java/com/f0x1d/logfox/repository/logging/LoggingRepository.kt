@@ -8,12 +8,15 @@ import com.f0x1d.logfox.extensions.toast
 import com.f0x1d.logfox.extensions.updateList
 import com.f0x1d.logfox.model.LogLine
 import com.f0x1d.logfox.repository.base.BaseRepository
+import com.f0x1d.logfox.repository.logging.base.LoggingHelperRepository
 import com.f0x1d.logfox.utils.preferences.AppPreferences
 import com.f0x1d.logfox.utils.terminal.DefaultTerminal
 import com.f0x1d.logfox.utils.terminal.base.Terminal
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,11 +32,9 @@ import javax.inject.Singleton
 @Singleton
 class LoggingRepository @Inject constructor(
     @ApplicationContext private val context: Context,
-    crashesRepository: CrashesRepository,
-    recordingsRepository: RecordingsRepository,
-    filtersRepository: FiltersRepository,
     private val appPreferences: AppPreferences,
-    private val terminals: Array<Terminal>
+    private val terminals: Array<Terminal>,
+    private val helpers: Array<LoggingHelperRepository>
 ): BaseRepository(), SharedPreferences.OnSharedPreferenceChangeListener {
 
     companion object {
@@ -45,17 +46,11 @@ class LoggingRepository @Inject constructor(
 
     private var loggingJob: Job? = null
 
-    private var loggingTerminal: Terminal = terminals.first()
+    private var loggingTerminal = terminals.first()
     private var loggingInterval = AppPreferences.LOGS_UPDATE_INTERVAL_DEFAULT
     private var logsDisplayLimit = AppPreferences.LOGS_DISPLAY_LIMIT_DEFAULT
 
     private var idsCounter = -1L
-
-    private val helpers = listOf(
-        crashesRepository,
-        recordingsRepository,
-        filtersRepository
-    )
 
     fun startLoggingIfNot() {
         if (loggingJob?.isActive == true) return
@@ -66,9 +61,9 @@ class LoggingRepository @Inject constructor(
         appPreferences.registerListener(this)
 
         loggingJob = onAppScope {
-            helpers.forEach {
-                it.setup()
-            }
+            helpers.map {
+                async(Dispatchers.IO) { it.setup() }
+            }.awaitAll()
 
             while (isActive) {
                 readLogs()
@@ -77,9 +72,17 @@ class LoggingRepository @Inject constructor(
     }
 
     fun restartLogging(updateTerminal: Boolean = true) {
-        if (updateTerminal) loggingTerminal = terminals[appPreferences.selectedTerminalIndex]
-
         loggingJob?.cancel()
+
+        if (updateTerminal) {
+            val prevTerminal = loggingTerminal
+            loggingTerminal = terminals[appPreferences.selectedTerminalIndex]
+
+            if (prevTerminal != loggingTerminal) onAppScope {
+                prevTerminal.exit()
+            }
+        }
+
         loggingJob = onAppScope {
             while (isActive) {
                 readLogs()
@@ -94,9 +97,12 @@ class LoggingRepository @Inject constructor(
         appPreferences.unregisterListener(this)
 
         onAppScope {
-            helpers.forEach {
-                it.stop()
+            val closingHelpers = helpers.map {
+                async(Dispatchers.IO) { it.stop() }
             }
+
+            loggingTerminal.exit()
+            closingHelpers.awaitAll()
         }
     }
 
@@ -131,7 +137,7 @@ class LoggingRepository @Inject constructor(
         val updateLines = mutableListOf<LogLine>()
         val mutex = Mutex()
 
-        val updater = launch {
+        val updater = launch(Dispatchers.IO) {
             while (isActive) {
                 delay(loggingInterval)
 
@@ -148,37 +154,38 @@ class LoggingRepository @Inject constructor(
             }
         }
 
-        process.output.bufferedReader().useLines {
-            var droppedFirst = false
-            // avoiding getting the same line after logging restart because of
-            // WARNING: -T 0 invalid, setting to 1
-            for (line in it) {
-                if (!isActive) break
+        try {
+            process.output.bufferedReader().useLines {
+                var droppedFirst = false
+                // avoiding getting the same line after logging restart because of
+                // WARNING: -T 0 invalid, setting to 1
+                for (line in it) {
+                    if (!isActive) break
 
-                val logLine = LogLine(idsCounter++, line) ?: continue
-                if (!droppedFirst) {
-                    droppedFirst = true
-                    continue
-                }
+                    val logLine = LogLine(idsCounter++, line) ?: continue
+                    if (!droppedFirst) {
+                        droppedFirst = true
+                        continue
+                    }
 
-                mutex.withLock {
-                    updateLines.add(logLine)
-                }
+                    mutex.withLock {
+                        updateLines.add(logLine)
+                    }
 
-                helpers.forEach { helper ->
-                    helper.readers.forEach { reader ->
-                        reader.readLine(logLine)
+                    helpers.forEach { helper ->
+                        helper.readers.forEach { reader ->
+                            reader.readLine(logLine)
+                        }
                     }
                 }
             }
+
+            process.destroy()
+        } catch (e: Exception) {
+            // closed or dead
         }
 
         updater.cancel()
-        try {
-            process.destroy()
-        } catch (e: Exception) {
-            // Already dead
-        }
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {

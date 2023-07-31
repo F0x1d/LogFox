@@ -67,10 +67,10 @@ class LoggingService: Service() {
     }
 
     private fun killApp() {
+        loggingRepository.stopLogging()
         activityManager.appTasks.forEach {
             it.finishAndRemoveTask()
         }
-        loggingRepository.stopLogging()
 
         stopService()
     }
