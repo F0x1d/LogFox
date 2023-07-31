@@ -1,7 +1,6 @@
 package com.f0x1d.logfox;
 
 import com.f0x1d.logfox.model.terminal.TerminalResult;
-import com.f0x1d.logfox.model.terminal.shizuku.ShizukuTerminalProcess;
 
 interface IUserService {
     void destroy() = 16777114;

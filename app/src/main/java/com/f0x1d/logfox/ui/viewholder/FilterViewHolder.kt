@@ -4,7 +4,7 @@ import android.text.Html
 import android.view.View
 import android.widget.TextView
 import com.f0x1d.logfox.R
-import com.f0x1d.logfox.database.UserFilter
+import com.f0x1d.logfox.database.entity.UserFilter
 import com.f0x1d.logfox.databinding.ItemFilterBinding
 import com.f0x1d.logfox.ui.viewholder.base.BaseViewHolder
 import com.f0x1d.logfox.utils.view.OnlyUserCheckedChangeListener
@@ -36,6 +36,7 @@ class FilterViewHolder(
         binding.tidText.setTextOrMakeGoneIfNull(R.string.tid, data.tid)
         binding.tagText.setTextOrMakeGoneIfNull(R.string.tag, data.tag)
         binding.contentText.setTextOrMakeGoneIfNull(R.string.content_contains, data.content)
+
         checkedListener.check(data.enabled)
     }
 

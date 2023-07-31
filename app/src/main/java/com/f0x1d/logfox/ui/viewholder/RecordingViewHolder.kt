@@ -1,6 +1,6 @@
 package com.f0x1d.logfox.ui.viewholder
 
-import com.f0x1d.logfox.database.LogRecording
+import com.f0x1d.logfox.database.entity.LogRecording
 import com.f0x1d.logfox.databinding.ItemRecordingBinding
 import com.f0x1d.logfox.extensions.toLocaleString
 import com.f0x1d.logfox.ui.viewholder.base.BaseViewHolder

@@ -49,7 +49,7 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
                 viewModel.switchState()
             }
             setClickListenerOn(R.id.search_item) {
-                findNavController().navigate(LogsFragmentDirections.actionLogsFragmentToSearchBottomSheet(viewModel.query))
+                findNavController().navigate(LogsFragmentDirections.actionLogsFragmentToSearchBottomSheet(viewModel.query.value))
             }
             setClickListenerOn(R.id.filters_item) {
                 findNavController().navigate(LogsFragmentDirections.actionLogsFragmentToFiltersFragment())
@@ -91,7 +91,7 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
                 if (changingState)
                     return
 
-                if (viewModel.paused() && !recyclerView.canScrollVertically(1)) {
+                if (viewModel.paused.value && !recyclerView.canScrollVertically(1)) {
                     if (viewModel.resumeLoggingWithBottomTouch) viewModel.resume()
                 } else
                     viewModel.pause()
@@ -105,7 +105,7 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
                 scrollLogToBottom()
         }
 
-        viewModel.data.observe(viewLifecycleOwner) {
+        viewModel.logs.observe(viewLifecycleOwner) {
             adapter.submitList(null)
             adapter.submitList(it ?: return@observe) {
                 scrollLogToBottom()
@@ -130,10 +130,12 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
-        if (key == "pref_logs_text_size") adapter.textSize = viewModel.appPreferences.logsTextSize.toFloat()
-        else if (key == "pref_logs_expanded") adapter.logsExpanded = viewModel.appPreferences.logsExpanded
+        viewModel.appPreferences.apply {
+            if (key == "pref_logs_text_size") adapter.textSize = logsTextSize.toFloat()
+            else if (key == "pref_logs_expanded") adapter.logsExpanded = logsExpanded
 
-        if (key?.startsWith("pref_show_log") == true) adapter.logsFormat = viewModel.appPreferences.showLogValues
+            if (key?.startsWith("pref_show_log") == true) adapter.logsFormat = showLogValues
+        }
     }
 
     override fun onDestroy() {

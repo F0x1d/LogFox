@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import com.f0x1d.logfox.adapter.base.BaseListAdapter
-import com.f0x1d.logfox.database.AppCrash
+import com.f0x1d.logfox.database.entity.AppCrash
 import com.f0x1d.logfox.databinding.ItemCrashBinding
 import com.f0x1d.logfox.ui.viewholder.CrashViewHolder
 

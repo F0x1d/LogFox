@@ -1,4 +1,4 @@
-package com.f0x1d.logfox.database
+package com.f0x1d.logfox.database.entity
 
 import androidx.annotation.Keep
 import androidx.room.*
@@ -22,13 +22,16 @@ data class UserFilter(
 interface UserFilterDao {
 
     @Query("SELECT * FROM UserFilter")
-    suspend fun getAll(): List<UserFilter>
+    fun getAllAsFlow(): Flow<List<UserFilter>>
 
     @Query("SELECT * FROM UserFilter WHERE id = :id")
     fun get(id: Long): Flow<UserFilter?>
 
     @Insert
-    suspend fun insert(userFilter: UserFilter): Long
+    suspend fun insert(userFilter: UserFilter)
+
+    @Insert
+    suspend fun insert(items: List<UserFilter>)
 
     @Update
     suspend fun update(userFilter: UserFilter)

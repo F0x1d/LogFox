@@ -2,26 +2,33 @@ package com.f0x1d.logfox.viewmodel.recordings
 
 import android.app.Application
 import android.net.Uri
+import androidx.lifecycle.asLiveData
 import com.f0x1d.logfox.database.AppDatabase
-import com.f0x1d.logfox.database.LogRecording
 import com.f0x1d.logfox.repository.logging.RecordingsRepository
-import com.f0x1d.logfox.viewmodel.base.BaseSameFlowProxyViewModel
+import com.f0x1d.logfox.viewmodel.base.BaseViewModel
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flowOn
 import java.io.File
 
 class RecordingViewModel @AssistedInject constructor(
     @Assisted recordingId: Long,
     application: Application,
-    database: AppDatabase,
+    private val database: AppDatabase,
     private val recordingsRepository: RecordingsRepository
-): BaseSameFlowProxyViewModel<LogRecording>(application, database.logRecordingDao().get(recordingId)) {
+): BaseViewModel(application) {
+
+    val recording = database.logRecordingDao().get(recordingId)
+        .distinctUntilChanged()
+        .flowOn(Dispatchers.IO)
+        .asLiveData()
 
     fun exportFile(uri: Uri) = launchCatching(Dispatchers.IO) {
         ctx.contentResolver.openOutputStream(uri)?.use { outputStream ->
-            data.value?.apply {
+            recording.value?.apply {
                 File(file).inputStream().use { inputStream ->
                     inputStream.copyTo(outputStream)
                 }
@@ -29,7 +36,7 @@ class RecordingViewModel @AssistedInject constructor(
         }
     }
 
-    fun updateTitle(title: String) = data.value?.apply {
+    fun updateTitle(title: String) = recording.value?.apply {
         recordingsRepository.updateTitle(this, title)
     }
 }

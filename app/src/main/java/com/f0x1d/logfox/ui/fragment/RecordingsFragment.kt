@@ -9,7 +9,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.adapter.RecordingsAdapter
-import com.f0x1d.logfox.database.LogRecording
+import com.f0x1d.logfox.database.entity.LogRecording
 import com.f0x1d.logfox.databinding.FragmentRecordingsBinding
 import com.f0x1d.logfox.extensions.setClickListenerOn
 import com.f0x1d.logfox.extensions.startLoggingService
@@ -62,8 +62,8 @@ class RecordingsFragment: BaseViewModelFragment<RecordingsViewModel, FragmentRec
         binding.recordingsRecycler.addItemDecoration(RecyclerViewDivider(requireContext(), 80.dpToPx.toInt(), 10.dpToPx.toInt()))
         binding.recordingsRecycler.adapter = adapter
 
-        viewModel.data.observe(viewLifecycleOwner) {
-            adapter.submitList(it ?: return@observe)
+        viewModel.recordings.observe(viewLifecycleOwner) {
+            adapter.submitList(it)
         }
 
         viewModel.recordingStateData.observe(viewLifecycleOwner) {
@@ -104,7 +104,7 @@ class RecordingsFragment: BaseViewModelFragment<RecordingsViewModel, FragmentRec
         }
     }
 
-    private fun openDetails(recording: LogRecording?) = recording?.id?.apply {
-        findNavController().navigate(RecordingsFragmentDirections.actionRecordingsFragmentToRecordingBottomSheet(this))
+    private fun openDetails(recording: LogRecording?) = recording?.id?.also {
+        findNavController().navigate(RecordingsFragmentDirections.actionRecordingsFragmentToRecordingBottomSheet(it))
     }
 }

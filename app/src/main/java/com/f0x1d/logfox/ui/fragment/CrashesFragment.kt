@@ -42,8 +42,8 @@ class CrashesFragment: BaseViewModelFragment<CrashesViewModel, FragmentCrashesBi
         binding.crashesRecycler.addItemDecoration(RecyclerViewDivider(requireContext(), 80.dpToPx.toInt(), 10.dpToPx.toInt()))
         binding.crashesRecycler.adapter = adapter
 
-        viewModel.data.observe(viewLifecycleOwner) {
-            adapter.submitList(it ?: return@observe)
+        viewModel.crashes.observe(viewLifecycleOwner) {
+            adapter.submitList(it)
         }
     }
 }

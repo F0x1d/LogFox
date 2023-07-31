@@ -1,12 +1,12 @@
 package com.f0x1d.logfox.repository.logging.base
 
 import com.f0x1d.logfox.repository.base.BaseRepository
-import com.f0x1d.logfox.repository.logging.readers.base.BaseReader
+import com.f0x1d.logfox.repository.logging.readers.base.LogsReader
 
 abstract class LoggingHelperRepository: BaseRepository() {
 
-    open val readers = emptyList<BaseReader>()
+    open val readers = emptyList<LogsReader>()
 
-    abstract suspend fun setup()
+    open suspend fun setup() {}
     open suspend fun stop() {}
 }

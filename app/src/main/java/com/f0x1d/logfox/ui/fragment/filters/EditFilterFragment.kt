@@ -8,13 +8,14 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.databinding.FragmentEditFilterBinding
 import com.f0x1d.logfox.extensions.applyInsets
 import com.f0x1d.logfox.extensions.setClickListenerOn
-import com.f0x1d.logfox.extensions.viewModelFactory
 import com.f0x1d.logfox.model.LogLevel
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
 import com.f0x1d.logfox.utils.dpToPx
@@ -33,13 +34,16 @@ class EditFilterFragment: BaseViewModelFragment<FilterViewModel, FragmentEditFil
 
     override val viewModel by viewModels<FilterViewModel> {
         viewModelFactory {
-            assistedFactory.create(navArgs.filterId)
+            initializer {
+                assistedFactory.create(navArgs.filterId)
+            }
         }
     }
 
     private val exportFilterLauncher = registerForActivityResult(ActivityResultContracts.CreateDocument("application/json")) {
         viewModel.export(it ?: return@registerForActivityResult)
     }
+
     private val navArgs by navArgs<EditFilterFragmentArgs>()
 
     override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) = FragmentEditFilterBinding.inflate(inflater, container, false)
@@ -66,7 +70,7 @@ class EditFilterFragment: BaseViewModelFragment<FilterViewModel, FragmentEditFil
             findNavController().popBackStack()
         }
 
-        viewModel.distinctiveData.observe(viewLifecycleOwner) {
+        viewModel.filter.observe(viewLifecycleOwner) {
             if (it == null) return@observe
 
             binding.pidText.setText(it.pid)

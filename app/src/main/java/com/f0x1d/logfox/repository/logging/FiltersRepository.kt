@@ -1,20 +1,16 @@
 package com.f0x1d.logfox.repository.logging
 
 import com.f0x1d.logfox.database.AppDatabase
-import com.f0x1d.logfox.database.UserFilter
-import com.f0x1d.logfox.extensions.updateList
+import com.f0x1d.logfox.database.entity.UserFilter
 import com.f0x1d.logfox.model.LogLevel
 import com.f0x1d.logfox.repository.logging.base.LoggingHelperItemsRepository
-import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class FiltersRepository @Inject constructor(private val database: AppDatabase): LoggingHelperItemsRepository<UserFilter>() {
-
-    override suspend fun setup() = itemsFlow.update {
-        database.userFilterDao().getAll()
-    }
+class FiltersRepository @Inject constructor(
+    private val database: AppDatabase
+): LoggingHelperItemsRepository<UserFilter>() {
 
     fun create(enabledLogLevels: List<LogLevel>, pid: String, tid: String, tag: String, content: String) = createAll(
         listOf(
@@ -29,13 +25,7 @@ class FiltersRepository @Inject constructor(private val database: AppDatabase): 
     )
 
     fun createAll(userFilters: List<UserFilter>) = runOnAppScope {
-        itemsFlow.updateList {
-            userFilters.forEach {
-                add(
-                    it.copy(id = database.userFilterDao().insert(it))
-                )
-            }
-        }
+        database.userFilterDao().insert(userFilters)
     }
 
     fun switch(userFilter: UserFilter, checked: Boolean) = update {
@@ -52,25 +42,12 @@ class FiltersRepository @Inject constructor(private val database: AppDatabase): 
         )
     }
 
-    fun update(newValue: () -> UserFilter) = updateInternal(
-        newItem = newValue,
-        databaseUpdate = { database.userFilterDao().update(it) },
-        idGet = { it.id }
-    )
+    private fun update(newValue: () -> UserFilter) = update(newValue())
 
-    override suspend fun deleteInternal(item: UserFilter) {
-        itemsFlow.updateList {
-            remove(item)
-            database.userFilterDao().delete(item)
-        }
-    }
+    override suspend fun updateInternal(item: UserFilter) = database.userFilterDao().update(item)
+    override suspend fun deleteInternal(item: UserFilter) = database.userFilterDao().delete(item)
 
-    override suspend fun clearInternal() {
-        itemsFlow.update {
-            database.userFilterDao().deleteAll()
-            emptyList()
-        }
-    }
+    override suspend fun clearInternal() = database.userFilterDao().deleteAll()
 
     private fun String.nullIfEmpty() = ifEmpty { null }
 }

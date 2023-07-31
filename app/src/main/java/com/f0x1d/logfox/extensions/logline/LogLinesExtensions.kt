@@ -1,11 +1,10 @@
 package com.f0x1d.logfox.extensions.logline
 
-import com.f0x1d.logfox.database.UserFilter
+import com.f0x1d.logfox.database.entity.UserFilter
 import com.f0x1d.logfox.model.LogLine
-import com.f0x1d.logfox.repository.logging.FiltersRepository
 
-fun List<LogLine>.filterAndSearch(filtersRepository: FiltersRepository, query: String?) = filterByExtendedFilters(
-    filtersRepository.itemsFlow.value.filter { it.enabled }
+fun List<LogLine>.filterAndSearch(filters: List<UserFilter>, query: String?) = filterByExtendedFilters(
+    filters.filter { it.enabled }
 ).let {
     if (query == null)
         it

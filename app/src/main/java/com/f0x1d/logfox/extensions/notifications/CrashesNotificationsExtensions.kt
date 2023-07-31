@@ -8,7 +8,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.os.bundleOf
 import com.f0x1d.logfox.LogFoxApp
 import com.f0x1d.logfox.R
-import com.f0x1d.logfox.database.AppCrash
+import com.f0x1d.logfox.database.entity.AppCrash
 import com.f0x1d.logfox.extensions.*
 import com.f0x1d.logfox.receiver.CopyReceiver
 import com.f0x1d.logfox.ui.activity.CrashDetailsActivity
@@ -42,7 +42,7 @@ fun Context.sendErrorNotification(appCrash: AppCrash) = doIfPermitted {
     )
 }
 
-fun Context.cancelCrashNotificationForPackage(appCrash: AppCrash) = notificationManagerCompat.cancel(appCrash.packageName, appCrash.notificationId)
+fun Context.cancelCrashNotificationFor(appCrash: AppCrash) = notificationManagerCompat.cancel(appCrash.packageName, appCrash.notificationId)
 
 fun Context.cancelAllCrashNotifications() = notificationManager.apply {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return@apply

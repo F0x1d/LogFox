@@ -1,4 +1,4 @@
-package com.f0x1d.logfox.database
+package com.f0x1d.logfox.database.entity
 
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
@@ -19,6 +19,12 @@ interface LogRecordingDao {
 
     @Query("SELECT * FROM LogRecording ORDER BY date_and_time DESC")
     suspend fun getAll(): List<LogRecording>
+
+    @Query("SELECT * FROM LogRecording ORDER BY date_and_time DESC")
+    fun getAllAsFlow(): Flow<List<LogRecording>>
+
+    @Query("SELECT COUNT(*) FROM LogRecording")
+    suspend fun count(): Int
 
     @Query("SELECT * FROM LogRecording WHERE id = :id")
     fun get(id: Long): Flow<LogRecording?>
