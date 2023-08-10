@@ -34,6 +34,23 @@
 
             <com.google.android.material.button.MaterialButton
                 style="@style/Widget.Material3.Button.OutlinedButton.Icon"
+                android:id="@+id/including_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/including"
+                app:icon="@drawable/ic_add"
+                app:strokeColor="?colorPrimary"
+                app:strokeWidth="2dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/log_levels_button" />
+
+            <com.google.android.material.button.MaterialButton
+                style="@style/Widget.Material3.Button.OutlinedButton.Icon"
                 android:id="@+id/log_levels_button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -44,7 +61,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/including_button"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toTopOf="@id/pid_layout"/>

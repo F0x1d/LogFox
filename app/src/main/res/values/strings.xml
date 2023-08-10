@@ -109,4 +109,6 @@
     <string name="shizuku_reminder">Don\'t forget to start Shizuku!</string>
     <string name="fallback_to_default_terminal">Fallback to default backend</string>
     <string name="fallback_to_default_terminal_desc">When selected one is not available. Otherwise LogFox will infinitely try to use it</string>
+    <string name="including">Including</string>
+    <string name="excluding">Excluding</string>
 </resources>

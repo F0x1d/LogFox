@@ -31,6 +31,7 @@ class FilterViewHolder(
     }
 
     override fun bindTo(data: UserFilter) {
+        binding.includingText.setText(if (data.including) R.string.including else R.string.excluding)
         binding.allowedLevelsText.setTextOrMakeGoneIfNull(R.string.log_levels, data.allowedLevels.joinToString { it.letter })
         binding.pidText.setTextOrMakeGoneIfNull(R.string.pid, data.pid)
         binding.tidText.setTextOrMakeGoneIfNull(R.string.tid, data.tid)

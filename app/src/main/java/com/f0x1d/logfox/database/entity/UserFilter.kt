@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.Flow
 @Keep
 @Entity
 data class UserFilter(
+    @ColumnInfo(name = "including") val including: Boolean = true,
     @ColumnInfo(name = "allowed_levels") val allowedLevels: List<LogLevel> = emptyList(),
     @ColumnInfo(name = "pid") val pid: String? = null,
     @ColumnInfo(name = "tid") val tid: String? = null,

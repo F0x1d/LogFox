@@ -1,5 +1,6 @@
 package com.f0x1d.logfox.ui.fragment.filters
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +8,7 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
@@ -19,20 +21,20 @@ import com.f0x1d.logfox.extensions.setClickListenerOn
 import com.f0x1d.logfox.model.LogLevel
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
 import com.f0x1d.logfox.utils.dpToPx
-import com.f0x1d.logfox.viewmodel.filters.FilterTextData
-import com.f0x1d.logfox.viewmodel.filters.FilterViewModel
-import com.f0x1d.logfox.viewmodel.filters.FilterViewModelAssistedFactory
+import com.f0x1d.logfox.viewmodel.filters.EditFilterViewModel
+import com.f0x1d.logfox.viewmodel.filters.EditFilterViewModelAssistedFactory
+import com.google.android.material.color.MaterialColors
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class EditFilterFragment: BaseViewModelFragment<FilterViewModel, FragmentEditFilterBinding>() {
+class EditFilterFragment: BaseViewModelFragment<EditFilterViewModel, FragmentEditFilterBinding>() {
 
     @Inject
-    lateinit var assistedFactory: FilterViewModelAssistedFactory
+    lateinit var assistedFactory: EditFilterViewModelAssistedFactory
 
-    override val viewModel by viewModels<FilterViewModel> {
+    override val viewModel by viewModels<EditFilterViewModel> {
         viewModelFactory {
             initializer {
                 assistedFactory.create(navArgs.filterId)
@@ -61,22 +63,31 @@ class EditFilterFragment: BaseViewModelFragment<FilterViewModel, FragmentEditFil
 
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
 
+        binding.includingButton.setOnClickListener {
+            viewModel.including = !viewModel.including
+            updateIncludingButton(viewModel.including)
+        }
         binding.logLevelsButton.setOnClickListener {
             showFilterDialog()
         }
+        binding.pidText.doAfterTextChanged { viewModel.pid = it?.toString() }
+        binding.tidText.doAfterTextChanged { viewModel.tid = it?.toString() }
+        binding.tagText.doAfterTextChanged { viewModel.tag = it?.toString() }
+        binding.contentText.doAfterTextChanged { viewModel.content = it?.toString() }
 
         binding.saveFab.setOnClickListener {
-            viewModel.create(collectFilterTextData())
+            viewModel.create()
             findNavController().popBackStack()
         }
 
         viewModel.filter.observe(viewLifecycleOwner) {
-            if (it == null) return@observe
+            updateIncludingButton(viewModel.including)
+            binding.pidText.setText(viewModel.pid)
+            binding.tidText.setText(viewModel.tid)
+            binding.tagText.setText(viewModel.tag)
+            binding.contentText.setText(viewModel.content)
 
-            binding.pidText.setText(it.pid)
-            binding.tidText.setText(it.tid)
-            binding.tagText.setText(it.tag)
-            binding.contentText.setText(it.content)
+            if (it == null) return@observe
 
             binding.toolbar.inflateMenu(R.menu.edit_filter_menu)
             binding.toolbar.menu.setClickListenerOn(R.id.export_item) {
@@ -84,18 +95,27 @@ class EditFilterFragment: BaseViewModelFragment<FilterViewModel, FragmentEditFil
             }
 
             binding.saveFab.setOnClickListener { view ->
-                viewModel.update(it, collectFilterTextData())
+                viewModel.update(it)
                 findNavController().popBackStack()
             }
         }
     }
 
-    private fun collectFilterTextData() = FilterTextData(
-        binding.pidText.text?.toString() ?: "",
-        binding.tidText.text?.toString() ?: "",
-        binding.tagText.text?.toString() ?: "",
-        binding.contentText.text?.toString() ?: ""
-    )
+    private fun updateIncludingButton(enabled: Boolean) = binding.includingButton.run {
+        setIconResource(if (enabled) R.drawable.ic_add else R.drawable.ic_clear)
+
+        ColorStateList.valueOf(MaterialColors.getColor(this, if (enabled)
+            android.R.attr.colorPrimary
+        else
+            androidx.appcompat.R.attr.colorError
+        )).also {
+            iconTint = it
+            strokeColor = it
+            setTextColor(it)
+        }
+
+        setText(if (enabled) R.string.including else R.string.excluding)
+    }
 
     private fun showFilterDialog() {
         MaterialAlertDialogBuilder(requireContext())

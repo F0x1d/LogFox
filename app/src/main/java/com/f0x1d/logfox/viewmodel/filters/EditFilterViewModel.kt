@@ -16,8 +16,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.take
 
-class FilterViewModel @AssistedInject constructor(
+class EditFilterViewModel @AssistedInject constructor(
     @Assisted filterId: Long,
     application: Application,
     private val database: AppDatabase,
@@ -26,33 +27,40 @@ class FilterViewModel @AssistedInject constructor(
 
     val filter = database.userFilterDao().get(filterId)
         .distinctUntilChanged()
+        .take(1) // Not to handle changes
         .flowOn(Dispatchers.IO)
         .onEach {
-            val allowedLevels = it?.allowedLevels?.map { it.ordinal } ?: return@onEach
+            including = it?.including ?: return@onEach
+            val allowedLevels = it.allowedLevels.map { it.ordinal }
 
             for (i in 0 until enabledLogLevels.size) {
                 enabledLogLevels[i] = allowedLevels.contains(i)
             }
+            pid = it.pid
+            tid = it.tid
+            tag = it.tag
+            content = it.content
         }
         .asLiveData()
 
+    var including = true
     val enabledLogLevels = mutableListOf(true, true, true, true, true, true, true)
+    var pid: String? = null
+    var tid: String? = null
+    var tag: String? = null
+    var content: String? = null
 
-    fun create(filterTextData: FilterTextData) = filtersRepository.create(
+    fun create() = filtersRepository.create(
+        including,
         enabledLogLevels.toEnabledLogLevels(),
-        filterTextData.pid,
-        filterTextData.tid,
-        filterTextData.tag,
-        filterTextData.content
+        pid, tid, tag, content
     )
 
-    fun update(userFilter: UserFilter, filterTextData: FilterTextData) = filtersRepository.update(
+    fun update(userFilter: UserFilter) = filtersRepository.update(
         userFilter,
+        including,
         enabledLogLevels.toEnabledLogLevels(),
-        filterTextData.pid,
-        filterTextData.tid,
-        filterTextData.tag,
-        filterTextData.content
+        pid, tid, tag, content
     )
 
     fun export(uri: Uri) = launchCatching(Dispatchers.IO) {
@@ -66,9 +74,7 @@ class FilterViewModel @AssistedInject constructor(
     private fun List<Boolean>.toEnabledLogLevels() = mapIndexed { index, value -> if (value) enumValues<LogLevel>()[index] else null }.filterNotNull()
 }
 
-data class FilterTextData(val pid: String, val tid: String, val tag: String, val content: String)
-
 @AssistedFactory
-interface FilterViewModelAssistedFactory {
-    fun create(filterId: Long): FilterViewModel
+interface EditFilterViewModelAssistedFactory {
+    fun create(filterId: Long): EditFilterViewModel
 }
