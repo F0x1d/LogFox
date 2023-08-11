@@ -20,11 +20,7 @@ fun List<LogLine>.filterByExtendedFilters(filters: List<UserFilter>): List<LogLi
 
     return filter { logLine ->
         val shouldExclude = excludingFilters.any {
-            it.allowedLevels.contains(logLine.level) &&
-                    it.pid.equalsOrTrueIfNull(logLine.pid) &&
-                    it.tid.equalsOrTrueIfNull(logLine.tid) &&
-                    it.tag.equalsOrTrueIfNull(logLine.tag) &&
-                    it.content.containsOrTrueIfNull(logLine.content)
+            it.lineSuits(logLine)
         }
 
         if (shouldExclude)
@@ -33,15 +29,17 @@ fun List<LogLine>.filterByExtendedFilters(filters: List<UserFilter>): List<LogLi
             if (isEmpty())
                 true
             else any {
-                it.allowedLevels.contains(logLine.level) &&
-                        it.pid.equalsOrTrueIfNull(logLine.pid) &&
-                        it.tid.equalsOrTrueIfNull(logLine.tid) &&
-                        it.tag.equalsOrTrueIfNull(logLine.tag) &&
-                        it.content.containsOrTrueIfNull(logLine.content)
+                it.lineSuits(logLine)
             }
         }
     }
 }
+
+private fun UserFilter.lineSuits(logLine: LogLine) = allowedLevels.contains(logLine.level) &&
+        pid.equalsOrTrueIfNull(logLine.pid) &&
+        tid.equalsOrTrueIfNull(logLine.tid) &&
+        tag.equalsOrTrueIfNull(logLine.tag) &&
+        content.containsOrTrueIfNull(logLine.content)
 
 private fun String?.equalsOrTrueIfNull(other: String) = if (this == null) true else other == this
 private fun String?.containsOrTrueIfNull(other: String) = if (this == null) true else other.contains(this)

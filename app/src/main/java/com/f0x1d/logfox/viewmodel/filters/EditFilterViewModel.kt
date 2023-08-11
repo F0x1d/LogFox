@@ -13,10 +13,12 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.take
+import kotlinx.coroutines.flow.update
 
 class EditFilterViewModel @AssistedInject constructor(
     @Assisted filterId: Long,
@@ -29,38 +31,42 @@ class EditFilterViewModel @AssistedInject constructor(
         .distinctUntilChanged()
         .take(1) // Not to handle changes
         .flowOn(Dispatchers.IO)
-        .onEach {
-            including = it?.including ?: return@onEach
-            val allowedLevels = it.allowedLevels.map { it.ordinal }
+        .onEach { filter ->
+            if (filter == null) return@onEach
+
+            including.update { filter.including }
+
+            val allowedLevels = filter.allowedLevels.map { it.ordinal }
 
             for (i in 0 until enabledLogLevels.size) {
                 enabledLogLevels[i] = allowedLevels.contains(i)
             }
-            pid = it.pid
-            tid = it.tid
-            tag = it.tag
-            content = it.content
+
+            pid.update { filter.pid }
+            tid.update { filter.tid }
+            tag.update { filter.tag }
+            content.update { filter.content }
         }
         .asLiveData()
 
-    var including = true
+    val including = MutableStateFlow(true)
     val enabledLogLevels = mutableListOf(true, true, true, true, true, true, true)
-    var pid: String? = null
-    var tid: String? = null
-    var tag: String? = null
-    var content: String? = null
+    val pid = MutableStateFlow<String?>(null)
+    val tid = MutableStateFlow<String?>(null)
+    val tag = MutableStateFlow<String?>(null)
+    val content = MutableStateFlow<String?>(null)
 
     fun create() = filtersRepository.create(
-        including,
+        including.value,
         enabledLogLevels.toEnabledLogLevels(),
-        pid, tid, tag, content
+        pid.value, tid.value, tag.value, content.value
     )
 
     fun update(userFilter: UserFilter) = filtersRepository.update(
         userFilter,
-        including,
+        including.value,
         enabledLogLevels.toEnabledLogLevels(),
-        pid, tid, tag, content
+        pid.value, tid.value, tag.value, content.value
     )
 
     fun export(uri: Uri) = launchCatching(Dispatchers.IO) {

@@ -5,11 +5,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.fragment.findNavController
@@ -26,6 +28,9 @@ import com.f0x1d.logfox.viewmodel.filters.EditFilterViewModelAssistedFactory
 import com.google.android.material.color.MaterialColors
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.take
+import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -64,16 +69,11 @@ class EditFilterFragment: BaseViewModelFragment<EditFilterViewModel, FragmentEdi
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
 
         binding.includingButton.setOnClickListener {
-            viewModel.including = !viewModel.including
-            updateIncludingButton(viewModel.including)
+            viewModel.including.update { !it }
         }
         binding.logLevelsButton.setOnClickListener {
             showFilterDialog()
         }
-        binding.pidText.doAfterTextChanged { viewModel.pid = it?.toString() }
-        binding.tidText.doAfterTextChanged { viewModel.tid = it?.toString() }
-        binding.tagText.doAfterTextChanged { viewModel.tag = it?.toString() }
-        binding.contentText.doAfterTextChanged { viewModel.content = it?.toString() }
 
         binding.saveFab.setOnClickListener {
             viewModel.create()
@@ -81,11 +81,14 @@ class EditFilterFragment: BaseViewModelFragment<EditFilterViewModel, FragmentEdi
         }
 
         viewModel.filter.observe(viewLifecycleOwner) {
-            updateIncludingButton(viewModel.including)
-            binding.pidText.setText(viewModel.pid)
-            binding.tidText.setText(viewModel.tid)
-            binding.tagText.setText(viewModel.tag)
-            binding.contentText.setText(viewModel.content)
+            viewModel.including.asLiveData().observe(viewLifecycleOwner) { enabled ->
+                updateIncludingButton(enabled)
+            }
+
+            viewModel.pid.toText(binding.pidText)
+            viewModel.tid.toText(binding.tidText)
+            viewModel.tag.toText(binding.tagText)
+            viewModel.content.toText(binding.contentText)
 
             if (it == null) return@observe
 
@@ -97,6 +100,15 @@ class EditFilterFragment: BaseViewModelFragment<EditFilterViewModel, FragmentEdi
             binding.saveFab.setOnClickListener { view ->
                 viewModel.update(it)
                 findNavController().popBackStack()
+            }
+        }
+    }
+
+    private fun MutableStateFlow<String?>.toText(editText: EditText) {
+        take(1).asLiveData().observe(viewLifecycleOwner) {
+            editText.apply {
+                setText(it)
+                doAfterTextChanged { value -> update { value?.toString() } }
             }
         }
     }
