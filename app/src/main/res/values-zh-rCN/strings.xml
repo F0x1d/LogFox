@@ -102,4 +102,6 @@
     <string name="shizuku_reminder">别忘了启动 Shizuku!</string>
     <string name="fallback_to_default_terminal">回退到默认后端</string>
     <string name="fallback_to_default_terminal_desc">仅当所选后端不可用时,否则 LogFox 将一直尝试使用所选的</string>
+    <string name="including">含有</string>
+    <string name="excluding">排除</string>
 </resources>
