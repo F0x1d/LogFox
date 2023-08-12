@@ -21,7 +21,7 @@ jobs:
           cache: 'gradle'
 
       - name: Build APK
-        run: bash ./gradlew assemble --stacktrace --no-daemon
+        run: bash ./gradlew assembleRelease --stacktrace --no-daemon
 
       - name: Sign APK
         id: sign_apk

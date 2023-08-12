@@ -70,7 +70,10 @@ class EditFilterViewModel @AssistedInject constructor(
     )
 
     fun export(uri: Uri) = launchCatching(Dispatchers.IO) {
-        ctx.contentResolver.openOutputStream(uri)?.exportFilters(ctx, filter.value?.let { listOf(it) } ?: emptyList())
+        ctx.contentResolver.openOutputStream(uri)?.exportFilters(
+            ctx,
+            filter.value?.let { listOf(it) } ?: emptyList()
+        )
     }
 
     fun filterLevel(which: Int, filtering: Boolean) {
