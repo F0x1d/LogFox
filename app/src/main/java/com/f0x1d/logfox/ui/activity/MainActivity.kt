@@ -65,6 +65,7 @@ class MainActivity: BaseViewModelActivity<MainViewModel, ActivityMainBinding>(),
             R.id.logsExtendedCopyFragment -> false
             R.id.filtersFragment -> false
             R.id.editFilterFragment -> false
+            R.id.chooseAppFragment -> false
             else -> true
         }
 

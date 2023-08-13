@@ -38,7 +38,7 @@ class LoggingRepository @Inject constructor(
 ): BaseRepository(), SharedPreferences.OnSharedPreferenceChangeListener {
 
     companion object {
-        private val COMMAND = arrayOf("logcat" , "-v", "epoch", "-T", "1")
+        private val COMMAND = arrayOf("logcat" , "-v", "epoch,uid", "-T", "1")
     }
 
     val logsFlow = MutableStateFlow(emptyList<LogLine>())
@@ -51,6 +51,8 @@ class LoggingRepository @Inject constructor(
     private var logsDisplayLimit = AppPreferences.LOGS_DISPLAY_LIMIT_DEFAULT
 
     private var idsCounter = -1L
+
+    private val packageManager = context.packageManager
 
     fun startLoggingIfNot() {
         if (loggingJob?.isActive == true) return
@@ -162,7 +164,7 @@ class LoggingRepository @Inject constructor(
                 for (line in it) {
                     if (!isActive) break
 
-                    val logLine = LogLine(idsCounter++, line) ?: continue
+                    val logLine = LogLine(idsCounter++, line, packageManager) ?: continue
                     if (!droppedFirst) {
                         droppedFirst = true
                         continue

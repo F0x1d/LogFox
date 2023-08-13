@@ -56,16 +56,27 @@ class SettingsUIFragment: BaseSettingsWrapperFragment() {
                     .setTitle(R.string.logs_format)
                     .setIcon(R.drawable.ic_dialog_list)
                     .setMultiChoiceItems(
-                        intArrayOf(R.string.date, R.string.time, R.string.pid, R.string.tid, R.string.tag, R.string.content).fillWithStrings(requireContext()),
-                        appPreferences.showLogValues
+                        intArrayOf(
+                            R.string.date,
+                            R.string.time,
+                            R.string.uid,
+                            R.string.pid,
+                            R.string.tid,
+                            R.string.package_name,
+                            R.string.tag,
+                            R.string.content
+                        ).fillWithStrings(requireContext()),
+                        appPreferences.showLogValues.asArray
                     ) { dialog, which, checked ->
                         when (which) {
                             0 -> appPreferences.showLogDate = checked
                             1 -> appPreferences.showLogTime = checked
-                            2 -> appPreferences.showLogPid = checked
-                            3 -> appPreferences.showLogTid = checked
-                            4 -> appPreferences.showLogTag = checked
-                            5 -> appPreferences.showLogContent = checked
+                            2 -> appPreferences.showLogUid = checked
+                            3 -> appPreferences.showLogPid = checked
+                            4 -> appPreferences.showLogTid = checked
+                            5 -> appPreferences.showLogPackage = checked
+                            6 -> appPreferences.showLogTag = checked
+                            7 -> appPreferences.showLogContent = checked
                         }
                     }
                     .setPositiveButton(R.string.close, null)

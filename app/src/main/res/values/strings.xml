@@ -50,6 +50,7 @@
     <string name="show_anr_notifications">Show ANR notifications</string>
     <string name="error">Error: %s</string>
     <string name="log_levels">Log levels</string>
+    <string name="uid" translatable="false">UID</string>
     <string name="pid" translatable="false">PID</string>
     <string name="tid" translatable="false">TID</string>
     <string name="tag">Tag</string>
@@ -111,4 +112,6 @@
     <string name="fallback_to_default_terminal_desc">When selected one is not available. Otherwise LogFox will infinitely try to use it</string>
     <string name="including">Including</string>
     <string name="excluding">Excluding</string>
+    <string name="package_name">Package name</string>
+    <string name="apps">Apps</string>
 </resources>

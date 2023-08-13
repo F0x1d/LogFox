@@ -11,8 +11,6 @@ import com.f0x1d.logfox.adapter.LogsAdapter
 import com.f0x1d.logfox.databinding.ItemLogBinding
 import com.f0x1d.logfox.extensions.logline.backgroundColorByLevel
 import com.f0x1d.logfox.extensions.logline.foregroundColorByLevel
-import com.f0x1d.logfox.extensions.logsDateFormatted
-import com.f0x1d.logfox.extensions.logsTimeFormatted
 import com.f0x1d.logfox.model.LogLine
 import com.f0x1d.logfox.ui.viewholder.base.BaseViewHolder
 import com.f0x1d.logfox.utils.dpToPx
@@ -72,13 +70,15 @@ class LogViewHolder(
         }
 
         binding.logText.text = buildString {
-            adapter<LogsAdapter>().logsFormat.also {
-                if (it[0]) append(data.dateAndTime.logsDateFormatted + " ")
-                if (it[1]) append(data.dateAndTime.logsTimeFormatted + " ")
-                if (it[2]) append(data.pid + " ")
-                if (it[3]) append(data.tid + " ")
-                if (it[4]) append(data.tag + if (it[5]) ": " else "")
-                if (it[5]) append(data.content)
+            adapter<LogsAdapter>().logsFormat.apply {
+                if (date) append(data.logsDateFormatted + " ")
+                if (time) append(data.logsTimeFormatted + " ")
+                if (uid) append(data.uid + " ")
+                if (pid) append(data.pid + " ")
+                if (tid) append(data.tid + " ")
+                if (packageName && data.packageName != null) append(data.packageName + " ")
+                if (tag) append(data.tag + if (content) ": " else "")
+                if (content) append(data.content)
             }
         }
         binding.levelText.text = data.level.letter

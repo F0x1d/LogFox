@@ -12,13 +12,24 @@ class FiltersRepository @Inject constructor(
     private val database: AppDatabase
 ): LoggingHelperItemsRepository<UserFilter>() {
 
-    fun create(including: Boolean, enabledLogLevels: List<LogLevel>, pid: String?, tid: String?, tag: String?, content: String?) = createAll(
+    fun create(
+        including: Boolean,
+        enabledLogLevels: List<LogLevel>,
+        uid: String?,
+        pid: String?,
+        tid: String?,
+        packageName: String?,
+        tag: String?,
+        content: String?
+    ) = createAll(
         listOf(
             UserFilter(
                 including = including,
                 allowedLevels = enabledLogLevels,
+                uid = uid?.nullIfEmpty(),
                 pid = pid?.nullIfEmpty(),
                 tid = tid?.nullIfEmpty(),
+                packageName = packageName?.nullIfEmpty(),
                 tag = tag?.nullIfEmpty(),
                 content = content?.nullIfEmpty()
             )
@@ -33,12 +44,24 @@ class FiltersRepository @Inject constructor(
         userFilter.copy(enabled = checked)
     }
 
-    fun update(userFilter: UserFilter, including: Boolean, enabledLogLevels: List<LogLevel>, pid: String?, tid: String?, tag: String?, content: String?) = update {
+    fun update(
+        userFilter: UserFilter,
+        including: Boolean,
+        enabledLogLevels: List<LogLevel>,
+        uid: String?,
+        pid: String?,
+        tid: String?,
+        packageName: String?,
+        tag: String?,
+        content: String?
+    ) = update {
         userFilter.copy(
             including = including,
             allowedLevels = enabledLogLevels,
+            uid = uid?.nullIfEmpty(),
             pid = pid?.nullIfEmpty(),
             tid = tid?.nullIfEmpty(),
+            packageName = packageName?.nullIfEmpty(),
             tag = tag?.nullIfEmpty(),
             content = content?.nullIfEmpty()
         )

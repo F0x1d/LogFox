@@ -1,7 +1,5 @@
 package com.f0x1d.logfox.ui.fragment
 
-import android.graphics.Canvas
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.adapter.RecordingsAdapter
 import com.f0x1d.logfox.database.entity.LogRecording
@@ -36,7 +33,8 @@ class RecordingsFragment: BaseViewModelFragment<RecordingsViewModel, FragmentRec
         viewModel.delete(it)
     })
 
-    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) = FragmentRecordingsBinding.inflate(inflater, container, false)
+    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) =
+        FragmentRecordingsBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -62,11 +60,15 @@ class RecordingsFragment: BaseViewModelFragment<RecordingsViewModel, FragmentRec
         binding.pauseFab.setOnClickListener { viewModel.togglePauseResume() }
 
         binding.recordingsRecycler.layoutManager = LinearLayoutManager(requireContext())
-        binding.recordingsRecycler.addItemDecoration(MaterialDividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL).apply {
-            dividerInsetStart = 80.dpToPx.toInt()
-            dividerInsetEnd = 10.dpToPx.toInt()
-            isLastItemDecorated = false
-        })
+        binding.recordingsRecycler.addItemDecoration(
+            MaterialDividerItemDecoration(
+                requireContext(),
+                LinearLayoutManager.VERTICAL
+            ).apply {
+                dividerInsetStart = 80.dpToPx.toInt()
+                dividerInsetEnd = 10.dpToPx.toInt()
+                isLastItemDecorated = false
+            })
         binding.recordingsRecycler.adapter = adapter
 
         viewModel.recordings.observe(viewLifecycleOwner) {
@@ -81,6 +83,7 @@ class RecordingsFragment: BaseViewModelFragment<RecordingsViewModel, FragmentRec
 
                     binding.pauseFab.hide()
                 }
+
                 RecordingState.RECORDING -> {
                     binding.recordFab.setImageResource(R.drawable.ic_stop)
                     binding.recordFab.isEnabled = true
@@ -88,6 +91,7 @@ class RecordingsFragment: BaseViewModelFragment<RecordingsViewModel, FragmentRec
                     binding.pauseFab.setImageResource(R.drawable.ic_pause)
                     binding.pauseFab.show()
                 }
+
                 RecordingState.PAUSED -> {
                     binding.recordFab.setImageResource(R.drawable.ic_stop)
                     binding.recordFab.isEnabled = true
@@ -95,6 +99,7 @@ class RecordingsFragment: BaseViewModelFragment<RecordingsViewModel, FragmentRec
                     binding.pauseFab.setImageResource(R.drawable.ic_play)
                     binding.pauseFab.show()
                 }
+
                 RecordingState.SAVING -> {
                     binding.recordFab.setImageResource(R.drawable.ic_recording)
                     binding.recordFab.isEnabled = false
@@ -112,23 +117,8 @@ class RecordingsFragment: BaseViewModelFragment<RecordingsViewModel, FragmentRec
     }
 
     private fun openDetails(recording: LogRecording?) = recording?.id?.also {
-        findNavController().navigate(RecordingsFragmentDirections.actionRecordingsFragmentToRecordingBottomSheet(it))
-    }
-}
-class DividerItemDecorator(private val divider: Drawable?) : RecyclerView.ItemDecoration() {
-
-    override fun onDrawOver(canvas: Canvas, parent: RecyclerView, state: RecyclerView.State) {
-        val dividerLeft = parent.paddingLeft
-        val dividerRight = parent.width - parent.paddingRight
-        val childCount = parent.childCount
-        for (i in 0..childCount - 2) {
-            val child: View = parent.getChildAt(i)
-            val params =
-                child.layoutParams as RecyclerView.LayoutParams
-            val dividerTop: Int = child.bottom + params.bottomMargin
-            val dividerBottom = dividerTop + (divider?.intrinsicHeight?:0)
-            divider?.setBounds(dividerLeft, dividerTop, dividerRight, dividerBottom)
-            divider?.draw(canvas)
-        }
+        findNavController().navigate(
+            RecordingsFragmentDirections.actionRecordingsFragmentToRecordingBottomSheet(it)
+        )
     }
 }

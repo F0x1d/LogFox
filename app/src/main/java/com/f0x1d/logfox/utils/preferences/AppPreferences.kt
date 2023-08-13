@@ -56,12 +56,18 @@ class AppPreferences @Inject constructor(@ApplicationContext context: Context): 
     var showLogTime
         get() = get("pref_show_log_time", false)
         set(value) { put("pref_show_log_time", value) }
+    var showLogUid
+        get() = get("pref_show_log_uid", false)
+        set(value) { put("pref_show_log_uid", value) }
     var showLogPid
         get() = get("pref_show_log_pid", false)
         set(value) { put("pref_show_log_pid", value) }
     var showLogTid
         get() = get("pref_show_log_tid", false)
         set(value) { put("pref_show_log_tid", value) }
+    var showLogPackage
+        get() = get("pref_show_log_package", false)
+        set(value) { put("pref_show_log_package", value) }
     var showLogTag
         get() = get("pref_show_log_tag", true)
         set(value) { put("pref_show_log_tag", value) }
@@ -73,7 +79,16 @@ class AppPreferences @Inject constructor(@ApplicationContext context: Context): 
         get() = get("pref_asked_notifications_permission", false)
         set(value) { put("pref_asked_notifications_permission", value) }
 
-    val showLogValues get() = booleanArrayOf(showLogDate, showLogTime, showLogPid, showLogTid, showLogTag, showLogContent)
+    val showLogValues get() = ShowLogValues(
+        showLogDate,
+        showLogTime,
+        showLogUid,
+        showLogPid,
+        showLogTid,
+        showLogPackage,
+        showLogTag,
+        showLogContent
+    )
 
     fun collectingFor(crashType: CrashType) = get("pref_collect_${crashType.readableName.lowercase()}", true)
     fun showingNotificationsFor(crashType: CrashType) = get("pref_notifications_${crashType.readableName.lowercase()}", true)
@@ -83,4 +98,26 @@ class AppPreferences @Inject constructor(@ApplicationContext context: Context): 
     }
 
     override fun providePreferences(context: Context) = PreferenceManager.getDefaultSharedPreferences(context)
+}
+
+data class ShowLogValues(
+    val date: Boolean,
+    val time: Boolean,
+    val uid: Boolean,
+    val pid: Boolean,
+    val tid: Boolean,
+    val packageName: Boolean,
+    val tag: Boolean,
+    val content: Boolean
+) {
+    val asArray = booleanArrayOf(
+        date,
+        time,
+        uid,
+        pid,
+        tid,
+        packageName,
+        tag,
+        content
+    )
 }

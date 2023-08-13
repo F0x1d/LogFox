@@ -11,8 +11,10 @@ import kotlinx.coroutines.flow.Flow
 data class UserFilter(
     @ColumnInfo(name = "including") val including: Boolean = true,
     @ColumnInfo(name = "allowed_levels") val allowedLevels: List<LogLevel> = emptyList(),
+    @ColumnInfo(name = "uid") val uid: String? = null,
     @ColumnInfo(name = "pid") val pid: String? = null,
     @ColumnInfo(name = "tid") val tid: String? = null,
+    @ColumnInfo(name = "package_name") val packageName: String? = null,
     @ColumnInfo(name = "tag") val tag: String? = null,
     @ColumnInfo(name = "content") val content: String? = null,
     @ColumnInfo(name = "enabled") @GsonSkip val enabled: Boolean = true,

@@ -63,5 +63,16 @@
             android:name="filterId"
             app:argType="long"
             android:defaultValue="-1L" />
+        <action
+            android:id="@+id/action_editFilterFragment_to_chooseAppFragment"
+            app:destination="@id/chooseAppFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
+    <fragment
+        android:id="@+id/chooseAppFragment"
+        android:name="com.f0x1d.logfox.ui.fragment.filters.ChooseAppFragment"
+        android:label="ChooseAppFragment" />
 </navigation>

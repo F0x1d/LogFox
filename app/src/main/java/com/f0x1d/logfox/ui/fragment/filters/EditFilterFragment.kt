@@ -10,12 +10,12 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
 import androidx.core.widget.doAfterTextChanged
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.navigation.navGraphViewModels
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.databinding.FragmentEditFilterBinding
 import com.f0x1d.logfox.extensions.applyInsets
@@ -23,6 +23,7 @@ import com.f0x1d.logfox.extensions.setClickListenerOn
 import com.f0x1d.logfox.model.LogLevel
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
 import com.f0x1d.logfox.utils.dpToPx
+import com.f0x1d.logfox.utils.event.Event
 import com.f0x1d.logfox.viewmodel.filters.EditFilterViewModel
 import com.f0x1d.logfox.viewmodel.filters.EditFilterViewModelAssistedFactory
 import com.google.android.material.color.MaterialColors
@@ -39,7 +40,7 @@ class EditFilterFragment: BaseViewModelFragment<EditFilterViewModel, FragmentEdi
     @Inject
     lateinit var assistedFactory: EditFilterViewModelAssistedFactory
 
-    override val viewModel by viewModels<EditFilterViewModel> {
+    override val viewModel by navGraphViewModels<EditFilterViewModel>(R.id.editFilterFragment) {
         viewModelFactory {
             initializer {
                 assistedFactory.create(navArgs.filterId)
@@ -75,6 +76,12 @@ class EditFilterFragment: BaseViewModelFragment<EditFilterViewModel, FragmentEdi
             showFilterDialog()
         }
 
+        binding.selectAppButton.setOnClickListener {
+            findNavController().navigate(
+                EditFilterFragmentDirections.actionEditFilterFragmentToChooseAppFragment()
+            )
+        }
+
         binding.saveFab.setOnClickListener {
             viewModel.create()
             findNavController().popBackStack()
@@ -85,8 +92,10 @@ class EditFilterFragment: BaseViewModelFragment<EditFilterViewModel, FragmentEdi
                 updateIncludingButton(enabled)
             }
 
+            viewModel.uid.toText(binding.uidText)
             viewModel.pid.toText(binding.pidText)
             viewModel.tid.toText(binding.tidText)
+            viewModel.packageName.toText(binding.packageNameText)
             viewModel.tag.toText(binding.tagText)
             viewModel.content.toText(binding.contentText)
 
@@ -100,6 +109,14 @@ class EditFilterFragment: BaseViewModelFragment<EditFilterViewModel, FragmentEdi
             binding.saveFab.setOnClickListener { view ->
                 viewModel.update(it)
                 findNavController().popBackStack()
+            }
+        }
+    }
+
+    override fun onEvent(event: Event) {
+        when (event.type) {
+            EditFilterViewModel.EVENT_TYPE_UPDATE_PACKAGE_NAME_TEXT -> {
+                binding.packageNameText.setText(viewModel.packageName.value)
             }
         }
     }

@@ -36,8 +36,10 @@ fun List<LogLine>.filterByExtendedFilters(filters: List<UserFilter>): List<LogLi
 }
 
 private fun UserFilter.lineSuits(logLine: LogLine) = allowedLevels.contains(logLine.level) &&
+        uid.equalsOrTrueIfNull(logLine.uid) &&
         pid.equalsOrTrueIfNull(logLine.pid) &&
         tid.equalsOrTrueIfNull(logLine.tid) &&
+        packageName.equalsOrTrueIfNull(logLine.packageName ?: "") &&
         tag.equalsOrTrueIfNull(logLine.tag) &&
         content.containsOrTrueIfNull(logLine.content)
 

@@ -1,11 +1,30 @@
 package com.f0x1d.logfox.extensions.logline
 
+import android.content.pm.PackageManager
+import androidx.collection.LruCache
 import com.f0x1d.logfox.model.LogLevel
 import com.f0x1d.logfox.model.LogLine
+import com.f0x1d.logfox.utils.UIDS
 
-private val logRegex = "(.{23}) (.{5}) (.{5}) (.) (.+?): (.+)".toRegex()
+private val logRegex = "(.{23}) (.{1,5}) (.{1,5}) (.{1,5}) (.) (.+?): (.+)".toRegex()
+// time, uid, pid, tid, level, tag, message
 
-fun LogLine(id: Long, line: String) = logRegex.find(line)?.run {
+private val uidsCache = LruCache<String, String>(200)
+
+fun LogLine(
+    id: Long,
+    line: String,
+    packageManager: PackageManager
+) = logRegex.find(line)?.run {
+    val uid = groupValues[2].replace(" ", "")
+    val integerUid = uid.toIntOrNull() ?: UIDS.MAPPINGS[uid]
+
+    val packageName = uidsCache.get(uid) ?: integerUid?.let {
+        packageManager.getPackagesForUid(it)?.firstOrNull()?.also { packageName ->
+            uidsCache.put(uid, packageName)
+        }
+    }
+
     LogLine(
         id,
         groupValues[1].replace(" ", "").run {
@@ -13,12 +32,16 @@ fun LogLine(id: Long, line: String) = logRegex.find(line)?.run {
                 substring(0, it).toLong() * 1000 + substring(it + 1).toLong()
             }
         },
-        groupValues[2].replace(" ", ""),
+        uid,
         groupValues[3].replace(" ", ""),
-        mapLevel(groupValues[4]),
-        groupValues[5],
-        groupValues[6]
+        groupValues[4].replace(" ", ""),
+        packageName,
+        mapLevel(groupValues[5]),
+        groupValues[6].trim(),
+        groupValues[7]
     )
 }
 
-private fun mapLevel(level: String) = LogLevel.values().find { it.letter == level } ?: throw RuntimeException("wtf is $level")
+private fun mapLevel(level: String) = LogLevel.values().find {
+    it.letter == level
+} ?: throw RuntimeException("wtf is $level")
