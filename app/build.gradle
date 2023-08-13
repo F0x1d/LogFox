@@ -16,7 +16,7 @@ android {
     namespace 'com.f0x1d.logfox'
     defaultConfig {
         applicationId "com.f0x1d.logfox"
-        minSdk 21
+        minSdk 24
         targetSdk 34
         versionCode 38
         versionName "1.3.6"

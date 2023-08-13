@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <animated-selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/state_on"
-       android:drawable="@drawable/ic_android"
-       android:state_checked="true" />
+    <item
+        android:id="@+id/state_on"
+        android:drawable="@drawable/ic_android"
+        android:state_checked="true" />
 
-    <item android:id="@+id/state_off"
-       android:drawable="@drawable/ic_android" />
+    <item
+        android:id="@+id/state_off"
+        android:drawable="@drawable/ic_android" />
 
     <transition
-       android:drawable="@drawable/ic_android_avd"
-       android:fromId="@id/state_off"
-       android:toId="@id/state_on" />
-  </animated-selector>
+        android:drawable="@drawable/ic_android_avd"
+        android:fromId="@id/state_off"
+        android:toId="@id/state_on" />
+</animated-selector>

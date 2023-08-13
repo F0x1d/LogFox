@@ -38,7 +38,7 @@ class LoggingRepository @Inject constructor(
 ): BaseRepository(), SharedPreferences.OnSharedPreferenceChangeListener {
 
     companion object {
-        private val COMMAND = arrayOf("logcat" , "-v", "epoch,uid", "-T", "1")
+        private val COMMAND = arrayOf("logcat" , "-v", "uid", "-v", "epoch", "-T", "1")
     }
 
     val logsFlow = MutableStateFlow(emptyList<LogLine>())

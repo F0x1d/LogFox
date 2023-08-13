@@ -1,11 +1,13 @@
 package com.f0x1d.logfox.ui.activity.base
 
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.viewbinding.ViewBinding
+import com.f0x1d.logfox.R
 import com.f0x1d.logfox.extensions.snackbar
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
 
@@ -17,6 +19,9 @@ abstract class BaseActivity<T : ViewBinding>: AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O_MR1)
+            window.navigationBarColor = resources.getColor(R.color.transparent_black, theme)
 
         super.onCreate(savedInstanceState)
 

@@ -18,7 +18,7 @@ fun Context.sendRecordingNotification() = doIfPermitted {
         RECORDING_NOTIFICATIONS_ID,
         NotificationCompat.Builder(this@sendRecordingNotification, LogFoxApp.RECORDING_STATUS_CHANNEL_ID)
             .setContentTitle(getString(R.string.recording))
-            .setSmallIcon(R.drawable.ic_recording)
+            .setSmallIcon(R.drawable.ic_recording_notification)
             .addAction(
                 R.drawable.ic_pause,
                 getString(R.string.pause),
@@ -42,7 +42,7 @@ fun Context.sendRecordingPausedNotification() = doIfPermitted {
         RECORDING_NOTIFICATIONS_ID,
         NotificationCompat.Builder(this@sendRecordingPausedNotification, LogFoxApp.RECORDING_STATUS_CHANNEL_ID)
             .setContentTitle(getString(R.string.recording_paused))
-            .setSmallIcon(R.drawable.ic_recording_play)
+            .setSmallIcon(R.drawable.ic_recording_play_notification)
             .addAction(
                 R.drawable.ic_play,
                 getString(R.string.resume),

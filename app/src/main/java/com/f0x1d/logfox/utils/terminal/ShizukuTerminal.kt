@@ -4,7 +4,6 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.ServiceConnection
 import android.content.pm.PackageManager
-import android.os.Build
 import android.os.IBinder
 import android.os.ParcelFileDescriptor.AutoCloseInputStream
 import android.os.ParcelFileDescriptor.AutoCloseOutputStream
@@ -49,8 +48,6 @@ class ShizukuTerminal @Inject constructor(
     }
 
     override suspend fun isSupported() = suspendCoroutine {
-        if (!shizukuAvailable) it.resume(false)
-
         when {
             !Shizuku.pingBinder() -> it.resume(false)
             Shizuku.isPreV11() -> it.resume(false)
@@ -118,8 +115,6 @@ class ShizukuTerminal @Inject constructor(
     }
 
     override suspend fun exit() = withContext(Dispatchers.IO) {
-        if (shizukuAvailable) Shizuku.unbindUserService(userServiceArgs, null, true)
+        Shizuku.unbindUserService(userServiceArgs, null, true)
     }
 }
-
-val shizukuAvailable get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M

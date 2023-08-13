@@ -10,7 +10,6 @@ import com.f0x1d.logfox.utils.preferences.AppPreferences
 import com.f0x1d.logfox.utils.terminal.DefaultTerminal
 import com.f0x1d.logfox.utils.terminal.RootTerminal
 import com.f0x1d.logfox.utils.terminal.ShizukuTerminal
-import com.f0x1d.logfox.utils.terminal.shizukuAvailable
 import com.f0x1d.logfox.viewmodel.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -54,7 +53,7 @@ class SetupViewModel @Inject constructor(
     fun shizuku() = launchCatching(Dispatchers.IO) {
         appPreferences.selectTerminal(ShizukuTerminal.INDEX)
 
-        if (shizukuAvailable && shizukuTerminal.isSupported() && shizukuTerminal.executeNow(*command).isSuccessful)
+        if (shizukuTerminal.isSupported() && shizukuTerminal.executeNow(*command).isSuccessful)
             gotPermission()
         else
             snackbar(R.string.shizuku_error)

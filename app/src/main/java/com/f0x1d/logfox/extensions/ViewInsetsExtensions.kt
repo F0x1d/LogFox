@@ -25,7 +25,9 @@ fun View.applyInsets(view: View, block: View.(Insets) -> Unit) = com.f0x1d.logfo
 
 fun applyInsets(view: View, block: (Insets) -> Unit) {
     ViewCompat.setOnApplyWindowInsetsListener(view) { _, windowInsets ->
-        val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+        val insets = windowInsets.getInsets(
+            WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.ime()
+        )
 
         block.invoke(insets)
 

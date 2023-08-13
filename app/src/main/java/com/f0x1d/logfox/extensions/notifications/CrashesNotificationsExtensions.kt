@@ -3,7 +3,6 @@ package com.f0x1d.logfox.extensions.notifications
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.os.bundleOf
 import com.f0x1d.logfox.LogFoxApp
@@ -21,7 +20,7 @@ fun Context.sendErrorNotification(appCrash: AppCrash) = doIfPermitted {
         NotificationCompat.Builder(this@sendErrorNotification, LogFoxApp.CRASHES_CHANNEL_ID)
             .setContentTitle(getString(R.string.app_crashed, appCrash.appName ?: appCrash.packageName))
             .setContentText(appCrash.log)
-            .setSmallIcon(R.drawable.ic_android)
+            .setSmallIcon(R.drawable.ic_android_notification)
             .setStyle(NotificationCompat.BigTextStyle().bigText(appCrash.log))
             .apply {
                 if (appCrash.id != 0L) setContentIntent(makeActivityPendingIntent(CRASH_DETAILS_INTENT_ID, CrashDetailsActivity::class.java, bundleOf(
@@ -45,8 +44,6 @@ fun Context.sendErrorNotification(appCrash: AppCrash) = doIfPermitted {
 fun Context.cancelCrashNotificationFor(appCrash: AppCrash) = notificationManagerCompat.cancel(appCrash.packageName, appCrash.notificationId)
 
 fun Context.cancelAllCrashNotifications() = notificationManager.apply {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return@apply
-
     activeNotifications.forEach {
         if (it.tag != null && it.tag.contains(".")) cancel(it.tag, it.id)
     }
