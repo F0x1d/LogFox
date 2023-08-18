@@ -12,9 +12,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    application: Application,
     private val loggingRepository: LoggingRepository,
-    private val appPreferences: AppPreferences
+    private val appPreferences: AppPreferences,
+    application: Application
 ): BaseViewModel(application) {
 
     companion object {

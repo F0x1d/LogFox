@@ -10,12 +10,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
 import androidx.core.widget.doAfterTextChanged
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
-import androidx.navigation.navGraphViewModels
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.databinding.FragmentEditFilterBinding
 import com.f0x1d.logfox.extensions.applyInsets
@@ -25,34 +22,21 @@ import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
 import com.f0x1d.logfox.utils.dpToPx
 import com.f0x1d.logfox.utils.event.Event
 import com.f0x1d.logfox.viewmodel.filters.EditFilterViewModel
-import com.f0x1d.logfox.viewmodel.filters.EditFilterViewModelAssistedFactory
 import com.google.android.material.color.MaterialColors
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.update
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class EditFilterFragment: BaseViewModelFragment<EditFilterViewModel, FragmentEditFilterBinding>() {
 
-    @Inject
-    lateinit var assistedFactory: EditFilterViewModelAssistedFactory
-
-    override val viewModel by navGraphViewModels<EditFilterViewModel>(R.id.editFilterFragment) {
-        viewModelFactory {
-            initializer {
-                assistedFactory.create(navArgs.filterId)
-            }
-        }
-    }
+    override val viewModel by hiltNavGraphViewModels<EditFilterViewModel>(R.id.editFilterFragment)
 
     private val exportFilterLauncher = registerForActivityResult(ActivityResultContracts.CreateDocument("application/json")) {
         viewModel.export(it ?: return@registerForActivityResult)
     }
-
-    private val navArgs by navArgs<EditFilterFragmentArgs>()
 
     override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) = FragmentEditFilterBinding.inflate(inflater, container, false)
 

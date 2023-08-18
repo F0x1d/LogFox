@@ -5,15 +5,14 @@ import android.net.Uri
 import androidx.lifecycle.asLiveData
 import com.f0x1d.logfox.database.AppDatabase
 import com.f0x1d.logfox.database.entity.UserFilter
+import com.f0x1d.logfox.di.viewmodel.FilterId
 import com.f0x1d.logfox.extensions.sendEvent
 import com.f0x1d.logfox.model.InstalledApp
 import com.f0x1d.logfox.model.LogLevel
 import com.f0x1d.logfox.repository.logging.FiltersRepository
 import com.f0x1d.logfox.utils.exportFilters
 import com.f0x1d.logfox.viewmodel.base.BaseViewModel
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -21,19 +20,21 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.update
+import javax.inject.Inject
 
-class EditFilterViewModel @AssistedInject constructor(
-    @Assisted filterId: Long,
-    application: Application,
+@HiltViewModel
+class EditFilterViewModel @Inject constructor(
+    @FilterId val filterId: Long?,
     private val database: AppDatabase,
-    private val filtersRepository: FiltersRepository
+    private val filtersRepository: FiltersRepository,
+    application: Application
 ): BaseViewModel(application) {
 
     companion object {
         const val EVENT_TYPE_UPDATE_PACKAGE_NAME_TEXT = "update_package_name_text"
     }
 
-    val filter = database.userFilterDao().get(filterId)
+    val filter = database.userFilterDao().get(filterId ?: -1L)
         .distinctUntilChanged()
         .take(1) // Not to handle changes
         .flowOn(Dispatchers.IO)
@@ -96,9 +97,4 @@ class EditFilterViewModel @AssistedInject constructor(
     }
 
     private fun List<Boolean>.toEnabledLogLevels() = mapIndexed { index, value -> if (value) enumValues<LogLevel>()[index] else null }.filterNotNull()
-}
-
-@AssistedFactory
-interface EditFilterViewModelAssistedFactory {
-    fun create(filterId: Long): EditFilterViewModel
 }

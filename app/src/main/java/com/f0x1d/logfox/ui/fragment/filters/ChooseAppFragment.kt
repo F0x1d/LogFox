@@ -6,9 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.updatePadding
 import androidx.fragment.app.viewModels
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.lifecycle.asLiveData
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.adapter.AppsAdapter
@@ -26,7 +26,7 @@ class ChooseAppFragment: BaseViewModelFragment<ChooseAppViewModel, FragmentChoos
 
     override val viewModel by viewModels<ChooseAppViewModel>()
 
-    private val editFilterViewModel by navGraphViewModels<EditFilterViewModel>(R.id.editFilterFragment)
+    private val editFilterViewModel by hiltNavGraphViewModels<EditFilterViewModel>(R.id.editFilterFragment)
 
     private val adapter = AppsAdapter {
         editFilterViewModel.selectApp(it)

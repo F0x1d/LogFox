@@ -22,10 +22,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LogsViewModel @Inject constructor(
-    application: Application,
     private val database: AppDatabase,
     private val loggingRepository: LoggingRepository,
-    val appPreferences: AppPreferences
+    val appPreferences: AppPreferences,
+    application: Application
 ): BaseViewModel(application) {
 
     val query = MutableStateFlow<String?>(null)

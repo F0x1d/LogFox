@@ -17,9 +17,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FiltersViewModel @Inject constructor(
-    application: Application,
     private val database: AppDatabase,
-    private val filtersRepository: FiltersRepository
+    private val filtersRepository: FiltersRepository,
+    application: Application
 ): BaseViewModel(application) {
 
     val filters = database.userFilterDao().getAllAsFlow()

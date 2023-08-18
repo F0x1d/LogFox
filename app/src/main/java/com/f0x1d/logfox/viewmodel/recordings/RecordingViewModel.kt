@@ -4,11 +4,10 @@ import android.app.Application
 import android.net.Uri
 import androidx.lifecycle.asLiveData
 import com.f0x1d.logfox.database.AppDatabase
+import com.f0x1d.logfox.di.viewmodel.RecordingId
 import com.f0x1d.logfox.repository.logging.RecordingsRepository
 import com.f0x1d.logfox.viewmodel.base.BaseViewModel
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -16,12 +15,14 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import java.io.File
+import javax.inject.Inject
 
-class RecordingViewModel @AssistedInject constructor(
-    @Assisted recordingId: Long,
-    application: Application,
+@HiltViewModel
+class RecordingViewModel @Inject constructor(
+    @RecordingId val recordingId: Long,
     private val database: AppDatabase,
-    private val recordingsRepository: RecordingsRepository
+    private val recordingsRepository: RecordingsRepository,
+    application: Application
 ): BaseViewModel(application) {
 
     val recording = database.logRecordingDao().get(recordingId)
@@ -47,9 +48,4 @@ class RecordingViewModel @AssistedInject constructor(
     fun updateTitle(title: String) = recording.value?.apply {
         recordingsRepository.updateTitle(this, title)
     }
-}
-
-@AssistedFactory
-interface RecordingViewModelAssistedFactory {
-    fun create(recordingId: Long): RecordingViewModel
 }

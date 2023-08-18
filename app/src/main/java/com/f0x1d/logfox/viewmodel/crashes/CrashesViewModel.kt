@@ -14,9 +14,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CrashesViewModel @Inject constructor(
-    application: Application,
     private val database: AppDatabase,
-    private val crashesRepository: CrashesRepository
+    private val crashesRepository: CrashesRepository,
+    application: Application
 ): BaseViewModel(application) {
 
     val crashes = database.appCrashDao().getAllAsFlow()

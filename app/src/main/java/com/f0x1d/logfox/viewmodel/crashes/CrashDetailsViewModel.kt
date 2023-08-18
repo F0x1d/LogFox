@@ -4,20 +4,21 @@ import android.app.Application
 import androidx.lifecycle.asLiveData
 import com.f0x1d.logfox.database.AppDatabase
 import com.f0x1d.logfox.database.entity.AppCrash
+import com.f0x1d.logfox.di.viewmodel.CrashId
 import com.f0x1d.logfox.repository.logging.CrashesRepository
 import com.f0x1d.logfox.viewmodel.base.BaseViewModel
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
+import javax.inject.Inject
 
-class CrashDetailsViewModel @AssistedInject constructor(
-    @Assisted crashId: Long,
-    application: Application,
+@HiltViewModel
+class CrashDetailsViewModel @Inject constructor(
+    @CrashId val crashId: Long,
     private val database: AppDatabase,
-    private val crashesRepository: CrashesRepository
+    private val crashesRepository: CrashesRepository,
+    application: Application
 ): BaseViewModel(application) {
 
     companion object {
@@ -30,9 +31,4 @@ class CrashDetailsViewModel @AssistedInject constructor(
         .asLiveData()
 
     fun deleteCrash(appCrash: AppCrash) = crashesRepository.delete(appCrash)
-}
-
-@AssistedFactory
-interface CrashDetailsViewModelAssistedFactory {
-    fun create(crashId: Long): CrashDetailsViewModel
 }

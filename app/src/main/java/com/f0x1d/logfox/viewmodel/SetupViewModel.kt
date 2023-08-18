@@ -17,10 +17,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SetupViewModel @Inject constructor(
-    application: Application,
     private val appPreferences: AppPreferences,
     private val rootTerminal: RootTerminal,
-    private val shizukuTerminal: ShizukuTerminal
+    private val shizukuTerminal: ShizukuTerminal,
+    application: Application
 ): BaseViewModel(application) {
 
     private val command = arrayOf("pm", "grant", BuildConfig.APPLICATION_ID, Manifest.permission.READ_LOGS)

@@ -17,10 +17,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RecordingsViewModel @Inject constructor(
-    application: Application,
     private val database: AppDatabase,
     private val loggingRepository: LoggingRepository,
-    private val recordingsRepository: RecordingsRepository
+    private val recordingsRepository: RecordingsRepository,
+    application: Application
 ): BaseViewModel(application) {
 
     companion object {

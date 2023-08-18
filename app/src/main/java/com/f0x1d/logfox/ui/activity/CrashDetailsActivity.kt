@@ -3,9 +3,6 @@ package com.f0x1d.logfox.ui.activity
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import androidx.navigation.navArgs
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.database.entity.AppCrash
 import com.f0x1d.logfox.databinding.ActivityCrashDetailsBinding
@@ -19,23 +16,12 @@ import com.f0x1d.logfox.extensions.shareIntent
 import com.f0x1d.logfox.ui.activity.base.BaseViewModelActivity
 import com.f0x1d.logfox.utils.event.Event
 import com.f0x1d.logfox.viewmodel.crashes.CrashDetailsViewModel
-import com.f0x1d.logfox.viewmodel.crashes.CrashDetailsViewModelAssistedFactory
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class CrashDetailsActivity: BaseViewModelActivity<CrashDetailsViewModel, ActivityCrashDetailsBinding>() {
 
-    @Inject
-    lateinit var assistedFactory: CrashDetailsViewModelAssistedFactory
-
-    override val viewModel by viewModels<CrashDetailsViewModel> {
-        viewModelFactory {
-            initializer {
-                assistedFactory.create(navArgs.crashId)
-            }
-        }
-    }
+    override val viewModel by viewModels<CrashDetailsViewModel>()
 
     private val zipCrashLauncher = registerForActivityResult(ActivityResultContracts.CreateDocument("application/zip")) {
         viewModel.crashToZip(
@@ -43,8 +29,6 @@ class CrashDetailsActivity: BaseViewModelActivity<CrashDetailsViewModel, Activit
             viewModel.crash.value ?: return@registerForActivityResult
         )
     }
-
-    private val navArgs by navArgs<CrashDetailsActivityArgs>()
 
     override fun inflateBinding() = ActivityCrashDetailsBinding.inflate(layoutInflater)
 

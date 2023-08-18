@@ -60,7 +60,7 @@
         android:name="com.f0x1d.logfox.ui.fragment.filters.EditFilterFragment"
         android:label="EditFilterFragment">
         <argument
-            android:name="filterId"
+            android:name="filter_id"
             app:argType="long"
             android:defaultValue="-1L" />
         <action
