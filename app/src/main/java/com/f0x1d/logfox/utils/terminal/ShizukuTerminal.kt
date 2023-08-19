@@ -39,13 +39,11 @@ class ShizukuTerminal @Inject constructor(
     override val title = R.string.shizuku
 
     private var userService: IUserService? = null
-    private val userServiceArgs by lazy {
-        Shizuku.UserServiceArgs(ComponentName(context, UserService::class.java))
-            .daemon(false)
-            .processNameSuffix("service")
-            .debuggable(BuildConfig.DEBUG)
-            .version(BuildConfig.VERSION_CODE)
-    }
+    private val userServiceArgs = Shizuku.UserServiceArgs(ComponentName(context, UserService::class.java))
+        .daemon(false)
+        .processNameSuffix("service")
+        .debuggable(BuildConfig.DEBUG)
+        .version(BuildConfig.VERSION_CODE)
 
     override suspend fun isSupported() = suspendCoroutine {
         when {
@@ -114,7 +112,7 @@ class ShizukuTerminal @Inject constructor(
         }
     }
 
-    override suspend fun exit() = withContext(Dispatchers.IO) {
+    override suspend fun exit() {
         Shizuku.unbindUserService(userServiceArgs, null, true)
     }
 }
