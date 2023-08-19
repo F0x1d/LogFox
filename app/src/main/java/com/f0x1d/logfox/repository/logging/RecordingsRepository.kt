@@ -4,7 +4,9 @@ import android.content.Context
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.database.AppDatabase
 import com.f0x1d.logfox.database.entity.LogRecording
+import com.f0x1d.logfox.database.entity.UserFilter
 import com.f0x1d.logfox.extensions.exportFormatted
+import com.f0x1d.logfox.extensions.logline.filterAndSearch
 import com.f0x1d.logfox.extensions.notifications.removeRecordingNotification
 import com.f0x1d.logfox.extensions.notifications.sendRecordingNotification
 import com.f0x1d.logfox.extensions.notifications.sendRecordingPausedNotification
@@ -16,6 +18,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.sync.Mutex
@@ -39,6 +43,7 @@ class RecordingsRepository @Inject constructor(
 
     private val linesMutex = Mutex()
     private val fileMutex = Mutex()
+    private val filtersMutex = Mutex()
 
     private var recordingDir: File? = null
 
@@ -46,9 +51,23 @@ class RecordingsRepository @Inject constructor(
     private var recordingFile: File? = null
     private var recordingJob: Job? = null
 
+    private var filtersJob: Job? = null
+    private var activeFilters = emptyList<UserFilter>()
+
     override suspend fun setup() {
         recordingDir = File("${context.filesDir.absolutePath}/recordings").apply {
             if (!exists()) mkdirs()
+        }
+
+        filtersJob = onAppScope {
+            database.userFilterDao().getAllAsFlow()
+                .distinctUntilChanged()
+                .flowOn(Dispatchers.IO)
+                .collect {
+                    filtersMutex.withLock {
+                        activeFilters = it
+                    }
+                }
         }
     }
 
@@ -64,6 +83,8 @@ class RecordingsRepository @Inject constructor(
         linesMutex.withLock {
             recordedLines.clear()
         }
+
+        filtersJob?.cancel()
     }
 
     fun record() = runOnAppScope {
@@ -155,8 +176,14 @@ class RecordingsRepository @Inject constructor(
     inner class RecordingReader: LogsReader {
         override suspend fun readLine(line: LogLine) {
             if (recordingStateFlow.value == RecordingState.RECORDING) {
+                val linesToAdd = filtersMutex.withLock {
+                    listOf(line).filterAndSearch(activeFilters)
+                }.apply {
+                    if (isEmpty()) return
+                }
+
                 linesMutex.withLock {
-                    recordedLines.add(line)
+                    recordedLines.addAll(linesToAdd)
                 }
             }
         }
