@@ -17,16 +17,16 @@ import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
 
 fun InputStream.importFilters(context: Context, filtersRepository: FiltersRepository) = use {
-    val gson = EntryPoints.get(context, ExportImportUtilsEntryPoint::class.java).gson()
+    val filters = context.gson.fromJson<List<UserFilter>>(
+        it.readBytes().decodeToString(),
+        object : TypeToken<List<UserFilter>>() {}.type
+    )
 
-    val filters = gson.fromJson<List<UserFilter>>(String(it.readBytes()), object : TypeToken<List<UserFilter>>() {}.type)
     filtersRepository.createAll(filters)
 }
 
 fun OutputStream.exportFilters(context: Context, filters: List<UserFilter>) = use {
-    val gson = EntryPoints.get(context, ExportImportUtilsEntryPoint::class.java).gson()
-
-    it.write(gson.toJson(filters).encodeToByteArray())
+    it.write(context.gson.toJson(filters).encodeToByteArray())
 }
 
 fun OutputStream.exportCrashToZip(context: Context, log: String) = exportToZip(context) {
@@ -64,6 +64,10 @@ private fun ZipOutputStream.putZipEntry(name: String, file: File) {
 
     closeEntry()
 }
+
+private val Context.gson get() = EntryPoints
+    .get(this, ExportImportUtilsEntryPoint::class.java)
+    .gson()
 
 @EntryPoint
 @InstallIn(SingletonComponent::class)
