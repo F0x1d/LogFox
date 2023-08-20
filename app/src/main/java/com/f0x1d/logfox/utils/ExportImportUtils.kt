@@ -7,8 +7,8 @@ import com.f0x1d.logfox.repository.logging.FiltersRepository
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dagger.hilt.EntryPoint
+import dagger.hilt.EntryPoints
 import dagger.hilt.InstallIn
-import dagger.hilt.android.EntryPointAccessors
 import dagger.hilt.components.SingletonComponent
 import java.io.File
 import java.io.InputStream
@@ -17,14 +17,14 @@ import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
 
 fun InputStream.importFilters(context: Context, filtersRepository: FiltersRepository) = use {
-    val gson = EntryPointAccessors.fromApplication(context, ExportImportUtilsEntryPoint::class.java).gson()
+    val gson = EntryPoints.get(context, ExportImportUtilsEntryPoint::class.java).gson()
 
     val filters = gson.fromJson<List<UserFilter>>(String(it.readBytes()), object : TypeToken<List<UserFilter>>() {}.type)
     filtersRepository.createAll(filters)
 }
 
 fun OutputStream.exportFilters(context: Context, filters: List<UserFilter>) = use {
-    val gson = EntryPointAccessors.fromApplication(context, ExportImportUtilsEntryPoint::class.java).gson()
+    val gson = EntryPoints.get(context, ExportImportUtilsEntryPoint::class.java).gson()
 
     it.write(gson.toJson(filters).encodeToByteArray())
 }
@@ -38,7 +38,7 @@ fun OutputStream.exportLogToZip(context: Context, logFile: String) = exportToZip
 }
 
 private fun OutputStream.exportToZip(context: Context, block: ZipOutputStream.() -> Unit) = use {
-    val device = EntryPointAccessors.fromApplication(context, ExportImportUtilsEntryPoint::class.java).device()
+    val device = EntryPoints.get(context, ExportImportUtilsEntryPoint::class.java).device()
 
     ZipOutputStream(this).use { zipOutputStream ->
         block.invoke(zipOutputStream)

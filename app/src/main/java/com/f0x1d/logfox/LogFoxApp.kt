@@ -6,10 +6,8 @@ import androidx.core.app.NotificationManagerCompat
 import com.f0x1d.logfox.extensions.applyTheme
 import com.f0x1d.logfox.extensions.notificationManagerCompat
 import com.f0x1d.logfox.utils.preferences.AppPreferences
-import com.f0x1d.logfox.utils.view.FontsInterceptor
 import com.google.android.material.color.DynamicColors
 import dagger.hilt.android.HiltAndroidApp
-import io.github.inflationx.viewpump.ViewPump
 import kotlinx.coroutines.MainScope
 import javax.inject.Inject
 
@@ -33,12 +31,6 @@ class LogFoxApp: Application() {
         instance = this
 
         applyTheme(appPreferences.nightTheme)
-
-        ViewPump.init(
-            ViewPump.builder()
-                .addInterceptor(FontsInterceptor(this))
-                .build()
-        )
 
         DynamicColors.applyToActivitiesIfAvailable(this)
 

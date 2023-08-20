@@ -6,7 +6,6 @@
         android:id="@+id/export_item"
         android:title="@string/export"
         android:icon="@drawable/ic_export"
-        android:visible="false"
         app:showAsAction="always" />
 
 </menu>
