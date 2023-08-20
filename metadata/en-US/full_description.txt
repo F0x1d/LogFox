@@ -1,0 +1,1 @@
+Best LogCat reader for Android, which supports filters, recordings, crashes observing and etc. Also it is beautiful.
