@@ -7,7 +7,6 @@ import android.content.pm.PackageManager
 import android.os.IBinder
 import android.os.ParcelFileDescriptor.AutoCloseInputStream
 import android.os.ParcelFileDescriptor.AutoCloseOutputStream
-import androidx.annotation.RequiresApi
 import com.f0x1d.logfox.BuildConfig
 import com.f0x1d.logfox.IUserService
 import com.f0x1d.logfox.R
@@ -26,7 +25,6 @@ import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-@RequiresApi(23)
 @Singleton
 class ShizukuTerminal @Inject constructor(
     @ApplicationContext private val context: Context
@@ -80,12 +78,17 @@ class ShizukuTerminal @Inject constructor(
             return
         }
 
+        var alreadyConnected = false
         val userServiceConnection = object : ServiceConnection {
             override fun onServiceConnected(componentName: ComponentName?, binder: IBinder?) {
                 if (binder == null || !binder.pingBinder()) return
 
                 userService = IUserService.Stub.asInterface(binder)
+
+                if (alreadyConnected) return
+
                 resume(true)
+                alreadyConnected = true
             }
 
             override fun onServiceDisconnected(componentName: ComponentName?) {
