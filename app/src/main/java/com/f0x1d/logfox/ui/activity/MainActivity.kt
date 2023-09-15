@@ -37,6 +37,10 @@ class MainActivity: BaseViewModelActivity<MainViewModel, ActivityMainBinding>(),
         navController = findNavController(R.id.nav_host_fragment_content_main)
 
         binding.bottomNavigation.setupWithNavController(navController)
+        binding.bottomNavigation.setOnItemReselectedListener {
+            // Just do nothing
+        }
+
         navController.addOnDestinationChangedListener(this)
 
         if (!hasNotificationsPermission() && !viewModel.askedNotificationsPermission) {
