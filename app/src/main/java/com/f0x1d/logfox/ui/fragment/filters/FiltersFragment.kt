@@ -17,6 +17,7 @@ import com.f0x1d.logfox.adapter.FiltersAdapter
 import com.f0x1d.logfox.databinding.FragmentFiltersBinding
 import com.f0x1d.logfox.extensions.applyInsets
 import com.f0x1d.logfox.extensions.setClickListenerOn
+import com.f0x1d.logfox.extensions.showAreYouSureDialog
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
 import com.f0x1d.logfox.utils.dpToPx
 import com.f0x1d.logfox.viewmodel.filters.FiltersViewModel
@@ -61,7 +62,9 @@ class FiltersFragment: BaseViewModelFragment<FiltersViewModel, FragmentFiltersBi
         binding.toolbar.inflateMenu(R.menu.filters_menu)
         binding.toolbar.menu.apply {
             setClickListenerOn(R.id.clear_item) {
-                viewModel.clearAll()
+                showAreYouSureDialog {
+                    viewModel.clearAll()
+                }
             }
             setClickListenerOn(R.id.import_item) {
                 importFiltersLauncher.launch(arrayOf(if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) "application/json" else "*/*"))

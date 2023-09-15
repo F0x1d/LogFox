@@ -11,6 +11,7 @@ import com.f0x1d.logfox.R
 import com.f0x1d.logfox.adapter.CrashesAdapter
 import com.f0x1d.logfox.databinding.FragmentCrashesBinding
 import com.f0x1d.logfox.extensions.setClickListenerOn
+import com.f0x1d.logfox.extensions.showAreYouSureDialog
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
 import com.f0x1d.logfox.utils.dpToPx
 import com.f0x1d.logfox.viewmodel.crashes.CrashesViewModel
@@ -35,7 +36,9 @@ class CrashesFragment: BaseViewModelFragment<CrashesViewModel, FragmentCrashesBi
 
         binding.toolbar.inflateMenu(R.menu.crashes_menu)
         binding.toolbar.menu.setClickListenerOn(R.id.clear_item) {
-            viewModel.clearCrashes()
+            showAreYouSureDialog {
+                viewModel.clearCrashes()
+            }
         }
 
         binding.crashesRecycler.layoutManager = LinearLayoutManager(requireContext())

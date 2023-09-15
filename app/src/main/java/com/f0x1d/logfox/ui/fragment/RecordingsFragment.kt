@@ -12,6 +12,7 @@ import com.f0x1d.logfox.adapter.RecordingsAdapter
 import com.f0x1d.logfox.database.entity.LogRecording
 import com.f0x1d.logfox.databinding.FragmentRecordingsBinding
 import com.f0x1d.logfox.extensions.setClickListenerOn
+import com.f0x1d.logfox.extensions.showAreYouSureDialog
 import com.f0x1d.logfox.extensions.startLoggingService
 import com.f0x1d.logfox.repository.logging.RecordingState
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
@@ -41,7 +42,9 @@ class RecordingsFragment: BaseViewModelFragment<RecordingsViewModel, FragmentRec
 
         binding.toolbar.inflateMenu(R.menu.recordings_menu)
         binding.toolbar.menu.setClickListenerOn(R.id.clear_item) {
-            viewModel.clearRecordings()
+            showAreYouSureDialog {
+                viewModel.clearRecordings()
+            }
         }
 
         binding.recordFab.setOnClickListener {

@@ -13,6 +13,7 @@ import com.f0x1d.logfox.extensions.exportFormatted
 import com.f0x1d.logfox.extensions.loadIcon
 import com.f0x1d.logfox.extensions.setClickListenerOn
 import com.f0x1d.logfox.extensions.shareIntent
+import com.f0x1d.logfox.extensions.showAreYouSureDialog
 import com.f0x1d.logfox.ui.activity.base.BaseViewModelActivity
 import com.f0x1d.logfox.utils.event.Event
 import com.f0x1d.logfox.viewmodel.crashes.CrashDetailsViewModel
@@ -59,8 +60,10 @@ class CrashDetailsActivity: BaseViewModelActivity<CrashDetailsViewModel, Activit
     private fun setupFor(appCrash: AppCrash) {
         binding.toolbar.menu.apply {
             setClickListenerOn(R.id.delete_item) {
-                viewModel.deleteCrash(appCrash)
-                finish()
+                showAreYouSureDialog {
+                    viewModel.deleteCrash(appCrash)
+                    finish()
+                }
             }
         }
 

@@ -105,4 +105,5 @@
     <string name="excluding">Исключая</string>
     <string name="package_name">Имя пакета</string>
     <string name="apps">Приложения</string>
+    <string name="are_you_sure">Вы уверены?</string>
 </resources>

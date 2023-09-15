@@ -114,4 +114,5 @@
     <string name="excluding">Excluding</string>
     <string name="package_name">Package name</string>
     <string name="apps">Apps</string>
+    <string name="are_you_sure">Are you sure?</string>
 </resources>
