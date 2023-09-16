@@ -31,7 +31,9 @@ class RecordingsFragment: BaseViewModelFragment<RecordingsViewModel, FragmentRec
     private val adapter = RecordingsAdapter(click = {
         openDetails(it)
     }, delete = {
-        viewModel.delete(it)
+        showAreYouSureDialog {
+            viewModel.delete(it)
+        }
     })
 
     override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) =

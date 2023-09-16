@@ -26,7 +26,9 @@ class CrashesFragment: BaseViewModelFragment<CrashesViewModel, FragmentCrashesBi
     private val adapter = CrashesAdapter(click = {
         findNavController().navigate(CrashesFragmentDirections.actionCrashesFragmentToCrashDetailsActivity(it.id))
     }, delete = {
-        viewModel.deleteCrash(it)
+        showAreYouSureDialog {
+            viewModel.deleteCrash(it)
+        }
     })
 
     override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) = FragmentCrashesBinding.inflate(inflater, container, false)

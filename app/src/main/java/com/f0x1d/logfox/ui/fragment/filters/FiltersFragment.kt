@@ -33,7 +33,9 @@ class FiltersFragment: BaseViewModelFragment<FiltersViewModel, FragmentFiltersBi
             FiltersFragmentDirections.actionFiltersFragmentToEditFilterFragment(it.id)
         )
     }, delete = {
-        viewModel.delete(it)
+        showAreYouSureDialog {
+            viewModel.delete(it)
+        }
     }, checked = { userFilter, checked ->
         viewModel.switch(userFilter, checked)
     })
