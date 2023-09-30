@@ -1,7 +1,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     ext {
-        agp_version = '8.1.1'
+        agp_version = '8.1.2'
         kotlin_version = '1.9.0'
         ksp_version = '1.9.0-1.0.12'
 
@@ -26,7 +26,7 @@ buildscript {
 
         material_version = '1.9.0'
 
-        navigation_version = '2.7.2'
+        navigation_version = '2.7.3'
 
         junit_version = '4.13.2'
         androidx_junit_version = '1.1.5'

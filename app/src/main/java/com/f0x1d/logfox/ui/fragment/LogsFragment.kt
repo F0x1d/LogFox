@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,6 +14,7 @@ import com.f0x1d.logfox.R
 import com.f0x1d.logfox.adapter.LogsAdapter
 import com.f0x1d.logfox.databinding.FragmentLogsBinding
 import com.f0x1d.logfox.extensions.copyText
+import com.f0x1d.logfox.extensions.readFileName
 import com.f0x1d.logfox.extensions.sendKillApp
 import com.f0x1d.logfox.extensions.sendStopService
 import com.f0x1d.logfox.extensions.setClickListenerOn
@@ -35,6 +37,12 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
         }
     }
     private var changingState = false
+
+    private val stopViewingFileBackPressedCallback = object : OnBackPressedCallback(false) {
+        override fun handleOnBackPressed() {
+            viewModel.stopViewingFile()
+        }
+    }
 
     override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) = FragmentLogsBinding.inflate(inflater, container, false)
 
@@ -105,6 +113,27 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
                 scrollLogToBottom()
         }
 
+        viewModel.viewingFileData.observe(viewLifecycleOwner) {
+            binding.toolbar.apply {
+                stopViewingFileBackPressedCallback.isEnabled = it
+
+                menu.findItem(R.id.pause_item).isVisible = !it
+
+                title = if (it)
+                    viewModel.deepLinkIntent?.readFileName(requireContext())
+                else getString(R.string.app_name)
+
+                if (it) setNavigationIcon(R.drawable.ic_clear)
+                else {
+                    navigationIcon = null
+                }
+
+                setNavigationOnClickListener {
+                    viewModel.stopViewingFile()
+                }
+            }
+        }
+
         viewModel.logs.observe(viewLifecycleOwner) {
             adapter.submitList(null)
             adapter.submitList(it ?: return@observe) {
@@ -127,6 +156,11 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
         viewModel.serviceRunningData.observe(viewLifecycleOwner) { running ->
             binding.toolbar.menu.findItem(R.id.service_status_item).setTitle(if (running) R.string.stop_service else R.string.start_service)
         }
+
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            stopViewingFileBackPressedCallback
+        )
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {

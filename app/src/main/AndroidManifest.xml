@@ -18,7 +18,18 @@
         android:theme="@style/Theme.LogFox"
         android:localeConfig="@xml/locales_config">
 
-        <activity android:name=".ui.activity.MainActivity" android:exported="true">
+        <activity
+            android:name=".ui.activity.MainActivity"
+            android:launchMode="singleInstance"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="content" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
