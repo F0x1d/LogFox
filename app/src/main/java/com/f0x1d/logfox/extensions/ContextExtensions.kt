@@ -14,7 +14,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.repository.logging.LoggingRepository
 import com.f0x1d.logfox.service.LoggingService
@@ -75,7 +74,7 @@ fun Context.shareIntent(text: String) = baseShareIntent {
 }
 
 fun Context.shareFileIntent(file: File) = baseShareIntent {
-    val uri = FileProvider.getUriForFile(this, "com.f0x1d.logfox.provider", file)
+    val uri = file.asUri(this)
 
     it.putExtra(Intent.EXTRA_STREAM, uri)
     it.type = "text/plain"

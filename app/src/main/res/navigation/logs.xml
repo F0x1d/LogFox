@@ -8,6 +8,17 @@
         android:id="@+id/logsFragment"
         android:name="com.f0x1d.logfox.ui.fragment.LogsFragment"
         android:label="LogsFragment" >
+        <deepLink
+            app:uri="content"
+            app:mimeType="*/*"
+            app:action="android.intent.action.VIEW" />
+
+        <argument
+            android:name="file_uri"
+            app:argType="android.net.Uri"
+            android:defaultValue="@null"
+            app:nullable="true" />
+
         <action
             android:id="@+id/action_logsFragment_to_logsExtendedCopyFragment"
             app:destination="@id/logsExtendedCopyFragment"

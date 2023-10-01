@@ -1,10 +1,13 @@
 package com.f0x1d.logfox.viewmodel
 
 import android.app.Application
+import android.net.Uri
 import androidx.lifecycle.asLiveData
 import com.f0x1d.logfox.database.AppDatabase
 import com.f0x1d.logfox.database.entity.UserFilter
+import com.f0x1d.logfox.di.viewmodel.FileUri
 import com.f0x1d.logfox.extensions.logline.filterAndSearch
+import com.f0x1d.logfox.extensions.readFileContentsAsFlow
 import com.f0x1d.logfox.model.LogLine
 import com.f0x1d.logfox.repository.logging.LoggingRepository
 import com.f0x1d.logfox.utils.preferences.AppPreferences
@@ -22,6 +25,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LogsViewModel @Inject constructor(
+    @FileUri val fileUri: Uri?,
     private val database: AppDatabase,
     private val loggingRepository: LoggingRepository,
     val appPreferences: AppPreferences,
@@ -33,19 +37,37 @@ class LogsViewModel @Inject constructor(
     val paused = MutableStateFlow(false)
     val pausedData = paused.asLiveData()
 
+    val viewingFile = MutableStateFlow(fileUri != null)
+    val viewingFileData = viewingFile.asLiveData()
+
+    @Suppress("UNCHECKED_CAST")
     val logs = combine(
         loggingRepository.logsFlow,
+        fileUri.readFileContentsAsFlow(ctx, appPreferences),
+        viewingFile,
         database.userFilterDao().getAllAsFlow(),
         query,
         paused
-    ) { logs, filters, query, paused ->
-        LogsData(logs, filters, query, paused)
+    ) { values ->
+        val logs = values[0] as List<LogLine>
+        val fileLogs = values[1] as List<LogLine>
+        val viewingFile = values[2] as Boolean
+        val filters = values[3] as List<UserFilter>
+        val query = values[4] as String?
+        val paused = values[5] as Boolean
+
+        val resultLogs = when {
+            viewingFile -> fileLogs
+            else -> logs
+        }
+
+        LogsData(resultLogs, viewingFile, filters, query, paused)
     }.scan(null as LogsData?) { accumulator, data ->
         when {
-            !data.paused -> data
+            !data.paused || data.viewingFile != accumulator?.viewingFile -> data
 
-            data.query != accumulator?.query -> data.copy(logs = accumulator?.logs ?: data.logs)
-            data.filters != accumulator?.filters -> data.copy(logs = accumulator?.logs ?: data.logs)
+            data.query != accumulator.query -> data.copy(logs = accumulator.logs)
+            data.filters != accumulator.filters -> data.copy(logs = accumulator.logs)
 
             else -> data.copy(logs = accumulator.logs, passing = false)
         }
@@ -62,6 +84,12 @@ class LogsViewModel @Inject constructor(
     val serviceRunningData = loggingRepository.serviceRunningFlow.asLiveData()
 
     val resumeLoggingWithBottomTouch get() = appPreferences.resumeLoggingWithBottomTouch
+
+    fun stopViewingFile() = viewingFile.apply {
+        if (value) update {
+            false
+        }
+    }
 
     fun query(query: String?) = this.query.update { query }
 
@@ -80,6 +108,7 @@ class LogsViewModel @Inject constructor(
 
 data class LogsData(
     val logs: List<LogLine>,
+    val viewingFile: Boolean,
     val filters: List<UserFilter>,
     val query: String?,
     val paused: Boolean,

@@ -18,7 +18,29 @@
         android:theme="@style/Theme.LogFox"
         android:localeConfig="@xml/locales_config">
 
-        <activity android:name=".ui.activity.MainActivity" android:exported="true">
+        <activity
+            android:name=".ui.activity.MainActivity"
+            android:launchMode="singleTop"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.EDIT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="content"/>
+                <data android:mimeType="*/*" />
+                <data android:pathPattern=".*\\.log" />
+                <data android:pathPattern=".*\\..*\\.log" />
+                <data android:pathPattern=".*\\..*\\..*\\.log" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\.log" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\.log" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\.log" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\.log" />
+                <data android:host="*" />
+            </intent-filter>
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

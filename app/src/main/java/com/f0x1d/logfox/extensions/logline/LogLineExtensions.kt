@@ -6,7 +6,7 @@ import com.f0x1d.logfox.model.LogLevel
 import com.f0x1d.logfox.model.LogLine
 import com.f0x1d.logfox.utils.UIDS
 
-private val logRegex = "(.{23}) (.{1,5}) (.{1,5}) (.{1,5}) (.) (.+?): (.+)".toRegex()
+private val logRegex = "(.{14}) (.{1,5}) (.{1,5}) (.{1,5}) (.) (.+?): (.+)".toRegex()
 // time, uid, pid, tid, level, tag, message
 
 private val uidsCache = LruCache<String, String>(200)
@@ -15,7 +15,7 @@ fun LogLine(
     id: Long,
     line: String,
     packageManager: PackageManager
-) = logRegex.find(line)?.run {
+) = logRegex.find(line.trim())?.run {
     val uid = groupValues[2].replace(" ", "")
     val integerUid = uid.toIntOrNull() ?: UIDS.MAPPINGS[uid]
 
@@ -38,7 +38,8 @@ fun LogLine(
         packageName,
         mapLevel(groupValues[5]),
         groupValues[6].trim(),
-        groupValues[7]
+        groupValues[7],
+        groupValues[0]
     )
 }
 

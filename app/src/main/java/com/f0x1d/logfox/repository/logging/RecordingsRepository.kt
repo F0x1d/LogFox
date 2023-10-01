@@ -92,7 +92,7 @@ class RecordingsRepository @Inject constructor(
 
         recordingTime = System.currentTimeMillis()
         fileMutex.withLock {
-            recordingFile = File(recordingDir, "${recordingTime.exportFormatted}.txt").apply {
+            recordingFile = File(recordingDir, "${recordingTime.exportFormatted}.log").apply {
                 createNewFile()
             }
         }

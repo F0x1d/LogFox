@@ -30,11 +30,11 @@ fun OutputStream.exportFilters(context: Context, filters: List<UserFilter>) = us
 }
 
 fun OutputStream.exportCrashToZip(context: Context, log: String) = exportToZip(context) {
-    putZipEntry("log.txt", log.encodeToByteArray())
+    putZipEntry("crash.log", log.encodeToByteArray())
 }
 
 fun OutputStream.exportLogToZip(context: Context, logFile: String) = exportToZip(context) {
-    putZipEntry("log.txt", File(logFile))
+    putZipEntry("crash.log", File(logFile))
 }
 
 private fun OutputStream.exportToZip(context: Context, block: ZipOutputStream.() -> Unit) = use {
