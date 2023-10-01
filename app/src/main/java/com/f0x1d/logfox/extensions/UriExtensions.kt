@@ -7,14 +7,15 @@ import com.f0x1d.logfox.extensions.logline.LogLine
 import com.f0x1d.logfox.model.LogLine
 import com.f0x1d.logfox.utils.preferences.AppPreferences
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 
-fun Uri?.readFileContentsAsFlow(context: Context, appPreferences: AppPreferences) = flow {
+fun Uri?.readFileContentsAsFlow(context: Context, appPreferences: AppPreferences) = flow<List<LogLine>> {
     val uri = this@readFileContentsAsFlow
 
     if (uri == null) {
-        emit(null)
+        emit(emptyList())
     } else {
         val logsDisplayLimit = appPreferences.logsDisplayLimit
 
@@ -39,8 +40,10 @@ fun Uri?.readFileContentsAsFlow(context: Context, appPreferences: AppPreferences
 
                 emit(logLines)
             }
-        } ?: emit(null)
+        } ?: emit(emptyList())
     }
-}.flowOn(Dispatchers.IO)
+}.flowOn(Dispatchers.IO).catch {
+    emit(emptyList())
+}
 
 fun Uri.readFileName(context: Context) = DocumentFile.fromSingleUri(context, this)?.name

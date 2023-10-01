@@ -50,27 +50,24 @@ class LogsViewModel @Inject constructor(
         paused
     ) { values ->
         val logs = values[0] as List<LogLine>
-        val fileLogs = values[1] as List<LogLine>?
+        val fileLogs = values[1] as List<LogLine>
         val viewingFile = values[2] as Boolean
         val filters = values[3] as List<UserFilter>
         val query = values[4] as String?
-        var paused = values[5] as Boolean
+        val paused = values[5] as Boolean
 
         val resultLogs = when {
-            viewingFile -> {
-                paused = false
-                fileLogs ?: logs
-            }
+            viewingFile -> fileLogs
             else -> logs
         }
 
-        LogsData(resultLogs, filters, query, paused)
+        LogsData(resultLogs, viewingFile, filters, query, paused)
     }.scan(null as LogsData?) { accumulator, data ->
         when {
-            !data.paused -> data
+            !data.paused || data.viewingFile != accumulator?.viewingFile -> data
 
-            data.query != accumulator?.query -> data.copy(logs = accumulator?.logs ?: data.logs)
-            data.filters != accumulator?.filters -> data.copy(logs = accumulator?.logs ?: data.logs)
+            data.query != accumulator.query -> data.copy(logs = accumulator.logs)
+            data.filters != accumulator.filters -> data.copy(logs = accumulator.logs)
 
             else -> data.copy(logs = accumulator.logs, passing = false)
         }
@@ -111,6 +108,7 @@ class LogsViewModel @Inject constructor(
 
 data class LogsData(
     val logs: List<LogLine>,
+    val viewingFile: Boolean,
     val filters: List<UserFilter>,
     val query: String?,
     val paused: Boolean,
