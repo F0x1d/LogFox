@@ -10,7 +10,7 @@
         android:label="LogsFragment" >
         <deepLink
             app:uri="content"
-            app:mimeType="text/plain"
+            app:mimeType="*/*"
             app:action="android.intent.action.VIEW" />
 
         <argument

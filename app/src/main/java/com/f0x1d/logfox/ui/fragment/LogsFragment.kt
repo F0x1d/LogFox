@@ -119,9 +119,11 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
             binding.toolbar.apply {
                 menu.findItem(R.id.pause_item).isVisible = !it
 
-                title = if (it)
-                    viewModel.fileUri?.readFileName(requireContext())
-                else getString(R.string.app_name)
+                title = when (it) {
+                    true -> viewModel.fileUri?.readFileName(requireContext())
+
+                    else -> getString(R.string.app_name)
+                }
 
                 if (it) setNavigationIcon(R.drawable.ic_clear)
                 else {

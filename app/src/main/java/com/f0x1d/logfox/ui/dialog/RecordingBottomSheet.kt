@@ -34,7 +34,8 @@ class RecordingBottomSheet: BaseViewModelBottomSheet<RecordingViewModel, SheetRe
             viewModel.recording.value ?: return@registerForActivityResult
         )
     }
-    private val logExportLauncher = registerForActivityResult(ActivityResultContracts.CreateDocument("text/plain")) {
+    // no plain because android will append .txt itself
+    private val logExportLauncher = registerForActivityResult(ActivityResultContracts.CreateDocument("text/*")) {
         viewModel.exportFile(it ?: return@registerForActivityResult)
     }
 
@@ -54,7 +55,7 @@ class RecordingBottomSheet: BaseViewModelBottomSheet<RecordingViewModel, SheetRe
                 ))
             }
             binding.exportLayout.setOnClickListener {
-                logExportLauncher.launch("${logRecording.dateAndTime.exportFormatted}.txt")
+                logExportLauncher.launch("${logRecording.dateAndTime.exportFormatted}.log")
             }
             binding.shareLayout.setOnClickListener {
                 requireContext().shareFileIntent(File(logRecording.file))
