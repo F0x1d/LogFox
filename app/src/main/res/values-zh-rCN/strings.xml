@@ -107,4 +107,5 @@
     <string name="package_name">包名</string>
     <string name="apps">应用</string>
     <string name="are_you_sure">你确定?</string>
+    <string name="view">查看</string>
 </resources>
