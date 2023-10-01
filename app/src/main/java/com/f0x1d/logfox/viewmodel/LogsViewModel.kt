@@ -1,11 +1,11 @@
 package com.f0x1d.logfox.viewmodel
 
 import android.app.Application
-import android.content.Intent
+import android.net.Uri
 import androidx.lifecycle.asLiveData
 import com.f0x1d.logfox.database.AppDatabase
 import com.f0x1d.logfox.database.entity.UserFilter
-import com.f0x1d.logfox.di.viewmodel.DeepLinkIntent
+import com.f0x1d.logfox.di.viewmodel.FileUri
 import com.f0x1d.logfox.extensions.logline.filterAndSearch
 import com.f0x1d.logfox.extensions.readFileContentsAsFlow
 import com.f0x1d.logfox.model.LogLine
@@ -25,7 +25,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LogsViewModel @Inject constructor(
-    @DeepLinkIntent val deepLinkIntent: Intent?,
+    @FileUri val fileUri: Uri?,
     private val database: AppDatabase,
     private val loggingRepository: LoggingRepository,
     val appPreferences: AppPreferences,
@@ -37,13 +37,13 @@ class LogsViewModel @Inject constructor(
     val paused = MutableStateFlow(false)
     val pausedData = paused.asLiveData()
 
-    val viewingFile = MutableStateFlow(deepLinkIntent != null)
+    val viewingFile = MutableStateFlow(fileUri != null)
     val viewingFileData = viewingFile.asLiveData()
 
     @Suppress("UNCHECKED_CAST")
     val logs = combine(
         loggingRepository.logsFlow,
-        deepLinkIntent.readFileContentsAsFlow(ctx),
+        fileUri.readFileContentsAsFlow(ctx, appPreferences),
         viewingFile,
         database.userFilterDao().getAllAsFlow(),
         query,
@@ -54,10 +54,13 @@ class LogsViewModel @Inject constructor(
         val viewingFile = values[2] as Boolean
         val filters = values[3] as List<UserFilter>
         val query = values[4] as String?
-        val paused = values[5] as Boolean
+        var paused = values[5] as Boolean
 
         val resultLogs = when {
-            viewingFile -> fileLogs ?: logs
+            viewingFile -> {
+                paused = false
+                fileLogs ?: logs
+            }
             else -> logs
         }
 

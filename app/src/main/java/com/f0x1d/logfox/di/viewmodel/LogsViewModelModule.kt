@@ -1,6 +1,7 @@
 package com.f0x1d.logfox.di.viewmodel
 
 import android.content.Intent
+import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import dagger.Module
@@ -16,12 +17,12 @@ object LogsViewModelModule {
 
     @Provides
     @ViewModelScoped
-    @DeepLinkIntent
+    @FileUri
     fun provideDeepLinkIntent(savedStateHandle: SavedStateHandle) = savedStateHandle.get<Intent>(
         NavController.KEY_DEEP_LINK_INTENT
-    )
+    )?.data ?: savedStateHandle.get<Uri>("file_uri")
 }
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
-annotation class DeepLinkIntent
+annotation class FileUri

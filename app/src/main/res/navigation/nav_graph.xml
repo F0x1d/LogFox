@@ -19,4 +19,14 @@
         app:destination="@id/setupFragment"
         app:popUpTo="@id/nav_graph"
         app:popUpToInclusive="true" />
+
+    <action
+        android:id="@+id/action_global_logsFragment"
+        app:destination="@id/logs">
+        <argument
+            android:name="file_uri"
+            app:argType="android.net.Uri"
+            android:defaultValue="@null"
+            app:nullable="true" />
+    </action>
 </navigation>

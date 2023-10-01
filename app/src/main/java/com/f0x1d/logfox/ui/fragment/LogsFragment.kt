@@ -114,13 +114,13 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
         }
 
         viewModel.viewingFileData.observe(viewLifecycleOwner) {
-            binding.toolbar.apply {
-                stopViewingFileBackPressedCallback.isEnabled = it
+            stopViewingFileBackPressedCallback.isEnabled = it
 
+            binding.toolbar.apply {
                 menu.findItem(R.id.pause_item).isVisible = !it
 
                 title = if (it)
-                    viewModel.deepLinkIntent?.readFileName(requireContext())
+                    viewModel.fileUri?.readFileName(requireContext())
                 else getString(R.string.app_name)
 
                 if (it) setNavigationIcon(R.drawable.ic_clear)

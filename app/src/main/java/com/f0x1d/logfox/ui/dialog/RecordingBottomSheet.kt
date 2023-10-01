@@ -8,7 +8,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.asLiveData
+import androidx.navigation.fragment.findNavController
+import com.f0x1d.logfox.NavGraphDirections
 import com.f0x1d.logfox.databinding.SheetRecordingBinding
+import com.f0x1d.logfox.extensions.asUri
 import com.f0x1d.logfox.extensions.exportFormatted
 import com.f0x1d.logfox.extensions.logToZip
 import com.f0x1d.logfox.extensions.shareFileIntent
@@ -45,6 +48,11 @@ class RecordingBottomSheet: BaseViewModelBottomSheet<RecordingViewModel, SheetRe
 
             binding.timeText.text = logRecording.dateAndTime.toLocaleString()
 
+            binding.viewLayout.setOnClickListener {
+                findNavController().navigate(NavGraphDirections.actionGlobalLogsFragment(
+                    File(logRecording.file).asUri(requireContext())
+                ))
+            }
             binding.exportLayout.setOnClickListener {
                 logExportLauncher.launch("${logRecording.dateAndTime.exportFormatted}.txt")
             }
