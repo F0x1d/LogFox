@@ -5,6 +5,8 @@
 Yet another LogCat reader for Android
 
 [![license](https://img.shields.io/github/license/F0x1d/LogFox)](./LICENSE)
+[![release](https://img.shields.io/github/v/release/F0x1d/LogFox)](https://github.com/F0x1d/LogFox/releases/latest)
+
 
 ## Features
 
