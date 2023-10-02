@@ -10,7 +10,7 @@
     android:layout_marginBottom="5dp"
     app:cardBackgroundColor="?android:colorBackground"
     app:strokeWidth="1dp"
-    app:strokeColor="?attr/logFoxCardStrokeColor">
+    app:strokeColor="@color/card_stroke_color">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

@@ -34,7 +34,6 @@
         <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">?isLightTheme</item>
 
         <item name="enableEdgeToEdge">true</item>
-        <item name="logFoxCardStrokeColor">@color/card_stroke_color</item>
 
         <item name="materialAlertDialogTheme">@style/ThemeOverlay.LogFoxMaterialAlertDialog</item>
         <item name="bottomSheetDialogTheme">@style/LogFoxBottomSheetDialogStyle</item>
