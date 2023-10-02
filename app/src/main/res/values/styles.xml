@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="ThemeOverlay.LogFoxMaterialAlertDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog.Centered">
+    <style name="LogFoxMaterialAlertDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog.Centered">
         <item name="buttonBarPositiveButtonStyle">@style/LogFoxMaterialAlertDialog.Button</item>
         <item name="buttonBarNegativeButtonStyle">@style/LogFoxMaterialAlertDialog.Button</item>
         <item name="buttonBarNeutralButtonStyle">@style/LogFoxMaterialAlertDialog.Button</item>
@@ -19,5 +19,9 @@
         <item name="android:windowSoftInputMode">adjustResize</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
+    </style>
+
+    <style name="LogFoxPreferenceTheme" parent="PreferenceThemeOverlay">
+        <item name="android:layout">@layout/fragment_settings</item>
     </style>
 </resources>

@@ -20,8 +20,8 @@
             app:navigationIconTint="?colorOnSurface"/>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/container"
+    <FrameLayout
+        android:id="@android:id/list_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
