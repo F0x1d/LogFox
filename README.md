@@ -11,10 +11,10 @@ Yet another LogCat reader for Android
 ## Features
 
 - [Shizuku](https://shizuku.rikka.app/) (No Root) & Root support
-- Record log
+- Record logs
 - Show crashes
 - Logs recording with ability to export to ZIP with device info
-- Observing and notifying about Java/JNI crashes and ANRs with ability to export to my textbin
+- Observing and notifying about Java/JNI crashes and ANRs
 - Powerful filters
 - Material You design
 
