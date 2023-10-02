@@ -1,11 +1,13 @@
 package com.f0x1d.logfox.ui.activity.base
 
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.viewbinding.ViewBinding
+import com.f0x1d.logfox.R
 import com.f0x1d.logfox.extensions.snackbar
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
@@ -24,6 +26,14 @@ abstract class BaseActivity<T : ViewBinding> : AppCompatActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         super.onCreate(savedInstanceState)
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            window.navigationBarColor = getColor(R.color.transparent_black)
+        } else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.O) {
+            // Android O support light navigation bar,but cannot define in theme.xml.
+            val windowInsetsCompat = WindowCompat.getInsetsController(window, window.decorView)
+            windowInsetsCompat.isAppearanceLightNavigationBars=true
+        }
 
         inflateBinding()?.also {
             binding = it

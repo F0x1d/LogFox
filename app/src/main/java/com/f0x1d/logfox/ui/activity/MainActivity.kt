@@ -3,6 +3,8 @@ package com.f0x1d.logfox.ui.activity
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
@@ -22,12 +24,14 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity: BaseViewModelActivity<MainViewModel, ActivityMainBinding>(), NavController.OnDestinationChangedListener {
+class MainActivity : BaseViewModelActivity<MainViewModel, ActivityMainBinding>(),
+    NavController.OnDestinationChangedListener {
 
     override val viewModel by viewModels<MainViewModel>()
     private lateinit var navController: NavController
 
-    private val requestNotificationPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) {}
+    private val requestNotificationPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) {}
 
     override fun inflateBinding() = ActivityMainBinding.inflate(layoutInflater)
 
@@ -54,7 +58,11 @@ class MainActivity: BaseViewModelActivity<MainViewModel, ActivityMainBinding>(),
                 .setTitle(R.string.no_notification_permission)
                 .setMessage(R.string.notification_permission_is_required)
                 .setCancelable(false)
-                .setPositiveButton(android.R.string.ok) { dialog, which -> requestNotificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)}
+                .setPositiveButton(android.R.string.ok) { dialog, which ->
+                    requestNotificationPermissionLauncher.launch(
+                        Manifest.permission.POST_NOTIFICATIONS
+                    )
+                }
                 .setNegativeButton(R.string.close, null)
                 .show()
 
@@ -68,7 +76,11 @@ class MainActivity: BaseViewModelActivity<MainViewModel, ActivityMainBinding>(),
         }
     }
 
-    override fun onDestinationChanged(controller: NavController, destination: NavDestination, arguments: Bundle?) {
+    override fun onDestinationChanged(
+        controller: NavController,
+        destination: NavDestination,
+        arguments: Bundle?
+    ) {
         val barShown = when (destination.id) {
             R.id.setupFragment -> false
             R.id.logsExtendedCopyFragment -> false
@@ -80,6 +92,12 @@ class MainActivity: BaseViewModelActivity<MainViewModel, ActivityMainBinding>(),
 
         binding.bottomNavigation?.visibility = if (barShown) View.VISIBLE else View.GONE
         binding.navigationRail?.visibility = if (barShown) View.VISIBLE else View.GONE
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // Only use transparent color when bottomNavigation shown.
+            window.navigationBarColor =
+                if (binding.bottomNavigation != null && barShown) Color.TRANSPARENT
+                else getColor(R.color.background_emphasis_high_type)
+        }
     }
 
     override fun onNewIntent(intent: Intent?) {
