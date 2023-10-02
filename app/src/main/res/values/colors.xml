@@ -9,36 +9,4 @@
     <color name="ic_launcher_foreground">#F78D1E</color>
 
     <color name="card_stroke_color">#ffdadce0</color>
-
-    <color name="seed">#F78D1E</color>
-    <color name="md_theme_primary">#904D00</color>
-    <color name="md_theme_onPrimary">#FFFFFF</color>
-    <color name="md_theme_primaryContainer">#FFDCC2</color>
-    <color name="md_theme_onPrimaryContainer">#2E1500</color>
-    <color name="md_theme_secondary">#745944</color>
-    <color name="md_theme_onSecondary">#FFFFFF</color>
-    <color name="md_theme_secondaryContainer">#FFDCC2</color>
-    <color name="md_theme_onSecondaryContainer">#2A1707</color>
-    <color name="md_theme_tertiary">#5C6237</color>
-    <color name="md_theme_onTertiary">#FFFFFF</color>
-    <color name="md_theme_tertiaryContainer">#E1E7B1</color>
-    <color name="md_theme_onTertiaryContainer">#191E00</color>
-    <color name="md_theme_error">#BA1A1A</color>
-    <color name="md_theme_errorContainer">#FFDAD6</color>
-    <color name="md_theme_onError">#FFFFFF</color>
-    <color name="md_theme_onErrorContainer">#410002</color>
-    <color name="md_theme_background">#FFFBFF</color>
-    <color name="md_theme_onBackground">#201B17</color>
-    <color name="md_theme_surface">#FFFBFF</color>
-    <color name="md_theme_onSurface">#201B17</color>
-    <color name="md_theme_surfaceVariant">#F3DFD2</color>
-    <color name="md_theme_onSurfaceVariant">#51443B</color>
-    <color name="md_theme_outline">#847469</color>
-    <color name="md_theme_inverseOnSurface">#FAEEE8</color>
-    <color name="md_theme_inverseSurface">#352F2B</color>
-    <color name="md_theme_inversePrimary">#FFB77C</color>
-    <color name="md_theme_shadow">#000000</color>
-    <color name="md_theme_surfaceTint">#904D00</color>
-    <color name="md_theme_outlineVariant">#D6C3B6</color>
-    <color name="md_theme_scrim">#000000</color>
 </resources>
