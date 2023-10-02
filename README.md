@@ -1,6 +1,6 @@
 # LogFox
 
-<img src="./app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" width="200" />
+<img src="./app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png" width="200" />
 
 Yet another LogCat reader for Android
 
@@ -11,7 +11,10 @@ Yet another LogCat reader for Android
 - [Shizuku](https://shizuku.rikka.app/) (No Root) & Root support
 - Record log
 - Show crashes
-- Material You
+- Logs recording with ability to export to ZIP with device info
+- Observing and notifying about Java/JNI crashes and ANRs with ability to export to my textbin
+- Powerful filters
+- Material You design
 
 ## Download
 
