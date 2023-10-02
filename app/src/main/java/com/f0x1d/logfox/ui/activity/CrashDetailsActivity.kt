@@ -6,7 +6,6 @@ import androidx.activity.viewModels
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.database.entity.AppCrash
 import com.f0x1d.logfox.databinding.ActivityCrashDetailsBinding
-import com.f0x1d.logfox.extensions.applyBottomInsets
 import com.f0x1d.logfox.extensions.copyText
 import com.f0x1d.logfox.extensions.crashToZip
 import com.f0x1d.logfox.extensions.exportFormatted
@@ -18,6 +17,7 @@ import com.f0x1d.logfox.ui.activity.base.BaseViewModelActivity
 import com.f0x1d.logfox.utils.event.Event
 import com.f0x1d.logfox.viewmodel.crashes.CrashDetailsViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import dev.chrisbanes.insetter.applyInsetter
 
 @AndroidEntryPoint
 class CrashDetailsActivity: BaseViewModelActivity<CrashDetailsViewModel, ActivityCrashDetailsBinding>() {
@@ -36,7 +36,11 @@ class CrashDetailsActivity: BaseViewModelActivity<CrashDetailsViewModel, Activit
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding.logCard.applyBottomInsets(window.decorView)
+        binding.logCard.applyInsetter {
+            type(navigationBars = true) {
+                margin(vertical = true)
+            }
+        }
 
         binding.toolbar.inflateMenu(R.menu.crash_details_menu)
         binding.toolbar.setNavigationOnClickListener {

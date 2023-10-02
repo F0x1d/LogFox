@@ -5,6 +5,7 @@ buildscript {
         kotlin_version = '1.9.0'
         ksp_version = '1.9.0-1.0.12'
 
+        insetter_version = "0.6.1"
         shizuku_version = '13.1.4'
         viewpump_version = '2.1.1'
         gson_version = '2.10.1'

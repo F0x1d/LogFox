@@ -54,6 +54,8 @@ kotlin {
 }
 
 dependencies {
+    implementation "dev.chrisbanes.insetter:insetter:$insetter_version"
+
     implementation "dev.rikka.shizuku:api:$shizuku_version"
     implementation "dev.rikka.shizuku:provider:$shizuku_version"
 

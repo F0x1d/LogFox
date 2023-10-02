@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.updatePadding
 import androidx.fragment.app.viewModels
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.lifecycle.asLiveData
@@ -13,13 +12,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.adapter.AppsAdapter
 import com.f0x1d.logfox.databinding.FragmentChooseAppBinding
-import com.f0x1d.logfox.extensions.applyInsets
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
 import com.f0x1d.logfox.utils.dpToPx
 import com.f0x1d.logfox.viewmodel.filters.ChooseAppViewModel
 import com.f0x1d.logfox.viewmodel.filters.EditFilterViewModel
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import dagger.hilt.android.AndroidEntryPoint
+import dev.chrisbanes.insetter.applyInsetter
 
 @AndroidEntryPoint
 class ChooseAppFragment: BaseViewModelFragment<ChooseAppViewModel, FragmentChooseAppBinding>() {
@@ -41,8 +40,10 @@ class ChooseAppFragment: BaseViewModelFragment<ChooseAppViewModel, FragmentChoos
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        applyInsets(view) {
-            binding.appsRecycler.updatePadding(bottom = it.bottom)
+        binding.appsRecycler.applyInsetter {
+            type(navigationBars = true) {
+                padding(vertical = true)
+            }
         }
 
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
