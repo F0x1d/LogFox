@@ -12,6 +12,8 @@ import com.f0x1d.logfox.adapter.RecordingsAdapter
 import com.f0x1d.logfox.database.entity.LogRecording
 import com.f0x1d.logfox.databinding.FragmentRecordingsBinding
 import com.f0x1d.logfox.extensions.isHorizontalOrientation
+import com.f0x1d.logfox.extensions.marginRelative
+import com.f0x1d.logfox.extensions.paddingRelative
 import com.f0x1d.logfox.extensions.setClickListenerOn
 import com.f0x1d.logfox.extensions.showAreYouSureDialog
 import com.f0x1d.logfox.extensions.startLoggingService
@@ -26,7 +28,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.chrisbanes.insetter.applyInsetter
 
 @AndroidEntryPoint
-class RecordingsFragment: BaseViewModelFragment<RecordingsViewModel, FragmentRecordingsBinding>() {
+class RecordingsFragment : BaseViewModelFragment<RecordingsViewModel, FragmentRecordingsBinding>() {
 
     override val viewModel by viewModels<RecordingsViewModel>()
 
@@ -44,7 +46,35 @@ class RecordingsFragment: BaseViewModelFragment<RecordingsViewModel, FragmentRec
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        requireContext().isHorizontalOrientation.also { horizontalOrientation ->
+        requireContext().also {
+            binding.appBarLayout.applyInsetter {
+                type(statusBars = true, navigationBars = true, displayCutout = true) {
+                    paddingRelative(it, start = !it.isHorizontalOrientation, top = true, end = true)
+                }
+            }
+            binding.recordingsRecycler.applyInsetter {
+                type(navigationBars = true, displayCutout = true) {
+                    paddingRelative(
+                        it,
+                        start = !it.isHorizontalOrientation,
+                        bottom = it.isHorizontalOrientation,
+                        end = true
+                    )
+                }
+            }
+
+            binding.pauseFab.applyInsetter {
+                type(navigationBars = true, displayCutout = true) {
+                    marginRelative(it, end = true, bottom = it.isHorizontalOrientation)
+                }
+            }
+            binding.recordFab.applyInsetter {
+                type(navigationBars = true, displayCutout = true) {
+                    marginRelative(it, end = true, bottom = it.isHorizontalOrientation)
+                }
+            }
+        }
+        /* requireContext().isHorizontalOrientation.also { horizontalOrientation ->
             binding.recordingsRecycler.applyInsetter {
                 type(navigationBars = true) {
                     padding(vertical = horizontalOrientation)
@@ -61,7 +91,7 @@ class RecordingsFragment: BaseViewModelFragment<RecordingsViewModel, FragmentRec
                     margin(vertical = horizontalOrientation)
                 }
             }
-        }
+        } */
 
         binding.toolbar.inflateMenu(R.menu.recordings_menu)
         binding.toolbar.menu.setClickListenerOn(R.id.clear_item) {

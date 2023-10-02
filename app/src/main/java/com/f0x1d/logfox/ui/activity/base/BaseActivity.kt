@@ -11,11 +11,10 @@ import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.android.EntryPointAccessors
 import dagger.hilt.components.SingletonComponent
-import dev.chrisbanes.insetter.applyInsetter
 import io.github.inflationx.viewpump.ViewPump
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
 
-abstract class BaseActivity<T : ViewBinding>: AppCompatActivity() {
+abstract class BaseActivity<T : ViewBinding> : AppCompatActivity() {
 
     protected lateinit var binding: T
 
@@ -23,15 +22,6 @@ abstract class BaseActivity<T : ViewBinding>: AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
-
-        window.decorView.applyInsetter {
-            type(
-                navigationBars = true,
-                displayCutout = true
-            ) {
-                padding(horizontal = true)
-            }
-        }
 
         super.onCreate(savedInstanceState)
 
@@ -42,7 +32,9 @@ abstract class BaseActivity<T : ViewBinding>: AppCompatActivity() {
     }
 
     override fun attachBaseContext(newBase: Context) {
-        val viewPump = EntryPointAccessors.fromApplication(newBase, BaseActivityEntryPoint::class.java).viewPump()
+        val viewPump =
+            EntryPointAccessors.fromApplication(newBase, BaseActivityEntryPoint::class.java)
+                .viewPump()
         super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase, viewPump))
     }
 

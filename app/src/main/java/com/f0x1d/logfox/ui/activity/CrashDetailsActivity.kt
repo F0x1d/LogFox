@@ -20,25 +20,32 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.chrisbanes.insetter.applyInsetter
 
 @AndroidEntryPoint
-class CrashDetailsActivity: BaseViewModelActivity<CrashDetailsViewModel, ActivityCrashDetailsBinding>() {
+class CrashDetailsActivity :
+    BaseViewModelActivity<CrashDetailsViewModel, ActivityCrashDetailsBinding>() {
 
     override val viewModel by viewModels<CrashDetailsViewModel>()
 
-    private val zipCrashLauncher = registerForActivityResult(ActivityResultContracts.CreateDocument("application/zip")) {
-        viewModel.crashToZip(
-            it ?: return@registerForActivityResult,
-            viewModel.crash.value ?: return@registerForActivityResult
-        )
-    }
+    private val zipCrashLauncher =
+        registerForActivityResult(ActivityResultContracts.CreateDocument("application/zip")) {
+            viewModel.crashToZip(
+                it ?: return@registerForActivityResult,
+                viewModel.crash.value ?: return@registerForActivityResult
+            )
+        }
 
     override fun inflateBinding() = ActivityCrashDetailsBinding.inflate(layoutInflater)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding.logCard.applyInsetter {
-            type(navigationBars = true) {
-                margin(vertical = true)
+        binding.appBarLayout.applyInsetter {
+            type(statusBars = true, navigationBars = true, displayCutout = true) {
+                padding(horizontal = true, top = true)
+            }
+        }
+        binding.scrollView.applyInsetter {
+            type(navigationBars = true, displayCutout = true) {
+                padding(horizontal = true, bottom = true)
             }
         }
 
@@ -85,7 +92,14 @@ class CrashDetailsActivity: BaseViewModelActivity<CrashDetailsViewModel, Activit
         }
 
         binding.zipLayout.setOnClickListener {
-            zipCrashLauncher.launch("crash-${appCrash.packageName.replace(".", "-")}-${appCrash.dateAndTime.exportFormatted}.zip")
+            zipCrashLauncher.launch(
+                "crash-${
+                    appCrash.packageName.replace(
+                        ".",
+                        "-"
+                    )
+                }-${appCrash.dateAndTime.exportFormatted}.zip"
+            )
         }
 
         binding.logText.text = appCrash.log

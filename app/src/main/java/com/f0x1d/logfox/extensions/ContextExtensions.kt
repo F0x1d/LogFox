@@ -11,6 +11,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Build
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.NotificationManagerCompat
@@ -23,8 +24,9 @@ import java.io.File
 import kotlin.system.exitProcess
 
 
-fun Context.copyText(text: String) = (getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager)
-    .setPrimaryClip(ClipData.newPlainText(getString(R.string.app_name), text))
+fun Context.copyText(text: String) =
+    (getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager)
+        .setPrimaryClip(ClipData.newPlainText(getString(R.string.app_name), text))
 
 fun Context.hasPermissionToReadLogs() = ContextCompat.checkSelfPermission(
     this,
@@ -36,7 +38,11 @@ val Context.notificationManager get() = getSystemService(Context.NOTIFICATION_SE
 val Context.activityManager get() = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
 val Context.uiModeManager get() = getSystemService(Context.UI_MODE_SERVICE) as UiModeManager
 
-fun Context.startLoggingAndService(loggingRepository: LoggingRepository, appPreferences: AppPreferences, force: Boolean = false) {
+fun Context.startLoggingAndService(
+    loggingRepository: LoggingRepository,
+    appPreferences: AppPreferences,
+    force: Boolean = false
+) {
     loggingRepository.startLoggingIfNot()
 
     if (appPreferences.startOnLaunch || force) {
@@ -44,7 +50,11 @@ fun Context.startLoggingAndService(loggingRepository: LoggingRepository, appPref
     }
 }
 
-fun Context.startLoggingAndServiceIfCan(loggingRepository: LoggingRepository, appPreferences: AppPreferences, force: Boolean = false) {
+fun Context.startLoggingAndServiceIfCan(
+    loggingRepository: LoggingRepository,
+    appPreferences: AppPreferences,
+    force: Boolean = false
+) {
     if (hasPermissionToReadLogs()) {
         startLoggingAndService(loggingRepository, appPreferences, force)
     }
@@ -101,17 +111,22 @@ fun Context.catchingNotNumber(block: () -> Unit) = try {
 
 fun Context.sendKillApp() = sendService(LoggingService.ACTION_KILL_SERVICE)
 fun Context.sendStopService() = sendService(LoggingService.ACTION_STOP_SERVICE)
-private fun Context.sendService(action: String) = startService(Intent(this, LoggingService::class.java).setAction(action))
+private fun Context.sendService(action: String) =
+    startService(Intent(this, LoggingService::class.java).setAction(action))
 
 fun Context.hasNotificationsPermission() = if (Build.VERSION.SDK_INT >= 33)
-    ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
+    ContextCompat.checkSelfPermission(
+        this,
+        Manifest.permission.POST_NOTIFICATIONS
+    ) == PackageManager.PERMISSION_GRANTED
 else
     true
 
-fun Context.doIfPermitted(block: NotificationManagerCompat.() -> Unit) = if (hasNotificationsPermission())
-    block.invoke(notificationManagerCompat)
-else
-    Unit
+fun Context.doIfPermitted(block: NotificationManagerCompat.() -> Unit) =
+    if (hasNotificationsPermission())
+        block.invoke(notificationManagerCompat)
+    else
+        Unit
 
 fun Context.applyTheme(nightMode: Int, force: Boolean = false) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -123,3 +138,4 @@ fun Context.applyTheme(nightMode: Int, force: Boolean = false) {
 }
 
 val Context.isHorizontalOrientation get() = resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+val Context.isRtl get() = resources.configuration.layoutDirection == View.LAYOUT_DIRECTION_RTL
