@@ -7,24 +7,21 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.view.updateLayoutParams
-import androidx.core.view.updatePadding
 import androidx.core.widget.doAfterTextChanged
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.lifecycle.asLiveData
 import androidx.navigation.fragment.findNavController
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.databinding.FragmentEditFilterBinding
-import com.f0x1d.logfox.extensions.applyInsets
 import com.f0x1d.logfox.extensions.setClickListenerOn
 import com.f0x1d.logfox.model.LogLevel
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
-import com.f0x1d.logfox.utils.dpToPx
 import com.f0x1d.logfox.utils.event.Event
 import com.f0x1d.logfox.viewmodel.filters.EditFilterViewModel
 import com.google.android.material.color.MaterialColors
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
+import dev.chrisbanes.insetter.applyInsetter
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.update
@@ -43,12 +40,24 @@ class EditFilterFragment: BaseViewModelFragment<EditFilterViewModel, FragmentEdi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        applyInsets(view) { insets ->
-            binding.saveFab.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                bottomMargin = 10.dpToPx.toInt() + insets.bottom
+        binding.saveFab.applyInsetter {
+            type(
+                navigationBars = true,
+                ime = true
+            ) {
+                margin(
+                    vertical = true,
+                    animated = true
+                )
             }
-
-            binding.scrollView.updatePadding(bottom = 71.dpToPx.toInt() + insets.bottom)
+        }
+        binding.scrollView.applyInsetter {
+            type(
+                navigationBars = true,
+                ime = true
+            ) {
+                padding(vertical = true)
+            }
         }
 
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }

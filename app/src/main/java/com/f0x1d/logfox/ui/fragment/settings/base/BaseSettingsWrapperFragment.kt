@@ -8,8 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.databinding.FragmentSettingsBinding
-import com.f0x1d.logfox.extensions.applyTopInsets
+import com.f0x1d.logfox.extensions.isHorizontalOrientation
 import com.f0x1d.logfox.ui.fragment.base.BaseFragment
+import dev.chrisbanes.insetter.applyInsetter
 
 abstract class BaseSettingsWrapperFragment: BaseFragment<FragmentSettingsBinding>() {
 
@@ -22,7 +23,11 @@ abstract class BaseSettingsWrapperFragment: BaseFragment<FragmentSettingsBinding
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.toolbar.applyTopInsets(view)
+        binding.container.applyInsetter {
+            type(navigationBars = true) {
+                padding(vertical = requireContext().isHorizontalOrientation)
+            }
+        }
 
         binding.toolbar.setTitle(title)
         if (showBackArrow) {

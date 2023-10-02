@@ -39,10 +39,11 @@ class MainActivity: BaseViewModelActivity<MainViewModel, ActivityMainBinding>(),
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment_content_main) as NavHostFragment
         navController = navHostFragment.navController
 
-        binding.bottomNavigation.setupWithNavController(navController)
-        binding.bottomNavigation.setOnItemReselectedListener {
+        binding.bottomNavigation?.setupWithNavController(navController)
+        binding.bottomNavigation?.setOnItemReselectedListener {
             // Just do nothing
         }
+        binding.navigationRail?.setupWithNavController(navController)
 
         navController.addOnDestinationChangedListener(this)
 
@@ -76,7 +77,8 @@ class MainActivity: BaseViewModelActivity<MainViewModel, ActivityMainBinding>(),
             else -> true
         }
 
-        binding.bottomNavigation.visibility = if (barShown) View.VISIBLE else View.GONE
+        binding.bottomNavigation?.visibility = if (barShown) View.VISIBLE else View.GONE
+        binding.navigationRail?.visibility = if (barShown) View.VISIBLE else View.GONE
     }
 
     override fun onNewIntent(intent: Intent?) {

@@ -5,23 +5,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewGroup.MarginLayoutParams
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.view.updateLayoutParams
-import androidx.core.view.updatePadding
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.adapter.FiltersAdapter
 import com.f0x1d.logfox.databinding.FragmentFiltersBinding
-import com.f0x1d.logfox.extensions.applyInsets
 import com.f0x1d.logfox.extensions.setClickListenerOn
 import com.f0x1d.logfox.extensions.showAreYouSureDialog
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
-import com.f0x1d.logfox.utils.dpToPx
 import com.f0x1d.logfox.viewmodel.filters.FiltersViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import dev.chrisbanes.insetter.applyInsetter
 
 @AndroidEntryPoint
 class FiltersFragment: BaseViewModelFragment<FiltersViewModel, FragmentFiltersBinding>() {
@@ -52,12 +48,15 @@ class FiltersFragment: BaseViewModelFragment<FiltersViewModel, FragmentFiltersBi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        applyInsets(view) { insets ->
-            binding.addFab.updateLayoutParams<MarginLayoutParams> {
-                bottomMargin = 10.dpToPx.toInt() + insets.bottom
+        binding.addFab.applyInsetter {
+            type(navigationBars = true) {
+                margin(vertical = true)
             }
-
-            binding.filtersRecycler.updatePadding(bottom = 71.dpToPx.toInt() + insets.bottom)
+        }
+        binding.filtersRecycler.applyInsetter {
+            type(navigationBars = true) {
+                padding(vertical = true)
+            }
         }
 
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
