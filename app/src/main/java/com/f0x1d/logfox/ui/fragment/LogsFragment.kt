@@ -14,6 +14,7 @@ import com.f0x1d.logfox.R
 import com.f0x1d.logfox.adapter.LogsAdapter
 import com.f0x1d.logfox.databinding.FragmentLogsBinding
 import com.f0x1d.logfox.extensions.copyText
+import com.f0x1d.logfox.extensions.isHorizontalOrientation
 import com.f0x1d.logfox.extensions.readFileName
 import com.f0x1d.logfox.extensions.sendKillApp
 import com.f0x1d.logfox.extensions.sendStopService
@@ -24,6 +25,7 @@ import com.f0x1d.logfox.utils.fillWithStrings
 import com.f0x1d.logfox.viewmodel.LogsViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
+import dev.chrisbanes.insetter.applyInsetter
 
 @AndroidEntryPoint
 class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(), SharedPreferences.OnSharedPreferenceChangeListener {
@@ -50,6 +52,19 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.appPreferences.registerListener(this)
+
+        requireContext().isHorizontalOrientation.also { horizontalOrientation ->
+            binding.logsRecycler.applyInsetter {
+                type(navigationBars = true) {
+                    padding(vertical = horizontalOrientation)
+                }
+            }
+            binding.scrollFab.applyInsetter {
+                type(navigationBars = true) {
+                    margin(vertical = horizontalOrientation)
+                }
+            }
+        }
 
         binding.toolbar.inflateMenu(R.menu.logs_menu)
         binding.toolbar.menu.apply {

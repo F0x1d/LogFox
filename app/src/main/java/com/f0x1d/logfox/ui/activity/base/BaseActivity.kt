@@ -25,7 +25,10 @@ abstract class BaseActivity<T : ViewBinding>: AppCompatActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         window.decorView.applyInsetter {
-            type(navigationBars = true, displayCutout = true) {
+            type(
+                navigationBars = true,
+                displayCutout = true
+            ) {
                 padding(horizontal = true)
             }
         }

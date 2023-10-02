@@ -9,6 +9,7 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.os.Build
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
@@ -120,3 +121,5 @@ fun Context.applyTheme(nightMode: Int, force: Boolean = false) {
     } else
         AppCompatDelegate.setDefaultNightMode(if (nightMode != 0) nightMode else AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
 }
+
+val Context.isHorizontalOrientation get() = resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE

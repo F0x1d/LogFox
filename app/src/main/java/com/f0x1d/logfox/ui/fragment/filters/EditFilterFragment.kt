@@ -41,12 +41,21 @@ class EditFilterFragment: BaseViewModelFragment<EditFilterViewModel, FragmentEdi
         super.onViewCreated(view, savedInstanceState)
 
         binding.saveFab.applyInsetter {
-            type(navigationBars = true, ime = true) {
-                margin(vertical = true, animated = true)
+            type(
+                navigationBars = true,
+                ime = true
+            ) {
+                margin(
+                    vertical = true,
+                    animated = true
+                )
             }
         }
         binding.scrollView.applyInsetter {
-            type(navigationBars = true, ime = true) {
+            type(
+                navigationBars = true,
+                ime = true
+            ) {
                 padding(vertical = true)
             }
         }

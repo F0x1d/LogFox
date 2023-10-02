@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.adapter.CrashesAdapter
 import com.f0x1d.logfox.databinding.FragmentCrashesBinding
+import com.f0x1d.logfox.extensions.isHorizontalOrientation
 import com.f0x1d.logfox.extensions.setClickListenerOn
 import com.f0x1d.logfox.extensions.showAreYouSureDialog
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
@@ -17,6 +18,7 @@ import com.f0x1d.logfox.utils.dpToPx
 import com.f0x1d.logfox.viewmodel.crashes.CrashesViewModel
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import dagger.hilt.android.AndroidEntryPoint
+import dev.chrisbanes.insetter.applyInsetter
 
 @AndroidEntryPoint
 class CrashesFragment: BaseViewModelFragment<CrashesViewModel, FragmentCrashesBinding>() {
@@ -35,6 +37,12 @@ class CrashesFragment: BaseViewModelFragment<CrashesViewModel, FragmentCrashesBi
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.crashesRecycler.applyInsetter {
+            type(navigationBars = true) {
+                padding(vertical = requireContext().isHorizontalOrientation)
+            }
+        }
 
         binding.toolbar.inflateMenu(R.menu.crashes_menu)
         binding.toolbar.menu.setClickListenerOn(R.id.clear_item) {
