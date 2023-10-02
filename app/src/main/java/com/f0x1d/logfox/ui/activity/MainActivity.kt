@@ -35,8 +35,9 @@ class MainActivity: BaseViewModelActivity<MainViewModel, ActivityMainBinding>(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.nav_host_fragment_content_main) as NavHostFragment
+        val navHostFragment = supportFragmentManager.findFragmentById(
+            R.id.nav_host_fragment_content_main
+        ) as NavHostFragment
         navController = navHostFragment.navController
 
         binding.bottomNavigation?.setupWithNavController(navController)
