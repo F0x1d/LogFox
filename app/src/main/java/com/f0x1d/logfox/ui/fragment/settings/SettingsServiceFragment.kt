@@ -4,13 +4,13 @@ import android.os.Build
 import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
-import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.extensions.observeAndUpdateSummaryForList
 import com.f0x1d.logfox.extensions.setupAsListPreference
 import com.f0x1d.logfox.extensions.toast
 import com.f0x1d.logfox.repository.logging.LoggingRepository
+import com.f0x1d.logfox.ui.fragment.settings.base.BasePreferenceFragment
 import com.f0x1d.logfox.ui.fragment.settings.base.BaseSettingsWrapperFragment
 import com.f0x1d.logfox.utils.fillWithStrings
 import com.f0x1d.logfox.utils.preferences.AppPreferences
@@ -29,7 +29,7 @@ class SettingsServiceFragment: BaseSettingsWrapperFragment() {
     override val showBackArrow = true
 
     @AndroidEntryPoint
-    class SettingsServiceWrappedFragment: PreferenceFragmentCompat() {
+    class SettingsServiceWrappedFragment: BasePreferenceFragment() {
 
         @Inject
         lateinit var loggingRepository: LoggingRepository

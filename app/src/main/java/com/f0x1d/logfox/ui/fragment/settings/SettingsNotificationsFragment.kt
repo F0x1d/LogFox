@@ -6,11 +6,11 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import androidx.preference.Preference
-import androidx.preference.PreferenceFragmentCompat
 import com.f0x1d.logfox.BuildConfig
 import com.f0x1d.logfox.LogFoxApp
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.extensions.hasNotificationsPermission
+import com.f0x1d.logfox.ui.fragment.settings.base.BasePreferenceFragment
 import com.f0x1d.logfox.ui.fragment.settings.base.BaseSettingsWrapperFragment
 import com.f0x1d.logfox.utils.preferences.AppPreferences
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,7 +24,7 @@ class SettingsNotificationsFragment: BaseSettingsWrapperFragment() {
     override val showBackArrow = true
 
     @AndroidEntryPoint
-    class SettingsNotificationWrappedFragment: PreferenceFragmentCompat() {
+    class SettingsNotificationWrappedFragment: BasePreferenceFragment() {
 
         @Inject
         lateinit var appPreferences: AppPreferences

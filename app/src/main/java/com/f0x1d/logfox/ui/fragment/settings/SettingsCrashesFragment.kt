@@ -1,8 +1,8 @@
 package com.f0x1d.logfox.ui.fragment.settings
 
 import android.os.Bundle
-import androidx.preference.PreferenceFragmentCompat
 import com.f0x1d.logfox.R
+import com.f0x1d.logfox.ui.fragment.settings.base.BasePreferenceFragment
 import com.f0x1d.logfox.ui.fragment.settings.base.BaseSettingsWrapperFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -14,7 +14,7 @@ class SettingsCrashesFragment: BaseSettingsWrapperFragment() {
     override val showBackArrow = true
 
     @AndroidEntryPoint
-    class SettingsCrashesWrappedFragment: PreferenceFragmentCompat() {
+    class SettingsCrashesWrappedFragment: BasePreferenceFragment() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             addPreferencesFromResource(R.xml.settings_crashes)
         }

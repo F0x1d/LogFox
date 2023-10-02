@@ -3,9 +3,9 @@ package com.f0x1d.logfox.ui.fragment.settings
 import android.os.Bundle
 import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
-import androidx.preference.PreferenceFragmentCompat
 import com.f0x1d.logfox.BuildConfig
 import com.f0x1d.logfox.R
+import com.f0x1d.logfox.ui.fragment.settings.base.BasePreferenceFragment
 import com.f0x1d.logfox.ui.fragment.settings.base.BaseSettingsWrapperFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -15,7 +15,7 @@ class SettingsMenuFragment: BaseSettingsWrapperFragment() {
     override val wrappedFragment get() = SettingsMenuWrappedFragment()
 
     @AndroidEntryPoint
-    class SettingsMenuWrappedFragment: PreferenceFragmentCompat() {
+    class SettingsMenuWrappedFragment: BasePreferenceFragment() {
 
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             addPreferencesFromResource(R.xml.settings_menu)
