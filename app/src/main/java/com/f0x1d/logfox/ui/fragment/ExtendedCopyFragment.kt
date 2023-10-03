@@ -19,9 +19,9 @@ class ExtendedCopyFragment: BaseFragment<FragmentExtendedCopyBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.logText.applyInsetter {
+        binding.scrollView.applyInsetter {
             type(navigationBars = true) {
-                margin(vertical = true)
+                padding(vertical = true)
             }
         }
 

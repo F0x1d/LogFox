@@ -1,5 +1,4 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
     <style name="Theme.LogFox" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowLightStatusBar">?isLightTheme</item>
@@ -7,6 +6,7 @@
         <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">?isLightTheme</item>
 
         <item name="enableEdgeToEdge">true</item>
+        <item name="android:windowLayoutInDisplayCutoutMode" tools:targetApi="o_mr1">shortEdges</item>
 
         <item name="materialAlertDialogTheme">@style/LogFoxMaterialAlertDialog</item>
         <item name="bottomSheetDialogTheme">@style/LogFoxBottomSheetDialogStyle</item>

@@ -1,11 +1,13 @@
 package com.f0x1d.logfox.ui.activity.base
 
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.viewbinding.ViewBinding
+import com.f0x1d.logfox.R
 import com.f0x1d.logfox.extensions.snackbar
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
@@ -24,25 +26,32 @@ abstract class BaseActivity<T : ViewBinding>: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
-        window.decorView.applyInsetter {
-            type(
-                navigationBars = true,
-                displayCutout = true
-            ) {
-                padding(horizontal = true)
-            }
-        }
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O_MR1)
+            window.navigationBarColor = getColor(R.color.transparent_black)
 
         super.onCreate(savedInstanceState)
 
         inflateBinding()?.also {
             binding = it
             setContentView(it.root)
+
+            binding.root.applyInsetter {
+                type(
+                    navigationBars = true,
+                    displayCutout = true
+                ) {
+                    padding(horizontal = true)
+                }
+            }
         }
     }
 
     override fun attachBaseContext(newBase: Context) {
-        val viewPump = EntryPointAccessors.fromApplication(newBase, BaseActivityEntryPoint::class.java).viewPump()
+        val viewPump = EntryPointAccessors.fromApplication(
+            newBase,
+            BaseActivityEntryPoint::class.java
+        ).viewPump()
+
         super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase, viewPump))
     }
 

@@ -21,7 +21,9 @@ abstract class BaseViewModelActivity<T : BaseViewModel, D : ViewBinding>: BaseAc
         viewModel.snackbarEventsData.observe(this) {
             if (it.isConsumed) return@observe
 
-            snackbar(it.consume<String>()!!)
+            it.consume<String>()?.also { message ->
+                snackbar(message)
+            }
         }
     }
 

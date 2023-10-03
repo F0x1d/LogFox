@@ -36,9 +36,9 @@ class CrashDetailsActivity: BaseViewModelActivity<CrashDetailsViewModel, Activit
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding.logCard.applyInsetter {
+        binding.scrollView.applyInsetter {
             type(navigationBars = true) {
-                margin(vertical = true)
+                padding(vertical = true)
             }
         }
 
