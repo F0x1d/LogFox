@@ -65,12 +65,8 @@ class LogsFragment : BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>()
             }
             binding.logsRecycler.applyInsetter {
                 type(navigationBars = true, displayCutout = true) {
-                    paddingRelative(
-                        it,
-                        bottom = it.isHorizontalOrientation,
-                        end = true,
-                        start = !it.isHorizontalOrientation
-                    )
+                    paddingRelative(it, bottom = it.isHorizontalOrientation)
+                    marginRelative(it, end = true, start = !it.isHorizontalOrientation)
                 }
             }
             binding.scrollFab.applyInsetter {

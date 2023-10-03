@@ -6,6 +6,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.preference.PreferenceFragmentCompat
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.extensions.isHorizontalOrientation
+import com.f0x1d.logfox.extensions.marginRelative
 import com.f0x1d.logfox.extensions.paddingRelative
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.MaterialToolbar
@@ -42,12 +43,8 @@ abstract class BasePreferenceFragment : PreferenceFragmentCompat() {
 
             applyInsetter {
                 type(navigationBars = true, displayCutout = true) {
-                    paddingRelative(
-                        context,
-                        start = !context.isHorizontalOrientation,
-                        bottom = context.isHorizontalOrientation,
-                        end = true
-                    )
+                    paddingRelative(context, bottom = context.isHorizontalOrientation)
+                    marginRelative(context, end = true, start = !context.isHorizontalOrientation)
                 }
             }
         }

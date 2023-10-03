@@ -54,12 +54,8 @@ class RecordingsFragment : BaseViewModelFragment<RecordingsViewModel, FragmentRe
             }
             binding.recordingsRecycler.applyInsetter {
                 type(navigationBars = true, displayCutout = true) {
-                    paddingRelative(
-                        it,
-                        start = !it.isHorizontalOrientation,
-                        bottom = it.isHorizontalOrientation,
-                        end = true
-                    )
+                    paddingRelative(it, bottom = it.isHorizontalOrientation)
+                    marginRelative(it, end = true, start = !it.isHorizontalOrientation)
                 }
             }
 
@@ -74,24 +70,6 @@ class RecordingsFragment : BaseViewModelFragment<RecordingsViewModel, FragmentRe
                 }
             }
         }
-        /* requireContext().isHorizontalOrientation.also { horizontalOrientation ->
-            binding.recordingsRecycler.applyInsetter {
-                type(navigationBars = true) {
-                    padding(vertical = horizontalOrientation)
-                }
-            }
-
-            binding.pauseFab.applyInsetter {
-                type(navigationBars = true) {
-                    margin(vertical = horizontalOrientation)
-                }
-            }
-            binding.recordFab.applyInsetter {
-                type(navigationBars = true) {
-                    margin(vertical = horizontalOrientation)
-                }
-            }
-        } */
 
         binding.toolbar.inflateMenu(R.menu.recordings_menu)
         binding.toolbar.menu.setClickListenerOn(R.id.clear_item) {

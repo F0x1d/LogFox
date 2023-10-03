@@ -11,6 +11,7 @@ import com.f0x1d.logfox.R
 import com.f0x1d.logfox.adapter.CrashesAdapter
 import com.f0x1d.logfox.databinding.FragmentCrashesBinding
 import com.f0x1d.logfox.extensions.isHorizontalOrientation
+import com.f0x1d.logfox.extensions.marginRelative
 import com.f0x1d.logfox.extensions.paddingRelative
 import com.f0x1d.logfox.extensions.setClickListenerOn
 import com.f0x1d.logfox.extensions.showAreYouSureDialog
@@ -51,12 +52,8 @@ class CrashesFragment : BaseViewModelFragment<CrashesViewModel, FragmentCrashesB
             }
             binding.crashesRecycler.applyInsetter {
                 type(navigationBars = true, displayCutout = true) {
-                    paddingRelative(
-                        it,
-                        start = !it.isHorizontalOrientation,
-                        bottom = it.isHorizontalOrientation,
-                        end = true
-                    )
+                    paddingRelative(it, bottom = it.isHorizontalOrientation)
+                    marginRelative(it, end = true, start = !it.isHorizontalOrientation)
                 }
             }
         }
