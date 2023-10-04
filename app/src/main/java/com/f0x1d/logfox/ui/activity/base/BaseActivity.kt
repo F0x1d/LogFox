@@ -1,6 +1,7 @@
 package com.f0x1d.logfox.ui.activity.base
 
 import android.content.Context
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -26,8 +27,16 @@ abstract class BaseActivity<T : ViewBinding>: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O_MR1)
-            window.navigationBarColor = getColor(R.color.transparent_black)
+        window.navigationBarColor = when {
+            Build.VERSION.SDK_INT < Build.VERSION_CODES.O_MR1 -> getColor(
+                R.color.transparent_black
+            )
+            Build.VERSION.SDK_INT < Build.VERSION_CODES.Q -> getColor(
+                R.color.navbar_transparent_background
+            )
+
+            else -> Color.TRANSPARENT
+        }
 
         super.onCreate(savedInstanceState)
 

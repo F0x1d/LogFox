@@ -40,11 +40,10 @@ class MainActivity: BaseViewModelActivity<MainViewModel, ActivityMainBinding>(),
         ) as NavHostFragment
         navController = navHostFragment.navController
 
-        binding.bottomNavigation?.setupWithNavController(navController)
-        binding.bottomNavigation?.setOnItemReselectedListener {
+        binding.barView?.setupWithNavController(navController)
+        binding.barView?.setOnItemReselectedListener {
             // Just do nothing
         }
-        binding.navigationRail?.setupWithNavController(navController)
 
         navController.addOnDestinationChangedListener(this)
 
@@ -78,8 +77,11 @@ class MainActivity: BaseViewModelActivity<MainViewModel, ActivityMainBinding>(),
             else -> true
         }
 
-        binding.bottomNavigation?.visibility = if (barShown) View.VISIBLE else View.GONE
-        binding.navigationRail?.visibility = if (barShown) View.VISIBLE else View.GONE
+        binding.barView?.visibility = when (barShown) {
+            true -> View.VISIBLE
+
+            else -> View.GONE
+        }
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -91,4 +93,6 @@ class MainActivity: BaseViewModelActivity<MainViewModel, ActivityMainBinding>(),
         super.onDestroy()
         navController.removeOnDestinationChangedListener(this)
     }
+
+    private val ActivityMainBinding.barView get() = bottomNavigation ?: navigationRail
 }
