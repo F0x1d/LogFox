@@ -40,6 +40,14 @@ class CrashesRepository @Inject constructor(
         ANRDetector(crashCollected)
     )
 
+    fun deleteAllByPackageName(appCrash: AppCrash) = runOnAppScope {
+        database.appCrashDao().getAllByPackageName(appCrash.packageName).forEach {
+            context.cancelCrashNotificationFor(it)
+        }
+
+        database.appCrashDao().deleteByPackageName(appCrash.packageName)
+    }
+
     override suspend fun updateInternal(item: AppCrash) = database.appCrashDao().update(item)
 
     override suspend fun deleteInternal(item: AppCrash) {

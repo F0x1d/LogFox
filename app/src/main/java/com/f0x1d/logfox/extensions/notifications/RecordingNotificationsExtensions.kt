@@ -59,4 +59,4 @@ fun Context.sendRecordingPausedNotification() = doIfPermitted {
     )
 }
 
-fun Context.removeRecordingNotification() = notificationManagerCompat.cancel(RECORDING_NOTIFICATIONS_TAG, RECORDING_NOTIFICATIONS_ID)
+fun Context.cancelRecordingNotification() = notificationManagerCompat.cancel(RECORDING_NOTIFICATIONS_TAG, RECORDING_NOTIFICATIONS_ID)

@@ -96,6 +96,7 @@ class MainActivity: BaseViewModelActivity<MainViewModel, ActivityMainBinding>(),
             R.id.filtersFragment -> false
             R.id.editFilterFragment -> false
             R.id.chooseAppFragment -> false
+            R.id.appCrashesFragment -> false
 
             else -> true
         }

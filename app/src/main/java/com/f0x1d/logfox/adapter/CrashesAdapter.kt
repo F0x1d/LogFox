@@ -4,20 +4,22 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import com.f0x1d.logfox.adapter.base.BaseListAdapter
-import com.f0x1d.logfox.database.entity.AppCrash
 import com.f0x1d.logfox.databinding.ItemCrashBinding
+import com.f0x1d.logfox.model.AppCrashesCount
 import com.f0x1d.logfox.ui.viewholder.CrashViewHolder
 
 class CrashesAdapter(
-    private val click: (AppCrash) -> Unit,
-    private val delete: (AppCrash) -> Unit
-): BaseListAdapter<AppCrash, ItemCrashBinding>(CRASH_DIFF) {
+    private val click: (AppCrashesCount) -> Unit,
+    private val delete: (AppCrashesCount) -> Unit
+): BaseListAdapter<AppCrashesCount, ItemCrashBinding>(CRASH_DIFF) {
 
     companion object {
-        private val CRASH_DIFF = object : DiffUtil.ItemCallback<AppCrash>() {
-            override fun areItemsTheSame(oldItem: AppCrash, newItem: AppCrash) = oldItem.id == newItem.id
+        private val CRASH_DIFF = object : DiffUtil.ItemCallback<AppCrashesCount>() {
+            override fun areItemsTheSame(oldItem: AppCrashesCount, newItem: AppCrashesCount) =
+                oldItem.lastCrash.id == newItem.lastCrash.id
 
-            override fun areContentsTheSame(oldItem: AppCrash, newItem: AppCrash) = oldItem == newItem
+            override fun areContentsTheSame(oldItem: AppCrashesCount, newItem: AppCrashesCount) =
+                oldItem == newItem
         }
     }
 
