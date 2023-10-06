@@ -13,8 +13,6 @@ import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import androidx.transition.ChangeBounds
-import androidx.transition.Transition
-import androidx.transition.Transition.TransitionListener
 import androidx.transition.TransitionManager
 import com.f0x1d.logfox.NavGraphDirections
 import com.f0x1d.logfox.R
@@ -36,7 +34,7 @@ class MainActivity: BaseViewModelActivity<MainViewModel, ActivityMainBinding>(),
 
     private val requestNotificationPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) {}
 
-    private var barShown = false
+    private var barShown = true
     private val barScene by lazy {
         ConstraintSet().apply {
             clone(this@MainActivity, R.layout.activity_main)
@@ -50,16 +48,6 @@ class MainActivity: BaseViewModelActivity<MainViewModel, ActivityMainBinding>(),
     private val changeBoundsTransition by lazy {
         ChangeBounds().apply {
             duration = resources.getInteger(androidx.navigation.ui.R.integer.config_navAnimTime).toLong()
-
-            addListener(object : TransitionListener {
-                override fun onTransitionStart(transition: Transition) {}
-                override fun onTransitionEnd(transition: Transition) {
-                    TransitionManager.endTransitions(binding.root)
-                }
-                override fun onTransitionCancel(transition: Transition) {}
-                override fun onTransitionPause(transition: Transition) {}
-                override fun onTransitionResume(transition: Transition) {}
-            })
         }
     }
 
