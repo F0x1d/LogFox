@@ -28,11 +28,11 @@ Yet another LogCat reader for Android
 ## Screenshots
 
 <p align="center">
-  <img src="./screenshots/1.png" width="30%" />
-  <img src="./screenshots/2.png" width="30%" />
-  <img src="./screenshots/3.png" width="30%" />
-  <img src="./screenshots/4.png" width="30%" />
-  <img src="./screenshots/5.png" width="30%" />
+  <img src="./metadata/en-US/images/phoneScreenshots/1.png" width="30%" />
+  <img src="./metadata/en-US/images/phoneScreenshots/2.png" width="30%" />
+  <img src="./metadata/en-US/images/phoneScreenshots/3.png" width="30%" />
+  <img src="./metadata/en-US/images/phoneScreenshots/4.png" width="30%" />
+  <img src="./metadata/en-US/images/phoneScreenshots/5.png" width="30%" />
 </p>
 
 ## License
