@@ -7,7 +7,7 @@ import com.f0x1d.logfox.database.entity.LogRecording
 import com.f0x1d.logfox.database.entity.UserFilter
 import com.f0x1d.logfox.extensions.exportFormatted
 import com.f0x1d.logfox.extensions.logline.filterAndSearch
-import com.f0x1d.logfox.extensions.notifications.removeRecordingNotification
+import com.f0x1d.logfox.extensions.notifications.cancelRecordingNotification
 import com.f0x1d.logfox.extensions.notifications.sendRecordingNotification
 import com.f0x1d.logfox.extensions.notifications.sendRecordingPausedNotification
 import com.f0x1d.logfox.model.LogLine
@@ -120,7 +120,7 @@ class RecordingsRepository @Inject constructor(
 
     fun end(recordingSaved: (LogRecording) -> Unit = {}) = runOnAppScope {
         recordingStateFlow.update { RecordingState.SAVING }
-        context.removeRecordingNotification()
+        context.cancelRecordingNotification()
 
         recordingJob?.cancel()
 

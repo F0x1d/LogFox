@@ -21,6 +21,9 @@ interface AppCrashDao {
     @Query("SELECT * FROM AppCrash ORDER BY date_and_time DESC")
     fun getAllAsFlow(): Flow<List<AppCrash>>
 
+    @Query("SELECT * FROM AppCrash WHERE package_name = :packageName")
+    suspend fun getAllByPackageName(packageName: String): List<AppCrash>
+
     @Query("SELECT * FROM AppCrash WHERE id = :id")
     fun get(id: Long): Flow<AppCrash?>
 
@@ -32,6 +35,9 @@ interface AppCrashDao {
 
     @Delete
     suspend fun delete(appCrash: AppCrash)
+
+    @Query("DELETE FROM AppCrash WHERE package_name = :packageName")
+    suspend fun deleteByPackageName(packageName: String)
 
     @Query("DELETE FROM AppCrash")
     suspend fun deleteAll()

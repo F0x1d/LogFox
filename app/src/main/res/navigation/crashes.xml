@@ -6,10 +6,33 @@
 
     <fragment
         android:id="@+id/crashesFragment"
-        android:name="com.f0x1d.logfox.ui.fragment.CrashesFragment"
+        android:name="com.f0x1d.logfox.ui.fragment.crashes.CrashesFragment"
         android:label="CrashesFragment" >
         <action
             android:id="@+id/action_crashesFragment_to_crashDetailsActivity"
+            app:destination="@id/crashDetailsActivity" />
+        <action
+            android:id="@+id/action_crashesFragment_to_appCrashesFragment"
+            app:destination="@id/appCrashesFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
+    </fragment>
+    <fragment
+        android:id="@+id/appCrashesFragment"
+        android:name="com.f0x1d.logfox.ui.fragment.crashes.AppCrashesFragment"
+        android:label="AppCrashesFragment" >
+        <argument
+            android:name="package_name"
+            app:argType="string" />
+        <argument
+            android:name="app_name"
+            app:argType="string"
+            app:nullable="true" />
+
+        <action
+            android:id="@+id/action_appCrashesFragment_to_crashDetailsActivity"
             app:destination="@id/crashDetailsActivity" />
     </fragment>
     <activity
