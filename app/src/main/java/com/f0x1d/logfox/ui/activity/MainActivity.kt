@@ -20,6 +20,7 @@ import com.f0x1d.logfox.databinding.ActivityMainBinding
 import com.f0x1d.logfox.extensions.contrastedNavBarAvailable
 import com.f0x1d.logfox.extensions.gesturesAvailable
 import com.f0x1d.logfox.extensions.hasNotificationsPermission
+import com.f0x1d.logfox.extensions.isHorizontalOrientation
 import com.f0x1d.logfox.ui.activity.base.BaseViewModelActivity
 import com.f0x1d.logfox.utils.event.Event
 import com.f0x1d.logfox.viewmodel.MainViewModel
@@ -107,8 +108,8 @@ class MainActivity: BaseViewModelActivity<MainViewModel, ActivityMainBinding>(),
         }
 
         if (!gesturesAvailable && contrastedNavBarAvailable) {
-            window.navigationBarColor = when (barShown) {
-                true -> Color.TRANSPARENT
+            window.navigationBarColor = when {
+                barShown && !isHorizontalOrientation -> Color.TRANSPARENT
 
                 else -> getColor(R.color.navbar_transparent_background)
             }
