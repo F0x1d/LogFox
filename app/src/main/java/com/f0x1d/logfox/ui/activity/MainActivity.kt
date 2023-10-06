@@ -3,17 +3,24 @@ package com.f0x1d.logfox.ui.activity
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
-import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import androidx.transition.ChangeBounds
+import androidx.transition.Transition
+import androidx.transition.Transition.TransitionListener
+import androidx.transition.TransitionManager
 import com.f0x1d.logfox.NavGraphDirections
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.databinding.ActivityMainBinding
+import com.f0x1d.logfox.extensions.contrastedNavBarAvailable
+import com.f0x1d.logfox.extensions.gesturesAvailable
 import com.f0x1d.logfox.extensions.hasNotificationsPermission
 import com.f0x1d.logfox.ui.activity.base.BaseViewModelActivity
 import com.f0x1d.logfox.utils.event.Event
@@ -28,6 +35,33 @@ class MainActivity: BaseViewModelActivity<MainViewModel, ActivityMainBinding>(),
     private lateinit var navController: NavController
 
     private val requestNotificationPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) {}
+
+    private var barShown = false
+    private val barScene by lazy {
+        ConstraintSet().apply {
+            clone(this@MainActivity, R.layout.activity_main)
+        }
+    }
+    private val noBarScene by lazy {
+        ConstraintSet().apply {
+            clone(this@MainActivity, R.layout.activity_main_no_bar)
+        }
+    }
+    private val changeBoundsTransition by lazy {
+        ChangeBounds().apply {
+            duration = resources.getInteger(androidx.navigation.ui.R.integer.config_navAnimTime).toLong()
+
+            addListener(object : TransitionListener {
+                override fun onTransitionStart(transition: Transition) {}
+                override fun onTransitionEnd(transition: Transition) {
+                    TransitionManager.endTransitions(binding.root)
+                }
+                override fun onTransitionCancel(transition: Transition) {}
+                override fun onTransitionPause(transition: Transition) {}
+                override fun onTransitionResume(transition: Transition) {}
+            })
+        }
+    }
 
     override fun inflateBinding() = ActivityMainBinding.inflate(layoutInflater)
 
@@ -74,13 +108,39 @@ class MainActivity: BaseViewModelActivity<MainViewModel, ActivityMainBinding>(),
             R.id.filtersFragment -> false
             R.id.editFilterFragment -> false
             R.id.chooseAppFragment -> false
+
+            else -> true
+        }
+        val animateBarTransition = when (destination.id) {
+            R.id.setupFragment -> false
+
             else -> true
         }
 
-        binding.barView?.visibility = when (barShown) {
-            true -> View.VISIBLE
+        if (!gesturesAvailable && contrastedNavBarAvailable) {
+            window.navigationBarColor = when (barShown) {
+                true -> Color.TRANSPARENT
 
-            else -> View.GONE
+                else -> getColor(R.color.navbar_transparent_background)
+            }
+        }
+
+        if (this.barShown != barShown) {
+            this.barShown = barShown
+
+            binding.root.also {
+                if (animateBarTransition) TransitionManager.beginDelayedTransition(
+                    it,
+                    changeBoundsTransition
+                )
+
+                val scene = when (barShown) {
+                    true -> barScene
+
+                    else -> noBarScene
+                }
+                scene.applyTo(it)
+            }
         }
     }
 

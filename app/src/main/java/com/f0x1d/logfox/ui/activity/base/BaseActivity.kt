@@ -2,13 +2,14 @@ package com.f0x1d.logfox.ui.activity.base
 
 import android.content.Context
 import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.viewbinding.ViewBinding
 import com.f0x1d.logfox.R
+import com.f0x1d.logfox.extensions.contrastedNavBarAvailable
+import com.f0x1d.logfox.extensions.gesturesAvailable
 import com.f0x1d.logfox.extensions.snackbar
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
@@ -28,10 +29,10 @@ abstract class BaseActivity<T : ViewBinding>: AppCompatActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         window.navigationBarColor = when {
-            Build.VERSION.SDK_INT < Build.VERSION_CODES.O_MR1 -> getColor(
+            !contrastedNavBarAvailable -> getColor(
                 R.color.transparent_black
             )
-            Build.VERSION.SDK_INT < Build.VERSION_CODES.Q -> getColor(
+            !gesturesAvailable -> getColor(
                 R.color.navbar_transparent_background
             )
 

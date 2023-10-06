@@ -2,7 +2,6 @@ package com.f0x1d.logfox.ui.fragment.settings
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import androidx.preference.Preference
@@ -10,6 +9,7 @@ import com.f0x1d.logfox.BuildConfig
 import com.f0x1d.logfox.LogFoxApp
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.extensions.hasNotificationsPermission
+import com.f0x1d.logfox.extensions.notificationsChannelsAvailable
 import com.f0x1d.logfox.ui.fragment.settings.base.BasePreferenceFragment
 import com.f0x1d.logfox.utils.preferences.AppPreferences
 import dagger.hilt.android.AndroidEntryPoint
@@ -37,7 +37,7 @@ class SettingsNotificationsFragment: BasePreferenceFragment() {
         }
 
         findPreference<Preference>("pref_logging_notification")?.apply {
-            isVisible = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
+            isVisible = notificationsChannelsAvailable
 
             setOnPreferenceClickListener {
                 startActivity(Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS).apply {

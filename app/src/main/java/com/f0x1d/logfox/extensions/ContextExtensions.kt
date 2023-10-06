@@ -1,6 +1,7 @@
 package com.f0x1d.logfox.extensions
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.ActivityManager
 import android.app.NotificationManager
 import android.app.UiModeManager
@@ -10,7 +11,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
-import android.os.Build
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.NotificationManagerCompat
@@ -50,9 +50,10 @@ fun Context.startLoggingAndServiceIfCan(loggingRepository: LoggingRepository, ap
     }
 }
 
+@SuppressLint("NewApi")
 fun Context.startLoggingService() {
     Intent(this, LoggingService::class.java).also {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+        if (startForegroundServiceAvailable)
             startForegroundService(it)
         else
             startService(it)
@@ -103,7 +104,8 @@ fun Context.sendKillApp() = sendService(LoggingService.ACTION_KILL_SERVICE)
 fun Context.sendStopService() = sendService(LoggingService.ACTION_STOP_SERVICE)
 private fun Context.sendService(action: String) = startService(Intent(this, LoggingService::class.java).setAction(action))
 
-fun Context.hasNotificationsPermission() = if (Build.VERSION.SDK_INT >= 33)
+@SuppressLint("InlinedApi")
+fun Context.hasNotificationsPermission() = if (shouldRequestNotificationsPermission)
     ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
 else
     true
@@ -113,8 +115,9 @@ fun Context.doIfPermitted(block: NotificationManagerCompat.() -> Unit) = if (has
 else
     Unit
 
+@SuppressLint("NewApi")
 fun Context.applyTheme(nightMode: Int, force: Boolean = false) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+    if (uiModeManagerAvailable) {
         if (force) uiModeManager.setApplicationNightMode(
             if (nightMode != 0) nightMode else UiModeManager.MODE_NIGHT_CUSTOM
         )

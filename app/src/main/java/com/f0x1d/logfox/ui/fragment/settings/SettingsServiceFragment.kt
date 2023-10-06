@@ -1,11 +1,11 @@
 package com.f0x1d.logfox.ui.fragment.settings
 
-import android.os.Build
 import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
 import androidx.preference.SwitchPreferenceCompat
 import com.f0x1d.logfox.R
+import com.f0x1d.logfox.extensions.isAtLeastAndroid13
 import com.f0x1d.logfox.extensions.observeAndUpdateSummaryForList
 import com.f0x1d.logfox.extensions.setupAsListPreference
 import com.f0x1d.logfox.extensions.toast
@@ -100,5 +100,3 @@ class SettingsServiceFragment: BasePreferenceFragment() {
             .show()
     }
 }
-
-val isAtLeastAndroid13 = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU

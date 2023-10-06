@@ -1,6 +1,5 @@
 package com.f0x1d.logfox.ui.fragment.filters
 
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.adapter.FiltersAdapter
 import com.f0x1d.logfox.databinding.FragmentFiltersBinding
+import com.f0x1d.logfox.extensions.canPickJSON
 import com.f0x1d.logfox.extensions.setClickListenerOn
 import com.f0x1d.logfox.extensions.showAreYouSureDialog
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
@@ -68,7 +68,7 @@ class FiltersFragment: BaseViewModelFragment<FiltersViewModel, FragmentFiltersBi
                 }
             }
             setClickListenerOn(R.id.import_item) {
-                importFiltersLauncher.launch(arrayOf(if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) "application/json" else "*/*"))
+                importFiltersLauncher.launch(arrayOf(if (canPickJSON) "application/json" else "*/*"))
             }
             setClickListenerOn(R.id.export_all_item) {
                 exportFiltersLauncher.launch("filters.json")
