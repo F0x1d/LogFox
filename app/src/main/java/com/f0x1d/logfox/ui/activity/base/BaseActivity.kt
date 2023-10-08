@@ -3,7 +3,6 @@ package com.f0x1d.logfox.ui.activity.base
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.viewbinding.ViewBinding
@@ -65,7 +64,7 @@ abstract class BaseActivity<T : ViewBinding>: AppCompatActivity() {
         super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase, viewPump))
     }
 
-    protected fun snackbar(text: String) = findViewById<View>(android.R.id.content).snackbar(text)
+    protected fun snackbar(text: String) = binding.root.snackbar(text)
 
     protected fun snackbar(id: Int) = snackbar(getString(id))
 }
