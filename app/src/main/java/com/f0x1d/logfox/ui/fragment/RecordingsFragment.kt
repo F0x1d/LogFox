@@ -26,14 +26,14 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.chrisbanes.insetter.applyInsetter
 
 @AndroidEntryPoint
-class RecordingsFragment: BaseViewModelFragment<RecordingsViewModel, FragmentRecordingsBinding>() {
+class RecordingsFragment : BaseViewModelFragment<RecordingsViewModel, FragmentRecordingsBinding>() {
 
     override val viewModel by viewModels<RecordingsViewModel>()
 
     private val adapter = RecordingsAdapter(click = {
         openDetails(it)
     }, delete = {
-        showAreYouSureDialog {
+        showAreYouSureDialog(R.string.delete, R.string.delete_warning) {
             viewModel.delete(it)
         }
     })
@@ -65,7 +65,7 @@ class RecordingsFragment: BaseViewModelFragment<RecordingsViewModel, FragmentRec
 
         binding.toolbar.inflateMenu(R.menu.recordings_menu)
         binding.toolbar.menu.setClickListenerOn(R.id.clear_item) {
-            showAreYouSureDialog {
+            showAreYouSureDialog(R.string.clear, R.string.clear_warning) {
                 viewModel.clearRecordings()
             }
         }

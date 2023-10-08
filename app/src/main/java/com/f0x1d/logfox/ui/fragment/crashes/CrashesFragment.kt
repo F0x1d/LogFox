@@ -21,7 +21,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.chrisbanes.insetter.applyInsetter
 
 @AndroidEntryPoint
-class CrashesFragment: BaseViewModelFragment<CrashesViewModel, FragmentCrashesBinding>() {
+class CrashesFragment : BaseViewModelFragment<CrashesViewModel, FragmentCrashesBinding>() {
 
     override val viewModel by viewModels<CrashesViewModel>()
 
@@ -36,12 +36,13 @@ class CrashesFragment: BaseViewModelFragment<CrashesViewModel, FragmentCrashesBi
 
         findNavController().navigate(direction)
     }, delete = {
-        showAreYouSureDialog {
+        showAreYouSureDialog(R.string.delete, R.string.delete_warning) {
             viewModel.deleteCrashesByPackageName(it.lastCrash)
         }
     })
 
-    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) = FragmentCrashesBinding.inflate(inflater, container, false)
+    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) =
+        FragmentCrashesBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -54,17 +55,21 @@ class CrashesFragment: BaseViewModelFragment<CrashesViewModel, FragmentCrashesBi
 
         binding.toolbar.inflateMenu(R.menu.crashes_menu)
         binding.toolbar.menu.setClickListenerOn(R.id.clear_item) {
-            showAreYouSureDialog {
+            showAreYouSureDialog(R.string.clear, R.string.clear_warning) {
                 viewModel.clearCrashes()
             }
         }
 
         binding.crashesRecycler.layoutManager = LinearLayoutManager(requireContext())
-        binding.crashesRecycler.addItemDecoration(MaterialDividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL).apply {
-            dividerInsetStart = 80.dpToPx.toInt()
-            dividerInsetEnd = 10.dpToPx.toInt()
-            isLastItemDecorated = false
-        })
+        binding.crashesRecycler.addItemDecoration(
+            MaterialDividerItemDecoration(
+                requireContext(),
+                LinearLayoutManager.VERTICAL
+            ).apply {
+                dividerInsetStart = 80.dpToPx.toInt()
+                dividerInsetEnd = 10.dpToPx.toInt()
+                isLastItemDecorated = false
+            })
         binding.crashesRecycler.adapter = adapter
 
         viewModel.crashes.observe(viewLifecycleOwner) {
