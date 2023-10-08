@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
@@ -35,6 +36,9 @@
         android:visibility="gone"
         android:layout_margin="10dp"
         app:layout_anchorGravity="bottom|right|end"
-        android:layout_gravity="end|bottom"/>
+        android:layout_gravity="end|bottom"
+        android:contentDescription="@string/scroll_to_bottom"
+        android:tooltipText="@string/scroll_to_bottom"
+        tools:targetApi="o" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

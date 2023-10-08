@@ -36,7 +36,7 @@ class CrashesFragment: BaseViewModelFragment<CrashesViewModel, FragmentCrashesBi
 
         findNavController().navigate(direction)
     }, delete = {
-        showAreYouSureDialog {
+        showAreYouSureDialog(R.string.delete, R.string.delete_warning) {
             viewModel.deleteCrashesByPackageName(it.lastCrash)
         }
     })
@@ -54,7 +54,7 @@ class CrashesFragment: BaseViewModelFragment<CrashesViewModel, FragmentCrashesBi
 
         binding.toolbar.inflateMenu(R.menu.crashes_menu)
         binding.toolbar.menu.setClickListenerOn(R.id.clear_item) {
-            showAreYouSureDialog {
+            showAreYouSureDialog(R.string.clear, R.string.clear_warning) {
                 viewModel.clearCrashes()
             }
         }

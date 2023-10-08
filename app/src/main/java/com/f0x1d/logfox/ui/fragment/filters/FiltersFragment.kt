@@ -29,7 +29,7 @@ class FiltersFragment: BaseViewModelFragment<FiltersViewModel, FragmentFiltersBi
             FiltersFragmentDirections.actionFiltersFragmentToEditFilterFragment(it.id)
         )
     }, delete = {
-        showAreYouSureDialog {
+        showAreYouSureDialog(R.string.delete, R.string.delete_warning) {
             viewModel.delete(it)
         }
     }, checked = { userFilter, checked ->
@@ -63,7 +63,7 @@ class FiltersFragment: BaseViewModelFragment<FiltersViewModel, FragmentFiltersBi
         binding.toolbar.inflateMenu(R.menu.filters_menu)
         binding.toolbar.menu.apply {
             setClickListenerOn(R.id.clear_item) {
-                showAreYouSureDialog {
+                showAreYouSureDialog(R.string.clear, R.string.clear_warning) {
                     viewModel.clearAll()
                 }
             }

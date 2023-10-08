@@ -116,4 +116,7 @@
     <string name="apps">Apps</string>
     <string name="are_you_sure">Are you sure?</string>
     <string name="view">View</string>
+    <string name="delete_warning">Are you sure want to delete it? This action cannot be undone.</string>
+    <string name="clear_warning">Are you sure want to clear it? This action cannot be undone.</string>
+    <string name="scroll_to_bottom">Scroll to the bottom</string>
 </resources>

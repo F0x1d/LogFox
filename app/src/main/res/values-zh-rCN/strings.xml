@@ -7,6 +7,7 @@
     <string name="text_copied">已复制</string>
     <string name="search">搜索</string>
     <string name="clear">清除</string>
+    <string name="clear_warning">确定要清除吗？清除后无法恢复。</string>
     <string name="query">查询</string>
     <string name="logging_status">日志状态</string>
     <string name="logging">记录中</string>
@@ -33,6 +34,7 @@
     <string name="recordings">录制</string>
     <string name="record_file">录制</string>
     <string name="delete">删除</string>
+    <string name="delete_warning">确定要删除吗？删除后将无法恢复。</string>
     <string name="resume">继续</string>
     <string name="logs_update_interval">更新间隔</string>
     <string name="in_ms">毫秒</string>
@@ -108,4 +110,5 @@
     <string name="apps">应用</string>
     <string name="are_you_sure">你确定?</string>
     <string name="view">查看</string>
+    <string name="scroll_to_bottom">滚动到底部</string>
 </resources>

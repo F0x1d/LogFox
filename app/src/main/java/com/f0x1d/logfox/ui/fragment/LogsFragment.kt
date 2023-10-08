@@ -160,7 +160,9 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
 
         viewModel.pausedData.observe(viewLifecycleOwner) { paused ->
             changingState = true
-            binding.toolbar.menu.findItem(R.id.pause_item).setIcon(if (paused) R.drawable.ic_play else R.drawable.ic_pause)
+            binding.toolbar.menu.findItem(R.id.pause_item)
+                .setIcon(if (paused) R.drawable.ic_play else R.drawable.ic_pause)
+                .setTitle(if (paused) R.string.resume else R.string.pause)
             if (paused) {
                 binding.scrollFab.show()
             } else {

@@ -64,7 +64,7 @@ class CrashDetailsActivity: BaseViewModelActivity<CrashDetailsViewModel, Activit
     private fun setupFor(appCrash: AppCrash) {
         binding.toolbar.menu.apply {
             setClickListenerOn(R.id.delete_item) {
-                showAreYouSureDialog {
+                showAreYouSureDialog(R.string.delete, R.string.delete_warning) {
                     viewModel.deleteCrash(appCrash)
                     finish()
                 }

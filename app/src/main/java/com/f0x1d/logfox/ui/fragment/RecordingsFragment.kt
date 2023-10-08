@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.TooltipCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,6 +14,7 @@ import com.f0x1d.logfox.database.entity.LogRecording
 import com.f0x1d.logfox.databinding.FragmentRecordingsBinding
 import com.f0x1d.logfox.extensions.isHorizontalOrientation
 import com.f0x1d.logfox.extensions.setClickListenerOn
+import com.f0x1d.logfox.extensions.setDescription
 import com.f0x1d.logfox.extensions.showAreYouSureDialog
 import com.f0x1d.logfox.extensions.startLoggingService
 import com.f0x1d.logfox.repository.logging.RecordingState
@@ -33,7 +35,7 @@ class RecordingsFragment: BaseViewModelFragment<RecordingsViewModel, FragmentRec
     private val adapter = RecordingsAdapter(click = {
         openDetails(it)
     }, delete = {
-        showAreYouSureDialog {
+        showAreYouSureDialog(R.string.delete, R.string.delete_warning) {
             viewModel.delete(it)
         }
     })
@@ -65,7 +67,7 @@ class RecordingsFragment: BaseViewModelFragment<RecordingsViewModel, FragmentRec
 
         binding.toolbar.inflateMenu(R.menu.recordings_menu)
         binding.toolbar.menu.setClickListenerOn(R.id.clear_item) {
-            showAreYouSureDialog {
+            showAreYouSureDialog(R.string.clear, R.string.clear_warning) {
                 viewModel.clearRecordings()
             }
         }
@@ -101,36 +103,40 @@ class RecordingsFragment: BaseViewModelFragment<RecordingsViewModel, FragmentRec
             adapter.submitList(it)
         }
 
-        viewModel.recordingStateData.observe(viewLifecycleOwner) {
-            when (it) {
-                RecordingState.IDLE -> {
-                    binding.recordFab.setImageResource(R.drawable.ic_recording)
-                    binding.recordFab.isEnabled = true
+        viewModel.recordingStateData.observe(viewLifecycleOwner) { state ->
+            binding.recordFab.apply {
+                when (state) {
+                    RecordingState.IDLE, RecordingState.SAVING -> {
+                        setImageResource(R.drawable.ic_recording)
+                        setDescription(R.string.record)
+                        isEnabled = state == RecordingState.IDLE
+                    }
 
-                    binding.pauseFab.hide()
+                    RecordingState.RECORDING, RecordingState.PAUSED -> {
+                        setImageResource(R.drawable.ic_stop)
+                        setDescription(R.string.stop)
+                        isEnabled = true
+                    }
                 }
+            }
 
-                RecordingState.RECORDING -> {
-                    binding.recordFab.setImageResource(R.drawable.ic_stop)
-                    binding.recordFab.isEnabled = true
+            binding.pauseFab.apply {
+                when (state) {
+                    RecordingState.IDLE, RecordingState.SAVING -> {
+                        hide()
+                    }
 
-                    binding.pauseFab.setImageResource(R.drawable.ic_pause)
-                    binding.pauseFab.show()
-                }
+                    RecordingState.RECORDING -> {
+                        setImageResource(R.drawable.ic_pause)
+                        setDescription(R.string.pause)
+                        show()
+                    }
 
-                RecordingState.PAUSED -> {
-                    binding.recordFab.setImageResource(R.drawable.ic_stop)
-                    binding.recordFab.isEnabled = true
-
-                    binding.pauseFab.setImageResource(R.drawable.ic_play)
-                    binding.pauseFab.show()
-                }
-
-                RecordingState.SAVING -> {
-                    binding.recordFab.setImageResource(R.drawable.ic_recording)
-                    binding.recordFab.isEnabled = false
-
-                    binding.pauseFab.hide()
+                    RecordingState.PAUSED -> {
+                        setImageResource(R.drawable.ic_play)
+                        setDescription(R.string.resume)
+                        show()
+                    }
                 }
             }
         }

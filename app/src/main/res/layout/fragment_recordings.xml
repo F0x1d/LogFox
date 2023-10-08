@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
@@ -36,8 +37,11 @@
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="76dp"
+        android:contentDescription="@string/pause"
+        android:tooltipText="@string/pause"
         app:layout_anchorGravity="bottom|right|end"
-        android:layout_gravity="end|bottom"/>
+        android:layout_gravity="end|bottom"
+        tools:targetApi="o" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/record_fab"
@@ -46,6 +50,9 @@
         android:src="@drawable/ic_recording"
         android:layout_margin="10dp"
         app:layout_anchorGravity="bottom|right|end"
-        android:layout_gravity="end|bottom"/>
+        android:layout_gravity="end|bottom"
+        android:contentDescription="@string/record"
+        android:tooltipText="@string/record"
+        tools:targetApi="o" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
