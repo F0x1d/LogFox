@@ -1,9 +1,10 @@
 package com.f0x1d.logfox.extensions
 
+import androidx.annotation.StringRes
 import androidx.appcompat.widget.TooltipCompat
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-fun FloatingActionButton.setDescription(resId: Int) {
+fun FloatingActionButton.setDescription(@StringRes resId: Int) {
     setDescription(context.getString(resId))
 }
 
