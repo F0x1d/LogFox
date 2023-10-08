@@ -91,6 +91,7 @@ class MainActivity: BaseViewModelActivity<MainViewModel, ActivityMainBinding>(),
         }
     }
 
+    @SuppressLint("NewApi")
     override fun onDestinationChanged(controller: NavController, destination: NavDestination, arguments: Bundle?) {
         val barShown = when (destination.id) {
             R.id.setupFragment -> false
@@ -115,7 +116,6 @@ class MainActivity: BaseViewModelActivity<MainViewModel, ActivityMainBinding>(),
                 else -> getColor(R.color.navbar_transparent_background)
             }
         } else if (gesturesAvailable) {
-            @SuppressLint("NewApi")
             window.isNavigationBarContrastEnforced = !(barShown && !isHorizontalOrientation)
         }
 
