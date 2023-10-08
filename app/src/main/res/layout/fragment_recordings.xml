@@ -49,10 +49,10 @@
         android:layout_height="wrap_content"
         android:src="@drawable/ic_recording"
         android:layout_margin="10dp"
-        android:contentDescription="@string/record"
-        android:tooltipText="@string/record"
         app:layout_anchorGravity="bottom|right|end"
         android:layout_gravity="end|bottom"
+        android:contentDescription="@string/record"
+        android:tooltipText="@string/record"
         tools:targetApi="o" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -14,6 +14,7 @@ import com.f0x1d.logfox.database.entity.LogRecording
 import com.f0x1d.logfox.databinding.FragmentRecordingsBinding
 import com.f0x1d.logfox.extensions.isHorizontalOrientation
 import com.f0x1d.logfox.extensions.setClickListenerOn
+import com.f0x1d.logfox.extensions.setDescription
 import com.f0x1d.logfox.extensions.showAreYouSureDialog
 import com.f0x1d.logfox.extensions.startLoggingService
 import com.f0x1d.logfox.repository.logging.RecordingState
@@ -104,52 +105,39 @@ class RecordingsFragment: BaseViewModelFragment<RecordingsViewModel, FragmentRec
 
         viewModel.recordingStateData.observe(viewLifecycleOwner) { state ->
             binding.recordFab.apply {
-                val description: String
+
                 when (state) {
-                    RecordingState.IDLE,
-                    RecordingState.SAVING -> {
+                    RecordingState.IDLE, RecordingState.SAVING -> {
                         setImageResource(R.drawable.ic_recording)
-                        description = getString(R.string.record)
+                        setDescription(R.string.record)
                         isEnabled = state == RecordingState.IDLE
                     }
 
-                    RecordingState.RECORDING,
-                    RecordingState.PAUSED -> {
+                    RecordingState.RECORDING, RecordingState.PAUSED -> {
                         setImageResource(R.drawable.ic_stop)
-                        description = getString(R.string.stop)
+                        setDescription(R.string.stop)
                         isEnabled = true
                     }
-                }
-                description.also {
-                    contentDescription = it
-                    TooltipCompat.setTooltipText(this, it)
                 }
             }
 
             binding.pauseFab.apply {
-                val description: String?
                 when (state) {
-                    RecordingState.IDLE,
-                    RecordingState.SAVING -> {
-                        description = null
+                    RecordingState.IDLE, RecordingState.SAVING -> {
                         hide()
                     }
 
                     RecordingState.RECORDING -> {
                         setImageResource(R.drawable.ic_pause)
-                        description = getString(R.string.pause)
+                        setDescription(R.string.pause)
                         show()
                     }
 
                     RecordingState.PAUSED -> {
                         setImageResource(R.drawable.ic_play)
-                        description = getString(R.string.resume)
+                        setDescription(R.string.resume)
                         show()
                     }
-                }
-                description?.also {
-                    contentDescription = it
-                    TooltipCompat.setTooltipText(this, it)
                 }
             }
         }
