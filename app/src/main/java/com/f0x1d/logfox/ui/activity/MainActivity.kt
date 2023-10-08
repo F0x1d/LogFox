@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -90,6 +91,7 @@ class MainActivity: BaseViewModelActivity<MainViewModel, ActivityMainBinding>(),
         }
     }
 
+    @SuppressLint("NewApi")
     override fun onDestinationChanged(controller: NavController, destination: NavDestination, arguments: Bundle?) {
         val barShown = when (destination.id) {
             R.id.setupFragment -> false
@@ -113,6 +115,8 @@ class MainActivity: BaseViewModelActivity<MainViewModel, ActivityMainBinding>(),
 
                 else -> getColor(R.color.navbar_transparent_background)
             }
+        } else if (gesturesAvailable) {
+            window.isNavigationBarContrastEnforced = !(barShown && !isHorizontalOrientation)
         }
 
         if (this.barShown != barShown) {
