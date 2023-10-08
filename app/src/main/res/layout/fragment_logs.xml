@@ -18,7 +18,7 @@
             android:layout_height="?actionBarSize"
             app:title="@string/app_name"
             app:titleCentered="true"
-            app:navigationIconTint="?colorOnSurface" />
+            app:navigationIconTint="?colorOnSurface"/>
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView
