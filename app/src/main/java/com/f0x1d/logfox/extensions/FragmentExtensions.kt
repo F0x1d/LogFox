@@ -6,4 +6,5 @@ import com.f0x1d.logfox.R
 fun Fragment.showAreYouSureDialog(
     title: Int,
     message: Int = R.string.are_you_sure,
-    okPressed: () -> Unit) = requireActivity().showAreYouSureDialog(title, message, okPressed)
+    okPressed: () -> Unit
+) = requireActivity().showAreYouSureDialog(title, message, okPressed)

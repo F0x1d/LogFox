@@ -105,7 +105,6 @@ class RecordingsFragment: BaseViewModelFragment<RecordingsViewModel, FragmentRec
 
         viewModel.recordingStateData.observe(viewLifecycleOwner) { state ->
             binding.recordFab.apply {
-
                 when (state) {
                     RecordingState.IDLE, RecordingState.SAVING -> {
                         setImageResource(R.drawable.ic_recording)
