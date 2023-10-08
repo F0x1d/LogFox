@@ -27,7 +27,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.chrisbanes.insetter.applyInsetter
 
 @AndroidEntryPoint
-class RecordingsFragment : BaseViewModelFragment<RecordingsViewModel, FragmentRecordingsBinding>() {
+class RecordingsFragment: BaseViewModelFragment<RecordingsViewModel, FragmentRecordingsBinding>() {
 
     override val viewModel by viewModels<RecordingsViewModel>()
 

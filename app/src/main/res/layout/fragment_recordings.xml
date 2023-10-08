@@ -34,13 +34,13 @@
         android:layout_height="wrap_content"
         android:src="@drawable/ic_pause"
         android:visibility="gone"
-        android:layout_gravity="end|bottom"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="76dp"
         android:contentDescription="@string/pause"
         android:tooltipText="@string/pause"
         app:layout_anchorGravity="bottom|right|end"
+        android:layout_gravity="end|bottom"
         tools:targetApi="o" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

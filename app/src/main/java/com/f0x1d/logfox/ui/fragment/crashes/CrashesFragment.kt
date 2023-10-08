@@ -41,8 +41,7 @@ class CrashesFragment: BaseViewModelFragment<CrashesViewModel, FragmentCrashesBi
         }
     })
 
-    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) =
-        FragmentCrashesBinding.inflate(inflater, container, false)
+    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) = FragmentCrashesBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -61,15 +60,11 @@ class CrashesFragment: BaseViewModelFragment<CrashesViewModel, FragmentCrashesBi
         }
 
         binding.crashesRecycler.layoutManager = LinearLayoutManager(requireContext())
-        binding.crashesRecycler.addItemDecoration(
-            MaterialDividerItemDecoration(
-                requireContext(),
-                LinearLayoutManager.VERTICAL
-            ).apply {
-                dividerInsetStart = 80.dpToPx.toInt()
-                dividerInsetEnd = 10.dpToPx.toInt()
-                isLastItemDecorated = false
-            })
+        binding.crashesRecycler.addItemDecoration(MaterialDividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL).apply {
+            dividerInsetStart = 80.dpToPx.toInt()
+            dividerInsetEnd = 10.dpToPx.toInt()
+            isLastItemDecorated = false
+        })
         binding.crashesRecycler.adapter = adapter
 
         viewModel.crashes.observe(viewLifecycleOwner) {
