@@ -4,8 +4,8 @@ import android.annotation.SuppressLint
 import com.bumptech.glide.Glide
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.databinding.ItemCrashBinding
-import com.f0x1d.logfox.extensions.loadIcon
 import com.f0x1d.logfox.extensions.toLocaleString
+import com.f0x1d.logfox.extensions.views.loadIcon
 import com.f0x1d.logfox.model.AppCrashesCount
 import com.f0x1d.logfox.ui.viewholder.base.BaseViewHolder
 

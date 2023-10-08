@@ -6,9 +6,9 @@ import androidx.preference.Preference
 import androidx.preference.SwitchPreferenceCompat
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.extensions.isAtLeastAndroid13
-import com.f0x1d.logfox.extensions.observeAndUpdateSummaryForList
-import com.f0x1d.logfox.extensions.setupAsListPreference
 import com.f0x1d.logfox.extensions.toast
+import com.f0x1d.logfox.extensions.views.observeAndUpdateSummaryForList
+import com.f0x1d.logfox.extensions.views.setupAsListPreference
 import com.f0x1d.logfox.repository.logging.LoggingRepository
 import com.f0x1d.logfox.ui.fragment.settings.base.BasePreferenceFragment
 import com.f0x1d.logfox.utils.fillWithStrings

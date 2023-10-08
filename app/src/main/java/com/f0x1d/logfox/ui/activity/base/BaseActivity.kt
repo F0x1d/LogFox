@@ -9,7 +9,7 @@ import androidx.viewbinding.ViewBinding
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.extensions.contrastedNavBarAvailable
 import com.f0x1d.logfox.extensions.gesturesAvailable
-import com.f0x1d.logfox.extensions.snackbar
+import com.f0x1d.logfox.extensions.views.snackbar
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.android.EntryPointAccessors

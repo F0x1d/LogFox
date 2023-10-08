@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.TooltipCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,10 +12,10 @@ import com.f0x1d.logfox.adapter.RecordingsAdapter
 import com.f0x1d.logfox.database.entity.LogRecording
 import com.f0x1d.logfox.databinding.FragmentRecordingsBinding
 import com.f0x1d.logfox.extensions.isHorizontalOrientation
-import com.f0x1d.logfox.extensions.setClickListenerOn
-import com.f0x1d.logfox.extensions.setDescription
 import com.f0x1d.logfox.extensions.showAreYouSureDialog
 import com.f0x1d.logfox.extensions.startLoggingService
+import com.f0x1d.logfox.extensions.views.setClickListenerOn
+import com.f0x1d.logfox.extensions.views.setDescription
 import com.f0x1d.logfox.repository.logging.RecordingState
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
 import com.f0x1d.logfox.utils.dpToPx

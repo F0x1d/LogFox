@@ -11,8 +11,8 @@ import com.f0x1d.logfox.R
 import com.f0x1d.logfox.adapter.CrashesAdapter
 import com.f0x1d.logfox.databinding.FragmentCrashesBinding
 import com.f0x1d.logfox.extensions.isHorizontalOrientation
-import com.f0x1d.logfox.extensions.setClickListenerOn
 import com.f0x1d.logfox.extensions.showAreYouSureDialog
+import com.f0x1d.logfox.extensions.views.setClickListenerOn
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
 import com.f0x1d.logfox.utils.dpToPx
 import com.f0x1d.logfox.viewmodel.crashes.CrashesViewModel

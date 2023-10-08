@@ -1,4 +1,4 @@
-package com.f0x1d.logfox.extensions
+package com.f0x1d.logfox.extensions.views
 
 import android.view.Menu
 import android.view.MenuItem

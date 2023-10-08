@@ -9,10 +9,10 @@ import com.f0x1d.logfox.databinding.ActivityCrashDetailsBinding
 import com.f0x1d.logfox.extensions.copyText
 import com.f0x1d.logfox.extensions.crashToZip
 import com.f0x1d.logfox.extensions.exportFormatted
-import com.f0x1d.logfox.extensions.loadIcon
-import com.f0x1d.logfox.extensions.setClickListenerOn
 import com.f0x1d.logfox.extensions.shareIntent
 import com.f0x1d.logfox.extensions.showAreYouSureDialog
+import com.f0x1d.logfox.extensions.views.loadIcon
+import com.f0x1d.logfox.extensions.views.setClickListenerOn
 import com.f0x1d.logfox.ui.activity.base.BaseViewModelActivity
 import com.f0x1d.logfox.utils.event.Event
 import com.f0x1d.logfox.viewmodel.crashes.CrashDetailsViewModel

@@ -1,4 +1,4 @@
-package com.f0x1d.logfox.extensions
+package com.f0x1d.logfox.extensions.views
 
 import android.view.View
 import com.google.android.material.snackbar.Snackbar
