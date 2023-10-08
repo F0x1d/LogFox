@@ -21,7 +21,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.chrisbanes.insetter.applyInsetter
 
 @AndroidEntryPoint
-class CrashesFragment : BaseViewModelFragment<CrashesViewModel, FragmentCrashesBinding>() {
+class CrashesFragment: BaseViewModelFragment<CrashesViewModel, FragmentCrashesBinding>() {
 
     override val viewModel by viewModels<CrashesViewModel>()
 

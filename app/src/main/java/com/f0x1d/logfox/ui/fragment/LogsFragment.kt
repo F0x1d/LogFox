@@ -47,8 +47,7 @@ class LogsFragment : BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>()
         }
     }
 
-    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) =
-        FragmentLogsBinding.inflate(inflater, container, false)
+    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) = FragmentLogsBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -74,11 +73,7 @@ class LogsFragment : BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>()
                 viewModel.switchState()
             }
             setClickListenerOn(R.id.search_item) {
-                findNavController().navigate(
-                    LogsFragmentDirections.actionLogsFragmentToSearchBottomSheet(
-                        viewModel.query.value
-                    )
-                )
+                findNavController().navigate(LogsFragmentDirections.actionLogsFragmentToSearchBottomSheet(viewModel.query.value))
             }
             setClickListenerOn(R.id.filters_item) {
                 findNavController().navigate(LogsFragmentDirections.actionLogsFragmentToFiltersFragment())
@@ -179,8 +174,7 @@ class LogsFragment : BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>()
         }
 
         viewModel.serviceRunningData.observe(viewLifecycleOwner) { running ->
-            binding.toolbar.menu.findItem(R.id.service_status_item)
-                .setTitle(if (running) R.string.stop_service else R.string.start_service)
+            binding.toolbar.menu.findItem(R.id.service_status_item).setTitle(if (running) R.string.stop_service else R.string.start_service)
         }
 
         requireActivity().onBackPressedDispatcher.addCallback(
@@ -217,11 +211,7 @@ class LogsFragment : BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>()
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(R.string.selected)
             .setIcon(R.drawable.ic_dialog_checklist)
-            .setItems(
-                intArrayOf(android.R.string.copy, R.string.extended_copy).fillWithStrings(
-                    requireContext()
-                )
-            ) { dialog, which ->
+            .setItems(intArrayOf(android.R.string.copy, R.string.extended_copy).fillWithStrings(requireContext())) { dialog, which ->
                 val textToCopy = adapter.selectedItems.joinToString("\n") { it.original }
                 when (which) {
                     0 -> {
@@ -229,11 +219,7 @@ class LogsFragment : BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>()
                         snackbar(R.string.text_copied)
                     }
 
-                    1 -> findNavController().navigate(
-                        LogsFragmentDirections.actionLogsFragmentToLogsExtendedCopyFragment(
-                            textToCopy
-                        )
-                    )
+                    1 -> findNavController().navigate(LogsFragmentDirections.actionLogsFragmentToLogsExtendedCopyFragment(textToCopy))
                 }
             }
             .setPositiveButton(R.string.close, null)

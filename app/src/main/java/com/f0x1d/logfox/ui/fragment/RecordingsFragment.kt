@@ -152,7 +152,6 @@ class RecordingsFragment : BaseViewModelFragment<RecordingsViewModel, FragmentRe
                     TooltipCompat.setTooltipText(this, it)
                 }
             }
-
         }
     }
 
