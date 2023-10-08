@@ -77,7 +77,7 @@ class MainActivity: BaseViewModelActivity<MainViewModel, ActivityMainBinding>(),
                 .setTitle(R.string.no_notification_permission)
                 .setMessage(R.string.notification_permission_is_required)
                 .setCancelable(false)
-                .setPositiveButton(android.R.string.ok) { dialog, which -> requestNotificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS) }
+                .setPositiveButton(android.R.string.ok) { dialog, which -> requestNotificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)}
                 .setNegativeButton(R.string.close, null)
                 .show()
 
