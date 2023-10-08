@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.TooltipCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -101,38 +102,57 @@ class RecordingsFragment : BaseViewModelFragment<RecordingsViewModel, FragmentRe
             adapter.submitList(it)
         }
 
-        viewModel.recordingStateData.observe(viewLifecycleOwner) {
-            when (it) {
-                RecordingState.IDLE -> {
-                    binding.recordFab.setImageResource(R.drawable.ic_recording)
-                    binding.recordFab.isEnabled = true
+        viewModel.recordingStateData.observe(viewLifecycleOwner) { state ->
+            binding.recordFab.apply {
+                val description: String
+                when (state) {
+                    RecordingState.IDLE,
+                    RecordingState.SAVING -> {
+                        setImageResource(R.drawable.ic_recording)
+                        description = getString(R.string.record)
+                        isEnabled = state == RecordingState.IDLE
+                    }
 
-                    binding.pauseFab.hide()
+                    RecordingState.RECORDING,
+                    RecordingState.PAUSED -> {
+                        setImageResource(R.drawable.ic_stop)
+                        description = getString(R.string.stop)
+                        isEnabled = true
+                    }
                 }
-
-                RecordingState.RECORDING -> {
-                    binding.recordFab.setImageResource(R.drawable.ic_stop)
-                    binding.recordFab.isEnabled = true
-
-                    binding.pauseFab.setImageResource(R.drawable.ic_pause)
-                    binding.pauseFab.show()
-                }
-
-                RecordingState.PAUSED -> {
-                    binding.recordFab.setImageResource(R.drawable.ic_stop)
-                    binding.recordFab.isEnabled = true
-
-                    binding.pauseFab.setImageResource(R.drawable.ic_play)
-                    binding.pauseFab.show()
-                }
-
-                RecordingState.SAVING -> {
-                    binding.recordFab.setImageResource(R.drawable.ic_recording)
-                    binding.recordFab.isEnabled = false
-
-                    binding.pauseFab.hide()
+                description.also {
+                    contentDescription = it
+                    TooltipCompat.setTooltipText(this, it)
                 }
             }
+
+            binding.pauseFab.apply {
+                val description: String?
+                when (state) {
+                    RecordingState.IDLE,
+                    RecordingState.SAVING -> {
+                        description = null
+                        hide()
+                    }
+
+                    RecordingState.RECORDING -> {
+                        setImageResource(R.drawable.ic_pause)
+                        description = getString(R.string.pause)
+                        show()
+                    }
+
+                    RecordingState.PAUSED -> {
+                        setImageResource(R.drawable.ic_play)
+                        description = getString(R.string.start)
+                        show()
+                    }
+                }
+                description?.also {
+                    contentDescription = it
+                    TooltipCompat.setTooltipText(this, it)
+                }
+            }
+
         }
     }
 
