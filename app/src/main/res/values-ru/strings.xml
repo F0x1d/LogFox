@@ -107,4 +107,7 @@
     <string name="apps">Приложения</string>
     <string name="are_you_sure">Вы уверены?</string>
     <string name="view">Просмотр</string>
+    <string name="delete_warning">Вы действительно хотите удалить это? Вы не сможете отменить это действие.</string>
+    <string name="clear_warning">Вы действительно хотите очистить это? Вы не сможете отменить это действие.</string>
+    <string name="scroll_to_bottom">Промотать вниз</string>
 </resources>
