@@ -143,7 +143,7 @@ class RecordingsFragment : BaseViewModelFragment<RecordingsViewModel, FragmentRe
 
                     RecordingState.PAUSED -> {
                         setImageResource(R.drawable.ic_play)
-                        description = getString(R.string.start)
+                        description = getString(R.string.resume)
                         show()
                     }
                 }

@@ -119,5 +119,4 @@
     <string name="delete_warning">Are you sure you want to delete it? You will not be able to recover after deletion.</string>
     <string name="clear_warning">Are you sure you want to clear it? You can\'t recover from a clearing.</string>
     <string name="scroll_to_bottom">Scroll to the bottom</string>
-    <string name="start">Start</string>
 </resources>
