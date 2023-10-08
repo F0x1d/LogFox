@@ -13,11 +13,7 @@ fun FragmentActivity.showAreYouSureDialog(okClicked: () -> Unit) {
         .show()
 }
 
-fun FragmentActivity.showAreYouSureDialog(
-    title: Int,
-    message: Int = R.string.are_you_sure,
-    okClicked: () -> Unit
-) {
+fun FragmentActivity.showAreYouSureDialog(title: Int, message: Int = R.string.are_you_sure, okClicked: () -> Unit) {
     MaterialAlertDialogBuilder(this)
         .setIcon(R.drawable.ic_dialog_warning)
         .setTitle(title)

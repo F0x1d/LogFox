@@ -16,9 +16,9 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
-            app:navigationIconTint="?colorOnSurface"
             app:title="@string/app_name"
-            app:titleCentered="true" />
+            app:titleCentered="true"
+            app:navigationIconTint="?colorOnSurface" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -32,13 +32,13 @@
         android:id="@+id/scroll_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:layout_margin="10dp"
         android:contentDescription="@string/scroll_to_bottom"
         android:src="@drawable/ic_arrow_drop_down"
         android:tooltipText="@string/scroll_to_bottom"
         android:visibility="gone"
+        android:layout_margin="10dp"
         app:layout_anchorGravity="bottom|right|end"
+        android:layout_gravity="end|bottom"
         tools:targetApi="o" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

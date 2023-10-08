@@ -28,8 +28,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.chrisbanes.insetter.applyInsetter
 
 @AndroidEntryPoint
-class LogsFragment : BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
-    SharedPreferences.OnSharedPreferenceChangeListener {
+class LogsFragment : BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(), SharedPreferences.OnSharedPreferenceChangeListener {
 
     override val viewModel by hiltNavGraphViewModels<LogsViewModel>(R.id.logsFragment)
 
@@ -218,7 +217,6 @@ class LogsFragment : BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>()
                         requireContext().copyText(textToCopy)
                         snackbar(R.string.text_copied)
                     }
-
                     1 -> findNavController().navigate(LogsFragmentDirections.actionLogsFragmentToLogsExtendedCopyFragment(textToCopy))
                 }
             }

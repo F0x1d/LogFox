@@ -32,14 +32,14 @@
         android:id="@+id/pause_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:src="@drawable/ic_pause"
+        android:visibility="gone"
         android:layout_gravity="end|bottom"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="76dp"
         android:contentDescription="@string/pause"
-        android:src="@drawable/ic_pause"
         android:tooltipText="@string/pause"
-        android:visibility="gone"
         app:layout_anchorGravity="bottom|right|end"
         tools:targetApi="o" />
 
@@ -47,12 +47,12 @@
         android:id="@+id/record_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
+        android:src="@drawable/ic_recording"
         android:layout_margin="10dp"
         android:contentDescription="@string/record"
-        android:src="@drawable/ic_recording"
         android:tooltipText="@string/record"
         app:layout_anchorGravity="bottom|right|end"
+        android:layout_gravity="end|bottom"
         tools:targetApi="o" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
