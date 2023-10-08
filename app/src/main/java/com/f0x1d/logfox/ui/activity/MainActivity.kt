@@ -114,8 +114,8 @@ class MainActivity: BaseViewModelActivity<MainViewModel, ActivityMainBinding>(),
 
                 else -> getColor(R.color.navbar_transparent_background)
             }
-        } else if (gesturesAvailable && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            // Add Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q to make lint happy.
+        } else if (gesturesAvailable) {
+            @SuppressLint("NewApi")
             window.isNavigationBarContrastEnforced = !(barShown && !isHorizontalOrientation)
         }
 
