@@ -1,7 +1,6 @@
 package com.f0x1d.logfox.ui.viewholder
 
 import android.content.res.ColorStateList
-import android.graphics.drawable.GradientDrawable
 import android.view.Gravity
 import androidx.appcompat.widget.PopupMenu
 import com.f0x1d.logfox.R
@@ -76,10 +75,7 @@ class LogViewHolder(
         }
         binding.levelText.text = data.level.letter
 
-        binding.levelText.background = GradientDrawable().apply {
-            cornerRadii = floatArrayOf(0f, 0f, radius, radius, radius, radius, 0f, 0f)
-            color = ColorStateList.valueOf(data.level.backgroundColorByLevel())
-        }
+        binding.levelText.backgroundTintList = ColorStateList.valueOf(data.level.backgroundColorByLevel())
         binding.levelText.setTextColor(data.level.foregroundColorByLevel())
 
         changeExpandedAndSelected(data)
