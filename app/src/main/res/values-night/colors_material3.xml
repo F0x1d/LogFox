@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="blue_container">#004b70</color>
+    <color name="blue_on_container">#cae6ff</color>
+    <color name="gray_surface_variant">#3f484a</color>
+    <color name="gray_on_surface_variant">#bfc8ca</color>
+    <color name="green_container">#005313</color>
+    <color name="green_on_container">#94f990</color>
+    <color name="red_primary">#ffb4a9</color>
+    <color name="red_on_primary">#690002</color>
+    <color name="yellow_container">#4f4800</color>
+    <color name="yellow_on_container">#f9e534</color>
+</resources>

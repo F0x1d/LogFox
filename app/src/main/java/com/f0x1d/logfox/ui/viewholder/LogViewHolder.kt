@@ -82,12 +82,12 @@ class LogViewHolder(
             }
         }
         binding.levelText.text = data.level.letter
-
+        val context = binding.levelText.context
         binding.levelText.background = GradientDrawable().apply {
             cornerRadii = floatArrayOf(0f, 0f, radius, radius, radius, radius, 0f, 0f)
-            color = ColorStateList.valueOf(data.level.backgroundColorByLevel())
+            color = ColorStateList.valueOf(data.level.backgroundColorByLevel(context))
         }
-        binding.levelText.setTextColor(data.level.foregroundColorByLevel())
+        binding.levelText.setTextColor(data.level.foregroundColorByLevel(context))
 
         changeExpandedAndSelected(data)
     }
