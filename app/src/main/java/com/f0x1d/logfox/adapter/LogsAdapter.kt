@@ -11,7 +11,7 @@ import com.f0x1d.logfox.utils.preferences.AppPreferences
 
 class LogsAdapter(
     private val appPreferences: AppPreferences,
-    private val levelColorCacheMap: MutableMap<Int, Int>,
+    val levelColorCacheMap: MutableMap<Int, Int>,
     private val copyLog: (LogLine) -> Unit
 ): BaseListAdapter<LogLine, ItemLogBinding>(LOGLINE_DIFF) {
 
@@ -44,7 +44,6 @@ class LogsAdapter(
 
     override fun createHolder(layoutInflater: LayoutInflater, parent: ViewGroup) = LogViewHolder(
         binding = ItemLogBinding.inflate(layoutInflater, parent, false),
-        levelColorCacheMap = levelColorCacheMap,
         copyLog = copyLog
     )
 

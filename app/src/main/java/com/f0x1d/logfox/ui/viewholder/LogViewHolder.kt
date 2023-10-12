@@ -14,7 +14,6 @@ import com.f0x1d.logfox.utils.dpToPx
 
 class LogViewHolder(
     binding: ItemLogBinding,
-    private val levelColorCacheMap: MutableMap<Int, Int>,
     private val copyLog: (LogLine) -> Unit
 ): BaseViewHolder<LogLine, ItemLogBinding>(binding) {
 
@@ -75,9 +74,14 @@ class LogViewHolder(
             }
         }
         binding.levelText.text = data.level.letter
-        val context = binding.levelText.context
-        binding.levelText.backgroundTintList = ColorStateList.valueOf(data.level.backgroundColorByLevel(context, levelColorCacheMap))
-        binding.levelText.setTextColor(data.level.foregroundColorByLevel(context, levelColorCacheMap))
+
+        val levelColorCacheMap =
+        binding.levelText.context.also { context ->
+            adapter<LogsAdapter>().levelColorCacheMap.also {
+                binding.levelText.backgroundTintList = ColorStateList.valueOf(data.level.backgroundColorByLevel(context, it))
+                binding.levelText.setTextColor(data.level.foregroundColorByLevel(context, it))
+            }
+        }
 
         changeExpandedAndSelected(data)
     }
