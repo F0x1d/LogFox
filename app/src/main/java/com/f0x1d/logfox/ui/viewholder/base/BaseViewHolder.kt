@@ -8,7 +8,7 @@ abstract class BaseViewHolder<T, D : ViewBinding>(protected val binding: D): Rec
 
     protected val baseAdapter get() = bindingAdapter as BaseListAdapter<T, D>
     protected val elements: List<T> get() = baseAdapter.currentList
-    protected val currentItem: T get() = elements[bindingAdapterPosition]
+    protected val currentItem: T? get() = elements.getOrNull(bindingAdapterPosition)
 
     abstract fun bindTo(data: T)
     open fun recycle() {}
