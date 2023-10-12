@@ -18,6 +18,7 @@ import com.google.android.material.color.MaterialColors
 
 class LogViewHolder(
     binding: ItemLogBinding,
+    private val levelColorCacheMap: MutableMap<Int, Int>,
     private val copyLog: (LogLine) -> Unit
 ): BaseViewHolder<LogLine, ItemLogBinding>(binding) {
 
@@ -85,9 +86,9 @@ class LogViewHolder(
         val context = binding.levelText.context
         binding.levelText.background = GradientDrawable().apply {
             cornerRadii = floatArrayOf(0f, 0f, radius, radius, radius, radius, 0f, 0f)
-            color = ColorStateList.valueOf(data.level.backgroundColorByLevel(context))
+            color = ColorStateList.valueOf(data.level.backgroundColorByLevel(context, levelColorCacheMap))
         }
-        binding.levelText.setTextColor(data.level.foregroundColorByLevel(context))
+        binding.levelText.setTextColor(data.level.foregroundColorByLevel(context, levelColorCacheMap))
 
         changeExpandedAndSelected(data)
     }

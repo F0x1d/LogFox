@@ -32,8 +32,10 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
 
     override val viewModel by hiltNavGraphViewModels<LogsViewModel>(R.id.logsFragment)
 
+    private val levelColorCacheMap = mutableMapOf<Int, Int>()
+
     private val adapter by lazy {
-        LogsAdapter(viewModel.appPreferences) {
+        LogsAdapter(viewModel.appPreferences, levelColorCacheMap) {
             requireContext().copyText(it.original)
             snackbar(R.string.text_copied)
         }
