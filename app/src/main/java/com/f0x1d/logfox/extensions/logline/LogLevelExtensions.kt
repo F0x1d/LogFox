@@ -17,14 +17,19 @@ fun LogLevel.backgroundColorIdByLevel() = when (this) {
 }
 
 @ColorInt
-fun LogLevel.backgroundColorByLevel(context: Context, levelColorCacheMap: MutableMap<Int, Int>): Int {
-    return backgroundColorIdByLevel().let { levelColorCacheMap.getOrPut(it) { context.getColor(it) }}
+fun LogLevel.backgroundColorByLevel(context: Context, levelColorCacheMap: MutableMap<Int, Int>) = backgroundColorIdByLevel().let {
+    levelColorCacheMap.getOrPut(it) {
+        context.getColor(it)
+    }
 }
 
 @ColorInt
-fun LogLevel.foregroundColorByLevel(context: Context, levelColorCacheMap: MutableMap<Int, Int>): Int {
-    return foregroundColorIdByLevel().let { levelColorCacheMap.getOrPut(it) { context.getColor(it) }}
+fun LogLevel.foregroundColorByLevel(context: Context, levelColorCacheMap: MutableMap<Int, Int>) = foregroundColorIdByLevel().let {
+    levelColorCacheMap.getOrPut(it) {
+        context.getColor(it)
+    }
 }
+
 
 @ColorRes
 fun LogLevel.foregroundColorIdByLevel() = when (this) {
