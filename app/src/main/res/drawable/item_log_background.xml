@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="@color/item_log_background_ripple">
+    <item android:id="@android:id/mask">
+        <color android:color="@android:color/black" />
+    </item>
+    <item>
+        <selector>
+            <item android:state_selected="true">
+                <color android:color="@macro/m3_comp_filled_card_container_color" />
+            </item>
+        </selector>
+    </item>
+</ripple>
