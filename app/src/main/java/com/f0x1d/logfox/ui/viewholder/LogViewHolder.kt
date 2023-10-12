@@ -75,7 +75,6 @@ class LogViewHolder(
         }
         binding.levelText.text = data.level.letter
 
-
         binding.levelText.context.also { context ->
             adapter<LogsAdapter>().levelColorCacheMap.also {
                 binding.levelText.backgroundTintList = ColorStateList.valueOf(data.level.backgroundColorByLevel(context, it))
