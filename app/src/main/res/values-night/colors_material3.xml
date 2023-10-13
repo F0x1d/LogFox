@@ -12,6 +12,8 @@
     <color name="green_on_container">#94f990</color>
     <color name="red_primary">#ffb4a9</color>
     <color name="red_on_primary">#690002</color>
+    <color name="red_container">#930005</color>
+    <color name="red_on_container">#ffdad5</color>
     <color name="yellow_primary">#dbc90a</color>
     <color name="yellow_on_primary">#363100</color>
     <color name="yellow_container">#4f4800</color>
