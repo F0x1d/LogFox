@@ -20,25 +20,20 @@ import com.f0x1d.logfox.extensions.sendKillApp
 import com.f0x1d.logfox.extensions.sendStopService
 import com.f0x1d.logfox.extensions.startLoggingService
 import com.f0x1d.logfox.extensions.views.setClickListenerOn
-import com.f0x1d.logfox.model.LogLevel
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
 import com.f0x1d.logfox.utils.fillWithStrings
 import com.f0x1d.logfox.viewmodel.LogsViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import dev.chrisbanes.insetter.applyInsetter
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(), SharedPreferences.OnSharedPreferenceChangeListener {
 
     override val viewModel by hiltNavGraphViewModels<LogsViewModel>(R.id.logsFragment)
 
-    @Inject
-    lateinit var logLevelsColorsMappings: Map<LogLevel, Pair<Int, Int>>
-
     private val adapter by lazy {
-        LogsAdapter(viewModel.appPreferences, logLevelsColorsMappings) {
+        LogsAdapter(viewModel.appPreferences) {
             requireContext().copyText(it.original)
             snackbar(R.string.text_copied)
         }
