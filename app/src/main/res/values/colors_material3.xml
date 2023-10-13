@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Generated using https://m3.material.io/theme-builder#/custom with https://m2.material.io/design/color/the-color-system.html#tools-for-picking-colors -->
+    <color name="blue_primary">#006493</color>
+    <color name="blue_on_primary">#ffffff</color>
     <color name="blue_container">#cae6ff</color>
     <color name="blue_on_container">#001e30</color>
     <color name="gray_surface_variant">#dbe4e6</color>
     <color name="gray_on_surface_variant">#3f484a</color>
+    <color name="green_primary">#006e1c</color>
+    <color name="green_on_primary">#ffffff</color>
     <color name="green_container">#94f990</color>
     <color name="green_on_container">#002204</color>
     <color name="red_primary">#bb1614</color>
     <color name="red_on_primary">#ffffff</color>
+    <color name="yellow_primary">#695f00</color>
+    <color name="yellow_on_primary">#ffffff</color>
     <color name="yellow_container">#f9e534</color>
     <color name="yellow_on_container">#201c00</color>
 </resources>

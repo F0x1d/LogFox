@@ -14,17 +14,17 @@ import com.f0x1d.logfox.model.LogLevel.WARNING
 @ColorRes
 fun LogLevel.backgroundColorIdByLevel() = when (this) {
     VERBOSE -> R.color.gray_surface_variant
-    INFO -> R.color.green_container
-    DEBUG -> R.color.blue_container
-    WARNING -> R.color.yellow_container
+    INFO -> R.color.green_primary
+    DEBUG -> R.color.blue_primary
+    WARNING -> R.color.yellow_primary
     ERROR, FATAL, SILENT -> R.color.red_primary
 }
 
 @ColorRes
 fun LogLevel.foregroundColorIdByLevel() = when (this) {
     VERBOSE -> R.color.gray_on_surface_variant
-    INFO -> R.color.green_on_container
-    DEBUG -> R.color.blue_on_container
-    WARNING -> R.color.yellow_on_container
+    INFO -> R.color.green_on_primary
+    DEBUG -> R.color.blue_on_primary
+    WARNING -> R.color.yellow_on_primary
     ERROR, FATAL, SILENT -> R.color.red_on_primary
 }
