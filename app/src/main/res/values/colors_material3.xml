@@ -17,4 +17,15 @@
     <color name="yellow_on_primary">#ffffff</color>
     <color name="yellow_container">#f9e534</color>
     <color name="yellow_on_container">#201c00</color>
+
+    <color name="level_debug_background">@color/blue_container</color>
+    <color name="level_debug_on_background">@color/blue_on_container</color>
+    <color name="level_verbose_background">@color/gray_surface_variant</color>
+    <color name="level_verbose_on_background">@color/gray_on_surface_variant</color>
+    <color name="level_info_background">@color/green_container</color>
+    <color name="level_info_on_background">@color/green_on_container</color>
+    <color name="level_error_background">@color/red_primary</color>
+    <color name="level_error_on_background">@color/red_on_primary</color>
+    <color name="level_warning_background">@color/yellow_container</color>
+    <color name="level_warning_on_background">@color/yellow_on_container</color>
 </resources>

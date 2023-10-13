@@ -28,11 +28,11 @@ enum class LogLevel(
     @ColorRes val backgroundColorId: Int,
     @ColorRes val foregroundColorId: Int
 ) {
-    VERBOSE("V", R.color.gray_surface_variant, R.color.gray_on_surface_variant),
-    DEBUG("D", R.color.blue_primary, R.color.blue_on_primary),
-    INFO("I", R.color.green_primary, R.color.green_on_primary),
-    WARNING("W", R.color.yellow_primary, R.color.yellow_on_primary),
-    ERROR("E", R.color.red_primary, R.color.red_on_primary),
-    FATAL("F", R.color.red_primary, R.color.red_on_primary),
-    SILENT("S", R.color.red_primary, R.color.red_on_primary)
+    VERBOSE("V", R.color.level_verbose_background, R.color.level_verbose_on_background),
+    DEBUG("D", R.color.level_debug_background, R.color.level_debug_on_background),
+    INFO("I", R.color.level_info_background, R.color.level_info_on_background),
+    WARNING("W", R.color.level_warning_background, R.color.level_warning_on_background),
+    ERROR("E", R.color.level_error_background, R.color.level_error_on_background),
+    FATAL("F", R.color.level_error_background, R.color.level_error_on_background),
+    SILENT("S", R.color.level_error_background, R.color.level_error_on_background)
 }
