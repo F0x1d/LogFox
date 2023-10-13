@@ -1,6 +1,5 @@
 package com.f0x1d.logfox.ui.viewholder
 
-import android.content.res.ColorStateList
 import android.view.Gravity
 import androidx.appcompat.widget.PopupMenu
 import com.f0x1d.logfox.R
@@ -53,7 +52,7 @@ class LogViewHolder(
     override fun bindTo(data: LogLine) {
         adapter<LogsAdapter>().textSize.also {
             binding.logText.textSize = it
-            binding.levelText.textSize = it
+            binding.levelView.textSize = it
         }
 
         binding.logText.text = buildString {
@@ -68,14 +67,8 @@ class LogViewHolder(
                 if (content) append(data.content)
             }
         }
-        binding.levelText.text = data.level.letter
 
-        adapter<LogsAdapter>().logLevelsColorsMappings.also {
-            val (backgroundColor, foregroundColor) = it[data.level] ?: return@also
-
-            binding.levelText.backgroundTintList = ColorStateList.valueOf(backgroundColor)
-            binding.levelText.setTextColor(foregroundColor)
-        }
+        binding.levelView.logLevel = data.level
 
         changeExpandedAndSelected(data)
     }
