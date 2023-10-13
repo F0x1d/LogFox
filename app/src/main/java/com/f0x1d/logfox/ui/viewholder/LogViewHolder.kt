@@ -26,7 +26,7 @@ class LogViewHolder(
                     true
                 }
                 R.id.copy_item -> {
-                    copyLog.invoke(currentItem)
+                    copyLog.invoke(currentItem ?: return@setOnMenuItemClickListener false)
                     true
                 }
 
@@ -85,7 +85,7 @@ class LogViewHolder(
     }
 
     private fun selectItem() = adapter<LogsAdapter>().selectedItems.apply {
-        currentItem.also {
+        currentItem?.also {
             if (any { logLine -> it.id == logLine.id })
                 remove(it)
             else
@@ -96,7 +96,7 @@ class LogViewHolder(
     }
 
     private fun expandOrCollapseItem() = adapter<LogsAdapter>().expandedStates.apply {
-        currentItem.also {
+        currentItem?.also {
             put(it.id, !getOrElse(it.id) { adapter<LogsAdapter>().logsExpanded })
             changeExpandedAndSelected(it)
         }

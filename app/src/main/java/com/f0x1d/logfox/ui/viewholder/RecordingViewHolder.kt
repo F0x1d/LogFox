@@ -13,10 +13,10 @@ class RecordingViewHolder(
 
     init {
         binding.root.setOnClickListener {
-            click.invoke(currentItem)
+            click.invoke(currentItem ?: return@setOnClickListener)
         }
         binding.deleteButton.setOnClickListener {
-            delete.invoke(currentItem)
+            delete.invoke(currentItem ?: return@setOnClickListener)
         }
     }
 

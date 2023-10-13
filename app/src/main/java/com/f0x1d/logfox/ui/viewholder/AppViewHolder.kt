@@ -13,7 +13,7 @@ class AppViewHolder(
 
     init {
         binding.root.setOnClickListener {
-            click(currentItem)
+            click(currentItem ?: return@setOnClickListener)
         }
     }
 

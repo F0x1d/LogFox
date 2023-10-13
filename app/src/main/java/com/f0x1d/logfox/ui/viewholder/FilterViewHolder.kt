@@ -17,15 +17,15 @@ class FilterViewHolder(
 ): BaseViewHolder<UserFilter, ItemFilterBinding>(binding) {
 
     private val checkedListener = OnlyUserCheckedChangeListener(binding.enabledBox) { button, isChecked ->
-        checked.invoke(currentItem, isChecked)
+        checked.invoke(currentItem ?: return@OnlyUserCheckedChangeListener, isChecked)
     }
 
     init {
         binding.root.setOnClickListener {
-            click.invoke(currentItem)
+            click.invoke(currentItem ?: return@setOnClickListener)
         }
         binding.deleteButton.setOnClickListener {
-            delete.invoke(currentItem)
+            delete.invoke(currentItem ?: return@setOnClickListener)
         }
         binding.enabledBox.setOnCheckedChangeListener(checkedListener)
     }

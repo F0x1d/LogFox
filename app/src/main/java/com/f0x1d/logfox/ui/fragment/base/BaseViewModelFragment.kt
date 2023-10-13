@@ -22,7 +22,9 @@ abstract class BaseViewModelFragment<T : BaseViewModel, D : ViewBinding>: BaseFr
         viewModel.snackbarEventsData.observe(viewLifecycleOwner) {
             if (it.isConsumed) return@observe
 
-            snackbar(it.consume<String>()!!)
+            it.consume<String>()?.also { message ->
+                snackbar(message)
+            }
         }
     }
 
