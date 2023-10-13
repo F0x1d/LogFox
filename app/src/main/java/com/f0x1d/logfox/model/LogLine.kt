@@ -29,9 +29,9 @@ enum class LogLevel(
     @ColorRes val foregroundColorId: Int
 ) {
     VERBOSE("V", R.color.gray_surface_variant, R.color.gray_on_surface_variant),
-    DEBUG("D", R.color.blue_container, R.color.blue_on_container),
-    INFO("I", R.color.green_container, R.color.green_on_container),
-    WARNING("W", R.color.yellow_container, R.color.yellow_on_container),
+    DEBUG("D", R.color.blue_primary, R.color.blue_on_primary),
+    INFO("I", R.color.green_primary, R.color.green_on_primary),
+    WARNING("W", R.color.yellow_primary, R.color.yellow_on_primary),
     ERROR("E", R.color.red_primary, R.color.red_on_primary),
     FATAL("F", R.color.red_primary, R.color.red_on_primary),
     SILENT("S", R.color.red_primary, R.color.red_on_primary)
