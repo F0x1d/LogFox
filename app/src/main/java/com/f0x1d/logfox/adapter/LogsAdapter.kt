@@ -5,13 +5,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import com.f0x1d.logfox.adapter.base.BaseListAdapter
 import com.f0x1d.logfox.databinding.ItemLogBinding
+import com.f0x1d.logfox.model.LogLevel
 import com.f0x1d.logfox.model.LogLine
 import com.f0x1d.logfox.ui.viewholder.LogViewHolder
 import com.f0x1d.logfox.utils.preferences.AppPreferences
 
 class LogsAdapter(
     private val appPreferences: AppPreferences,
-    val levelColorCacheMap: MutableMap<Int, Int>,
+    val logLevelsColorsMappings: Map<LogLevel, Pair<Int, Int>>,
     private val copyLog: (LogLine) -> Unit
 ): BaseListAdapter<LogLine, ItemLogBinding>(LOGLINE_DIFF) {
 

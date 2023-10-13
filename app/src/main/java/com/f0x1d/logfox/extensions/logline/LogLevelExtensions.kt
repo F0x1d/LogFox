@@ -1,11 +1,15 @@
 package com.f0x1d.logfox.extensions.logline
 
-import android.content.Context
-import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.model.LogLevel
-import com.f0x1d.logfox.model.LogLevel.*
+import com.f0x1d.logfox.model.LogLevel.DEBUG
+import com.f0x1d.logfox.model.LogLevel.ERROR
+import com.f0x1d.logfox.model.LogLevel.FATAL
+import com.f0x1d.logfox.model.LogLevel.INFO
+import com.f0x1d.logfox.model.LogLevel.SILENT
+import com.f0x1d.logfox.model.LogLevel.VERBOSE
+import com.f0x1d.logfox.model.LogLevel.WARNING
 
 @ColorRes
 fun LogLevel.backgroundColorIdByLevel() = when (this) {
@@ -15,21 +19,6 @@ fun LogLevel.backgroundColorIdByLevel() = when (this) {
     WARNING -> R.color.yellow_container
     ERROR, FATAL, SILENT -> R.color.red_primary
 }
-
-@ColorInt
-fun LogLevel.backgroundColorByLevel(context: Context, levelColorCacheMap: MutableMap<Int, Int>) = backgroundColorIdByLevel().let {
-    levelColorCacheMap.getOrPut(it) {
-        context.getColor(it)
-    }
-}
-
-@ColorInt
-fun LogLevel.foregroundColorByLevel(context: Context, levelColorCacheMap: MutableMap<Int, Int>) = foregroundColorIdByLevel().let {
-    levelColorCacheMap.getOrPut(it) {
-        context.getColor(it)
-    }
-}
-
 
 @ColorRes
 fun LogLevel.foregroundColorIdByLevel() = when (this) {

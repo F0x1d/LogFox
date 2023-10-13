@@ -6,18 +6,13 @@ import androidx.appcompat.widget.PopupMenu
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.adapter.LogsAdapter
 import com.f0x1d.logfox.databinding.ItemLogBinding
-import com.f0x1d.logfox.extensions.logline.backgroundColorByLevel
-import com.f0x1d.logfox.extensions.logline.foregroundColorByLevel
 import com.f0x1d.logfox.model.LogLine
 import com.f0x1d.logfox.ui.viewholder.base.BaseViewHolder
-import com.f0x1d.logfox.utils.dpToPx
 
 class LogViewHolder(
     binding: ItemLogBinding,
     private val copyLog: (LogLine) -> Unit
 ): BaseViewHolder<LogLine, ItemLogBinding>(binding) {
-
-    private val radius = 6.dpToPx
 
     private val popupMenu: PopupMenu
 
@@ -75,11 +70,11 @@ class LogViewHolder(
         }
         binding.levelText.text = data.level.letter
 
-        binding.levelText.context.also { context ->
-            adapter<LogsAdapter>().levelColorCacheMap.also {
-                binding.levelText.backgroundTintList = ColorStateList.valueOf(data.level.backgroundColorByLevel(context, it))
-                binding.levelText.setTextColor(data.level.foregroundColorByLevel(context, it))
-            }
+        adapter<LogsAdapter>().logLevelsColorsMappings.also {
+            val (backgroundColor, foregroundColor) = it[data.level] ?: return@also
+
+            binding.levelText.backgroundTintList = ColorStateList.valueOf(backgroundColor)
+            binding.levelText.setTextColor(foregroundColor)
         }
 
         changeExpandedAndSelected(data)
