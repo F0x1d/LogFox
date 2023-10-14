@@ -36,7 +36,7 @@ class CrashDetailsActivity: BaseViewModelActivity<CrashDetailsViewModel, Activit
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        setTitle(R.string.crash_details)
         binding.scrollView.applyInsetter {
             type(navigationBars = true) {
                 padding(vertical = true)
