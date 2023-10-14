@@ -5,7 +5,8 @@
     android:clickable="true"
     android:focusable="true"
     android:background="?selectableItemBackground"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <ImageView
         android:id="@+id/icon"
@@ -18,7 +19,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/title"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:importantForAccessibility="no" />
 
     <TextView
         android:id="@+id/title"
@@ -56,6 +58,9 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@id/title"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:contentDescription="@string/delete"
+        android:tooltipText="@string/delete"
+        tools:targetApi="o" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
