@@ -27,7 +27,7 @@ else
 fun <T : BroadcastReceiver> Context.makeBroadcastPendingIntent(id: Int, clazz: Class<T>, setup: Intent.() -> Unit) = PendingIntent.getBroadcast(
     this,
     id,
-    Intent(this, clazz).also { setup.invoke(it) },
+    Intent(this, clazz).also { setup(it) },
     pendingIntentFlags
 )
 
@@ -39,7 +39,7 @@ fun <T : BroadcastReceiver> Context.makeBroadcastPendingIntent(id: Int, clazz: C
 fun <T : Service> Context.makeServicePendingIntent(id: Int, clazz: Class<T>, setup: Intent.() -> Unit) = PendingIntent.getService(
     this,
     id,
-    Intent(this, clazz).also { setup.invoke(it) },
+    Intent(this, clazz).also { setup(it) },
     pendingIntentFlags
 )
 
@@ -51,7 +51,7 @@ fun <T : Service> Context.makeServicePendingIntent(id: Int, clazz: Class<T>, ext
 fun <T : Activity> Context.makeActivityPendingIntent(id: Int, clazz: Class<T>, setup: Intent.() -> Unit) = PendingIntent.getActivity(
     this,
     id,
-    Intent(this, clazz).also { setup.invoke(it) },
+    Intent(this, clazz).also { setup(it) },
     pendingIntentFlags
 )
 

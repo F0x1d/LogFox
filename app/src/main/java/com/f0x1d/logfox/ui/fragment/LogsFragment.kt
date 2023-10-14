@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
+import androidx.lifecycle.asLiveData
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -26,6 +27,7 @@ import com.f0x1d.logfox.viewmodel.LogsViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import dev.chrisbanes.insetter.applyInsetter
+import kotlinx.coroutines.flow.update
 
 @AndroidEntryPoint
 class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(), SharedPreferences.OnSharedPreferenceChangeListener {
@@ -33,16 +35,23 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
     override val viewModel by hiltNavGraphViewModels<LogsViewModel>(R.id.logsFragment)
 
     private val adapter by lazy {
-        LogsAdapter(viewModel.appPreferences) {
+        LogsAdapter(viewModel.appPreferences, selectedItem = viewModel::selectLine, copyLog = {
             requireContext().copyText(it.original)
             snackbar(R.string.text_copied)
-        }
+        })
     }
     private var changingState = false
 
     private val stopViewingFileBackPressedCallback = object : OnBackPressedCallback(false) {
         override fun handleOnBackPressed() {
             viewModel.stopViewingFile()
+        }
+    }
+    private val clearSelectionBackPressedCallback = object : OnBackPressedCallback(false) {
+        override fun handleOnBackPressed() {
+            viewModel.selectedItems.update {
+                emptyList()
+            }
         }
     }
 
@@ -81,13 +90,13 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
                 showSelectedDialog()
             }
             setClickListenerOn(R.id.clear_selected_item) {
-                adapter.clearSelected()
+                viewModel.selectedItems.update { emptyList() }
             }
             setClickListenerOn(R.id.clear_item) {
                 viewModel.clearLogs()
 
                 adapter.submitList(null)
-                adapter.clearSelected()
+                viewModel.selectedItems.update { emptyList() }
             }
             setClickListenerOn(R.id.service_status_item) {
                 requireContext().apply {
@@ -102,6 +111,14 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
             }
             setClickListenerOn(R.id.exit_item) {
                 requireContext().sendKillApp()
+            }
+        }
+        binding.toolbar.setNavigationOnClickListener {
+            viewModel.apply {
+                if (selectedItems.value.isNotEmpty()) selectedItems.update {
+                    emptyList()
+                } else if (viewModel.viewingFile.value)
+                    viewModel.stopViewingFile()
             }
         }
 
@@ -128,37 +145,30 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
                 scrollLogToBottom()
         }
 
-        viewModel.viewingFileData.observe(viewLifecycleOwner) {
+        viewModel.viewingFile.asLiveData().observe(viewLifecycleOwner) {
             stopViewingFileBackPressedCallback.isEnabled = it
+            setupToolbarForFile(it)
+        }
 
-            binding.toolbar.apply {
-                menu.findItem(R.id.pause_item).isVisible = !it
+        viewModel.selectedItems.asLiveData().observe(viewLifecycleOwner) {
+            val selecting = it.isNotEmpty()
 
-                title = when (it) {
-                    true -> viewModel.fileUri?.readFileName(requireContext())
+            clearSelectionBackPressedCallback.isEnabled = selecting
+            adapter.selectedItems = it
 
-                    else -> getString(R.string.app_name)
-                }
-
-                if (it) setNavigationIcon(R.drawable.ic_clear)
-                else {
-                    navigationIcon = null
-                }
-
-                setNavigationOnClickListener {
-                    viewModel.stopViewingFile()
-                }
-            }
+            setupToolbarForSelection(selecting, it.size)
         }
 
         viewModel.logs.observe(viewLifecycleOwner) {
-            adapter.submitList(null)
+            // TODO: Check performance without this
+            //adapter.submitList(null)
+
             adapter.submitList(it ?: return@observe) {
                 scrollLogToBottom()
             }
         }
 
-        viewModel.pausedData.observe(viewLifecycleOwner) { paused ->
+        viewModel.paused.asLiveData().observe(viewLifecycleOwner) { paused ->
             changingState = true
             binding.toolbar.menu.findItem(R.id.pause_item)
                 .setIcon(if (paused) R.drawable.ic_play else R.drawable.ic_pause)
@@ -176,10 +186,10 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
             binding.toolbar.menu.findItem(R.id.service_status_item).setTitle(if (running) R.string.stop_service else R.string.start_service)
         }
 
-        requireActivity().onBackPressedDispatcher.addCallback(
-            viewLifecycleOwner,
-            stopViewingFileBackPressedCallback
-        )
+        requireActivity().onBackPressedDispatcher.apply {
+            addCallback(viewLifecycleOwner, stopViewingFileBackPressedCallback)
+            addCallback(viewLifecycleOwner, clearSelectionBackPressedCallback)
+        }
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
@@ -194,6 +204,49 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
     override fun onDestroy() {
         super.onDestroy()
         viewModel.appPreferences.unregisterListener(this)
+    }
+
+    private fun setupToolbarForFile(viewing: Boolean) = binding.toolbar.apply {
+        menu.findItem(R.id.pause_item).isVisible = !viewing
+
+        title = when (viewing) {
+            true -> viewModel.fileUri?.readFileName(requireContext())
+
+            else -> getString(R.string.app_name)
+        }
+
+        if (viewing) setNavigationIcon(R.drawable.ic_clear)
+        else {
+            navigationIcon = null
+        }
+    }
+
+    private fun setupToolbarForSelection(selecting: Boolean, count: Int) = binding.toolbar.apply {
+        val setVisibility = { itemId: Int, visible: Boolean ->
+            menu.findItem(itemId).isVisible = visible
+        }
+        val visibleDuringSelection = { itemId: Int -> setVisibility(itemId, selecting) }
+        val invisibleDuringSelection = { itemId: Int -> setVisibility(itemId, !selecting) }
+
+        invisibleDuringSelection(R.id.search_item)
+        invisibleDuringSelection(R.id.filters_item)
+        visibleDuringSelection(R.id.selected_item)
+        visibleDuringSelection(R.id.clear_selected_item)
+        invisibleDuringSelection(R.id.clear_item)
+        invisibleDuringSelection(R.id.service_status_item)
+        invisibleDuringSelection(R.id.restart_logging_item)
+
+        title = when {
+            selecting -> count.toString()
+            viewModel.viewingFile.value -> viewModel.fileUri?.readFileName(requireContext())
+
+            else -> getString(R.string.app_name)
+        }
+
+        if (selecting) setNavigationIcon(R.drawable.ic_clear)
+        else if (!viewModel.viewingFile.value) {
+            navigationIcon = null
+        }
     }
 
     private fun scrollLogToBottom() {

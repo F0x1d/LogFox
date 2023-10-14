@@ -8,6 +8,7 @@ import com.f0x1d.logfox.database.entity.UserFilter
 import com.f0x1d.logfox.di.viewmodel.FileUri
 import com.f0x1d.logfox.extensions.logline.filterAndSearch
 import com.f0x1d.logfox.extensions.readFileContentsAsFlow
+import com.f0x1d.logfox.extensions.updateList
 import com.f0x1d.logfox.model.LogLine
 import com.f0x1d.logfox.repository.logging.LoggingRepository
 import com.f0x1d.logfox.utils.preferences.AppPreferences
@@ -35,10 +36,10 @@ class LogsViewModel @Inject constructor(
     val query = MutableStateFlow<String?>(null)
 
     val paused = MutableStateFlow(false)
-    val pausedData = paused.asLiveData()
 
     val viewingFile = MutableStateFlow(fileUri != null)
-    val viewingFileData = viewingFile.asLiveData()
+
+    val selectedItems = MutableStateFlow(emptyList<LogLine>())
 
     @Suppress("UNCHECKED_CAST")
     val logs = combine(
@@ -86,9 +87,19 @@ class LogsViewModel @Inject constructor(
     val resumeLoggingWithBottomTouch get() = appPreferences.resumeLoggingWithBottomTouch
 
     fun stopViewingFile() = viewingFile.apply {
+        selectedItems.update { emptyList() }
+
         if (value) update {
             false
         }
+    }
+
+    fun selectLine(logLine: LogLine, selected: Boolean) = selectedItems.updateList {
+        if (selected) add(
+            logLine
+        ) else remove(
+            logLine
+        )
     }
 
     fun query(query: String?) = this.query.update { query }

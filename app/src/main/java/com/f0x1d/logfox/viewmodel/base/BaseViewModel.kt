@@ -29,12 +29,12 @@ abstract class BaseViewModel(application: Application): AndroidViewModel(applica
     ) = viewModelScope.launch(context) {
         try {
             coroutineScope {
-                block.invoke(this)
+                block(this)
             }
         } catch (e: Exception) {
             if (e is CancellationException) return@launch
 
-            errorBlock.invoke(this)
+            errorBlock(this)
 
             e.printStackTrace()
 

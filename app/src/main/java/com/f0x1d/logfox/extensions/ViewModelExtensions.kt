@@ -20,7 +20,7 @@ fun BaseViewModel.crashToZip(uri: Uri, appCrash: AppCrash) = toZip(uri) {
 inline fun BaseViewModel.toZip(uri: Uri, crossinline block: OutputStream.() -> Unit) {
     launchCatching(Dispatchers.IO) {
         ctx.contentResolver.openOutputStream(uri)?.also {
-            block.invoke(it)
+            block(it)
         }
     }
 }

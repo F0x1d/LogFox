@@ -133,7 +133,7 @@ class RecordingsRepository @Inject constructor(
         }
 
         withContext(Dispatchers.Main) {
-            recordingSaved.invoke(logRecording)
+            recordingSaved(logRecording)
         }
 
         recordingStateFlow.update { RecordingState.IDLE }
