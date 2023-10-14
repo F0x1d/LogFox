@@ -111,4 +111,5 @@
     <string name="are_you_sure">你确定?</string>
     <string name="view">查看</string>
     <string name="scroll_to_bottom">滚动到底部</string>
+    <string name="add">添加</string>
 </resources>

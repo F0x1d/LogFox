@@ -119,4 +119,5 @@
     <string name="delete_warning">Are you sure want to delete it? This action cannot be undone.</string>
     <string name="clear_warning">Are you sure want to clear it? This action cannot be undone.</string>
     <string name="scroll_to_bottom">Scroll to the bottom</string>
+    <string name="add">Add</string>
 </resources>
