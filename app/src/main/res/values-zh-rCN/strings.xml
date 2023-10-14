@@ -113,4 +113,5 @@
     <string name="scroll_to_bottom">滚动到底部</string>
     <string name="add">添加</string>
     <string name="crash_details">崩溃详情</string>
+    <string name="app_icon">应用图标</string>
 </resources>

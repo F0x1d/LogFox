@@ -121,4 +121,5 @@
     <string name="scroll_to_bottom">Scroll to the bottom</string>
     <string name="add">Add</string>
     <string name="crash_details">Crash details</string>
+    <string name="app_icon">App icon</string>
 </resources>
