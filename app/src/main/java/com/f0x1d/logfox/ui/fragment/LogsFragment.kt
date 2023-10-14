@@ -89,9 +89,6 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
             setClickListenerOn(R.id.selected_item) {
                 showSelectedDialog()
             }
-            setClickListenerOn(R.id.clear_selected_item) {
-                viewModel.selectedItems.update { emptyList() }
-            }
             setClickListenerOn(R.id.clear_item) {
                 viewModel.clearLogs()
 
@@ -231,7 +228,6 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
         invisibleDuringSelection(R.id.search_item)
         invisibleDuringSelection(R.id.filters_item)
         visibleDuringSelection(R.id.selected_item)
-        visibleDuringSelection(R.id.clear_selected_item)
         invisibleDuringSelection(R.id.clear_item)
         invisibleDuringSelection(R.id.service_status_item)
         invisibleDuringSelection(R.id.restart_logging_item)
