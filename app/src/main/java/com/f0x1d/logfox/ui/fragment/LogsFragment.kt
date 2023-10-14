@@ -160,9 +160,9 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
         }
 
         viewModel.logs.observe(viewLifecycleOwner) {
-            // TODO: Check performance without this
-            //adapter.submitList(null)
+            // TODO: Understand why all ListAdapters stop working after 15 minutes without submitting null
 
+            adapter.submitList(null)
             adapter.submitList(it ?: return@observe) {
                 scrollLogToBottom()
             }
