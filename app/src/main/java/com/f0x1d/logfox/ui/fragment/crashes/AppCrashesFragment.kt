@@ -11,6 +11,7 @@ import com.f0x1d.logfox.R
 import com.f0x1d.logfox.adapter.CrashesAdapter
 import com.f0x1d.logfox.databinding.FragmentAppCrashesBinding
 import com.f0x1d.logfox.extensions.showAreYouSureDialog
+import com.f0x1d.logfox.extensions.views.setupBackButton
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
 import com.f0x1d.logfox.utils.dpToPx
 import com.f0x1d.logfox.viewmodel.crashes.AppCrashesViewModel
@@ -45,7 +46,7 @@ class AppCrashesFragment: BaseViewModelFragment<AppCrashesViewModel, FragmentApp
         }
 
         binding.toolbar.title = viewModel.appName ?: viewModel.packageName
-        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding.toolbar.setupBackButton()
 
         binding.crashesRecycler.layoutManager = LinearLayoutManager(requireContext())
         binding.crashesRecycler.addItemDecoration(MaterialDividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL).apply {

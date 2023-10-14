@@ -13,6 +13,7 @@ import com.f0x1d.logfox.extensions.shareIntent
 import com.f0x1d.logfox.extensions.showAreYouSureDialog
 import com.f0x1d.logfox.extensions.views.loadIcon
 import com.f0x1d.logfox.extensions.views.setClickListenerOn
+import com.f0x1d.logfox.extensions.views.setupBackButton
 import com.f0x1d.logfox.ui.activity.base.BaseViewModelActivity
 import com.f0x1d.logfox.utils.event.Event
 import com.f0x1d.logfox.viewmodel.crashes.CrashDetailsViewModel
@@ -43,7 +44,7 @@ class CrashDetailsActivity: BaseViewModelActivity<CrashDetailsViewModel, Activit
         }
 
         binding.toolbar.inflateMenu(R.menu.crash_details_menu)
-        binding.toolbar.setNavigationOnClickListener {
+        binding.toolbar.setupBackButton {
             onBackPressedDispatcher.onBackPressed()
         }
 
