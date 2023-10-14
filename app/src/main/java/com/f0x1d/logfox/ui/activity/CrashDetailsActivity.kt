@@ -1,6 +1,7 @@
 package com.f0x1d.logfox.ui.activity
 
 import android.os.Bundle
+import android.widget.Button
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import com.f0x1d.logfox.R
@@ -12,6 +13,7 @@ import com.f0x1d.logfox.extensions.exportFormatted
 import com.f0x1d.logfox.extensions.shareIntent
 import com.f0x1d.logfox.extensions.showAreYouSureDialog
 import com.f0x1d.logfox.extensions.views.loadIcon
+import com.f0x1d.logfox.extensions.views.setAccessibilityDelegateForClassName
 import com.f0x1d.logfox.extensions.views.setClickListenerOn
 import com.f0x1d.logfox.extensions.views.setupBackButton
 import com.f0x1d.logfox.ui.activity.base.BaseViewModelActivity
@@ -47,6 +49,10 @@ class CrashDetailsActivity: BaseViewModelActivity<CrashDetailsViewModel, Activit
         binding.toolbar.setupBackButton {
             onBackPressedDispatcher.onBackPressed()
         }
+
+        binding.copyLayout.setAccessibilityDelegateForClassName(Button::class.java)
+        binding.shareLayout.setAccessibilityDelegateForClassName(Button::class.java)
+        binding.zipLayout.setAccessibilityDelegateForClassName(Button::class.java)
 
         viewModel.crash.observe(this) {
             setupFor(it ?: return@observe)
