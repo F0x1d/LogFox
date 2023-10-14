@@ -85,7 +85,7 @@ fun Context.shareFileIntent(file: File) = baseShareIntent {
 private fun Context.baseShareIntent(block: (Intent) -> Unit) {
     try {
         val intent = Intent(Intent.ACTION_SEND)
-        block.invoke(intent)
+        block(intent)
 
         startActivity(Intent.createChooser(intent, getString(R.string.share)))
     } catch (e: Exception) {
@@ -95,7 +95,7 @@ private fun Context.baseShareIntent(block: (Intent) -> Unit) {
 }
 
 fun Context.catchingNotNumber(block: () -> Unit) = try {
-    block.invoke()
+    block()
 } catch (e: NumberFormatException) {
     toast(R.string.this_is_not_a_number)
 }
@@ -111,7 +111,7 @@ else
     true
 
 fun Context.doIfPermitted(block: NotificationManagerCompat.() -> Unit) = if (hasNotificationsPermission())
-    block.invoke(notificationManagerCompat)
+    block(notificationManagerCompat)
 else
     Unit
 

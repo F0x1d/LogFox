@@ -10,6 +10,7 @@ import com.f0x1d.logfox.ui.viewholder.base.BaseViewHolder
 
 class LogViewHolder(
     binding: ItemLogBinding,
+    private val selectedItem: (LogLine, Boolean) -> Unit,
     private val copyLog: (LogLine) -> Unit
 ): BaseViewHolder<LogLine, ItemLogBinding>(binding) {
 
@@ -25,7 +26,7 @@ class LogViewHolder(
                     true
                 }
                 R.id.copy_item -> {
-                    copyLog.invoke(currentItem ?: return@setOnMenuItemClickListener false)
+                    copyLog(currentItem ?: return@setOnMenuItemClickListener false)
                     true
                 }
 
@@ -80,11 +81,9 @@ class LogViewHolder(
     private fun selectItem() = adapter<LogsAdapter>().selectedItems.apply {
         currentItem?.also {
             if (any { logLine -> it.id == logLine.id })
-                remove(it)
+                selectedItem(it, false)
             else
-                add(it)
-
-            changeExpandedAndSelected(it)
+                selectedItem(it, true)
         }
     }
 
