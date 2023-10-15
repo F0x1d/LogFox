@@ -34,8 +34,8 @@ abstract class BaseCrashDetector(private val collected: suspend (AppCrash) -> Un
         if (stillCollecting(line)) {
             collectedLines.add(line)
         } else {
-            linesModifier.invoke(collectedLines)
-            collected.invoke(logsToAppCrash(packageFromCollected(collectedLines), crashType, collectedLines))
+            linesModifier(collectedLines)
+            collected(logsToAppCrash(packageFromCollected(collectedLines), crashType, collectedLines))
 
             collecting = false
             collectedFirstLine = null

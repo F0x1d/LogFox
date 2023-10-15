@@ -12,15 +12,15 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 fun Preference.setupAsEditTextPreference(setup: (DialogTextBinding) -> Unit, setupDialog: MaterialAlertDialogBuilder.() -> Unit, get: () -> String?, save: (String?) -> Unit) {
     setOnPreferenceClickListener {
         val dialogBinding = DialogTextBinding.inflate(LayoutInflater.from(context))
-        setup.invoke(dialogBinding)
+        setup(dialogBinding)
 
-        dialogBinding.text.setText(get.invoke())
+        dialogBinding.text.setText(get())
 
         MaterialAlertDialogBuilder(context)
             .setTitle(title)
             .setView(dialogBinding.root)
             .setPositiveButton(android.R.string.ok) { dialog, which ->
-                save.invoke(dialogBinding.text.text?.toString())
+                save(dialogBinding.text.text?.toString())
             }
             .setNegativeButton(R.string.close, null)
             .apply(setupDialog)
@@ -40,7 +40,7 @@ fun Preference.setupAsListPreference(setupDialog: MaterialAlertDialogBuilder.() 
             .setTitle(title)
             .setSingleChoiceItems(items, selected()) { dialog, which ->
                 dialog.cancel()
-                onSelected.invoke(which)
+                onSelected(which)
             }
             .setPositiveButton(R.string.close, null)
             .apply(setupDialog)
@@ -63,6 +63,6 @@ inline fun <reified T> Preference.observeAndUpdateSummary(appPreferences: AppPre
 
 inline fun <reified T> Preference.observeAndUpdateSummary(appPreferences: AppPreferences, observer: LifecycleOwner, defValue: T, crossinline block: (T) -> Unit) {
     appPreferences.asLiveData(key, defValue).observe(observer) {
-        block.invoke(it)
+        block(it)
     }
 }

@@ -41,7 +41,7 @@ private fun OutputStream.exportToZip(context: Context, block: ZipOutputStream.()
     val device = EntryPoints.get(context, ExportImportUtilsEntryPoint::class.java).device()
 
     ZipOutputStream(this).use { zipOutputStream ->
-        block.invoke(zipOutputStream)
+        block(zipOutputStream)
         zipOutputStream.putZipEntry("device.txt", device.toString().encodeToByteArray())
     }
 }

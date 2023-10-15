@@ -11,6 +11,7 @@ import com.f0x1d.logfox.utils.preferences.AppPreferences
 
 class LogsAdapter(
     private val appPreferences: AppPreferences,
+    private val selectedItem: (LogLine, Boolean) -> Unit,
     private val copyLog: (LogLine) -> Unit
 ): BaseListAdapter<LogLine, ItemLogBinding>(LOGLINE_DIFF) {
 
@@ -23,7 +24,11 @@ class LogsAdapter(
     }
 
     val expandedStates = mutableMapOf<Long, Boolean>()
-    val selectedItems = mutableListOf<LogLine>()
+    var selectedItems = emptyList<LogLine>()
+        set(value) {
+            field = value
+            notifyItemRangeChanged(0, itemCount)
+        }
 
     var textSize = appPreferences.logsTextSize.toFloat()
         set(value) {
@@ -43,11 +48,7 @@ class LogsAdapter(
 
     override fun createHolder(layoutInflater: LayoutInflater, parent: ViewGroup) = LogViewHolder(
         binding = ItemLogBinding.inflate(layoutInflater, parent, false),
+        selectedItem = selectedItem,
         copyLog = copyLog
     )
-
-    fun clearSelected() {
-        selectedItems.clear()
-        notifyItemRangeChanged(0, itemCount)
-    }
 }
