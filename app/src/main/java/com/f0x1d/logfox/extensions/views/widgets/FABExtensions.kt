@@ -1,4 +1,4 @@
-package com.f0x1d.logfox.extensions.widgets
+package com.f0x1d.logfox.extensions.views.widgets
 
 import androidx.annotation.StringRes
 import androidx.appcompat.widget.TooltipCompat

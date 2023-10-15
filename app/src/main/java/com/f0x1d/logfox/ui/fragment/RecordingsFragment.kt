@@ -14,8 +14,8 @@ import com.f0x1d.logfox.databinding.FragmentRecordingsBinding
 import com.f0x1d.logfox.extensions.isHorizontalOrientation
 import com.f0x1d.logfox.extensions.showAreYouSureDialog
 import com.f0x1d.logfox.extensions.startLoggingService
-import com.f0x1d.logfox.extensions.widgets.setClickListenerOn
-import com.f0x1d.logfox.extensions.widgets.setDescription
+import com.f0x1d.logfox.extensions.views.widgets.setClickListenerOn
+import com.f0x1d.logfox.extensions.views.widgets.setDescription
 import com.f0x1d.logfox.repository.logging.RecordingState
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
 import com.f0x1d.logfox.utils.dpToPx
