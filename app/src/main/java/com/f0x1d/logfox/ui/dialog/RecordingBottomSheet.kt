@@ -17,7 +17,7 @@ import com.f0x1d.logfox.extensions.exportFormatted
 import com.f0x1d.logfox.extensions.logToZip
 import com.f0x1d.logfox.extensions.shareFileIntent
 import com.f0x1d.logfox.extensions.toLocaleString
-import com.f0x1d.logfox.extensions.views.setAccessibilityDelegateForClassName
+import com.f0x1d.logfox.extensions.views.replaceAccessibilityDelegateClassNameWithButton
 import com.f0x1d.logfox.ui.dialog.base.BaseViewModelBottomSheet
 import com.f0x1d.logfox.viewmodel.recordings.RecordingViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -51,21 +51,21 @@ class RecordingBottomSheet: BaseViewModelBottomSheet<RecordingViewModel, SheetRe
 
             binding.timeText.text = logRecording.dateAndTime.toLocaleString()
 
-            binding.viewLayout.setAccessibilityDelegateForClassName(Button::class.java)
+            binding.viewLayout.replaceAccessibilityDelegateClassNameWithButton()
             binding.viewLayout.setOnClickListener {
                 findNavController().navigate(NavGraphDirections.actionGlobalLogsFragment(
                     File(logRecording.file).asUri(requireContext())
                 ))
             }
-            binding.exportLayout.setAccessibilityDelegateForClassName(Button::class.java)
+            binding.exportLayout.replaceAccessibilityDelegateClassNameWithButton()
             binding.exportLayout.setOnClickListener {
                 logExportLauncher.launch("${logRecording.dateAndTime.exportFormatted}.log")
             }
-            binding.shareLayout.setAccessibilityDelegateForClassName(Button::class.java)
+            binding.shareLayout.replaceAccessibilityDelegateClassNameWithButton()
             binding.shareLayout.setOnClickListener {
                 requireContext().shareFileIntent(File(logRecording.file))
             }
-            binding.zipLayout.setAccessibilityDelegateForClassName(Button::class.java)
+            binding.zipLayout.replaceAccessibilityDelegateClassNameWithButton()
             binding.zipLayout.setOnClickListener {
                 zipLogLauncher.launch("${logRecording.dateAndTime.exportFormatted}.zip")
             }
