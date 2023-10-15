@@ -11,7 +11,7 @@ import com.f0x1d.logfox.R
 import com.f0x1d.logfox.adapter.CrashesAdapter
 import com.f0x1d.logfox.databinding.FragmentAppCrashesBinding
 import com.f0x1d.logfox.extensions.showAreYouSureDialog
-import com.f0x1d.logfox.extensions.widgets.setupBackButtonForNavController
+import com.f0x1d.logfox.extensions.views.setupBackButtonForNavController
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
 import com.f0x1d.logfox.utils.dpToPx
 import com.f0x1d.logfox.viewmodel.crashes.AppCrashesViewModel

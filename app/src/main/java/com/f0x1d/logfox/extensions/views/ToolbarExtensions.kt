@@ -1,4 +1,4 @@
-package com.f0x1d.logfox.extensions.widgets
+package com.f0x1d.logfox.extensions.views
 
 import android.view.View
 import androidx.appcompat.widget.Toolbar
