@@ -5,7 +5,7 @@ import android.view.View
 import androidx.preference.PreferenceFragmentCompat
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.extensions.isHorizontalOrientation
-import com.f0x1d.logfox.extensions.views.setupBackButton
+import com.f0x1d.logfox.extensions.views.setupBackButtonForNavController
 import com.google.android.material.appbar.MaterialToolbar
 import dev.chrisbanes.insetter.applyInsetter
 
@@ -20,7 +20,7 @@ abstract class BasePreferenceFragment: PreferenceFragmentCompat() {
         view.findViewById<MaterialToolbar>(R.id.toolbar).apply {
             setTitle(this@BasePreferenceFragment.title)
 
-            if (showBackArrow) setupBackButton()
+            if (showBackArrow) setupBackButtonForNavController()
         }
 
         listView.apply {

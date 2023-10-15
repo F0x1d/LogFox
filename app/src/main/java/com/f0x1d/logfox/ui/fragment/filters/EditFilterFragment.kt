@@ -14,7 +14,7 @@ import androidx.navigation.fragment.findNavController
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.databinding.FragmentEditFilterBinding
 import com.f0x1d.logfox.extensions.views.setClickListenerOn
-import com.f0x1d.logfox.extensions.views.setupBackButton
+import com.f0x1d.logfox.extensions.views.setupBackButtonForNavController
 import com.f0x1d.logfox.model.LogLevel
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
 import com.f0x1d.logfox.utils.event.Event
@@ -61,7 +61,7 @@ class EditFilterFragment: BaseViewModelFragment<EditFilterViewModel, FragmentEdi
             }
         }
 
-        binding.toolbar.setupBackButton()
+        binding.toolbar.setupBackButtonForNavController()
 
         binding.includingButton.setOnClickListener {
             viewModel.including.update { !it }

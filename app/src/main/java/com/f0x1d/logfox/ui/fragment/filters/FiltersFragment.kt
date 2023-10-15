@@ -14,7 +14,7 @@ import com.f0x1d.logfox.databinding.FragmentFiltersBinding
 import com.f0x1d.logfox.extensions.canPickJSON
 import com.f0x1d.logfox.extensions.showAreYouSureDialog
 import com.f0x1d.logfox.extensions.views.setClickListenerOn
-import com.f0x1d.logfox.extensions.views.setupBackButton
+import com.f0x1d.logfox.extensions.views.setupBackButtonForNavController
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
 import com.f0x1d.logfox.viewmodel.filters.FiltersViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -60,7 +60,7 @@ class FiltersFragment: BaseViewModelFragment<FiltersViewModel, FragmentFiltersBi
             }
         }
 
-        binding.toolbar.setupBackButton()
+        binding.toolbar.setupBackButtonForNavController()
         binding.toolbar.inflateMenu(R.menu.filters_menu)
         binding.toolbar.menu.apply {
             setClickListenerOn(R.id.clear_item) {

@@ -11,11 +11,6 @@ fun Toolbar.setupBackButton(onClickListener: View.OnClickListener) {
     setNavigationContentDescription(androidx.appcompat.R.string.abc_action_bar_up_description)
 }
 
-/**
- * Set the Back button on the toolbar.
- *
- * This method uses `findNavController().popBackStack()` as the click listener.
- * */
-fun Toolbar.setupBackButton() {
+fun Toolbar.setupBackButtonForNavController() {
     setupBackButton { findNavController().popBackStack() }
 }
