@@ -15,7 +15,7 @@ import com.f0x1d.logfox.extensions.showAreYouSureDialog
 import com.f0x1d.logfox.extensions.views.widgets.loadIcon
 import com.f0x1d.logfox.extensions.views.setAccessibilityDelegateForClassName
 import com.f0x1d.logfox.extensions.views.widgets.setClickListenerOn
-import com.f0x1d.logfox.extensions.views.setupBackButton
+import com.f0x1d.logfox.extensions.views.widgets.setupBackButton
 import com.f0x1d.logfox.ui.activity.base.BaseViewModelActivity
 import com.f0x1d.logfox.utils.event.Event
 import com.f0x1d.logfox.viewmodel.crashes.CrashDetailsViewModel
