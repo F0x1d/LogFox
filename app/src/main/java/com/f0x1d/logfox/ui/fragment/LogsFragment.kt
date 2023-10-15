@@ -19,7 +19,7 @@ import com.f0x1d.logfox.extensions.readFileName
 import com.f0x1d.logfox.extensions.sendKillApp
 import com.f0x1d.logfox.extensions.sendStopService
 import com.f0x1d.logfox.extensions.startLoggingService
-import com.f0x1d.logfox.extensions.views.setClickListenerOn
+import com.f0x1d.logfox.extensions.widgets.setClickListenerOn
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
 import com.f0x1d.logfox.utils.fillWithStrings
 import com.f0x1d.logfox.viewmodel.LogsViewModel

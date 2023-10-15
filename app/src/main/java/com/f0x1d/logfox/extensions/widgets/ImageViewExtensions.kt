@@ -1,4 +1,4 @@
-package com.f0x1d.logfox.extensions.views
+package com.f0x1d.logfox.extensions.widgets
 
 import android.widget.ImageView
 import com.bumptech.glide.Glide

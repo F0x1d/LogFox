@@ -13,8 +13,8 @@ import com.f0x1d.logfox.adapter.FiltersAdapter
 import com.f0x1d.logfox.databinding.FragmentFiltersBinding
 import com.f0x1d.logfox.extensions.canPickJSON
 import com.f0x1d.logfox.extensions.showAreYouSureDialog
-import com.f0x1d.logfox.extensions.views.setClickListenerOn
-import com.f0x1d.logfox.extensions.views.setupBackButtonForNavController
+import com.f0x1d.logfox.extensions.widgets.setClickListenerOn
+import com.f0x1d.logfox.extensions.widgets.setupBackButtonForNavController
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
 import com.f0x1d.logfox.viewmodel.filters.FiltersViewModel
 import dagger.hilt.android.AndroidEntryPoint
