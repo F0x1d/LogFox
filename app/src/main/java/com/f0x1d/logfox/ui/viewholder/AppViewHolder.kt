@@ -2,7 +2,7 @@ package com.f0x1d.logfox.ui.viewholder
 
 import com.bumptech.glide.Glide
 import com.f0x1d.logfox.databinding.ItemAppBinding
-import com.f0x1d.logfox.extensions.views.loadIcon
+import com.f0x1d.logfox.extensions.views.widgets.loadIcon
 import com.f0x1d.logfox.model.InstalledApp
 import com.f0x1d.logfox.ui.viewholder.base.BaseViewHolder
 

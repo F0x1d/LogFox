@@ -48,7 +48,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activity.CrashDetailsActivity" />
+        <activity
+            android:name=".ui.activity.CrashDetailsActivity"
+            android:label="@string/crash_details" />
 
         <service
             android:name=".service.LoggingService"

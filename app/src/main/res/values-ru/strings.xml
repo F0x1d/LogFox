@@ -110,4 +110,7 @@
     <string name="delete_warning">Вы действительно хотите удалить это? Вы не сможете отменить это действие.</string>
     <string name="clear_warning">Вы действительно хотите очистить это? Вы не сможете отменить это действие.</string>
     <string name="scroll_to_bottom">Промотать вниз</string>
+    <string name="add">Добавить</string>
+    <string name="crash_details">Детали сбоя</string>
+    <string name="app_icon">Иконка приложения</string>
 </resources>

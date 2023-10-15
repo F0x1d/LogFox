@@ -73,7 +73,8 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/export_layout"
-                app:layout_constraintBottom_toBottomOf="parent">
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:contentDescription="@string/view">
 
                 <ImageView
                     android:id="@+id/view_image"
@@ -85,7 +86,8 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="@id/view_text"
                     app:layout_constraintEnd_toEndOf="@id/view_text"
-                    app:layout_constraintBottom_toTopOf="@id/view_text"/>
+                    app:layout_constraintBottom_toTopOf="@id/view_text"
+                    android:importantForAccessibility="no" />
 
                 <TextView
                     android:id="@+id/view_text"
@@ -115,7 +117,8 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toEndOf="@id/view_layout"
                 app:layout_constraintEnd_toStartOf="@id/share_layout"
-                app:layout_constraintBottom_toBottomOf="parent">
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:contentDescription="@string/export">
 
                 <ImageView
                     android:id="@+id/export_image"
@@ -127,7 +130,8 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="@id/export_text"
                     app:layout_constraintEnd_toEndOf="@id/export_text"
-                    app:layout_constraintBottom_toTopOf="@id/export_text"/>
+                    app:layout_constraintBottom_toTopOf="@id/export_text"
+                    android:importantForAccessibility="no" />
 
                 <TextView
                     android:id="@+id/export_text"
@@ -157,7 +161,8 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toEndOf="@id/export_layout"
                 app:layout_constraintEnd_toStartOf="@id/zip_layout"
-                app:layout_constraintBottom_toBottomOf="parent">
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:contentDescription="@string/share">
 
                 <ImageView
                     android:id="@+id/share_image"
@@ -169,7 +174,8 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="@id/share_text"
                     app:layout_constraintEnd_toEndOf="@id/share_text"
-                    app:layout_constraintBottom_toTopOf="@id/share_text"/>
+                    app:layout_constraintBottom_toTopOf="@id/share_text"
+                    android:importantForAccessibility="no" />
 
                 <TextView
                     android:id="@+id/share_text"
@@ -199,7 +205,8 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toEndOf="@id/share_layout"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent">
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:contentDescription="@string/zip">
 
                 <ImageView
                     android:id="@+id/zip_image"
@@ -211,7 +218,8 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="@id/zip_text"
                     app:layout_constraintEnd_toEndOf="@id/zip_text"
-                    app:layout_constraintBottom_toTopOf="@id/zip_text"/>
+                    app:layout_constraintBottom_toTopOf="@id/zip_text"
+                    android:importantForAccessibility="no" />
 
                 <TextView
                     android:id="@+id/zip_text"

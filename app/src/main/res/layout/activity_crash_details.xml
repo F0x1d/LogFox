@@ -38,7 +38,8 @@
                 android:layout_marginTop="30dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:contentDescription="@string/app_icon" />
 
             <TextView
                 android:id="@+id/app_name"
@@ -100,7 +101,8 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@id/share_layout"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:contentDescription="@android:string/copy">
 
                         <ImageView
                             android:id="@+id/copy_image"
@@ -112,7 +114,8 @@
                             app:layout_constraintBottom_toTopOf="@id/copy_text"
                             app:layout_constraintEnd_toEndOf="@id/copy_text"
                             app:layout_constraintStart_toStartOf="@id/copy_text"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:importantForAccessibility="no" />
 
                         <TextView
                             android:id="@+id/copy_text"
@@ -142,7 +145,8 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@id/zip_layout"
                         app:layout_constraintStart_toEndOf="@id/copy_layout"
-                        app:layout_constraintTop_toTopOf="parent">
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:contentDescription="@string/share">
 
                         <ImageView
                             android:id="@+id/share_image"
@@ -154,7 +158,8 @@
                             app:layout_constraintBottom_toTopOf="@id/share_text"
                             app:layout_constraintEnd_toEndOf="@id/share_text"
                             app:layout_constraintStart_toStartOf="@id/share_text"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:importantForAccessibility="no" />
 
                         <TextView
                             android:id="@+id/share_text"
@@ -184,7 +189,8 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/share_layout"
-                        app:layout_constraintTop_toTopOf="parent">
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:contentDescription="@string/zip">
 
                         <ImageView
                             android:id="@+id/zip_image"
@@ -196,7 +202,8 @@
                             app:layout_constraintBottom_toTopOf="@id/zip_text"
                             app:layout_constraintEnd_toEndOf="@id/zip_text"
                             app:layout_constraintStart_toStartOf="@id/zip_text"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:importantForAccessibility="no" />
 
                         <TextView
                             android:id="@+id/zip_text"

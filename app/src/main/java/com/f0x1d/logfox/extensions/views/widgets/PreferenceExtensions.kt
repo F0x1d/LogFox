@@ -1,4 +1,4 @@
-package com.f0x1d.logfox.extensions.views
+package com.f0x1d.logfox.extensions.views.widgets
 
 import android.view.LayoutInflater
 import android.view.WindowManager

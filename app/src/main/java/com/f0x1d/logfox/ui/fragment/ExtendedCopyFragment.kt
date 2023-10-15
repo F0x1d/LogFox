@@ -4,9 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.f0x1d.logfox.databinding.FragmentExtendedCopyBinding
+import com.f0x1d.logfox.extensions.views.widgets.setupBackButtonForNavController
 import com.f0x1d.logfox.ui.fragment.base.BaseFragment
 import dev.chrisbanes.insetter.applyInsetter
 
@@ -24,10 +24,7 @@ class ExtendedCopyFragment: BaseFragment<FragmentExtendedCopyBinding>() {
                 padding(vertical = true)
             }
         }
-
-        binding.toolbar.setNavigationOnClickListener {
-            findNavController().popBackStack()
-        }
+        binding.toolbar.setupBackButtonForNavController()
 
         binding.logText.text = navArgs.content
     }
