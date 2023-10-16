@@ -10,6 +10,7 @@
         <item name="materialAlertDialogTheme">@style/LogFoxMaterialAlertDialog</item>
         <item name="bottomSheetDialogTheme">@style/LogFoxBottomSheetDialogStyle</item>
         <item name="preferenceTheme">@style/LogFoxPreferenceTheme</item>
+        <item name="toolbarStyle">@style/LogFoxToolbarStyle</item>
 
         <item name="fontFamily">@font/google_sans</item>
         <item name="android:fontFamily">@font/google_sans</item>
