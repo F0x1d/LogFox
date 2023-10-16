@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="color_primary">#F78D1E</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
     <color name="transparent_black">#40000000</color>
 
     <color name="ic_launcher_background">@color/white</color>
-    <color name="ic_launcher_foreground">#F78D1E</color>
+    <color name="ic_launcher_foreground">@color/color_primary</color>
 
     <color name="card_stroke_color">#ffdadce0</color>
 </resources>
