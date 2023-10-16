@@ -25,4 +25,19 @@
     <style name="LogFoxPreferenceTheme" parent="PreferenceThemeOverlay">
         <item name="android:layout">@layout/fragment_settings</item>
     </style>
+
+    <style name="LogFoxToolbarTitleLargeAppearance" parent="TextAppearance.Material3.TitleLarge">
+        <item name="fontFamily">@font/google_sans_medium</item>
+        <item name="android:fontFamily">@font/google_sans_medium</item>
+    </style>
+
+    <style name="LogFoxToolbarTitleMediumAppearance" parent="TextAppearance.Material3.TitleMedium">
+        <item name="fontFamily">@font/google_sans_medium</item>
+        <item name="android:fontFamily">@font/google_sans_medium</item>
+    </style>
+
+    <style name="LogFoxToolbarStyle" parent="Widget.Material3.Toolbar">
+        <item name="titleTextAppearance">@style/LogFoxToolbarTitleLargeAppearance</item>
+        <item name="subtitleTextAppearance">@style/LogFoxToolbarTitleMediumAppearance</item>
+    </style>
 </resources>
