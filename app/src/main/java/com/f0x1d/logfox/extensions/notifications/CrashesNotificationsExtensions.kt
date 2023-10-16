@@ -28,7 +28,7 @@ fun Context.sendErrorNotification(appCrash: AppCrash) = doIfPermitted {
                 )))
             }
             .setAutoCancel(true)
-            .applyPrimaryColor(this@sendErrorNotification)
+            .applyPrimaryColorIfNeed(this@sendErrorNotification)
             .addAction(
                 R.drawable.ic_copy,
                 getString(android.R.string.copy),
