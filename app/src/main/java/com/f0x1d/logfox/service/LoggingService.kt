@@ -9,7 +9,7 @@ import com.f0x1d.logfox.LogFoxApp
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.extensions.EXIT_APP_INTENT_ID
 import com.f0x1d.logfox.extensions.STOP_LOGGING_SERVICE_INTENT_ID
-import com.f0x1d.logfox.extensions.notifications.applyPrimaryColorIfNeed
+import com.f0x1d.logfox.extensions.notifications.applyPrimaryColorIfNeeded
 import com.f0x1d.logfox.extensions.makeOpenAppPendingIntent
 import com.f0x1d.logfox.extensions.makeServicePendingIntent
 import com.f0x1d.logfox.repository.logging.LoggingRepository
@@ -50,7 +50,7 @@ class LoggingService: Service() {
         .setContentTitle(getString(R.string.logging))
         .setSmallIcon(R.drawable.ic_bug_notification)
         .setContentIntent(makeOpenAppPendingIntent())
-        .applyPrimaryColorIfNeed(this)
+        .applyPrimaryColorIfNeeded(this)
         .addAction(R.drawable.ic_stop, getString(R.string.stop_service), makeServicePendingIntent(STOP_LOGGING_SERVICE_INTENT_ID, LoggingService::class.java) {
             action = ACTION_STOP_SERVICE
         })
