@@ -11,7 +11,7 @@
         android:fitsSystemWindows="true"
         app:liftOnScroll="true">
 
-        <com.f0x1d.logfox.ui.view.OpenSansToolbar
+        <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
