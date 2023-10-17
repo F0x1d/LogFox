@@ -13,7 +13,7 @@ import com.f0x1d.logfox.extensions.copyText
 import com.f0x1d.logfox.extensions.crashToZip
 import com.f0x1d.logfox.extensions.exportFormatted
 import com.f0x1d.logfox.extensions.shareIntent
-import com.f0x1d.logfox.extensions.showAreYouSureDialog
+import com.f0x1d.logfox.extensions.showAreYouSureDeleteDialog
 import com.f0x1d.logfox.extensions.views.replaceAccessibilityDelegateClassNameWithButton
 import com.f0x1d.logfox.extensions.views.widgets.loadIcon
 import com.f0x1d.logfox.extensions.views.widgets.setClickListenerOn
@@ -80,7 +80,7 @@ class CrashDetailsActivity: BaseViewModelActivity<CrashDetailsViewModel, Activit
                 }
             }
             setClickListenerOn(R.id.delete_item) {
-                showAreYouSureDialog(R.string.delete, R.string.delete_warning) {
+                showAreYouSureDeleteDialog {
                     viewModel.deleteCrash(appCrash)
                     finish()
                 }

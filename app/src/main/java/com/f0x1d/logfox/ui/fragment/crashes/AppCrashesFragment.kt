@@ -7,10 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.f0x1d.logfox.R
 import com.f0x1d.logfox.adapter.CrashesAdapter
 import com.f0x1d.logfox.databinding.FragmentAppCrashesBinding
-import com.f0x1d.logfox.extensions.showAreYouSureDialog
+import com.f0x1d.logfox.extensions.showAreYouSureDeleteDialog
 import com.f0x1d.logfox.extensions.views.widgets.setupBackButtonForNavController
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
 import com.f0x1d.logfox.utils.dpToPx
@@ -29,7 +28,7 @@ class AppCrashesFragment: BaseViewModelFragment<AppCrashesViewModel, FragmentApp
             AppCrashesFragmentDirections.actionAppCrashesFragmentToCrashDetailsActivity(it.lastCrash.id)
         )
     }, delete = {
-        showAreYouSureDialog(R.string.delete, R.string.delete_warning) {
+        showAreYouSureDeleteDialog {
             viewModel.deleteCrash(it.lastCrash)
         }
     })

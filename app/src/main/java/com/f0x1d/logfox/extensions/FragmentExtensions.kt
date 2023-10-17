@@ -8,3 +8,14 @@ fun Fragment.showAreYouSureDialog(
     message: Int = R.string.are_you_sure,
     okPressed: () -> Unit
 ) = requireActivity().showAreYouSureDialog(title, message, okPressed)
+
+fun Fragment.showAreYouSureDeleteDialog(okClicked: () -> Unit) = showAreYouSureDialog(
+    R.string.delete,
+    R.string.delete_warning,
+    okClicked
+)
+fun Fragment.showAreYouSureClearDialog(okClicked: () -> Unit) = showAreYouSureDialog(
+    R.string.clear,
+    R.string.clear_warning,
+    okClicked
+)

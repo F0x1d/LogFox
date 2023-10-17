@@ -12,7 +12,8 @@ import com.f0x1d.logfox.adapter.RecordingsAdapter
 import com.f0x1d.logfox.database.entity.LogRecording
 import com.f0x1d.logfox.databinding.FragmentRecordingsBinding
 import com.f0x1d.logfox.extensions.isHorizontalOrientation
-import com.f0x1d.logfox.extensions.showAreYouSureDialog
+import com.f0x1d.logfox.extensions.showAreYouSureClearDialog
+import com.f0x1d.logfox.extensions.showAreYouSureDeleteDialog
 import com.f0x1d.logfox.extensions.startLoggingService
 import com.f0x1d.logfox.extensions.views.widgets.setClickListenerOn
 import com.f0x1d.logfox.extensions.views.widgets.setDescription
@@ -34,7 +35,7 @@ class RecordingsFragment: BaseViewModelFragment<RecordingsViewModel, FragmentRec
     private val adapter = RecordingsAdapter(click = {
         openDetails(it)
     }, delete = {
-        showAreYouSureDialog(R.string.delete, R.string.delete_warning) {
+        showAreYouSureDeleteDialog {
             viewModel.delete(it)
         }
     })
@@ -66,7 +67,7 @@ class RecordingsFragment: BaseViewModelFragment<RecordingsViewModel, FragmentRec
 
         binding.toolbar.inflateMenu(R.menu.recordings_menu)
         binding.toolbar.menu.setClickListenerOn(R.id.clear_item) {
-            showAreYouSureDialog(R.string.clear, R.string.clear_warning) {
+            showAreYouSureClearDialog {
                 viewModel.clearRecordings()
             }
         }

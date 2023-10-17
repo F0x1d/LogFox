@@ -11,7 +11,8 @@ import com.f0x1d.logfox.R
 import com.f0x1d.logfox.adapter.CrashesAdapter
 import com.f0x1d.logfox.databinding.FragmentCrashesBinding
 import com.f0x1d.logfox.extensions.isHorizontalOrientation
-import com.f0x1d.logfox.extensions.showAreYouSureDialog
+import com.f0x1d.logfox.extensions.showAreYouSureClearDialog
+import com.f0x1d.logfox.extensions.showAreYouSureDeleteDialog
 import com.f0x1d.logfox.extensions.views.widgets.setClickListenerOn
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
 import com.f0x1d.logfox.utils.dpToPx
@@ -36,7 +37,7 @@ class CrashesFragment: BaseViewModelFragment<CrashesViewModel, FragmentCrashesBi
 
         findNavController().navigate(direction)
     }, delete = {
-        showAreYouSureDialog(R.string.delete, R.string.delete_warning) {
+        showAreYouSureDeleteDialog {
             viewModel.deleteCrashesByPackageName(it.lastCrash)
         }
     })
@@ -54,7 +55,7 @@ class CrashesFragment: BaseViewModelFragment<CrashesViewModel, FragmentCrashesBi
 
         binding.toolbar.inflateMenu(R.menu.crashes_menu)
         binding.toolbar.menu.setClickListenerOn(R.id.clear_item) {
-            showAreYouSureDialog(R.string.clear, R.string.clear_warning) {
+            showAreYouSureClearDialog {
                 viewModel.clearCrashes()
             }
         }

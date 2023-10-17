@@ -12,7 +12,8 @@ import com.f0x1d.logfox.R
 import com.f0x1d.logfox.adapter.FiltersAdapter
 import com.f0x1d.logfox.databinding.FragmentFiltersBinding
 import com.f0x1d.logfox.extensions.canPickJSON
-import com.f0x1d.logfox.extensions.showAreYouSureDialog
+import com.f0x1d.logfox.extensions.showAreYouSureClearDialog
+import com.f0x1d.logfox.extensions.showAreYouSureDeleteDialog
 import com.f0x1d.logfox.extensions.views.widgets.setClickListenerOn
 import com.f0x1d.logfox.extensions.views.widgets.setupBackButtonForNavController
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
@@ -30,7 +31,7 @@ class FiltersFragment: BaseViewModelFragment<FiltersViewModel, FragmentFiltersBi
             FiltersFragmentDirections.actionFiltersFragmentToEditFilterFragment(it.id)
         )
     }, delete = {
-        showAreYouSureDialog(R.string.delete, R.string.delete_warning) {
+        showAreYouSureDeleteDialog {
             viewModel.delete(it)
         }
     }, checked = { userFilter, checked ->
@@ -64,7 +65,7 @@ class FiltersFragment: BaseViewModelFragment<FiltersViewModel, FragmentFiltersBi
         binding.toolbar.inflateMenu(R.menu.filters_menu)
         binding.toolbar.menu.apply {
             setClickListenerOn(R.id.clear_item) {
-                showAreYouSureDialog(R.string.clear, R.string.clear_warning) {
+                showAreYouSureClearDialog {
                     viewModel.clearAll()
                 }
             }

@@ -17,3 +17,14 @@ fun FragmentActivity.showAreYouSureDialog(
         .setNeutralButton(R.string.no, null)
         .show()
 }
+
+fun FragmentActivity.showAreYouSureDeleteDialog(okClicked: () -> Unit) = showAreYouSureDialog(
+    R.string.delete,
+    R.string.delete_warning,
+    okClicked
+)
+fun FragmentActivity.showAreYouSureClearDialog(okClicked: () -> Unit) = showAreYouSureDialog(
+    R.string.clear,
+    R.string.clear_warning,
+    okClicked
+)
