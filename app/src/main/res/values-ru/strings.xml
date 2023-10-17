@@ -113,4 +113,5 @@
     <string name="add">Добавить</string>
     <string name="crash_details">Детали сбоя</string>
     <string name="app_icon">Иконка приложения</string>
+    <string name="information">Информация</string>
 </resources>

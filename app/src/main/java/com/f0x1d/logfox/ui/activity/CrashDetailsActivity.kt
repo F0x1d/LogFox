@@ -1,7 +1,9 @@
 package com.f0x1d.logfox.ui.activity
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
-import android.widget.Button
+import android.provider.Settings
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import com.f0x1d.logfox.R
@@ -12,8 +14,8 @@ import com.f0x1d.logfox.extensions.crashToZip
 import com.f0x1d.logfox.extensions.exportFormatted
 import com.f0x1d.logfox.extensions.shareIntent
 import com.f0x1d.logfox.extensions.showAreYouSureDialog
-import com.f0x1d.logfox.extensions.views.widgets.loadIcon
 import com.f0x1d.logfox.extensions.views.replaceAccessibilityDelegateClassNameWithButton
+import com.f0x1d.logfox.extensions.views.widgets.loadIcon
 import com.f0x1d.logfox.extensions.views.widgets.setClickListenerOn
 import com.f0x1d.logfox.extensions.views.widgets.setupBackButton
 import com.f0x1d.logfox.ui.activity.base.BaseViewModelActivity
@@ -70,6 +72,13 @@ class CrashDetailsActivity: BaseViewModelActivity<CrashDetailsViewModel, Activit
 
     private fun setupFor(appCrash: AppCrash) {
         binding.toolbar.menu.apply {
+            setClickListenerOn(R.id.info_item) {
+                Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                    data = Uri.fromParts("package", appCrash.packageName, null)
+                }.also {
+                    startActivity(it)
+                }
+            }
             setClickListenerOn(R.id.delete_item) {
                 showAreYouSureDialog(R.string.delete, R.string.delete_warning) {
                     viewModel.deleteCrash(appCrash)

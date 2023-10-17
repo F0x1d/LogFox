@@ -122,4 +122,5 @@
     <string name="add">Add</string>
     <string name="crash_details">Crash details</string>
     <string name="app_icon">App icon</string>
+    <string name="information">Information</string>
 </resources>
