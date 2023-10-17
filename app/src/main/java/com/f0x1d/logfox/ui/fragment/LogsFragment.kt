@@ -233,7 +233,7 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
         invisibleDuringSelection(R.id.restart_logging_item)
 
         title = when {
-            selecting -> count.toString()
+            selecting -> context.resources.getQuantityString(R.plurals.selected_count, count, count)
             viewModel.viewingFile.value -> viewModel.fileUri?.readFileName(requireContext())
 
             else -> getString(R.string.app_name)
