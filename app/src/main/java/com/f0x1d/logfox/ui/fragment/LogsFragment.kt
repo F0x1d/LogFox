@@ -20,7 +20,9 @@ import com.f0x1d.logfox.extensions.readFileName
 import com.f0x1d.logfox.extensions.sendKillApp
 import com.f0x1d.logfox.extensions.sendStopService
 import com.f0x1d.logfox.extensions.startLoggingService
+import com.f0x1d.logfox.extensions.views.widgets.invalidateNavigationButton
 import com.f0x1d.logfox.extensions.views.widgets.setClickListenerOn
+import com.f0x1d.logfox.extensions.views.widgets.setupCloseButton
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
 import com.f0x1d.logfox.utils.fillWithStrings
 import com.f0x1d.logfox.viewmodel.LogsViewModel
@@ -212,10 +214,8 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
             else -> getString(R.string.app_name)
         }
 
-        if (viewing) setNavigationIcon(R.drawable.ic_clear)
-        else {
-            navigationIcon = null
-        }
+        if (viewing) setupCloseButton()
+        else invalidateNavigationButton()
     }
 
     private fun setupToolbarForSelection(selecting: Boolean, count: Int) = binding.toolbar.apply {
@@ -239,10 +239,8 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
             else -> getString(R.string.app_name)
         }
 
-        if (selecting) setNavigationIcon(R.drawable.ic_clear)
-        else if (!viewModel.viewingFile.value) {
-            navigationIcon = null
-        }
+        if (selecting) setupCloseButton()
+        else if (!viewModel.viewingFile.value) invalidateNavigationButton()
     }
 
     private fun scrollLogToBottom() {
