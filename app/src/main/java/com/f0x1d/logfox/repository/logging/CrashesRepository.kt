@@ -25,8 +25,8 @@ class CrashesRepository @Inject constructor(
     private val dumpCollector: DumpCollector
 ): LoggingHelperItemsRepository<AppCrash>(), SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private val crashCollected: suspend (AppCrash) -> Unit = { appCrash ->
-        appCrash.copy(logDump = dumpCollector.dump()).also { appCrash ->
+    private val crashCollected: suspend (AppCrash) -> Unit = {
+        it.copy(logDump = dumpCollector.dump()).also { appCrash ->
             if (appPreferences.collectingFor(appCrash.crashType)) {
                 appCrash.copy(
                     id = database.appCrashDao().insert(appCrash)

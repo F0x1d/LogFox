@@ -1,6 +1,5 @@
 package com.f0x1d.logfox.repository.logging.readers.crashes
 
-import android.util.Log
 import com.f0x1d.logfox.model.LogLine
 import com.f0x1d.logfox.repository.logging.readers.base.LogsReader
 import com.f0x1d.logfox.utils.LimitedArrayList
@@ -23,8 +22,6 @@ class DumpCollector @Inject constructor(
 
     fun dump() = logsDump.joinToString("\n") {
         it.original
-    }.also {
-        Log.e("f0x1d", "dumped ${logsDump.size}, capacity: ${logsDump.capacity}")
     }
 
     override suspend fun readLine(line: LogLine) {
