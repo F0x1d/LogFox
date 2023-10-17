@@ -13,7 +13,6 @@ import com.f0x1d.logfox.NavGraphDirections
 import com.f0x1d.logfox.databinding.SheetRecordingBinding
 import com.f0x1d.logfox.extensions.asUri
 import com.f0x1d.logfox.extensions.exportFormatted
-import com.f0x1d.logfox.extensions.logToZip
 import com.f0x1d.logfox.extensions.shareFileIntent
 import com.f0x1d.logfox.extensions.toLocaleString
 import com.f0x1d.logfox.extensions.views.replaceAccessibilityDelegateClassNameWithButton
@@ -29,14 +28,15 @@ class RecordingBottomSheet: BaseViewModelBottomSheet<RecordingViewModel, SheetRe
 
     override val viewModel by viewModels<RecordingViewModel>()
 
-    private val zipLogLauncher = registerForActivityResult(ActivityResultContracts.CreateDocument("application/zip")) {
-        viewModel.logToZip(
-            it ?: return@registerForActivityResult,
-            viewModel.recording.value ?: return@registerForActivityResult
-        )
+    private val zipLogLauncher = registerForActivityResult(
+        ActivityResultContracts.CreateDocument("application/zip")
+    ) {
+        viewModel.exportZipFile(it ?: return@registerForActivityResult)
     }
     // no plain because android will append .txt itself
-    private val logExportLauncher = registerForActivityResult(ActivityResultContracts.CreateDocument("text/*")) {
+    private val logExportLauncher = registerForActivityResult(
+        ActivityResultContracts.CreateDocument("text/*")
+    ) {
         viewModel.exportFile(it ?: return@registerForActivityResult)
     }
 

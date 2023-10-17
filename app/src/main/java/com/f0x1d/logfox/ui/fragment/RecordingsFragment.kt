@@ -11,6 +11,7 @@ import com.f0x1d.logfox.R
 import com.f0x1d.logfox.adapter.RecordingsAdapter
 import com.f0x1d.logfox.database.entity.LogRecording
 import com.f0x1d.logfox.databinding.FragmentRecordingsBinding
+import com.f0x1d.logfox.extensions.dpToPx
 import com.f0x1d.logfox.extensions.isHorizontalOrientation
 import com.f0x1d.logfox.extensions.showAreYouSureClearDialog
 import com.f0x1d.logfox.extensions.showAreYouSureDeleteDialog
@@ -19,7 +20,6 @@ import com.f0x1d.logfox.extensions.views.widgets.setClickListenerOn
 import com.f0x1d.logfox.extensions.views.widgets.setDescription
 import com.f0x1d.logfox.repository.logging.RecordingState
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
-import com.f0x1d.logfox.utils.dpToPx
 import com.f0x1d.logfox.utils.event.Event
 import com.f0x1d.logfox.viewmodel.recordings.RecordingsViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder

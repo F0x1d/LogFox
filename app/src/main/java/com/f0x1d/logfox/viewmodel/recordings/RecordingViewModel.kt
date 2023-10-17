@@ -5,6 +5,9 @@ import android.net.Uri
 import androidx.lifecycle.asLiveData
 import com.f0x1d.logfox.database.AppDatabase
 import com.f0x1d.logfox.di.viewmodel.RecordingId
+import com.f0x1d.logfox.extensions.io.output.exportToZip
+import com.f0x1d.logfox.extensions.io.output.putZipEntry
+import com.f0x1d.logfox.model.Device
 import com.f0x1d.logfox.repository.logging.RecordingsRepository
 import com.f0x1d.logfox.viewmodel.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,6 +25,7 @@ class RecordingViewModel @Inject constructor(
     @RecordingId val recordingId: Long,
     private val database: AppDatabase,
     private val recordingsRepository: RecordingsRepository,
+    private val device: Device,
     application: Application
 ): BaseViewModel(application) {
 
@@ -40,6 +44,17 @@ class RecordingViewModel @Inject constructor(
             recording.value?.apply {
                 File(file).inputStream().use { inputStream ->
                     inputStream.copyTo(outputStream)
+                }
+            }
+        }
+    }
+
+    fun exportZipFile(uri: Uri) = launchCatching(Dispatchers.IO) {
+        ctx.contentResolver.openOutputStream(uri)?.use {
+            recording.value?.apply {
+                it.exportToZip {
+                    putZipEntry("device.txt", device.toString().encodeToByteArray())
+                    putZipEntry("recorded.log", File(file))
                 }
             }
         }

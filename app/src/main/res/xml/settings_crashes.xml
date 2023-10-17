@@ -3,6 +3,22 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <PreferenceCategory
+        android:title="@string/logs_dump"
+        app:iconSpaceReserved="false"
+        app:allowDividerAbove="false">
+
+        <Preference
+            android:summary="@string/logs_dump_description"
+            android:selectable="false"
+            app:iconSpaceReserved="false" />
+
+        <Preference
+            android:title="@string/logs_dump_lines_count"
+            android:key="pref_logs_dump_lines_count"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:title="@string/crashes"
         app:iconSpaceReserved="false"
         app:allowDividerAbove="false">

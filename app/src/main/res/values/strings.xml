@@ -123,4 +123,7 @@
     <string name="crash_details">Crash details</string>
     <string name="app_icon">App icon</string>
     <string name="information">Information</string>
+    <string name="logs_dump">Logs dump</string>
+    <string name="logs_dump_description">These are some system logs before the crash itself</string>
+    <string name="logs_dump_lines_count">Dump lines count</string>
 </resources>

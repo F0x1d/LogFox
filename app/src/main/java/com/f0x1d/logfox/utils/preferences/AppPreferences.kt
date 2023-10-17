@@ -10,12 +10,15 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class AppPreferences @Inject constructor(@ApplicationContext context: Context): BasePreferences(context) {
+class AppPreferences @Inject constructor(
+    @ApplicationContext context: Context
+): BasePreferences(context) {
 
     companion object {
         const val LOGS_UPDATE_INTERVAL_DEFAULT = 300L
         const val LOGS_TEXT_SIZE_DEFAULT = 14
         const val LOGS_DISPLAY_LIMIT_DEFAULT = 10000
+        const val LOGS_DUMP_LINES_COUNT_DEFAULT = 100
     }
 
     var startOnBoot
@@ -89,6 +92,10 @@ class AppPreferences @Inject constructor(@ApplicationContext context: Context): 
         showLogTag,
         showLogContent
     )
+
+    var logsDumpLinesCount
+        get() = get("pref_logs_dump_lines_count", LOGS_DUMP_LINES_COUNT_DEFAULT)
+        set(value) { put("pref_logs_dump_lines_count", value) }
 
     fun collectingFor(crashType: CrashType) = get("pref_collect_${crashType.readableName.lowercase()}", true)
     fun showingNotificationsFor(crashType: CrashType) = get("pref_notifications_${crashType.readableName.lowercase()}", true)

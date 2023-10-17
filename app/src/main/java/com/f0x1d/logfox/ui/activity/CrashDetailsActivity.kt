@@ -10,7 +10,6 @@ import com.f0x1d.logfox.R
 import com.f0x1d.logfox.database.entity.AppCrash
 import com.f0x1d.logfox.databinding.ActivityCrashDetailsBinding
 import com.f0x1d.logfox.extensions.copyText
-import com.f0x1d.logfox.extensions.crashToZip
 import com.f0x1d.logfox.extensions.exportFormatted
 import com.f0x1d.logfox.extensions.shareIntent
 import com.f0x1d.logfox.extensions.showAreYouSureDeleteDialog
@@ -29,11 +28,10 @@ class CrashDetailsActivity: BaseViewModelActivity<CrashDetailsViewModel, Activit
 
     override val viewModel by viewModels<CrashDetailsViewModel>()
 
-    private val zipCrashLauncher = registerForActivityResult(ActivityResultContracts.CreateDocument("application/zip")) {
-        viewModel.crashToZip(
-            it ?: return@registerForActivityResult,
-            viewModel.crash.value ?: return@registerForActivityResult
-        )
+    private val zipCrashLauncher = registerForActivityResult(
+        ActivityResultContracts.CreateDocument("application/zip")
+    ) {
+        viewModel.exportCrashToZip(it ?: return@registerForActivityResult)
     }
 
     override fun inflateBinding() = ActivityCrashDetailsBinding.inflate(layoutInflater)

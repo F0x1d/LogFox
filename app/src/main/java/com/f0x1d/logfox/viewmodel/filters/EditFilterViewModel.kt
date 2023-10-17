@@ -10,8 +10,8 @@ import com.f0x1d.logfox.extensions.sendEvent
 import com.f0x1d.logfox.model.InstalledApp
 import com.f0x1d.logfox.model.LogLevel
 import com.f0x1d.logfox.repository.logging.FiltersRepository
-import com.f0x1d.logfox.utils.exportFilters
 import com.f0x1d.logfox.viewmodel.base.BaseViewModel
+import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,6 +27,7 @@ class EditFilterViewModel @Inject constructor(
     @FilterId val filterId: Long?,
     private val database: AppDatabase,
     private val filtersRepository: FiltersRepository,
+    private val gson: Gson,
     application: Application
 ): BaseViewModel(application) {
 
@@ -80,10 +81,11 @@ class EditFilterViewModel @Inject constructor(
     )
 
     fun export(uri: Uri) = launchCatching(Dispatchers.IO) {
-        ctx.contentResolver.openOutputStream(uri)?.exportFilters(
-            ctx,
-            filter.value?.let { listOf(it) } ?: emptyList()
-        )
+        ctx.contentResolver.openOutputStream(uri)?.use { outputStream ->
+            val filters = filter.value?.let { listOf(it) } ?: emptyList()
+
+            outputStream.write(gson.toJson(filters).encodeToByteArray())
+        }
     }
 
     fun filterLevel(which: Int, filtering: Boolean) {

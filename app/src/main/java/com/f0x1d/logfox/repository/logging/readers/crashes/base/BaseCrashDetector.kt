@@ -11,13 +11,13 @@ abstract class BaseCrashDetector(private val collected: suspend (AppCrash) -> Un
     protected abstract val crashType: CrashType
     protected open val commonTag: String? = null
     protected open val linesModifier: MutableList<LogLine>.() -> Unit = {
-        commonTag?.apply {
-            removeAll { it.tag != this }
+        commonTag?.also { tag ->
+            removeAll { line -> line.tag != tag }
         }
     }
 
     private var collecting = false
-    protected var collectedFirstLine: LogLine? = null
+    private var collectedFirstLine: LogLine? = null
     private val collectedLines = mutableListOf<LogLine>()
     private val defaultChecker = DefaultChecker()
 
@@ -55,17 +55,20 @@ abstract class BaseCrashDetector(private val collected: suspend (AppCrash) -> Un
     }
 
     private fun logsToAppCrash(crashedAppPackageName: String, crashType: CrashType, lines: List<LogLine>) = LogFoxApp.instance.run {
-        try {
-            val appInfo = packageManager.getPackageInfo(crashedAppPackageName, 0).applicationInfo
-            AppCrash(
-                packageManager.getApplicationLabel(appInfo).toString(),
-                crashedAppPackageName,
-                crashType,
-                lines.first().dateAndTime,
-                lines.joinToString("\n") { it.content }
-            )
+        val appName = try {
+            packageManager.getPackageInfo(crashedAppPackageName, 0).applicationInfo.let {
+                packageManager.getApplicationLabel(it).toString()
+            }
         } catch (e: Exception) {
-            AppCrash(null, crashedAppPackageName, crashType, lines.first().dateAndTime, lines.joinToString("\n") { it.content })
+            null
         }
+
+        AppCrash(
+            appName,
+            crashedAppPackageName,
+            crashType,
+            lines.first().dateAndTime,
+            lines.joinToString("\n") { it.content }
+        )
     }
 }
