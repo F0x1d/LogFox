@@ -26,19 +26,23 @@ class CrashesRepository @Inject constructor(
 ): LoggingHelperItemsRepository<AppCrash>(), SharedPreferences.OnSharedPreferenceChangeListener {
 
     private val crashCollected: suspend (AppCrash) -> Unit = {
-        it.copy(logDump = dumpCollector.dump()).also { appCrash ->
-            if (appPreferences.collectingFor(appCrash.crashType)) {
-                appCrash.copy(
-                    id = database.appCrashDao().insert(appCrash)
-                ).also { appCrash ->
-                    if (appPreferences.showingNotificationsFor(appCrash.crashType)) {
-                        context.sendErrorNotification(appCrash)
-                    }
-                }
-            } else if (appPreferences.showingNotificationsFor(appCrash.crashType)) {
+        val sendNotificationIfNeeded = { appCrash: AppCrash ->
+            if (appPreferences.showingNotificationsFor(appCrash.crashType)) {
                 context.sendErrorNotification(appCrash)
             }
         }
+
+        val appCrash = it.copy(logDump = dumpCollector.dump())
+
+        if (appPreferences.collectingFor(appCrash.crashType)) {
+            val appCrashWithId = appCrash.copy(
+                id = database.appCrashDao().insert(appCrash)
+            )
+
+            sendNotificationIfNeeded(appCrashWithId)
+        } else sendNotificationIfNeeded(
+            appCrash
+        )
     }
 
     override val readers = listOf(

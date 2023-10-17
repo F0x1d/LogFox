@@ -18,7 +18,7 @@ class DumpCollector @Inject constructor(
             field = value
         }
 
-    val logsDump = LimitedArrayList<LogLine>(capacity)
+    private val logsDump = LimitedArrayList<LogLine>(capacity)
 
     fun dump() = logsDump.joinToString("\n") {
         it.original
