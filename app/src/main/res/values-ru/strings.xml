@@ -114,4 +114,7 @@
     <string name="crash_details">Детали сбоя</string>
     <string name="app_icon">Иконка приложения</string>
     <string name="information">Информация</string>
+    <string name="logs_dump">Свалка логов</string>
+    <string name="logs_dump_description">Это системные логи, которые были до сбоя приложения</string>
+    <string name="logs_dump_lines_count">Количество строк в свалке логов</string>
 </resources>
