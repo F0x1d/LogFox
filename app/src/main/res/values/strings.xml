@@ -124,6 +124,6 @@
     <string name="app_icon">App icon</string>
     <string name="information">Information</string>
     <string name="logs_dump">Logs dump</string>
-    <string name="logs_dump_description">These are some system logs before the crash of the app itself</string>
+    <string name="logs_dump_description">These are the system logs saved before the app itself crashed</string>
     <string name="logs_dump_lines_count">Logs dump lines count</string>
 </resources>
