@@ -225,6 +225,7 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
         val visibleDuringSelection = { itemId: Int -> setVisibility(itemId, selecting) }
         val invisibleDuringSelection = { itemId: Int -> setVisibility(itemId, !selecting) }
 
+        invisibleDuringSelection(R.id.pause_item)
         invisibleDuringSelection(R.id.search_item)
         invisibleDuringSelection(R.id.filters_item)
         visibleDuringSelection(R.id.selected_item)
