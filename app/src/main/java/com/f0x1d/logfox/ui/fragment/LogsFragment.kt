@@ -20,7 +20,9 @@ import com.f0x1d.logfox.extensions.readFileName
 import com.f0x1d.logfox.extensions.sendKillApp
 import com.f0x1d.logfox.extensions.sendStopService
 import com.f0x1d.logfox.extensions.startLoggingService
+import com.f0x1d.logfox.extensions.views.widgets.invalidateNavigationButton
 import com.f0x1d.logfox.extensions.views.widgets.setClickListenerOn
+import com.f0x1d.logfox.extensions.views.widgets.setupCloseButton
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
 import com.f0x1d.logfox.utils.fillWithStrings
 import com.f0x1d.logfox.viewmodel.LogsViewModel
@@ -212,10 +214,8 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
             else -> getString(R.string.app_name)
         }
 
-        if (viewing) setNavigationIcon(R.drawable.ic_clear)
-        else {
-            navigationIcon = null
-        }
+        if (viewing) setupCloseButton()
+        else invalidateNavigationButton()
     }
 
     private fun setupToolbarForSelection(selecting: Boolean, count: Int) = binding.toolbar.apply {
@@ -225,6 +225,7 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
         val visibleDuringSelection = { itemId: Int -> setVisibility(itemId, selecting) }
         val invisibleDuringSelection = { itemId: Int -> setVisibility(itemId, !selecting) }
 
+        invisibleDuringSelection(R.id.pause_item)
         invisibleDuringSelection(R.id.search_item)
         invisibleDuringSelection(R.id.filters_item)
         visibleDuringSelection(R.id.selected_item)
@@ -233,16 +234,14 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
         invisibleDuringSelection(R.id.restart_logging_item)
 
         title = when {
-            selecting -> count.toString()
+            selecting -> resources.getQuantityString(R.plurals.selected_count, count, count)
             viewModel.viewingFile.value -> viewModel.fileUri?.readFileName(requireContext())
 
             else -> getString(R.string.app_name)
         }
 
-        if (selecting) setNavigationIcon(R.drawable.ic_clear)
-        else if (!viewModel.viewingFile.value) {
-            navigationIcon = null
-        }
+        if (selecting) setupCloseButton()
+        else if (!viewModel.viewingFile.value) invalidateNavigationButton()
     }
 
     private fun scrollLogToBottom() {

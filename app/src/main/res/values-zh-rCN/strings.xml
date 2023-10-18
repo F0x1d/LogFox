@@ -114,4 +114,5 @@
     <string name="add">添加</string>
     <string name="crash_details">崩溃详情</string>
     <string name="app_icon">应用图标</string>
+    <string name="information">信息</string>
 </resources>

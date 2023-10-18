@@ -14,3 +14,13 @@ fun Toolbar.setupBackButton(onClickListener: View.OnClickListener) {
 fun Toolbar.setupBackButtonForNavController() {
     setupBackButton { findNavController().popBackStack() }
 }
+
+fun Toolbar.setupCloseButton() {
+    setNavigationIcon(R.drawable.ic_clear)
+    setNavigationContentDescription(R.string.close)
+}
+
+fun Toolbar.invalidateNavigationButton() {
+    navigationIcon = null
+    navigationContentDescription = null
+}
