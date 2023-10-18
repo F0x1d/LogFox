@@ -125,10 +125,10 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
         })
 
         binding.scrollFab.setOnClickListener {
+            scrollLogToBottom()
+
             if (viewModel.resumeLoggingWithBottomTouch)
                 viewModel.resume()
-            else
-                scrollLogToBottom()
         }
 
         viewModel.selectedItems.asLiveData().observe(viewLifecycleOwner) {
@@ -141,8 +141,6 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
         }
 
         viewModel.logs.observe(viewLifecycleOwner) {
-            // TODO: Understand why all ListAdapters stop working after 15 minutes without submitting null
-
             adapter.submitList(null)
             adapter.submitList(it ?: return@observe) {
                 scrollLogToBottom()
