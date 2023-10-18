@@ -19,6 +19,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.scan
@@ -47,12 +48,12 @@ class LogsViewModel @Inject constructor(
         fileUri?.readFileContentsAsFlow(ctx, appPreferences) ?: loggingRepository.logsFlow,
         database.userFilterDao().getAllAsFlow(),
         query,
-        if (!viewingFile) paused else MutableStateFlow(true)
+        if (!viewingFile) paused else flowOf(false)
     ) { logs, filters, query, paused ->
         LogsData(logs, filters, query, paused)
     }.scan(null as LogsData?) { accumulator, data ->
         when {
-            !data.paused || viewingFile -> data
+            !data.paused -> data
 
             data.query != accumulator?.query -> data.copy(logs = accumulator?.logs ?: emptyList())
             data.filters != accumulator?.filters -> data.copy(logs = accumulator?.logs ?: emptyList())

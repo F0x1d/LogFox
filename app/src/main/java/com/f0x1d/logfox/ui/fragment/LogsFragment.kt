@@ -125,10 +125,10 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
         })
 
         binding.scrollFab.setOnClickListener {
-            scrollLogToBottom()
-
             if (viewModel.resumeLoggingWithBottomTouch)
                 viewModel.resume()
+            else
+                scrollLogToBottom()
         }
 
         viewModel.selectedItems.asLiveData().observe(viewLifecycleOwner) {
