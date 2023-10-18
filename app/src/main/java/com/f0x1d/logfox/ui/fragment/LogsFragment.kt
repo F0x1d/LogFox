@@ -181,14 +181,15 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
         }
         val visibleDuringSelection = { itemId: Int -> setVisibility(itemId, selecting) }
         val invisibleDuringSelection = { itemId: Int -> setVisibility(itemId, !selecting) }
+        val visibleOnlyInDefault = { itemId: Int -> setVisibility(itemId, !selecting && !viewModel.viewingFile) }
 
-        setVisibility(R.id.pause_item, !selecting && !viewModel.viewingFile)
+        visibleOnlyInDefault(R.id.pause_item)
         invisibleDuringSelection(R.id.search_item)
         invisibleDuringSelection(R.id.filters_item)
         visibleDuringSelection(R.id.selected_item)
-        invisibleDuringSelection(R.id.clear_item)
-        invisibleDuringSelection(R.id.service_status_item)
-        invisibleDuringSelection(R.id.restart_logging_item)
+        visibleOnlyInDefault(R.id.clear_item)
+        visibleOnlyInDefault(R.id.service_status_item)
+        visibleOnlyInDefault(R.id.restart_logging_item)
 
         title = when {
             selecting -> resources.getQuantityString(R.plurals.selected_count, count, count)
