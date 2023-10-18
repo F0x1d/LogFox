@@ -15,6 +15,7 @@ Yet another LogCat reader for Android
 - Show crashes
 - Observing and notifying about Java/JNI crashes and ANRs
 - Powerful filters
+- Accessibility support
 - Material You design
 
 ## Download
@@ -38,7 +39,7 @@ Yet another LogCat reader for Android
 ## License
 
 ```txt
-Copyright (C) 2022-2023 Zoteev Maksim
+Copyright (C) 2022-2023 Maksim Zoteev
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
