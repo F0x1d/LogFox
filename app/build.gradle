@@ -18,8 +18,8 @@ android {
         applicationId "com.f0x1d.logfox"
         minSdk 24
         targetSdk 34
-        versionCode 47
-        versionName "1.4.5"
+        versionCode 48
+        versionName "1.4.6"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
