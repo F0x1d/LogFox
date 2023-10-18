@@ -8,6 +8,7 @@ import com.f0x1d.logfox.database.entity.UserFilter
 import com.f0x1d.logfox.di.viewmodel.FileUri
 import com.f0x1d.logfox.extensions.logline.filterAndSearch
 import com.f0x1d.logfox.extensions.readFileContentsAsFlow
+import com.f0x1d.logfox.extensions.readFileName
 import com.f0x1d.logfox.extensions.updateList
 import com.f0x1d.logfox.model.LogLine
 import com.f0x1d.logfox.repository.logging.LoggingRepository
@@ -37,38 +38,24 @@ class LogsViewModel @Inject constructor(
 
     val paused = MutableStateFlow(false)
 
-    val viewingFile = MutableStateFlow(fileUri != null)
+    val viewingFile = fileUri != null
+    val viewingFileName = fileUri?.readFileName(ctx)
 
     val selectedItems = MutableStateFlow(emptyList<LogLine>())
 
-    @Suppress("UNCHECKED_CAST")
     val logs = combine(
-        loggingRepository.logsFlow,
-        fileUri.readFileContentsAsFlow(ctx, appPreferences),
-        viewingFile,
+        fileUri?.readFileContentsAsFlow(ctx, appPreferences) ?: loggingRepository.logsFlow,
         database.userFilterDao().getAllAsFlow(),
         query,
-        paused
-    ) { values ->
-        val logs = values[0] as List<LogLine>
-        val fileLogs = values[1] as List<LogLine>
-        val viewingFile = values[2] as Boolean
-        val filters = values[3] as List<UserFilter>
-        val query = values[4] as String?
-        val paused = values[5] as Boolean
-
-        val resultLogs = when {
-            viewingFile -> fileLogs
-            else -> logs
-        }
-
-        LogsData(resultLogs, viewingFile, filters, query, paused)
+        if (!viewingFile) paused else MutableStateFlow(true)
+    ) { logs, filters, query, paused ->
+        LogsData(logs, filters, query, paused)
     }.scan(null as LogsData?) { accumulator, data ->
         when {
-            !data.paused || data.viewingFile != accumulator?.viewingFile -> data
+            !data.paused || viewingFile -> data
 
-            data.query != accumulator.query -> data.copy(logs = accumulator.logs)
-            data.filters != accumulator.filters -> data.copy(logs = accumulator.logs)
+            data.query != accumulator?.query -> data.copy(logs = accumulator?.logs ?: emptyList())
+            data.filters != accumulator?.filters -> data.copy(logs = accumulator?.logs ?: emptyList())
 
             else -> data.copy(logs = accumulator.logs, passing = false)
         }
@@ -85,14 +72,6 @@ class LogsViewModel @Inject constructor(
     val serviceRunningData = loggingRepository.serviceRunningFlow.asLiveData()
 
     val resumeLoggingWithBottomTouch get() = appPreferences.resumeLoggingWithBottomTouch
-
-    fun stopViewingFile() = viewingFile.apply {
-        selectedItems.update { emptyList() }
-
-        if (value) update {
-            false
-        }
-    }
 
     fun selectLine(logLine: LogLine, selected: Boolean) = selectedItems.updateList {
         if (selected) add(
@@ -119,7 +98,6 @@ class LogsViewModel @Inject constructor(
 
 data class LogsData(
     val logs: List<LogLine>,
-    val viewingFile: Boolean,
     val filters: List<UserFilter>,
     val query: String?,
     val paused: Boolean,
