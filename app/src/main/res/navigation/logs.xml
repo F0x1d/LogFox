@@ -48,12 +48,7 @@
     <dialog
         android:id="@+id/searchBottomSheet"
         android:name="com.f0x1d.logfox.ui.dialog.SearchBottomSheet"
-        android:label="SearchBottomSheet" >
-        <argument
-            android:name="query"
-            app:argType="string"
-            app:nullable="true" />
-    </dialog>
+        android:label="SearchBottomSheet" />
     <fragment
         android:id="@+id/filtersFragment"
         android:name="com.f0x1d.logfox.ui.fragment.filters.FiltersFragment"

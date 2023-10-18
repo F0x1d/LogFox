@@ -16,12 +16,12 @@ import com.f0x1d.logfox.adapter.LogsAdapter
 import com.f0x1d.logfox.databinding.FragmentLogsBinding
 import com.f0x1d.logfox.extensions.copyText
 import com.f0x1d.logfox.extensions.isHorizontalOrientation
-import com.f0x1d.logfox.extensions.readFileName
 import com.f0x1d.logfox.extensions.sendKillApp
 import com.f0x1d.logfox.extensions.sendStopService
 import com.f0x1d.logfox.extensions.startLoggingService
 import com.f0x1d.logfox.extensions.views.widgets.invalidateNavigationButton
 import com.f0x1d.logfox.extensions.views.widgets.setClickListenerOn
+import com.f0x1d.logfox.extensions.views.widgets.setupBackButtonForBackPressedDispatcher
 import com.f0x1d.logfox.extensions.views.widgets.setupCloseButton
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
 import com.f0x1d.logfox.utils.fillWithStrings
@@ -44,11 +44,6 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
     }
     private var changingState = false
 
-    private val stopViewingFileBackPressedCallback = object : OnBackPressedCallback(false) {
-        override fun handleOnBackPressed() {
-            viewModel.stopViewingFile()
-        }
-    }
     private val clearSelectionBackPressedCallback = object : OnBackPressedCallback(false) {
         override fun handleOnBackPressed() {
             viewModel.selectedItems.update {
@@ -83,7 +78,7 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
                 viewModel.switchState()
             }
             setClickListenerOn(R.id.search_item) {
-                findNavController().navigate(LogsFragmentDirections.actionLogsFragmentToSearchBottomSheet(viewModel.query.value))
+                findNavController().navigate(LogsFragmentDirections.actionLogsFragmentToSearchBottomSheet())
             }
             setClickListenerOn(R.id.filters_item) {
                 findNavController().navigate(LogsFragmentDirections.actionLogsFragmentToFiltersFragment())
@@ -112,14 +107,6 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
                 requireContext().sendKillApp()
             }
         }
-        binding.toolbar.setNavigationOnClickListener {
-            viewModel.apply {
-                if (selectedItems.value.isNotEmpty()) selectedItems.update {
-                    emptyList()
-                } else if (viewModel.viewingFile.value)
-                    viewModel.stopViewingFile()
-            }
-        }
 
         binding.logsRecycler.layoutManager = LinearLayoutManager(requireContext())
         binding.logsRecycler.itemAnimator = null
@@ -144,17 +131,12 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
                 scrollLogToBottom()
         }
 
-        viewModel.viewingFile.asLiveData().observe(viewLifecycleOwner) {
-            stopViewingFileBackPressedCallback.isEnabled = it
-            setupToolbarForFile(it)
-        }
-
         viewModel.selectedItems.asLiveData().observe(viewLifecycleOwner) {
             val selecting = it.isNotEmpty()
 
             clearSelectionBackPressedCallback.isEnabled = selecting
-            adapter.selectedItems = it
 
+            adapter.selectedItems = it
             setupToolbarForSelection(selecting, it.size)
         }
 
@@ -169,15 +151,18 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
 
         viewModel.paused.asLiveData().observe(viewLifecycleOwner) { paused ->
             changingState = true
+
             binding.toolbar.menu.findItem(R.id.pause_item)
                 .setIcon(if (paused) R.drawable.ic_play else R.drawable.ic_pause)
                 .setTitle(if (paused) R.string.resume else R.string.pause)
+
             if (paused) {
                 binding.scrollFab.show()
             } else {
                 binding.scrollFab.hide()
                 scrollLogToBottom()
             }
+
             changingState = false
         }
 
@@ -186,36 +171,8 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
         }
 
         requireActivity().onBackPressedDispatcher.apply {
-            addCallback(viewLifecycleOwner, stopViewingFileBackPressedCallback)
             addCallback(viewLifecycleOwner, clearSelectionBackPressedCallback)
         }
-    }
-
-    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
-        viewModel.appPreferences.apply {
-            if (key == "pref_logs_text_size") adapter.textSize = logsTextSize.toFloat()
-            else if (key == "pref_logs_expanded") adapter.logsExpanded = logsExpanded
-
-            if (key?.startsWith("pref_show_log") == true) adapter.logsFormat = showLogValues
-        }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        viewModel.appPreferences.unregisterListener(this)
-    }
-
-    private fun setupToolbarForFile(viewing: Boolean) = binding.toolbar.apply {
-        menu.findItem(R.id.pause_item).isVisible = !viewing
-
-        title = when (viewing) {
-            true -> viewModel.fileUri?.readFileName(requireContext())
-
-            else -> getString(R.string.app_name)
-        }
-
-        if (viewing) setupCloseButton()
-        else invalidateNavigationButton()
     }
 
     private fun setupToolbarForSelection(selecting: Boolean, count: Int) = binding.toolbar.apply {
@@ -225,7 +182,7 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
         val visibleDuringSelection = { itemId: Int -> setVisibility(itemId, selecting) }
         val invisibleDuringSelection = { itemId: Int -> setVisibility(itemId, !selecting) }
 
-        invisibleDuringSelection(R.id.pause_item)
+        setVisibility(R.id.pause_item, !selecting && !viewModel.viewingFile)
         invisibleDuringSelection(R.id.search_item)
         invisibleDuringSelection(R.id.filters_item)
         visibleDuringSelection(R.id.selected_item)
@@ -235,13 +192,24 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
 
         title = when {
             selecting -> resources.getQuantityString(R.plurals.selected_count, count, count)
-            viewModel.viewingFile.value -> viewModel.fileUri?.readFileName(requireContext())
+            viewModel.viewingFile -> viewModel.viewingFileName
 
             else -> getString(R.string.app_name)
         }
 
-        if (selecting) setupCloseButton()
-        else if (!viewModel.viewingFile.value) invalidateNavigationButton()
+        if (selecting) {
+            setupCloseButton()
+
+            setNavigationOnClickListener {
+                viewModel.selectedItems.update {
+                    emptyList()
+                }
+            }
+        } else if (viewModel.viewingFile)
+            // For new activities with opened files
+            setupBackButtonForBackPressedDispatcher(requireActivity())
+
+        else invalidateNavigationButton()
     }
 
     private fun scrollLogToBottom() {
@@ -270,5 +238,19 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
             }
             .setPositiveButton(R.string.close, null)
             .show()
+    }
+
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+        viewModel.appPreferences.apply {
+            if (key == "pref_logs_text_size") adapter.textSize = logsTextSize.toFloat()
+            else if (key == "pref_logs_expanded") adapter.logsExpanded = logsExpanded
+
+            if (key?.startsWith("pref_show_log") == true) adapter.logsFormat = showLogValues
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel.appPreferences.unregisterListener(this)
     }
 }
