@@ -6,12 +6,12 @@ import androidx.preference.Preference
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.extensions.applyTheme
 import com.f0x1d.logfox.extensions.catchingNotNumber
+import com.f0x1d.logfox.extensions.fillWithStrings
 import com.f0x1d.logfox.extensions.views.widgets.observeAndUpdateSummary
 import com.f0x1d.logfox.extensions.views.widgets.observeAndUpdateSummaryForList
 import com.f0x1d.logfox.extensions.views.widgets.setupAsEditTextPreference
 import com.f0x1d.logfox.extensions.views.widgets.setupAsListPreference
 import com.f0x1d.logfox.ui.fragment.settings.base.BasePreferenceFragment
-import com.f0x1d.logfox.utils.fillWithStrings
 import com.f0x1d.logfox.utils.preferences.AppPreferences
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint

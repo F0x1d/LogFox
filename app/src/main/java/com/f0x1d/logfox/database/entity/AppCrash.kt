@@ -10,6 +10,7 @@ data class AppCrash(
     @ColumnInfo(name = "crash_type") val crashType: CrashType,
     @ColumnInfo(name = "date_and_time") val dateAndTime: Long,
     @ColumnInfo(name = "log") val log: String,
+    @ColumnInfo(name = "log_dump") val logDump: String? = null,
     @PrimaryKey(autoGenerate = true) val id: Long = 0
 ) {
     val notificationId get() = (if (id == 0L) dateAndTime else id).toInt()

@@ -15,7 +15,7 @@ import com.f0x1d.logfox.database.entity.LogRecordingDao
 import com.f0x1d.logfox.database.entity.UserFilter
 import com.f0x1d.logfox.database.entity.UserFilterDao
 
-@Database(entities = [AppCrash::class, LogRecording::class, UserFilter::class], version = 9)
+@Database(entities = [AppCrash::class, LogRecording::class, UserFilter::class], version = 10)
 @TypeConverters(CrashTypeConverter::class, AllowedLevelsConverter::class)
 abstract class AppDatabase: RoomDatabase() {
 
@@ -44,6 +44,9 @@ abstract class AppDatabase: RoomDatabase() {
         val MIGRATION_8_9 = Migration(8, 9) {
             it.execSQL("ALTER TABLE UserFilter ADD COLUMN uid TEXT")
             it.execSQL("ALTER TABLE UserFilter ADD COLUMN package_name TEXT")
+        }
+        val MIGRATION_9_10 = Migration(9, 10) {
+            it.execSQL("ALTER TABLE AppCrash ADD COLUMN log_dump TEXT")
         }
     }
 

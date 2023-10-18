@@ -114,5 +114,8 @@
     <string name="add">添加</string>
     <string name="crash_details">崩溃详情</string>
     <string name="app_icon">应用图标</string>
-    <string name="information">信息</string>
+    <string name="information">详情信息</string>
+    <string name="logs_dump">日志转储</string>
+    <string name="logs_dump_description">这些是应用自身崩溃前保存的系统日志</string>
+    <string name="logs_dump_lines_count">日志转储行数</string>
 </resources>

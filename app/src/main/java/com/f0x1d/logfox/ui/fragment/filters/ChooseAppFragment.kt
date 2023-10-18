@@ -12,9 +12,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.adapter.AppsAdapter
 import com.f0x1d.logfox.databinding.FragmentChooseAppBinding
+import com.f0x1d.logfox.extensions.dpToPx
 import com.f0x1d.logfox.extensions.views.widgets.setupBackButtonForNavController
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
-import com.f0x1d.logfox.utils.dpToPx
 import com.f0x1d.logfox.viewmodel.filters.ChooseAppViewModel
 import com.f0x1d.logfox.viewmodel.filters.EditFilterViewModel
 import com.google.android.material.divider.MaterialDividerItemDecoration
