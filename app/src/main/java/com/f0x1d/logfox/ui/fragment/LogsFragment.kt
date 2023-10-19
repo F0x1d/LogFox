@@ -15,7 +15,6 @@ import com.f0x1d.logfox.R
 import com.f0x1d.logfox.adapter.LogsAdapter
 import com.f0x1d.logfox.databinding.FragmentLogsBinding
 import com.f0x1d.logfox.extensions.copyText
-import com.f0x1d.logfox.extensions.fillWithStrings
 import com.f0x1d.logfox.extensions.isHorizontalOrientation
 import com.f0x1d.logfox.extensions.sendKillApp
 import com.f0x1d.logfox.extensions.sendStopService
@@ -26,7 +25,6 @@ import com.f0x1d.logfox.extensions.views.widgets.setupBackButtonForBackPressedDi
 import com.f0x1d.logfox.extensions.views.widgets.setupCloseButton
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
 import com.f0x1d.logfox.viewmodel.LogsViewModel
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import dev.chrisbanes.insetter.applyInsetter
 import kotlinx.coroutines.flow.update
@@ -83,8 +81,12 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
             setClickListenerOn(R.id.filters_item) {
                 findNavController().navigate(LogsFragmentDirections.actionLogsFragmentToFiltersFragment())
             }
-            setClickListenerOn(R.id.selected_item) {
-                showSelectedDialog()
+            setClickListenerOn(R.id.copy_selected_item) {
+                requireContext().copyText(viewModel.selectedItemsContent)
+                snackbar(R.string.text_copied)
+            }
+            setClickListenerOn(R.id.extended_copy_selected_item) {
+                findNavController().navigate(LogsFragmentDirections.actionLogsFragmentToLogsExtendedCopyFragment(viewModel.selectedItemsContent))
             }
             setClickListenerOn(R.id.clear_item) {
                 viewModel.clearLogs()
@@ -214,29 +216,6 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
     private fun scrollLogToBottom() {
         binding.logsRecycler.stopScroll()
         binding.logsRecycler.scrollToPosition(adapter.itemCount - 1)
-    }
-
-    private fun showSelectedDialog() {
-        if (adapter.selectedItems.isEmpty()) {
-            snackbar(R.string.nothing_is_selected)
-            return
-        }
-
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle(R.string.selected)
-            .setIcon(R.drawable.ic_dialog_checklist)
-            .setItems(intArrayOf(android.R.string.copy, R.string.extended_copy).fillWithStrings(requireContext())) { dialog, which ->
-                val textToCopy = adapter.selectedItems.joinToString("\n") { it.original }
-                when (which) {
-                    0 -> {
-                        requireContext().copyText(textToCopy)
-                        snackbar(R.string.text_copied)
-                    }
-                    1 -> findNavController().navigate(LogsFragmentDirections.actionLogsFragmentToLogsExtendedCopyFragment(textToCopy))
-                }
-            }
-            .setPositiveButton(R.string.close, null)
-            .show()
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
