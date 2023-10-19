@@ -21,7 +21,8 @@
         <activity
             android:name=".ui.activity.MainActivity"
             android:windowSoftInputMode="adjustResize"
-            android:exported="true">
+            android:exported="true"
+            android:documentLaunchMode="intoExisting">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.EDIT" />
