@@ -24,7 +24,16 @@
         android:id="@+id/selected_item"
         android:icon="@drawable/ic_checklist"
         android:title="@string/selected"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom">
+        <menu>
+            <item
+                android:id="@+id/copy_selected_item"
+                android:title="@android:string/copy" />
+            <item
+                android:id="@+id/extended_copy_selected_item"
+                android:title="@string/extended_copy" />
+        </menu>
+    </item>
 
     <item
         android:id="@+id/clear_item"
