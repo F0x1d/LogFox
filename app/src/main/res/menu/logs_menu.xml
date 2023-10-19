@@ -29,11 +29,11 @@
             <item
                 android:id="@+id/copy_selected_item"
                 android:title="@android:string/copy"
-                app:showAsAction="ifRoom" />
+                app:showAsAction="never" />
             <item
                 android:id="@+id/extended_copy_selected_item"
                 android:title="@string/extended_copy"
-                app:showAsAction="ifRoom" />
+                app:showAsAction="never" />
         </menu>
     </item>
 
