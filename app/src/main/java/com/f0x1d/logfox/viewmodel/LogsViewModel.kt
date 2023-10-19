@@ -44,6 +44,8 @@ class LogsViewModel @Inject constructor(
 
     val selectedItems = MutableStateFlow(emptyList<LogLine>())
 
+    val selectedItemsContent get() = selectedItems.value.joinToString("\n") { it.original }
+
     val logs = combine(
         fileUri?.readFileContentsAsFlow(ctx, appPreferences) ?: loggingRepository.logsFlow,
         database.userFilterDao().getAllAsFlow(),

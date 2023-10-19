@@ -50,8 +50,6 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
         }
     }
 
-    private val textToCopy get() = adapter.selectedItems.joinToString("\n") { it.original }
-
     override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) = FragmentLogsBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -84,11 +82,11 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
                 findNavController().navigate(LogsFragmentDirections.actionLogsFragmentToFiltersFragment())
             }
             setClickListenerOn(R.id.copy_selected_item) {
-                requireContext().copyText(textToCopy)
+                requireContext().copyText(viewModel.selectedItemsContent)
                 snackbar(R.string.text_copied)
             }
             setClickListenerOn(R.id.extended_copy_selected_item) {
-                findNavController().navigate(LogsFragmentDirections.actionLogsFragmentToLogsExtendedCopyFragment(textToCopy))
+                findNavController().navigate(LogsFragmentDirections.actionLogsFragmentToLogsExtendedCopyFragment(viewModel.selectedItemsContent))
             }
             setClickListenerOn(R.id.clear_item) {
                 viewModel.clearLogs()
