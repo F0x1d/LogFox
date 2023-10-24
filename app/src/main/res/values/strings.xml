@@ -126,4 +126,7 @@
     <string name="logs_dump">Logs dump</string>
     <string name="logs_dump_description">These are the system logs saved before the app itself crashed</string>
     <string name="logs_dump_lines_count">Logs dump lines count</string>
+    <string name="telegram" translatable="false">Telegram</string>
+    <string name="releases">Releases</string>
+    <string name="alpha_builds">Alpha builds</string>
 </resources>

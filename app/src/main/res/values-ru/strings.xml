@@ -117,4 +117,6 @@
     <string name="logs_dump">Свалка логов</string>
     <string name="logs_dump_description">Это системные логи, которые были до сбоя приложения</string>
     <string name="logs_dump_lines_count">Количество строк в свалке логов</string>
+    <string name="releases">Релизы</string>
+    <string name="alpha_builds">Альфа сборки</string>
 </resources>

@@ -54,4 +54,26 @@
         </Preference>
     </PreferenceCategory>
 
+    <PreferenceCategory
+        android:title="@string/telegram"
+        app:iconSpaceReserved="false"
+        app:allowDividerAbove="false">
+        <Preference
+            android:title="@string/releases"
+            android:icon="@drawable/ic_settings_picnic">
+
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="https://t.me/f0x1dsshit" />
+        </Preference>
+        <Preference
+            android:title="@string/alpha_builds"
+            android:icon="@drawable/ic_settings_handyman">
+
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="https://t.me/f0x1dsshit_ci" />
+        </Preference>
+    </PreferenceCategory>
+
 </PreferenceScreen>
