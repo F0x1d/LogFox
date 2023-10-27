@@ -17,7 +17,7 @@
     <string name="filter">过滤器</string>
     <string name="about_app">关于本 App</string>
     <string name="setup">设置</string>
-    <string name="how_to_use_adb">自从 Android 13 Google 限制了在 ADB 中获取日志。你只能在几分钟内看到日志，之后你需要重启日志服务。\n\n在 ADB 中运行该命令：\n\n%s</string>
+    <string name="how_to_use_adb">自 Android 13，Google 限制了通过 ADB 收集日志。你只能看到几分钟的日志，然后需要重启日志服务。\n\n在 ADB 中运行此命令：\n\n%s</string>
     <string name="check">检查</string>
     <string name="developer">开发者</string>
     <string name="service">服务</string>
