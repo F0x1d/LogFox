@@ -63,7 +63,7 @@
     <string name="content">内容</string>
     <string name="logs_format">日志格式</string>
     <string name="no_permission_detected">未获取权限</string>
-    <string name="logs_restart_required">所有日志将在重启后才可获得</string>
+    <string name="logs_restart_required">所有日志只有在重启后才可用</string>
     <string name="too_big_log">日志太大，尝试压缩后发送</string>
     <string name="night_theme">主题</string>
     <string name="follow_system">跟随系统</string>
