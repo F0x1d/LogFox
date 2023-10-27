@@ -103,7 +103,7 @@
     <string name="shizuku_error">使用 Shizuku 时遇到错误</string>
     <string name="shizuku_reminder">别忘了启动 Shizuku！</string>
     <string name="fallback_to_default_terminal">回退到默认后端</string>
-    <string name="fallback_to_default_terminal_desc">仅当所选后端不可用时才会回退，否则 LogFox 将一直尝试使用所选的后端</string>
+    <string name="fallback_to_default_terminal_desc">仅当所选后端不可用时回退，否则 LogFox 将一直尝试使用所选后端</string>
     <string name="including">含有</string>
     <string name="excluding">排除</string>
     <string name="package_name">包名</string>
