@@ -83,7 +83,7 @@
     <string name="title">标题</string>
     <string name="recording_status">录制状态</string>
     <string name="warning">警告</string>
-    <string name="recording_with_no_service_warning">你正试图在没有运行日志服务的情况下进行录制。由于 Andorid 的后台应用限制，这可能导致无法保存录制。在录制时启动日志服务更好。</string>
+    <string name="recording_with_no_service_warning">你正试图在没有运行日志服务的情况下进行录制。由于 Andorid 的后台应用限制，这可能导致无法保存录制，最好在录制时运行日志服务。</string>
     <string name="links">链接</string>
     <string name="recording_paused">录制暂停</string>
     <string name="close">关闭</string>
