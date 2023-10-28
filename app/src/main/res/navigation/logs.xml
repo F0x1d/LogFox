@@ -8,11 +8,6 @@
         android:id="@+id/logsFragment"
         android:name="com.f0x1d.logfox.ui.fragment.LogsFragment"
         android:label="LogsFragment" >
-        <deepLink
-            app:uri="content"
-            app:mimeType="*/*"
-            app:action="android.intent.action.VIEW" />
-
         <argument
             android:name="file_uri"
             app:argType="android.net.Uri"

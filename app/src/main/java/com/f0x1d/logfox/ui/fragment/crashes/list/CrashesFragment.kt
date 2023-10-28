@@ -1,4 +1,4 @@
-package com.f0x1d.logfox.ui.fragment.crashes
+package com.f0x1d.logfox.ui.fragment.crashes.list
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -28,7 +28,7 @@ class CrashesFragment: BaseViewModelFragment<CrashesViewModel, FragmentCrashesBi
 
     private val adapter = CrashesAdapter(click = {
         val direction = when (it.count) {
-            1 -> CrashesFragmentDirections.actionCrashesFragmentToCrashDetailsActivity(it.lastCrash.id)
+            1 -> CrashesFragmentDirections.actionCrashesFragmentToCrashDetailsFragment(it.lastCrash.id)
             else -> CrashesFragmentDirections.actionCrashesFragmentToAppCrashesFragment(
                 packageName = it.lastCrash.packageName,
                 appName = it.lastCrash.appName

@@ -1,11 +1,15 @@
-package com.f0x1d.logfox.ui.activity
+package com.f0x1d.logfox.ui.fragment.crashes
 
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.viewModels
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.database.entity.AppCrash
 import com.f0x1d.logfox.databinding.ActivityCrashDetailsBinding
@@ -16,15 +20,15 @@ import com.f0x1d.logfox.extensions.showAreYouSureDeleteDialog
 import com.f0x1d.logfox.extensions.views.replaceAccessibilityDelegateClassNameWithButton
 import com.f0x1d.logfox.extensions.views.widgets.loadIcon
 import com.f0x1d.logfox.extensions.views.widgets.setClickListenerOn
-import com.f0x1d.logfox.extensions.views.widgets.setupBackButton
-import com.f0x1d.logfox.ui.activity.base.BaseViewModelActivity
+import com.f0x1d.logfox.extensions.views.widgets.setupBackButtonForNavController
+import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
 import com.f0x1d.logfox.utils.event.Event
 import com.f0x1d.logfox.viewmodel.crashes.CrashDetailsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import dev.chrisbanes.insetter.applyInsetter
 
 @AndroidEntryPoint
-class CrashDetailsActivity: BaseViewModelActivity<CrashDetailsViewModel, ActivityCrashDetailsBinding>() {
+class CrashDetailsFragment: BaseViewModelFragment<CrashDetailsViewModel, ActivityCrashDetailsBinding>() {
 
     override val viewModel by viewModels<CrashDetailsViewModel>()
 
@@ -34,10 +38,13 @@ class CrashDetailsActivity: BaseViewModelActivity<CrashDetailsViewModel, Activit
         viewModel.exportCrashToZip(it ?: return@registerForActivityResult)
     }
 
-    override fun inflateBinding() = ActivityCrashDetailsBinding.inflate(layoutInflater)
+    override fun inflateBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ) = ActivityCrashDetailsBinding.inflate(inflater, container, false)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         binding.scrollView.applyInsetter {
             type(navigationBars = true) {
@@ -46,15 +53,13 @@ class CrashDetailsActivity: BaseViewModelActivity<CrashDetailsViewModel, Activit
         }
 
         binding.toolbar.inflateMenu(R.menu.crash_details_menu)
-        binding.toolbar.setupBackButton {
-            onBackPressedDispatcher.onBackPressed()
-        }
+        binding.toolbar.setupBackButtonForNavController()
 
         binding.copyLayout.replaceAccessibilityDelegateClassNameWithButton()
         binding.shareLayout.replaceAccessibilityDelegateClassNameWithButton()
         binding.zipLayout.replaceAccessibilityDelegateClassNameWithButton()
 
-        viewModel.crash.observe(this) {
+        viewModel.crash.observe(viewLifecycleOwner) {
             setupFor(it ?: return@observe)
         }
     }
@@ -62,7 +67,7 @@ class CrashDetailsActivity: BaseViewModelActivity<CrashDetailsViewModel, Activit
     override fun onEvent(event: Event) {
         when (event.type) {
             CrashDetailsViewModel.EVENT_TYPE_COPY_LINK -> {
-                copyText(event.consume() ?: return)
+                requireContext().copyText(event.consume() ?: return)
                 snackbar(R.string.text_copied)
             }
         }
@@ -80,7 +85,7 @@ class CrashDetailsActivity: BaseViewModelActivity<CrashDetailsViewModel, Activit
             setClickListenerOn(R.id.delete_item) {
                 showAreYouSureDeleteDialog {
                     viewModel.deleteCrash(appCrash)
-                    finish()
+                    findNavController().popBackStack()
                 }
             }
         }
@@ -90,12 +95,12 @@ class CrashDetailsActivity: BaseViewModelActivity<CrashDetailsViewModel, Activit
         binding.appPackage.text = appCrash.packageName
 
         binding.copyLayout.setOnClickListener {
-            copyText(appCrash.log)
+            requireContext().copyText(appCrash.log)
             snackbar(R.string.text_copied)
         }
 
         binding.shareLayout.setOnClickListener {
-            shareIntent(appCrash.log)
+            requireContext().shareIntent(appCrash.log)
         }
 
         binding.zipLayout.setOnClickListener {

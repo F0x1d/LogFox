@@ -1,4 +1,4 @@
-package com.f0x1d.logfox.ui.fragment.crashes
+package com.f0x1d.logfox.ui.fragment.crashes.list
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -25,7 +25,7 @@ class AppCrashesFragment: BaseViewModelFragment<AppCrashesViewModel, FragmentApp
 
     private val adapter = CrashesAdapter(click = {
         findNavController().navigate(
-            AppCrashesFragmentDirections.actionAppCrashesFragmentToCrashDetailsActivity(it.lastCrash.id)
+            AppCrashesFragmentDirections.actionAppCrashesFragmentToCrashDetailsFragment(it.lastCrash.id)
         )
     }, delete = {
         showAreYouSureDeleteDialog {

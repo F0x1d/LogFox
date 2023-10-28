@@ -5,12 +5,12 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
 import androidx.core.os.bundleOf
+import androidx.navigation.NavDeepLinkBuilder
 import com.f0x1d.logfox.LogFoxApp
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.database.entity.AppCrash
 import com.f0x1d.logfox.extensions.*
 import com.f0x1d.logfox.receiver.CopyReceiver
-import com.f0x1d.logfox.ui.activity.CrashDetailsActivity
 
 @SuppressLint("MissingPermission")
 fun Context.sendErrorNotification(appCrash: AppCrash) = doIfPermitted {
@@ -23,9 +23,13 @@ fun Context.sendErrorNotification(appCrash: AppCrash) = doIfPermitted {
             .setSmallIcon(R.drawable.ic_android_notification)
             .setStyle(NotificationCompat.BigTextStyle().bigText(appCrash.log))
             .apply {
-                if (appCrash.id != 0L) setContentIntent(makeActivityPendingIntent(CRASH_DETAILS_INTENT_ID, CrashDetailsActivity::class.java, bundleOf(
-                    "crash_id" to appCrash.id
-                )))
+                if (appCrash.id != 0L) setContentIntent(
+                    NavDeepLinkBuilder(this@sendErrorNotification)
+                        .setGraph(R.navigation.nav_graph)
+                        .setDestination(R.id.crashDetailsFragment)
+                        .setArguments(bundleOf("crash_id" to appCrash.id))
+                        .createPendingIntent()
+                )
             }
             .setAutoCancel(true)
             .applyPrimaryColorIfNeeded(this@sendErrorNotification)

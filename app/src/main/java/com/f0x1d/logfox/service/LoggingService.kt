@@ -9,6 +9,7 @@ import com.f0x1d.logfox.LogFoxApp
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.extensions.EXIT_APP_INTENT_ID
 import com.f0x1d.logfox.extensions.STOP_LOGGING_SERVICE_INTENT_ID
+import com.f0x1d.logfox.extensions.activityManager
 import com.f0x1d.logfox.extensions.makeOpenAppPendingIntent
 import com.f0x1d.logfox.extensions.makeServicePendingIntent
 import com.f0x1d.logfox.extensions.notifications.applyPrimaryColorIfNeeded
@@ -16,7 +17,6 @@ import com.f0x1d.logfox.repository.logging.LoggingRepository
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
-import kotlin.system.exitProcess
 
 @AndroidEntryPoint
 class LoggingService: Service() {
@@ -70,9 +70,12 @@ class LoggingService: Service() {
 
     private fun killApp() {
         loggingRepository.stopLogging()
-        stopService()
 
-        exitProcess(0)
+        activityManager.appTasks.forEach {
+            it.finishAndRemoveTask()
+        }
+
+        stopService()
     }
 
     override fun onBind(p0: Intent?) = null

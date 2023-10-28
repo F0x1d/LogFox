@@ -84,6 +84,32 @@ class MainActivity: BaseViewModelActivity<MainViewModel, ActivityMainBinding>(),
         }
     }
 
+    override fun onPostCreate(savedInstanceState: Bundle?) {
+        super.onPostCreate(savedInstanceState)
+        handleIntent(intent)
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        handleIntent(intent, onNewIntent = true)
+    }
+
+    private fun handleIntent(intent: Intent?, onNewIntent: Boolean = false) {
+        if (onNewIntent)
+            if (navController.handleDeepLink(intent))
+                return
+
+        if (intent == null) return
+
+        if (intent.data == null) return
+
+        when (intent.action) {
+            Intent.ACTION_VIEW -> navController.navigate(
+                NavGraphDirections.actionGlobalLogsFragment(fileUri = intent.data)
+            )
+        }
+    }
+
     override fun onEvent(event: Event) {
         when (event.type) {
             MainViewModel.EVENT_TYPE_SETUP -> navController.navigate(NavGraphDirections.actionGlobalSetupFragment())
@@ -99,6 +125,7 @@ class MainActivity: BaseViewModelActivity<MainViewModel, ActivityMainBinding>(),
             R.id.editFilterFragment -> false
             R.id.chooseAppFragment -> false
             R.id.appCrashesFragment -> false
+            R.id.crashDetailsFragment -> false
 
             else -> true
         }
@@ -135,11 +162,6 @@ class MainActivity: BaseViewModelActivity<MainViewModel, ActivityMainBinding>(),
                 scene.applyTo(it)
             }
         }
-    }
-
-    override fun onNewIntent(intent: Intent?) {
-        super.onNewIntent(intent)
-        navController.handleDeepLink(intent)
     }
 
     override fun onDestroy() {
