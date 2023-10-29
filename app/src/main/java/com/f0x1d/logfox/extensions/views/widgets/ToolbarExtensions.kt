@@ -2,7 +2,6 @@ package com.f0x1d.logfox.extensions.views.widgets
 
 import android.view.View
 import androidx.appcompat.widget.Toolbar
-import androidx.fragment.app.FragmentActivity
 import androidx.navigation.findNavController
 import com.f0x1d.logfox.R
 
@@ -14,10 +13,6 @@ fun Toolbar.setupBackButton(onClickListener: View.OnClickListener) {
 
 fun Toolbar.setupBackButtonForNavController() = setupBackButton {
     findNavController().popBackStack()
-}
-
-fun Toolbar.setupBackButtonForBackPressedDispatcher(activity: FragmentActivity) = setupBackButton {
-    activity.onBackPressedDispatcher.onBackPressed()
 }
 
 fun Toolbar.setupCloseButton() {

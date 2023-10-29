@@ -21,7 +21,7 @@ import com.f0x1d.logfox.extensions.sendStopService
 import com.f0x1d.logfox.extensions.startLoggingService
 import com.f0x1d.logfox.extensions.views.widgets.invalidateNavigationButton
 import com.f0x1d.logfox.extensions.views.widgets.setClickListenerOn
-import com.f0x1d.logfox.extensions.views.widgets.setupBackButtonForBackPressedDispatcher
+import com.f0x1d.logfox.extensions.views.widgets.setupBackButtonForNavController
 import com.f0x1d.logfox.extensions.views.widgets.setupCloseButton
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
 import com.f0x1d.logfox.viewmodel.LogsViewModel
@@ -207,8 +207,7 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
                 }
             }
         } else if (viewModel.viewingFile)
-            // For new activities with opened files
-            setupBackButtonForBackPressedDispatcher(requireActivity())
+            setupBackButtonForNavController()
 
         else invalidateNavigationButton()
     }
