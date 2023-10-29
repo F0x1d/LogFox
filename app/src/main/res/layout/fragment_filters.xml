@@ -18,6 +18,7 @@
             android:layout_height="?actionBarSize"
             app:title="@string/filters"
             app:titleCentered="true"
+            app:menu="@menu/filters_menu"
             app:navigationIcon="@drawable/ic_arrow_back"
             app:navigationIconTint="?colorOnSurface" />
     </com.google.android.material.appbar.AppBarLayout>

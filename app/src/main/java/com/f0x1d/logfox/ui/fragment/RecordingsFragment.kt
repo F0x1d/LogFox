@@ -65,7 +65,6 @@ class RecordingsFragment: BaseViewModelFragment<RecordingsViewModel, FragmentRec
             }
         }
 
-        binding.toolbar.inflateMenu(R.menu.recordings_menu)
         binding.toolbar.menu.setClickListenerOn(R.id.clear_item) {
             showAreYouSureClearDialog {
                 viewModel.clearRecordings()

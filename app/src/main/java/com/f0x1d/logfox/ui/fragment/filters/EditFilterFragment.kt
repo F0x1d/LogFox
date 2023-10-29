@@ -95,9 +95,11 @@ class EditFilterFragment: BaseViewModelFragment<EditFilterViewModel, FragmentEdi
 
             if (it == null) return@observe
 
-            binding.toolbar.inflateMenu(R.menu.edit_filter_menu)
-            binding.toolbar.menu.setClickListenerOn(R.id.export_item) {
-                exportFilterLauncher.launch("filter.json")
+            binding.toolbar.menu.apply {
+                findItem(R.id.export_item).isVisible = true
+                setClickListenerOn(R.id.export_item) {
+                    exportFilterLauncher.launch("filter.json")
+                }
             }
 
             binding.saveFab.setOnClickListener { view ->

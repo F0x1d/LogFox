@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.lifecycle.asLiveData
@@ -13,13 +15,17 @@ import com.f0x1d.logfox.R
 import com.f0x1d.logfox.adapter.AppsAdapter
 import com.f0x1d.logfox.databinding.FragmentChooseAppBinding
 import com.f0x1d.logfox.extensions.dpToPx
+import com.f0x1d.logfox.extensions.views.widgets.setClickListenerOn
 import com.f0x1d.logfox.extensions.views.widgets.setupBackButtonForNavController
+import com.f0x1d.logfox.model.InstalledApp
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
 import com.f0x1d.logfox.viewmodel.filters.ChooseAppViewModel
 import com.f0x1d.logfox.viewmodel.filters.EditFilterViewModel
 import com.google.android.material.divider.MaterialDividerItemDecoration
+import com.google.android.material.search.SearchView
 import dagger.hilt.android.AndroidEntryPoint
 import dev.chrisbanes.insetter.applyInsetter
+import kotlinx.coroutines.flow.update
 
 @AndroidEntryPoint
 class ChooseAppFragment: BaseViewModelFragment<ChooseAppViewModel, FragmentChooseAppBinding>() {
@@ -28,9 +34,17 @@ class ChooseAppFragment: BaseViewModelFragment<ChooseAppViewModel, FragmentChoos
 
     private val editFilterViewModel by hiltNavGraphViewModels<EditFilterViewModel>(R.id.editFilterFragment)
 
-    private val adapter = AppsAdapter {
+    private val onAppClicked: (InstalledApp) -> Unit = {
         editFilterViewModel.selectApp(it)
         findNavController().popBackStack()
+    }
+    private val appsAdapter = AppsAdapter(onAppClicked)
+    private val searchedAppsAdapter = AppsAdapter(onAppClicked)
+
+    private val closeSearchOnBackPressedCallback = object : OnBackPressedCallback(false) {
+        override fun handleOnBackPressed() {
+            binding.searchView.hide()
+        }
     }
 
     override fun inflateBinding(
@@ -47,18 +61,47 @@ class ChooseAppFragment: BaseViewModelFragment<ChooseAppViewModel, FragmentChoos
             }
         }
 
-        binding.toolbar.setupBackButtonForNavController()
+        binding.searchBar.apply {
+            setupBackButtonForNavController()
+            menu.setClickListenerOn(R.id.search_item) {
+                binding.searchView.show()
+            }
+        }
+        binding.searchView.editText.doAfterTextChanged { editable ->
+            viewModel.query.update {
+                editable.toString()
+            }
+        }
+        binding.searchView.addTransitionListener { searchView, previousState, newState ->
+            closeSearchOnBackPressedCallback.isEnabled = newState == SearchView.TransitionState.SHOWN
+        }
 
-        binding.appsRecycler.layoutManager = LinearLayoutManager(requireContext())
-        binding.appsRecycler.addItemDecoration(MaterialDividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL).apply {
-            dividerInsetStart = 80.dpToPx.toInt()
-            dividerInsetEnd = 10.dpToPx.toInt()
-            isLastItemDecorated = false
-        })
-        binding.appsRecycler.adapter = adapter
+        listOf(
+            binding.appsRecycler,
+            binding.searchedAppsRecycler
+        ).forEach {
+            it.apply {
+                layoutManager = LinearLayoutManager(requireContext())
+                addItemDecoration(MaterialDividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL).apply {
+                    dividerInsetStart = 80.dpToPx.toInt()
+                    dividerInsetEnd = 10.dpToPx.toInt()
+                    isLastItemDecorated = false
+                })
+            }
+        }
+
+        binding.appsRecycler.adapter = appsAdapter
+        binding.searchedAppsRecycler.adapter = searchedAppsAdapter
 
         viewModel.apps.asLiveData().observe(viewLifecycleOwner) {
-            adapter.submitList(it)
+            appsAdapter.submitList(it)
+        }
+        viewModel.searchedApps.observe(viewLifecycleOwner) {
+            searchedAppsAdapter.submitList(it)
+        }
+
+        requireActivity().onBackPressedDispatcher.apply {
+            addCallback(viewLifecycleOwner, closeSearchOnBackPressedCallback)
         }
     }
 }

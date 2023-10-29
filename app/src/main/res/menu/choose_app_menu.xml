@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
-    <item
-        android:id="@+id/export_item"
-        android:title="@string/export"
-        android:icon="@drawable/ic_export"
-        android:visible="false"
+    <item android:id="@+id/search_item"
+        android:title="@string/search"
+        android:icon="@drawable/ic_search"
         app:showAsAction="always" />
-
 </menu>

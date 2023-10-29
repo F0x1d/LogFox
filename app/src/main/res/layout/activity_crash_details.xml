@@ -16,6 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:titleCentered="true"
+            app:menu="@menu/crash_details_menu"
             app:navigationIcon="@drawable/ic_arrow_back"
             app:navigationIconTint="?colorOnSurface" />
     </com.google.android.material.appbar.AppBarLayout>

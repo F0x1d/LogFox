@@ -17,7 +17,8 @@
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
             app:title="@string/recordings"
-            app:titleCentered="true" />
+            app:titleCentered="true"
+            app:menu="@menu/recordings_menu" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView

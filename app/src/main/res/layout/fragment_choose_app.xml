@@ -11,15 +11,29 @@
         android:fitsSystemWindows="true"
         app:liftOnScroll="true">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
+        <com.google.android.material.search.SearchBar
+            android:id="@+id/search_bar"
             android:layout_width="match_parent"
-            android:layout_height="?actionBarSize"
-            app:title="@string/apps"
-            app:titleCentered="true"
+            android:layout_height="wrap_content"
+            app:menu="@menu/choose_app_menu"
             app:navigationIcon="@drawable/ic_arrow_back"
-            app:navigationIconTint="?colorOnSurface"/>
+            app:navigationIconTint="?colorOnSurface"
+            android:hint="@string/apps" />
     </com.google.android.material.appbar.AppBarLayout>
+
+    <com.google.android.material.search.SearchView
+        android:id="@+id/search_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:hint="@string/apps"
+        app:layout_anchor="@id/search_bar">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/searched_apps_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false" />
+    </com.google.android.material.search.SearchView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/apps_recycler"

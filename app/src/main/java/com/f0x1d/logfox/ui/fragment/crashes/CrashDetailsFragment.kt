@@ -52,7 +52,6 @@ class CrashDetailsFragment: BaseViewModelFragment<CrashDetailsViewModel, Activit
             }
         }
 
-        binding.toolbar.inflateMenu(R.menu.crash_details_menu)
         binding.toolbar.setupBackButtonForNavController()
 
         binding.copyLayout.replaceAccessibilityDelegateClassNameWithButton()

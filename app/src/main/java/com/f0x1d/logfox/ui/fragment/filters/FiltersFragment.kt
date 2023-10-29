@@ -62,7 +62,6 @@ class FiltersFragment: BaseViewModelFragment<FiltersViewModel, FragmentFiltersBi
         }
 
         binding.toolbar.setupBackButtonForNavController()
-        binding.toolbar.inflateMenu(R.menu.filters_menu)
         binding.toolbar.menu.apply {
             setClickListenerOn(R.id.clear_item) {
                 showAreYouSureClearDialog {

@@ -42,7 +42,7 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
     }
     private var changingState = false
 
-    private val clearSelectionBackPressedCallback = object : OnBackPressedCallback(false) {
+    private val clearSelectionOnBackPressedCallback = object : OnBackPressedCallback(false) {
         override fun handleOnBackPressed() {
             viewModel.selectedItems.update {
                 emptyList()
@@ -70,7 +70,6 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
             }
         }
 
-        binding.toolbar.inflateMenu(R.menu.logs_menu)
         binding.toolbar.menu.apply {
             setClickListenerOn(R.id.pause_item) {
                 viewModel.switchState()
@@ -136,7 +135,7 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
         viewModel.selectedItems.asLiveData().observe(viewLifecycleOwner) {
             val selecting = it.isNotEmpty()
 
-            clearSelectionBackPressedCallback.isEnabled = selecting
+            clearSelectionOnBackPressedCallback.isEnabled = selecting
 
             adapter.selectedItems = it
             setupToolbarForSelection(selecting, it.size)
@@ -171,7 +170,7 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
         }
 
         requireActivity().onBackPressedDispatcher.apply {
-            addCallback(viewLifecycleOwner, clearSelectionBackPressedCallback)
+            addCallback(viewLifecycleOwner, clearSelectionOnBackPressedCallback)
         }
     }
 

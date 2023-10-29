@@ -53,7 +53,6 @@ class CrashesFragment: BaseViewModelFragment<CrashesViewModel, FragmentCrashesBi
             }
         }
 
-        binding.toolbar.inflateMenu(R.menu.crashes_menu)
         binding.toolbar.menu.setClickListenerOn(R.id.clear_item) {
             showAreYouSureClearDialog {
                 viewModel.clearCrashes()
