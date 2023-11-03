@@ -34,7 +34,7 @@
     </fragment>
     <fragment
         android:id="@+id/logsExtendedCopyFragment"
-        android:name="com.f0x1d.logfox.ui.fragment.ExtendedCopyFragment"
+        android:name="com.f0x1d.logfox.ui.fragment.LogsExtendedCopyFragment"
         android:label="ExtendedCopyFragment" >
         <argument
             android:name="content"

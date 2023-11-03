@@ -74,6 +74,9 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
             setClickListenerOn(R.id.pause_item) {
                 viewModel.switchState()
             }
+            setClickListenerOn(R.id.select_all_item) {
+                viewModel.selectAll()
+            }
             setClickListenerOn(R.id.search_item) {
                 findNavController().navigate(LogsFragmentDirections.actionLogsFragmentToSearchBottomSheet())
             }
@@ -183,6 +186,7 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
         val visibleOnlyInDefault = { itemId: Int -> setVisibility(itemId, !selecting && !viewModel.viewingFile) }
 
         visibleOnlyInDefault(R.id.pause_item)
+        visibleDuringSelection(R.id.select_all_item)
         invisibleDuringSelection(R.id.search_item)
         invisibleDuringSelection(R.id.filters_item)
         visibleDuringSelection(R.id.selected_item)

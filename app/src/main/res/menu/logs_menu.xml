@@ -9,6 +9,12 @@
         app:showAsAction="always" />
 
     <item
+        android:id="@+id/select_all_item"
+        android:icon="@drawable/ic_select_all"
+        android:title="@string/select_all"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/search_item"
         android:icon="@drawable/ic_search"
         android:title="@string/search"

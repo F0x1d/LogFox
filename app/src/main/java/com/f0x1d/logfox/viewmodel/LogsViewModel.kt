@@ -84,6 +84,14 @@ class LogsViewModel @Inject constructor(
         )
     }
 
+    fun selectAll() {
+        if (selectedItems.value == logs.value) selectedItems.update {
+            emptyList()
+        } else selectedItems.update {
+            logs.value ?: emptyList()
+        }
+    }
+
     fun query(query: String?) = this.query.update { query }
 
     fun clearLogs() = loggingRepository.clearLogs()
