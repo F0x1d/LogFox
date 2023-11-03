@@ -4,7 +4,7 @@ import android.Manifest
 import android.app.Application
 import com.f0x1d.logfox.BuildConfig
 import com.f0x1d.logfox.R
-import com.f0x1d.logfox.extensions.hasPermissionToReadLogs
+import com.f0x1d.logfox.extensions.context.hasPermissionToReadLogs
 import com.f0x1d.logfox.extensions.sendEvent
 import com.f0x1d.logfox.utils.preferences.AppPreferences
 import com.f0x1d.logfox.utils.terminal.DefaultTerminal

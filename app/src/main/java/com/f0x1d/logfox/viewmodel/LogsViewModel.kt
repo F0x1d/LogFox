@@ -47,7 +47,7 @@ class LogsViewModel @Inject constructor(
     val selectedItemsContent get() = selectedItems.value.joinToString("\n") { it.original }
 
     val logs = combine(
-        fileUri?.readFileContentsAsFlow(ctx, appPreferences) ?: loggingRepository.logsFlow,
+        fileUri?.readFileContentsAsFlow(ctx) ?: loggingRepository.logsFlow,
         database.userFilterDao().getAllAsFlow(),
         query,
         if (!viewingFile) paused else flowOf(false)

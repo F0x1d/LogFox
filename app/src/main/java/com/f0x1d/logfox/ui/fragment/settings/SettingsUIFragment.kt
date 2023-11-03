@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.text.InputType
 import androidx.preference.Preference
 import com.f0x1d.logfox.R
-import com.f0x1d.logfox.extensions.applyTheme
-import com.f0x1d.logfox.extensions.catchingNotNumber
+import com.f0x1d.logfox.extensions.context.applyTheme
+import com.f0x1d.logfox.extensions.context.catchingNotNumber
 import com.f0x1d.logfox.extensions.fillWithStrings
 import com.f0x1d.logfox.extensions.views.widgets.observeAndUpdateSummary
 import com.f0x1d.logfox.extensions.views.widgets.observeAndUpdateSummaryForList
@@ -44,6 +44,34 @@ class SettingsUIFragment: BasePreferenceFragment() {
             }
 
             observeAndUpdateSummaryForList(appPreferences, this@SettingsUIFragment, 0, filledThemeSettings)
+        }
+
+        findPreference<Preference>("pref_date_format")?.apply {
+            setupAsEditTextPreference({
+                it.textLayout.setHint(R.string.date_format)
+            }, {
+                setIcon(R.drawable.ic_dialog_time_format)
+            }, {
+                appPreferences.dateFormat
+            }, {
+                appPreferences.dateFormat = it?.trim() ?: AppPreferences.DATE_FORMAT_DEFAULT
+            })
+
+            observeAndUpdateSummary(appPreferences, this@SettingsUIFragment, AppPreferences.DATE_FORMAT_DEFAULT)
+        }
+
+        findPreference<Preference>("pref_time_format")?.apply {
+            setupAsEditTextPreference({
+                it.textLayout.setHint(R.string.time_format)
+            }, {
+                setIcon(R.drawable.ic_dialog_time_format)
+            }, {
+                appPreferences.timeFormat
+            }, {
+                appPreferences.timeFormat = it?.trim() ?: AppPreferences.TIME_FORMAT_DEFAULT
+            })
+
+            observeAndUpdateSummary(appPreferences, this@SettingsUIFragment, AppPreferences.TIME_FORMAT_DEFAULT)
         }
 
         findPreference<Preference>("pref_logs_format")?.setOnPreferenceClickListener {

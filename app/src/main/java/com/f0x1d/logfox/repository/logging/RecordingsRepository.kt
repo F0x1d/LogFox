@@ -5,7 +5,6 @@ import com.f0x1d.logfox.R
 import com.f0x1d.logfox.database.AppDatabase
 import com.f0x1d.logfox.database.entity.LogRecording
 import com.f0x1d.logfox.database.entity.UserFilter
-import com.f0x1d.logfox.extensions.exportFormatted
 import com.f0x1d.logfox.extensions.logline.filterAndSearch
 import com.f0x1d.logfox.extensions.notifications.cancelRecordingNotification
 import com.f0x1d.logfox.extensions.notifications.sendRecordingNotification
@@ -13,6 +12,7 @@ import com.f0x1d.logfox.extensions.notifications.sendRecordingPausedNotification
 import com.f0x1d.logfox.model.LogLine
 import com.f0x1d.logfox.repository.logging.base.LoggingHelperItemsRepository
 import com.f0x1d.logfox.repository.logging.readers.base.LogsReader
+import com.f0x1d.logfox.utils.DateTimeFormatter
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -32,7 +32,8 @@ import javax.inject.Singleton
 @Singleton
 class RecordingsRepository @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val database: AppDatabase
+    private val database: AppDatabase,
+    private val dateTimeFormatter: DateTimeFormatter
 ): LoggingHelperItemsRepository<LogRecording>() {
 
     val recordingStateFlow = MutableStateFlow(RecordingState.IDLE)
@@ -92,7 +93,10 @@ class RecordingsRepository @Inject constructor(
 
         recordingTime = System.currentTimeMillis()
         fileMutex.withLock {
-            recordingFile = File(recordingDir, "${recordingTime.exportFormatted}.log").apply {
+            recordingFile = File(
+                recordingDir,
+                "${dateTimeFormatter.formatForExport(recordingTime)}.log"
+            ).apply {
                 createNewFile()
             }
         }

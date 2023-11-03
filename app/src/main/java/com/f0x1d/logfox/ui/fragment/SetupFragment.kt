@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.databinding.FragmentSetupBinding
-import com.f0x1d.logfox.extensions.copyText
-import com.f0x1d.logfox.extensions.hardRestartApp
+import com.f0x1d.logfox.extensions.context.copyText
+import com.f0x1d.logfox.extensions.context.hardRestartApp
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
 import com.f0x1d.logfox.utils.event.Event
 import com.f0x1d.logfox.viewmodel.SetupViewModel

@@ -4,8 +4,8 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import com.f0x1d.logfox.R
-import com.f0x1d.logfox.extensions.startLoggingAndServiceIfCan
-import com.f0x1d.logfox.extensions.toast
+import com.f0x1d.logfox.extensions.context.startLoggingAndServiceIfCan
+import com.f0x1d.logfox.extensions.context.toast
 import com.f0x1d.logfox.repository.logging.LoggingRepository
 import com.f0x1d.logfox.utils.preferences.AppPreferences
 import com.f0x1d.logfox.utils.terminal.ShizukuTerminal

@@ -10,8 +10,12 @@ abstract class BasePreferences(context: Context) {
 
     abstract fun providePreferences(context: Context): SharedPreferences
 
-    inline fun <reified T> asLiveData(key: String, defValue: T) = object : SharedPreferenceLiveData<T>(sharedPreferences, key, defValue) {
-        override fun fromPreferences(key: String, defValue: T) = get(key, defValue)
+    inline fun <reified T> asLiveData(key: String, defValue: T?) = object : SharedPreferenceLiveData<T?>(sharedPreferences, key, defValue) {
+        override fun fromPreferences(key: String, defValue: T?) = try {
+            get(key, defValue)
+        } catch (e: RuntimeException) {
+            getNullable(key, defValue)
+        }
     }
 
     inline fun <reified T> put(key: String, value: T?) = sharedPreferences.edit {

@@ -7,15 +7,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.viewbinding.ViewBinding
 import com.f0x1d.logfox.R
+import com.f0x1d.logfox.extensions.context.viewPump
 import com.f0x1d.logfox.extensions.contrastedNavBarAvailable
 import com.f0x1d.logfox.extensions.gesturesAvailable
 import com.f0x1d.logfox.extensions.views.snackbar
-import dagger.hilt.EntryPoint
-import dagger.hilt.InstallIn
-import dagger.hilt.android.EntryPointAccessors
-import dagger.hilt.components.SingletonComponent
 import dev.chrisbanes.insetter.applyInsetter
-import io.github.inflationx.viewpump.ViewPump
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
 
 abstract class BaseActivity<T : ViewBinding>: AppCompatActivity() {
@@ -56,21 +52,10 @@ abstract class BaseActivity<T : ViewBinding>: AppCompatActivity() {
     }
 
     override fun attachBaseContext(newBase: Context) {
-        val viewPump = EntryPointAccessors.fromApplication(
-            newBase,
-            BaseActivityEntryPoint::class.java
-        ).viewPump()
-
-        super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase, viewPump))
+        super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase, newBase.viewPump))
     }
 
     protected fun snackbar(text: String) = binding.root.snackbar(text)
 
     protected fun snackbar(id: Int) = snackbar(getString(id))
-}
-
-@EntryPoint
-@InstallIn(SingletonComponent::class)
-interface BaseActivityEntryPoint {
-    fun viewPump(): ViewPump
 }

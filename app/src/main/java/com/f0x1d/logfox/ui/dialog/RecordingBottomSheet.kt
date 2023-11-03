@@ -12,8 +12,7 @@ import androidx.navigation.fragment.findNavController
 import com.f0x1d.logfox.NavGraphDirections
 import com.f0x1d.logfox.databinding.SheetRecordingBinding
 import com.f0x1d.logfox.extensions.asUri
-import com.f0x1d.logfox.extensions.exportFormatted
-import com.f0x1d.logfox.extensions.shareFileIntent
+import com.f0x1d.logfox.extensions.context.shareFileIntent
 import com.f0x1d.logfox.extensions.toLocaleString
 import com.f0x1d.logfox.extensions.views.replaceAccessibilityDelegateClassNameWithButton
 import com.f0x1d.logfox.ui.dialog.base.BaseViewModelBottomSheet
@@ -58,7 +57,7 @@ class RecordingBottomSheet: BaseViewModelBottomSheet<RecordingViewModel, SheetRe
             }
             binding.exportLayout.replaceAccessibilityDelegateClassNameWithButton()
             binding.exportLayout.setOnClickListener {
-                logExportLauncher.launch("${logRecording.dateAndTime.exportFormatted}.log")
+                logExportLauncher.launch("${viewModel.dateTimeFormatter.formatForExport(logRecording.dateAndTime)}.log")
             }
             binding.shareLayout.replaceAccessibilityDelegateClassNameWithButton()
             binding.shareLayout.setOnClickListener {
@@ -66,7 +65,7 @@ class RecordingBottomSheet: BaseViewModelBottomSheet<RecordingViewModel, SheetRe
             }
             binding.zipLayout.replaceAccessibilityDelegateClassNameWithButton()
             binding.zipLayout.setOnClickListener {
-                zipLogLauncher.launch("${logRecording.dateAndTime.exportFormatted}.zip")
+                zipLogLauncher.launch("${viewModel.dateTimeFormatter.formatForExport(logRecording.dateAndTime)}.log")
             }
         }
 

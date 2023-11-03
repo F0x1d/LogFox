@@ -3,8 +3,8 @@ package com.f0x1d.logfox.repository.logging
 import android.content.Context
 import android.content.SharedPreferences
 import com.f0x1d.logfox.R
+import com.f0x1d.logfox.extensions.context.toast
 import com.f0x1d.logfox.extensions.logline.LogLine
-import com.f0x1d.logfox.extensions.toast
 import com.f0x1d.logfox.extensions.updateList
 import com.f0x1d.logfox.model.LogLine
 import com.f0x1d.logfox.repository.base.BaseRepository
@@ -164,7 +164,7 @@ class LoggingRepository @Inject constructor(
                 for (line in it) {
                     if (!isActive) break
 
-                    val logLine = LogLine(idsCounter++, line, packageManager) ?: continue
+                    val logLine = LogLine(idsCounter++, line, context) ?: continue
                     if (!droppedFirst) {
                         droppedFirst = true
                         continue

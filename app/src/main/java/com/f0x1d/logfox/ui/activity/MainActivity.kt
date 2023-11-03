@@ -17,10 +17,10 @@ import androidx.transition.TransitionManager
 import com.f0x1d.logfox.NavGraphDirections
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.databinding.ActivityMainBinding
+import com.f0x1d.logfox.extensions.context.hasNotificationsPermission
+import com.f0x1d.logfox.extensions.context.isHorizontalOrientation
 import com.f0x1d.logfox.extensions.contrastedNavBarAvailable
 import com.f0x1d.logfox.extensions.gesturesAvailable
-import com.f0x1d.logfox.extensions.hasNotificationsPermission
-import com.f0x1d.logfox.extensions.isHorizontalOrientation
 import com.f0x1d.logfox.ui.activity.base.BaseViewModelActivity
 import com.f0x1d.logfox.utils.event.Event
 import com.f0x1d.logfox.viewmodel.MainViewModel

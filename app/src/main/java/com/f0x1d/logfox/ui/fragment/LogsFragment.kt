@@ -14,11 +14,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.adapter.LogsAdapter
 import com.f0x1d.logfox.databinding.FragmentLogsBinding
-import com.f0x1d.logfox.extensions.copyText
-import com.f0x1d.logfox.extensions.isHorizontalOrientation
-import com.f0x1d.logfox.extensions.sendKillApp
-import com.f0x1d.logfox.extensions.sendStopService
-import com.f0x1d.logfox.extensions.startLoggingService
+import com.f0x1d.logfox.extensions.context.copyText
+import com.f0x1d.logfox.extensions.context.isHorizontalOrientation
+import com.f0x1d.logfox.extensions.context.sendKillApp
+import com.f0x1d.logfox.extensions.context.sendStopService
+import com.f0x1d.logfox.extensions.context.startLoggingService
 import com.f0x1d.logfox.extensions.views.widgets.invalidateNavigationButton
 import com.f0x1d.logfox.extensions.views.widgets.setClickListenerOn
 import com.f0x1d.logfox.extensions.views.widgets.setupBackButtonForNavController

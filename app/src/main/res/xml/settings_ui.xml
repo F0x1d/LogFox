@@ -10,6 +10,21 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        android:title="@string/date_time"
+        app:iconSpaceReserved="false"
+        app:allowDividerAbove="false">
+
+        <Preference
+            android:title="@string/date_format"
+            android:key="pref_date_format"
+            app:iconSpaceReserved="false" />
+        <Preference
+            android:title="@string/time_format"
+            android:key="pref_time_format"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:title="@string/logs"
         app:iconSpaceReserved="false"
         app:allowDividerAbove="false">

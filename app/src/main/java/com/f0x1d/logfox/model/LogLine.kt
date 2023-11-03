@@ -3,8 +3,6 @@ package com.f0x1d.logfox.model
 import androidx.annotation.ColorRes
 import androidx.annotation.Keep
 import com.f0x1d.logfox.R
-import com.f0x1d.logfox.extensions.logsDateFormatted
-import com.f0x1d.logfox.extensions.logsTimeFormatted
 
 data class LogLine(
     val id: Long,
@@ -16,10 +14,7 @@ data class LogLine(
     val level: LogLevel = LogLevel.INFO,
     val tag: String = "",
     val content: String,
-    val original: String,
-
-    val logsDateFormatted: String = dateAndTime.logsDateFormatted,
-    val logsTimeFormatted: String = dateAndTime.logsTimeFormatted
+    val original: String
 )
 
 @Keep

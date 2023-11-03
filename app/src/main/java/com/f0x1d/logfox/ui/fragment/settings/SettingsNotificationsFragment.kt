@@ -8,7 +8,7 @@ import androidx.preference.Preference
 import com.f0x1d.logfox.BuildConfig
 import com.f0x1d.logfox.LogFoxApp
 import com.f0x1d.logfox.R
-import com.f0x1d.logfox.extensions.hasNotificationsPermission
+import com.f0x1d.logfox.extensions.context.hasNotificationsPermission
 import com.f0x1d.logfox.extensions.notificationsChannelsAvailable
 import com.f0x1d.logfox.ui.fragment.settings.base.BasePreferenceFragment
 import com.f0x1d.logfox.utils.preferences.AppPreferences

@@ -3,8 +3,8 @@ package com.f0x1d.logfox
 import android.app.Application
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationManagerCompat
-import com.f0x1d.logfox.extensions.applyTheme
-import com.f0x1d.logfox.extensions.notificationManagerCompat
+import com.f0x1d.logfox.extensions.context.applyTheme
+import com.f0x1d.logfox.extensions.context.notificationManagerCompat
 import com.f0x1d.logfox.utils.preferences.AppPreferences
 import com.google.android.material.color.DynamicColors
 import dagger.hilt.android.HiltAndroidApp

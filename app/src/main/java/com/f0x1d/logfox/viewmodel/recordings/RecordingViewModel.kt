@@ -9,6 +9,7 @@ import com.f0x1d.logfox.extensions.io.output.exportToZip
 import com.f0x1d.logfox.extensions.io.output.putZipEntry
 import com.f0x1d.logfox.model.Device
 import com.f0x1d.logfox.repository.logging.RecordingsRepository
+import com.f0x1d.logfox.utils.DateTimeFormatter
 import com.f0x1d.logfox.viewmodel.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -23,6 +24,7 @@ import javax.inject.Inject
 @HiltViewModel
 class RecordingViewModel @Inject constructor(
     @RecordingId val recordingId: Long,
+    val dateTimeFormatter: DateTimeFormatter,
     private val database: AppDatabase,
     private val recordingsRepository: RecordingsRepository,
     private val device: Device,

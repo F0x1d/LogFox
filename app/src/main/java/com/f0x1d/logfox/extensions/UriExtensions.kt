@@ -3,21 +3,21 @@ package com.f0x1d.logfox.extensions
 import android.content.Context
 import android.net.Uri
 import androidx.documentfile.provider.DocumentFile
+import com.f0x1d.logfox.extensions.context.appPreferences
 import com.f0x1d.logfox.extensions.logline.LogLine
 import com.f0x1d.logfox.model.LogLine
-import com.f0x1d.logfox.utils.preferences.AppPreferences
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 
-fun Uri?.readFileContentsAsFlow(context: Context, appPreferences: AppPreferences) = flow<List<LogLine>> {
+fun Uri?.readFileContentsAsFlow(context: Context) = flow {
     val uri = this@readFileContentsAsFlow
 
     if (uri == null) {
         emit(emptyList())
     } else {
-        val logsDisplayLimit = appPreferences.logsDisplayLimit
+        val logsDisplayLimit = context.appPreferences.logsDisplayLimit
 
         context.contentResolver.openInputStream(uri)?.use {
             it.bufferedReader().useLines { lines ->
@@ -25,7 +25,7 @@ fun Uri?.readFileContentsAsFlow(context: Context, appPreferences: AppPreferences
                 val logLines = mutableListOf<LogLine>()
 
                 for (line in lines) {
-                    val logLine = LogLine(id, line, context.packageManager) ?: LogLine(
+                    val logLine = LogLine(id, line, context) ?: LogLine(
                         id = id,
                         content = line,
                         original = line

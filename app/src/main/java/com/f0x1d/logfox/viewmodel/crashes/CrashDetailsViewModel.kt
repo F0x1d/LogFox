@@ -10,6 +10,7 @@ import com.f0x1d.logfox.extensions.io.output.exportToZip
 import com.f0x1d.logfox.extensions.io.output.putZipEntry
 import com.f0x1d.logfox.model.Device
 import com.f0x1d.logfox.repository.logging.CrashesRepository
+import com.f0x1d.logfox.utils.DateTimeFormatter
 import com.f0x1d.logfox.viewmodel.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -20,6 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CrashDetailsViewModel @Inject constructor(
     @CrashId val crashId: Long,
+    val dateTimeFormatter: DateTimeFormatter,
     private val database: AppDatabase,
     private val crashesRepository: CrashesRepository,
     private val device: Device,
