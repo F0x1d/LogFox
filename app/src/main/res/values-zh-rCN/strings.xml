@@ -120,4 +120,8 @@
     <string name="logs_dump_lines_count">日志转储行数</string>
     <string name="releases">正式版</string>
     <string name="alpha_builds">Alpha 版</string>
+    <string name="select_all">全选</string>
+    <string name="date_time">日期与时间</string>
+    <string name="date_format">日期格式</string>
+    <string name="time_format">时间格式</string>
 </resources>
