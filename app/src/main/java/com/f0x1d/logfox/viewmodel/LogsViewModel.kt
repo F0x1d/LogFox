@@ -55,10 +55,13 @@ class LogsViewModel @Inject constructor(
         LogsData(logs, filters, query, paused)
     }.scan(null as LogsData?) { accumulator, data ->
         when {
+            accumulator == null -> data.copy(passing = false)
+
             !data.paused -> data
 
-            data.query != accumulator?.query -> data.copy(logs = accumulator?.logs ?: emptyList())
-            data.filters != accumulator?.filters -> data.copy(logs = accumulator?.logs ?: emptyList())
+            data.query != accumulator.query || data.filters != accumulator.filters -> data.copy(
+                logs = accumulator.logs
+            )
 
             else -> data.copy(logs = accumulator.logs, passing = false)
         }

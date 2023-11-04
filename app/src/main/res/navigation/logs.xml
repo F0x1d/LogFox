@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/logsFragment"
-        android:name="com.f0x1d.logfox.ui.fragment.LogsFragment"
+        android:name="com.f0x1d.logfox.ui.fragment.logs.LogsFragment"
         android:label="LogsFragment" >
         <argument
             android:name="file_uri"
@@ -34,7 +34,7 @@
     </fragment>
     <fragment
         android:id="@+id/logsExtendedCopyFragment"
-        android:name="com.f0x1d.logfox.ui.fragment.LogsExtendedCopyFragment"
+        android:name="com.f0x1d.logfox.ui.fragment.logs.LogsExtendedCopyFragment"
         android:label="ExtendedCopyFragment" >
         <argument
             android:name="content"

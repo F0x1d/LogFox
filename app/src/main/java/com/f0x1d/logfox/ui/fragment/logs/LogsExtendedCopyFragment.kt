@@ -1,4 +1,4 @@
-package com.f0x1d.logfox.ui.fragment
+package com.f0x1d.logfox.ui.fragment.logs
 
 import android.os.Bundle
 import android.view.LayoutInflater

@@ -1,4 +1,4 @@
-package com.f0x1d.logfox.ui.fragment
+package com.f0x1d.logfox.ui.fragment.logs
 
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -146,7 +146,7 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
 
         viewModel.logs.observe(viewLifecycleOwner) {
             adapter.submitList(null)
-            adapter.submitList(it ?: return@observe) {
+            adapter.submitList(it) {
                 scrollLogToBottom()
             }
         }
@@ -222,8 +222,15 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         viewModel.appPreferences.apply {
-            if (key == "pref_logs_text_size") adapter.textSize = logsTextSize.toFloat()
-            else if (key == "pref_logs_expanded") adapter.logsExpanded = logsExpanded
+            when (key) {
+                "pref_logs_text_size" -> adapter.textSize = logsTextSize.toFloat()
+                "pref_logs_expanded" -> adapter.logsExpanded = logsExpanded
+
+                "pref_date_format", "pref_time_format" -> adapter.notifyItemRangeChanged(
+                    0,
+                    adapter.itemCount
+                )
+            }
 
             if (key?.startsWith("pref_show_log") == true) adapter.logsFormat = showLogValues
         }
