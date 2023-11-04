@@ -123,4 +123,6 @@
     <string name="date_time">Дата, время</string>
     <string name="date_format">Формат даты</string>
     <string name="time_format">Формат времени</string>
+    <string name="archives">Архивы</string>
+    <string name="include_device_information_in_archives">Добавлять информацию об устройстве при экспорте записей и сбоев</string>
 </resources>

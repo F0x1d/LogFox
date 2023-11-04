@@ -86,6 +86,9 @@ class AppPreferences @Inject constructor(
     var fallbackToDefaultTerminal
         get() = get("pref_fallback_to_default_terminal", true)
         set(value) { put("pref_fallback_to_default_terminal", value) }
+    var includeDeviceInfoInArchives
+        get() = get("pref_include_device_info_in_archives", true)
+        set(value) { put("pref_include_device_info_in_archives", value) }
 
     var askedNotificationsPermission
         get() = get("pref_asked_notifications_permission", false)

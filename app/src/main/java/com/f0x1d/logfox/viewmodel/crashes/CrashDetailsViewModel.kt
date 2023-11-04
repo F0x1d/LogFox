@@ -11,6 +11,7 @@ import com.f0x1d.logfox.extensions.io.output.putZipEntry
 import com.f0x1d.logfox.model.Device
 import com.f0x1d.logfox.repository.logging.CrashesRepository
 import com.f0x1d.logfox.utils.DateTimeFormatter
+import com.f0x1d.logfox.utils.preferences.AppPreferences
 import com.f0x1d.logfox.viewmodel.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -24,6 +25,7 @@ class CrashDetailsViewModel @Inject constructor(
     val dateTimeFormatter: DateTimeFormatter,
     private val database: AppDatabase,
     private val crashesRepository: CrashesRepository,
+    private val appPreferences: AppPreferences,
     private val device: Device,
     application: Application
 ): BaseViewModel(application) {
@@ -41,9 +43,17 @@ class CrashDetailsViewModel @Inject constructor(
         crash.value?.also { appCrash ->
             ctx.contentResolver.openOutputStream(uri)?.use {
                 it.exportToZip {
-                    putZipEntry("device.txt", device.toString().encodeToByteArray())
+                    if (appPreferences.includeDeviceInfoInArchives) putZipEntry(
+                        "device.txt",
+                        device.toString().encodeToByteArray()
+                    )
+
                     putZipEntry("crash.log", appCrash.log.encodeToByteArray())
-                    putZipEntry("dump.log", (appCrash.logDump ?: "").encodeToByteArray())
+
+                    if (!appCrash.logDump.isNullOrEmpty()) putZipEntry(
+                        "dump.log",
+                        appCrash.logDump.encodeToByteArray()
+                    )
                 }
             }
         }
