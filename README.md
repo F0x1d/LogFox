@@ -36,6 +36,11 @@ Yet another LogCat reader for Android
   <img src="./metadata/en-US/images/phoneScreenshots/5.png" width="30%" />
 </p>
 
+## Donation
+<a href="https://nowpayments.io/donation/f0x1d" target="_blank">
+  <img src="https://nowpayments.io/images/embeds/donation-button-white.svg" alt="Crypto donation button by NOWPayments">
+</a>
+
 ## License
 
 ```txt
