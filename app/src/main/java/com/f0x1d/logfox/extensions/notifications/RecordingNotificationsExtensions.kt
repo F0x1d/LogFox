@@ -6,6 +6,8 @@ import androidx.core.app.NotificationCompat
 import com.f0x1d.logfox.LogFoxApp
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.extensions.*
+import com.f0x1d.logfox.extensions.context.doIfPermitted
+import com.f0x1d.logfox.extensions.context.notificationManagerCompat
 import com.f0x1d.logfox.receiver.RecordingReceiver
 
 private const val RECORDING_NOTIFICATIONS_TAG = "recording"

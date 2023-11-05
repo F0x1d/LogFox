@@ -47,4 +47,18 @@
             app:widgetLayout="@layout/preference_material_switch"
             app:iconSpaceReserved="false" />
     </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/archives"
+        app:iconSpaceReserved="false"
+        app:allowDividerAbove="false">
+
+        <SwitchPreferenceCompat
+            android:title="@string/include_device_information_in_archives"
+            android:key="pref_include_device_info_in_archives"
+            android:defaultValue="true"
+            app:singleLineTitle="false"
+            app:widgetLayout="@layout/preference_material_switch"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
 </PreferenceScreen>

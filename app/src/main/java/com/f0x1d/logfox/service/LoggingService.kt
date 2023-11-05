@@ -9,7 +9,7 @@ import com.f0x1d.logfox.LogFoxApp
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.extensions.EXIT_APP_INTENT_ID
 import com.f0x1d.logfox.extensions.STOP_LOGGING_SERVICE_INTENT_ID
-import com.f0x1d.logfox.extensions.activityManager
+import com.f0x1d.logfox.extensions.context.activityManager
 import com.f0x1d.logfox.extensions.makeOpenAppPendingIntent
 import com.f0x1d.logfox.extensions.makeServicePendingIntent
 import com.f0x1d.logfox.extensions.notifications.applyPrimaryColorIfNeeded

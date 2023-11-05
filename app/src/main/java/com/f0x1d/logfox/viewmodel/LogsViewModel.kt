@@ -3,6 +3,7 @@ package com.f0x1d.logfox.viewmodel
 import android.app.Application
 import android.net.Uri
 import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
 import com.f0x1d.logfox.database.AppDatabase
 import com.f0x1d.logfox.database.entity.UserFilter
 import com.f0x1d.logfox.di.viewmodel.FileUri
@@ -17,12 +18,14 @@ import com.f0x1d.logfox.viewmodel.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.scan
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
@@ -47,7 +50,7 @@ class LogsViewModel @Inject constructor(
     val selectedItemsContent get() = selectedItems.value.joinToString("\n") { it.original }
 
     val logs = combine(
-        fileUri?.readFileContentsAsFlow(ctx, appPreferences) ?: loggingRepository.logsFlow,
+        fileUri?.readFileContentsAsFlow(ctx) ?: loggingRepository.logsFlow,
         database.userFilterDao().getAllAsFlow(),
         query,
         if (!viewingFile) paused else flowOf(false)
@@ -57,8 +60,9 @@ class LogsViewModel @Inject constructor(
         when {
             !data.paused -> data
 
-            data.query != accumulator?.query -> data.copy(logs = accumulator?.logs ?: emptyList())
-            data.filters != accumulator?.filters -> data.copy(logs = accumulator?.logs ?: emptyList())
+            data.query != accumulator?.query || data.filters != accumulator?.filters -> data.copy(
+                logs = accumulator?.logs ?: emptyList()
+            )
 
             else -> data.copy(logs = accumulator.logs, passing = false)
         }
@@ -70,6 +74,10 @@ class LogsViewModel @Inject constructor(
         }
     }.flowOn(
         Dispatchers.IO
+    ).stateIn(
+        viewModelScope,
+        SharingStarted.Eagerly,
+        emptyList()
     ).asLiveData()
 
     val serviceRunningData = loggingRepository.serviceRunningFlow.asLiveData()
@@ -82,6 +90,14 @@ class LogsViewModel @Inject constructor(
         ) else remove(
             logLine
         )
+    }
+
+    fun selectAll() {
+        if (selectedItems.value == logs.value) selectedItems.update {
+            emptyList()
+        } else selectedItems.update {
+            logs.value ?: emptyList()
+        }
     }
 
     fun query(query: String?) = this.query.update { query }

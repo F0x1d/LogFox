@@ -119,4 +119,10 @@
     <string name="logs_dump_lines_count">Количество строк в свалке логов</string>
     <string name="releases">Релизы</string>
     <string name="alpha_builds">Альфа сборки</string>
+    <string name="select_all">Выбрать всё</string>
+    <string name="date_time">Дата, время</string>
+    <string name="date_format">Формат даты</string>
+    <string name="time_format">Формат времени</string>
+    <string name="archives">Архивы</string>
+    <string name="include_device_information_in_archives">Добавлять информацию об устройстве при экспорте записей и сбоев</string>
 </resources>

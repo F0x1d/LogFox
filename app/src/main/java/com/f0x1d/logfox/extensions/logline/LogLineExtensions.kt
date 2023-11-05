@@ -1,6 +1,6 @@
 package com.f0x1d.logfox.extensions.logline
 
-import android.content.pm.PackageManager
+import android.content.Context
 import androidx.collection.LruCache
 import com.f0x1d.logfox.model.LogLevel
 import com.f0x1d.logfox.model.LogLine
@@ -14,24 +14,26 @@ private val uidsCache = LruCache<String, String>(200)
 fun LogLine(
     id: Long,
     line: String,
-    packageManager: PackageManager
+    context: Context
 ) = logRegex.find(line.trim())?.run {
     val uid = groupValues[2].replace(" ", "")
     val integerUid = uid.toIntOrNull() ?: UIDS.MAPPINGS[uid]
 
-    val packageName = uidsCache.get(uid) ?: integerUid?.let {
-        packageManager.getPackagesForUid(it)?.firstOrNull()?.also { packageName ->
+    val packageName = uidsCache[uid] ?: integerUid?.let {
+        context.packageManager.getPackagesForUid(it)?.firstOrNull()?.also { packageName ->
             uidsCache.put(uid, packageName)
+        }
+    }
+
+    val time = groupValues[1].replace(" ", "").run {
+        indexOf(".").let {
+            substring(0, it).toLong() * 1000 + substring(it + 1).toLong()
         }
     }
 
     LogLine(
         id,
-        groupValues[1].replace(" ", "").run {
-            indexOf(".").let {
-                substring(0, it).toLong() * 1000 + substring(it + 1).toLong()
-            }
-        },
+        time,
         uid,
         groupValues[3].replace(" ", ""),
         groupValues[4].replace(" ", ""),

@@ -15,28 +15,24 @@ class AppPreferences @Inject constructor(
 ): BasePreferences(context) {
 
     companion object {
+        const val DATE_FORMAT_DEFAULT = "dd.MM"
+        const val TIME_FORMAT_DEFAULT = "HH:mm:ss.SSS"
+
         const val LOGS_UPDATE_INTERVAL_DEFAULT = 300L
         const val LOGS_TEXT_SIZE_DEFAULT = 14
         const val LOGS_DISPLAY_LIMIT_DEFAULT = 10000
         const val LOGS_DUMP_LINES_COUNT_DEFAULT = 100
     }
 
-    var startOnBoot
-        get() = get("pref_start_on_boot", true)
-        set(value) { put("pref_start_on_boot", value) }
-    var startOnLaunch
-        get() = get("pref_start_on_launch", true)
-        set(value) { put("pref_start_on_launch", value) }
-    var selectedTerminalIndex
-        get() = get("pref_selected_terminal_index", 0)
-        set(value) { put("pref_selected_terminal_index", value) }
-    var fallbackToDefaultTerminal
-        get() = get("pref_fallback_to_default_terminal", true)
-        set(value) { put("pref_fallback_to_default_terminal", value) }
-
     var nightTheme
         get() = get("pref_night_theme", 0)
         set(value) { put("pref_night_theme", value) }
+    var dateFormat
+        get() = getNullable("pref_date_format", DATE_FORMAT_DEFAULT)
+        set(value) { put("pref_date_format", value) }
+    var timeFormat
+        get() = getNullable("pref_time_format", TIME_FORMAT_DEFAULT)
+        set(value) { put("pref_time_format", value) }
     var logsUpdateInterval
         get() = get("pref_logs_update_interval", LOGS_UPDATE_INTERVAL_DEFAULT)
         set(value) { put("pref_logs_update_interval", value) }
@@ -77,6 +73,22 @@ class AppPreferences @Inject constructor(
     var showLogContent
         get() = get("pref_show_log_content", true)
         set(value) { put("pref_show_log_content", value) }
+
+    var startOnBoot
+        get() = get("pref_start_on_boot", true)
+        set(value) { put("pref_start_on_boot", value) }
+    var startOnLaunch
+        get() = get("pref_start_on_launch", true)
+        set(value) { put("pref_start_on_launch", value) }
+    var selectedTerminalIndex
+        get() = get("pref_selected_terminal_index", 0)
+        set(value) { put("pref_selected_terminal_index", value) }
+    var fallbackToDefaultTerminal
+        get() = get("pref_fallback_to_default_terminal", true)
+        set(value) { put("pref_fallback_to_default_terminal", value) }
+    var includeDeviceInfoInArchives
+        get() = get("pref_include_device_info_in_archives", true)
+        set(value) { put("pref_include_device_info_in_archives", value) }
 
     var askedNotificationsPermission
         get() = get("pref_asked_notifications_permission", false)

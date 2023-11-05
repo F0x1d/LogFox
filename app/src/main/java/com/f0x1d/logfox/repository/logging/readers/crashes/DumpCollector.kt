@@ -18,11 +18,7 @@ class DumpCollector @Inject constructor(
             field = value
         }
 
-    private val logsDump = LimitedArrayList<LogLine>(capacity)
-
-    fun dump() = logsDump.joinToString("\n") {
-        it.original
-    }
+    val logsDump = LimitedArrayList<LogLine>(capacity)
 
     override suspend fun readLine(line: LogLine) {
         logsDump.add(line)

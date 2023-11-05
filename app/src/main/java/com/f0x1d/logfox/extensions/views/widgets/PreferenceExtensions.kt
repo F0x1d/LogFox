@@ -63,6 +63,6 @@ inline fun <reified T> Preference.observeAndUpdateSummary(appPreferences: AppPre
 
 inline fun <reified T> Preference.observeAndUpdateSummary(appPreferences: AppPreferences, observer: LifecycleOwner, defValue: T, crossinline block: (T) -> Unit) {
     appPreferences.asLiveData(key, defValue).observe(observer) {
-        block(it)
+        block(it ?: return@observe)
     }
 }

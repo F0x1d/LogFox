@@ -1,4 +1,4 @@
-package com.f0x1d.logfox.extensions
+package com.f0x1d.logfox.extensions.context
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -16,6 +16,10 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import com.f0x1d.logfox.R
+import com.f0x1d.logfox.extensions.asUri
+import com.f0x1d.logfox.extensions.shouldRequestNotificationsPermission
+import com.f0x1d.logfox.extensions.startForegroundServiceAvailable
+import com.f0x1d.logfox.extensions.uiModeManagerAvailable
 import com.f0x1d.logfox.repository.logging.LoggingRepository
 import com.f0x1d.logfox.service.LoggingService
 import com.f0x1d.logfox.utils.preferences.AppPreferences

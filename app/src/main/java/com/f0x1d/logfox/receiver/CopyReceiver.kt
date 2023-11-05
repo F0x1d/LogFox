@@ -4,9 +4,9 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import com.f0x1d.logfox.R
-import com.f0x1d.logfox.extensions.copyText
-import com.f0x1d.logfox.extensions.notificationManagerCompat
-import com.f0x1d.logfox.extensions.toast
+import com.f0x1d.logfox.extensions.context.copyText
+import com.f0x1d.logfox.extensions.context.notificationManagerCompat
+import com.f0x1d.logfox.extensions.context.toast
 
 class CopyReceiver: BroadcastReceiver() {
 

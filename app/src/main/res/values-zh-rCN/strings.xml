@@ -120,4 +120,10 @@
     <string name="logs_dump_lines_count">日志转储行数</string>
     <string name="releases">正式版</string>
     <string name="alpha_builds">Alpha 版</string>
+    <string name="select_all">全选</string>
+    <string name="date_time">日期与时间</string>
+    <string name="date_format">日期格式</string>
+    <string name="time_format">时间格式</string>
+    <string name="archives">压缩档案</string>
+    <string name="include_device_information_in_archives">在导出的崩溃日志和录制中包含设备信息</string>
 </resources>

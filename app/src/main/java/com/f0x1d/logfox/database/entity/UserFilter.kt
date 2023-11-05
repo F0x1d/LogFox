@@ -27,6 +27,9 @@ interface UserFilterDao {
     @Query("SELECT * FROM UserFilter")
     fun getAllAsFlow(): Flow<List<UserFilter>>
 
+    @Query("SELECT * FROM UserFilter")
+    suspend fun getAll(): List<UserFilter>
+
     @Query("SELECT * FROM UserFilter WHERE id = :id")
     fun get(id: Long): Flow<UserFilter?>
 

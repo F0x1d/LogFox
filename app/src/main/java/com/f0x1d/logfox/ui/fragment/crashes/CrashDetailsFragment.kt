@@ -13,9 +13,8 @@ import androidx.navigation.fragment.findNavController
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.database.entity.AppCrash
 import com.f0x1d.logfox.databinding.ActivityCrashDetailsBinding
-import com.f0x1d.logfox.extensions.copyText
-import com.f0x1d.logfox.extensions.exportFormatted
-import com.f0x1d.logfox.extensions.shareIntent
+import com.f0x1d.logfox.extensions.context.copyText
+import com.f0x1d.logfox.extensions.context.shareIntent
 import com.f0x1d.logfox.extensions.showAreYouSureDeleteDialog
 import com.f0x1d.logfox.extensions.views.replaceAccessibilityDelegateClassNameWithButton
 import com.f0x1d.logfox.extensions.views.widgets.loadIcon
@@ -103,7 +102,7 @@ class CrashDetailsFragment: BaseViewModelFragment<CrashDetailsViewModel, Activit
         }
 
         binding.zipLayout.setOnClickListener {
-            zipCrashLauncher.launch("crash-${appCrash.packageName.replace(".", "-")}-${appCrash.dateAndTime.exportFormatted}.zip")
+            zipCrashLauncher.launch("crash-${appCrash.packageName.replace(".", "-")}-${viewModel.dateTimeFormatter.formatForExport(appCrash.dateAndTime)}.zip")
         }
 
         binding.logText.text = appCrash.log

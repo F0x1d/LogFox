@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.preference.PreferenceFragmentCompat
 import com.f0x1d.logfox.R
-import com.f0x1d.logfox.extensions.isHorizontalOrientation
+import com.f0x1d.logfox.extensions.context.isHorizontalOrientation
 import com.f0x1d.logfox.extensions.views.widgets.setupBackButtonForNavController
 import com.google.android.material.appbar.MaterialToolbar
 import dev.chrisbanes.insetter.applyInsetter

@@ -1,4 +1,4 @@
-package com.f0x1d.logfox.ui.fragment
+package com.f0x1d.logfox.ui.fragment.logs
 
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -14,11 +14,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.adapter.LogsAdapter
 import com.f0x1d.logfox.databinding.FragmentLogsBinding
-import com.f0x1d.logfox.extensions.copyText
-import com.f0x1d.logfox.extensions.isHorizontalOrientation
-import com.f0x1d.logfox.extensions.sendKillApp
-import com.f0x1d.logfox.extensions.sendStopService
-import com.f0x1d.logfox.extensions.startLoggingService
+import com.f0x1d.logfox.extensions.context.copyText
+import com.f0x1d.logfox.extensions.context.isHorizontalOrientation
+import com.f0x1d.logfox.extensions.context.sendKillApp
+import com.f0x1d.logfox.extensions.context.sendStopService
+import com.f0x1d.logfox.extensions.context.startLoggingService
 import com.f0x1d.logfox.extensions.views.widgets.invalidateNavigationButton
 import com.f0x1d.logfox.extensions.views.widgets.setClickListenerOn
 import com.f0x1d.logfox.extensions.views.widgets.setupBackButtonForNavController
@@ -73,6 +73,9 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
         binding.toolbar.menu.apply {
             setClickListenerOn(R.id.pause_item) {
                 viewModel.switchState()
+            }
+            setClickListenerOn(R.id.select_all_item) {
+                viewModel.selectAll()
             }
             setClickListenerOn(R.id.search_item) {
                 findNavController().navigate(LogsFragmentDirections.actionLogsFragmentToSearchBottomSheet())
@@ -143,7 +146,7 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
 
         viewModel.logs.observe(viewLifecycleOwner) {
             adapter.submitList(null)
-            adapter.submitList(it ?: return@observe) {
+            adapter.submitList(it) {
                 scrollLogToBottom()
             }
         }
@@ -183,6 +186,7 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
         val visibleOnlyInDefault = { itemId: Int -> setVisibility(itemId, !selecting && !viewModel.viewingFile) }
 
         visibleOnlyInDefault(R.id.pause_item)
+        visibleDuringSelection(R.id.select_all_item)
         invisibleDuringSelection(R.id.search_item)
         invisibleDuringSelection(R.id.filters_item)
         visibleDuringSelection(R.id.selected_item)
@@ -218,8 +222,15 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         viewModel.appPreferences.apply {
-            if (key == "pref_logs_text_size") adapter.textSize = logsTextSize.toFloat()
-            else if (key == "pref_logs_expanded") adapter.logsExpanded = logsExpanded
+            when (key) {
+                "pref_logs_text_size" -> adapter.textSize = logsTextSize.toFloat()
+                "pref_logs_expanded" -> adapter.logsExpanded = logsExpanded
+
+                "pref_date_format", "pref_time_format" -> adapter.notifyItemRangeChanged(
+                    0,
+                    adapter.itemCount
+                )
+            }
 
             if (key?.startsWith("pref_show_log") == true) adapter.logsFormat = showLogValues
         }

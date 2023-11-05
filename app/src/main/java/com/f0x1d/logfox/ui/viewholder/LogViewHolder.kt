@@ -5,6 +5,7 @@ import androidx.appcompat.widget.PopupMenu
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.adapter.LogsAdapter
 import com.f0x1d.logfox.databinding.ItemLogBinding
+import com.f0x1d.logfox.extensions.context.dateTimeFormatter
 import com.f0x1d.logfox.model.LogLine
 import com.f0x1d.logfox.ui.viewholder.base.BaseViewHolder
 
@@ -13,6 +14,8 @@ class LogViewHolder(
     private val selectedItem: (LogLine, Boolean) -> Unit,
     private val copyLog: (LogLine) -> Unit
 ): BaseViewHolder<LogLine, ItemLogBinding>(binding) {
+
+    private val dateTimeFormatter = binding.root.context.dateTimeFormatter
 
     private val popupMenu: PopupMenu
 
@@ -58,8 +61,8 @@ class LogViewHolder(
 
         binding.logText.text = buildString {
             adapter<LogsAdapter>().logsFormat.apply {
-                if (date) append(data.logsDateFormatted + " ")
-                if (time) append(data.logsTimeFormatted + " ")
+                if (date) append(dateTimeFormatter.formatDate(data.dateAndTime) + " ")
+                if (time) append(dateTimeFormatter.formatTime(data.dateAndTime) + " ")
                 if (uid) append(data.uid + " ")
                 if (pid) append(data.pid + " ")
                 if (tid) append(data.tid + " ")
@@ -80,10 +83,7 @@ class LogViewHolder(
 
     private fun selectItem() = adapter<LogsAdapter>().selectedItems.apply {
         currentItem?.also {
-            if (any { logLine -> it.id == logLine.id })
-                selectedItem(it, false)
-            else
-                selectedItem(it, true)
+            selectedItem(it, !any { logLine -> it.id == logLine.id })
         }
     }
 
