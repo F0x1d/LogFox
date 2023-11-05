@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.f0x1d.logfox.database.AppDatabase
 import com.f0x1d.logfox.database.entity.AppCrash
+import com.f0x1d.logfox.extensions.logline.filterAndSearch
 import com.f0x1d.logfox.extensions.notifications.cancelAllCrashNotifications
 import com.f0x1d.logfox.extensions.notifications.cancelCrashNotificationFor
 import com.f0x1d.logfox.extensions.notifications.sendErrorNotification
@@ -32,7 +33,12 @@ class CrashesRepository @Inject constructor(
             }
         }
 
-        val appCrash = it.copy(logDump = dumpCollector.dump())
+        val logDump = dumpCollector
+            .logsDump
+            .filterAndSearch(database.userFilterDao().getAll())
+            .joinToString("\n") { logLine -> logLine.original }
+
+        val appCrash = it.copy(logDump = logDump)
 
         if (appPreferences.collectingFor(appCrash.crashType)) {
             val appCrashWithId = appCrash.copy(
