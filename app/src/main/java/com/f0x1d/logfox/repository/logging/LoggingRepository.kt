@@ -52,8 +52,6 @@ class LoggingRepository @Inject constructor(
 
     private var idsCounter = -1L
 
-    private val packageManager = context.packageManager
-
     fun startLoggingIfNot() {
         if (loggingJob?.isActive == true) return
 

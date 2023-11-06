@@ -78,7 +78,7 @@ class LogsViewModel @Inject constructor(
         viewModelScope,
         SharingStarted.Eagerly,
         emptyList()
-    ).asLiveData()
+    )
 
     val serviceRunningData = loggingRepository.serviceRunningFlow.asLiveData()
 
@@ -96,7 +96,7 @@ class LogsViewModel @Inject constructor(
         if (selectedItems.value == logs.value) selectedItems.update {
             emptyList()
         } else selectedItems.update {
-            logs.value ?: emptyList()
+            logs.value
         }
     }
 

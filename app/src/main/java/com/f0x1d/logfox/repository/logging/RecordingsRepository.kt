@@ -46,7 +46,9 @@ class RecordingsRepository @Inject constructor(
     private val fileMutex = Mutex()
     private val filtersMutex = Mutex()
 
-    private var recordingDir: File? = null
+    private var recordingDir = File("${context.filesDir.absolutePath}/recordings").apply {
+        if (!exists()) mkdirs()
+    }
 
     private var recordingTime = 0L
     private var recordingFile: File? = null
@@ -56,10 +58,6 @@ class RecordingsRepository @Inject constructor(
     private var activeFilters = emptyList<UserFilter>()
 
     override suspend fun setup() {
-        recordingDir = File("${context.filesDir.absolutePath}/recordings").apply {
-            if (!exists()) mkdirs()
-        }
-
         filtersJob = onAppScope {
             database.userFilterDao().getAllAsFlow()
                 .distinctUntilChanged()

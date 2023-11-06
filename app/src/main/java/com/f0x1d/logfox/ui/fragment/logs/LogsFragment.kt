@@ -144,7 +144,7 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
             setupToolbarForSelection(selecting, it.size)
         }
 
-        viewModel.logs.observe(viewLifecycleOwner) {
+        viewModel.logs.asLiveData().observe(viewLifecycleOwner) {
             adapter.submitList(null)
             adapter.submitList(it) {
                 scrollLogToBottom()
