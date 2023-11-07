@@ -46,7 +46,7 @@ class RecordingsRepository @Inject constructor(
     private val fileMutex = Mutex()
     private val filtersMutex = Mutex()
 
-    private var recordingDir = File("${context.filesDir.absolutePath}/recordings").apply {
+    private val recordingDir = File("${context.filesDir.absolutePath}/recordings").apply {
         if (!exists()) mkdirs()
     }
 
@@ -86,6 +86,31 @@ class RecordingsRepository @Inject constructor(
         filtersJob?.cancel()
     }
 
+    fun createRecordingFrom(lines: List<LogLine>) = runOnAppScope {
+        val recordingTime = System.currentTimeMillis()
+
+        val recordingFile = File(
+            recordingDir,
+            "${dateTimeFormatter.formatForExport(recordingTime)}.log"
+        )
+
+        recordingFile.writeText(
+            lines.joinToString("\n") {
+                it.original
+            }
+        )
+
+        val title = "${context.getString(R.string.record_file)} ${database.logRecordingDao().count() + 1}"
+
+        database.logRecordingDao().insert(
+            LogRecording(
+                title,
+                recordingTime,
+                recordingFile.absolutePath
+            )
+        )
+    }
+
     fun record() = runOnAppScope {
         recordingStateFlow.update { RecordingState.RECORDING }
 
@@ -94,9 +119,7 @@ class RecordingsRepository @Inject constructor(
             recordingFile = File(
                 recordingDir,
                 "${dateTimeFormatter.formatForExport(recordingTime)}.log"
-            ).apply {
-                createNewFile()
-            }
+            )
         }
 
         recordingJob = onAppScope {
