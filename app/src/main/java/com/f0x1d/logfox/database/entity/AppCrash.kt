@@ -2,6 +2,7 @@ package com.f0x1d.logfox.database.entity
 
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
+import java.io.File
 
 @Entity
 data class AppCrash(
@@ -11,9 +12,12 @@ data class AppCrash(
     @ColumnInfo(name = "date_and_time") val dateAndTime: Long,
     @ColumnInfo(name = "log") val log: String,
     @ColumnInfo(name = "log_dump") val logDump: String? = null,
+    @ColumnInfo(name = "log_dump_file") val logDumpFile: String? = null,
     @PrimaryKey(autoGenerate = true) val id: Long = 0
 ) {
     val notificationId get() = (if (id == 0L) dateAndTime else id).toInt()
+
+    fun deleteDumpFile() = logDumpFile?.let { File(it).delete() }
 }
 
 @Dao
@@ -21,6 +25,9 @@ interface AppCrashDao {
 
     @Query("SELECT * FROM AppCrash ORDER BY date_and_time DESC")
     fun getAllAsFlow(): Flow<List<AppCrash>>
+
+    @Query("SELECT * FROM AppCrash ORDER BY date_and_time DESC")
+    suspend fun getAll(): List<AppCrash>
 
     @Query("SELECT * FROM AppCrash WHERE package_name = :packageName")
     suspend fun getAllByPackageName(packageName: String): List<AppCrash>

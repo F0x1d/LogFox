@@ -150,7 +150,7 @@ class SettingsUIFragment: BasePreferenceFragment() {
                 appPreferences.logsDisplayLimit.toString()
             }, {
                 requireContext().catchingNotNumber {
-                    appPreferences.logsDisplayLimit = it?.toInt() ?: AppPreferences.LOGS_DISPLAY_LIMIT_DEFAULT
+                    appPreferences.logsDisplayLimit = it?.toInt()?.coerceAtLeast(0) ?: AppPreferences.LOGS_DISPLAY_LIMIT_DEFAULT
                 }
             })
 

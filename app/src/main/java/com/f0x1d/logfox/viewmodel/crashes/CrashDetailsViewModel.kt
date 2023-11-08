@@ -17,6 +17,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
+import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
@@ -53,6 +54,10 @@ class CrashDetailsViewModel @Inject constructor(
                     if (!appCrash.logDump.isNullOrEmpty()) putZipEntry(
                         "dump.log",
                         appCrash.logDump.encodeToByteArray()
+                    )
+                    if (appCrash.logDumpFile != null) putZipEntry(
+                        "dump.log",
+                        File(appCrash.logDumpFile)
                     )
                 }
             }

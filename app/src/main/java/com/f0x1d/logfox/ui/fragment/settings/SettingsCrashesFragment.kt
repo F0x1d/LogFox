@@ -26,7 +26,7 @@ class SettingsCrashesFragment: BasePreferenceFragment() {
 
         findPreference<Preference>("pref_logs_dump_lines_count")?.apply {
             setupAsEditTextPreference({
-                it.textLayout.hint = "0...1000"
+                it.textLayout.setHint(R.string.lines)
                 it.text.inputType = InputType.TYPE_CLASS_NUMBER
             }, {
                 setIcon(R.drawable.ic_dialog_list)
@@ -36,7 +36,7 @@ class SettingsCrashesFragment: BasePreferenceFragment() {
                 requireContext().catchingNotNumber {
                     val count = it?.toInt() ?: AppPreferences.LOGS_DUMP_LINES_COUNT_DEFAULT
 
-                    appPreferences.logsDumpLinesCount = count.coerceIn(0..1000)
+                    appPreferences.logsDumpLinesCount = count.coerceAtLeast(0)
                 }
             })
 

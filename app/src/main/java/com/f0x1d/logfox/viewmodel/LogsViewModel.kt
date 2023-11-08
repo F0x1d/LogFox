@@ -13,6 +13,7 @@ import com.f0x1d.logfox.extensions.readFileName
 import com.f0x1d.logfox.extensions.updateList
 import com.f0x1d.logfox.model.LogLine
 import com.f0x1d.logfox.repository.logging.LoggingRepository
+import com.f0x1d.logfox.repository.logging.RecordingsRepository
 import com.f0x1d.logfox.utils.preferences.AppPreferences
 import com.f0x1d.logfox.viewmodel.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -34,6 +35,7 @@ class LogsViewModel @Inject constructor(
     @FileUri val fileUri: Uri?,
     private val database: AppDatabase,
     private val loggingRepository: LoggingRepository,
+    private val recordingsRepository: RecordingsRepository,
     val appPreferences: AppPreferences,
     application: Application
 ): BaseViewModel(application) {
@@ -78,7 +80,7 @@ class LogsViewModel @Inject constructor(
         viewModelScope,
         SharingStarted.Eagerly,
         emptyList()
-    ).asLiveData()
+    )
 
     val serviceRunningData = loggingRepository.serviceRunningFlow.asLiveData()
 
@@ -96,9 +98,11 @@ class LogsViewModel @Inject constructor(
         if (selectedItems.value == logs.value) selectedItems.update {
             emptyList()
         } else selectedItems.update {
-            logs.value ?: emptyList()
+            logs.value
         }
     }
+
+    fun selectedToRecording() = recordingsRepository.createRecordingFrom(selectedItems.value)
 
     fun query(query: String?) = this.query.update { query }
 

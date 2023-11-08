@@ -40,6 +40,10 @@
                 android:id="@+id/extended_copy_selected_item"
                 android:title="@string/extended_copy"
                 app:showAsAction="never" />
+            <item
+                android:id="@+id/selected_to_recording_item"
+                android:title="@string/to_recording"
+                app:showAsAction="never" />
         </menu>
     </item>
 

@@ -11,6 +11,7 @@ import androidx.lifecycle.asLiveData
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.f0x1d.logfox.NavGraphDirections
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.adapter.LogsAdapter
 import com.f0x1d.logfox.databinding.FragmentLogsBinding
@@ -90,6 +91,10 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
             setClickListenerOn(R.id.extended_copy_selected_item) {
                 findNavController().navigate(LogsFragmentDirections.actionLogsFragmentToLogsExtendedCopyFragment(viewModel.selectedItemsContent))
             }
+            setClickListenerOn(R.id.selected_to_recording_item) {
+                viewModel.selectedToRecording()
+                findNavController().navigate(NavGraphDirections.actionGlobalRecordingsFragment())
+            }
             setClickListenerOn(R.id.clear_item) {
                 viewModel.clearLogs()
 
@@ -144,7 +149,7 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
             setupToolbarForSelection(selecting, it.size)
         }
 
-        viewModel.logs.observe(viewLifecycleOwner) {
+        viewModel.logs.asLiveData().observe(viewLifecycleOwner) {
             adapter.submitList(null)
             adapter.submitList(it) {
                 scrollLogToBottom()

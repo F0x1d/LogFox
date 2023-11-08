@@ -135,4 +135,6 @@
     <string name="time_format">Time format</string>
     <string name="archives">Archives</string>
     <string name="include_device_information_in_archives">Include device information with exported recordings and crashes</string>
+    <string name="log_dump_size_warning">Logs dump lines are kept in RAM, so make sure not to overflow it with chosen count</string>
+    <string name="to_recording">To recording</string>
 </resources>

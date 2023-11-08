@@ -15,6 +15,7 @@ import com.f0x1d.logfox.repository.logging.readers.crashes.JNICrashDetector
 import com.f0x1d.logfox.repository.logging.readers.crashes.JavaCrashDetector
 import com.f0x1d.logfox.utils.preferences.AppPreferences
 import dagger.hilt.android.qualifiers.ApplicationContext
+import java.io.File
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -25,6 +26,10 @@ class CrashesRepository @Inject constructor(
     private val appPreferences: AppPreferences,
     private val dumpCollector: DumpCollector
 ): LoggingHelperItemsRepository<AppCrash>(), SharedPreferences.OnSharedPreferenceChangeListener {
+
+    private val logDumpsDir = File(context.filesDir.absolutePath + "/dumps").apply {
+        if (!exists()) mkdirs()
+    }
 
     private val crashCollected: suspend (AppCrash) -> Unit = {
         val sendNotificationIfNeeded = { appCrash: AppCrash ->
@@ -38,7 +43,15 @@ class CrashesRepository @Inject constructor(
             .filterAndSearch(database.userFilterDao().getAll())
             .joinToString("\n") { logLine -> logLine.original }
 
-        val appCrash = it.copy(logDump = logDump)
+        val logDumpFile = when (logDump.isNotEmpty()) {
+            true -> File(logDumpsDir, "${it.notificationId}-dump.txt").apply {
+                writeText(logDump)
+            }
+
+            else -> null
+        }
+
+        val appCrash = it.copy(logDumpFile = logDumpFile?.absolutePath)
 
         if (appPreferences.collectingFor(appCrash.crashType)) {
             val appCrashWithId = appCrash.copy(
@@ -69,6 +82,7 @@ class CrashesRepository @Inject constructor(
 
     fun deleteAllByPackageName(appCrash: AppCrash) = runOnAppScope {
         database.appCrashDao().getAllByPackageName(appCrash.packageName).forEach {
+            it.deleteDumpFile()
             context.cancelCrashNotificationFor(it)
         }
 
@@ -78,12 +92,16 @@ class CrashesRepository @Inject constructor(
     override suspend fun updateInternal(item: AppCrash) = database.appCrashDao().update(item)
 
     override suspend fun deleteInternal(item: AppCrash) {
+        item.deleteDumpFile()
         database.appCrashDao().delete(item)
 
         context.cancelCrashNotificationFor(item)
     }
 
     override suspend fun clearInternal() {
+        database.appCrashDao().getAll().forEach {
+            it.deleteDumpFile()
+        }
         database.appCrashDao().deleteAll()
 
         context.cancelAllCrashNotifications()

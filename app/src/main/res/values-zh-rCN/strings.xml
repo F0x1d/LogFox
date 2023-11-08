@@ -126,4 +126,6 @@
     <string name="time_format">时间格式</string>
     <string name="archives">压缩档案</string>
     <string name="include_device_information_in_archives">在导出的崩溃日志和录制中包含设备信息</string>
+    <string name="log_dump_size_warning">日志存储在 RAM 中，请确保所选值不会溢出 RAM</string>
+    <string name="to_recording">转为录制</string>
 </resources>

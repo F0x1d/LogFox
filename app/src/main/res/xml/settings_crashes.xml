@@ -17,6 +17,11 @@
             android:key="pref_logs_dump_lines_count"
             app:singleLineTitle="false"
             app:iconSpaceReserved="false" />
+
+        <Preference
+            android:summary="@string/log_dump_size_warning"
+            android:selectable="false"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
     <PreferenceCategory
