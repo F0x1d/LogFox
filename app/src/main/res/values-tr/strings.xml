@@ -15,7 +15,7 @@
     <string name="filter">Filtre</string>
     <string name="about_app">Uygulama hakkında</string>
     <string name="setup">Kur</string>
-    <string name="how_to_use_adb">Android 13\'ten bu yana Google, ADB üzerinden logcat erişimini sınırlandırdı. Logları sadece birkaç dakikalığına görebileceksiniz, sonra loglamayı geri başlatmanız gerekecek.\n\Şu komutu ADB'de çalıştırın:\n\n%s</string>
+    <string name="how_to_use_adb">Android 13\'ten bu yana Google, ADB üzerinden logcat erişimini sınırlandırdı. Logları sadece birkaç dakikalığına görebileceksiniz, sonra loglamayı geri başlatmanız gerekecek.\n\Şu komutu ADB\'de çalıştırın:\n\n%s</string>
     <string name="check">Kontrol et</string>
     <string name="developer">Geliștirici</string>
     <string name="service">Hizmet</string>
