@@ -15,7 +15,7 @@
     <string name="filter">Filtre</string>
     <string name="about_app">Uygulama hakkında</string>
     <string name="setup">Kur</string>
-    <string name="how_to_use_adb">Android 13'ten bu yana Google, ADB üzerinden logcat erişimini sınırlandırdı. Logları sadece birkaç dakikalığına görebileceksiniz, sonra loglamayı geri başlatmanız gerekecek.\n\Şu komutu ADB'de çalıştırın:\n\n%s</string>
+    <string name="how_to_use_adb">Android 13\'ten bu yana Google, ADB üzerinden logcat erişimini sınırlandırdı. Logları sadece birkaç dakikalığına görebileceksiniz, sonra loglamayı geri başlatmanız gerekecek.\n\Şu komutu ADB'de çalıştırın:\n\n%s</string>
     <string name="check">Kontrol et</string>
     <string name="developer">Geliștirici</string>
     <string name="service">Hizmet</string>
@@ -34,7 +34,7 @@
     <string name="delete">Sil</string>
     <string name="resume">Devam et</string>
     <string name="logs_update_interval">Log güncelleme sıklığı</string>
-    <string name="in_ms">ms'te</string>
+    <string name="in_ms">ms\'te</string>
     <string name="this_is_not_a_number">Bu bir numara değil</string>
     <string name="logs_text_size">Log metin büyüklüğü</string>
     <string name="collect_java_crashes">Java çökmelelerini topla</string>
@@ -75,7 +75,7 @@
     <string name="start_on_launch">Uygulama başlangıcında çalıştır</string>
     <string name="start_service">Hizmeti başlat</string>
     <string name="stop_service">Hizmeti durdur</string>
-    <string name="service_required_desc">Servis, arka planda çökmeleri gözlemlemek için sadece bir saplamadır. Servis olmadan Android LogFox'u öldürür</string>
+    <string name="service_required_desc">Servis, arka planda çökmeleri gözlemlemek için sadece bir saplamadır. Servis olmadan Android LogFox\'u öldürür</string>
     <string name="recording">Kaydediliyor</string>
     <string name="title">Başlık</string>
     <string name="recording_status">Kayıt durumu</string>
@@ -84,7 +84,7 @@
     <string name="links">Linkler</string>
     <string name="recording_paused">Kayıt durduruldu</string>
     <string name="close">Kapat</string>
-    <string name="android13_start_on_boot_warning">Android 13'ten beri Google logcat'in arka plandan başlatılmasını sınırlandırmıştır. Bu yüzden, bu geçiş çalışmayabilir. Root veya Shizuku kullanın.</string>
+    <string name="android13_start_on_boot_warning">Android 13\'ten beri Google logcat\'in arka plandan başlatılmasını sınırlandırmıştır. Bu yüzden, bu geçiş çalışmayabilir. Root veya Shizuku kullanın.</string>
     <string name="select">Seç</string>
     <string name="logs_display_limit">Log görüntüleme sınırı</string>
     <string name="lines">Çizgiler</string>
