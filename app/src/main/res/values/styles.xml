@@ -26,18 +26,18 @@
         <item name="android:layout">@layout/fragment_settings</item>
     </style>
 
-    <style name="LogFoxToolbarTitleLargeAppearance" parent="TextAppearance.Material3.TitleLarge">
+    <style name="LogFoxToolbarTitleAppearance" parent="TextAppearance.Material3.ActionBar.Title">
         <item name="fontFamily">@font/google_sans_medium</item>
         <item name="android:fontFamily">@font/google_sans_medium</item>
     </style>
 
-    <style name="LogFoxToolbarTitleMediumAppearance" parent="TextAppearance.Material3.TitleMedium">
-        <item name="fontFamily">@font/google_sans_medium</item>
-        <item name="android:fontFamily">@font/google_sans_medium</item>
+    <style name="LogFoxToolbarSubtitleAppearance" parent="TextAppearance.Material3.ActionBar.Subtitle">
+        <item name="fontFamily">@font/google_sans</item>
+        <item name="android:fontFamily">@font/google_sans</item>
     </style>
 
     <style name="LogFoxToolbarStyle" parent="Widget.Material3.Toolbar">
-        <item name="titleTextAppearance">@style/LogFoxToolbarTitleLargeAppearance</item>
-        <item name="subtitleTextAppearance">@style/LogFoxToolbarTitleMediumAppearance</item>
+        <item name="titleTextAppearance">@style/LogFoxToolbarTitleAppearance</item>
+        <item name="subtitleTextAppearance">@style/LogFoxToolbarSubtitleAppearance</item>
     </style>
 </resources>

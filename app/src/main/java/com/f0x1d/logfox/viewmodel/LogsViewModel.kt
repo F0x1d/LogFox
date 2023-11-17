@@ -41,6 +41,9 @@ class LogsViewModel @Inject constructor(
 ): BaseViewModel(application) {
 
     val query = MutableStateFlow<String?>(null)
+    val queryAndFilters = query.combine(database.userFilterDao().getAllAsFlow()) { query, filters ->
+        query to filters.filter { it.enabled }
+    }.flowOn(Dispatchers.IO)
 
     val paused = MutableStateFlow(false)
 
@@ -117,12 +120,12 @@ class LogsViewModel @Inject constructor(
 
     fun pause() = paused.update { true }
     fun resume() = paused.update { false }
-}
 
-data class LogsData(
-    val logs: List<LogLine>,
-    val filters: List<UserFilter>,
-    val query: String?,
-    val paused: Boolean,
-    val passing: Boolean = true
-)
+    private data class LogsData(
+        val logs: List<LogLine>,
+        val filters: List<UserFilter>,
+        val query: String?,
+        val paused: Boolean,
+        val passing: Boolean = true
+    )
+}

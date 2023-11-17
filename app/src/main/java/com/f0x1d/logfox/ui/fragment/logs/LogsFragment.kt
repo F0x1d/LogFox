@@ -140,6 +140,24 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
                 scrollLogToBottom()
         }
 
+        viewModel.queryAndFilters.asLiveData().observe(viewLifecycleOwner) {
+            val (query, filters) = it
+
+            val subtitle = buildString {
+                if (query != null) {
+                    append(query)
+
+                    if (filters.isNotEmpty())
+                        append(", ")
+                }
+
+                if (filters.isNotEmpty())
+                    append(resources.getQuantityString(R.plurals.filters_count, filters.size, filters.size))
+            }
+
+            binding.toolbar.subtitle = subtitle
+        }
+
         viewModel.selectedItems.asLiveData().observe(viewLifecycleOwner) {
             val selecting = it.isNotEmpty()
 
