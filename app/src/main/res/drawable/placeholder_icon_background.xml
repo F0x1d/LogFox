@@ -5,8 +5,8 @@
     <solid android:color="@color/placeholder_icon_background" />
 
     <padding
-        android:top="15dp"
-        android:left="15dp"
-        android:right="15dp"
-        android:bottom="15dp"/>
+        android:top="25dp"
+        android:left="25dp"
+        android:right="25dp"
+        android:bottom="25dp"/>
 </shape>
