@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="card_stroke_color">#3a3c3e</color>
+    <color name="placeholder_icon_background">#424242</color>
 </resources>

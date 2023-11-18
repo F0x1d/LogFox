@@ -20,6 +20,15 @@
             app:titleCentered="true" />
     </com.google.android.material.appbar.AppBarLayout>
 
+    <include
+        android:id="@+id/placeholder_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        layout="@layout/placeholder_crashes"
+        app:layout_anchor="@id/crashes_recycler"
+        app:layout_anchorGravity="center" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/crashes_recycler"
         android:layout_width="match_parent"

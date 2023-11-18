@@ -31,14 +31,23 @@
         android:paddingBottom="71dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
+    <include
+        android:id="@+id/placeholder_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        layout="@layout/placeholder_filters"
+        app:layout_anchor="@id/filters_recycler"
+        app:layout_anchorGravity="center" />
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/add_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_add"
         android:layout_margin="10dp"
-        app:layout_anchorGravity="bottom|right|end"
-        android:layout_gravity="end|bottom"
+        app:layout_anchor="@id/filters_recycler"
+        app:layout_anchorGravity="bottom|end"
         android:contentDescription="@string/add"
         android:tooltipText="@string/add"
         tools:targetApi="o" />

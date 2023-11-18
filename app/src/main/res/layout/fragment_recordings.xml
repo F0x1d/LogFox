@@ -29,6 +29,15 @@
         android:paddingBottom="66dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
+    <include
+        android:id="@+id/placeholder_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        layout="@layout/placeholder_recordings"
+        app:layout_anchor="@id/recordings_recycler"
+        app:layout_anchorGravity="center" />
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/pause_fab"
         android:layout_width="wrap_content"
@@ -40,8 +49,8 @@
         android:layout_marginBottom="76dp"
         android:contentDescription="@string/pause"
         android:tooltipText="@string/pause"
-        app:layout_anchorGravity="bottom|right|end"
-        android:layout_gravity="end|bottom"
+        app:layout_anchor="@id/recordings_recycler"
+        app:layout_anchorGravity="bottom|end"
         tools:targetApi="o" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -50,8 +59,8 @@
         android:layout_height="wrap_content"
         android:src="@drawable/ic_recording"
         android:layout_margin="10dp"
-        app:layout_anchorGravity="bottom|right|end"
-        android:layout_gravity="end|bottom"
+        app:layout_anchor="@id/recordings_recycler"
+        app:layout_anchorGravity="bottom|end"
         android:contentDescription="@string/record"
         android:tooltipText="@string/record"
         tools:targetApi="o" />
