@@ -18,6 +18,7 @@
             android:layout_height="?actionBarSize"
             app:title="@string/app_name"
             app:titleCentered="true"
+            app:subtitleCentered="true"
             app:menu="@menu/logs_menu"
             app:navigationIconTint="?colorOnSurface"/>
     </com.google.android.material.appbar.AppBarLayout>
@@ -29,6 +30,15 @@
         android:clipToPadding="false"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
+    <include
+        android:id="@+id/placeholder_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        layout="@layout/placeholder_logs"
+        app:layout_anchor="@id/logs_recycler"
+        app:layout_anchorGravity="center" />
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/scroll_fab"
         android:layout_width="wrap_content"
@@ -36,8 +46,8 @@
         android:src="@drawable/ic_arrow_drop_down"
         android:visibility="gone"
         android:layout_margin="10dp"
-        app:layout_anchorGravity="bottom|right|end"
-        android:layout_gravity="end|bottom"
+        app:layout_anchor="@id/logs_recycler"
+        app:layout_anchorGravity="bottom|end"
         android:contentDescription="@string/scroll_to_bottom"
         android:tooltipText="@string/scroll_to_bottom"
         tools:targetApi="o" />

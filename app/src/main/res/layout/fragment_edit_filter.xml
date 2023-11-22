@@ -242,8 +242,8 @@
         android:layout_height="wrap_content"
         android:src="@drawable/ic_save"
         android:layout_margin="10dp"
-        app:layout_anchorGravity="bottom|right|end"
-        android:layout_gravity="end|bottom"
+        app:layout_anchor="@id/scroll_view"
+        app:layout_anchorGravity="bottom|end"
         android:contentDescription="@string/save"
         android:tooltipText="@string/save"
         tools:targetApi="o" />

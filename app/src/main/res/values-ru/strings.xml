@@ -127,4 +127,9 @@
     <string name="include_device_information_in_archives">Добавлять информацию об устройстве при экспорте записей и сбоев</string>
     <string name="log_dump_size_warning">Свалка логов хранится в оперативной памяти, так что не переполните её выбранным значением</string>
     <string name="to_recording">В запись</string>
+    <string name="no_logs">Сейчас логов нет</string>
+    <string name="all_logs_were_filtered_out">Все логи отфильтрованы</string>
+    <string name="no_crashes">Сейчас сбоев нет</string>
+    <string name="no_recordings">Сейчас записей нет</string>
+    <string name="no_filters">Сейчас фильтров нет</string>
 </resources>

@@ -52,7 +52,11 @@ interface UserFilterDao {
 class AllowedLevelsConverter {
 
     @TypeConverter
-    fun toAllowedLevels(data: String) = data.split(",").map { enumValues<LogLevel>()[it.toInt()] }
+    fun toAllowedLevels(data: String) = when (data.isEmpty()) {
+        true -> emptyList()
+
+        else -> data.split(",").map { enumValues<LogLevel>()[it.toInt()] }
+    }
 
     @TypeConverter
     fun fromAllowedLevels(allowedLevels: List<LogLevel>) = allowedLevels.joinToString(",") { it.ordinal.toString() }

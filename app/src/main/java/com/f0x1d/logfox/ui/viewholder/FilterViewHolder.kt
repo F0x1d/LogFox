@@ -32,19 +32,19 @@ class FilterViewHolder(
 
     override fun bindTo(data: UserFilter) {
         binding.includingText.setText(if (data.including) R.string.including else R.string.excluding)
-        binding.allowedLevelsText.setTextOrMakeGoneIfNull(R.string.log_levels, data.allowedLevels.joinToString { it.letter })
-        binding.uidText.setTextOrMakeGoneIfNull(R.string.uid, data.uid)
-        binding.pidText.setTextOrMakeGoneIfNull(R.string.pid, data.pid)
-        binding.tidText.setTextOrMakeGoneIfNull(R.string.tid, data.tid)
-        binding.packageNameText.setTextOrMakeGoneIfNull(R.string.package_name, data.packageName)
-        binding.tagText.setTextOrMakeGoneIfNull(R.string.tag, data.tag)
-        binding.contentText.setTextOrMakeGoneIfNull(R.string.content_contains, data.content)
+        binding.allowedLevelsText.setTextOrMakeGoneIfEmpty(R.string.log_levels, data.allowedLevels.joinToString { it.letter })
+        binding.uidText.setTextOrMakeGoneIfEmpty(R.string.uid, data.uid)
+        binding.pidText.setTextOrMakeGoneIfEmpty(R.string.pid, data.pid)
+        binding.tidText.setTextOrMakeGoneIfEmpty(R.string.tid, data.tid)
+        binding.packageNameText.setTextOrMakeGoneIfEmpty(R.string.package_name, data.packageName)
+        binding.tagText.setTextOrMakeGoneIfEmpty(R.string.tag, data.tag)
+        binding.contentText.setTextOrMakeGoneIfEmpty(R.string.content_contains, data.content)
 
         checkedListener.check(data.enabled)
     }
 
-    private fun TextView.setTextOrMakeGoneIfNull(prefix: Int, content: String?) {
-        visibility = if (content == null) View.GONE else View.VISIBLE
+    private fun TextView.setTextOrMakeGoneIfEmpty(prefix: Int, content: String?) {
+        visibility = if (content.isNullOrEmpty()) View.GONE else View.VISIBLE
 
         if (content != null) {
             text = Html.fromHtml("<b>${context.getString(prefix)}:</b> $content")

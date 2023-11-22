@@ -121,7 +121,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toEndOf="@id/allowed_levels_text"
+            app:layout_constraintStart_toEndOf="@id/including_text"
             app:layout_constraintEnd_toStartOf="@id/delete_button"
             app:layout_constraintBottom_toBottomOf="parent" />
 

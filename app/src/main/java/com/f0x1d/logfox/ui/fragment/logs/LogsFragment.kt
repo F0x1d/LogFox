@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.core.view.isVisible
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.lifecycle.asLiveData
 import androidx.navigation.fragment.findNavController
@@ -140,6 +141,31 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
                 scrollLogToBottom()
         }
 
+        viewModel.queryAndFilters.asLiveData().observe(viewLifecycleOwner) {
+            val (query, filters) = it
+
+            val subtitle = buildString {
+                if (query != null) {
+                    append(query)
+
+                    if (filters.isNotEmpty())
+                        append(", ")
+                }
+
+                if (filters.isNotEmpty())
+                    append(resources.getQuantityString(R.plurals.filters_count, filters.size, filters.size))
+            }
+
+            binding.toolbar.subtitle = subtitle
+            binding.placeholderLayout.placeholderText.setText(
+                when (subtitle.isEmpty()) {
+                    true -> R.string.no_logs
+
+                    else -> R.string.all_logs_were_filtered_out
+                }
+            )
+        }
+
         viewModel.selectedItems.asLiveData().observe(viewLifecycleOwner) {
             val selecting = it.isNotEmpty()
 
@@ -150,6 +176,8 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
         }
 
         viewModel.logs.asLiveData().observe(viewLifecycleOwner) {
+            binding.placeholderLayout.root.isVisible = it.isEmpty()
+
             adapter.submitList(null)
             adapter.submitList(it) {
                 scrollLogToBottom()

@@ -41,11 +41,11 @@
     <string name="this_is_not_a_number">这不是一个数字</string>
     <string name="logs_text_size">字体大小</string>
     <string name="collect_java_crashes">收集 Java 崩溃</string>
-    <string name="show_java_crashes_notifications">显示 Java 崩溃消息</string>
+    <string name="show_java_crashes_notifications">发送 Java 崩溃通知</string>
     <string name="collect_jni_crashes">收集 JNI 崩溃</string>
-    <string name="show_jni_crashes_notifications">显示 JNI 崩溃消息</string>
+    <string name="show_jni_crashes_notifications">发送 JNI 崩溃通知</string>
     <string name="collect_anr">收集 ANR</string>
-    <string name="show_anr_notifications">显示 ANR 消息</string>
+    <string name="show_anr_notifications">发送 ANR 通知</string>
     <string name="error">错误: %s</string>
     <string name="log_levels">Log 等级</string>
     <string name="tag">标签</string>
@@ -128,4 +128,9 @@
     <string name="include_device_information_in_archives">在导出的崩溃日志和录制中包含设备信息</string>
     <string name="log_dump_size_warning">日志存储在 RAM 中，请确保所选值不会溢出 RAM</string>
     <string name="to_recording">转为录制</string>
+    <string name="no_logs">目前没有日志</string>
+    <string name="all_logs_were_filtered_out">所有日志都被过滤掉了</string>
+    <string name="no_crashes">目前没有崩溃记录</string>
+    <string name="no_recordings">目前没有录制</string>
+    <string name="no_filters">目前没有过滤器</string>
 </resources>

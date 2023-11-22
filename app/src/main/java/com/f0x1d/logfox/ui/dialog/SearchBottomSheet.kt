@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import androidx.core.view.isVisible
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.databinding.SheetSearchBinding
@@ -24,7 +25,7 @@ class SearchBottomSheet: BaseBottomSheet<SheetSearchBinding>() {
 
         binding.queryText.setText(query)
 
-        binding.clearSearchButton.visibility = if (query == null) View.GONE else View.VISIBLE
+        binding.clearSearchButton.isVisible = query != null
         binding.clearSearchButton.setOnClickListener {
             search(null)
         }
