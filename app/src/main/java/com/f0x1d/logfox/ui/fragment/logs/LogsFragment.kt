@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
-import androidx.core.view.isVisible
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.lifecycle.asLiveData
 import androidx.navigation.fragment.findNavController
@@ -25,6 +24,7 @@ import com.f0x1d.logfox.extensions.views.widgets.invalidateNavigationButton
 import com.f0x1d.logfox.extensions.views.widgets.setClickListenerOn
 import com.f0x1d.logfox.extensions.views.widgets.setupBackButtonForNavController
 import com.f0x1d.logfox.extensions.views.widgets.setupCloseButton
+import com.f0x1d.logfox.model.LogLine
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
 import com.f0x1d.logfox.viewmodel.LogsViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -43,6 +43,7 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
         })
     }
     private var changingState = false
+    private var changingPlaceholderVisibilityRunnable: Runnable? = null
 
     private val clearSelectionOnBackPressedCallback = object : OnBackPressedCallback(false) {
         override fun handleOnBackPressed() {
@@ -98,9 +99,7 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
             }
             setClickListenerOn(R.id.clear_item) {
                 viewModel.clearLogs()
-
-                adapter.submitList(null)
-                viewModel.selectedItems.update { emptyList() }
+                updateLogsList(null)
             }
             setClickListenerOn(R.id.service_status_item) {
                 requireContext().apply {
@@ -176,12 +175,7 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
         }
 
         viewModel.logs.asLiveData().observe(viewLifecycleOwner) {
-            binding.placeholderLayout.root.isVisible = it.isEmpty()
-
-            adapter.submitList(null)
-            adapter.submitList(it) {
-                scrollLogToBottom()
-            }
+            updateLogsList(it)
         }
 
         viewModel.paused.asLiveData().observe(viewLifecycleOwner) { paused ->
@@ -246,6 +240,25 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
             setupBackButtonForNavController()
 
         else invalidateNavigationButton()
+    }
+
+    private fun updateLogsList(items: List<LogLine>?) {
+        binding.placeholderLayout.root.apply {
+            if (items?.isEmpty() != false) {
+                animate()
+                    .alpha(1f)
+                    .setStartDelay(1000)
+                    .setDuration(200)
+            } else {
+                animate().cancel()
+                alpha = 0f
+            }
+        }
+
+        adapter.submitList(null)
+        adapter.submitList(items) {
+            scrollLogToBottom()
+        }
     }
 
     private fun scrollLogToBottom() {

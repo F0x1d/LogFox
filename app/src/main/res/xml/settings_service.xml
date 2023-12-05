@@ -46,6 +46,14 @@
             app:singleLineTitle="false"
             app:widgetLayout="@layout/preference_material_switch"
             app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
+            android:title="@string/show_logs_from_app_launch"
+            android:key="pref_show_logs_from_app_launch"
+            android:defaultValue="true"
+            app:singleLineTitle="false"
+            app:widgetLayout="@layout/preference_material_switch"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
     <PreferenceCategory

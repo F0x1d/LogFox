@@ -80,6 +80,9 @@ class AppPreferences @Inject constructor(
     var startOnLaunch
         get() = get("pref_start_on_launch", true)
         set(value) { put("pref_start_on_launch", value) }
+    var showLogsFromAppLaunch
+        get() = get("pref_show_logs_from_app_launch", true)
+        set(value) { put("pref_show_logs_from_app_launch", value) }
     var selectedTerminalIndex
         get() = get("pref_selected_terminal_index", 0)
         set(value) { put("pref_selected_terminal_index", value) }

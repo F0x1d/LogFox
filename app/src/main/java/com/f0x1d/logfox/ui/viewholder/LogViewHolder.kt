@@ -39,28 +39,33 @@ class LogViewHolder(
         popupMenu.setForceShowIcon(true)
 
         binding.root.setOnClickListener {
-            if (adapter<LogsAdapter>().selectedItems.isNotEmpty())
+            val adapter = adapter<LogsAdapter>() ?: return@setOnClickListener
+
+            if (adapter.selectedItems.isNotEmpty())
                 selectItem()
             else
                 expandOrCollapseItem()
         }
         binding.root.setOnLongClickListener {
-            if (adapter<LogsAdapter>().selectedItems.isNotEmpty())
+            val adapter = adapter<LogsAdapter>() ?: return@setOnLongClickListener true
+
+            if (adapter.selectedItems.isNotEmpty())
                 expandOrCollapseItem()
             else
                 popupMenu.show()
+
             return@setOnLongClickListener true
         }
     }
 
     override fun bindTo(data: LogLine) {
-        adapter<LogsAdapter>().textSize.also {
+        adapter<LogsAdapter>()?.textSize?.also {
             binding.logText.textSize = it
             binding.levelView.textSize = it
         }
 
         binding.logText.text = buildString {
-            adapter<LogsAdapter>().logsFormat.apply {
+            adapter<LogsAdapter>()?.logsFormat?.apply {
                 if (date) append(dateTimeFormatter.formatDate(data.dateAndTime) + " ")
                 if (time) append(dateTimeFormatter.formatTime(data.dateAndTime) + " ")
                 if (uid) append(data.uid + " ")
@@ -81,21 +86,23 @@ class LogViewHolder(
         popupMenu.dismiss()
     }
 
-    private fun selectItem() = adapter<LogsAdapter>().selectedItems.apply {
+    private fun selectItem() = adapter<LogsAdapter>()?.selectedItems?.apply {
         currentItem?.also {
             selectedItem(it, !any { logLine -> it.id == logLine.id })
         }
     }
 
-    private fun expandOrCollapseItem() = adapter<LogsAdapter>().expandedStates.apply {
-        currentItem?.also {
-            put(it.id, !getOrElse(it.id) { adapter<LogsAdapter>().logsExpanded })
-            changeExpandedAndSelected(it)
+    private fun expandOrCollapseItem() = adapter<LogsAdapter>()?.apply {
+        expandedStates.apply {
+            currentItem?.also {
+                put(it.id, !getOrElse(it.id) { logsExpanded })
+                changeExpandedAndSelected(it)
+            }
         }
     }
 
-    private fun changeExpandedAndSelected(logLine: LogLine) {
-        binding.logText.maxLines = if (adapter<LogsAdapter>().expandedStates.getOrElse(logLine.id) { adapter<LogsAdapter>().logsExpanded }) Int.MAX_VALUE else 1
-        binding.container.isSelected = adapter<LogsAdapter>().selectedItems.contains(logLine)
+    private fun changeExpandedAndSelected(logLine: LogLine) = adapter<LogsAdapter>()?.apply {
+        binding.logText.maxLines = if (expandedStates.getOrElse(logLine.id) { logsExpanded }) Int.MAX_VALUE else 1
+        binding.container.isSelected = selectedItems.contains(logLine)
     }
 }
