@@ -76,6 +76,16 @@ class SettingsServiceFragment: BasePreferenceFragment() {
                 return@setOnPreferenceChangeListener true
             }
         }
+
+        findPreference<SwitchPreferenceCompat>("pref_show_logs_from_app_launch")?.apply {
+            setOnPreferenceChangeListener { preference, newValue ->
+                if (!(newValue as Boolean)) {
+                    loggingRepository.restartLogging(updateTerminal = false)
+                }
+
+                return@setOnPreferenceChangeListener true
+            }
+        }
     }
 
     private fun askAboutNewTerminalRestart() {

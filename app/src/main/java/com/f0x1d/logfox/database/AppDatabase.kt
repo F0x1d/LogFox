@@ -15,7 +15,7 @@ import com.f0x1d.logfox.database.entity.LogRecordingDao
 import com.f0x1d.logfox.database.entity.UserFilter
 import com.f0x1d.logfox.database.entity.UserFilterDao
 
-@Database(entities = [AppCrash::class, LogRecording::class, UserFilter::class], version = 11)
+@Database(entities = [AppCrash::class, LogRecording::class, UserFilter::class], version = 12)
 @TypeConverters(CrashTypeConverter::class, AllowedLevelsConverter::class)
 abstract class AppDatabase: RoomDatabase() {
 
@@ -50,6 +50,9 @@ abstract class AppDatabase: RoomDatabase() {
         }
         val MIGRATION_10_11 = Migration(10, 11) {
             it.execSQL("ALTER TABLE AppCrash ADD COLUMN log_dump_file TEXT")
+        }
+        val MIGRATION_11_12 = Migration(11, 12) {
+            it.execSQL("CREATE INDEX index_AppCrash_date_and_time ON AppCrash(date_and_time)")
         }
     }
 

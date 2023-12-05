@@ -38,7 +38,8 @@ class LoggingRepository @Inject constructor(
 ): BaseRepository(), SharedPreferences.OnSharedPreferenceChangeListener {
 
     companion object {
-        private val COMMAND = arrayOf("logcat" , "-v", "uid", "-v", "epoch", "-T", "1")
+        private val COMMAND = arrayOf("logcat" , "-v", "uid", "-v", "epoch")
+        private val SHOW_LOGS_FROM_NOW_FLAGS = arrayOf("-T", "1")
     }
 
     val logsFlow = MutableStateFlow(emptyList<LogLine>())
@@ -128,7 +129,13 @@ class LoggingRepository @Inject constructor(
             return@coroutineScope
         }
 
-        val process = loggingTerminal.execute(*COMMAND)
+        val command = COMMAND + when (appPreferences.showLogsFromAppLaunch) {
+            true -> SHOW_LOGS_FROM_NOW_FLAGS
+
+            else -> emptyArray()
+        }
+
+        val process = loggingTerminal.execute(*command)
         if (process == null) {
             fallbackToDefaultTerminal()
             return@coroutineScope

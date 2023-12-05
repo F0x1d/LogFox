@@ -31,7 +31,38 @@ class CrashesRepository @Inject constructor(
         if (!exists()) mkdirs()
     }
 
-    private val crashCollected: suspend (AppCrash) -> Unit = {
+    override val readers = listOf(
+        dumpCollector,
+        JavaCrashDetector(this::collectCrash),
+        JNICrashDetector(this::collectCrash),
+        ANRDetector(this::collectCrash)
+    )
+
+    override suspend fun setup() {
+        dumpCollector.capacity = appPreferences.logsDumpLinesCount
+        appPreferences.registerListener(this)
+    }
+
+    override suspend fun stop() {
+        appPreferences.unregisterListener(this)
+    }
+
+    fun deleteAllByPackageName(appCrash: AppCrash) = runOnAppScope {
+        database.appCrashDao().getAllByPackageName(appCrash.packageName).forEach {
+            it.deleteDumpFile()
+            context.cancelCrashNotificationFor(it)
+        }
+
+        database.appCrashDao().deleteByPackageName(appCrash.packageName)
+    }
+
+    private suspend fun collectCrash(it: AppCrash) {
+        database.appCrashDao().getAllByDateAndTime(it.dateAndTime).filter { crash ->
+            crash.packageName == it.packageName
+        }.also {
+            if (it.isNotEmpty()) return
+        }
+
         val sendNotificationIfNeeded = { appCrash: AppCrash ->
             if (appPreferences.showingNotificationsFor(appCrash.crashType)) {
                 context.sendErrorNotification(appCrash)
@@ -62,31 +93,6 @@ class CrashesRepository @Inject constructor(
         } else sendNotificationIfNeeded(
             appCrash
         )
-    }
-
-    override val readers = listOf(
-        dumpCollector,
-        JavaCrashDetector(crashCollected),
-        JNICrashDetector(crashCollected),
-        ANRDetector(crashCollected)
-    )
-
-    override suspend fun setup() {
-        dumpCollector.capacity = appPreferences.logsDumpLinesCount
-        appPreferences.registerListener(this)
-    }
-
-    override suspend fun stop() {
-        appPreferences.unregisterListener(this)
-    }
-
-    fun deleteAllByPackageName(appCrash: AppCrash) = runOnAppScope {
-        database.appCrashDao().getAllByPackageName(appCrash.packageName).forEach {
-            it.deleteDumpFile()
-            context.cancelCrashNotificationFor(it)
-        }
-
-        database.appCrashDao().deleteByPackageName(appCrash.packageName)
     }
 
     override suspend fun updateInternal(item: AppCrash) = database.appCrashDao().update(item)

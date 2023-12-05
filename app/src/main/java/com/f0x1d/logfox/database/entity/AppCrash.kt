@@ -1,6 +1,14 @@
 package com.f0x1d.logfox.database.entity
 
-import androidx.room.*
+import androidx.room.ColumnInfo
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Entity
+import androidx.room.Insert
+import androidx.room.PrimaryKey
+import androidx.room.Query
+import androidx.room.TypeConverter
+import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 import java.io.File
 
@@ -9,9 +17,9 @@ data class AppCrash(
     @ColumnInfo(name = "app_name") val appName: String?,
     @ColumnInfo(name = "package_name") val packageName: String,
     @ColumnInfo(name = "crash_type") val crashType: CrashType,
-    @ColumnInfo(name = "date_and_time") val dateAndTime: Long,
+    @ColumnInfo(name = "date_and_time", index = true) val dateAndTime: Long,
     @ColumnInfo(name = "log") val log: String,
-    @ColumnInfo(name = "log_dump") val logDump: String? = null,
+    @Deprecated("Use logDumpFile") @ColumnInfo(name = "log_dump") val logDump: String? = null,
     @ColumnInfo(name = "log_dump_file") val logDumpFile: String? = null,
     @PrimaryKey(autoGenerate = true) val id: Long = 0
 ) {
@@ -31,6 +39,9 @@ interface AppCrashDao {
 
     @Query("SELECT * FROM AppCrash WHERE package_name = :packageName")
     suspend fun getAllByPackageName(packageName: String): List<AppCrash>
+
+    @Query("SELECT * FROM AppCrash WHERE date_and_time = :dateAndTime")
+    suspend fun getAllByDateAndTime(dateAndTime: Long): List<AppCrash>
 
     @Query("SELECT * FROM AppCrash WHERE id = :id")
     fun get(id: Long): Flow<AppCrash?>
