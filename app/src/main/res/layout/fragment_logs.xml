@@ -34,7 +34,6 @@
         android:id="@+id/placeholder_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"
         layout="@layout/placeholder_logs"
         app:layout_anchor="@id/logs_recycler"
         app:layout_anchorGravity="center" />

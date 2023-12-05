@@ -109,7 +109,9 @@ class LogsViewModel @Inject constructor(
 
     fun query(query: String?) = this.query.update { query }
 
-    fun clearLogs() = loggingRepository.clearLogs()
+    fun clearLogs() = loggingRepository.clearLogs().also {
+        selectedItems.update { emptyList() }
+    }
 
     fun restartLogging() = loggingRepository.restartLogging()
 
