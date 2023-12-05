@@ -247,7 +247,7 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
             if (items?.isEmpty() != false) {
                 animate()
                     .alpha(1f)
-                    .setStartDelay(2000)
+                    .setStartDelay(1000)
                     .setDuration(200)
             } else {
                 animate().cancel()
