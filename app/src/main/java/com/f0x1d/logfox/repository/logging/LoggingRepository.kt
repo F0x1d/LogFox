@@ -163,7 +163,7 @@ class LoggingRepository @Inject constructor(
 
         try {
             process.output.bufferedReader().useLines {
-                var droppedFirst = false
+                var droppedFirst = !appPreferences.showLogsFromAppLaunch
                 // avoiding getting the same line after logging restart because of
                 // WARNING: -T 0 invalid, setting to 1
                 for (line in it) {
