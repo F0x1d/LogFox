@@ -60,7 +60,7 @@
         app:allowDividerAbove="false">
         <Preference
             android:title="@string/releases"
-            android:icon="@drawable/ic_settings_picnic">
+            android:icon="@drawable/ic_settings_releases">
 
             <intent
                 android:action="android.intent.action.VIEW"

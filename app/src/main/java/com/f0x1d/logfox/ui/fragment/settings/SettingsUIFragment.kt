@@ -50,7 +50,7 @@ class SettingsUIFragment: BasePreferenceFragment() {
             setupAsEditTextPreference({
                 it.textLayout.setHint(R.string.date_format)
             }, {
-                setIcon(R.drawable.ic_dialog_time_format)
+                setIcon(R.drawable.ic_dialog_date_format)
             }, {
                 appPreferences.dateFormat
             }, {
