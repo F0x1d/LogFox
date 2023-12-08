@@ -48,7 +48,7 @@ class LoggingService: Service() {
 
     private fun notification() = NotificationCompat.Builder(this, LogFoxApp.LOGGING_STATUS_CHANNEL_ID)
         .setContentTitle(getString(R.string.logging))
-        .setSmallIcon(R.drawable.ic_bug_notification)
+        .setSmallIcon(R.drawable.ic_logfox)
         .setContentIntent(makeOpenAppPendingIntent())
         .applyPrimaryColorIfNeeded(this)
         .addAction(R.drawable.ic_stop, getString(R.string.stop_service), makeServicePendingIntent(STOP_LOGGING_SERVICE_INTENT_ID, LoggingService::class.java) {
