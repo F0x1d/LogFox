@@ -9,7 +9,7 @@
         android:layout_width="120dp"
         android:layout_height="120dp"
         app:tint="?android:textColorSecondary"
-        app:srcCompat="@drawable/ic_android"
+        app:srcCompat="@drawable/ic_bug"
         android:background="@drawable/placeholder_icon_background"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
