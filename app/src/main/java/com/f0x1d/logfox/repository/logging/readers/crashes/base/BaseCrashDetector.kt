@@ -6,7 +6,7 @@ import com.f0x1d.logfox.database.entity.CrashType
 import com.f0x1d.logfox.model.LogLine
 import com.f0x1d.logfox.repository.logging.readers.base.LogsReader
 
-abstract class BaseCrashDetector(private val collected: suspend (AppCrash) -> Unit): LogsReader {
+abstract class BaseCrashDetector(private val collected: suspend (AppCrash, List<LogLine>) -> Unit): LogsReader {
 
     protected abstract val crashType: CrashType
     protected open val commonTag: String? = null
@@ -35,7 +35,14 @@ abstract class BaseCrashDetector(private val collected: suspend (AppCrash) -> Un
             collectedLines.add(line)
         } else {
             linesModifier(collectedLines)
-            collected(logsToAppCrash(packageFromCollected(collectedLines), crashType, collectedLines))
+            collected(
+                makeAppCrash(
+                    packageFromCollected(collectedLines),
+                    crashType,
+                    collectedLines
+                ),
+                collectedLines
+            )
 
             collecting = false
             collectedFirstLine = null
@@ -54,7 +61,7 @@ abstract class BaseCrashDetector(private val collected: suspend (AppCrash) -> Un
         }
     }
 
-    private fun logsToAppCrash(crashedAppPackageName: String, crashType: CrashType, lines: List<LogLine>) = LogFoxApp.instance.run {
+    private fun makeAppCrash(crashedAppPackageName: String, crashType: CrashType, lines: List<LogLine>) = LogFoxApp.instance.run {
         val appName = try {
             packageManager.getPackageInfo(crashedAppPackageName, 0).applicationInfo.let {
                 packageManager.getApplicationLabel(it).toString()
@@ -67,8 +74,7 @@ abstract class BaseCrashDetector(private val collected: suspend (AppCrash) -> Un
             appName,
             crashedAppPackageName,
             crashType,
-            lines.first().dateAndTime,
-            lines.joinToString("\n") { it.content }
+            lines.first().dateAndTime
         )
     }
 }

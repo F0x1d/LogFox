@@ -13,6 +13,7 @@ import com.f0x1d.logfox.database.entity.AllowedLevelsConverter
 import com.f0x1d.logfox.database.entity.AppCrash
 import com.f0x1d.logfox.database.entity.AppCrashDao
 import com.f0x1d.logfox.database.entity.CrashTypeConverter
+import com.f0x1d.logfox.database.entity.FileConverter
 import com.f0x1d.logfox.database.entity.LogRecording
 import com.f0x1d.logfox.database.entity.LogRecordingDao
 import com.f0x1d.logfox.database.entity.UserFilter
@@ -24,16 +25,24 @@ import com.f0x1d.logfox.database.entity.UserFilterDao
         LogRecording::class,
         UserFilter::class
     ],
-    version = 13,
+    version = 14,
     autoMigrations = [
         AutoMigration(
             from = 12,
             to = 13,
             spec = AppDatabase.Companion.AutoMigration12_13::class
+        ),
+        AutoMigration(
+            from = 13,
+            to = 14
         )
     ]
 )
-@TypeConverters(CrashTypeConverter::class, AllowedLevelsConverter::class)
+@TypeConverters(
+    CrashTypeConverter::class,
+    AllowedLevelsConverter::class,
+    FileConverter::class
+)
 abstract class AppDatabase: RoomDatabase() {
 
     companion object {

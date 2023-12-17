@@ -8,6 +8,7 @@ import com.f0x1d.logfox.extensions.logline.filterAndSearch
 import com.f0x1d.logfox.extensions.notifications.cancelAllCrashNotifications
 import com.f0x1d.logfox.extensions.notifications.cancelCrashNotificationFor
 import com.f0x1d.logfox.extensions.notifications.sendErrorNotification
+import com.f0x1d.logfox.model.LogLine
 import com.f0x1d.logfox.repository.logging.base.LoggingHelperItemsRepository
 import com.f0x1d.logfox.repository.logging.readers.crashes.ANRDetector
 import com.f0x1d.logfox.repository.logging.readers.crashes.DumpCollector
@@ -27,6 +28,9 @@ class CrashesRepository @Inject constructor(
     private val dumpCollector: DumpCollector
 ): LoggingHelperItemsRepository<AppCrash>(), SharedPreferences.OnSharedPreferenceChangeListener {
 
+    private val logsDir = File(context.filesDir.absolutePath + "/crashes").apply {
+        if (!exists()) mkdirs()
+    }
     private val logDumpsDir = File(context.filesDir.absolutePath + "/dumps").apply {
         if (!exists()) mkdirs()
     }
@@ -49,40 +53,51 @@ class CrashesRepository @Inject constructor(
 
     fun deleteAllByPackageName(appCrash: AppCrash) = runOnAppScope {
         database.appCrashDao().getAllByPackageName(appCrash.packageName).forEach {
-            it.deleteDumpFile()
+            it.deleteAssociatedFiles()
             context.cancelCrashNotificationFor(it)
         }
 
         database.appCrashDao().deleteByPackageName(appCrash.packageName)
     }
 
-    private suspend fun collectCrash(it: AppCrash) {
+    private suspend fun collectCrash(it: AppCrash, lines: List<LogLine>) {
+        val crashLog = lines.joinToString("\n") {
+            it.content
+        }
+
+        val sendNotificationIfNeeded = { appCrash: AppCrash ->
+            if (appPreferences.showingNotificationsFor(appCrash.crashType)) {
+                context.sendErrorNotification(appCrash, crashLog)
+            }
+        }
+
         database.appCrashDao().getAllByDateAndTime(it.dateAndTime).filter { crash ->
             crash.packageName == it.packageName
         }.also {
             if (it.isNotEmpty()) return
         }
 
-        val sendNotificationIfNeeded = { appCrash: AppCrash ->
-            if (appPreferences.showingNotificationsFor(appCrash.crashType)) {
-                context.sendErrorNotification(appCrash)
-            }
+        val logFile = File(logDumpsDir, "${it.dateAndTime}-crash.log").apply {
+            writeText(crashLog)
         }
 
         val logDump = dumpCollector
             .logsDump
             .filterAndSearch(database.userFilterDao().getAll())
-            .joinToString("\n") { logLine -> logLine.original }
+            .joinToString("\n") { it.original }
 
         val logDumpFile = when (logDump.isNotEmpty()) {
-            true -> File(logDumpsDir, "${it.notificationId}-dump.txt").apply {
+            true -> File(logDumpsDir, "${it.dateAndTime}-dump.log").apply {
                 writeText(logDump)
             }
 
             else -> null
         }
 
-        val appCrash = it.copy(logDumpFile = logDumpFile?.absolutePath)
+        val appCrash = it.copy(
+            logFile = logFile,
+            logDumpFile = logDumpFile
+        )
 
         if (appPreferences.collectingFor(appCrash.crashType)) {
             val appCrashWithId = appCrash.copy(
@@ -98,7 +113,7 @@ class CrashesRepository @Inject constructor(
     override suspend fun updateInternal(item: AppCrash) = database.appCrashDao().update(item)
 
     override suspend fun deleteInternal(item: AppCrash) {
-        item.deleteDumpFile()
+        item.deleteAssociatedFiles()
         database.appCrashDao().delete(item)
 
         context.cancelCrashNotificationFor(item)
@@ -106,7 +121,7 @@ class CrashesRepository @Inject constructor(
 
     override suspend fun clearInternal() {
         database.appCrashDao().getAll().forEach {
-            it.deleteDumpFile()
+            it.deleteAssociatedFiles()
         }
         database.appCrashDao().deleteAll()
 

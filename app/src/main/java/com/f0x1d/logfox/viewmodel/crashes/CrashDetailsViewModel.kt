@@ -17,7 +17,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
-import java.io.File
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 @HiltViewModel
@@ -36,12 +36,21 @@ class CrashDetailsViewModel @Inject constructor(
     }
 
     val crash = database.appCrashDao().get(crashId)
+        .map {
+            when (it) {
+                null -> null
+
+                else -> it to it.logFile?.readText()
+            }
+        }
         .distinctUntilChanged()
         .flowOn(Dispatchers.IO)
         .asLiveData()
 
     fun exportCrashToZip(uri: Uri) = launchCatching(Dispatchers.IO) {
-        crash.value?.also { appCrash ->
+        crash.value?.also { item ->
+            val (appCrash, crashLog) = item
+
             ctx.contentResolver.openOutputStream(uri)?.use {
                 it.exportToZip {
                     if (appPreferences.includeDeviceInfoInArchives) putZipEntry(
@@ -49,11 +58,14 @@ class CrashDetailsViewModel @Inject constructor(
                         device.toString().encodeToByteArray()
                     )
 
-                    putZipEntry("crash.log", appCrash.log.encodeToByteArray())
+                    putZipEntry(
+                        "crash.log",
+                        (crashLog ?: appCrash.log).encodeToByteArray()
+                    )
 
                     if (appCrash.logDumpFile != null) putZipEntry(
                         "dump.log",
-                        File(appCrash.logDumpFile)
+                        appCrash.logDumpFile
                     )
                 }
             }
