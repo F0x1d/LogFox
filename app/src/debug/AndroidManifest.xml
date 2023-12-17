@@ -4,5 +4,6 @@
 
     <application
         android:label="@string/app_name_debug"
-        tools:replace="android:label" />
+        tools:replace="android:label"
+        tools:ignore="MissingApplicationIcon" />
 </manifest>
