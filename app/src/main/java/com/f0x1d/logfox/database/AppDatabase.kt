@@ -1,8 +1,11 @@
 package com.f0x1d.logfox.database
 
+import androidx.room.AutoMigration
 import androidx.room.Database
+import androidx.room.DeleteColumn
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import androidx.room.migration.AutoMigrationSpec
 import androidx.room.migration.Migration
 import com.f0x1d.logfox.LogFoxApp
 import com.f0x1d.logfox.R
@@ -10,13 +13,36 @@ import com.f0x1d.logfox.database.entity.AllowedLevelsConverter
 import com.f0x1d.logfox.database.entity.AppCrash
 import com.f0x1d.logfox.database.entity.AppCrashDao
 import com.f0x1d.logfox.database.entity.CrashTypeConverter
+import com.f0x1d.logfox.database.entity.FileConverter
 import com.f0x1d.logfox.database.entity.LogRecording
 import com.f0x1d.logfox.database.entity.LogRecordingDao
 import com.f0x1d.logfox.database.entity.UserFilter
 import com.f0x1d.logfox.database.entity.UserFilterDao
 
-@Database(entities = [AppCrash::class, LogRecording::class, UserFilter::class], version = 12)
-@TypeConverters(CrashTypeConverter::class, AllowedLevelsConverter::class)
+@Database(
+    entities = [
+        AppCrash::class,
+        LogRecording::class,
+        UserFilter::class
+    ],
+    version = 14,
+    autoMigrations = [
+        AutoMigration(
+            from = 12,
+            to = 13,
+            spec = AppDatabase.Companion.AutoMigration12_13::class
+        ),
+        AutoMigration(
+            from = 13,
+            to = 14
+        )
+    ]
+)
+@TypeConverters(
+    CrashTypeConverter::class,
+    AllowedLevelsConverter::class,
+    FileConverter::class
+)
 abstract class AppDatabase: RoomDatabase() {
 
     companion object {
@@ -54,6 +80,8 @@ abstract class AppDatabase: RoomDatabase() {
         val MIGRATION_11_12 = Migration(11, 12) {
             it.execSQL("CREATE INDEX index_AppCrash_date_and_time ON AppCrash(date_and_time)")
         }
+        @DeleteColumn(tableName = "AppCrash", columnName = "log_dump")
+        class AutoMigration12_13: AutoMigrationSpec
     }
 
     abstract fun appCrashDao(): AppCrashDao

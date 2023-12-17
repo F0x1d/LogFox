@@ -16,15 +16,15 @@ import com.f0x1d.logfox.extensions.context.notificationManagerCompat
 import com.f0x1d.logfox.receiver.CopyReceiver
 
 @SuppressLint("MissingPermission")
-fun Context.sendErrorNotification(appCrash: AppCrash) = doIfPermitted {
+fun Context.sendErrorNotification(appCrash: AppCrash, crashLog: String?) = doIfPermitted {
     notify(
         appCrash.packageName,
         appCrash.notificationId,
         NotificationCompat.Builder(this@sendErrorNotification, LogFoxApp.CRASHES_CHANNEL_ID)
             .setContentTitle(getString(R.string.app_crashed, appCrash.appName ?: appCrash.packageName))
-            .setContentText(appCrash.log)
+            .setContentText(crashLog)
             .setSmallIcon(R.drawable.ic_android_notification)
-            .setStyle(NotificationCompat.BigTextStyle().bigText(appCrash.log))
+            .setStyle(NotificationCompat.BigTextStyle().bigText(crashLog))
             .apply {
                 if (appCrash.id != 0L) setContentIntent(
                     NavDeepLinkBuilder(this@sendErrorNotification)
@@ -40,7 +40,7 @@ fun Context.sendErrorNotification(appCrash: AppCrash) = doIfPermitted {
                 R.drawable.ic_copy,
                 getString(android.R.string.copy),
                 makeBroadcastPendingIntent(COPY_CRASH_INTENT_ID, CopyReceiver::class.java, bundleOf(
-                    Intent.EXTRA_TEXT to appCrash.log,
+                    Intent.EXTRA_TEXT to crashLog,
                     CopyReceiver.EXTRA_PACKAGE_NAME to appCrash.packageName,
                     CopyReceiver.EXTRA_NOTIFICATION_ID to appCrash.notificationId
                 ))

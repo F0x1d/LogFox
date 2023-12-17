@@ -5,7 +5,7 @@ import com.f0x1d.logfox.database.entity.CrashType
 import com.f0x1d.logfox.model.LogLine
 import com.f0x1d.logfox.repository.logging.readers.crashes.base.BaseCrashDetector
 
-class ANRDetector(collected: suspend (AppCrash) -> Unit): BaseCrashDetector(collected) {
+class ANRDetector(collected: suspend (AppCrash, List<LogLine>) -> Unit): BaseCrashDetector(collected) {
 
     override val crashType = CrashType.ANR
     override val commonTag = "ActivityManager"

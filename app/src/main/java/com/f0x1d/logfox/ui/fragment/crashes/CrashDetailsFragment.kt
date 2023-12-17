@@ -71,7 +71,9 @@ class CrashDetailsFragment: BaseViewModelFragment<CrashDetailsViewModel, Activit
         }
     }
 
-    private fun setupFor(appCrash: AppCrash) {
+    private fun setupFor(item: Pair<AppCrash, String?>) {
+        val (appCrash, crashLog) = item
+
         binding.toolbar.menu.apply {
             setClickListenerOn(R.id.info_item) {
                 Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
@@ -93,18 +95,18 @@ class CrashDetailsFragment: BaseViewModelFragment<CrashDetailsViewModel, Activit
         binding.appPackage.text = appCrash.packageName
 
         binding.copyLayout.setOnClickListener {
-            requireContext().copyText(appCrash.log)
+            requireContext().copyText(crashLog ?: "")
             snackbar(R.string.text_copied)
         }
 
         binding.shareLayout.setOnClickListener {
-            requireContext().shareIntent(appCrash.log)
+            requireContext().shareIntent(crashLog ?: "")
         }
 
         binding.zipLayout.setOnClickListener {
             zipCrashLauncher.launch("crash-${appCrash.packageName.replace(".", "-")}-${viewModel.dateTimeFormatter.formatForExport(appCrash.dateAndTime)}.zip")
         }
 
-        binding.logText.text = appCrash.log
+        binding.logText.text = crashLog
     }
 }

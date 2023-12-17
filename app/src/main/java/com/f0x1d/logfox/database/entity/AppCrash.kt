@@ -18,14 +18,20 @@ data class AppCrash(
     @ColumnInfo(name = "package_name") val packageName: String,
     @ColumnInfo(name = "crash_type") val crashType: CrashType,
     @ColumnInfo(name = "date_and_time", index = true) val dateAndTime: Long,
-    @ColumnInfo(name = "log") val log: String,
-    @Deprecated("Use logDumpFile") @ColumnInfo(name = "log_dump") val logDump: String? = null,
-    @ColumnInfo(name = "log_dump_file") val logDumpFile: String? = null,
+    @ColumnInfo(name = "log") @Deprecated("Use logFile") val log: String = "",
+    @ColumnInfo(name = "log_file") val logFile: File? = null,
+    @ColumnInfo(name = "log_dump_file") val logDumpFile: File? = null,
     @PrimaryKey(autoGenerate = true) val id: Long = 0
 ) {
     val notificationId get() = (if (id == 0L) dateAndTime else id).toInt()
 
-    fun deleteDumpFile() = logDumpFile?.let { File(it).delete() }
+    fun deleteLogFile() = logFile?.delete()
+    fun deleteDumpFile() = logDumpFile?.delete()
+
+    fun deleteAssociatedFiles() {
+        deleteLogFile()
+        deleteDumpFile()
+    }
 }
 
 @Dao
@@ -52,6 +58,9 @@ interface AppCrashDao {
     @Update
     suspend fun update(appCrash: AppCrash)
 
+    @Update
+    suspend fun update(appCrashes: List<AppCrash>)
+
     @Delete
     suspend fun delete(appCrash: AppCrash)
 
@@ -74,4 +83,12 @@ class CrashTypeConverter {
 
     @TypeConverter
     fun fromCrashType(value: CrashType) = value.ordinal
+}
+
+class FileConverter {
+    @TypeConverter
+    fun toFile(value: String) = File(value)
+
+    @TypeConverter
+    fun fromFile(value: File) = value.absolutePath
 }
