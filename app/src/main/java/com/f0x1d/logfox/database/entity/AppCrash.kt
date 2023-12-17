@@ -19,7 +19,6 @@ data class AppCrash(
     @ColumnInfo(name = "crash_type") val crashType: CrashType,
     @ColumnInfo(name = "date_and_time", index = true) val dateAndTime: Long,
     @ColumnInfo(name = "log") val log: String,
-    @Deprecated("Use logDumpFile") @ColumnInfo(name = "log_dump") val logDump: String? = null,
     @ColumnInfo(name = "log_dump_file") val logDumpFile: String? = null,
     @PrimaryKey(autoGenerate = true) val id: Long = 0
 ) {
