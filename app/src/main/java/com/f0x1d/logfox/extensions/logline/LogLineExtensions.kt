@@ -8,6 +8,7 @@ import com.f0x1d.logfox.utils.UIDS
 
 private val logRegex = "(.{14}) (.{1,5}) (.{1,5}) (.{1,5}) (.) (.+?): (.+)".toRegex()
 // time, uid, pid, tid, level, tag, message
+private val uidRegex = "u(.+?).*a(.+)".toRegex()
 
 private val uidsCache = LruCache<String, String>(200)
 
@@ -17,7 +18,9 @@ fun LogLine(
     context: Context
 ) = logRegex.find(line.trim())?.run {
     val uid = groupValues[2].replace(" ", "")
-    val integerUid = uid.toIntOrNull() ?: UIDS.MAPPINGS[uid]
+    val integerUid = uidRegex.find(uid)?.run {
+        100_000 * groupValues[1].toInt() + 10_000 + groupValues[2].toInt()
+    } ?: uid.toIntOrNull() ?: UIDS.MAPPINGS[uid]
 
     val packageName = uidsCache[uid] ?: integerUid?.let {
         context.packageManager.getPackagesForUid(it)?.firstOrNull()?.also { packageName ->
