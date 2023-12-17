@@ -92,137 +92,42 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/copy_layout"
+                    <Button
+                        android:id="@+id/copy"
+                        style="@style/LogFoxBigButtonStyle"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:background="?selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
+                        android:text="@android:string/copy"
+                        app:icon="@drawable/ic_copy"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/share_layout"
+                        app:layout_constraintEnd_toStartOf="@id/share"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        android:contentDescription="@android:string/copy">
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                        <ImageView
-                            android:id="@+id/copy_image"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/ic_copy"
-                            app:tint="?colorPrimary"
-                            android:layout_marginTop="15dp"
-                            app:layout_constraintBottom_toTopOf="@id/copy_text"
-                            app:layout_constraintEnd_toEndOf="@id/copy_text"
-                            app:layout_constraintStart_toStartOf="@id/copy_text"
-                            app:layout_constraintTop_toTopOf="parent"
-                            android:importantForAccessibility="no" />
-
-                        <TextView
-                            android:id="@+id/copy_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:ellipsize="end"
-                            android:includeFontPadding="false"
-                            android:maxLines="1"
-                            android:text="@android:string/copy"
-                            android:textColor="?colorPrimary"
-                            android:textSize="14sp"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginBottom="15dp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/copy_image" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/share_layout"
+                    <Button
+                        android:id="@+id/share"
+                        style="@style/LogFoxBigButtonStyle"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:background="?selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
+                        android:text="@string/share"
+                        app:icon="@drawable/ic_share"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/zip_layout"
-                        app:layout_constraintStart_toEndOf="@id/copy_layout"
-                        app:layout_constraintTop_toTopOf="parent"
-                        android:contentDescription="@string/share">
+                        app:layout_constraintEnd_toStartOf="@id/zip"
+                        app:layout_constraintStart_toEndOf="@id/copy"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                        <ImageView
-                            android:id="@+id/share_image"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/ic_share"
-                            app:tint="?colorPrimary"
-                            android:layout_marginTop="15dp"
-                            app:layout_constraintBottom_toTopOf="@id/share_text"
-                            app:layout_constraintEnd_toEndOf="@id/share_text"
-                            app:layout_constraintStart_toStartOf="@id/share_text"
-                            app:layout_constraintTop_toTopOf="parent"
-                            android:importantForAccessibility="no" />
-
-                        <TextView
-                            android:id="@+id/share_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:ellipsize="end"
-                            android:includeFontPadding="false"
-                            android:maxLines="1"
-                            android:text="@string/share"
-                            android:textColor="?colorPrimary"
-                            android:textSize="14sp"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginBottom="15dp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/share_image" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/zip_layout"
+                    <Button
+                        android:id="@+id/zip"
+                        style="@style/LogFoxBigButtonStyle"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:background="?selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
+                        android:text="@string/zip"
+                        app:icon="@drawable/ic_archive"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/share_layout"
-                        app:layout_constraintTop_toTopOf="parent"
-                        android:contentDescription="@string/zip">
+                        app:layout_constraintStart_toEndOf="@id/share"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                        <ImageView
-                            android:id="@+id/zip_image"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/ic_archive"
-                            app:tint="?colorPrimary"
-                            android:layout_marginTop="15dp"
-                            app:layout_constraintBottom_toTopOf="@id/zip_text"
-                            app:layout_constraintEnd_toEndOf="@id/zip_text"
-                            app:layout_constraintStart_toStartOf="@id/zip_text"
-                            app:layout_constraintTop_toTopOf="parent"
-                            android:importantForAccessibility="no" />
-
-                        <TextView
-                            android:id="@+id/zip_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:ellipsize="end"
-                            android:includeFontPadding="false"
-                            android:maxLines="1"
-                            android:text="@string/zip"
-                            android:textColor="?colorPrimary"
-                            android:textSize="14sp"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginBottom="15dp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/zip_image" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
