@@ -58,6 +58,9 @@ interface AppCrashDao {
     @Update
     suspend fun update(appCrash: AppCrash)
 
+    @Update
+    suspend fun update(appCrashes: List<AppCrash>)
+
     @Delete
     suspend fun delete(appCrash: AppCrash)
 

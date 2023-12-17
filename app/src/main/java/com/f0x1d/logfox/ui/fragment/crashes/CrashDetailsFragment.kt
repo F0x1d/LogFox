@@ -95,18 +95,18 @@ class CrashDetailsFragment: BaseViewModelFragment<CrashDetailsViewModel, Activit
         binding.appPackage.text = appCrash.packageName
 
         binding.copyLayout.setOnClickListener {
-            requireContext().copyText(crashLog ?: appCrash.log)
+            requireContext().copyText(crashLog ?: "")
             snackbar(R.string.text_copied)
         }
 
         binding.shareLayout.setOnClickListener {
-            requireContext().shareIntent(crashLog ?: appCrash.log)
+            requireContext().shareIntent(crashLog ?: "")
         }
 
         binding.zipLayout.setOnClickListener {
             zipCrashLauncher.launch("crash-${appCrash.packageName.replace(".", "-")}-${viewModel.dateTimeFormatter.formatForExport(appCrash.dateAndTime)}.zip")
         }
 
-        binding.logText.text = crashLog ?: appCrash.log
+        binding.logText.text = crashLog
     }
 }

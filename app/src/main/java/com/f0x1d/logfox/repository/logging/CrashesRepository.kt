@@ -45,6 +45,24 @@ class CrashesRepository @Inject constructor(
     override suspend fun setup() {
         dumpCollector.capacity = appPreferences.logsDumpLinesCount
         appPreferences.registerListener(this)
+
+        val crashes = database.appCrashDao().getAll()
+        val shouldMigrate = crashes.any { it.logFile == null }
+
+        if (!shouldMigrate) return
+
+        database.appCrashDao().update(
+            crashes.map {
+                val logFile = File(logDumpsDir, "${it.dateAndTime}-crash.log").apply {
+                    writeText(it.log)
+                }
+
+                it.copy(
+                    log = "",
+                    logFile = logFile
+                )
+            }
+        )
     }
 
     override suspend fun stop() {

@@ -22,9 +22,9 @@ fun Context.sendErrorNotification(appCrash: AppCrash, crashLog: String?) = doIfP
         appCrash.notificationId,
         NotificationCompat.Builder(this@sendErrorNotification, LogFoxApp.CRASHES_CHANNEL_ID)
             .setContentTitle(getString(R.string.app_crashed, appCrash.appName ?: appCrash.packageName))
-            .setContentText(crashLog ?: appCrash.log)
+            .setContentText(crashLog)
             .setSmallIcon(R.drawable.ic_android_notification)
-            .setStyle(NotificationCompat.BigTextStyle().bigText(crashLog ?: appCrash.log))
+            .setStyle(NotificationCompat.BigTextStyle().bigText(crashLog))
             .apply {
                 if (appCrash.id != 0L) setContentIntent(
                     NavDeepLinkBuilder(this@sendErrorNotification)
@@ -40,7 +40,7 @@ fun Context.sendErrorNotification(appCrash: AppCrash, crashLog: String?) = doIfP
                 R.drawable.ic_copy,
                 getString(android.R.string.copy),
                 makeBroadcastPendingIntent(COPY_CRASH_INTENT_ID, CopyReceiver::class.java, bundleOf(
-                    Intent.EXTRA_TEXT to (crashLog ?: appCrash.log),
+                    Intent.EXTRA_TEXT to crashLog,
                     CopyReceiver.EXTRA_PACKAGE_NAME to appCrash.packageName,
                     CopyReceiver.EXTRA_NOTIFICATION_ID to appCrash.notificationId
                 ))

@@ -58,9 +58,9 @@ class CrashDetailsViewModel @Inject constructor(
                         device.toString().encodeToByteArray()
                     )
 
-                    putZipEntry(
+                    if (crashLog != null) putZipEntry(
                         "crash.log",
-                        (crashLog ?: appCrash.log).encodeToByteArray()
+                        crashLog.encodeToByteArray()
                     )
 
                     if (appCrash.logDumpFile != null) putZipEntry(
