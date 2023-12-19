@@ -78,4 +78,17 @@
     <color name="m3_ref_palette_error95">#ffffedea</color>
     <color name="m3_ref_palette_error99">#fffffbff</color>
     <color name="m3_ref_palette_error100">#ffffffff</color>
+
+    <!-- TODO: Use real colors, not approximate colors -->
+    <color name="m3_ref_palette_neutral12">@color/m3_ref_palette_neutral10</color>
+    <color name="m3_ref_palette_neutral17">@color/m3_ref_palette_neutral_variant20</color>
+    <color name="m3_ref_palette_neutral22">@color/m3_ref_palette_neutral_variant20</color>
+    <color name="m3_ref_palette_neutral24">@color/m3_ref_palette_neutral_variant20</color>
+    <color name="m3_ref_palette_neutral4">@color/m3_ref_palette_neutral_variant0</color>
+    <color name="m3_ref_palette_neutral6">@color/m3_ref_palette_neutral0</color>
+    <color name="m3_ref_palette_neutral87">@color/m3_ref_palette_error90</color>
+    <color name="m3_ref_palette_neutral92">@color/m3_ref_palette_error95</color>
+    <color name="m3_ref_palette_neutral94">@color/m3_ref_palette_error95</color>
+    <color name="m3_ref_palette_neutral96">@color/m3_ref_palette_error95</color>
+    <color name="m3_ref_palette_neutral98">@color/m3_ref_palette_error99</color>
 </resources>
