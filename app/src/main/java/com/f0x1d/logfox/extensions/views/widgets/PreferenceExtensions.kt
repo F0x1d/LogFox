@@ -1,11 +1,12 @@
 package com.f0x1d.logfox.extensions.views.widgets
 
 import android.view.LayoutInflater
-import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import androidx.lifecycle.LifecycleOwner
 import androidx.preference.Preference
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.databinding.DialogTextBinding
+import com.f0x1d.logfox.extensions.context.inputMethodManager
 import com.f0x1d.logfox.utils.preferences.AppPreferences
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
@@ -26,8 +27,19 @@ fun Preference.setupAsEditTextPreference(setup: (DialogTextBinding) -> Unit, set
             .apply(setupDialog)
             .create()
             .apply {
-                window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
-                dialogBinding.text.requestFocus()
+                setOnShowListener {
+                    dialogBinding.text.apply {
+                        requestFocus()
+                        setSelection(text?.length ?: 0)
+
+                        postDelayed({
+                            context.inputMethodManager.showSoftInput(
+                                this,
+                                InputMethodManager.SHOW_IMPLICIT
+                            )
+                        }, 100)
+                    }
+                }
             }
             .show()
         return@setOnPreferenceClickListener true

@@ -11,10 +11,12 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.getSystemService
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.extensions.asUri
 import com.f0x1d.logfox.extensions.shouldRequestNotificationsPermission
@@ -36,9 +38,10 @@ fun Context.hasPermissionToReadLogs() = ContextCompat.checkSelfPermission(
 ) == PackageManager.PERMISSION_GRANTED
 
 val Context.notificationManagerCompat get() = NotificationManagerCompat.from(this)
-val Context.notificationManager get() = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-val Context.activityManager get() = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
-val Context.uiModeManager get() = getSystemService(Context.UI_MODE_SERVICE) as UiModeManager
+val Context.notificationManager get() = getSystemService<NotificationManager>()!!
+val Context.activityManager get() = getSystemService<ActivityManager>()!!
+val Context.uiModeManager get() = getSystemService<UiModeManager>()!!
+val Context.inputMethodManager get() = getSystemService<InputMethodManager>()!!
 
 fun Context.startLoggingAndService(loggingRepository: LoggingRepository, appPreferences: AppPreferences, force: Boolean = false) {
     loggingRepository.startLoggingIfNot()
