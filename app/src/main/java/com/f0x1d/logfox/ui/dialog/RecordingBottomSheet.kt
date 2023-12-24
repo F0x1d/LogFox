@@ -48,18 +48,18 @@ class RecordingBottomSheet: BaseViewModelBottomSheet<RecordingViewModel, SheetRe
 
             binding.timeText.text = logRecording.dateAndTime.toLocaleString()
 
-            binding.view.setOnClickListener {
+            binding.viewButton.setOnClickListener {
                 findNavController().navigate(NavGraphDirections.actionGlobalLogsFragment(
                     File(logRecording.file).asUri(requireContext())
                 ))
             }
-            binding.export.setOnClickListener {
+            binding.exportButton.setOnClickListener {
                 logExportLauncher.launch("${viewModel.dateTimeFormatter.formatForExport(logRecording.dateAndTime)}.log")
             }
-            binding.share.setOnClickListener {
+            binding.shareButton.setOnClickListener {
                 requireContext().shareFileIntent(File(logRecording.file))
             }
-            binding.zip.setOnClickListener {
+            binding.zipButton.setOnClickListener {
                 zipLogLauncher.launch("${viewModel.dateTimeFormatter.formatForExport(logRecording.dateAndTime)}.log")
             }
         }
