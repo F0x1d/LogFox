@@ -16,7 +16,6 @@ import com.f0x1d.logfox.databinding.ActivityCrashDetailsBinding
 import com.f0x1d.logfox.extensions.context.copyText
 import com.f0x1d.logfox.extensions.context.shareIntent
 import com.f0x1d.logfox.extensions.showAreYouSureDeleteDialog
-import com.f0x1d.logfox.extensions.views.replaceAccessibilityDelegateClassNameWithButton
 import com.f0x1d.logfox.extensions.views.widgets.loadIcon
 import com.f0x1d.logfox.extensions.views.widgets.setClickListenerOn
 import com.f0x1d.logfox.extensions.views.widgets.setupBackButtonForNavController
@@ -52,10 +51,6 @@ class CrashDetailsFragment: BaseViewModelFragment<CrashDetailsViewModel, Activit
         }
 
         binding.toolbar.setupBackButtonForNavController()
-
-        binding.copyLayout.replaceAccessibilityDelegateClassNameWithButton()
-        binding.shareLayout.replaceAccessibilityDelegateClassNameWithButton()
-        binding.zipLayout.replaceAccessibilityDelegateClassNameWithButton()
 
         viewModel.crash.observe(viewLifecycleOwner) {
             setupFor(it ?: return@observe)
@@ -94,16 +89,16 @@ class CrashDetailsFragment: BaseViewModelFragment<CrashDetailsViewModel, Activit
         binding.appName.text = appCrash.appName ?: getString(R.string.unknown)
         binding.appPackage.text = appCrash.packageName
 
-        binding.copyLayout.setOnClickListener {
+        binding.copyButton.setOnClickListener {
             requireContext().copyText(crashLog ?: "")
             snackbar(R.string.text_copied)
         }
 
-        binding.shareLayout.setOnClickListener {
+        binding.shareButton.setOnClickListener {
             requireContext().shareIntent(crashLog ?: "")
         }
 
-        binding.zipLayout.setOnClickListener {
+        binding.zipButton.setOnClickListener {
             zipCrashLauncher.launch("crash-${appCrash.packageName.replace(".", "-")}-${viewModel.dateTimeFormatter.formatForExport(appCrash.dateAndTime)}.zip")
         }
 
