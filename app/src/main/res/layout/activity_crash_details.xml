@@ -93,8 +93,8 @@
                     android:layout_height="match_parent">
 
                     <Button
-                        android:id="@+id/copy_button"
                         style="@style/LogFoxBigButtonStyle"
+                        android:id="@+id/copy_button"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="@android:string/copy"
@@ -105,8 +105,8 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <Button
-                        android:id="@+id/share_button"
                         style="@style/LogFoxBigButtonStyle"
+                        android:id="@+id/share_button"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="@string/share"
@@ -117,8 +117,8 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <Button
-                        android:id="@+id/zip_button"
                         style="@style/LogFoxBigButtonStyle"
+                        android:id="@+id/zip_button"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="@string/zip"
