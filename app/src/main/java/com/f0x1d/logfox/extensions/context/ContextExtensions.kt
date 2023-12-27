@@ -11,7 +11,9 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
+import android.os.Build
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
@@ -38,6 +40,8 @@ fun Context.hasPermissionToReadLogs() = ContextCompat.checkSelfPermission(
 val Context.notificationManagerCompat get() = NotificationManagerCompat.from(this)
 val Context.notificationManager get() = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 val Context.activityManager get() = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+
+@get:RequiresApi(Build.VERSION_CODES.S)
 val Context.uiModeManager get() = getSystemService(Context.UI_MODE_SERVICE) as UiModeManager
 
 fun Context.startLoggingAndService(loggingRepository: LoggingRepository, appPreferences: AppPreferences, force: Boolean = false) {
@@ -54,7 +58,6 @@ fun Context.startLoggingAndServiceIfCan(loggingRepository: LoggingRepository, ap
     }
 }
 
-@SuppressLint("NewApi")
 fun Context.startLoggingService() {
     Intent(this, LoggingService::class.java).also {
         if (startForegroundServiceAvailable)
@@ -119,7 +122,6 @@ fun Context.doIfPermitted(block: NotificationManagerCompat.() -> Unit) = if (has
 else
     Unit
 
-@SuppressLint("NewApi")
 fun Context.applyTheme(nightMode: Int, force: Boolean = false) {
     if (uiModeManagerAvailable) {
         if (force) uiModeManager.setApplicationNightMode(
