@@ -5,7 +5,8 @@
     android:clickable="true"
     android:focusable="true"
     android:background="?selectableItemBackground"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <ImageView
         android:id="@+id/icon"
@@ -15,7 +16,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/title"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:src="@mipmap/ic_launcher"/>
 
     <TextView
         android:id="@+id/title"
@@ -31,7 +33,8 @@
         app:layout_constraintTop_toTopOf="@id/icon"
         app:layout_constraintStart_toEndOf="@id/icon"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/package_name_text"/>
+        app:layout_constraintBottom_toTopOf="@id/package_name_text"
+        tools:text="@string/app_name" />
 
     <TextView
         android:id="@+id/package_name_text"
@@ -42,6 +45,7 @@
         app:layout_constraintTop_toBottomOf="@id/title"
         app:layout_constraintStart_toStartOf="@id/title"
         app:layout_constraintEnd_toEndOf="@id/title"
-        app:layout_constraintBottom_toBottomOf="@id/icon"/>
+        app:layout_constraintBottom_toBottomOf="@id/icon"
+        tools:text="com.f0x1d.logfox" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

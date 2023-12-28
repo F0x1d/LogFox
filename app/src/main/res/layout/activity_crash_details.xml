@@ -2,7 +2,8 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar_layout"
@@ -40,7 +41,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:contentDescription="@string/app_icon" />
+                android:contentDescription="@string/app_icon"
+                tools:src="@mipmap/ic_launcher" />
 
             <TextView
                 android:id="@+id/app_name"
@@ -57,7 +59,8 @@
                 android:layout_marginEnd="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/app_logo" />
+                app:layout_constraintTop_toBottomOf="@id/app_logo"
+                tools:text="@string/app_name" />
 
             <TextView
                 android:id="@+id/app_package"
@@ -69,7 +72,8 @@
                 android:layout_marginTop="5dp"
                 app:layout_constraintEnd_toEndOf="@id/app_name"
                 app:layout_constraintStart_toStartOf="@id/app_name"
-                app:layout_constraintTop_toBottomOf="@id/app_name" />
+                app:layout_constraintTop_toBottomOf="@id/app_name"
+                tools:text="com.f0x1d.logfox" />
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/actions_card"
@@ -162,7 +166,8 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="@tools:sample/lorem/random" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
         </androidx.constraintlayout.widget.ConstraintLayout>
