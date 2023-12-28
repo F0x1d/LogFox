@@ -27,6 +27,9 @@ class AppPreferences @Inject constructor(
     var nightTheme
         get() = get("pref_night_theme", 0)
         set(value) { put("pref_night_theme", value) }
+    var blackNightTheme
+        get() = get("pref_black_night_theme", false)
+        set(value) { put("pref_black_night_theme", value) }
     var dateFormat
         get() = getNullable("pref_date_format", DATE_FORMAT_DEFAULT)
         set(value) { put("pref_date_format", value) }

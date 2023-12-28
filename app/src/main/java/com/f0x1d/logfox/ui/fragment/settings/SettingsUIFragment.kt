@@ -3,9 +3,11 @@ package com.f0x1d.logfox.ui.fragment.settings
 import android.os.Bundle
 import android.text.InputType
 import androidx.preference.Preference
+import androidx.preference.SwitchPreferenceCompat
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.extensions.context.applyTheme
 import com.f0x1d.logfox.extensions.context.catchingNotNumber
+import com.f0x1d.logfox.extensions.context.isNightMode
 import com.f0x1d.logfox.extensions.fillWithStrings
 import com.f0x1d.logfox.extensions.views.widgets.observeAndUpdateSummary
 import com.f0x1d.logfox.extensions.views.widgets.observeAndUpdateSummaryForList
@@ -44,6 +46,16 @@ class SettingsUIFragment: BasePreferenceFragment() {
             }
 
             observeAndUpdateSummaryForList(appPreferences, this@SettingsUIFragment, 0, filledThemeSettings)
+        }
+        findPreference<SwitchPreferenceCompat>("pref_black_night_theme")?.apply {
+            setOnPreferenceChangeListener { preference, newValue ->
+                requireActivity().also {
+                    if (it.isNightMode) {
+                        it.recreate()
+                    }
+                }
+                return@setOnPreferenceChangeListener true
+            }
         }
 
         findPreference<Preference>("pref_date_format")?.apply {

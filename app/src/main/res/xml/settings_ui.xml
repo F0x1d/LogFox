@@ -7,6 +7,11 @@
             android:title="@string/night_theme"
             android:key="pref_night_theme"
             app:iconSpaceReserved="false" />
+        <SwitchPreferenceCompat
+            android:title="@string/black_night_theme"
+            android:key="pref_black_night_theme"
+            app:widgetLayout="@layout/preference_material_switch"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
     <PreferenceCategory

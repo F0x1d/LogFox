@@ -23,4 +23,19 @@
         <item name="android:windowDisablePreview">true</item>
         <item name="android:windowIsTranslucent">true</item>
     </style>
+
+    <!-- Black theme, all colors -6 -->
+    <style name="ThemeOverlay.LogFox.Black" parent="" tools:ignore="PrivateResource">
+        <item name="android:colorBackground">@color/m3_ref_palette_neutral0</item>
+
+        <item name="colorSurface">@color/m3_ref_palette_neutral0</item>
+        <item name="colorSurfaceContainer">@color/m3_ref_palette_neutral6</item>
+        <item name="colorSurfaceContainerLowest">@color/m3_ref_palette_neutral0</item> <!-- It should be -2 -->
+        <item name="colorSurfaceContainerLow">@color/m3_ref_palette_neutral4</item>
+        <item name="colorSurfaceContainerHigh">@color/m3_ref_palette_neutral10</item> <!-- It should be 11 -->
+        <item name="colorSurfaceContainerHighest">@color/m3_ref_palette_neutral12</item> <!-- It should be 16 -->
+        <item name="colorSurfaceBright">@color/m3_ref_palette_neutral10</item> <!-- It should be 18 -->
+        <item name="colorSurfaceDim">@color/m3_ref_palette_neutral0</item>
+    </style>
+
 </resources>

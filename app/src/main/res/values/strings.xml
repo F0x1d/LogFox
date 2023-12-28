@@ -143,4 +143,5 @@
     <string name="no_recordings">There are currently no recordings</string>
     <string name="no_filters">There are currently no filters</string>
     <string name="show_logs_from_app_launch">Show only logs which have appeared since the app launch</string>
+    <string name="black_night_theme">Black night theme</string>
 </resources>

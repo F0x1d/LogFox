@@ -6,7 +6,9 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.viewbinding.ViewBinding
+import com.f0x1d.logfox.LogFoxApp
 import com.f0x1d.logfox.R
+import com.f0x1d.logfox.extensions.context.isNightMode
 import com.f0x1d.logfox.extensions.context.viewPump
 import com.f0x1d.logfox.extensions.contrastedNavBarAvailable
 import com.f0x1d.logfox.extensions.gesturesAvailable
@@ -17,11 +19,17 @@ import io.github.inflationx.viewpump.ViewPumpContextWrapper
 
 abstract class BaseActivity<T : ViewBinding>: AppCompatActivity() {
 
+    var appPreferences = LogFoxApp.instance.appPreferences
+
+    private val isDarkNightActivity by lazy { appPreferences.blackNightTheme }
+
     protected lateinit var binding: T
 
     abstract fun inflateBinding(): T?
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        if (isNightMode && isDarkNightActivity) theme.applyStyle(R.style.ThemeOverlay_LogFox_Black,true)
+
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         if (!isHuawei) window.navigationBarColor = when {
@@ -50,6 +58,12 @@ abstract class BaseActivity<T : ViewBinding>: AppCompatActivity() {
                 }
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (isNightMode && isDarkNightActivity != appPreferences.blackNightTheme)
+            recreate()
     }
 
     override fun attachBaseContext(newBase: Context) {

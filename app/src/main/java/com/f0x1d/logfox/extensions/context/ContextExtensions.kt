@@ -131,4 +131,6 @@ fun Context.applyTheme(nightMode: Int, force: Boolean = false) {
         AppCompatDelegate.setDefaultNightMode(if (nightMode != 0) nightMode else AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
 }
 
+val Context.isNightMode get() = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+
 val Context.isHorizontalOrientation get() = resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
