@@ -27,7 +27,8 @@
         android:layout_height="match_parent"
         android:clipToPadding="false"
         android:paddingBottom="66dp"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:listitem="@layout/item_recording" />
 
     <include
         android:id="@+id/placeholder_layout"
