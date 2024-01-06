@@ -1,7 +1,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     ext {
-        agp_version = '8.2.0'
+        agp_version = '8.2.1'
         kotlin_version = '1.9.0'
         ksp_version = '1.9.0-1.0.12'
 
