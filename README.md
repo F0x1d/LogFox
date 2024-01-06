@@ -6,15 +6,14 @@ Yet another LogCat reader for Android
 
 [![license](https://img.shields.io/github/license/F0x1d/LogFox)](./LICENSE)
 [![release](https://img.shields.io/github/v/release/F0x1d/LogFox)](https://github.com/F0x1d/LogFox/releases/latest)
-
+[![downloads](https://img.shields.io/github/downloads/F0x1d/LogFox/total)](https://github.com/F0x1d/LogFox/releases/latest)
 
 ## Features
 
-- [Shizuku](https://shizuku.rikka.app/) (No Root) & Root support
+- [Shizuku](https://shizuku.rikka.app/), Root & ADB support
 - Record logs and export to ZIP with device info
-- Show crashes
-- Observing and notifying about Java/JNI crashes and ANRs
-- Powerful filters
+- Observe and get notifications about Java/JNI crashes and ANRs
+- Powerful filters for logs
 - Accessibility support
 - Material You design
 
@@ -22,8 +21,8 @@ Yet another LogCat reader for Android
 
 <a href="https://f-droid.org/packages/com.f0x1d.logfox">
     <img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
-    alt="Get it on F-Droid"
-    height="80">
+         alt="Get it on F-Droid"
+         height="80" />
 </a>
 
 ## Screenshots
