@@ -35,15 +35,10 @@ Yet another LogCat reader for Android
   <img src="./metadata/en-US/images/phoneScreenshots/5.png" width="30%" />
 </p>
 
-## Donation
-<a href="https://nowpayments.io/donation/f0x1d" target="_blank">
-  <img src="https://nowpayments.io/images/embeds/donation-button-white.svg" alt="Crypto donation button by NOWPayments">
-</a>
-
 ## License
 
 ```txt
-Copyright (C) 2022-2023 Maksim Zoteev
+Copyright (C) 2022-2024 Maksim Zoteev
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
