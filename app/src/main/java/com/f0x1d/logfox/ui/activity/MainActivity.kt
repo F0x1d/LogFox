@@ -21,7 +21,6 @@ import com.f0x1d.logfox.extensions.context.hasNotificationsPermission
 import com.f0x1d.logfox.extensions.context.isHorizontalOrientation
 import com.f0x1d.logfox.extensions.contrastedNavBarAvailable
 import com.f0x1d.logfox.extensions.gesturesAvailable
-import com.f0x1d.logfox.extensions.isHuawei
 import com.f0x1d.logfox.ui.activity.base.BaseViewModelActivity
 import com.f0x1d.logfox.utils.event.Event
 import com.f0x1d.logfox.viewmodel.MainViewModel
@@ -135,16 +134,14 @@ class MainActivity: BaseViewModelActivity<MainViewModel, ActivityMainBinding>(),
             else -> true
         }
 
-        if (!isHuawei) {
-            if (!gesturesAvailable && contrastedNavBarAvailable) {
-                window.navigationBarColor = when {
-                    barShown && !isHorizontalOrientation -> Color.TRANSPARENT
+        if (!gesturesAvailable && contrastedNavBarAvailable) {
+            window.navigationBarColor = when {
+                barShown && !isHorizontalOrientation -> Color.TRANSPARENT
 
-                    else -> getColor(R.color.navbar_transparent_background)
-                }
-            } else if (gesturesAvailable) {
-                window.isNavigationBarContrastEnforced = !(barShown && !isHorizontalOrientation)
+                else -> getColor(R.color.navbar_transparent_background)
             }
+        } else if (gesturesAvailable) {
+            window.isNavigationBarContrastEnforced = !(barShown && !isHorizontalOrientation)
         }
 
         if (this.barShown != barShown) {
