@@ -14,7 +14,6 @@ import com.f0x1d.logfox.databinding.SheetRecordingBinding
 import com.f0x1d.logfox.extensions.asUri
 import com.f0x1d.logfox.extensions.context.shareFileIntent
 import com.f0x1d.logfox.extensions.toLocaleString
-import com.f0x1d.logfox.extensions.views.replaceAccessibilityDelegateClassNameWithButton
 import com.f0x1d.logfox.ui.dialog.base.BaseViewModelBottomSheet
 import com.f0x1d.logfox.viewmodel.recordings.RecordingViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -49,22 +48,18 @@ class RecordingBottomSheet: BaseViewModelBottomSheet<RecordingViewModel, SheetRe
 
             binding.timeText.text = logRecording.dateAndTime.toLocaleString()
 
-            binding.viewLayout.replaceAccessibilityDelegateClassNameWithButton()
-            binding.viewLayout.setOnClickListener {
+            binding.viewButton.setOnClickListener {
                 findNavController().navigate(NavGraphDirections.actionGlobalLogsFragment(
                     File(logRecording.file).asUri(requireContext())
                 ))
             }
-            binding.exportLayout.replaceAccessibilityDelegateClassNameWithButton()
-            binding.exportLayout.setOnClickListener {
+            binding.exportButton.setOnClickListener {
                 logExportLauncher.launch("${viewModel.dateTimeFormatter.formatForExport(logRecording.dateAndTime)}.log")
             }
-            binding.shareLayout.replaceAccessibilityDelegateClassNameWithButton()
-            binding.shareLayout.setOnClickListener {
+            binding.shareButton.setOnClickListener {
                 requireContext().shareFileIntent(File(logRecording.file))
             }
-            binding.zipLayout.replaceAccessibilityDelegateClassNameWithButton()
-            binding.zipLayout.setOnClickListener {
+            binding.zipButton.setOnClickListener {
                 zipLogLauncher.launch("${viewModel.dateTimeFormatter.formatForExport(logRecording.dateAndTime)}.log")
             }
         }

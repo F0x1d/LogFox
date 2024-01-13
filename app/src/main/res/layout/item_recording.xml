@@ -35,7 +35,8 @@
         app:layout_constraintTop_toTopOf="@id/icon"
         app:layout_constraintStart_toEndOf="@id/icon"
         app:layout_constraintEnd_toStartOf="@id/delete_button"
-        app:layout_constraintBottom_toTopOf="@id/date_text"/>
+        app:layout_constraintBottom_toTopOf="@id/date_text"
+        tools:text="@string/app_name" />
 
     <TextView
         android:id="@+id/date_text"
@@ -46,7 +47,8 @@
         app:layout_constraintTop_toBottomOf="@id/title"
         app:layout_constraintStart_toStartOf="@id/title"
         app:layout_constraintEnd_toEndOf="@id/title"
-        app:layout_constraintBottom_toBottomOf="@id/icon"/>
+        app:layout_constraintBottom_toBottomOf="@id/icon"
+        tools:text="com.f0x1d.logfox" />
 
     <com.google.android.material.button.MaterialButton
         style="@style/Widget.Material3.Button.IconButton"

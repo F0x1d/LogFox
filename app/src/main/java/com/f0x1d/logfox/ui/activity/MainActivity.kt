@@ -116,7 +116,6 @@ class MainActivity: BaseViewModelActivity<MainViewModel, ActivityMainBinding>(),
         }
     }
 
-    @SuppressLint("NewApi")
     override fun onDestinationChanged(controller: NavController, destination: NavDestination, arguments: Bundle?) {
         val barShown = when (destination.id) {
             R.id.setupFragment -> false

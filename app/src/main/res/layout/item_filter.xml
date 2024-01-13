@@ -30,7 +30,8 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/enabled_box"
-            app:layout_constraintBottom_toTopOf="@id/allowed_levels_text" />
+            app:layout_constraintBottom_toTopOf="@id/allowed_levels_text"
+            tools:text="@string/including" />
 
         <TextView
             android:id="@+id/allowed_levels_text"
@@ -42,7 +43,8 @@
             app:layout_constraintTop_toBottomOf="@id/including_text"
             app:layout_constraintStart_toStartOf="@id/including_text"
             app:layout_constraintEnd_toEndOf="@id/including_text"
-            app:layout_constraintBottom_toTopOf="@id/uid_text"/>
+            app:layout_constraintBottom_toTopOf="@id/uid_text"
+            tools:text="@string/log_levels" />
 
         <TextView
             android:id="@+id/uid_text"
@@ -54,7 +56,8 @@
             app:layout_constraintTop_toBottomOf="@id/allowed_levels_text"
             app:layout_constraintStart_toStartOf="@id/including_text"
             app:layout_constraintEnd_toEndOf="@id/including_text"
-            app:layout_constraintBottom_toTopOf="@id/pid_text"/>
+            app:layout_constraintBottom_toTopOf="@id/pid_text"
+            tools:text="@string/uid" />
 
         <TextView
             android:id="@+id/pid_text"
@@ -66,7 +69,8 @@
             app:layout_constraintTop_toBottomOf="@id/uid_text"
             app:layout_constraintStart_toStartOf="@id/including_text"
             app:layout_constraintEnd_toEndOf="@id/including_text"
-            app:layout_constraintBottom_toTopOf="@id/tid_text"/>
+            app:layout_constraintBottom_toTopOf="@id/tid_text"
+            tools:text="@string/pid" />
 
         <TextView
             android:id="@+id/tid_text"
@@ -78,7 +82,8 @@
             app:layout_constraintTop_toBottomOf="@id/pid_text"
             app:layout_constraintStart_toStartOf="@id/including_text"
             app:layout_constraintEnd_toEndOf="@id/including_text"
-            app:layout_constraintBottom_toTopOf="@id/package_name_text"/>
+            app:layout_constraintBottom_toTopOf="@id/package_name_text"
+            tools:text="@string/tid" />
 
         <TextView
             android:id="@+id/package_name_text"
@@ -90,7 +95,8 @@
             app:layout_constraintTop_toBottomOf="@id/tid_text"
             app:layout_constraintStart_toStartOf="@id/including_text"
             app:layout_constraintEnd_toEndOf="@id/including_text"
-            app:layout_constraintBottom_toTopOf="@id/tag_text"/>
+            app:layout_constraintBottom_toTopOf="@id/tag_text"
+            tools:text="com.f0x1d.logfox" />
 
         <TextView
             android:id="@+id/tag_text"
@@ -102,7 +108,8 @@
             app:layout_constraintTop_toBottomOf="@id/package_name_text"
             app:layout_constraintStart_toStartOf="@id/including_text"
             app:layout_constraintEnd_toEndOf="@id/including_text"
-            app:layout_constraintBottom_toTopOf="@id/content_text"/>
+            app:layout_constraintBottom_toTopOf="@id/content_text"
+            tools:text="@string/tag" />
 
         <TextView
             android:id="@+id/content_text"
@@ -114,7 +121,8 @@
             app:layout_constraintTop_toBottomOf="@id/tag_text"
             app:layout_constraintStart_toStartOf="@id/including_text"
             app:layout_constraintEnd_toEndOf="@id/including_text"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:text="@string/content_contains" />
 
         <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/enabled_box"
