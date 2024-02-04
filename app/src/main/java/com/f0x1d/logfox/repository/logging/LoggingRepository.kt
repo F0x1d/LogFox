@@ -5,6 +5,8 @@ import android.content.SharedPreferences
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.extensions.context.toast
 import com.f0x1d.logfox.extensions.logline.LogLine
+import com.f0x1d.logfox.extensions.onAppScope
+import com.f0x1d.logfox.extensions.runOnAppScope
 import com.f0x1d.logfox.extensions.updateList
 import com.f0x1d.logfox.model.LogLine
 import com.f0x1d.logfox.repository.base.BaseRepository
@@ -63,7 +65,9 @@ class LoggingRepository @Inject constructor(
 
         loggingJob = onAppScope {
             helpers.map {
-                async(Dispatchers.IO) { it.setup() }
+                async(Dispatchers.IO) {
+                    it.setup()
+                }
             }.awaitAll()
 
             while (isActive) {
