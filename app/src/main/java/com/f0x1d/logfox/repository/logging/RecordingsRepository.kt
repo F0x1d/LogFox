@@ -90,7 +90,7 @@ class RecordingsRepository @Inject constructor(
         allRecordingReader.copyFileTo(recordingFile)
 
         val logRecording = LogRecording(
-            "${context.getString(R.string.recording)} ${database.logRecordingDao().count() + 1}",
+            "${context.getString(R.string.record_file)} ${database.logRecordingDao().count() + 1}",
             recordingTime,
             recordingFile.absolutePath
         ).let {

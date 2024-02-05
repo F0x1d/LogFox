@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.lifecycle.asLiveData
 import androidx.navigation.fragment.findNavController
@@ -50,6 +51,12 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
                 emptyList()
             }
         }
+    }
+
+    private val exportLogsLauncher = registerForActivityResult(
+        ActivityResultContracts.CreateDocument("text/*")
+    ) {
+        viewModel.exportSelectedLogsTo(it ?: return@registerForActivityResult)
     }
 
     override fun inflateBinding(
@@ -98,6 +105,11 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
             setClickListenerOn(R.id.selected_to_recording_item) {
                 viewModel.selectedToRecording()
                 findNavController().navigate(NavGraphDirections.actionGlobalRecordingsFragment())
+            }
+            setClickListenerOn(R.id.export_selected_item) {
+                exportLogsLauncher.launch(
+                    "${viewModel.dateTimeFormatter.formatForExport(System.currentTimeMillis())}.log"
+                )
             }
             setClickListenerOn(R.id.clear_item) {
                 viewModel.clearLogs()
