@@ -138,6 +138,7 @@
     <string name="log_dump_size_warning">Logs dump lines are kept in RAM, so make sure not to overflow it with chosen count</string>
     <string name="to_recording">To recording</string>
     <string name="no_logs">There are currently no logs</string>
+    <string name="waiting_for_logs">Waiting for logs</string>
     <string name="all_logs_were_filtered_out">All logs were filtered out</string>
     <string name="no_crashes">There are currently no crashes</string>
     <string name="no_recordings">There are currently no recordings</string>

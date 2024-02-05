@@ -172,7 +172,7 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
             binding.toolbar.subtitle = subtitle
             binding.placeholderLayout.placeholderText.setText(
                 when (subtitle.isEmpty()) {
-                    true -> R.string.no_logs
+                    true -> R.string.waiting_for_logs
 
                     else -> R.string.all_logs_were_filtered_out
                 }
