@@ -16,7 +16,10 @@ class SearchBottomSheet: BaseBottomSheet<SheetSearchBinding>() {
 
     private val logsViewModel by hiltNavGraphViewModels<LogsViewModel>(R.id.logsFragment)
 
-    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) = SheetSearchBinding.inflate(inflater, container, false)
+    override fun inflateBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ) = SheetSearchBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
