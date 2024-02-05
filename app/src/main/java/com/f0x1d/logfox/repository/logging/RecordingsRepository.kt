@@ -45,9 +45,7 @@ class RecordingsRepository @Inject constructor(
     private val recordingDir = File("${context.filesDir.absolutePath}/recordings").apply {
         if (!exists()) mkdirs()
     }
-    private val allRecordingFile = File(recordingDir, "all.log").apply {
-        delete()
-    }
+    private val allRecordingFile = File(recordingDir, "all.log")
 
     private var filtersJob: Job? = null
 
@@ -61,6 +59,7 @@ class RecordingsRepository @Inject constructor(
                 }
         }
 
+        allRecordingFile.delete()
         allRecordingReader.record(allRecordingFile)
     }
 
@@ -77,6 +76,30 @@ class RecordingsRepository @Inject constructor(
         allRecordingReader.clearLines()
 
         filtersJob?.cancel()
+    }
+
+    fun saveAll(recordingSaved: (LogRecording) -> Unit = {}) = runOnAppScope {
+        allRecordingReader.dumpLines()
+
+        val recordingTime = System.currentTimeMillis()
+        val recordingFile = File(
+            recordingDir,
+            "${dateTimeFormatter.formatForExport(recordingTime)}.log"
+        )
+
+        allRecordingReader.copyFileTo(recordingFile)
+
+        val logRecording = LogRecording(
+            "${context.getString(R.string.recording)} ${database.logRecordingDao().count() + 1}",
+            recordingTime,
+            recordingFile.absolutePath
+        ).let {
+            it.copy(id = database.logRecordingDao().insert(it))
+        }
+
+        withContext(Dispatchers.Main) {
+            recordingSaved(logRecording)
+        }
     }
 
     fun createRecordingFrom(lines: List<LogLine>) = runOnAppScope {

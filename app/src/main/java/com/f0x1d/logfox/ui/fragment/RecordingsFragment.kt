@@ -68,9 +68,14 @@ class RecordingsFragment: BaseViewModelFragment<RecordingsViewModel, FragmentRec
             }
         }
 
-        binding.toolbar.menu.setClickListenerOn(R.id.clear_item) {
-            showAreYouSureClearDialog {
-                viewModel.clearRecordings()
+        binding.toolbar.menu.apply {
+            setClickListenerOn(R.id.clear_item) {
+                showAreYouSureClearDialog {
+                    viewModel.clearRecordings()
+                }
+            }
+            setClickListenerOn(R.id.save_all_logs_item) {
+                viewModel.saveAll()
             }
         }
 

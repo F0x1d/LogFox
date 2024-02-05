@@ -43,7 +43,6 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
         })
     }
     private var changingState = false
-    private var changingPlaceholderVisibilityRunnable: Runnable? = null
 
     private val clearSelectionOnBackPressedCallback = object : OnBackPressedCallback(false) {
         override fun handleOnBackPressed() {

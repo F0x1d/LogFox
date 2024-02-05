@@ -10,6 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import java.util.LinkedList
 
 fun Uri?.readFileContentsAsFlow(context: Context) = flow {
     val uri = this@readFileContentsAsFlow
@@ -22,7 +23,7 @@ fun Uri?.readFileContentsAsFlow(context: Context) = flow {
         context.contentResolver.openInputStream(uri)?.use {
             it.bufferedReader().useLines { lines ->
                 var id = -1L
-                val logLines = mutableListOf<LogLine>()
+                val logLines = LinkedList<LogLine>()
 
                 for (line in lines) {
                     val logLine = LogLine(id, line, context) ?: LogLine(
@@ -33,7 +34,7 @@ fun Uri?.readFileContentsAsFlow(context: Context) = flow {
 
                     logLines.add(logLine)
                     if (logLines.size >= logsDisplayLimit)
-                        break
+                        logLines.removeFirst()
 
                     id -= 1
                 }

@@ -58,6 +58,10 @@ open class RecordingReader @Inject constructor(): LogsReader {
         recordingFile?.delete()
     }
 
+    suspend fun copyFileTo(file: File) = fileMutex.withLock {
+        recordingFile?.copyTo(file)
+    }
+
     suspend fun updateRecording(recording: Boolean) = recordingMutex.withLock {
         this.recording = recording
     }
