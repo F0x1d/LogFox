@@ -7,7 +7,6 @@ import com.f0x1d.logfox.extensions.context.toast
 import com.f0x1d.logfox.extensions.logline.LogLine
 import com.f0x1d.logfox.extensions.onAppScope
 import com.f0x1d.logfox.extensions.runOnAppScope
-import com.f0x1d.logfox.extensions.updateList
 import com.f0x1d.logfox.model.LogLine
 import com.f0x1d.logfox.repository.base.BaseRepository
 import com.f0x1d.logfox.repository.logging.base.LoggingHelperRepository
@@ -28,6 +27,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
+import java.util.LinkedList
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -47,6 +47,8 @@ class LoggingRepository @Inject constructor(
     val logsFlow = MutableStateFlow(emptyList<LogLine>())
     val serviceRunningFlow = MutableStateFlow(false)
 
+    private val logs = LinkedList<LogLine>()
+    private val logsMutex = Mutex()
     private var loggingJob: Job? = null
 
     private var loggingTerminal = terminals.first()
@@ -103,7 +105,9 @@ class LoggingRepository @Inject constructor(
 
         onAppScope {
             val closingHelpers = helpers.map {
-                async(Dispatchers.IO) { it.stop() }
+                async(Dispatchers.IO) {
+                    it.stop()
+                }
             }
 
             loggingTerminal.exit()
@@ -112,6 +116,10 @@ class LoggingRepository @Inject constructor(
     }
 
     fun clearLogs() = runOnAppScope {
+        logsMutex.withLock {
+            logs.clear()
+        }
+
         logsFlow.update {
             emptyList()
         }
@@ -145,21 +153,13 @@ class LoggingRepository @Inject constructor(
             return@coroutineScope
         }
 
-        val updateLines = mutableListOf<LogLine>()
-        val mutex = Mutex()
-
         val updater = launch(Dispatchers.IO) {
             while (isActive) {
                 delay(loggingInterval)
 
-                logsFlow.updateList {
-                    mutex.withLock {
-                        addAll(updateLines)
-                        updateLines.clear()
-                    }
-
-                    while (size > logsDisplayLimit) {
-                        removeFirst()
+                logsFlow.update {
+                    logsMutex.withLock {
+                        logs.toList()
                     }
                 }
             }
@@ -179,8 +179,11 @@ class LoggingRepository @Inject constructor(
                         continue
                     }
 
-                    mutex.withLock {
-                        updateLines.add(logLine)
+                    logsMutex.withLock {
+                        logs.add(logLine)
+
+                        while (logs.size > logsDisplayLimit)
+                            logs.removeFirst()
                     }
 
                     helpers.forEach { helper ->

@@ -67,6 +67,9 @@ open class RecordingReader @Inject constructor(): LogsReader {
 
         if (recording && shouldRecordLine(line)) linesMutex.withLock {
             recordedLines.add(line)
+        }.also {
+            if (recordedLines.size >= 1000)
+                dumpLines()
         }
     }
 

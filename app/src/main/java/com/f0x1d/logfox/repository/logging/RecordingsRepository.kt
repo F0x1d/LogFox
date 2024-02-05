@@ -17,13 +17,10 @@ import com.f0x1d.logfox.utils.DateTimeFormatter
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.isActive
 import kotlinx.coroutines.withContext
 import java.io.File
 import javax.inject.Inject
@@ -52,9 +49,6 @@ class RecordingsRepository @Inject constructor(
         delete()
     }
 
-    private var recordingJob: Job? = null
-    private var recordingAllJob: Job? = null
-
     private var filtersJob: Job? = null
 
     override suspend fun setup() {
@@ -67,19 +61,20 @@ class RecordingsRepository @Inject constructor(
                 }
         }
 
-        recordingAllJob = onAppScope {
-            allRecordingReader.startRecording(allRecordingFile)
-        }
+        allRecordingReader.record(allRecordingFile)
     }
 
     override suspend fun stop() {
         if (recordingStateFlow.value != RecordingState.IDLE) {
-            recordingJob?.cancel()
+            recordingReader.updateRecording(false)
             recordingReader.deleteFile()
         }
 
         recordingStateFlow.update { RecordingState.IDLE }
         recordingReader.clearLines()
+
+        allRecordingReader.updateRecording(false)
+        allRecordingReader.clearLines()
 
         filtersJob?.cancel()
     }
@@ -112,14 +107,12 @@ class RecordingsRepository @Inject constructor(
     fun record() = runOnAppScope {
         recordingStateFlow.update { RecordingState.RECORDING }
 
-        recordingJob = onAppScope {
-            recordingReader.startRecording(
-                File(
-                    recordingDir,
-                    "${dateTimeFormatter.formatForExport(System.currentTimeMillis())}.log"
-                )
+        recordingReader.record(
+            File(
+                recordingDir,
+                "${dateTimeFormatter.formatForExport(System.currentTimeMillis())}.log"
             )
-        }
+        )
 
         context.sendRecordingNotification()
     }
@@ -141,7 +134,6 @@ class RecordingsRepository @Inject constructor(
         recordingReader.updateRecording(false)
         context.cancelRecordingNotification()
 
-        recordingJob?.cancel()
         recordingReader.dumpLines()
 
         val title = "${context.getString(R.string.record_file)} ${database.logRecordingDao().count() + 1}"
@@ -162,16 +154,6 @@ class RecordingsRepository @Inject constructor(
     }
 
     fun updateTitle(logRecording: LogRecording, newTitle: String) = update(logRecording.copy(title = newTitle))
-
-    private suspend fun RecordingReader.startRecording(toFile: File) = coroutineScope {
-        record(toFile)
-
-        while (isActive) {
-            delay(1000)
-
-            recordingReader.dumpLines()
-        }
-    }
 
     override suspend fun updateInternal(item: LogRecording) = database.logRecordingDao().update(item)
 

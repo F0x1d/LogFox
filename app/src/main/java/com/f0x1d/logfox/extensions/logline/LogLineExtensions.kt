@@ -18,9 +18,9 @@ fun LogLine(
     context: Context
 ) = logRegex.find(line.trim())?.run {
     val uid = groupValues[2].replace(" ", "")
-    val integerUid = uidRegex.find(uid)?.run {
+    val integerUid = uid.toIntOrNull() ?: UIDS.MAPPINGS[uid] ?: uidRegex.find(uid)?.run {
         100_000 * groupValues[1].toInt() + 10_000 + groupValues[2].toInt()
-    } ?: uid.toIntOrNull() ?: UIDS.MAPPINGS[uid]
+    }
 
     val packageName = uidsCache[uid] ?: integerUid?.let {
         context.packageManager.getPackagesForUid(it)?.firstOrNull()?.also { packageName ->
@@ -48,6 +48,6 @@ fun LogLine(
     )
 }
 
-private fun mapLevel(level: String) = LogLevel.values().find {
+private fun mapLevel(level: String) = LogLevel.entries.find {
     it.letter == level
 } ?: throw RuntimeException("wtf is $level")
