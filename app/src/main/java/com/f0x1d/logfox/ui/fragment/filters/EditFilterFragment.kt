@@ -36,7 +36,10 @@ class EditFilterFragment: BaseViewModelFragment<EditFilterViewModel, FragmentEdi
         viewModel.export(it ?: return@registerForActivityResult)
     }
 
-    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) = FragmentEditFilterBinding.inflate(inflater, container, false)
+    override fun inflateBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ) = FragmentEditFilterBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

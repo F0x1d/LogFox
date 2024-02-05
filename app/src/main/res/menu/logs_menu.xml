@@ -44,6 +44,10 @@
                 android:id="@+id/selected_to_recording_item"
                 android:title="@string/to_recording"
                 app:showAsAction="never" />
+            <item
+                android:id="@+id/export_selected_item"
+                android:title="@string/export"
+                app:showAsAction="never" />
         </menu>
     </item>
 

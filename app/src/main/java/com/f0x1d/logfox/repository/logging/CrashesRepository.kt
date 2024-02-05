@@ -8,6 +8,7 @@ import com.f0x1d.logfox.extensions.logline.filterAndSearch
 import com.f0x1d.logfox.extensions.notifications.cancelAllCrashNotifications
 import com.f0x1d.logfox.extensions.notifications.cancelCrashNotificationFor
 import com.f0x1d.logfox.extensions.notifications.sendErrorNotification
+import com.f0x1d.logfox.extensions.runOnAppScope
 import com.f0x1d.logfox.model.LogLine
 import com.f0x1d.logfox.repository.logging.base.LoggingHelperItemsRepository
 import com.f0x1d.logfox.repository.logging.readers.crashes.ANRDetector

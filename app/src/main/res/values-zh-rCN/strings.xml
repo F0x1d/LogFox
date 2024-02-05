@@ -129,6 +129,7 @@
     <string name="log_dump_size_warning">日志存储在 RAM 中，请确保所选值不会溢出 RAM</string>
     <string name="to_recording">转为录制</string>
     <string name="no_logs">目前没有日志</string>
+    <string name="waiting_for_logs">等待日志加载</string>
     <string name="all_logs_were_filtered_out">所有日志都被过滤掉了</string>
     <string name="no_crashes">目前没有崩溃记录</string>
     <string name="no_recordings">目前没有录制</string>

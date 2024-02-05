@@ -14,6 +14,7 @@ import com.f0x1d.logfox.extensions.updateList
 import com.f0x1d.logfox.model.LogLine
 import com.f0x1d.logfox.repository.logging.LoggingRepository
 import com.f0x1d.logfox.repository.logging.RecordingsRepository
+import com.f0x1d.logfox.utils.DateTimeFormatter
 import com.f0x1d.logfox.utils.preferences.AppPreferences
 import com.f0x1d.logfox.viewmodel.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -36,6 +37,7 @@ class LogsViewModel @Inject constructor(
     private val database: AppDatabase,
     private val loggingRepository: LoggingRepository,
     private val recordingsRepository: RecordingsRepository,
+    val dateTimeFormatter: DateTimeFormatter,
     val appPreferences: AppPreferences,
     application: Application
 ): BaseViewModel(application) {
@@ -106,6 +108,16 @@ class LogsViewModel @Inject constructor(
     }
 
     fun selectedToRecording() = recordingsRepository.createRecordingFrom(selectedItems.value)
+
+    fun exportSelectedLogsTo(uri: Uri) = launchCatching(Dispatchers.IO) {
+        ctx.contentResolver.openOutputStream(uri)?.use {
+            it.write(
+                selectedItems.value.joinToString("\n") { line ->
+                    line.original
+                }.encodeToByteArray()
+            )
+        }
+    }
 
     fun query(query: String?) = this.query.update { query }
 

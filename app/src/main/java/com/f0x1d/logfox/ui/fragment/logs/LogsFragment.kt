@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.lifecycle.asLiveData
 import androidx.navigation.fragment.findNavController
@@ -43,7 +44,6 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
         })
     }
     private var changingState = false
-    private var changingPlaceholderVisibilityRunnable: Runnable? = null
 
     private val clearSelectionOnBackPressedCallback = object : OnBackPressedCallback(false) {
         override fun handleOnBackPressed() {
@@ -53,7 +53,16 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
         }
     }
 
-    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) = FragmentLogsBinding.inflate(inflater, container, false)
+    private val exportLogsLauncher = registerForActivityResult(
+        ActivityResultContracts.CreateDocument("text/*")
+    ) {
+        viewModel.exportSelectedLogsTo(it ?: return@registerForActivityResult)
+    }
+
+    override fun inflateBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ) = FragmentLogsBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -96,6 +105,11 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
             setClickListenerOn(R.id.selected_to_recording_item) {
                 viewModel.selectedToRecording()
                 findNavController().navigate(NavGraphDirections.actionGlobalRecordingsFragment())
+            }
+            setClickListenerOn(R.id.export_selected_item) {
+                exportLogsLauncher.launch(
+                    "${viewModel.dateTimeFormatter.formatForExport(System.currentTimeMillis())}.log"
+                )
             }
             setClickListenerOn(R.id.clear_item) {
                 viewModel.clearLogs()
@@ -158,7 +172,7 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
             binding.toolbar.subtitle = subtitle
             binding.placeholderLayout.placeholderText.setText(
                 when (subtitle.isEmpty()) {
-                    true -> R.string.no_logs
+                    true -> R.string.waiting_for_logs
 
                     else -> R.string.all_logs_were_filtered_out
                 }

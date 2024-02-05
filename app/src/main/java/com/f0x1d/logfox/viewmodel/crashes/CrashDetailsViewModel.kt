@@ -40,7 +40,9 @@ class CrashDetailsViewModel @Inject constructor(
             when (it) {
                 null -> null
 
-                else -> it to it.logFile?.readText()
+                else -> runCatching {
+                    it to it.logFile?.readText()
+                }.getOrNull()
             }
         }
         .distinctUntilChanged()

@@ -33,7 +33,10 @@ class AppCrashesFragment: BaseViewModelFragment<AppCrashesViewModel, FragmentApp
         }
     })
 
-    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) = FragmentAppCrashesBinding.inflate(inflater, container, false)
+    override fun inflateBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ) = FragmentAppCrashesBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

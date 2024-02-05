@@ -20,7 +20,10 @@ class SetupFragment: BaseViewModelFragment<SetupViewModel, FragmentSetupBinding>
 
     override val viewModel by viewModels<SetupViewModel>()
 
-    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) = FragmentSetupBinding.inflate(inflater, container, false)
+    override fun inflateBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ) = FragmentSetupBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

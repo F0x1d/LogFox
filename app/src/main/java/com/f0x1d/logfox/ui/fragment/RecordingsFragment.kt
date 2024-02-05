@@ -41,8 +41,10 @@ class RecordingsFragment: BaseViewModelFragment<RecordingsViewModel, FragmentRec
         }
     })
 
-    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) =
-        FragmentRecordingsBinding.inflate(inflater, container, false)
+    override fun inflateBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ) = FragmentRecordingsBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -66,9 +68,14 @@ class RecordingsFragment: BaseViewModelFragment<RecordingsViewModel, FragmentRec
             }
         }
 
-        binding.toolbar.menu.setClickListenerOn(R.id.clear_item) {
-            showAreYouSureClearDialog {
-                viewModel.clearRecordings()
+        binding.toolbar.menu.apply {
+            setClickListenerOn(R.id.clear_item) {
+                showAreYouSureClearDialog {
+                    viewModel.clearRecordings()
+                }
+            }
+            setClickListenerOn(R.id.save_all_logs_item) {
+                viewModel.saveAll()
             }
         }
 

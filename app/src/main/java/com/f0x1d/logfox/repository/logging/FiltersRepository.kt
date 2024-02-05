@@ -2,6 +2,7 @@ package com.f0x1d.logfox.repository.logging
 
 import com.f0x1d.logfox.database.AppDatabase
 import com.f0x1d.logfox.database.entity.UserFilter
+import com.f0x1d.logfox.extensions.runOnAppScope
 import com.f0x1d.logfox.model.LogLevel
 import com.f0x1d.logfox.repository.logging.base.LoggingHelperItemsRepository
 import javax.inject.Inject

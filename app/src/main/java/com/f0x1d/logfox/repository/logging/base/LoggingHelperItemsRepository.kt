@@ -1,5 +1,7 @@
 package com.f0x1d.logfox.repository.logging.base
 
+import com.f0x1d.logfox.extensions.runOnAppScope
+
 abstract class LoggingHelperItemsRepository<T>: LoggingHelperRepository() {
 
     fun update(item: T) = runOnAppScope { updateInternal(item) }

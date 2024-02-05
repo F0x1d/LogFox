@@ -13,25 +13,25 @@
             app:argType="android.net.Uri"
             android:defaultValue="@null"
             app:nullable="true" />
-
-        <action
-            android:id="@+id/action_logsFragment_to_logsExtendedCopyFragment"
-            app:destination="@id/logsExtendedCopyFragment"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
-        <action
-            android:id="@+id/action_logsFragment_to_searchBottomSheet"
-            app:destination="@id/searchBottomSheet" />
-        <action
-            android:id="@+id/action_logsFragment_to_filtersFragment"
-            app:destination="@id/filtersFragment"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
+    <action
+        android:id="@+id/action_logsFragment_to_logsExtendedCopyFragment"
+        app:destination="@id/logsExtendedCopyFragment"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
+        app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+        app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    <action
+        android:id="@+id/action_logsFragment_to_searchBottomSheet"
+        app:destination="@id/searchBottomSheet" />
+    <action
+        android:id="@+id/action_logsFragment_to_filtersFragment"
+        app:destination="@id/filtersFragment"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
+        app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+        app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+
     <fragment
         android:id="@+id/logsExtendedCopyFragment"
         android:name="com.f0x1d.logfox.ui.fragment.logs.LogsExtendedCopyFragment"
@@ -40,22 +40,24 @@
             android:name="content"
             app:argType="string" />
     </fragment>
+
     <dialog
         android:id="@+id/searchBottomSheet"
         android:name="com.f0x1d.logfox.ui.dialog.SearchBottomSheet"
         android:label="SearchBottomSheet" />
+
     <fragment
         android:id="@+id/filtersFragment"
         android:name="com.f0x1d.logfox.ui.fragment.filters.FiltersFragment"
-        android:label="FiltersFragment" >
-        <action
-            android:id="@+id/action_filtersFragment_to_editFilterFragment"
-            app:destination="@id/editFilterFragment"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
-    </fragment>
+        android:label="FiltersFragment" />
+    <action
+        android:id="@+id/action_filtersFragment_to_editFilterFragment"
+        app:destination="@id/editFilterFragment"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
+        app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+        app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+
     <fragment
         android:id="@+id/editFilterFragment"
         android:name="com.f0x1d.logfox.ui.fragment.filters.EditFilterFragment"
@@ -64,14 +66,15 @@
             android:name="filter_id"
             app:argType="long"
             android:defaultValue="-1L" />
-        <action
-            android:id="@+id/action_editFilterFragment_to_chooseAppFragment"
-            app:destination="@id/chooseAppFragment"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
+    <action
+        android:id="@+id/action_editFilterFragment_to_chooseAppFragment"
+        app:destination="@id/chooseAppFragment"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
+        app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+        app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+
     <fragment
         android:id="@+id/chooseAppFragment"
         android:name="com.f0x1d.logfox.ui.fragment.filters.ChooseAppFragment"

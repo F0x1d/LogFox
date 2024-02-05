@@ -38,7 +38,10 @@ class RecordingBottomSheet: BaseViewModelBottomSheet<RecordingViewModel, SheetRe
         viewModel.exportFile(it ?: return@registerForActivityResult)
     }
 
-    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) = SheetRecordingBinding.inflate(inflater, container, false)
+    override fun inflateBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ) = SheetRecordingBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -60,7 +63,7 @@ class RecordingBottomSheet: BaseViewModelBottomSheet<RecordingViewModel, SheetRe
                 requireContext().shareFileIntent(File(logRecording.file))
             }
             binding.zipButton.setOnClickListener {
-                zipLogLauncher.launch("${viewModel.dateTimeFormatter.formatForExport(logRecording.dateAndTime)}.log")
+                zipLogLauncher.launch("${viewModel.dateTimeFormatter.formatForExport(logRecording.dateAndTime)}.zip")
             }
         }
 
