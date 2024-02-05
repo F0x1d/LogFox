@@ -60,7 +60,7 @@ class RecordingBottomSheet: BaseViewModelBottomSheet<RecordingViewModel, SheetRe
                 requireContext().shareFileIntent(File(logRecording.file))
             }
             binding.zipButton.setOnClickListener {
-                zipLogLauncher.launch("${viewModel.dateTimeFormatter.formatForExport(logRecording.dateAndTime)}.log")
+                zipLogLauncher.launch("${viewModel.dateTimeFormatter.formatForExport(logRecording.dateAndTime)}.zip")
             }
         }
 
