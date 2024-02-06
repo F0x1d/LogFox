@@ -4,6 +4,7 @@ import android.content.Context
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.database.AppDatabase
 import com.f0x1d.logfox.database.entity.LogRecording
+import com.f0x1d.logfox.extensions.context.toast
 import com.f0x1d.logfox.extensions.notifications.cancelRecordingNotification
 import com.f0x1d.logfox.extensions.notifications.sendRecordingNotification
 import com.f0x1d.logfox.extensions.notifications.sendRecordingPausedNotification
@@ -12,8 +13,9 @@ import com.f0x1d.logfox.extensions.runOnAppScope
 import com.f0x1d.logfox.model.LogLine
 import com.f0x1d.logfox.repository.logging.base.LoggingHelperItemsRepository
 import com.f0x1d.logfox.repository.logging.readers.recordings.RecordingWithFiltersReader
-import com.f0x1d.logfox.repository.logging.readers.recordings.base.RecordingReader
 import com.f0x1d.logfox.utils.DateTimeFormatter
+import com.f0x1d.logfox.utils.preferences.AppPreferences
+import com.f0x1d.logfox.utils.terminal.base.Terminal
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -23,6 +25,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.withContext
 import java.io.File
+import java.io.FileOutputStream
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -32,20 +35,19 @@ class RecordingsRepository @Inject constructor(
     private val database: AppDatabase,
     private val dateTimeFormatter: DateTimeFormatter,
     private val recordingReader: RecordingWithFiltersReader,
-    private val allRecordingReader: RecordingReader
+    private val appPreferences: AppPreferences,
+    private val terminals: Array<Terminal>
 ): LoggingHelperItemsRepository<LogRecording>() {
 
     val recordingStateFlow = MutableStateFlow(RecordingState.IDLE)
 
     override val readers = listOf(
-        recordingReader,
-        allRecordingReader
+        recordingReader
     )
 
     private val recordingDir = File("${context.filesDir.absolutePath}/recordings").apply {
         if (!exists()) mkdirs()
     }
-    private val allRecordingFile = File(recordingDir, "all.log")
 
     private var filtersJob: Job? = null
 
@@ -59,8 +61,7 @@ class RecordingsRepository @Inject constructor(
                 }
         }
 
-        allRecordingFile.delete()
-        allRecordingReader.record(allRecordingFile)
+        File(recordingDir, "all.log").delete()
     }
 
     override suspend fun stop() {
@@ -72,22 +73,33 @@ class RecordingsRepository @Inject constructor(
         recordingStateFlow.update { RecordingState.IDLE }
         recordingReader.clearLines()
 
-        allRecordingReader.updateRecording(false)
-        allRecordingReader.clearLines()
-
         filtersJob?.cancel()
     }
 
     fun saveAll(recordingSaved: (LogRecording) -> Unit = {}) = runOnAppScope {
-        allRecordingReader.dumpLines()
-
         val recordingTime = System.currentTimeMillis()
         val recordingFile = File(
             recordingDir,
             "${dateTimeFormatter.formatForExport(recordingTime)}.log"
         )
 
-        allRecordingReader.copyFileTo(recordingFile)
+        val command = LoggingRepository.COMMAND + LoggingRepository.DUMP_FLAG
+        val process = terminals[appPreferences.selectedTerminalIndex].execute(*command)
+
+        try {
+            FileOutputStream(recordingFile, true).use { out ->
+                process?.output?.bufferedReader()?.useLines {
+                    for (line in it) {
+                        out.write((line + "\n").encodeToByteArray())
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            withContext(Dispatchers.Main) {
+                context.toast(R.string.error_saving_logs)
+            }
+            e.printStackTrace()
+        }
 
         val logRecording = LogRecording(
             "${context.getString(R.string.record_file)} ${database.logRecordingDao().count() + 1}",

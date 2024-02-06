@@ -40,8 +40,10 @@ class LoggingRepository @Inject constructor(
 ): BaseRepository(), SharedPreferences.OnSharedPreferenceChangeListener {
 
     companion object {
-        private val COMMAND = arrayOf("logcat" , "-v", "uid", "-v", "epoch")
-        private val SHOW_LOGS_FROM_NOW_FLAGS = arrayOf("-T", "1")
+        val COMMAND = arrayOf("logcat" , "-v", "uid", "-v", "epoch")
+
+        val DUMP_FLAG = arrayOf("-d")
+        val SHOW_LOGS_FROM_NOW_FLAGS = arrayOf("-T", "1")
     }
 
     val logsFlow = MutableStateFlow(emptyList<LogLine>())

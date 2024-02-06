@@ -44,6 +44,7 @@ fun Uri?.readFileContentsAsFlow(context: Context) = flow {
         } ?: emit(emptyList())
     }
 }.flowOn(Dispatchers.IO).catch {
+    it.printStackTrace()
     emit(emptyList())
 }
 

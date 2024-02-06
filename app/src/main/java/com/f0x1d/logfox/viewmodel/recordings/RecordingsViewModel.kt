@@ -2,6 +2,7 @@ package com.f0x1d.logfox.viewmodel.recordings
 
 import android.app.Application
 import androidx.lifecycle.asLiveData
+import com.f0x1d.logfox.R
 import com.f0x1d.logfox.database.AppDatabase
 import com.f0x1d.logfox.database.entity.LogRecording
 import com.f0x1d.logfox.extensions.sendEvent
@@ -56,6 +57,8 @@ class RecordingsViewModel @Inject constructor(
 
     fun saveAll() = recordingsRepository.saveAll {
         sendEvent(EVENT_TYPE_RECORDING_SAVED, it)
+    }.also {
+        snackbar(R.string.saving_logs)
     }
 
     fun delete(logRecording: LogRecording) = recordingsRepository.delete(logRecording)
