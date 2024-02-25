@@ -115,9 +115,6 @@
     <string name="crash_details">崩溃详情</string>
     <string name="app_icon">应用图标</string>
     <string name="information">详情信息</string>
-    <string name="logs_dump">日志转储</string>
-    <string name="logs_dump_description">这些是应用自身崩溃前保存的系统日志</string>
-    <string name="logs_dump_lines_count">日志转储行数</string>
     <string name="releases">正式版</string>
     <string name="alpha_builds">Alpha 版</string>
     <string name="select_all">全选</string>
@@ -126,7 +123,6 @@
     <string name="time_format">时间格式</string>
     <string name="archives">压缩档案</string>
     <string name="include_device_information_in_archives">在导出的崩溃日志和录制中包含设备信息</string>
-    <string name="log_dump_size_warning">日志存储在 RAM 中，请确保所选值不会溢出 RAM</string>
     <string name="to_recording">转为录制</string>
     <string name="no_logs">目前没有日志</string>
     <string name="waiting_for_logs">等待日志加载</string>

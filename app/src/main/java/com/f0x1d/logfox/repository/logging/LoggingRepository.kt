@@ -53,16 +53,24 @@ class LoggingRepository @Inject constructor(
     private val logsMutex = Mutex()
     private var loggingJob: Job? = null
 
-    private var loggingTerminal = terminals.first()
+    private var loggingTerminal = terminals[appPreferences.selectedTerminalIndex]
     private var loggingInterval = AppPreferences.LOGS_UPDATE_INTERVAL_DEFAULT
     private var logsDisplayLimit = AppPreferences.LOGS_DISPLAY_LIMIT_DEFAULT
 
     private var idsCounter = -1L
 
-    fun startLoggingIfNot() {
+    fun startLoggingIfNot(updateTerminal: Boolean = true) {
         if (loggingJob?.isActive == true) return
 
-        loggingTerminal = terminals[appPreferences.selectedTerminalIndex]
+        if (updateTerminal) {
+            val prevTerminal = loggingTerminal
+            loggingTerminal = terminals[appPreferences.selectedTerminalIndex]
+
+            if (prevTerminal != loggingTerminal) runOnAppScope {
+                prevTerminal.exit()
+            }
+        }
+
         loggingInterval = appPreferences.logsUpdateInterval
         logsDisplayLimit = appPreferences.logsDisplayLimit
         appPreferences.registerListener(this)
@@ -80,41 +88,25 @@ class LoggingRepository @Inject constructor(
         }
     }
 
-    fun restartLogging(updateTerminal: Boolean = true) {
-        loggingJob?.cancel()
-
-        if (updateTerminal) {
-            val prevTerminal = loggingTerminal
-            loggingTerminal = terminals[appPreferences.selectedTerminalIndex]
-
-            if (prevTerminal != loggingTerminal) onAppScope {
-                prevTerminal.exit()
-            }
-        }
-
-        loggingJob = onAppScope {
-            while (isActive) {
-                readLogs()
-            }
-        }
+    fun restartLogging(updateTerminal: Boolean = true) = runOnAppScope {
+        stopLogging()
+        startLoggingIfNot(updateTerminal = updateTerminal)
     }
 
-    fun stopLogging() {
+    suspend fun stopLogging() = coroutineScope {
         loggingJob?.cancel()
 
         clearLogs()
-        appPreferences.unregisterListener(this)
+        appPreferences.unregisterListener(this@LoggingRepository)
 
-        onAppScope {
-            val closingHelpers = helpers.map {
-                async(Dispatchers.IO) {
-                    it.stop()
-                }
+        val closingHelpers = helpers.map {
+            async(Dispatchers.IO) {
+                it.stop()
             }
-
-            loggingTerminal.exit()
-            closingHelpers.awaitAll()
         }
+
+        loggingTerminal.exit()
+        closingHelpers.awaitAll()
     }
 
     fun clearLogs() = runOnAppScope {

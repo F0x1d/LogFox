@@ -1,4 +1,4 @@
-package com.f0x1d.logfox.ui.fragment
+package com.f0x1d.logfox.ui.fragment.recordings
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -70,13 +70,16 @@ class RecordingsFragment: BaseViewModelFragment<RecordingsViewModel, FragmentRec
         }
 
         toolbar.menu.apply {
+            setClickListenerOn(R.id.logs_cache_item) {
+                findNavController().navigate(RecordingsFragmentDirections.actionRecordingsFragmentToCachedRecordingsFragment())
+            }
+            setClickListenerOn(R.id.save_all_logs_item) {
+                viewModel.saveAll()
+            }
             setClickListenerOn(R.id.clear_item) {
                 showAreYouSureClearDialog {
                     viewModel.clearRecordings()
                 }
-            }
-            setClickListenerOn(R.id.save_all_logs_item) {
-                viewModel.saveAll()
             }
         }
 

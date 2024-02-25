@@ -13,6 +13,7 @@ import com.f0x1d.logfox.extensions.context.activityManager
 import com.f0x1d.logfox.extensions.makeOpenAppPendingIntent
 import com.f0x1d.logfox.extensions.makeServicePendingIntent
 import com.f0x1d.logfox.extensions.notifications.applyPrimaryColorIfNeeded
+import com.f0x1d.logfox.extensions.runOnAppScope
 import com.f0x1d.logfox.repository.logging.LoggingRepository
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.update
@@ -77,7 +78,7 @@ class LoggingService: Service() {
         stopSelf()
     }
 
-    private fun killApp() {
+    private fun killApp() = runOnAppScope {
         loggingRepository.stopLogging()
 
         activityManager.appTasks.forEach {

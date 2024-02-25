@@ -1,14 +1,18 @@
 package com.f0x1d.logfox.ui.fragment.settings
 
 import android.os.Bundle
+import android.text.InputType
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
 import androidx.preference.SwitchPreferenceCompat
 import com.f0x1d.logfox.R
+import com.f0x1d.logfox.extensions.context.catchingNotNumber
 import com.f0x1d.logfox.extensions.context.toast
 import com.f0x1d.logfox.extensions.fillWithStrings
 import com.f0x1d.logfox.extensions.isAtLeastAndroid13
+import com.f0x1d.logfox.extensions.views.widgets.observeAndUpdateSummary
 import com.f0x1d.logfox.extensions.views.widgets.observeAndUpdateSummaryForList
+import com.f0x1d.logfox.extensions.views.widgets.setupAsEditTextPreference
 import com.f0x1d.logfox.extensions.views.widgets.setupAsListPreference
 import com.f0x1d.logfox.repository.logging.LoggingRepository
 import com.f0x1d.logfox.ui.fragment.settings.base.BasePreferenceFragment
@@ -37,6 +41,42 @@ class SettingsServiceFragment: BasePreferenceFragment() {
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.settings_service)
+
+        findPreference<SwitchPreferenceCompat>("pref_use_session_cache")?.apply {
+            setOnPreferenceChangeListener { preference, newValue ->
+                loggingRepository.restartLogging(updateTerminal = false)
+                return@setOnPreferenceChangeListener true
+            }
+        }
+        findPreference<SwitchPreferenceCompat>("pref_session_cache_save_recordings")?.apply {
+            setOnPreferenceChangeListener { preference, newValue ->
+                loggingRepository.restartLogging(updateTerminal = false)
+                return@setOnPreferenceChangeListener true
+            }
+        }
+
+        findPreference<Preference>("pref_session_cache_lines_count")?.apply {
+            setupAsEditTextPreference(
+                setupViews = {
+                    it.textLayout.setHint(R.string.lines)
+                    it.text.inputType = InputType.TYPE_CLASS_NUMBER
+                },
+                setupDialog = { setIcon(R.drawable.ic_dialog_list) },
+                get = { appPreferences.sessionCacheLinesCount.toString() },
+                save = {
+                    requireContext().catchingNotNumber {
+                        val count = it?.toInt() ?: AppPreferences.SESSION_CACHE_LINES_COUNT_DEFAULT
+
+                        appPreferences.sessionCacheLinesCount = count.coerceAtLeast(0)
+                    }
+                }
+            )
+
+            observeAndUpdateSummary(
+                observer = this@SettingsServiceFragment,
+                defValue = AppPreferences.SESSION_CACHE_LINES_COUNT_DEFAULT
+            )
+        }
 
         findPreference<Preference>("pref_selected_terminal_index")?.apply {
             val filledTerminalSettings = terminals

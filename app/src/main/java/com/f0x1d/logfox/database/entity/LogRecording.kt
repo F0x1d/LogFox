@@ -16,6 +16,7 @@ data class LogRecording(
     @ColumnInfo(name = "title") val title: String,
     @ColumnInfo(name = "date_and_time") val dateAndTime: Long,
     @ColumnInfo(name = "file") val file: File,
+    @ColumnInfo(name = "is_cache_recording", defaultValue = "0") val isCacheRecording: Boolean = false,
     @PrimaryKey(autoGenerate = true) val id: Long = 0
 ) {
     fun deleteFile() = file.delete()
@@ -24,14 +25,14 @@ data class LogRecording(
 @Dao
 interface LogRecordingDao {
 
-    @Query("SELECT * FROM LogRecording ORDER BY date_and_time DESC")
-    suspend fun getAll(): List<LogRecording>
+    @Query("SELECT * FROM LogRecording WHERE is_cache_recording = :cached ORDER BY date_and_time DESC")
+    suspend fun getAll(cached: Boolean = false): List<LogRecording>
 
-    @Query("SELECT * FROM LogRecording ORDER BY date_and_time DESC")
-    fun getAllAsFlow(): Flow<List<LogRecording>>
+    @Query("SELECT * FROM LogRecording WHERE is_cache_recording = :cached ORDER BY date_and_time DESC")
+    fun getAllAsFlow(cached: Boolean = false): Flow<List<LogRecording>>
 
-    @Query("SELECT COUNT(*) FROM LogRecording")
-    suspend fun count(): Int
+    @Query("SELECT COUNT(*) FROM LogRecording WHERE is_cache_recording = :cached")
+    suspend fun count(cached: Boolean = false): Int
 
     @Query("SELECT * FROM LogRecording WHERE id = :id")
     fun get(id: Long): Flow<LogRecording?>
@@ -45,6 +46,6 @@ interface LogRecordingDao {
     @Delete
     suspend fun delete(logRecording: LogRecording)
 
-    @Query("DELETE FROM LogRecording")
-    suspend fun deleteAll()
+    @Query("DELETE FROM LogRecording WHERE is_cache_recording = :deleteCacheRecordings")
+    suspend fun deleteAll(deleteCacheRecordings: Boolean = false)
 }

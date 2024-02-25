@@ -19,7 +19,8 @@ open class RecordingReader @Inject constructor(): LogsReader {
 
     var recordingFile: File? = null
         private set
-    private val fileMutex = Mutex()
+    protected val fileMutex = Mutex()
+    protected var recordedLinesSize = 1000
 
     suspend fun record(toFile: File) {
         recordingMutex.withLock {
@@ -30,6 +31,11 @@ open class RecordingReader @Inject constructor(): LogsReader {
         fileMutex.withLock {
             recordingFile = toFile
         }
+    }
+
+    suspend fun stopRecording() {
+        updateRecording(false)
+        dumpLines()
     }
 
     suspend fun dumpLines() {
@@ -44,26 +50,16 @@ open class RecordingReader @Inject constructor(): LogsReader {
         }
 
         if (content.isNotEmpty()) {
-            fileMutex.withLock {
-                recordingFile?.appendText(content + "\n")
-            }
+            writeToFile(content)
         }
-    }
-
-    suspend fun clearLines() = linesMutex.withLock {
-        recordedLines.clear()
-    }
-
-    suspend fun deleteFile() = fileMutex.withLock {
-        recordingFile?.delete()
-    }
-
-    suspend fun copyFileTo(file: File) = fileMutex.withLock {
-        recordingFile?.copyTo(file)
     }
 
     suspend fun updateRecording(recording: Boolean) = recordingMutex.withLock {
         this.recording = recording
+    }
+
+    suspend fun copyFileTo(file: File) = fileMutex.withLock {
+        recordingFile?.copyTo(file)
     }
 
     override suspend fun readLine(line: LogLine) {
@@ -72,9 +68,13 @@ open class RecordingReader @Inject constructor(): LogsReader {
         if (recording && shouldRecordLine(line)) linesMutex.withLock {
             recordedLines.add(line)
         }.also {
-            if (recordedLines.size >= 1000)
+            if (recordedLines.size >= recordedLinesSize)
                 dumpLines()
         }
+    }
+
+    protected open suspend fun writeToFile(content: String) = fileMutex.withLock {
+        recordingFile?.appendText(content + "\n")
     }
 
     protected open suspend fun shouldRecordLine(line: LogLine) = true

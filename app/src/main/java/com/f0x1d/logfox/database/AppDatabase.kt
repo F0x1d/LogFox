@@ -25,7 +25,7 @@ import com.f0x1d.logfox.database.entity.UserFilterDao
         LogRecording::class,
         UserFilter::class
     ],
-    version = 15,
+    version = 16,
     autoMigrations = [
         AutoMigration(
             from = 12,
@@ -39,6 +39,10 @@ import com.f0x1d.logfox.database.entity.UserFilterDao
         AutoMigration(
             from = 14,
             to = 15
+        ),
+        AutoMigration(
+            from = 15,
+            to = 16
         )
     ]
 )
@@ -86,10 +90,6 @@ abstract class AppDatabase: RoomDatabase() {
         }
         @DeleteColumn(tableName = "AppCrash", columnName = "log_dump")
         class AutoMigration12_13: AutoMigrationSpec
-        /*val MIGRATION_13_14 = Migration(13, 14) {
-            it.execSQL("ALTER TABLE AppCrash ADD COLUMN is_deleted INTEGER NOT NULL DEFAULT 0")
-            it.execSQL("ALTER TABLE AppCrash ADD COLUMN deleted_time INTEGER")
-        }*/
     }
 
     abstract fun appCrashDao(): AppCrashDao

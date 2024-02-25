@@ -44,23 +44,20 @@ interface AppCrashDao {
         private const val DAYS_30 = 30L * 24 * 3600 * 1000
     }
 
-    @Query("SELECT * FROM AppCrash WHERE is_deleted = 0 ORDER BY date_and_time DESC")
-    fun getAllAsFlow(): Flow<List<AppCrash>>
+    @Query("SELECT * FROM AppCrash WHERE is_deleted = :deleted ORDER BY date_and_time DESC")
+    fun getAllAsFlow(deleted: Boolean = false): Flow<List<AppCrash>>
 
-    @Query("SELECT * FROM AppCrash WHERE is_deleted = 0 ORDER BY date_and_time DESC")
-    suspend fun getAll(): List<AppCrash>
-
-    @Query("SELECT * FROM AppCrash WHERE is_deleted = 1 ORDER BY date_and_time DESC")
-    suspend fun getAllDeleted(): List<AppCrash>
+    @Query("SELECT * FROM AppCrash WHERE is_deleted = :deleted ORDER BY date_and_time DESC")
+    suspend fun getAll(deleted: Boolean = false): List<AppCrash>
 
     @Query("SELECT * FROM AppCrash WHERE package_name = :packageName AND is_deleted = 0")
     suspend fun getAllByPackageName(packageName: String): List<AppCrash>
 
     // This includes deleted ones as it will help to skip them
-    @Query("SELECT * FROM AppCrash WHERE date_and_time = :dateAndTime")
-    suspend fun getAllByDateAndTime(dateAndTime: Long): List<AppCrash>
+    @Query("SELECT * FROM AppCrash WHERE date_and_time = :dateAndTime AND package_name = :packageName")
+    suspend fun getAllByDateAndTime(dateAndTime: Long, packageName: String): List<AppCrash>
 
-    @Query("SELECT * FROM AppCrash WHERE id = :id AND is_deleted = 0")
+    @Query("SELECT * FROM AppCrash WHERE id = :id")
     fun get(id: Long): Flow<AppCrash?>
 
     @Insert
@@ -87,7 +84,7 @@ interface AppCrashDao {
 
     @Transaction
     suspend fun clearIfNeeded() {
-        val itemsToDelete = getAllDeleted().filter {
+        val itemsToDelete = getAll(deleted = true).filter {
             (System.currentTimeMillis() - (it.deletedTime ?: 0)) >= DAYS_30
         }.also {
             if (it.isEmpty()) return
