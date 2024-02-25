@@ -14,7 +14,7 @@ object LogLevelsModule {
 
     @Provides
     @ActivityScoped
-    fun provideLogLevelsColorsMappings(activity: Activity) = LogLevel.values().associateWith {
+    fun provideLogLevelsColorsMappings(activity: Activity) = LogLevel.entries.associateWith {
         val getColor = { resId: Int ->
             activity.resources.getColor(resId, activity.theme)
         }

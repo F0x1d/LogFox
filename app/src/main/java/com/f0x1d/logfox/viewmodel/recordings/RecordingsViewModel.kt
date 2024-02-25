@@ -12,6 +12,7 @@ import com.f0x1d.logfox.repository.logging.RecordingsRepository
 import com.f0x1d.logfox.viewmodel.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
@@ -28,10 +29,8 @@ class RecordingsViewModel @Inject constructor(
         const val EVENT_TYPE_RECORDING_SAVED = "recording_saved"
     }
 
-    val recordings = database.logRecordingDao().getAllAsFlow()
-        .distinctUntilChanged()
-        .flowOn(Dispatchers.IO)
-        .asLiveData()
+    val recordings = database.logRecordingDao().getAllAsFlow().toLiveData()
+    val cachedRecordings = database.logRecordingDao().getAllAsFlow(cached = true).toLiveData()
 
     val recordingStateData = recordingsRepository.recordingStateFlow.asLiveData()
 
@@ -46,14 +45,13 @@ class RecordingsViewModel @Inject constructor(
         }
     }
 
-    fun togglePauseResume() {
-        if (recordingsRepository.recordingStateFlow.value == RecordingState.PAUSED)
-            recordingsRepository.resume()
-        else
-            recordingsRepository.pause()
-    }
+    fun togglePauseResume() = if (recordingsRepository.recordingStateFlow.value == RecordingState.PAUSED)
+        recordingsRepository.resume()
+    else
+        recordingsRepository.pause()
 
     fun clearRecordings() = recordingsRepository.clear()
+    fun clearCachedRecordings() = recordingsRepository.clearCached()
 
     fun saveAll() = recordingsRepository.saveAll {
         sendEvent(EVENT_TYPE_RECORDING_SAVED, it)
@@ -62,4 +60,6 @@ class RecordingsViewModel @Inject constructor(
     }
 
     fun delete(logRecording: LogRecording) = recordingsRepository.delete(logRecording)
+
+    private fun Flow<List<LogRecording>>.toLiveData() = distinctUntilChanged().flowOn(Dispatchers.IO).asLiveData()
 }

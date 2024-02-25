@@ -28,11 +28,9 @@ class DateTimeFormatter @Inject constructor(
         context.getString(R.string.error, e.localizedMessage)
     }
 
-    fun formatForExport(time: Long) = dateFormatter.format(
-        time
-    ).withReplacedBadSymbolsForFileName + "-" + timeFormatter.format(
-        time
-    ).withReplacedBadSymbolsForFileName
+    fun formatForExport(time: Long) = dateFormatter.format(time)
+        .withReplacedBadSymbolsForFileName + "-" + timeFormatter.format(time)
+            .withReplacedBadSymbolsForFileName
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         when (key) {
@@ -49,11 +47,6 @@ class DateTimeFormatter @Inject constructor(
 
     private fun createFormatter(format: String?) = SimpleDateFormat(format, Locale.getDefault())
 
-    private val String.withReplacedBadSymbolsForFileName get() = replace(
-        ":",
-        "-"
-    ).replace(
-        "[^a-zA-Z0-9\\-]".toRegex(),
-        "_"
-    )
+    private val String.withReplacedBadSymbolsForFileName get() = replace(":", "-")
+        .replace("[^a-zA-Z0-9\\-]".toRegex(), "_")
 }

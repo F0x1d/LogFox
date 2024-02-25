@@ -114,9 +114,6 @@
     <string name="crash_details">Çökme detayları</string>
     <string name="app_icon">Uygulama ikonu</string>
     <string name="information">BİLGİ</string>
-    <string name="logs_dump">Log dökümü</string>
-    <string name="logs_dump_description">Bunlar, uygulamanın kendisi çökmeden önce kaydedilen sistem günlükleridir</string>
-    <string name="logs_dump_lines_count">Log dökümü satır sayısı</string>
     <string name="releases">Yayınlananlar</string>
     <string name="alpha_builds">ALPHA yapılar</string>
     <string name="select_all">Tümünü seç</string>
@@ -125,6 +122,5 @@
     <string name="time_format">Zaman formatı</string>
     <string name="archives">Arşivler</string>
     <string name="include_device_information_in_archives">Include device information with exported recordings and crashes</string>
-    <string name="log_dump_size_warning">Log döküm satırları RAM\'de tutulur, bu nedenle seçilen sayı ile RAM\'i taşırmadığınızdan emin olun</string>
     <string name="to_recording">Kayıt için</string>
 </resources>

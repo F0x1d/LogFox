@@ -1,11 +1,9 @@
-package com.f0x1d.logfox.viewmodel.crashes
+package com.f0x1d.logfox.viewmodel.crashes.list
 
 import android.app.Application
 import androidx.lifecycle.asLiveData
 import com.f0x1d.logfox.database.AppDatabase
 import com.f0x1d.logfox.database.entity.AppCrash
-import com.f0x1d.logfox.di.viewmodel.AppName
-import com.f0x1d.logfox.di.viewmodel.PackageName
 import com.f0x1d.logfox.model.AppCrashesCount
 import com.f0x1d.logfox.repository.logging.CrashesRepository
 import com.f0x1d.logfox.viewmodel.base.BaseViewModel
@@ -17,9 +15,7 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 @HiltViewModel
-class AppCrashesViewModel @Inject constructor(
-    @PackageName val packageName: String,
-    @AppName val appName: String?,
+class CrashesViewModel @Inject constructor(
     private val database: AppDatabase,
     private val crashesRepository: CrashesRepository,
     application: Application
@@ -28,14 +24,19 @@ class AppCrashesViewModel @Inject constructor(
     val crashes = database.appCrashDao().getAllAsFlow()
         .distinctUntilChanged()
         .map { crashes ->
-            crashes.filter { crash ->
-                crash.packageName == packageName
-            }.map {
-                AppCrashesCount(it)
+            val groupedCrashes = crashes.groupBy { it.packageName }
+
+            groupedCrashes.map {
+                AppCrashesCount(
+                    lastCrash = it.value.first(),
+                    count = it.value.size
+                )
             }
         }
         .flowOn(Dispatchers.IO)
         .asLiveData()
 
-    fun deleteCrash(appCrash: AppCrash) = crashesRepository.delete(appCrash)
+    fun deleteCrashesByPackageName(appCrash: AppCrash) = crashesRepository.deleteAllByPackageName(appCrash)
+
+    fun clearCrashes() = crashesRepository.clear()
 }

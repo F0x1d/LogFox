@@ -49,6 +49,8 @@ abstract class BasePreferences(context: Context) {
         else -> throw RuntimeException("Type ${defaultValue!!::class.java.canonicalName} is not nullable or unknown")
     }
 
-    fun registerListener(listener: SharedPreferences.OnSharedPreferenceChangeListener) = sharedPreferences.registerOnSharedPreferenceChangeListener(listener)
-    fun unregisterListener(listener: SharedPreferences.OnSharedPreferenceChangeListener) = sharedPreferences.unregisterOnSharedPreferenceChangeListener(listener)
+    fun registerListener(listener: SharedPreferences.OnSharedPreferenceChangeListener) =
+        sharedPreferences.registerOnSharedPreferenceChangeListener(listener)
+    fun unregisterListener(listener: SharedPreferences.OnSharedPreferenceChangeListener) =
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener(listener)
 }

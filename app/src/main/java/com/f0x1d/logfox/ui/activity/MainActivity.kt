@@ -33,7 +33,10 @@ class MainActivity: BaseViewModelActivity<MainViewModel, ActivityMainBinding>(),
     override val viewModel by viewModels<MainViewModel>()
     private lateinit var navController: NavController
 
-    private val requestNotificationPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) {}
+    private val requestNotificationPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission(),
+        {}
+    )
 
     private var barShown = true
     private val barScene by lazy {
@@ -55,28 +58,28 @@ class MainActivity: BaseViewModelActivity<MainViewModel, ActivityMainBinding>(),
     override fun inflateBinding() = ActivityMainBinding.inflate(layoutInflater)
 
     @SuppressLint("InlinedApi")
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
+    override fun ActivityMainBinding.onCreate(savedInstanceState: Bundle?) {
         val navHostFragment = supportFragmentManager.findFragmentById(
             R.id.nav_host_fragment_content_main
         ) as NavHostFragment
         navController = navHostFragment.navController
 
-        binding.barView?.setupWithNavController(navController)
-        binding.barView?.setOnItemReselectedListener {
+        barView?.setupWithNavController(navController)
+        barView?.setOnItemReselectedListener {
             // Just do nothing
         }
 
-        navController.addOnDestinationChangedListener(this)
+        navController.addOnDestinationChangedListener(this@MainActivity)
 
         if (!hasNotificationsPermission() && !viewModel.askedNotificationsPermission) {
-            MaterialAlertDialogBuilder(this)
+            MaterialAlertDialogBuilder(this@MainActivity)
                 .setIcon(R.drawable.ic_dialog_notification_important)
                 .setTitle(R.string.no_notification_permission)
                 .setMessage(R.string.notification_permission_is_required)
                 .setCancelable(false)
-                .setPositiveButton(android.R.string.ok) { dialog, which -> requestNotificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)}
+                .setPositiveButton(android.R.string.ok) { dialog, which ->
+                    requestNotificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                }
                 .setNegativeButton(R.string.close, null)
                 .show()
 

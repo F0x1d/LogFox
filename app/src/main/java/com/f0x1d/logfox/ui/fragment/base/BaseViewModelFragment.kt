@@ -28,5 +28,5 @@ abstract class BaseViewModelFragment<T : BaseViewModel, D : ViewBinding>: BaseFr
         }
     }
 
-    open fun onEvent(event: Event) {}
+    open fun onEvent(event: Event) = Unit
 }

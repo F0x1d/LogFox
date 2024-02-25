@@ -22,7 +22,7 @@
             app:navigationIconTint="?colorOnSurface" />
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.core.widget.NestedScrollView
+    <com.f0x1d.logfox.ui.view.CustomNestedScrollView
         android:id="@+id/scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -171,6 +171,6 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.core.widget.NestedScrollView>
+    </com.f0x1d.logfox.ui.view.CustomNestedScrollView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

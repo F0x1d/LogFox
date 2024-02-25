@@ -114,9 +114,6 @@
     <string name="crash_details">Detalhes da falha</string>
     <string name="app_icon">Ícone do app</string>
     <string name="information">Informação</string>
-    <string name="logs_dump">Despejo de registros</string>
-    <string name="logs_dump_description">Esses são os registros do sistema salvos antes a falha do app</string>
-    <string name="logs_dump_lines_count">Número de linhas do despejo de registros</string>
     <string name="releases">Versões</string>
     <string name="alpha_builds">Compilações Alpha</string>
     <string name="select_all">Selecionar todo</string>
@@ -125,7 +122,6 @@
     <string name="time_format">Formato da hora</string>
     <string name="archives">Arquivos</string>
     <string name="include_device_information_in_archives">Incluir informações sobre o aparelho em gravações e falhas exportadas</string>
-    <string name="log_dump_size_warning">As linhas do despejo de registros são mantidas na RAM, por isso, certifique-se de não sobrecarregá-la através de contagem escolhida</string>
     <string name="to_recording">Converter em gravação</string>
     <string name="no_logs">Não há registros até agora</string>
     <string name="all_logs_were_filtered_out">Todos os registros foram filtrados</string>

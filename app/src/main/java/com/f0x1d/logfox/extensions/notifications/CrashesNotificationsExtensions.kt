@@ -10,13 +10,13 @@ import com.f0x1d.logfox.LogFoxApp
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.database.entity.AppCrash
 import com.f0x1d.logfox.extensions.*
-import com.f0x1d.logfox.extensions.context.doIfPermitted
+import com.f0x1d.logfox.extensions.context.doIfNotificationsAllowed
 import com.f0x1d.logfox.extensions.context.notificationManager
 import com.f0x1d.logfox.extensions.context.notificationManagerCompat
 import com.f0x1d.logfox.receiver.CopyReceiver
 
 @SuppressLint("MissingPermission")
-fun Context.sendErrorNotification(appCrash: AppCrash, crashLog: String?) = doIfPermitted {
+fun Context.sendErrorNotification(appCrash: AppCrash, crashLog: String?) = doIfNotificationsAllowed {
     notify(
         appCrash.packageName,
         appCrash.notificationId,
@@ -49,7 +49,10 @@ fun Context.sendErrorNotification(appCrash: AppCrash, crashLog: String?) = doIfP
     )
 }
 
-fun Context.cancelCrashNotificationFor(appCrash: AppCrash) = notificationManagerCompat.cancel(appCrash.packageName, appCrash.notificationId)
+fun Context.cancelCrashNotificationFor(appCrash: AppCrash) = notificationManagerCompat.cancel(
+    appCrash.packageName,
+    appCrash.notificationId
+)
 
 fun Context.cancelAllCrashNotifications() = notificationManager.apply {
     activeNotifications.forEach {

@@ -21,16 +21,14 @@ class LogsExtendedCopyFragment: BaseViewModelFragment<LogsViewModel, FragmentLog
         container: ViewGroup?
     ) = FragmentLogsExtendedCopyBinding.inflate(inflater, container, false)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        binding.scrollView.applyInsetter {
+    override fun FragmentLogsExtendedCopyBinding.onViewCreated(view: View, savedInstanceState: Bundle?) {
+        scrollView.applyInsetter {
             type(navigationBars = true) {
                 padding(vertical = true)
             }
         }
-        binding.toolbar.setupBackButtonForNavController()
+        toolbar.setupBackButtonForNavController()
 
-        binding.logText.text = viewModel.selectedItemsContent
+        logText.text = viewModel.selectedItemsContent
     }
 }

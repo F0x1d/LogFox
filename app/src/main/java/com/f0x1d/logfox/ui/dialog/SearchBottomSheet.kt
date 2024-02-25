@@ -21,30 +21,28 @@ class SearchBottomSheet: BaseBottomSheet<SheetSearchBinding>() {
         container: ViewGroup?
     ) = SheetSearchBinding.inflate(inflater, container, false)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
+    override fun SheetSearchBinding.onViewCreated(view: View, savedInstanceState: Bundle?) {
         val query = logsViewModel.query.value
 
-        binding.queryText.setText(query)
+        queryText.setText(query)
 
-        binding.clearSearchButton.isVisible = query != null
-        binding.clearSearchButton.setOnClickListener {
+        clearSearchButton.isVisible = query != null
+        clearSearchButton.setOnClickListener {
             search(null)
         }
 
-        binding.searchButton.setOnClickListener {
-            search(binding.queryText.text?.toString())
+        searchButton.setOnClickListener {
+            search(queryText.text?.toString())
         }
-        binding.queryText.setOnEditorActionListener { v, actionId, event ->
+        queryText.setOnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                search(binding.queryText.text?.toString())
+                search(queryText.text?.toString())
                 true
             } else
                 false
         }
 
-        binding.queryText.requestFocus()
+        queryText.requestFocus()
     }
 
     private fun search(text: String?) {

@@ -20,5 +20,5 @@ abstract class BaseViewModelBottomSheet<T : BaseViewModel, D : ViewBinding>: Bas
         }
     }
 
-    open fun onEvent(event: Event) {}
+    open fun onEvent(event: Event) = Unit
 }

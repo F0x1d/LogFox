@@ -25,7 +25,7 @@ import com.f0x1d.logfox.database.entity.UserFilterDao
         LogRecording::class,
         UserFilter::class
     ],
-    version = 14,
+    version = 16,
     autoMigrations = [
         AutoMigration(
             from = 12,
@@ -35,6 +35,14 @@ import com.f0x1d.logfox.database.entity.UserFilterDao
         AutoMigration(
             from = 13,
             to = 14
+        ),
+        AutoMigration(
+            from = 14,
+            to = 15
+        ),
+        AutoMigration(
+            from = 15,
+            to = 16
         )
     ]
 )

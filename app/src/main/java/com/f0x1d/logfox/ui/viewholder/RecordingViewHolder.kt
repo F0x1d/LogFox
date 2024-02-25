@@ -12,16 +12,18 @@ class RecordingViewHolder(
 ): BaseViewHolder<LogRecording, ItemRecordingBinding>(binding) {
 
     init {
-        binding.root.setOnClickListener {
-            click(currentItem ?: return@setOnClickListener)
-        }
-        binding.deleteButton.setOnClickListener {
-            delete(currentItem ?: return@setOnClickListener)
+        binding.apply {
+            root.setOnClickListener {
+                click(currentItem ?: return@setOnClickListener)
+            }
+            deleteButton.setOnClickListener {
+                delete(currentItem ?: return@setOnClickListener)
+            }
         }
     }
 
-    override fun bindTo(data: LogRecording) {
-        binding.title.text = data.title
-        binding.dateText.text = data.dateAndTime.toLocaleString()
+    override fun ItemRecordingBinding.bindTo(data: LogRecording) {
+        title.text = data.title
+        dateText.text = data.dateAndTime.toLocaleString()
     }
 }

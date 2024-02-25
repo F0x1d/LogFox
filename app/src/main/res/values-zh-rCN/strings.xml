@@ -115,9 +115,6 @@
     <string name="crash_details">崩溃详情</string>
     <string name="app_icon">应用图标</string>
     <string name="information">详情信息</string>
-    <string name="logs_dump">日志转储</string>
-    <string name="logs_dump_description">这些是应用自身崩溃前保存的系统日志</string>
-    <string name="logs_dump_lines_count">日志转储行数</string>
     <string name="releases">正式版</string>
     <string name="alpha_builds">Alpha 版</string>
     <string name="select_all">全选</string>
@@ -126,7 +123,6 @@
     <string name="time_format">时间格式</string>
     <string name="archives">压缩档案</string>
     <string name="include_device_information_in_archives">在导出的崩溃日志和录制中包含设备信息</string>
-    <string name="log_dump_size_warning">日志存储在 RAM 中，请确保所选值不会溢出 RAM</string>
     <string name="to_recording">转为录制</string>
     <string name="no_logs">目前没有日志</string>
     <string name="waiting_for_logs">等待日志加载</string>
@@ -138,4 +134,10 @@
     <string name="save_all_logs">保存完整日志</string>
     <string name="saving_logs">正在保存日志，这可能需要一点时间…</string>
     <string name="error_saving_logs">保存日志时发生错误</string>
+    <string name="session_cache">会话缓存</string>
+    <string name="use_session_cache">缓存会话</string>
+    <string name="session_cache_description">这些是在整个 LogFox 日志会话期间保存的日志，在应用或系统突然崩溃时可能会有所帮助。它们包含在导出的崩溃信息中</string>
+    <string name="session_cache_save_recordings">保存缓存的会话到录制</string>
+    <string name="session_cache_lines_count">缓存会话行数</string>
+    <string name="session_cache_size_warning">缓存会话保存在 RAM 中，请确保所选行数不会溢出</string>
 </resources>

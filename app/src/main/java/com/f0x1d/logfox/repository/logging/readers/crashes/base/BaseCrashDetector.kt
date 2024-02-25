@@ -6,7 +6,9 @@ import com.f0x1d.logfox.database.entity.CrashType
 import com.f0x1d.logfox.model.LogLine
 import com.f0x1d.logfox.repository.logging.readers.base.LogsReader
 
-abstract class BaseCrashDetector(private val collected: suspend (AppCrash, List<LogLine>) -> Unit): LogsReader {
+abstract class BaseCrashDetector(
+    private val collected: suspend (AppCrash, List<LogLine>) -> Unit
+): LogsReader {
 
     protected abstract val crashType: CrashType
     protected open val commonTag: String? = null
@@ -37,9 +39,9 @@ abstract class BaseCrashDetector(private val collected: suspend (AppCrash, List<
             linesModifier(collectedLines)
             collected(
                 makeAppCrash(
-                    packageFromCollected(collectedLines),
-                    crashType,
-                    collectedLines
+                    crashedAppPackageName = packageFromCollected(collectedLines),
+                    crashType = crashType,
+                    lines = collectedLines
                 ),
                 collectedLines
             )
@@ -71,10 +73,10 @@ abstract class BaseCrashDetector(private val collected: suspend (AppCrash, List<
         }
 
         AppCrash(
-            appName,
-            crashedAppPackageName,
-            crashType,
-            lines.first().dateAndTime
+            appName = appName,
+            packageName = crashedAppPackageName,
+            crashType = crashType,
+            dateAndTime = lines.first().dateAndTime
         )
     }
 }

@@ -19,7 +19,6 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
-import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
@@ -44,31 +43,34 @@ class RecordingViewModel @Inject constructor(
     val currentTitle = MutableStateFlow<String?>(null)
 
     fun exportFile(uri: Uri) = launchCatching(Dispatchers.IO) {
+        val recording = recording.value ?: return@launchCatching
+
         ctx.contentResolver.openOutputStream(uri)?.use { outputStream ->
-            recording.value?.apply {
-                File(file).inputStream().use { inputStream ->
-                    inputStream.copyTo(outputStream)
-                }
+            recording.file.inputStream().use { inputStream ->
+                inputStream.copyTo(outputStream)
             }
         }
     }
 
     fun exportZipFile(uri: Uri) = launchCatching(Dispatchers.IO) {
-        ctx.contentResolver.openOutputStream(uri)?.use {
-            recording.value?.apply {
-                it.exportToZip {
-                    if (appPreferences.includeDeviceInfoInArchives) putZipEntry(
-                        "device.txt",
-                        device.toString().encodeToByteArray()
-                    )
+        val recording = recording.value ?: return@launchCatching
 
-                    putZipEntry("recorded.log", File(file))
-                }
+        ctx.contentResolver.openOutputStream(uri)?.use {
+            it.exportToZip {
+                if (appPreferences.includeDeviceInfoInArchives) putZipEntry(
+                    "device.txt",
+                    device.toString().encodeToByteArray()
+                )
+
+                putZipEntry(
+                    name = "recorded.log",
+                    file = recording.file
+                )
             }
         }
     }
 
-    fun updateTitle(title: String) = recording.value?.apply {
-        recordingsRepository.updateTitle(this, title)
+    fun updateTitle(title: String) = recording.value?.let {
+        recordingsRepository.updateTitle(it, title)
     }
 }

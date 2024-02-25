@@ -4,15 +4,21 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.f0x1d.logfox.adapter.base.BaseListAdapter
 
-abstract class BaseViewHolder<T, D : ViewBinding>(protected val binding: D): RecyclerView.ViewHolder(binding.root) {
+abstract class BaseViewHolder<T, D : ViewBinding>(
+    protected val binding: D
+): RecyclerView.ViewHolder(binding.root) {
 
     protected val baseAdapter get() = bindingAdapter as? BaseListAdapter<T, D>
     protected val elements: List<T> get() = baseAdapter?.currentList ?: emptyList()
     protected val currentItem: T? get() = elements.getOrNull(bindingAdapterPosition)
 
-    abstract fun bindTo(data: T)
-    open fun recycle() {}
-    open fun detach() {}
+    protected abstract fun D.bindTo(data: T)
+    protected open fun D.recycle() = Unit
+    protected open fun D.detach() = Unit
 
-    fun <R> adapter() = bindingAdapter as? R
+    fun bindTo(data: T) = binding.bindTo(data)
+    fun recycle() = binding.recycle()
+    fun detach() = binding.detach()
+
+    protected fun <R> adapter() = bindingAdapter as? R
 }

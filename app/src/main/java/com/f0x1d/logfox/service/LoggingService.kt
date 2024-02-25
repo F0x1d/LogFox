@@ -13,6 +13,7 @@ import com.f0x1d.logfox.extensions.context.activityManager
 import com.f0x1d.logfox.extensions.makeOpenAppPendingIntent
 import com.f0x1d.logfox.extensions.makeServicePendingIntent
 import com.f0x1d.logfox.extensions.notifications.applyPrimaryColorIfNeeded
+import com.f0x1d.logfox.extensions.runOnAppScope
 import com.f0x1d.logfox.repository.logging.LoggingRepository
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.update
@@ -52,12 +53,20 @@ class LoggingService: Service() {
         .setOngoing(true)
         .setContentIntent(makeOpenAppPendingIntent())
         .applyPrimaryColorIfNeeded(this)
-        .addAction(R.drawable.ic_stop, getString(R.string.stop_service), makeServicePendingIntent(STOP_LOGGING_SERVICE_INTENT_ID, LoggingService::class.java) {
-            action = ACTION_STOP_SERVICE
-        })
-        .addAction(R.drawable.ic_clear, getString(R.string.exit), makeServicePendingIntent(EXIT_APP_INTENT_ID, LoggingService::class.java) {
-            action = ACTION_KILL_SERVICE
-        })
+        .addAction(
+            R.drawable.ic_stop,
+            getString(R.string.stop_service),
+            makeServicePendingIntent(STOP_LOGGING_SERVICE_INTENT_ID, LoggingService::class.java) {
+                action = ACTION_STOP_SERVICE
+            }
+        )
+        .addAction(
+            R.drawable.ic_clear,
+            getString(R.string.exit),
+            makeServicePendingIntent(EXIT_APP_INTENT_ID, LoggingService::class.java) {
+                action = ACTION_KILL_SERVICE
+            }
+        )
         .build()
 
     private fun stopService() {
@@ -69,7 +78,7 @@ class LoggingService: Service() {
         stopSelf()
     }
 
-    private fun killApp() {
+    private fun killApp() = runOnAppScope {
         loggingRepository.stopLogging()
 
         activityManager.appTasks.forEach {

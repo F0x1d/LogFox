@@ -4,17 +4,15 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.f0x1d.logfox.database.AppDatabase
 import com.f0x1d.logfox.database.entity.AppCrash
-import com.f0x1d.logfox.extensions.logline.filterAndSearch
 import com.f0x1d.logfox.extensions.notifications.cancelAllCrashNotifications
 import com.f0x1d.logfox.extensions.notifications.cancelCrashNotificationFor
 import com.f0x1d.logfox.extensions.notifications.sendErrorNotification
-import com.f0x1d.logfox.extensions.runOnAppScope
 import com.f0x1d.logfox.model.LogLine
 import com.f0x1d.logfox.repository.logging.base.LoggingHelperItemsRepository
 import com.f0x1d.logfox.repository.logging.readers.crashes.ANRDetector
-import com.f0x1d.logfox.repository.logging.readers.crashes.DumpCollector
 import com.f0x1d.logfox.repository.logging.readers.crashes.JNICrashDetector
 import com.f0x1d.logfox.repository.logging.readers.crashes.JavaCrashDetector
+import com.f0x1d.logfox.repository.logging.readers.recordings.RewritingRecordingReader
 import com.f0x1d.logfox.utils.preferences.AppPreferences
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.File
@@ -26,7 +24,7 @@ class CrashesRepository @Inject constructor(
     @ApplicationContext private val context: Context,
     private val database: AppDatabase,
     private val appPreferences: AppPreferences,
-    private val dumpCollector: DumpCollector
+    private val cacheRecordingReader: RewritingRecordingReader
 ): LoggingHelperItemsRepository<AppCrash>(), SharedPreferences.OnSharedPreferenceChangeListener {
 
     private val logsDir = File(context.filesDir.absolutePath + "/crashes").apply {
@@ -37,15 +35,17 @@ class CrashesRepository @Inject constructor(
     }
 
     override val readers = listOf(
-        dumpCollector,
         JavaCrashDetector(this::collectCrash),
         JNICrashDetector(this::collectCrash),
         ANRDetector(this::collectCrash)
     )
 
     override suspend fun setup() {
-        dumpCollector.capacity = appPreferences.logsDumpLinesCount
+        super.setup()
+
         appPreferences.registerListener(this)
+
+        database.appCrashDao().clearIfNeeded()
 
         val crashes = database.appCrashDao().getAll()
         val shouldMigrate = crashes.any { it.logFile == null }
@@ -54,7 +54,7 @@ class CrashesRepository @Inject constructor(
 
         database.appCrashDao().update(
             crashes.map {
-                val logFile = File(logDumpsDir, "${it.dateAndTime}-crash.log").apply {
+                val logFile = File(logsDir, "${it.dateAndTime}-crash.log").apply {
                     writeText(it.log)
                 }
 
@@ -67,10 +67,11 @@ class CrashesRepository @Inject constructor(
     }
 
     override suspend fun stop() {
+        super.stop()
         appPreferences.unregisterListener(this)
     }
 
-    fun deleteAllByPackageName(appCrash: AppCrash) = runOnAppScope {
+    fun deleteAllByPackageName(appCrash: AppCrash) = runOnRepoScope {
         database.appCrashDao().getAllByPackageName(appCrash.packageName).forEach {
             it.deleteAssociatedFiles()
             context.cancelCrashNotificationFor(it)
@@ -80,6 +81,14 @@ class CrashesRepository @Inject constructor(
     }
 
     private suspend fun collectCrash(it: AppCrash, lines: List<LogLine>) {
+        // Don't handle if already present in data
+        database.appCrashDao().getAllByDateAndTime(
+            dateAndTime = it.dateAndTime,
+            packageName = it.packageName
+        ).also {
+            if (it.isNotEmpty()) return
+        }
+
         val crashLog = lines.joinToString("\n") {
             it.content
         }
@@ -90,24 +99,14 @@ class CrashesRepository @Inject constructor(
             }
         }
 
-        database.appCrashDao().getAllByDateAndTime(it.dateAndTime).filter { crash ->
-            crash.packageName == it.packageName
-        }.also {
-            if (it.isNotEmpty()) return
-        }
-
-        val logFile = File(logDumpsDir, "${it.dateAndTime}-crash.log").apply {
+        val logFile = File(logsDir, "${it.dateAndTime}-crash.log").apply {
             writeText(crashLog)
         }
 
-        val logDump = dumpCollector
-            .logsDump
-            .filterAndSearch(database.userFilterDao().getAll())
-            .joinToString("\n") { it.original }
-
-        val logDumpFile = when (logDump.isNotEmpty()) {
-            true -> File(logDumpsDir, "${it.dateAndTime}-dump.log").apply {
-                writeText(logDump)
+        val logDumpFile = when (appPreferences.useSessionCache) {
+            true -> File(logDumpsDir, "${it.dateAndTime}-dump.log").let {
+                cacheRecordingReader.dumpLines()
+                cacheRecordingReader.copyFileTo(it)
             }
 
             else -> null
@@ -149,7 +148,7 @@ class CrashesRepository @Inject constructor(
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         when (key) {
-            "pref_logs_dump_lines_count" -> dumpCollector.capacity = appPreferences.logsDumpLinesCount
+            "pref_session_cache_lines_count" -> cacheRecordingReader.updateRecordedLinesSize(appPreferences.sessionCacheLinesCount)
         }
     }
 }

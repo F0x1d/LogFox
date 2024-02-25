@@ -8,7 +8,7 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import javax.inject.Inject
 
-class RecordingWithFiltersReader @Inject constructor(): RecordingReader() {
+open class RecordingWithFiltersReader @Inject constructor(): RecordingReader() {
 
     private var filters = emptyList<UserFilter>()
     private val filtersMutex = Mutex()

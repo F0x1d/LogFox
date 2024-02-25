@@ -23,9 +23,9 @@ open class DefaultTerminal @Inject constructor(): Terminal {
 
     override suspend fun isSupported() = true
 
-    private fun createProcess(commands: Array<out String>) = (commandPrefix ?: emptyArray()).plus(commands).let {
-        Runtime.getRuntime().exec(it)
-    }
+    private fun createProcess(commands: Array<out String>) = (commandPrefix ?: emptyArray())
+        .plus(commands)
+        .let { Runtime.getRuntime().exec(it) }
 
     override suspend fun executeNow(vararg command: String) = withContext(Dispatchers.IO) {
         val process = createProcess(command)

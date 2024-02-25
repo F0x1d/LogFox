@@ -98,5 +98,10 @@ class EditFilterViewModel @Inject constructor(
         sendEvent(EVENT_TYPE_UPDATE_PACKAGE_NAME_TEXT)
     }
 
-    private fun List<Boolean>.toEnabledLogLevels() = mapIndexed { index, value -> if (value) enumValues<LogLevel>()[index] else null }.filterNotNull()
+    private fun List<Boolean>.toEnabledLogLevels() = mapIndexed { index, value ->
+        if (value)
+            enumValues<LogLevel>()[index]
+        else
+            null
+    }.filterNotNull()
 }

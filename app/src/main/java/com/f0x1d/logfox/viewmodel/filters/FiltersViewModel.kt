@@ -40,10 +40,10 @@ class FiltersViewModel @Inject constructor(
     }
 
     fun exportAll(uri: Uri) = launchCatching(Dispatchers.IO) {
-        filters.value?.also { filters ->
-            ctx.contentResolver.openOutputStream(uri)?.use {
-                it.write(gson.toJson(filters).encodeToByteArray())
-            }
+        val filters = filters.value ?: return@launchCatching
+
+        ctx.contentResolver.openOutputStream(uri)?.use {
+            it.write(gson.toJson(filters).encodeToByteArray())
         }
     }
 

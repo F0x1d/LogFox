@@ -19,7 +19,6 @@ import com.f0x1d.logfox.viewmodel.recordings.RecordingViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.take
-import java.io.File
 
 @AndroidEntryPoint
 class RecordingBottomSheet: BaseViewModelBottomSheet<RecordingViewModel, SheetRecordingBinding>() {
@@ -43,32 +42,32 @@ class RecordingBottomSheet: BaseViewModelBottomSheet<RecordingViewModel, SheetRe
         container: ViewGroup?
     ) = SheetRecordingBinding.inflate(inflater, container, false)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
+    override fun SheetRecordingBinding.onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewModel.recording.observe(viewLifecycleOwner) { logRecording ->
             if (logRecording == null) return@observe
 
-            binding.timeText.text = logRecording.dateAndTime.toLocaleString()
+            timeText.text = logRecording.dateAndTime.toLocaleString()
 
-            binding.viewButton.setOnClickListener {
-                findNavController().navigate(NavGraphDirections.actionGlobalLogsFragment(
-                    File(logRecording.file).asUri(requireContext())
-                ))
+            viewButton.setOnClickListener {
+                findNavController().navigate(
+                    NavGraphDirections.actionGlobalLogsFragment(
+                        fileUri = logRecording.file.asUri(requireContext())
+                    )
+                )
             }
-            binding.exportButton.setOnClickListener {
+            exportButton.setOnClickListener {
                 logExportLauncher.launch("${viewModel.dateTimeFormatter.formatForExport(logRecording.dateAndTime)}.log")
             }
-            binding.shareButton.setOnClickListener {
-                requireContext().shareFileIntent(File(logRecording.file))
+            shareButton.setOnClickListener {
+                requireContext().shareFileIntent(logRecording.file)
             }
-            binding.zipButton.setOnClickListener {
+            zipButton.setOnClickListener {
                 zipLogLauncher.launch("${viewModel.dateTimeFormatter.formatForExport(logRecording.dateAndTime)}.zip")
             }
         }
 
         viewModel.currentTitle.filterNotNull().take(1).asLiveData().observe(viewLifecycleOwner) {
-            binding.title.apply {
+            title.apply {
                 setText(it)
                 doAfterTextChanged { viewModel.updateTitle(it?.toString() ?: "") }
             }

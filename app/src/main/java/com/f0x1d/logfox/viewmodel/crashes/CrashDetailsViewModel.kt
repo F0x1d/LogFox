@@ -50,26 +50,24 @@ class CrashDetailsViewModel @Inject constructor(
         .asLiveData()
 
     fun exportCrashToZip(uri: Uri) = launchCatching(Dispatchers.IO) {
-        crash.value?.also { item ->
-            val (appCrash, crashLog) = item
+        val (appCrash, crashLog) = crash.value ?: return@launchCatching
 
-            ctx.contentResolver.openOutputStream(uri)?.use {
-                it.exportToZip {
-                    if (appPreferences.includeDeviceInfoInArchives) putZipEntry(
-                        "device.txt",
-                        device.toString().encodeToByteArray()
-                    )
+        ctx.contentResolver.openOutputStream(uri)?.use {
+            it.exportToZip {
+                if (appPreferences.includeDeviceInfoInArchives) putZipEntry(
+                    name = "device.txt",
+                    content = device.toString().encodeToByteArray()
+                )
 
-                    if (crashLog != null) putZipEntry(
-                        "crash.log",
-                        crashLog.encodeToByteArray()
-                    )
+                if (crashLog != null) putZipEntry(
+                    name = "crash.log",
+                    content = crashLog.encodeToByteArray()
+                )
 
-                    if (appCrash.logDumpFile != null) putZipEntry(
-                        "dump.log",
-                        appCrash.logDumpFile
-                    )
-                }
+                if (appCrash.logDumpFile != null) putZipEntry(
+                    name = "dump.log",
+                    file = appCrash.logDumpFile
+                )
             }
         }
     }

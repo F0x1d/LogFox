@@ -78,17 +78,21 @@ class ShizukuTerminal @Inject constructor(
             return
         }
 
-        var alreadyConnected = false
+        var resumed = false
         val userServiceConnection = object : ServiceConnection {
             override fun onServiceConnected(componentName: ComponentName?, binder: IBinder?) {
-                if (binder == null || !binder.pingBinder()) return
+                if (resumed) return
+
+                if (binder == null || !binder.pingBinder()) {
+                    resume(false)
+                    resumed = true
+                    return
+                }
 
                 userService = IUserService.Stub.asInterface(binder)
 
-                if (alreadyConnected) return
-
                 resume(true)
-                alreadyConnected = true
+                resumed = true
             }
 
             override fun onServiceDisconnected(componentName: ComponentName?) {
@@ -116,6 +120,8 @@ class ShizukuTerminal @Inject constructor(
     }
 
     override suspend fun exit() {
-        Shizuku.unbindUserService(userServiceArgs, null, true)
+        runCatching {
+            Shizuku.unbindUserService(userServiceArgs, null, true)
+        }
     }
 }

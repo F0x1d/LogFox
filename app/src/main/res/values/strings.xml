@@ -123,9 +123,6 @@
     <string name="crash_details">Crash details</string>
     <string name="app_icon">App icon</string>
     <string name="information">Information</string>
-    <string name="logs_dump">Logs dump</string>
-    <string name="logs_dump_description">These are the system logs saved before the app itself crashed</string>
-    <string name="logs_dump_lines_count">Logs dump lines count</string>
     <string name="telegram" translatable="false">Telegram</string>
     <string name="releases">Releases</string>
     <string name="alpha_builds">Alpha builds</string>
@@ -135,7 +132,6 @@
     <string name="time_format">Time format</string>
     <string name="archives">Archives</string>
     <string name="include_device_information_in_archives">Include device information in exported recordings and crashes</string>
-    <string name="log_dump_size_warning">Logs dump lines are kept in RAM, so make sure not to overflow it with chosen count</string>
     <string name="to_recording">To recording</string>
     <string name="no_logs">There are currently no logs</string>
     <string name="waiting_for_logs">Waiting for logs</string>
@@ -147,4 +143,10 @@
     <string name="save_all_logs">Save all logs</string>
     <string name="saving_logs">Saving logs, this may take some time…</string>
     <string name="error_saving_logs">Error saving logs</string>
+    <string name="session_cache">Session cache</string>
+    <string name="use_session_cache">Cache sessions</string>
+    <string name="session_cache_description">These are the logs saved during the whole LogFox logging session, they may be helpful in case of sudden app or system crash. They are included with exported crashes</string>
+    <string name="session_cache_save_recordings">Save cached sessions to recordings</string>
+    <string name="session_cache_lines_count">Session cache lines count</string>
+    <string name="session_cache_size_warning">Session cache is kept in RAM, so make sure not to overflow it with chosen count</string>
 </resources>

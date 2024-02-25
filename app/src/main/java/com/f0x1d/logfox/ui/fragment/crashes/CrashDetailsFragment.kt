@@ -12,7 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.database.entity.AppCrash
-import com.f0x1d.logfox.databinding.ActivityCrashDetailsBinding
+import com.f0x1d.logfox.databinding.FragmentCrashDetailsBinding
 import com.f0x1d.logfox.extensions.context.copyText
 import com.f0x1d.logfox.extensions.context.shareIntent
 import com.f0x1d.logfox.extensions.showAreYouSureDeleteDialog
@@ -26,7 +26,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.chrisbanes.insetter.applyInsetter
 
 @AndroidEntryPoint
-class CrashDetailsFragment: BaseViewModelFragment<CrashDetailsViewModel, ActivityCrashDetailsBinding>() {
+class CrashDetailsFragment: BaseViewModelFragment<CrashDetailsViewModel, FragmentCrashDetailsBinding>() {
 
     override val viewModel by viewModels<CrashDetailsViewModel>()
 
@@ -39,18 +39,16 @@ class CrashDetailsFragment: BaseViewModelFragment<CrashDetailsViewModel, Activit
     override fun inflateBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
-    ) = ActivityCrashDetailsBinding.inflate(inflater, container, false)
+    ) = FragmentCrashDetailsBinding.inflate(inflater, container, false)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        binding.scrollView.applyInsetter {
+    override fun FragmentCrashDetailsBinding.onViewCreated(view: View, savedInstanceState: Bundle?) {
+        scrollView.applyInsetter {
             type(navigationBars = true) {
                 padding(vertical = true)
             }
         }
 
-        binding.toolbar.setupBackButtonForNavController()
+        toolbar.setupBackButtonForNavController()
 
         viewModel.crash.observe(viewLifecycleOwner) {
             setupFor(it ?: return@observe)
@@ -66,14 +64,14 @@ class CrashDetailsFragment: BaseViewModelFragment<CrashDetailsViewModel, Activit
         }
     }
 
-    private fun setupFor(item: Pair<AppCrash, String?>) {
+    private fun FragmentCrashDetailsBinding.setupFor(item: Pair<AppCrash, String?>) {
         val (appCrash, crashLog) = item
 
-        binding.toolbar.menu.apply {
+        toolbar.menu.apply {
             setClickListenerOn(R.id.info_item) {
                 Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
                     data = Uri.fromParts("package", appCrash.packageName, null)
-                }.also {
+                }.let {
                     startActivity(it)
                 }
             }
@@ -85,23 +83,26 @@ class CrashDetailsFragment: BaseViewModelFragment<CrashDetailsViewModel, Activit
             }
         }
 
-        binding.appLogo.loadIcon(appCrash.packageName)
-        binding.appName.text = appCrash.appName ?: getString(R.string.unknown)
-        binding.appPackage.text = appCrash.packageName
+        appLogo.loadIcon(appCrash.packageName)
+        appName.text = appCrash.appName ?: getString(R.string.unknown)
+        appPackage.text = appCrash.packageName
 
-        binding.copyButton.setOnClickListener {
+        copyButton.setOnClickListener {
             requireContext().copyText(crashLog ?: "")
             snackbar(R.string.text_copied)
         }
 
-        binding.shareButton.setOnClickListener {
+        shareButton.setOnClickListener {
             requireContext().shareIntent(crashLog ?: "")
         }
 
-        binding.zipButton.setOnClickListener {
-            zipCrashLauncher.launch("crash-${appCrash.packageName.replace(".", "-")}-${viewModel.dateTimeFormatter.formatForExport(appCrash.dateAndTime)}.zip")
+        zipButton.setOnClickListener {
+            val pkg = appCrash.packageName.replace(".", "-")
+            val formattedDate = viewModel.dateTimeFormatter.formatForExport(appCrash.dateAndTime)
+            
+            zipCrashLauncher.launch("crash-$pkg-$formattedDate.zip")
         }
 
-        binding.logText.text = crashLog
+        logText.text = crashLog
     }
 }
