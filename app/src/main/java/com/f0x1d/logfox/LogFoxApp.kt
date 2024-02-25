@@ -5,11 +5,9 @@ import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationManagerCompat
 import com.f0x1d.logfox.extensions.context.applyTheme
 import com.f0x1d.logfox.extensions.context.notificationManagerCompat
-import com.f0x1d.logfox.utils.preferences.AppPreferences
 import com.google.android.material.color.DynamicColors
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.MainScope
-import javax.inject.Inject
 
 @HiltAndroidApp
 class LogFoxApp: Application() {
@@ -23,14 +21,11 @@ class LogFoxApp: Application() {
         lateinit var instance: LogFoxApp
     }
 
-    @Inject
-    lateinit var appPreferences: AppPreferences
-
     override fun onCreate() {
         super.onCreate()
         instance = this
 
-        applyTheme(appPreferences.nightTheme)
+        applyTheme()
 
         DynamicColors.applyToActivitiesIfAvailable(this)
 

@@ -47,6 +47,8 @@ class CrashesRepository @Inject constructor(
         dumpCollector.capacity = appPreferences.logsDumpLinesCount
         appPreferences.registerListener(this)
 
+        database.appCrashDao().clearIfNeeded()
+
         val crashes = database.appCrashDao().getAll()
         val shouldMigrate = crashes.any { it.logFile == null }
 

@@ -27,5 +27,5 @@ abstract class BaseViewModelActivity<T : BaseViewModel, D : ViewBinding>: BaseAc
         }
     }
 
-    open fun onEvent(event: Event) {}
+    open fun onEvent(event: Event) = Unit
 }

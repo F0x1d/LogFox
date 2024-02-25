@@ -41,10 +41,12 @@ class ChooseAppViewModel @Inject constructor(
 
         val installedApps = packageManager.getInstalledPackages(0).map {
             InstalledApp(
-                it.applicationInfo.loadLabel(packageManager),
-                it.packageName
+                title = it.applicationInfo.loadLabel(packageManager),
+                packageName = it.packageName
             )
-        }.sortedBy { it.title.toString() }
+        }.sortedBy {
+            it.title.toString()
+        }
 
         apps.update {
             installedApps

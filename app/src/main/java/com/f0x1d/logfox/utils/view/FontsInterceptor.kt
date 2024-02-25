@@ -11,7 +11,7 @@ import io.github.inflationx.viewpump.Interceptor
 class FontsInterceptor(context: Context): Interceptor {
 
     private val boldSansTypeface = ResourcesCompat.getFont(context, R.font.google_sans_medium)
-    private val fontsMap = hashMapOf(
+    private val fontsMap = mapOf(
         R.id.log_text to Typeface.MONOSPACE,
         R.id.title to boldSansTypeface,
         R.id.app_name to boldSansTypeface,

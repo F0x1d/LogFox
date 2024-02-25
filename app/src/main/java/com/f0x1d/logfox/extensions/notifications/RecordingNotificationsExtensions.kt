@@ -6,7 +6,7 @@ import androidx.core.app.NotificationCompat
 import com.f0x1d.logfox.LogFoxApp
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.extensions.*
-import com.f0x1d.logfox.extensions.context.doIfPermitted
+import com.f0x1d.logfox.extensions.context.doIfNotificationsAllowed
 import com.f0x1d.logfox.extensions.context.notificationManagerCompat
 import com.f0x1d.logfox.receiver.RecordingReceiver
 
@@ -14,7 +14,7 @@ private const val RECORDING_NOTIFICATIONS_TAG = "recording"
 private const val RECORDING_NOTIFICATIONS_ID = 0
 
 @SuppressLint("MissingPermission")
-fun Context.sendRecordingNotification() = doIfPermitted {
+fun Context.sendRecordingNotification() = doIfNotificationsAllowed {
     notify(
         RECORDING_NOTIFICATIONS_TAG,
         RECORDING_NOTIFICATIONS_ID,
@@ -25,12 +25,16 @@ fun Context.sendRecordingNotification() = doIfPermitted {
             .addAction(
                 R.drawable.ic_pause,
                 getString(R.string.pause),
-                makeBroadcastPendingIntent(PAUSE_RECORDING_INTENT_ID, RecordingReceiver::class.java) { action = RecordingReceiver.ACTION_PAUSE_LOGGING }
+                makeBroadcastPendingIntent(PAUSE_RECORDING_INTENT_ID, RecordingReceiver::class.java) {
+                    action = RecordingReceiver.ACTION_PAUSE_LOGGING
+                }
             )
             .addAction(
                 R.drawable.ic_stop,
                 getString(R.string.stop),
-                makeBroadcastPendingIntent(STOP_RECORDING_INTENT_ID, RecordingReceiver::class.java) { action = RecordingReceiver.ACTION_STOP_LOGGING }
+                makeBroadcastPendingIntent(STOP_RECORDING_INTENT_ID, RecordingReceiver::class.java) {
+                    action = RecordingReceiver.ACTION_STOP_LOGGING
+                }
             )
             .setOngoing(true)
             .setSilent(true)
@@ -39,7 +43,7 @@ fun Context.sendRecordingNotification() = doIfPermitted {
 }
 
 @SuppressLint("MissingPermission")
-fun Context.sendRecordingPausedNotification() = doIfPermitted {
+fun Context.sendRecordingPausedNotification() = doIfNotificationsAllowed {
     notify(
         RECORDING_NOTIFICATIONS_TAG,
         RECORDING_NOTIFICATIONS_ID,
@@ -50,17 +54,28 @@ fun Context.sendRecordingPausedNotification() = doIfPermitted {
             .addAction(
                 R.drawable.ic_play,
                 getString(R.string.resume),
-                makeBroadcastPendingIntent(RESUME_RECORDING_INTENT_ID, RecordingReceiver::class.java) { action = RecordingReceiver.ACTION_RESUME_LOGGING }
+                makeBroadcastPendingIntent(RESUME_RECORDING_INTENT_ID, RecordingReceiver::class.java) {
+                    action = RecordingReceiver.ACTION_RESUME_LOGGING
+                }
             )
             .addAction(
                 R.drawable.ic_stop,
                 getString(R.string.stop),
-                makeBroadcastPendingIntent(STOP_RECORDING_INTENT_ID, RecordingReceiver::class.java) { action = RecordingReceiver.ACTION_STOP_LOGGING }
+                makeBroadcastPendingIntent(STOP_RECORDING_INTENT_ID, RecordingReceiver::class.java) {
+                    action = RecordingReceiver.ACTION_STOP_LOGGING
+                }
             )
-            .setDeleteIntent(makeBroadcastPendingIntent(STOP_RECORDING_INTENT_ID, RecordingReceiver::class.java) { action = RecordingReceiver.ACTION_STOP_LOGGING })
+            .setDeleteIntent(
+                makeBroadcastPendingIntent(STOP_RECORDING_INTENT_ID, RecordingReceiver::class.java) {
+                    action = RecordingReceiver.ACTION_STOP_LOGGING
+                }
+            )
             .setSilent(true)
             .build()
     )
 }
 
-fun Context.cancelRecordingNotification() = notificationManagerCompat.cancel(RECORDING_NOTIFICATIONS_TAG, RECORDING_NOTIFICATIONS_ID)
+fun Context.cancelRecordingNotification() = notificationManagerCompat.cancel(
+    RECORDING_NOTIFICATIONS_TAG,
+    RECORDING_NOTIFICATIONS_ID
+)

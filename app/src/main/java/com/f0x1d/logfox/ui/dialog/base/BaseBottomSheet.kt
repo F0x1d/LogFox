@@ -17,6 +17,7 @@ abstract class BaseBottomSheet<T : ViewBinding>: BottomSheetDialogFragment() {
     protected val binding: T get() = mutableBinding!!
 
     abstract fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?): T?
+    protected open fun T.onViewCreated(view: View, savedInstanceState: Bundle?) = Unit
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         inflateBinding(inflater, container)?.also {
@@ -24,6 +25,11 @@ abstract class BaseBottomSheet<T : ViewBinding>: BottomSheetDialogFragment() {
             return it.root
         }
         return super.onCreateView(inflater, container, savedInstanceState)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.onViewCreated(view, savedInstanceState)
     }
 
     @SuppressLint("RestrictedApi")

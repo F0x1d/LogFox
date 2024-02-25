@@ -7,6 +7,7 @@ import androidx.room.Entity
 import androidx.room.Insert
 import androidx.room.PrimaryKey
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.TypeConverter
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
@@ -21,6 +22,8 @@ data class AppCrash(
     @ColumnInfo(name = "log") @Deprecated("Use logFile") val log: String = "",
     @ColumnInfo(name = "log_file") val logFile: File? = null,
     @ColumnInfo(name = "log_dump_file") val logDumpFile: File? = null,
+    @ColumnInfo(name = "is_deleted", defaultValue = "0") val isDeleted: Boolean = false,
+    @ColumnInfo(name = "deleted_time") val deletedTime: Long? = null,
     @PrimaryKey(autoGenerate = true) val id: Long = 0
 ) {
     val notificationId get() = (if (id == 0L) dateAndTime else id).toInt()
@@ -37,19 +40,27 @@ data class AppCrash(
 @Dao
 interface AppCrashDao {
 
-    @Query("SELECT * FROM AppCrash ORDER BY date_and_time DESC")
+    private companion object {
+        private const val DAYS_30 = 30L * 24 * 3600 * 1000
+    }
+
+    @Query("SELECT * FROM AppCrash WHERE is_deleted = 0 ORDER BY date_and_time DESC")
     fun getAllAsFlow(): Flow<List<AppCrash>>
 
-    @Query("SELECT * FROM AppCrash ORDER BY date_and_time DESC")
+    @Query("SELECT * FROM AppCrash WHERE is_deleted = 0 ORDER BY date_and_time DESC")
     suspend fun getAll(): List<AppCrash>
 
-    @Query("SELECT * FROM AppCrash WHERE package_name = :packageName")
+    @Query("SELECT * FROM AppCrash WHERE is_deleted = 1 ORDER BY date_and_time DESC")
+    suspend fun getAllDeleted(): List<AppCrash>
+
+    @Query("SELECT * FROM AppCrash WHERE package_name = :packageName AND is_deleted = 0")
     suspend fun getAllByPackageName(packageName: String): List<AppCrash>
 
+    // This includes deleted ones as it will help to skip them
     @Query("SELECT * FROM AppCrash WHERE date_and_time = :dateAndTime")
     suspend fun getAllByDateAndTime(dateAndTime: Long): List<AppCrash>
 
-    @Query("SELECT * FROM AppCrash WHERE id = :id")
+    @Query("SELECT * FROM AppCrash WHERE id = :id AND is_deleted = 0")
     fun get(id: Long): Flow<AppCrash?>
 
     @Insert
@@ -61,14 +72,32 @@ interface AppCrashDao {
     @Update
     suspend fun update(appCrashes: List<AppCrash>)
 
+    suspend fun delete(appCrash: AppCrash) {
+        update(appCrash.copy(isDeleted = true, deletedTime = System.currentTimeMillis()))
+    }
+
+    @Query("UPDATE AppCrash SET is_deleted = 1, deleted_time = :time WHERE package_name = :packageName")
+    suspend fun deleteByPackageName(
+        packageName: String,
+        time: Long = System.currentTimeMillis()
+    )
+
+    @Query("UPDATE AppCrash SET is_deleted = 1, deleted_time = :time")
+    suspend fun deleteAll(time: Long = System.currentTimeMillis())
+
+    @Transaction
+    suspend fun clearIfNeeded() {
+        val itemsToDelete = getAllDeleted().filter {
+            (System.currentTimeMillis() - (it.deletedTime ?: 0)) >= DAYS_30
+        }.also {
+            if (it.isEmpty()) return
+        }
+
+        _delete(itemsToDelete)
+    }
+
     @Delete
-    suspend fun delete(appCrash: AppCrash)
-
-    @Query("DELETE FROM AppCrash WHERE package_name = :packageName")
-    suspend fun deleteByPackageName(packageName: String)
-
-    @Query("DELETE FROM AppCrash")
-    suspend fun deleteAll()
+    suspend fun _delete(crashes: List<AppCrash>)
 }
 
 enum class CrashType(val readableName: String) {

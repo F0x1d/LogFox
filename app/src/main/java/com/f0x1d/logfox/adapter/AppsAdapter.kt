@@ -20,11 +20,8 @@ class AppsAdapter(
         }
     }
 
-    override fun createHolder(
-        layoutInflater: LayoutInflater,
-        parent: ViewGroup
-    ) = AppViewHolder(
-        ItemAppBinding.inflate(layoutInflater, parent, false),
-        click
+    override fun createHolder(layoutInflater: LayoutInflater, parent: ViewGroup) = AppViewHolder(
+        binding = ItemAppBinding.inflate(layoutInflater, parent, false),
+        click = click
     )
 }

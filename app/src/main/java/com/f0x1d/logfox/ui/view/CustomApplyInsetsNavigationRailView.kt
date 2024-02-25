@@ -12,9 +12,10 @@ class CustomApplyInsetsNavigationRailView: NavigationRailView {
 
     constructor(ctx: Context, attrs: AttributeSet): super(ctx, attrs) {
         ViewCompat.setOnApplyWindowInsetsListener(this) { _, windowInsets ->
-
             // applying only top and bottom padding
-            windowInsets.getInsets(WindowInsetsCompat.Type.systemBars()).also { insets ->
+            windowInsets.getInsets(
+                WindowInsetsCompat.Type.systemBars()
+            ).also { insets ->
                 setPadding(
                     0,
                     insets.top,

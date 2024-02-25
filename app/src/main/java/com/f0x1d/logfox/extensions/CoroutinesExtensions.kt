@@ -6,7 +6,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 fun onAppScope(block: suspend CoroutineScope.() -> Unit) = LogFoxApp.applicationScope.launch(
-    Dispatchers.IO
+    context = Dispatchers.IO
 ) {
     block(this)
 }

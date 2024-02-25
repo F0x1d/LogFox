@@ -43,8 +43,12 @@ class LogsViewModel @Inject constructor(
 ): BaseViewModel(application) {
 
     val query = MutableStateFlow<String?>(null)
-    val queryAndFilters = query.combine(database.userFilterDao().getAllAsFlow()) { query, filters ->
-        query to filters.filter { it.enabled }
+    val queryAndFilters = query.combine(
+        database.userFilterDao().getAllAsFlow()
+    ) { query, filters ->
+        query to filters.filter {
+            it.enabled
+        }
     }.flowOn(Dispatchers.IO)
 
     val paused = MutableStateFlow(false)
@@ -82,9 +86,9 @@ class LogsViewModel @Inject constructor(
     }.flowOn(
         Dispatchers.IO
     ).stateIn(
-        viewModelScope,
-        SharingStarted.Eagerly,
-        emptyList()
+        scope = viewModelScope,
+        started = SharingStarted.Eagerly,
+        initialValue = emptyList()
     )
 
     val serviceRunningData = loggingRepository.serviceRunningFlow.asLiveData()

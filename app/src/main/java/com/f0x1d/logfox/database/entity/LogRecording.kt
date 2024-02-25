@@ -1,6 +1,13 @@
 package com.f0x1d.logfox.database.entity
 
-import androidx.room.*
+import androidx.room.ColumnInfo
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Entity
+import androidx.room.Insert
+import androidx.room.PrimaryKey
+import androidx.room.Query
+import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 import java.io.File
 
@@ -8,10 +15,10 @@ import java.io.File
 data class LogRecording(
     @ColumnInfo(name = "title") val title: String,
     @ColumnInfo(name = "date_and_time") val dateAndTime: Long,
-    @ColumnInfo(name = "file") val file: String,
+    @ColumnInfo(name = "file") val file: File,
     @PrimaryKey(autoGenerate = true) val id: Long = 0
 ) {
-    fun deleteFile() = File(file).delete()
+    fun deleteFile() = file.delete()
 }
 
 @Dao

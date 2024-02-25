@@ -12,17 +12,19 @@ class AppViewHolder(
 ): BaseViewHolder<InstalledApp, ItemAppBinding>(binding) {
 
     init {
-        binding.root.setOnClickListener {
-            click(currentItem ?: return@setOnClickListener)
+        binding.apply {
+            root.setOnClickListener {
+                click(currentItem ?: return@setOnClickListener)
+            }
         }
     }
 
-    override fun bindTo(data: InstalledApp) {
-        binding.icon.loadIcon(data.packageName)
+    override fun ItemAppBinding.bindTo(data: InstalledApp) {
+        icon.loadIcon(data.packageName)
 
-        binding.title.text = data.title
-        binding.packageNameText.text = data.packageName
+        title.text = data.title
+        packageNameText.text = data.packageName
     }
 
-    override fun recycle() = Glide.with(binding.icon).clear(binding.icon)
+    override fun ItemAppBinding.recycle() = Glide.with(icon).clear(icon)
 }

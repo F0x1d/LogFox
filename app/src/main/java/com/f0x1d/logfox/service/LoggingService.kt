@@ -52,12 +52,20 @@ class LoggingService: Service() {
         .setOngoing(true)
         .setContentIntent(makeOpenAppPendingIntent())
         .applyPrimaryColorIfNeeded(this)
-        .addAction(R.drawable.ic_stop, getString(R.string.stop_service), makeServicePendingIntent(STOP_LOGGING_SERVICE_INTENT_ID, LoggingService::class.java) {
-            action = ACTION_STOP_SERVICE
-        })
-        .addAction(R.drawable.ic_clear, getString(R.string.exit), makeServicePendingIntent(EXIT_APP_INTENT_ID, LoggingService::class.java) {
-            action = ACTION_KILL_SERVICE
-        })
+        .addAction(
+            R.drawable.ic_stop,
+            getString(R.string.stop_service),
+            makeServicePendingIntent(STOP_LOGGING_SERVICE_INTENT_ID, LoggingService::class.java) {
+                action = ACTION_STOP_SERVICE
+            }
+        )
+        .addAction(
+            R.drawable.ic_clear,
+            getString(R.string.exit),
+            makeServicePendingIntent(EXIT_APP_INTENT_ID, LoggingService::class.java) {
+                action = ACTION_KILL_SERVICE
+            }
+        )
         .build()
 
     private fun stopService() {

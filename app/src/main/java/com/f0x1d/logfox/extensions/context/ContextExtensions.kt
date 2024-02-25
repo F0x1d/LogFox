@@ -11,8 +11,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
-import android.view.inputmethod.InputMethodManager
 import android.os.Build
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatDelegate
@@ -24,9 +24,7 @@ import com.f0x1d.logfox.extensions.asUri
 import com.f0x1d.logfox.extensions.shouldRequestNotificationsPermission
 import com.f0x1d.logfox.extensions.startForegroundServiceAvailable
 import com.f0x1d.logfox.extensions.uiModeManagerAvailable
-import com.f0x1d.logfox.repository.logging.LoggingRepository
 import com.f0x1d.logfox.service.LoggingService
-import com.f0x1d.logfox.utils.preferences.AppPreferences
 import java.io.File
 import kotlin.system.exitProcess
 
@@ -45,7 +43,7 @@ val Context.activityManager get() = getSystemService<ActivityManager>()!!
 @get:RequiresApi(Build.VERSION_CODES.S) val Context.uiModeManager get() = getSystemService<UiModeManager>()!!
 val Context.inputMethodManager get() = getSystemService<InputMethodManager>()!!
 
-fun Context.startLoggingAndService(loggingRepository: LoggingRepository, appPreferences: AppPreferences, force: Boolean = false) {
+fun Context.startLoggingAndService(force: Boolean = false) {
     loggingRepository.startLoggingIfNot()
 
     if (appPreferences.startOnLaunch || force) {
@@ -53,9 +51,9 @@ fun Context.startLoggingAndService(loggingRepository: LoggingRepository, appPref
     }
 }
 
-fun Context.startLoggingAndServiceIfCan(loggingRepository: LoggingRepository, appPreferences: AppPreferences, force: Boolean = false) {
+fun Context.startLoggingAndServiceIfCan(force: Boolean = false) {
     if (hasPermissionToReadLogs()) {
-        startLoggingAndService(loggingRepository, appPreferences, force)
+        startLoggingAndService(force)
     }
 }
 
@@ -118,12 +116,14 @@ fun Context.hasNotificationsPermission() = if (shouldRequestNotificationsPermiss
 else
     true
 
-fun Context.doIfPermitted(block: NotificationManagerCompat.() -> Unit) = if (hasNotificationsPermission())
+fun Context.doIfNotificationsAllowed(block: NotificationManagerCompat.() -> Unit) = if (hasNotificationsPermission())
     block(notificationManagerCompat)
 else
     Unit
 
-fun Context.applyTheme(nightMode: Int, force: Boolean = false) {
+fun Context.applyTheme(force: Boolean = false) {
+    val nightMode = appPreferences.nightTheme
+
     if (uiModeManagerAvailable) {
         if (force) uiModeManager.setApplicationNightMode(
             if (nightMode != 0) nightMode else UiModeManager.MODE_NIGHT_CUSTOM

@@ -19,6 +19,7 @@ abstract class BaseActivity<T : ViewBinding>: AppCompatActivity() {
     protected lateinit var binding: T
 
     abstract fun inflateBinding(): T?
+    protected open fun T.onCreate(savedInstanceState: Bundle?) = Unit
 
     override fun onCreate(savedInstanceState: Bundle?) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -48,6 +49,8 @@ abstract class BaseActivity<T : ViewBinding>: AppCompatActivity() {
                     padding(horizontal = true)
                 }
             }
+
+            binding.onCreate(savedInstanceState)
         }
     }
 

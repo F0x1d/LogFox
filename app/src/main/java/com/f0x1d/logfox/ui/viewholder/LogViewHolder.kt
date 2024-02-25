@@ -38,33 +38,35 @@ class LogViewHolder(
         }
         popupMenu.setForceShowIcon(true)
 
-        binding.root.setOnClickListener {
-            val adapter = adapter<LogsAdapter>() ?: return@setOnClickListener
+        binding.apply {
+            root.setOnClickListener {
+                val adapter = adapter<LogsAdapter>() ?: return@setOnClickListener
 
-            if (adapter.selectedItems.isNotEmpty())
-                selectItem()
-            else
-                expandOrCollapseItem()
-        }
-        binding.root.setOnLongClickListener {
-            val adapter = adapter<LogsAdapter>() ?: return@setOnLongClickListener true
+                if (adapter.selectedItems.isNotEmpty())
+                    selectItem()
+                else
+                    expandOrCollapseItem()
+            }
+            root.setOnLongClickListener {
+                val adapter = adapter<LogsAdapter>() ?: return@setOnLongClickListener true
 
-            if (adapter.selectedItems.isNotEmpty())
-                expandOrCollapseItem()
-            else
-                popupMenu.show()
+                if (adapter.selectedItems.isNotEmpty())
+                    expandOrCollapseItem()
+                else
+                    popupMenu.show()
 
-            return@setOnLongClickListener true
+                return@setOnLongClickListener true
+            }
         }
     }
 
-    override fun bindTo(data: LogLine) {
+    override fun ItemLogBinding.bindTo(data: LogLine) {
         adapter<LogsAdapter>()?.textSize?.also {
-            binding.logText.textSize = it
-            binding.levelView.textSize = it
+            logText.textSize = it
+            levelView.textSize = it
         }
 
-        binding.logText.text = buildString {
+        logText.text = buildString {
             adapter<LogsAdapter>()?.logsFormat?.apply {
                 if (date) append(dateTimeFormatter.formatDate(data.dateAndTime) + " ")
                 if (time) append(dateTimeFormatter.formatTime(data.dateAndTime) + " ")
@@ -77,32 +79,37 @@ class LogViewHolder(
             }
         }
 
-        binding.levelView.logLevel = data.level
+        levelView.logLevel = data.level
 
         changeExpandedAndSelected(data)
     }
 
-    override fun detach() {
+    override fun ItemLogBinding.detach() {
         popupMenu.dismiss()
     }
 
     private fun selectItem() = adapter<LogsAdapter>()?.selectedItems?.apply {
         currentItem?.also {
-            selectedItem(it, !any { logLine -> it.id == logLine.id })
+            val newValue = any { logLine -> it.id == logLine.id }.not()
+            selectedItem(it, newValue)
         }
     }
 
-    private fun expandOrCollapseItem() = adapter<LogsAdapter>()?.apply {
+    private fun ItemLogBinding.expandOrCollapseItem() = adapter<LogsAdapter>()?.apply {
         expandedStates.apply {
             currentItem?.also {
-                put(it.id, !getOrElse(it.id) { logsExpanded })
+                val newValue = getOrElse(it.id) { logsExpanded }.not()
+
+                put(it.id, newValue)
                 changeExpandedAndSelected(it)
             }
         }
     }
 
-    private fun changeExpandedAndSelected(logLine: LogLine) = adapter<LogsAdapter>()?.apply {
-        binding.logText.maxLines = if (expandedStates.getOrElse(logLine.id) { logsExpanded }) Int.MAX_VALUE else 1
-        binding.container.isSelected = selectedItems.contains(logLine)
+    private fun ItemLogBinding.changeExpandedAndSelected(logLine: LogLine) = adapter<LogsAdapter>()?.apply {
+        val expanded = expandedStates.getOrElse(logLine.id) { logsExpanded }
+
+        logText.maxLines = if (expanded) Int.MAX_VALUE else 1
+        container.isSelected = selectedItems.contains(logLine)
     }
 }

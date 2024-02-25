@@ -43,9 +43,9 @@ fun Uri?.readFileContentsAsFlow(context: Context) = flow {
             }
         } ?: emit(emptyList())
     }
-}.flowOn(Dispatchers.IO).catch {
+}.catch {
     it.printStackTrace()
     emit(emptyList())
-}
+}.flowOn(Dispatchers.IO)
 
 fun Uri.readFileName(context: Context) = DocumentFile.fromSingleUri(context, this)?.name

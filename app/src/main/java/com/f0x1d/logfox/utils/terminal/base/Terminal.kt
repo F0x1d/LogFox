@@ -12,5 +12,5 @@ interface Terminal {
 
     fun execute(vararg command: String): TerminalProcess?
 
-    suspend fun exit() {}
+    suspend fun exit() = Unit
 }

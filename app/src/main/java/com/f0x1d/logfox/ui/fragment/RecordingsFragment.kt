@@ -33,42 +33,43 @@ class RecordingsFragment: BaseViewModelFragment<RecordingsViewModel, FragmentRec
 
     override val viewModel by viewModels<RecordingsViewModel>()
 
-    private val adapter = RecordingsAdapter(click = {
-        openDetails(it)
-    }, delete = {
-        showAreYouSureDeleteDialog {
-            viewModel.delete(it)
+    private val adapter = RecordingsAdapter(
+        click = {
+            openDetails(it)
+        },
+        delete = {
+            showAreYouSureDeleteDialog {
+                viewModel.delete(it)
+            }
         }
-    })
+    )
 
     override fun inflateBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
     ) = FragmentRecordingsBinding.inflate(inflater, container, false)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
+    override fun FragmentRecordingsBinding.onViewCreated(view: View, savedInstanceState: Bundle?) {
         requireContext().isHorizontalOrientation.also { horizontalOrientation ->
-            binding.recordingsRecycler.applyInsetter {
+            recordingsRecycler.applyInsetter {
                 type(navigationBars = true) {
                     padding(vertical = horizontalOrientation)
                 }
             }
 
-            binding.pauseFab.applyInsetter {
+            pauseFab.applyInsetter {
                 type(navigationBars = true) {
                     margin(vertical = horizontalOrientation)
                 }
             }
-            binding.recordFab.applyInsetter {
+            recordFab.applyInsetter {
                 type(navigationBars = true) {
                     margin(vertical = horizontalOrientation)
                 }
             }
         }
 
-        binding.toolbar.menu.apply {
+        toolbar.menu.apply {
             setClickListenerOn(R.id.clear_item) {
                 showAreYouSureClearDialog {
                     viewModel.clearRecordings()
@@ -79,7 +80,7 @@ class RecordingsFragment: BaseViewModelFragment<RecordingsViewModel, FragmentRec
             }
         }
 
-        binding.recordFab.setOnClickListener {
+        recordFab.setOnClickListener {
             if (!viewModel.loggingServiceOrRecordingActive) {
                 MaterialAlertDialogBuilder(requireContext())
                     .setIcon(R.drawable.ic_dialog_warning)
@@ -92,10 +93,10 @@ class RecordingsFragment: BaseViewModelFragment<RecordingsViewModel, FragmentRec
 
             viewModel.toggleStartStop()
         }
-        binding.pauseFab.setOnClickListener { viewModel.togglePauseResume() }
+        pauseFab.setOnClickListener { viewModel.togglePauseResume() }
 
-        binding.recordingsRecycler.layoutManager = LinearLayoutManager(requireContext())
-        binding.recordingsRecycler.addItemDecoration(
+        recordingsRecycler.layoutManager = LinearLayoutManager(requireContext())
+        recordingsRecycler.addItemDecoration(
             MaterialDividerItemDecoration(
                 requireContext(),
                 LinearLayoutManager.VERTICAL
@@ -104,16 +105,16 @@ class RecordingsFragment: BaseViewModelFragment<RecordingsViewModel, FragmentRec
                 dividerInsetEnd = 10.dpToPx.toInt()
                 isLastItemDecorated = false
             })
-        binding.recordingsRecycler.adapter = adapter
+        recordingsRecycler.adapter = adapter
 
         viewModel.recordings.observe(viewLifecycleOwner) {
-            binding.placeholderLayout.root.isVisible = it.isEmpty()
+            placeholderLayout.root.isVisible = it.isEmpty()
 
             adapter.submitList(it)
         }
 
         viewModel.recordingStateData.observe(viewLifecycleOwner) { state ->
-            binding.recordFab.apply {
+            recordFab.apply {
                 when (state) {
                     RecordingState.IDLE, RecordingState.SAVING -> {
                         setImageResource(R.drawable.ic_recording)
@@ -129,7 +130,7 @@ class RecordingsFragment: BaseViewModelFragment<RecordingsViewModel, FragmentRec
                 }
             }
 
-            binding.pauseFab.apply {
+            pauseFab.apply {
                 when (state) {
                     RecordingState.IDLE, RecordingState.SAVING -> {
                         hide()

@@ -25,16 +25,14 @@ class SetupFragment: BaseViewModelFragment<SetupViewModel, FragmentSetupBinding>
         container: ViewGroup?
     ) = FragmentSetupBinding.inflate(inflater, container, false)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        binding.rootButton.setOnClickListener {
+    override fun FragmentSetupBinding.onViewCreated(view: View, savedInstanceState: Bundle?) {
+        rootButton.setOnClickListener {
             viewModel.root()
         }
-        binding.adbButton.setOnClickListener {
+        adbButton.setOnClickListener {
             viewModel.adb()
         }
-        binding.shizukuButton.setOnClickListener {
+        shizukuButton.setOnClickListener {
             viewModel.shizuku()
         }
     }

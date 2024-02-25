@@ -27,22 +27,30 @@ class FiltersFragment: BaseViewModelFragment<FiltersViewModel, FragmentFiltersBi
 
     override val viewModel by viewModels<FiltersViewModel>()
 
-    private val adapter = FiltersAdapter(click = {
-        findNavController().navigate(
-            FiltersFragmentDirections.actionFiltersFragmentToEditFilterFragment(it.id)
-        )
-    }, delete = {
-        showAreYouSureDeleteDialog {
-            viewModel.delete(it)
+    private val adapter = FiltersAdapter(
+        click = {
+            findNavController().navigate(
+                FiltersFragmentDirections.actionFiltersFragmentToEditFilterFragment(it.id)
+            )
+        },
+        delete = {
+            showAreYouSureDeleteDialog {
+                viewModel.delete(it)
+            }
+        },
+        checked = { userFilter, checked ->
+            viewModel.switch(userFilter, checked)
         }
-    }, checked = { userFilter, checked ->
-        viewModel.switch(userFilter, checked)
-    })
+    )
 
-    private val importFiltersLauncher = registerForActivityResult(ActivityResultContracts.OpenDocument()) {
+    private val importFiltersLauncher = registerForActivityResult(
+        ActivityResultContracts.OpenDocument()
+    ) {
         viewModel.import(it ?: return@registerForActivityResult)
     }
-    private val exportFiltersLauncher = registerForActivityResult(ActivityResultContracts.CreateDocument("application/json")) {
+    private val exportFiltersLauncher = registerForActivityResult(
+        ActivityResultContracts.CreateDocument("application/json")
+    ) {
         viewModel.exportAll(it ?: return@registerForActivityResult)
     }
 
@@ -51,22 +59,20 @@ class FiltersFragment: BaseViewModelFragment<FiltersViewModel, FragmentFiltersBi
         container: ViewGroup?
     ) = FragmentFiltersBinding.inflate(inflater, container, false)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        binding.addFab.applyInsetter {
+    override fun FragmentFiltersBinding.onViewCreated(view: View, savedInstanceState: Bundle?) {
+        addFab.applyInsetter {
             type(navigationBars = true) {
                 margin(vertical = true)
             }
         }
-        binding.filtersRecycler.applyInsetter {
+        filtersRecycler.applyInsetter {
             type(navigationBars = true) {
                 padding(vertical = true)
             }
         }
 
-        binding.toolbar.setupBackButtonForNavController()
-        binding.toolbar.menu.apply {
+        toolbar.setupBackButtonForNavController()
+        toolbar.menu.apply {
             setClickListenerOn(R.id.clear_item) {
                 showAreYouSureClearDialog {
                     viewModel.clearAll()
@@ -80,15 +86,15 @@ class FiltersFragment: BaseViewModelFragment<FiltersViewModel, FragmentFiltersBi
             }
         }
 
-        binding.filtersRecycler.layoutManager = LinearLayoutManager(requireContext())
-        binding.filtersRecycler.adapter = adapter
+        filtersRecycler.layoutManager = LinearLayoutManager(requireContext())
+        filtersRecycler.adapter = adapter
 
-        binding.addFab.setOnClickListener {
+        addFab.setOnClickListener {
             findNavController().navigate(FiltersFragmentDirections.actionFiltersFragmentToEditFilterFragment())
         }
 
         viewModel.filters.observe(viewLifecycleOwner) {
-            binding.placeholderLayout.root.isVisible = it.isEmpty()
+            placeholderLayout.root.isVisible = it.isEmpty()
 
             adapter.submitList(it)
         }

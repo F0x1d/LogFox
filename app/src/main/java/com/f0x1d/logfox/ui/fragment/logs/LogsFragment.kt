@@ -38,10 +38,14 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
     override val viewModel by hiltNavGraphViewModels<LogsViewModel>(R.id.logsFragment)
 
     private val adapter by lazy {
-        LogsAdapter(viewModel.appPreferences, selectedItem = viewModel::selectLine, copyLog = {
-            requireContext().copyText(it.original)
-            snackbar(R.string.text_copied)
-        })
+        LogsAdapter(
+            appPreferences = viewModel.appPreferences,
+            selectedItem = viewModel::selectLine,
+            copyLog = {
+                requireContext().copyText(it.original)
+                snackbar(R.string.text_copied)
+            }
+        )
     }
     private var changingState = false
 
@@ -64,25 +68,23 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
         container: ViewGroup?
     ) = FragmentLogsBinding.inflate(inflater, container, false)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        viewModel.appPreferences.registerListener(this)
+    override fun FragmentLogsBinding.onViewCreated(view: View, savedInstanceState: Bundle?) {
+        viewModel.appPreferences.registerListener(this@LogsFragment)
 
         requireContext().isHorizontalOrientation.also { horizontalOrientation ->
-            binding.logsRecycler.applyInsetter {
+            logsRecycler.applyInsetter {
                 type(navigationBars = true) {
                     padding(vertical = horizontalOrientation)
                 }
             }
-            binding.scrollFab.applyInsetter {
+            scrollFab.applyInsetter {
                 type(navigationBars = true) {
                     margin(vertical = horizontalOrientation)
                 }
             }
         }
 
-        binding.toolbar.menu.apply {
+        toolbar.menu.apply {
             setClickListenerOn(R.id.pause_item) {
                 viewModel.switchState()
             }
@@ -131,11 +133,11 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
             }
         }
 
-        binding.logsRecycler.layoutManager = LinearLayoutManager(requireContext())
-        binding.logsRecycler.itemAnimator = null
-        binding.logsRecycler.recycledViewPool.setMaxRecycledViews(0, 50)
-        binding.logsRecycler.adapter = adapter
-        binding.logsRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        logsRecycler.layoutManager = LinearLayoutManager(requireContext())
+        logsRecycler.itemAnimator = null
+        logsRecycler.recycledViewPool.setMaxRecycledViews(0, 50)
+        logsRecycler.adapter = adapter
+        logsRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 if (changingState)
                     return
@@ -147,7 +149,7 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
             }
         })
 
-        binding.scrollFab.setOnClickListener {
+        scrollFab.setOnClickListener {
             if (viewModel.resumeLoggingWithBottomTouch)
                 viewModel.resume()
             else
@@ -169,8 +171,8 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
                     append(resources.getQuantityString(R.plurals.filters_count, filters.size, filters.size))
             }
 
-            binding.toolbar.subtitle = subtitle
-            binding.placeholderLayout.placeholderText.setText(
+            toolbar.subtitle = subtitle
+            placeholderLayout.placeholderText.setText(
                 when (subtitle.isEmpty()) {
                     true -> R.string.waiting_for_logs
 
@@ -195,14 +197,14 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
         viewModel.paused.asLiveData().observe(viewLifecycleOwner) { paused ->
             changingState = true
 
-            binding.toolbar.menu.findItem(R.id.pause_item)
+            toolbar.menu.findItem(R.id.pause_item)
                 .setIcon(if (paused) R.drawable.ic_play else R.drawable.ic_pause)
                 .setTitle(if (paused) R.string.resume else R.string.pause)
 
             if (paused) {
-                binding.scrollFab.show()
+                scrollFab.show()
             } else {
-                binding.scrollFab.hide()
+                scrollFab.hide()
                 scrollLogToBottom()
             }
 
@@ -210,7 +212,7 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
         }
 
         viewModel.serviceRunningData.observe(viewLifecycleOwner) { running ->
-            binding.toolbar.menu.findItem(R.id.service_status_item).setTitle(if (running) R.string.stop_service else R.string.start_service)
+            toolbar.menu.findItem(R.id.service_status_item).setTitle(if (running) R.string.stop_service else R.string.start_service)
         }
 
         requireActivity().onBackPressedDispatcher.apply {
@@ -218,7 +220,7 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
         }
     }
 
-    private fun setupToolbarForSelection(selecting: Boolean, count: Int) = binding.toolbar.apply {
+    private fun FragmentLogsBinding.setupToolbarForSelection(selecting: Boolean, count: Int) = toolbar.apply {
         val setVisibility = { itemId: Int, visible: Boolean ->
             menu.findItem(itemId).isVisible = visible
         }
@@ -256,8 +258,8 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
         else invalidateNavigationButton()
     }
 
-    private fun updateLogsList(items: List<LogLine>?) {
-        binding.placeholderLayout.root.apply {
+    private fun FragmentLogsBinding.updateLogsList(items: List<LogLine>?) {
+        placeholderLayout.root.apply {
             if (items?.isEmpty() != false) {
                 animate()
                     .alpha(1f)
@@ -275,9 +277,9 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
         }
     }
 
-    private fun scrollLogToBottom() {
-        binding.logsRecycler.stopScroll()
-        binding.logsRecycler.scrollToPosition(adapter.itemCount - 1)
+    private fun FragmentLogsBinding.scrollLogToBottom() {
+        logsRecycler.stopScroll()
+        logsRecycler.scrollToPosition(adapter.itemCount - 1)
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {

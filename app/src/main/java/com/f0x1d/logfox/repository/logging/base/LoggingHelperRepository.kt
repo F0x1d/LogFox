@@ -7,6 +7,6 @@ abstract class LoggingHelperRepository: BaseRepository() {
 
     open val readers = emptyList<LogsReader>()
 
-    open suspend fun setup() {}
-    open suspend fun stop() {}
+    open suspend fun setup() = Unit
+    open suspend fun stop() = Unit
 }

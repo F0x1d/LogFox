@@ -39,31 +39,37 @@ class SettingsServiceFragment: BasePreferenceFragment() {
         addPreferencesFromResource(R.xml.settings_service)
 
         findPreference<Preference>("pref_selected_terminal_index")?.apply {
-            val filledTerminalSettings = terminals.map { it.title }.toIntArray().fillWithStrings(requireContext())
+            val filledTerminalSettings = terminals
+                .map { it.title }
+                .toIntArray()
+                .fillWithStrings(requireContext())
 
             setupAsListPreference(
-                {
-                    setIcon(R.drawable.ic_dialog_terminal)
-                },
-                filledTerminalSettings,
-                { appPreferences.selectedTerminalIndex }
-            ) {
-                if (appPreferences.selectedTerminalIndex == it) {
-                    loggingRepository.restartLogging()
-                    return@setupAsListPreference
-                }
+                setupDialog = { setIcon(R.drawable.ic_dialog_terminal) },
+                items = filledTerminalSettings,
+                selected = { appPreferences.selectedTerminalIndex },
+                onSelected = {
+                    if (appPreferences.selectedTerminalIndex == it) {
+                        loggingRepository.restartLogging()
+                        return@setupAsListPreference
+                    }
 
-                lifecycleScope.launch {
-                    val selectedTerminal = terminals[it]
-                    if (selectedTerminal.isSupported()) {
-                        appPreferences.selectedTerminalIndex = it
-                        askAboutNewTerminalRestart()
-                    } else
-                        requireContext().toast(R.string.terminal_unavailable)
+                    lifecycleScope.launch {
+                        val selectedTerminal = terminals[it]
+                        if (selectedTerminal.isSupported()) {
+                            appPreferences.selectedTerminalIndex = it
+                            askAboutNewTerminalRestart()
+                        } else
+                            requireContext().toast(R.string.terminal_unavailable)
+                    }
                 }
-            }
+            )
 
-            observeAndUpdateSummaryForList(appPreferences, this@SettingsServiceFragment, 0, filledTerminalSettings)
+            observeAndUpdateSummaryForList(
+                observer = this@SettingsServiceFragment,
+                defValue = 0,
+                items = filledTerminalSettings
+            )
         }
 
         findPreference<SwitchPreferenceCompat>("pref_start_on_boot")?.apply {

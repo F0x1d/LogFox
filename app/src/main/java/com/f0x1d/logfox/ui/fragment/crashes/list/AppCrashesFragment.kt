@@ -13,7 +13,7 @@ import com.f0x1d.logfox.extensions.dpToPx
 import com.f0x1d.logfox.extensions.showAreYouSureDeleteDialog
 import com.f0x1d.logfox.extensions.views.widgets.setupBackButtonForNavController
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
-import com.f0x1d.logfox.viewmodel.crashes.AppCrashesViewModel
+import com.f0x1d.logfox.viewmodel.crashes.list.AppCrashesViewModel
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import dev.chrisbanes.insetter.applyInsetter
@@ -23,40 +23,46 @@ class AppCrashesFragment: BaseViewModelFragment<AppCrashesViewModel, FragmentApp
 
     override val viewModel by viewModels<AppCrashesViewModel>()
 
-    private val adapter = CrashesAdapter(click = {
-        findNavController().navigate(
-            AppCrashesFragmentDirections.actionAppCrashesFragmentToCrashDetailsFragment(it.lastCrash.id)
-        )
-    }, delete = {
-        showAreYouSureDeleteDialog {
-            viewModel.deleteCrash(it.lastCrash)
+    private val adapter = CrashesAdapter(
+        click = {
+            findNavController().navigate(
+                AppCrashesFragmentDirections.actionAppCrashesFragmentToCrashDetailsFragment(it.lastCrash.id)
+            )
+        },
+        delete = {
+            showAreYouSureDeleteDialog {
+                viewModel.deleteCrash(it.lastCrash)
+            }
         }
-    })
+    )
 
     override fun inflateBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
     ) = FragmentAppCrashesBinding.inflate(inflater, container, false)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        binding.crashesRecycler.applyInsetter {
+    override fun FragmentAppCrashesBinding.onViewCreated(view: View, savedInstanceState: Bundle?) {
+        crashesRecycler.applyInsetter {
             type(navigationBars = true) {
                 padding(vertical = true)
             }
         }
 
-        binding.toolbar.title = viewModel.appName ?: viewModel.packageName
-        binding.toolbar.setupBackButtonForNavController()
+        toolbar.title = viewModel.appName ?: viewModel.packageName
+        toolbar.setupBackButtonForNavController()
 
-        binding.crashesRecycler.layoutManager = LinearLayoutManager(requireContext())
-        binding.crashesRecycler.addItemDecoration(MaterialDividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL).apply {
-            dividerInsetStart = 80.dpToPx.toInt()
-            dividerInsetEnd = 10.dpToPx.toInt()
-            isLastItemDecorated = false
-        })
-        binding.crashesRecycler.adapter = adapter
+        crashesRecycler.layoutManager = LinearLayoutManager(requireContext())
+        crashesRecycler.addItemDecoration(
+            MaterialDividerItemDecoration(
+                requireContext(),
+                LinearLayoutManager.VERTICAL
+            ).apply {
+                dividerInsetStart = 80.dpToPx.toInt()
+                dividerInsetEnd = 10.dpToPx.toInt()
+                isLastItemDecorated = false
+            }
+        )
+        crashesRecycler.adapter = adapter
 
         viewModel.crashes.observe(viewLifecycleOwner) {
             adapter.submitList(it)

@@ -25,22 +25,26 @@ class SettingsCrashesFragment: BasePreferenceFragment() {
         addPreferencesFromResource(R.xml.settings_crashes)
 
         findPreference<Preference>("pref_logs_dump_lines_count")?.apply {
-            setupAsEditTextPreference({
-                it.textLayout.setHint(R.string.lines)
-                it.text.inputType = InputType.TYPE_CLASS_NUMBER
-            }, {
-                setIcon(R.drawable.ic_dialog_list)
-            }, {
-                appPreferences.logsDumpLinesCount.toString()
-            }, {
-                requireContext().catchingNotNumber {
-                    val count = it?.toInt() ?: AppPreferences.LOGS_DUMP_LINES_COUNT_DEFAULT
+            setupAsEditTextPreference(
+                setupViews = {
+                    it.textLayout.setHint(R.string.lines)
+                    it.text.inputType = InputType.TYPE_CLASS_NUMBER
+                },
+                setupDialog = { setIcon(R.drawable.ic_dialog_list) },
+                get = { appPreferences.logsDumpLinesCount.toString() },
+                save = {
+                    requireContext().catchingNotNumber {
+                        val count = it?.toInt() ?: AppPreferences.LOGS_DUMP_LINES_COUNT_DEFAULT
 
-                    appPreferences.logsDumpLinesCount = count.coerceAtLeast(0)
+                        appPreferences.logsDumpLinesCount = count.coerceAtLeast(0)
+                    }
                 }
-            })
+            )
 
-            observeAndUpdateSummary(appPreferences, this@SettingsCrashesFragment, AppPreferences.LOGS_DUMP_LINES_COUNT_DEFAULT)
+            observeAndUpdateSummary(
+                observer = this@SettingsCrashesFragment,
+                defValue = AppPreferences.LOGS_DUMP_LINES_COUNT_DEFAULT
+            )
         }
     }
 }

@@ -112,8 +112,14 @@ class AppPreferences @Inject constructor(
         get() = get("pref_logs_dump_lines_count", LOGS_DUMP_LINES_COUNT_DEFAULT)
         set(value) { put("pref_logs_dump_lines_count", value) }
 
-    fun collectingFor(crashType: CrashType) = get("pref_collect_${crashType.readableName.lowercase()}", true)
-    fun showingNotificationsFor(crashType: CrashType) = get("pref_notifications_${crashType.readableName.lowercase()}", true)
+    fun collectingFor(crashType: CrashType) = get(
+        key = "pref_collect_${crashType.readableName.lowercase()}",
+        defaultValue = true
+    )
+    fun showingNotificationsFor(crashType: CrashType) = get(
+        key = "pref_notifications_${crashType.readableName.lowercase()}",
+        defaultValue = true
+    )
 
     fun selectTerminal(index: Int) = sharedPreferences.edit(commit = true) {
         putInt("pref_selected_terminal_index", index)

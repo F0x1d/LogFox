@@ -32,7 +32,9 @@ class EditFilterFragment: BaseViewModelFragment<EditFilterViewModel, FragmentEdi
 
     override val viewModel by hiltNavGraphViewModels<EditFilterViewModel>(R.id.editFilterFragment)
 
-    private val exportFilterLauncher = registerForActivityResult(ActivityResultContracts.CreateDocument("application/json")) {
+    private val exportFilterLauncher = registerForActivityResult(
+        ActivityResultContracts.CreateDocument("application/json")
+    ) {
         viewModel.export(it ?: return@registerForActivityResult)
     }
 
@@ -41,10 +43,8 @@ class EditFilterFragment: BaseViewModelFragment<EditFilterViewModel, FragmentEdi
         container: ViewGroup?
     ) = FragmentEditFilterBinding.inflate(inflater, container, false)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        binding.saveFab.applyInsetter {
+    override fun FragmentEditFilterBinding.onViewCreated(view: View, savedInstanceState: Bundle?) {
+        saveFab.applyInsetter {
             type(
                 navigationBars = true,
                 ime = true
@@ -55,7 +55,7 @@ class EditFilterFragment: BaseViewModelFragment<EditFilterViewModel, FragmentEdi
                 )
             }
         }
-        binding.scrollView.applyInsetter {
+        scrollView.applyInsetter {
             type(
                 navigationBars = true,
                 ime = true
@@ -64,22 +64,22 @@ class EditFilterFragment: BaseViewModelFragment<EditFilterViewModel, FragmentEdi
             }
         }
 
-        binding.toolbar.setupBackButtonForNavController()
+        toolbar.setupBackButtonForNavController()
 
-        binding.includingButton.setOnClickListener {
+        includingButton.setOnClickListener {
             viewModel.including.update { !it }
         }
-        binding.logLevelsButton.setOnClickListener {
+        logLevelsButton.setOnClickListener {
             showFilterDialog()
         }
 
-        binding.selectAppButton.setOnClickListener {
+        selectAppButton.setOnClickListener {
             findNavController().navigate(
                 EditFilterFragmentDirections.actionEditFilterFragmentToChooseAppFragment()
             )
         }
 
-        binding.saveFab.setOnClickListener {
+        saveFab.setOnClickListener {
             viewModel.create()
             findNavController().popBackStack()
         }
@@ -89,23 +89,24 @@ class EditFilterFragment: BaseViewModelFragment<EditFilterViewModel, FragmentEdi
                 updateIncludingButton(enabled)
             }
 
-            viewModel.uid.toText(binding.uidText)
-            viewModel.pid.toText(binding.pidText)
-            viewModel.tid.toText(binding.tidText)
-            viewModel.packageName.toText(binding.packageNameText)
-            viewModel.tag.toText(binding.tagText)
-            viewModel.content.toText(binding.contentText)
+            viewModel.uid.toText(uidText)
+            viewModel.pid.toText(pidText)
+            viewModel.tid.toText(tidText)
+            viewModel.packageName.toText(packageNameText)
+            viewModel.tag.toText(tagText)
+            viewModel.content.toText(contentText)
 
             if (it == null) return@observe
 
-            binding.toolbar.menu.apply {
+            toolbar.menu.apply {
                 findItem(R.id.export_item).isVisible = true
+
                 setClickListenerOn(R.id.export_item) {
                     exportFilterLauncher.launch("filter.json")
                 }
             }
 
-            binding.saveFab.setOnClickListener { view ->
+            saveFab.setOnClickListener { view ->
                 viewModel.update(it)
                 findNavController().popBackStack()
             }
@@ -129,14 +130,18 @@ class EditFilterFragment: BaseViewModelFragment<EditFilterViewModel, FragmentEdi
         }
     }
 
-    private fun updateIncludingButton(enabled: Boolean) = binding.includingButton.run {
+    private fun FragmentEditFilterBinding.updateIncludingButton(enabled: Boolean) = includingButton.run {
         setIconResource(if (enabled) R.drawable.ic_add else R.drawable.ic_clear)
 
-        ColorStateList.valueOf(MaterialColors.getColor(this, if (enabled)
-            android.R.attr.colorPrimary
-        else
-            androidx.appcompat.R.attr.colorError
-        )).also {
+        ColorStateList.valueOf(
+            MaterialColors.getColor(
+                this,
+                if (enabled)
+                    android.R.attr.colorPrimary
+                else
+                    androidx.appcompat.R.attr.colorError
+            )
+        ).also {
             iconTint = it
             strokeColor = it
             setTextColor(it)
@@ -149,7 +154,10 @@ class EditFilterFragment: BaseViewModelFragment<EditFilterViewModel, FragmentEdi
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(R.string.log_levels)
             .setIcon(R.drawable.ic_dialog_list)
-            .setMultiChoiceItems(LogLevel.values().map { it.name }.toTypedArray(), viewModel.enabledLogLevels.toTypedArray().toBooleanArray()) { dialog, which, checked ->
+            .setMultiChoiceItems(
+                LogLevel.entries.map { it.name }.toTypedArray(),
+                viewModel.enabledLogLevels.toTypedArray().toBooleanArray()
+            ) { dialog, which, checked ->
                 viewModel.filterLevel(which, checked)
             }
             .setPositiveButton(R.string.close, null)

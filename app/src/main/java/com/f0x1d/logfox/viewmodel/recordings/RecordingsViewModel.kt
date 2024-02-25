@@ -38,20 +38,16 @@ class RecordingsViewModel @Inject constructor(
     val loggingServiceOrRecordingActive get() = loggingRepository.serviceRunningFlow.value
             || recordingsRepository.recordingStateFlow.value != RecordingState.IDLE
 
-    fun toggleStartStop() {
-        if (recordingsRepository.recordingStateFlow.value == RecordingState.IDLE)
-            recordingsRepository.record()
-        else recordingsRepository.end {
-            sendEvent(EVENT_TYPE_RECORDING_SAVED, it)
-        }
+    fun toggleStartStop() = if (recordingsRepository.recordingStateFlow.value == RecordingState.IDLE)
+        recordingsRepository.record()
+    else recordingsRepository.end {
+        sendEvent(EVENT_TYPE_RECORDING_SAVED, it)
     }
 
-    fun togglePauseResume() {
-        if (recordingsRepository.recordingStateFlow.value == RecordingState.PAUSED)
-            recordingsRepository.resume()
-        else
-            recordingsRepository.pause()
-    }
+    fun togglePauseResume() = if (recordingsRepository.recordingStateFlow.value == RecordingState.PAUSED)
+        recordingsRepository.resume()
+    else
+        recordingsRepository.pause()
 
     fun clearRecordings() = recordingsRepository.clear()
 

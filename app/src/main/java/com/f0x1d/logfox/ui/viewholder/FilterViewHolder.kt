@@ -21,24 +21,26 @@ class FilterViewHolder(
     }
 
     init {
-        binding.root.setOnClickListener {
-            click(currentItem ?: return@setOnClickListener)
+        binding.apply {
+            root.setOnClickListener {
+                click(currentItem ?: return@setOnClickListener)
+            }
+            deleteButton.setOnClickListener {
+                delete(currentItem ?: return@setOnClickListener)
+            }
+            enabledBox.setOnCheckedChangeListener(checkedListener)
         }
-        binding.deleteButton.setOnClickListener {
-            delete(currentItem ?: return@setOnClickListener)
-        }
-        binding.enabledBox.setOnCheckedChangeListener(checkedListener)
     }
 
-    override fun bindTo(data: UserFilter) {
-        binding.includingText.setText(if (data.including) R.string.including else R.string.excluding)
-        binding.allowedLevelsText.setTextOrMakeGoneIfEmpty(R.string.log_levels, data.allowedLevels.joinToString { it.letter })
-        binding.uidText.setTextOrMakeGoneIfEmpty(R.string.uid, data.uid)
-        binding.pidText.setTextOrMakeGoneIfEmpty(R.string.pid, data.pid)
-        binding.tidText.setTextOrMakeGoneIfEmpty(R.string.tid, data.tid)
-        binding.packageNameText.setTextOrMakeGoneIfEmpty(R.string.package_name, data.packageName)
-        binding.tagText.setTextOrMakeGoneIfEmpty(R.string.tag, data.tag)
-        binding.contentText.setTextOrMakeGoneIfEmpty(R.string.content_contains, data.content)
+    override fun ItemFilterBinding.bindTo(data: UserFilter) {
+        includingText.setText(if (data.including) R.string.including else R.string.excluding)
+        allowedLevelsText.setTextOrMakeGoneIfEmpty(R.string.log_levels, data.allowedLevels.joinToString { it.letter })
+        uidText.setTextOrMakeGoneIfEmpty(R.string.uid, data.uid)
+        pidText.setTextOrMakeGoneIfEmpty(R.string.pid, data.pid)
+        tidText.setTextOrMakeGoneIfEmpty(R.string.tid, data.tid)
+        packageNameText.setTextOrMakeGoneIfEmpty(R.string.package_name, data.packageName)
+        tagText.setTextOrMakeGoneIfEmpty(R.string.tag, data.tag)
+        contentText.setTextOrMakeGoneIfEmpty(R.string.content_contains, data.content)
 
         checkedListener.check(data.enabled)
     }

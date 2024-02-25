@@ -29,10 +29,12 @@ class SettingsNotificationsFragment: BasePreferenceFragment() {
         addPreferencesFromResource(R.xml.settings_notifications)
 
         findPreference<Preference>("pref_notifications_permission")?.setOnPreferenceClickListener {
-            startActivity(Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
-                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                putExtra(Settings.EXTRA_APP_PACKAGE, BuildConfig.APPLICATION_ID)
-            })
+            startActivity(
+                Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    putExtra(Settings.EXTRA_APP_PACKAGE, BuildConfig.APPLICATION_ID)
+                }
+            )
             return@setOnPreferenceClickListener true
         }
 
@@ -40,11 +42,13 @@ class SettingsNotificationsFragment: BasePreferenceFragment() {
             isVisible = notificationsChannelsAvailable
 
             setOnPreferenceClickListener {
-                startActivity(Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS).apply {
-                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    putExtra(Settings.EXTRA_APP_PACKAGE, BuildConfig.APPLICATION_ID)
-                    putExtra(Settings.EXTRA_CHANNEL_ID, LogFoxApp.LOGGING_STATUS_CHANNEL_ID)
-                })
+                startActivity(
+                    Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS).apply {
+                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        putExtra(Settings.EXTRA_APP_PACKAGE, BuildConfig.APPLICATION_ID)
+                        putExtra(Settings.EXTRA_CHANNEL_ID, LogFoxApp.LOGGING_STATUS_CHANNEL_ID)
+                    }
+                )
                 return@setOnPreferenceClickListener true
             }
         }

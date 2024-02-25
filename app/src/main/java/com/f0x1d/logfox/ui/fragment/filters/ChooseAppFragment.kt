@@ -52,46 +52,48 @@ class ChooseAppFragment: BaseViewModelFragment<ChooseAppViewModel, FragmentChoos
         container: ViewGroup?
     ) = FragmentChooseAppBinding.inflate(inflater, container, false)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        binding.appsRecycler.applyInsetter {
+    override fun FragmentChooseAppBinding.onViewCreated(view: View, savedInstanceState: Bundle?) {
+        appsRecycler.applyInsetter {
             type(navigationBars = true) {
                 padding(vertical = true)
             }
         }
 
-        binding.searchBar.apply {
+        searchBar.apply {
             setupBackButtonForNavController()
+
             menu.setClickListenerOn(R.id.search_item) {
-                binding.searchView.show()
+                searchView.show()
             }
         }
-        binding.searchView.editText.doAfterTextChanged { editable ->
+        searchView.editText.doAfterTextChanged { editable ->
             viewModel.query.update {
                 editable.toString()
             }
         }
-        binding.searchView.addTransitionListener { searchView, previousState, newState ->
+        searchView.addTransitionListener { searchView, previousState, newState ->
             closeSearchOnBackPressedCallback.isEnabled = newState == SearchView.TransitionState.SHOWN
         }
 
-        listOf(
-            binding.appsRecycler,
-            binding.searchedAppsRecycler
-        ).forEach {
+        listOf(appsRecycler, searchedAppsRecycler).forEach {
             it.apply {
                 layoutManager = LinearLayoutManager(requireContext())
-                addItemDecoration(MaterialDividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL).apply {
-                    dividerInsetStart = 80.dpToPx.toInt()
-                    dividerInsetEnd = 10.dpToPx.toInt()
-                    isLastItemDecorated = false
-                })
+
+                addItemDecoration(
+                    MaterialDividerItemDecoration(
+                        requireContext(),
+                        LinearLayoutManager.VERTICAL
+                    ).apply {
+                        dividerInsetStart = 80.dpToPx.toInt()
+                        dividerInsetEnd = 10.dpToPx.toInt()
+                        isLastItemDecorated = false
+                    }
+                )
             }
         }
 
-        binding.appsRecycler.adapter = appsAdapter
-        binding.searchedAppsRecycler.adapter = searchedAppsAdapter
+        appsRecycler.adapter = appsAdapter
+        searchedAppsRecycler.adapter = searchedAppsAdapter
 
         viewModel.apps.asLiveData().observe(viewLifecycleOwner) {
             appsAdapter.submitList(it)

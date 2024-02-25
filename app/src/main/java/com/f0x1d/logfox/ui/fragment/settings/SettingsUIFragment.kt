@@ -33,45 +33,52 @@ class SettingsUIFragment: BasePreferenceFragment() {
             val filledThemeSettings = intArrayOf(R.string.follow_system, R.string.light, R.string.dark).fillWithStrings(requireContext())
 
             setupAsListPreference(
-                {
-                    setIcon(R.drawable.ic_dialog_theme)
-                },
-                filledThemeSettings,
-                { appPreferences.nightTheme }
-            ) {
-                appPreferences.nightTheme = it
-                requireActivity().applyTheme(it, true)
-            }
+                setupDialog = { setIcon(R.drawable.ic_dialog_theme) },
+                items = filledThemeSettings,
+                selected = { appPreferences.nightTheme },
+                onSelected = {
+                    appPreferences.nightTheme = it
+                    requireActivity().applyTheme(true)
+                }
+            )
 
-            observeAndUpdateSummaryForList(appPreferences, this@SettingsUIFragment, 0, filledThemeSettings)
+            observeAndUpdateSummaryForList(
+                observer = this@SettingsUIFragment,
+                defValue = 0,
+                items = filledThemeSettings
+            )
         }
 
         findPreference<Preference>("pref_date_format")?.apply {
-            setupAsEditTextPreference({
-                it.textLayout.setHint(R.string.date_format)
-            }, {
-                setIcon(R.drawable.ic_dialog_date_format)
-            }, {
-                appPreferences.dateFormat
-            }, {
-                appPreferences.dateFormat = it?.trim() ?: AppPreferences.DATE_FORMAT_DEFAULT
-            })
+            setupAsEditTextPreference(
+                setupViews = { it.textLayout.setHint(R.string.date_format) },
+                setupDialog = { setIcon(R.drawable.ic_dialog_date_format) },
+                get = { appPreferences.dateFormat },
+                save = {
+                    appPreferences.dateFormat = it?.trim() ?: AppPreferences.DATE_FORMAT_DEFAULT
+                }
+            )
 
-            observeAndUpdateSummary(appPreferences, this@SettingsUIFragment, AppPreferences.DATE_FORMAT_DEFAULT)
+            observeAndUpdateSummary(
+                observer = this@SettingsUIFragment,
+                defValue = AppPreferences.DATE_FORMAT_DEFAULT
+            )
         }
 
         findPreference<Preference>("pref_time_format")?.apply {
-            setupAsEditTextPreference({
-                it.textLayout.setHint(R.string.time_format)
-            }, {
-                setIcon(R.drawable.ic_dialog_time_format)
-            }, {
-                appPreferences.timeFormat
-            }, {
-                appPreferences.timeFormat = it?.trim() ?: AppPreferences.TIME_FORMAT_DEFAULT
-            })
+            setupAsEditTextPreference(
+                setupViews = { it.textLayout.setHint(R.string.time_format) },
+                setupDialog = { setIcon(R.drawable.ic_dialog_time_format) },
+                get = { appPreferences.timeFormat },
+                save = {
+                    appPreferences.timeFormat = it?.trim() ?: AppPreferences.TIME_FORMAT_DEFAULT
+                }
+            )
 
-            observeAndUpdateSummary(appPreferences, this@SettingsUIFragment, AppPreferences.TIME_FORMAT_DEFAULT)
+            observeAndUpdateSummary(
+                observer = this@SettingsUIFragment,
+                defValue = AppPreferences.TIME_FORMAT_DEFAULT
+            )
         }
 
         findPreference<Preference>("pref_logs_format")?.setOnPreferenceClickListener {
@@ -108,53 +115,66 @@ class SettingsUIFragment: BasePreferenceFragment() {
         }
 
         findPreference<Preference>("pref_logs_update_interval")?.apply {
-            setupAsEditTextPreference({
-                it.textLayout.setHint(R.string.in_ms)
-                it.text.inputType = InputType.TYPE_CLASS_NUMBER
-            }, {
-                setIcon(R.drawable.ic_dialog_timer)
-            }, {
-                appPreferences.logsUpdateInterval.toString()
-            }, {
-                requireContext().catchingNotNumber {
-                    appPreferences.logsUpdateInterval = it?.toLong() ?: AppPreferences.LOGS_UPDATE_INTERVAL_DEFAULT
+            setupAsEditTextPreference(
+                setupViews = {
+                    it.textLayout.setHint(R.string.in_ms)
+                    it.text.inputType = InputType.TYPE_CLASS_NUMBER
+                },
+                setupDialog = { setIcon(R.drawable.ic_dialog_timer) },
+                get = { appPreferences.logsUpdateInterval.toString() },
+                save = {
+                    requireContext().catchingNotNumber {
+                        appPreferences.logsUpdateInterval = it?.toLong() ?: AppPreferences.LOGS_UPDATE_INTERVAL_DEFAULT
+                    }
                 }
-            })
+            )
 
-            observeAndUpdateSummary(appPreferences, this@SettingsUIFragment, AppPreferences.LOGS_UPDATE_INTERVAL_DEFAULT)
+            observeAndUpdateSummary(
+                observer = this@SettingsUIFragment,
+                defValue = AppPreferences.LOGS_UPDATE_INTERVAL_DEFAULT
+            )
         }
 
         findPreference<Preference>("pref_logs_text_size")?.apply {
-            setupAsEditTextPreference({
-                it.text.inputType = InputType.TYPE_CLASS_NUMBER
-            }, {
-                setIcon(R.drawable.ic_dialog_text_fields)
-            }, {
-                appPreferences.logsTextSize.toString()
-            }, {
-                requireContext().catchingNotNumber {
-                    appPreferences.logsTextSize = it?.toInt() ?: AppPreferences.LOGS_TEXT_SIZE_DEFAULT
+            setupAsEditTextPreference(
+                setupViews = { it.text.inputType = InputType.TYPE_CLASS_NUMBER },
+                setupDialog = { setIcon(R.drawable.ic_dialog_text_fields) },
+                get = { appPreferences.logsTextSize.toString() },
+                save = {
+                    requireContext().catchingNotNumber {
+                        appPreferences.logsTextSize = it?.toInt() ?: AppPreferences.LOGS_TEXT_SIZE_DEFAULT
+                    }
                 }
-            })
+            )
 
-            observeAndUpdateSummary(appPreferences, this@SettingsUIFragment, AppPreferences.LOGS_TEXT_SIZE_DEFAULT)
+            observeAndUpdateSummary(
+                observer = this@SettingsUIFragment,
+                defValue = AppPreferences.LOGS_TEXT_SIZE_DEFAULT
+            )
         }
 
         findPreference<Preference>("pref_logs_display_limit")?.apply {
-            setupAsEditTextPreference({
-                it.textLayout.setHint(R.string.lines)
-                it.text.inputType = InputType.TYPE_CLASS_NUMBER
-            }, {
-                setIcon(R.drawable.ic_dialog_eye)
-            }, {
-                appPreferences.logsDisplayLimit.toString()
-            }, {
-                requireContext().catchingNotNumber {
-                    appPreferences.logsDisplayLimit = it?.toInt()?.coerceAtLeast(0) ?: AppPreferences.LOGS_DISPLAY_LIMIT_DEFAULT
+            setupAsEditTextPreference(
+                setupViews = {
+                    it.textLayout.setHint(R.string.lines)
+                    it.text.inputType = InputType.TYPE_CLASS_NUMBER
+                },
+                setupDialog = { setIcon(R.drawable.ic_dialog_eye) },
+                get = { appPreferences.logsDisplayLimit.toString() },
+                save = {
+                    requireContext().catchingNotNumber {
+                        appPreferences.logsDisplayLimit = it
+                            ?.toInt()
+                            ?.coerceAtLeast(0)
+                            ?: AppPreferences.LOGS_DISPLAY_LIMIT_DEFAULT
+                    }
                 }
-            })
+            )
 
-            observeAndUpdateSummary(appPreferences, this@SettingsUIFragment, AppPreferences.LOGS_DISPLAY_LIMIT_DEFAULT)
+            observeAndUpdateSummary(
+                observer = this@SettingsUIFragment,
+                defValue = AppPreferences.LOGS_DISPLAY_LIMIT_DEFAULT
+            )
         }
     }
 }

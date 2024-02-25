@@ -104,7 +104,7 @@ class RecordingsRepository @Inject constructor(
         val logRecording = LogRecording(
             "${context.getString(R.string.record_file)} ${database.logRecordingDao().count() + 1}",
             recordingTime,
-            recordingFile.absolutePath
+            recordingFile
         ).let {
             it.copy(id = database.logRecordingDao().insert(it))
         }
@@ -134,7 +134,7 @@ class RecordingsRepository @Inject constructor(
             LogRecording(
                 title,
                 recordingTime,
-                recordingFile.absolutePath
+                recordingFile
             )
         )
     }
@@ -176,7 +176,7 @@ class RecordingsRepository @Inject constructor(
         val logRecording = LogRecording(
             title,
             recordingReader.recordingTime,
-            recordingReader.recordingFile?.absolutePath ?: return@runOnAppScope
+            recordingReader.recordingFile ?: return@runOnAppScope
         ).let {
             it.copy(id = database.logRecordingDao().insert(it))
         }
