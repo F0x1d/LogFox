@@ -12,8 +12,10 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Build
+import android.util.TypedValue
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.annotation.AttrRes
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.NotificationManagerCompat
@@ -131,5 +133,14 @@ fun Context.applyTheme(force: Boolean = false) {
     } else
         AppCompatDelegate.setDefaultNightMode(if (nightMode != 0) nightMode else AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
 }
+
+fun Context.resolveAttribute(@AttrRes attributeResId: Int): TypedValue? {
+    val typedValue = TypedValue()
+    return if (theme.resolveAttribute(attributeResId, typedValue, true)) typedValue else null
+}
+
+fun Context.resolveBoolean(@AttrRes attributeResId: Int, defaultValue: Boolean = false) =
+    resolveAttribute(attributeResId).let { if (it != null && it.type == TypedValue.TYPE_INT_BOOLEAN) it.data != 0 else defaultValue }
+
 
 val Context.isHorizontalOrientation get() = resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
