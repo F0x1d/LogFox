@@ -6,7 +6,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.WindowCompat
 import androidx.viewbinding.ViewBinding
+import com.f0x1d.logfox.extensions.applyNavigationBarTheme
+import com.f0x1d.logfox.extensions.context.resolveBoolean
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -35,6 +38,7 @@ abstract class BaseBottomSheet<T : ViewBinding>: BottomSheetDialogFragment() {
     @SuppressLint("RestrictedApi")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
+        dialog.window?.applyNavigationBarTheme(isContrastEnforced = false)
         dialog.behavior.skipCollapsed = true
         dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
         dialog.behavior.disableShapeAnimations() // i love google https://github.com/material-components/material-components-android/pull/437
