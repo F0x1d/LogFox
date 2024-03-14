@@ -137,15 +137,17 @@ fun Context.applyTheme(force: Boolean = false) {
 fun Context.resolveAttribute(@AttrRes attributeResId: Int) = TypedValue().let {
     when (theme.resolveAttribute(attributeResId, it, true)) {
         true -> it
+
         else -> null
     }
 }
 
 fun Context.resolveBoolean(@AttrRes attributeResId: Int, defaultValue: Boolean = false) = resolveAttribute(
-    attributeResId
+    attributeResId = attributeResId
 ).let {
     when (it != null && it.type == TypedValue.TYPE_INT_BOOLEAN) {
         true -> it.data != 0
+
         else -> defaultValue
     }
 }
