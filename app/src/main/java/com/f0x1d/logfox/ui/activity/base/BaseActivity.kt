@@ -58,7 +58,13 @@ abstract class BaseActivity<T : ViewBinding>: AppCompatActivity() {
         super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase, newBase.viewPump))
     }
 
-    protected fun snackbar(text: String) = binding.root.snackbar(text)
+    protected fun snackbar(text: String) = binding.root.snackbar(text).apply {
+        view.applyInsetter {
+            type(navigationBars = true) {
+                margin(vertical = true)
+            }
+        }
+    }
 
     protected fun snackbar(id: Int) = snackbar(getString(id))
 }
