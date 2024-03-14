@@ -134,13 +134,21 @@ fun Context.applyTheme(force: Boolean = false) {
         AppCompatDelegate.setDefaultNightMode(if (nightMode != 0) nightMode else AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
 }
 
-fun Context.resolveAttribute(@AttrRes attributeResId: Int): TypedValue? {
-    val typedValue = TypedValue()
-    return if (theme.resolveAttribute(attributeResId, typedValue, true)) typedValue else null
+fun Context.resolveAttribute(@AttrRes attributeResId: Int) = TypedValue().let {
+    when (theme.resolveAttribute(attributeResId, it, true)) {
+        true -> it
+        else -> null
+    }
 }
 
-fun Context.resolveBoolean(@AttrRes attributeResId: Int, defaultValue: Boolean = false) =
-    resolveAttribute(attributeResId).let { if (it != null && it.type == TypedValue.TYPE_INT_BOOLEAN) it.data != 0 else defaultValue }
+fun Context.resolveBoolean(@AttrRes attributeResId: Int, defaultValue: Boolean = false) = resolveAttribute(
+    attributeResId
+).let {
+    when (it != null && it.type == TypedValue.TYPE_INT_BOOLEAN) {
+        true -> it.data != 0
+        else -> defaultValue
+    }
+}
 
 
 val Context.isHorizontalOrientation get() = resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE

@@ -38,7 +38,7 @@ abstract class BaseBottomSheet<T : ViewBinding>: BottomSheetDialogFragment() {
     @SuppressLint("RestrictedApi")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
-        dialog.window?.applyNavigationBarTheme(false)
+        dialog.window?.applyNavigationBarTheme(isContrastEnforced = false)
         dialog.behavior.skipCollapsed = true
         dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
         dialog.behavior.disableShapeAnimations() // i love google https://github.com/material-components/material-components-android/pull/437
