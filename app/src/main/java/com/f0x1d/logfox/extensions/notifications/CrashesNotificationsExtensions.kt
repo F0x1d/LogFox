@@ -23,7 +23,7 @@ fun Context.sendErrorNotification(appCrash: AppCrash, crashLog: String?) = doIfN
         NotificationCompat.Builder(this@sendErrorNotification, LogFoxApp.CRASHES_CHANNEL_ID)
             .setContentTitle(getString(R.string.app_crashed, appCrash.appName ?: appCrash.packageName))
             .setContentText(crashLog)
-            .setSmallIcon(R.drawable.ic_android_notification)
+            .setSmallIcon(R.drawable.ic_bug_notification)
             .setStyle(NotificationCompat.BigTextStyle().bigText(crashLog))
             .apply {
                 if (appCrash.id != 0L) setContentIntent(
