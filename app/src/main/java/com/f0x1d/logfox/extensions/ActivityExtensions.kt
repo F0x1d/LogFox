@@ -12,7 +12,7 @@ fun FragmentActivity.showAreYouSureDialog(
     .setIcon(R.drawable.ic_dialog_warning)
     .setTitle(title)
     .setMessage(message)
-    .setPositiveButton(R.string.yes) { dialog, i -> okClicked() }
+    .setPositiveButton(R.string.yes) { _, _ -> okClicked() }
     .setNeutralButton(R.string.no, null)
     .show()
 

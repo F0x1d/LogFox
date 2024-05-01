@@ -1,6 +1,5 @@
 package com.f0x1d.logfox.repository.logging.readers.recordings
 
-import com.f0x1d.logfox.model.LogLine
 import com.f0x1d.logfox.utils.preferences.AppPreferences
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -15,7 +14,7 @@ class RewritingRecordingReader @Inject constructor(
 
     // recordedLines are cleared, so manual dumpLines call may result in some lines be lost
     // This stateLines are not cleared and are just held at the size of recordedLines
-    private val stateLines = LinkedList<LogLine>()
+    private val stateLines = LinkedList<com.f0x1d.logfox.model.LogLine>()
     private val stateLinesMutex = Mutex()
 
     init {
@@ -26,7 +25,7 @@ class RewritingRecordingReader @Inject constructor(
         this.recordedLinesSize = newSize
     }
 
-    override suspend fun readLine(line: LogLine) {
+    override suspend fun readLine(line: com.f0x1d.logfox.model.LogLine) {
         super.readLine(line)
 
         stateLinesMutex.withLock {

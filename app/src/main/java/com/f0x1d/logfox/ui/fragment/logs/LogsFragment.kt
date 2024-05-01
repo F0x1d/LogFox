@@ -25,7 +25,6 @@ import com.f0x1d.logfox.extensions.views.widgets.invalidateNavigationButton
 import com.f0x1d.logfox.extensions.views.widgets.setClickListenerOn
 import com.f0x1d.logfox.extensions.views.widgets.setupBackButtonForNavController
 import com.f0x1d.logfox.extensions.views.widgets.setupCloseButton
-import com.f0x1d.logfox.model.LogLine
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
 import com.f0x1d.logfox.viewmodel.LogsViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -258,7 +257,7 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
         else invalidateNavigationButton()
     }
 
-    private fun FragmentLogsBinding.updateLogsList(items: List<LogLine>?) {
+    private fun FragmentLogsBinding.updateLogsList(items: List<com.f0x1d.logfox.model.LogLine>?) {
         placeholderLayout.root.apply {
             if (items?.isEmpty() != false) {
                 animate()

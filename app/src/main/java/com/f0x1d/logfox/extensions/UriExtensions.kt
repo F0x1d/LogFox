@@ -5,7 +5,6 @@ import android.net.Uri
 import androidx.documentfile.provider.DocumentFile
 import com.f0x1d.logfox.extensions.context.appPreferences
 import com.f0x1d.logfox.extensions.logline.LogLine
-import com.f0x1d.logfox.model.LogLine
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
@@ -23,10 +22,10 @@ fun Uri?.readFileContentsAsFlow(context: Context) = flow {
         context.contentResolver.openInputStream(uri)?.use {
             it.bufferedReader().useLines { lines ->
                 var id = -1L
-                val logLines = LinkedList<LogLine>()
+                val logLines = LinkedList<com.f0x1d.logfox.model.LogLine>()
 
                 for (line in lines) {
-                    val logLine = LogLine(id, line, context) ?: LogLine(
+                    val logLine = LogLine(id, line, context) ?: com.f0x1d.logfox.model.LogLine(
                         id = id,
                         content = line,
                         original = line

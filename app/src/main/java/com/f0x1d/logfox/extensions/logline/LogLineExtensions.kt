@@ -2,8 +2,6 @@ package com.f0x1d.logfox.extensions.logline
 
 import android.content.Context
 import androidx.collection.LruCache
-import com.f0x1d.logfox.model.LogLevel
-import com.f0x1d.logfox.model.LogLine
 import com.f0x1d.logfox.utils.UIDS_MAPPINGS
 
 private val logRegex = "(.{14}) (.{5,}?) (.{1,5}) (.{1,5}) (.) (.+?): (.+)".toRegex()
@@ -37,7 +35,7 @@ fun LogLine(
             }
         }
 
-        LogLine(
+        com.f0x1d.logfox.model.LogLine(
             id,
             time,
             uid,
@@ -52,6 +50,6 @@ fun LogLine(
     }
 }.getOrNull()
 
-private fun mapLevel(level: String) = LogLevel.entries.find {
+private fun mapLevel(level: String) = com.f0x1d.logfox.model.LogLevel.entries.find {
     it.letter == level
 } ?: throw RuntimeException("wtf is $level")

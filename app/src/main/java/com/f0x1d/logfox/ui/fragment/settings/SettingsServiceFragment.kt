@@ -43,13 +43,13 @@ class SettingsServiceFragment: BasePreferenceFragment() {
         addPreferencesFromResource(R.xml.settings_service)
 
         findPreference<SwitchPreferenceCompat>("pref_use_session_cache")?.apply {
-            setOnPreferenceChangeListener { preference, newValue ->
+            setOnPreferenceChangeListener { _, _ ->
                 loggingRepository.restartLogging(updateTerminal = false)
                 return@setOnPreferenceChangeListener true
             }
         }
         findPreference<SwitchPreferenceCompat>("pref_session_cache_save_recordings")?.apply {
-            setOnPreferenceChangeListener { preference, newValue ->
+            setOnPreferenceChangeListener { _, _ ->
                 loggingRepository.restartLogging(updateTerminal = false)
                 return@setOnPreferenceChangeListener true
             }
@@ -124,7 +124,7 @@ class SettingsServiceFragment: BasePreferenceFragment() {
         }
 
         findPreference<SwitchPreferenceCompat>("pref_show_logs_from_app_launch")?.apply {
-            setOnPreferenceChangeListener { preference, newValue ->
+            setOnPreferenceChangeListener { _, newValue ->
                 if (!(newValue as Boolean)) {
                     loggingRepository.restartLogging(updateTerminal = false)
                 }
@@ -139,7 +139,7 @@ class SettingsServiceFragment: BasePreferenceFragment() {
             .setIcon(R.drawable.ic_dialog_terminal)
             .setTitle(R.string.new_terminal_selected)
             .setMessage(R.string.new_terminal_selected_question)
-            .setPositiveButton(R.string.yes) { dialog, _ ->
+            .setPositiveButton(R.string.yes) { _, _ ->
                 loggingRepository.restartLogging()
             }
             .setNeutralButton(R.string.no, null)

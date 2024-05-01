@@ -13,13 +13,10 @@
         app:liftOnScroll="true">
 
         <com.google.android.material.appbar.MaterialToolbar
+            style="@style/Widget.LogFox.Toolbar"
             android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:titleCentered="true"
             app:menu="@menu/crash_details_menu"
-            app:navigationIcon="@drawable/ic_arrow_back"
-            app:navigationIconTint="?colorOnSurface" />
+            app:navigationIcon="@drawable/ic_arrow_back" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <com.f0x1d.logfox.ui.view.CustomNestedScrollView
@@ -97,7 +94,7 @@
                     android:layout_height="match_parent">
 
                     <Button
-                        style="@style/LogFoxBigButtonStyle"
+                        style="@style/Widget.LogFox.BigButton"
                         android:id="@+id/copy_button"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -109,7 +106,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <Button
-                        style="@style/LogFoxBigButtonStyle"
+                        style="@style/Widget.LogFox.BigButton"
                         android:id="@+id/share_button"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -121,7 +118,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <Button
-                        style="@style/LogFoxBigButtonStyle"
+                        style="@style/Widget.LogFox.BigButton"
                         android:id="@+id/zip_button"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"

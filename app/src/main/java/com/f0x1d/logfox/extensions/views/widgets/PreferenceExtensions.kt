@@ -24,7 +24,7 @@ fun Preference.setupAsEditTextPreference(
     MaterialAlertDialogBuilder(context)
         .setTitle(title)
         .setView(dialogBinding.root)
-        .setPositiveButton(android.R.string.ok) { dialog, which ->
+        .setPositiveButton(android.R.string.ok) { _, _ ->
             save(dialogBinding.text.text?.toString())
         }
         .setNegativeButton(R.string.close, null)

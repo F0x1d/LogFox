@@ -8,11 +8,15 @@ import com.f0x1d.logfox.extensions.context.resolveBoolean
 
 fun Window.applyNavigationBarTheme(isContrastEnforced: Boolean = true) {
     WindowCompat.getInsetsController(this, decorView).apply {
-        isAppearanceLightNavigationBars = context.resolveBoolean(androidx.appcompat.R.attr.isLightTheme, false)
+        val isLightTheme = context.resolveBoolean(androidx.appcompat.R.attr.isLightTheme, false)
+
+        isAppearanceLightStatusBars = isLightTheme
+        isAppearanceLightNavigationBars = isLightTheme
     }
+
     navigationBarColor = when {
         !contrastedNavBarAvailable -> context.getColor(
-            R.color.transparent_black
+            com.f0x1d.logfox.ui.R.color.transparent_black
         )
 
         !gesturesAvailable && isContrastEnforced -> context.getColor(

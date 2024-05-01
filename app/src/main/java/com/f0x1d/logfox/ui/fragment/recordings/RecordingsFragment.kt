@@ -19,9 +19,9 @@ import com.f0x1d.logfox.extensions.showAreYouSureClearDialog
 import com.f0x1d.logfox.extensions.showAreYouSureDeleteDialog
 import com.f0x1d.logfox.extensions.views.widgets.setClickListenerOn
 import com.f0x1d.logfox.extensions.views.widgets.setDescription
+import com.f0x1d.logfox.model.event.Event
 import com.f0x1d.logfox.repository.logging.RecordingState
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
-import com.f0x1d.logfox.utils.event.Event
 import com.f0x1d.logfox.viewmodel.recordings.RecordingsViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.divider.MaterialDividerItemDecoration
@@ -90,7 +90,7 @@ class RecordingsFragment: BaseViewModelFragment<RecordingsViewModel, FragmentRec
                     .setTitle(R.string.warning)
                     .setMessage(R.string.recording_with_no_service_warning)
                     .setPositiveButton(android.R.string.ok, null)
-                    .setNeutralButton(R.string.start_service) { dialog, which -> requireContext().startLoggingService() }
+                    .setNeutralButton(R.string.start_service) { _, _ -> requireContext().startLoggingService() }
                     .show()
             }
 
@@ -130,6 +130,8 @@ class RecordingsFragment: BaseViewModelFragment<RecordingsViewModel, FragmentRec
                         setDescription(R.string.stop)
                         isEnabled = true
                     }
+
+                    else -> Unit
                 }
             }
 

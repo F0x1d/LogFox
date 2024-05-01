@@ -1,6 +1,5 @@
 package com.f0x1d.logfox.repository.logging.readers.recordings.base
 
-import com.f0x1d.logfox.model.LogLine
 import com.f0x1d.logfox.repository.logging.readers.base.LogsReader
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -14,7 +13,7 @@ open class RecordingReader @Inject constructor(): LogsReader {
         private set
     private val recordingMutex = Mutex()
 
-    private val recordedLines = mutableListOf<LogLine>()
+    private val recordedLines = mutableListOf<com.f0x1d.logfox.model.LogLine>()
     private val linesMutex = Mutex()
 
     var recordingFile: File? = null
@@ -62,7 +61,7 @@ open class RecordingReader @Inject constructor(): LogsReader {
         recordingFile?.copyTo(file)
     }
 
-    override suspend fun readLine(line: LogLine) {
+    override suspend fun readLine(line: com.f0x1d.logfox.model.LogLine) {
         val recording = recordingMutex.withLock { recording }
 
         if (recording && shouldRecordLine(line)) linesMutex.withLock {
@@ -77,5 +76,5 @@ open class RecordingReader @Inject constructor(): LogsReader {
         recordingFile?.appendText(content + "\n")
     }
 
-    protected open suspend fun shouldRecordLine(line: LogLine) = true
+    protected open suspend fun shouldRecordLine(line: com.f0x1d.logfox.model.LogLine) = true
 }

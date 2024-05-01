@@ -1,4 +1,5 @@
 pluginManagement {
+    includeBuild("build-logic")
     repositories {
         gradlePluginPortal()
         google()
@@ -14,3 +15,7 @@ dependencyResolutionManagement {
 }
 
 include(":app")
+include(":data")
+include(":core:core-arch")
+include(":core:core-ui")
+include(":core:core-database")

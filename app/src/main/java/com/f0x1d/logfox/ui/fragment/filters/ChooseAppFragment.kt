@@ -71,7 +71,7 @@ class ChooseAppFragment: BaseViewModelFragment<ChooseAppViewModel, FragmentChoos
                 editable.toString()
             }
         }
-        searchView.addTransitionListener { searchView, previousState, newState ->
+        searchView.addTransitionListener { _, _, newState ->
             closeSearchOnBackPressedCallback.isEnabled = newState == SearchView.TransitionState.SHOWN
         }
 

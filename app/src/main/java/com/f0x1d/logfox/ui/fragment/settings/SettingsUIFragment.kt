@@ -97,7 +97,7 @@ class SettingsUIFragment: BasePreferenceFragment() {
                         R.string.content
                     ).fillWithStrings(requireContext()),
                     appPreferences.showLogValues.asArray
-                ) { dialog, which, checked ->
+                ) { _, which, checked ->
                     when (which) {
                         0 -> appPreferences.showLogDate = checked
                         1 -> appPreferences.showLogTime = checked

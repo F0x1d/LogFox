@@ -11,7 +11,6 @@ import com.f0x1d.logfox.extensions.logline.filterAndSearch
 import com.f0x1d.logfox.extensions.readFileContentsAsFlow
 import com.f0x1d.logfox.extensions.readFileName
 import com.f0x1d.logfox.extensions.updateList
-import com.f0x1d.logfox.model.LogLine
 import com.f0x1d.logfox.repository.logging.LoggingRepository
 import com.f0x1d.logfox.repository.logging.RecordingsRepository
 import com.f0x1d.logfox.utils.DateTimeFormatter
@@ -56,7 +55,7 @@ class LogsViewModel @Inject constructor(
     val viewingFile = fileUri != null
     val viewingFileName = fileUri?.readFileName(ctx)
 
-    val selectedItems = MutableStateFlow(emptyList<LogLine>())
+    val selectedItems = MutableStateFlow(emptyList<com.f0x1d.logfox.model.LogLine>())
 
     val selectedItemsContent get() = selectedItems.value.joinToString("\n") { it.original }
 
@@ -95,7 +94,7 @@ class LogsViewModel @Inject constructor(
 
     val resumeLoggingWithBottomTouch get() = appPreferences.resumeLoggingWithBottomTouch
 
-    fun selectLine(logLine: LogLine, selected: Boolean) = selectedItems.updateList {
+    fun selectLine(logLine: com.f0x1d.logfox.model.LogLine, selected: Boolean) = selectedItems.updateList {
         if (selected) add(
             logLine
         ) else remove(
@@ -140,7 +139,7 @@ class LogsViewModel @Inject constructor(
     fun resume() = paused.update { false }
 
     private data class LogsData(
-        val logs: List<LogLine>,
+        val logs: List<com.f0x1d.logfox.model.LogLine>,
         val filters: List<UserFilter>,
         val query: String?,
         val paused: Boolean,

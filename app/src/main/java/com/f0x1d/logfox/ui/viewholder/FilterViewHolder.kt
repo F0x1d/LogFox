@@ -16,7 +16,7 @@ class FilterViewHolder(
     checked: (UserFilter, Boolean) -> Unit
 ): BaseViewHolder<UserFilter, ItemFilterBinding>(binding) {
 
-    private val checkedListener = OnlyUserCheckedChangeListener(binding.enabledBox) { button, isChecked ->
+    private val checkedListener = OnlyUserCheckedChangeListener(binding.enabledBox) { _, isChecked ->
         checked(currentItem ?: return@OnlyUserCheckedChangeListener, isChecked)
     }
 

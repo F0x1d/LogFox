@@ -8,7 +8,7 @@ import com.f0x1d.logfox.database.entity.AppCrash
 import com.f0x1d.logfox.di.viewmodel.CrashId
 import com.f0x1d.logfox.extensions.io.output.exportToZip
 import com.f0x1d.logfox.extensions.io.output.putZipEntry
-import com.f0x1d.logfox.model.Device
+import com.f0x1d.logfox.model.deviceData
 import com.f0x1d.logfox.repository.logging.CrashesRepository
 import com.f0x1d.logfox.utils.DateTimeFormatter
 import com.f0x1d.logfox.utils.preferences.AppPreferences
@@ -27,7 +27,6 @@ class CrashDetailsViewModel @Inject constructor(
     private val database: AppDatabase,
     private val crashesRepository: CrashesRepository,
     private val appPreferences: AppPreferences,
-    private val device: Device,
     application: Application
 ): BaseViewModel(application) {
 
@@ -56,18 +55,20 @@ class CrashDetailsViewModel @Inject constructor(
             it.exportToZip {
                 if (appPreferences.includeDeviceInfoInArchives) putZipEntry(
                     name = "device.txt",
-                    content = device.toString().encodeToByteArray()
+                    content = deviceData.encodeToByteArray(),
                 )
 
                 if (crashLog != null) putZipEntry(
                     name = "crash.log",
-                    content = crashLog.encodeToByteArray()
+                    content = crashLog.encodeToByteArray(),
                 )
 
-                if (appCrash.logDumpFile != null) putZipEntry(
-                    name = "dump.log",
-                    file = appCrash.logDumpFile
-                )
+                appCrash.logDumpFile?.let { logDumpFile ->
+                    putZipEntry(
+                        name = "dump.log",
+                        file = logDumpFile,
+                    )
+                }
             }
         }
     }

@@ -2,7 +2,6 @@ package com.f0x1d.logfox.viewmodel.filters
 
 import android.app.Application
 import androidx.lifecycle.asLiveData
-import com.f0x1d.logfox.model.InstalledApp
 import com.f0x1d.logfox.viewmodel.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -19,7 +18,7 @@ class ChooseAppViewModel @Inject constructor(
     application: Application
 ): BaseViewModel(application) {
 
-    val apps = MutableStateFlow(emptyList<InstalledApp>())
+    val apps = MutableStateFlow(emptyList<com.f0x1d.logfox.model.InstalledApp>())
     val query = MutableStateFlow("")
 
     val searchedApps = combine(apps, query) { apps, query ->
@@ -40,7 +39,7 @@ class ChooseAppViewModel @Inject constructor(
         val packageManager = ctx.packageManager
 
         val installedApps = packageManager.getInstalledPackages(0).map {
-            InstalledApp(
+            com.f0x1d.logfox.model.InstalledApp(
                 title = it.applicationInfo.loadLabel(packageManager),
                 packageName = it.packageName
             )

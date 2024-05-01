@@ -2,7 +2,7 @@ package com.f0x1d.logfox.ui.activity.base
 
 import android.os.Bundle
 import androidx.viewbinding.ViewBinding
-import com.f0x1d.logfox.utils.event.Event
+import com.f0x1d.logfox.model.event.Event
 import com.f0x1d.logfox.viewmodel.base.BaseViewModel
 
 abstract class BaseViewModelActivity<T : BaseViewModel, D : ViewBinding>: BaseActivity<D>() {

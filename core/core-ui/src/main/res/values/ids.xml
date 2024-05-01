@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="log_text" type="id" />
+    <item name="title" type="id" />
+    <item name="app_name" type="id" />
+    <item name="delete_button" type="id" />
+    <item name="root_button" type="id" />
+    <item name="adb_button" type="id" />
+    <item name="shizuku_button" type="id" />
+    <item name="search_button" type="id" />
+    <item name="clear_search_button" type="id" />
+    <item name="log_levels_button" type="id" />
+    <item name="time_text" type="id" />
+    <item name="including_button" type="id" />
+</resources>

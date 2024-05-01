@@ -1,12 +1,10 @@
 package com.f0x1d.logfox.repository.logging.readers.crashes.base
 
-import com.f0x1d.logfox.model.LogLine
-
 class DefaultChecker {
 
     var wasBadLine = false
 
-    fun collecting(firstLine: LogLine?, line: LogLine) = if (firstLine?.pid == line.pid && firstLine.tid == line.tid) {
+    fun collecting(firstLine: com.f0x1d.logfox.model.LogLine?, line: com.f0x1d.logfox.model.LogLine) = if (firstLine?.pid == line.pid && firstLine.tid == line.tid) {
         wasBadLine = false
         true
     } else if (wasBadLine) {

@@ -1,8 +1,8 @@
 package com.f0x1d.logfox.extensions
 
 import androidx.lifecycle.MutableLiveData
-import com.f0x1d.logfox.utils.event.Event
-import com.f0x1d.logfox.utils.event.NoDataEvent
+import com.f0x1d.logfox.model.event.Event
+import com.f0x1d.logfox.model.event.NoDataEvent
 import com.f0x1d.logfox.viewmodel.base.BaseViewModel
 
 fun BaseViewModel.sendEvent(type: String, data: Any) = eventsData.sendEvent(type, data)

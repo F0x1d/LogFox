@@ -6,7 +6,7 @@ import androidx.core.content.edit
 
 abstract class BasePreferences(context: Context) {
 
-    val sharedPreferences = providePreferences(context)
+    val sharedPreferences by lazy { providePreferences(context) }
 
     abstract fun providePreferences(context: Context): SharedPreferences
 
@@ -18,6 +18,7 @@ abstract class BasePreferences(context: Context) {
         }
     }
 
+    @Suppress("UNCHECKED_CAST")
     inline fun <reified T> put(key: String, value: T?) = sharedPreferences.edit {
         when (value) {
             null -> putString(key, null)
@@ -37,16 +38,17 @@ abstract class BasePreferences(context: Context) {
         is Long -> sharedPreferences.getLong(key, defaultValue) as T
         is Float -> sharedPreferences.getFloat(key, defaultValue) as T
 
-        else -> throw RuntimeException("Type ${defaultValue!!::class.java.canonicalName} is nullable or unknown")
+        else -> error("Type of $defaultValue is not supported")
     }
 
+    @Suppress("UNCHECKED_CAST")
     inline fun <reified T> getNullable(key: String, defaultValue: T?): T? = when (defaultValue) {
         null -> sharedPreferences.getString(key, defaultValue) as T?
 
         is String -> sharedPreferences.getString(key, defaultValue) as T?
         is Set<*> -> sharedPreferences.getStringSet(key, defaultValue as Set<String>) as T?
 
-        else -> throw RuntimeException("Type ${defaultValue!!::class.java.canonicalName} is not nullable or unknown")
+        else -> error("Type of $defaultValue is not supported")
     }
 
     fun registerListener(listener: SharedPreferences.OnSharedPreferenceChangeListener) =

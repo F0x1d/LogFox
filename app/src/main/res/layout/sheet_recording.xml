@@ -64,7 +64,7 @@
             android:layout_height="wrap_content">
 
             <Button
-                style="@style/LogFoxBigButtonStyle"
+                style="@style/Widget.LogFox.BigButton"
                 android:id="@+id/view_button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -76,7 +76,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Button
-                style="@style/LogFoxBigButtonStyle"
+                style="@style/Widget.LogFox.BigButton"
                 android:id="@+id/export_button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -88,7 +88,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Button
-                style="@style/LogFoxBigButtonStyle"
+                style="@style/Widget.LogFox.BigButton"
                 android:id="@+id/share_button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -100,7 +100,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Button
-                style="@style/LogFoxBigButtonStyle"
+                style="@style/Widget.LogFox.BigButton"
                 android:id="@+id/zip_button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

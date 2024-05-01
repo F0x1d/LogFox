@@ -15,9 +15,8 @@ import com.f0x1d.logfox.R
 import com.f0x1d.logfox.databinding.FragmentEditFilterBinding
 import com.f0x1d.logfox.extensions.views.widgets.setClickListenerOn
 import com.f0x1d.logfox.extensions.views.widgets.setupBackButtonForNavController
-import com.f0x1d.logfox.model.LogLevel
+import com.f0x1d.logfox.model.event.Event
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
-import com.f0x1d.logfox.utils.event.Event
 import com.f0x1d.logfox.viewmodel.filters.EditFilterViewModel
 import com.google.android.material.color.MaterialColors
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -106,7 +105,7 @@ class EditFilterFragment: BaseViewModelFragment<EditFilterViewModel, FragmentEdi
                 }
             }
 
-            saveFab.setOnClickListener { view ->
+            saveFab.setOnClickListener { _ ->
                 viewModel.update(it)
                 findNavController().popBackStack()
             }
@@ -155,9 +154,9 @@ class EditFilterFragment: BaseViewModelFragment<EditFilterViewModel, FragmentEdi
             .setTitle(R.string.log_levels)
             .setIcon(R.drawable.ic_dialog_list)
             .setMultiChoiceItems(
-                LogLevel.entries.map { it.name }.toTypedArray(),
+                com.f0x1d.logfox.model.LogLevel.entries.map { it.name }.toTypedArray(),
                 viewModel.enabledLogLevels.toTypedArray().toBooleanArray()
-            ) { dialog, which, checked ->
+            ) { _, which, checked ->
                 viewModel.filterLevel(which, checked)
             }
             .setPositiveButton(R.string.close, null)

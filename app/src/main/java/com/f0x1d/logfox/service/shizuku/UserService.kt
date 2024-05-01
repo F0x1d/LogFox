@@ -22,6 +22,8 @@ class UserService(): IUserService.Stub() {
     private var latestId = 0L
     private val currentProcesses = HashMap<Long, Process>()
 
+    // Needed for shizuku
+    @Suppress("UNUSED_PARAMETER")
     @Keep
     constructor(context: Context): this()
 

@@ -13,12 +13,10 @@
         app:liftOnScroll="true">
 
         <com.google.android.material.appbar.MaterialToolbar
+            style="@style/Widget.LogFox.Toolbar"
             android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?actionBarSize"
             app:menu="@menu/crashes_menu"
-            app:title="@string/crashes"
-            app:titleCentered="true" />
+            app:title="@string/crashes" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <include

@@ -13,14 +13,10 @@
         app:liftOnScroll="true">
 
         <com.google.android.material.appbar.MaterialToolbar
+            style="@style/Widget.LogFox.Toolbar"
             android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?actionBarSize"
             app:title="@string/app_name"
-            app:titleCentered="true"
-            app:subtitleCentered="true"
-            app:menu="@menu/logs_menu"
-            app:navigationIconTint="?colorOnSurface"/>
+            app:menu="@menu/logs_menu" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView

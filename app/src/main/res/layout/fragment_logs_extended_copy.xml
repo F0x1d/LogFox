@@ -13,13 +13,10 @@
         app:liftOnScroll="true">
 
         <com.google.android.material.appbar.MaterialToolbar
+            style="@style/Widget.LogFox.Toolbar"
             android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?actionBarSize"
             app:title="@string/extended_copy"
-            app:titleCentered="true"
-            app:navigationIcon="@drawable/ic_arrow_back"
-            app:navigationIconTint="?colorOnSurface" />
+            app:navigationIcon="@drawable/ic_arrow_back" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView

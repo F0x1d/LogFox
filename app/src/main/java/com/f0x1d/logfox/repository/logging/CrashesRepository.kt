@@ -7,7 +7,6 @@ import com.f0x1d.logfox.database.entity.AppCrash
 import com.f0x1d.logfox.extensions.notifications.cancelAllCrashNotifications
 import com.f0x1d.logfox.extensions.notifications.cancelCrashNotificationFor
 import com.f0x1d.logfox.extensions.notifications.sendErrorNotification
-import com.f0x1d.logfox.model.LogLine
 import com.f0x1d.logfox.repository.logging.base.LoggingHelperItemsRepository
 import com.f0x1d.logfox.repository.logging.readers.crashes.ANRDetector
 import com.f0x1d.logfox.repository.logging.readers.crashes.JNICrashDetector
@@ -80,7 +79,7 @@ class CrashesRepository @Inject constructor(
         database.appCrashDao().deleteByPackageName(appCrash.packageName)
     }
 
-    private suspend fun collectCrash(it: AppCrash, lines: List<LogLine>) {
+    private suspend fun collectCrash(it: AppCrash, lines: List<com.f0x1d.logfox.model.LogLine>) {
         // Don't handle if already present in data
         database.appCrashDao().getAllByDateAndTime(
             dateAndTime = it.dateAndTime,

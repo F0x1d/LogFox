@@ -9,8 +9,8 @@ import com.f0x1d.logfox.R
 import com.f0x1d.logfox.databinding.FragmentSetupBinding
 import com.f0x1d.logfox.extensions.context.copyText
 import com.f0x1d.logfox.extensions.context.hardRestartApp
+import com.f0x1d.logfox.model.event.Event
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
-import com.f0x1d.logfox.utils.event.Event
 import com.f0x1d.logfox.viewmodel.SetupViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
@@ -46,8 +46,8 @@ class SetupFragment: BaseViewModelFragment<SetupViewModel, FragmentSetupBinding>
                     .setIcon(R.drawable.ic_dialog_adb)
                     .setTitle(R.string.adb)
                     .setMessage(getString(R.string.how_to_use_adb, viewModel.adbCommand))
-                    .setPositiveButton(R.string.check) { dialog, which -> viewModel.checkPermission() }
-                    .setNeutralButton(android.R.string.copy) { dialog, which ->
+                    .setPositiveButton(R.string.check) { _, _ -> viewModel.checkPermission() }
+                    .setNeutralButton(android.R.string.copy) { _, _ ->
                         requireContext().copyText(viewModel.adbCommand)
                         snackbar(R.string.text_copied)
                     }

@@ -5,26 +5,25 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import com.f0x1d.logfox.adapter.base.BaseListAdapter
 import com.f0x1d.logfox.databinding.ItemLogBinding
-import com.f0x1d.logfox.model.LogLine
 import com.f0x1d.logfox.ui.viewholder.LogViewHolder
 import com.f0x1d.logfox.utils.preferences.AppPreferences
 
 class LogsAdapter(
     private val appPreferences: AppPreferences,
-    private val selectedItem: (LogLine, Boolean) -> Unit,
-    private val copyLog: (LogLine) -> Unit
-): BaseListAdapter<LogLine, ItemLogBinding>(LOGLINE_DIFF) {
+    private val selectedItem: (com.f0x1d.logfox.model.LogLine, Boolean) -> Unit,
+    private val copyLog: (com.f0x1d.logfox.model.LogLine) -> Unit
+): BaseListAdapter<com.f0x1d.logfox.model.LogLine, ItemLogBinding>(LOGLINE_DIFF) {
 
     companion object {
-        private val LOGLINE_DIFF = object : DiffUtil.ItemCallback<LogLine>() {
-            override fun areItemsTheSame(oldItem: LogLine, newItem: LogLine) = oldItem.id == newItem.id
+        private val LOGLINE_DIFF = object : DiffUtil.ItemCallback<com.f0x1d.logfox.model.LogLine>() {
+            override fun areItemsTheSame(oldItem: com.f0x1d.logfox.model.LogLine, newItem: com.f0x1d.logfox.model.LogLine) = oldItem.id == newItem.id
 
-            override fun areContentsTheSame(oldItem: LogLine, newItem: LogLine) = oldItem == newItem
+            override fun areContentsTheSame(oldItem: com.f0x1d.logfox.model.LogLine, newItem: com.f0x1d.logfox.model.LogLine) = oldItem == newItem
         }
     }
 
     val expandedStates = mutableMapOf<Long, Boolean>()
-    var selectedItems = emptyList<LogLine>()
+    var selectedItems = emptyList<com.f0x1d.logfox.model.LogLine>()
         set(value) {
             field = value
             notifyItemRangeChanged(0, itemCount)

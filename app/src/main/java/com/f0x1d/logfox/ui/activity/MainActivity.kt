@@ -21,8 +21,8 @@ import com.f0x1d.logfox.extensions.context.hasNotificationsPermission
 import com.f0x1d.logfox.extensions.context.isHorizontalOrientation
 import com.f0x1d.logfox.extensions.contrastedNavBarAvailable
 import com.f0x1d.logfox.extensions.gesturesAvailable
+import com.f0x1d.logfox.model.event.Event
 import com.f0x1d.logfox.ui.activity.base.BaseViewModelActivity
-import com.f0x1d.logfox.utils.event.Event
 import com.f0x1d.logfox.viewmodel.MainViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
@@ -77,7 +77,7 @@ class MainActivity: BaseViewModelActivity<MainViewModel, ActivityMainBinding>(),
                 .setTitle(R.string.no_notification_permission)
                 .setMessage(R.string.notification_permission_is_required)
                 .setCancelable(false)
-                .setPositiveButton(android.R.string.ok) { dialog, which ->
+                .setPositiveButton(android.R.string.ok) { _, _ ->
                     requestNotificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
                 }
                 .setNegativeButton(R.string.close, null)

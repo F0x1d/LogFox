@@ -8,7 +8,6 @@ import com.f0x1d.logfox.extensions.context.toast
 import com.f0x1d.logfox.extensions.notifications.cancelRecordingNotification
 import com.f0x1d.logfox.extensions.notifications.sendRecordingNotification
 import com.f0x1d.logfox.extensions.notifications.sendRecordingPausedNotification
-import com.f0x1d.logfox.model.LogLine
 import com.f0x1d.logfox.repository.logging.base.LoggingHelperItemsRepository
 import com.f0x1d.logfox.repository.logging.readers.recordings.RecordingWithFiltersReader
 import com.f0x1d.logfox.repository.logging.readers.recordings.RewritingRecordingReader
@@ -161,7 +160,7 @@ class RecordingsRepository @Inject constructor(
         }
     }
 
-    fun createRecordingFrom(lines: List<LogLine>) = runOnRepoScope {
+    fun createRecordingFrom(lines: List<com.f0x1d.logfox.model.LogLine>) = runOnRepoScope {
         val recordingTime = System.currentTimeMillis()
 
         val recordingFile = File(

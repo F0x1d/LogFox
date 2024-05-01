@@ -6,8 +6,8 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.f0x1d.logfox.R
-import com.f0x1d.logfox.utils.event.Event
-import com.f0x1d.logfox.utils.event.SnackbarEvent
+import com.f0x1d.logfox.model.event.Event
+import com.f0x1d.logfox.model.event.SnackbarEvent
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

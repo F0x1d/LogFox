@@ -1,32 +1,18 @@
 import com.android.build.gradle.internal.api.ApkVariantOutputImpl
 
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
-    id(libs.plugins.kotlin.parcelize.get().pluginId)
-
-    alias(libs.plugins.ksp)
-    alias(libs.plugins.hilt.android)
-    alias(libs.plugins.androidx.navigation.safeargs)
+    id("logfox.android.application")
 }
 
 android {
-    compileSdk = Versions.ANDROID_COMPILE_SDK_VERSION
+    val logFoxPackageName = "com.f0x1d.logfox"
 
-    namespace = LOGFOX_PACKAGE_NAME
+    namespace = logFoxPackageName
     defaultConfig {
-        applicationId = LOGFOX_PACKAGE_NAME
+        applicationId = logFoxPackageName
 
-        minSdk = Versions.ANDROID_MIN_SDK_VERSION
-        targetSdk = Versions.ANDROID_TARGET_SDK_VERSION
-        versionCode = Versions.ANDROID_VERSION_CODE
-        versionName = Versions.ANDROID_VERSION_NAME
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
-        ksp {
-            arg("room.schemaLocation", "$projectDir/schemas")
-        }
+        versionCode = 60
+        versionName = "1.5.8"
     }
 
     applicationVariants.all {
@@ -36,31 +22,14 @@ android {
             }
         }
     }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = true
-            isShrinkResources = true
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-        }
-
-        debug {
-            applicationIdSuffix = ".debug"
-        }
-    }
-
-    buildFeatures {
-        buildConfig = true
-        aidl = true
-        viewBinding = true
-    }
-}
-
-kotlin {
-    jvmToolchain(17)
 }
 
 dependencies {
+    implementation(project(":data"))
+    implementation(project(":core:core-arch"))
+    implementation(project(":core:core-ui"))
+    implementation(project(":core:core-database"))
+
     implementation(libs.insetter)
     implementation(libs.bundles.shizuku)
     implementation(libs.viewpump)
@@ -73,23 +42,7 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)
 
-    implementation(libs.hilt.android)
-    ksp(libs.hilt.compiler)
-    implementation(libs.androidx.hilt.navigation.fragment)
-
-    implementation(libs.androidx.core)
-    implementation(libs.androidx.collection)
-    implementation(libs.androidx.fragment)
-    implementation(libs.androidx.preference)
-    implementation(libs.androidx.lifecycle.process)
-    implementation(libs.androidx.lifecycle.runtime)
-    implementation(libs.androidx.lifecycle.livedata)
-    implementation(libs.androidx.lifecycle.viewmodel)
-
-    implementation(libs.androidx.appcompat)
-    implementation(libs.androidx.constraintlayout)
-    implementation(libs.androidx.recyclerview)
-
+    implementation(libs.bundles.androidx)
     implementation(libs.material)
 
     implementation(libs.bundles.androidx.navigation)

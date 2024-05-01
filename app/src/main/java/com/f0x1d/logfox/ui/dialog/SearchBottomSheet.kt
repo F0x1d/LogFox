@@ -34,7 +34,7 @@ class SearchBottomSheet: BaseBottomSheet<SheetSearchBinding>() {
         searchButton.setOnClickListener {
             search(queryText.text?.toString())
         }
-        queryText.setOnEditorActionListener { v, actionId, event ->
+        queryText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 search(queryText.text?.toString())
                 true

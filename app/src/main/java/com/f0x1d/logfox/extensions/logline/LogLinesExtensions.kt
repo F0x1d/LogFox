@@ -1,9 +1,8 @@
 package com.f0x1d.logfox.extensions.logline
 
 import com.f0x1d.logfox.database.entity.UserFilter
-import com.f0x1d.logfox.model.LogLine
 
-fun List<LogLine>.filterAndSearch(filters: List<UserFilter>, query: String? = null) = filterByExtendedFilters(
+fun List<com.f0x1d.logfox.model.LogLine>.filterAndSearch(filters: List<UserFilter>, query: String? = null) = filterByExtendedFilters(
     filters.filter { it.enabled }
 ).let {
     if (query == null)
@@ -12,7 +11,7 @@ fun List<LogLine>.filterAndSearch(filters: List<UserFilter>, query: String? = nu
         it.filter { logLine -> logLine.tag.contains(query) || logLine.content.contains(query) }
 }
 
-private fun List<LogLine>.filterByExtendedFilters(filters: List<UserFilter>): List<LogLine> {
+private fun List<com.f0x1d.logfox.model.LogLine>.filterByExtendedFilters(filters: List<UserFilter>): List<com.f0x1d.logfox.model.LogLine> {
     if (filters.isEmpty()) return this
 
     val includingFilters = filters.filter { it.including }
@@ -35,7 +34,7 @@ private fun List<LogLine>.filterByExtendedFilters(filters: List<UserFilter>): Li
     }
 }
 
-private fun UserFilter.lineSuits(logLine: LogLine) = allowedLevels.contains(logLine.level) &&
+private fun UserFilter.lineSuits(logLine: com.f0x1d.logfox.model.LogLine) = allowedLevels.contains(logLine.level) &&
         uid.equalsOrTrueIfNull(logLine.uid) &&
         pid.equalsOrTrueIfNull(logLine.pid) &&
         tid.equalsOrTrueIfNull(logLine.tid) &&

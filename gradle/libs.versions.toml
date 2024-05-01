@@ -1,5 +1,9 @@
 [versions]
 
+compileSdk = "34"
+minSdk = "24"
+targetSdk = "34"
+
 kotlin = "1.9.23"
 androidGradlePlugin = "8.4.0"
 ksp = "1.9.23-1.0.20"
@@ -61,6 +65,9 @@ junit = { module = "junit:junit", version.ref = "junit" }
 androidx-test-ext-junit = { module = "androidx.test.ext:junit", version.ref = "androidx-test-ext-junit" }
 androidx-test-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "androidx-test-espresso" }
 
+android-gradle-plugin = { module = "com.android.tools.build:gradle", version.ref = "androidGradlePlugin" }
+kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+
 [plugins]
 
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
@@ -81,4 +88,17 @@ androidx-navigation = [
     "androidx-navigation-runtime",
     "androidx-navigation-fragment",
     "androidx-navigation-ui",
+]
+androidx = [
+    "androidx-appcompat",
+    "androidx-constraintlayout",
+    "androidx-core",
+    "androidx-collection",
+    "androidx-fragment",
+    "androidx-lifecycle-process",
+    "androidx-lifecycle-runtime",
+    "androidx-lifecycle-viewmodel",
+    "androidx-lifecycle-livedata",
+    "androidx-preference",
+    "androidx-recyclerview",
 ]

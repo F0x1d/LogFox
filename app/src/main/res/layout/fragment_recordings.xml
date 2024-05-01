@@ -13,11 +13,9 @@
         app:liftOnScroll="true">
 
         <com.google.android.material.appbar.MaterialToolbar
+            style="@style/Widget.LogFox.Toolbar"
             android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?actionBarSize"
             app:title="@string/recordings"
-            app:titleCentered="true"
             app:menu="@menu/recordings_menu" />
     </com.google.android.material.appbar.AppBarLayout>
 

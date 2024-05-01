@@ -6,14 +6,13 @@ import com.f0x1d.logfox.R
 import com.f0x1d.logfox.adapter.LogsAdapter
 import com.f0x1d.logfox.databinding.ItemLogBinding
 import com.f0x1d.logfox.extensions.context.dateTimeFormatter
-import com.f0x1d.logfox.model.LogLine
 import com.f0x1d.logfox.ui.viewholder.base.BaseViewHolder
 
 class LogViewHolder(
     binding: ItemLogBinding,
-    private val selectedItem: (LogLine, Boolean) -> Unit,
-    private val copyLog: (LogLine) -> Unit
-): BaseViewHolder<LogLine, ItemLogBinding>(binding) {
+    private val selectedItem: (com.f0x1d.logfox.model.LogLine, Boolean) -> Unit,
+    private val copyLog: (com.f0x1d.logfox.model.LogLine) -> Unit
+): BaseViewHolder<com.f0x1d.logfox.model.LogLine, ItemLogBinding>(binding) {
 
     private val dateTimeFormatter = binding.root.context.dateTimeFormatter
 
@@ -60,7 +59,7 @@ class LogViewHolder(
         }
     }
 
-    override fun ItemLogBinding.bindTo(data: LogLine) {
+    override fun ItemLogBinding.bindTo(data: com.f0x1d.logfox.model.LogLine) {
         adapter<LogsAdapter>()?.textSize?.also {
             logText.textSize = it
             levelView.textSize = it
@@ -106,7 +105,7 @@ class LogViewHolder(
         }
     }
 
-    private fun ItemLogBinding.changeExpandedAndSelected(logLine: LogLine) = adapter<LogsAdapter>()?.apply {
+    private fun ItemLogBinding.changeExpandedAndSelected(logLine: com.f0x1d.logfox.model.LogLine) = adapter<LogsAdapter>()?.apply {
         val expanded = expandedStates.getOrElse(logLine.id) { logsExpanded }
 
         logText.maxLines = if (expanded) Int.MAX_VALUE else 1

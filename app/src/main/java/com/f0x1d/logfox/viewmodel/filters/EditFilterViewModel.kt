@@ -7,8 +7,6 @@ import com.f0x1d.logfox.database.AppDatabase
 import com.f0x1d.logfox.database.entity.UserFilter
 import com.f0x1d.logfox.di.viewmodel.FilterId
 import com.f0x1d.logfox.extensions.sendEvent
-import com.f0x1d.logfox.model.InstalledApp
-import com.f0x1d.logfox.model.LogLevel
 import com.f0x1d.logfox.repository.logging.FiltersRepository
 import com.f0x1d.logfox.viewmodel.base.BaseViewModel
 import com.google.gson.Gson
@@ -92,7 +90,7 @@ class EditFilterViewModel @Inject constructor(
         enabledLogLevels[which] = filtering
     }
 
-    fun selectApp(app: InstalledApp) = packageName.update {
+    fun selectApp(app: com.f0x1d.logfox.model.InstalledApp) = packageName.update {
         app.packageName
     }.also {
         sendEvent(EVENT_TYPE_UPDATE_PACKAGE_NAME_TEXT)
@@ -100,7 +98,7 @@ class EditFilterViewModel @Inject constructor(
 
     private fun List<Boolean>.toEnabledLogLevels() = mapIndexed { index, value ->
         if (value)
-            enumValues<LogLevel>()[index]
+            enumValues<com.f0x1d.logfox.model.LogLevel>()[index]
         else
             null
     }.filterNotNull()
