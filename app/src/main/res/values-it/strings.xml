@@ -2,7 +2,6 @@
 <resources>
     <string name="crashes">Arresti anomali</string>
     <string name="pause">Pausa</string>
-    <string name="settings">Impostazioni</string>
     <string name="no_root">Accesso root non rilevato</string>
     <string name="text_copied">Testo copiato</string>
     <string name="search">Cerca</string>

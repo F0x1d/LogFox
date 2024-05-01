@@ -1,7 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="crashes">Falhas</string>
     <string name="pause">Pausar</string>
-    <string name="settings">Configurações</string>
     <string name="no_root">Root indisponível</string>
     <string name="text_copied">Texto copiado</string>
     <string name="search">Buscar</string>

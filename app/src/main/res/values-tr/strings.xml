@@ -1,7 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="crashes">Çökmeler</string>
     <string name="pause">Durdur</string>
-    <string name="settings">Ayarlar</string>
     <string name="no_root">Root bulunamadı</string>
     <string name="text_copied">Metin kopyalandı</string>
     <string name="search">Ara</string>

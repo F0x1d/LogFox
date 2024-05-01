@@ -1,7 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="crashes">Сбои</string>
     <string name="pause">Пауза</string>
-    <string name="settings">Настройки</string>
     <string name="no_root">Root не обнаружен</string>
     <string name="text_copied">Текст скопирован</string>
     <string name="search">Поиск</string>

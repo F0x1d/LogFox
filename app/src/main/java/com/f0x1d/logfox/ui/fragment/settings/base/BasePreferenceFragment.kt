@@ -11,7 +11,7 @@ import dev.chrisbanes.insetter.applyInsetter
 
 abstract class BasePreferenceFragment: PreferenceFragmentCompat() {
 
-    open val title = R.string.settings
+    open val title = com.f0x1d.logfox.ui.R.string.settings
     open val showBackArrow = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
