@@ -5,9 +5,12 @@ import android.content.Context
 import androidx.core.app.NotificationCompat
 import com.f0x1d.logfox.LogFoxApp
 import com.f0x1d.logfox.R
-import com.f0x1d.logfox.extensions.*
+import com.f0x1d.logfox.extensions.PAUSE_RECORDING_INTENT_ID
+import com.f0x1d.logfox.extensions.RESUME_RECORDING_INTENT_ID
+import com.f0x1d.logfox.extensions.STOP_RECORDING_INTENT_ID
 import com.f0x1d.logfox.extensions.context.doIfNotificationsAllowed
 import com.f0x1d.logfox.extensions.context.notificationManagerCompat
+import com.f0x1d.logfox.extensions.makeBroadcastPendingIntent
 import com.f0x1d.logfox.receiver.RecordingReceiver
 
 private const val RECORDING_NOTIFICATIONS_TAG = "recording"

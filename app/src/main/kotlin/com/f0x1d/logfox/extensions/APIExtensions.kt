@@ -1,7 +1,11 @@
 package com.f0x1d.logfox.extensions
 
-import android.os.Build.VERSION.*
-import android.os.Build.VERSION_CODES.*
+import android.os.Build.VERSION.SDK_INT
+import android.os.Build.VERSION_CODES.O
+import android.os.Build.VERSION_CODES.Q
+import android.os.Build.VERSION_CODES.R
+import android.os.Build.VERSION_CODES.S
+import android.os.Build.VERSION_CODES.TIRAMISU
 import androidx.annotation.ChecksSdkIntAtLeast
 
 @get:ChecksSdkIntAtLeast(api = TIRAMISU) val isAtLeastAndroid13 = SDK_INT >= TIRAMISU

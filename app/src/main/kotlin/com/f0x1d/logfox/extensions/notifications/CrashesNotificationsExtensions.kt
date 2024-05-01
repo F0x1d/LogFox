@@ -9,10 +9,11 @@ import androidx.navigation.NavDeepLinkBuilder
 import com.f0x1d.logfox.LogFoxApp
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.database.entity.AppCrash
-import com.f0x1d.logfox.extensions.*
+import com.f0x1d.logfox.extensions.COPY_CRASH_INTENT_ID
 import com.f0x1d.logfox.extensions.context.doIfNotificationsAllowed
 import com.f0x1d.logfox.extensions.context.notificationManager
 import com.f0x1d.logfox.extensions.context.notificationManagerCompat
+import com.f0x1d.logfox.extensions.makeBroadcastPendingIntent
 import com.f0x1d.logfox.receiver.CopyReceiver
 
 @SuppressLint("MissingPermission")
