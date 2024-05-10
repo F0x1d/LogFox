@@ -8,7 +8,4 @@
 
     <color name="ic_launcher_background">@color/white</color>
     <color name="ic_launcher_foreground">@color/color_primary</color>
-
-    <color name="card_stroke_color">#ffdadce0</color>
-    <color name="placeholder_icon_background">#E5E5E5</color>
 </resources>
