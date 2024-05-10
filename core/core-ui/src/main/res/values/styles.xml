@@ -63,4 +63,8 @@
         <item name="rippleColor">?colorControlHighlight</item>
         <item name="shapeAppearance">@style/ShapeAppearance.Material3.Corner.None</item>
     </style>
+
+    <style name="Widget.LogFox.CardView.Outlined" parent="Widget.Material3.CardView.Outlined">
+        <item name="cardCornerRadius">10dp</item>
+    </style>
 </resources>
