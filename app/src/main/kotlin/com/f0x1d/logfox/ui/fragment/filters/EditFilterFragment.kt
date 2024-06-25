@@ -13,10 +13,11 @@ import androidx.lifecycle.asLiveData
 import androidx.navigation.fragment.findNavController
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.databinding.FragmentEditFilterBinding
-import com.f0x1d.logfox.extensions.views.widgets.setClickListenerOn
-import com.f0x1d.logfox.extensions.views.widgets.setupBackButtonForNavController
 import com.f0x1d.logfox.model.event.Event
+import com.f0x1d.logfox.model.logline.LogLevel
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
+import com.f0x1d.logfox.ui.view.setClickListenerOn
+import com.f0x1d.logfox.ui.view.setupBackButtonForNavController
 import com.f0x1d.logfox.viewmodel.filters.EditFilterViewModel
 import com.google.android.material.color.MaterialColors
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -154,7 +155,7 @@ class EditFilterFragment: BaseViewModelFragment<EditFilterViewModel, FragmentEdi
             .setTitle(R.string.log_levels)
             .setIcon(R.drawable.ic_dialog_list)
             .setMultiChoiceItems(
-                com.f0x1d.logfox.model.LogLevel.entries.map { it.name }.toTypedArray(),
+                LogLevel.entries.map { it.name }.toTypedArray(),
                 viewModel.enabledLogLevels.toTypedArray().toBooleanArray()
             ) { _, which, checked ->
                 viewModel.filterLevel(which, checked)

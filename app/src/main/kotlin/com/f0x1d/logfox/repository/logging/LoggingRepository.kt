@@ -3,16 +3,13 @@ package com.f0x1d.logfox.repository.logging
 import android.content.Context
 import android.content.SharedPreferences
 import com.f0x1d.logfox.R
-import com.f0x1d.logfox.extensions.context.toast
-import com.f0x1d.logfox.extensions.logline.LogLine
+import com.f0x1d.logfox.context.toast
 import com.f0x1d.logfox.extensions.onAppScope
 import com.f0x1d.logfox.extensions.runOnAppScope
-import com.f0x1d.logfox.model.LogLine
+import com.f0x1d.logfox.model.logline.LogLine
+import com.f0x1d.logfox.preferences.shared.AppPreferences
 import com.f0x1d.logfox.repository.base.BaseRepository
 import com.f0x1d.logfox.repository.logging.base.LoggingHelperRepository
-import com.f0x1d.logfox.utils.preferences.AppPreferences
-import com.f0x1d.logfox.utils.terminal.DefaultTerminal
-import com.f0x1d.logfox.utils.terminal.base.Terminal
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -32,10 +29,10 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class LoggingRepository @Inject constructor(
+class LoggingRepository2 @Inject constructor(
     @ApplicationContext private val context: Context,
     private val appPreferences: AppPreferences,
-    private val terminals: Array<Terminal>,
+    private val terminals: Array<com.f0x1d.logfox.terminals.base.Terminal>,
     private val helpers: Array<LoggingHelperRepository>
 ): BaseRepository(), SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -97,7 +94,7 @@ class LoggingRepository @Inject constructor(
         loggingJob?.cancel()
 
         clearLogs()
-        appPreferences.unregisterListener(this@LoggingRepository)
+        appPreferences.unregisterListener(this@LoggingRepository2)
 
         val closingHelpers = helpers.map {
             async(Dispatchers.IO) {
@@ -123,7 +120,7 @@ class LoggingRepository @Inject constructor(
         if (appPreferences.fallbackToDefaultTerminal) withContext(Dispatchers.Main) {
             context.toast(R.string.terminal_unavailable_falling_back)
 
-            loggingTerminal = terminals[DefaultTerminal.INDEX]
+            loggingTerminal = terminals[com.f0x1d.logfox.terminals.DefaultTerminal.INDEX]
             restartLogging(updateTerminal = false)
         } else
             delay(10000) // waiting for 10sec before new attempt
@@ -196,10 +193,7 @@ class LoggingRepository @Inject constructor(
         updater.cancel()
     }
 
-    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
-        when (key) {
-            "pref_logs_update_interval" -> loggingInterval = appPreferences.logsUpdateInterval
-            "pref_logs_display_limit" -> logsDisplayLimit = appPreferences.logsDisplayLimit
-        }
+    override fun onSharedPreferenceChanged(p0: SharedPreferences?, p1: String?) {
+
     }
 }

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application>
+        <service
+            android:name="com.f0x1d.feature.logging.service.LoggingService"
+            android:foregroundServiceType="specialUse"
+            android:exported="false" />
+    </application>
+
+</manifest>

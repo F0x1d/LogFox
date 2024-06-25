@@ -2,18 +2,19 @@ package com.f0x1d.logfox.repository.logging
 
 import android.content.Context
 import com.f0x1d.logfox.R
+import com.f0x1d.logfox.context.toast
 import com.f0x1d.logfox.database.AppDatabase
 import com.f0x1d.logfox.database.entity.LogRecording
-import com.f0x1d.logfox.extensions.context.toast
+import com.f0x1d.logfox.datetime.DateTimeFormatter
 import com.f0x1d.logfox.extensions.notifications.cancelRecordingNotification
 import com.f0x1d.logfox.extensions.notifications.sendRecordingNotification
 import com.f0x1d.logfox.extensions.notifications.sendRecordingPausedNotification
+import com.f0x1d.logfox.feature.logging.core.repository.logging.LoggingRepository
+import com.f0x1d.logfox.model.logline.LogLine
+import com.f0x1d.logfox.preferences.shared.AppPreferences
 import com.f0x1d.logfox.repository.logging.base.LoggingHelperItemsRepository
 import com.f0x1d.logfox.repository.logging.readers.recordings.RecordingWithFiltersReader
 import com.f0x1d.logfox.repository.logging.readers.recordings.RewritingRecordingReader
-import com.f0x1d.logfox.utils.DateTimeFormatter
-import com.f0x1d.logfox.utils.preferences.AppPreferences
-import com.f0x1d.logfox.utils.terminal.base.Terminal
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -39,7 +40,7 @@ class RecordingsRepository @Inject constructor(
     private val recordingReader: RecordingWithFiltersReader,
     private val cacheRecordingReader: RewritingRecordingReader,
     private val appPreferences: AppPreferences,
-    private val terminals: Array<Terminal>
+    private val terminals: Array<com.f0x1d.logfox.terminals.base.Terminal>
 ): LoggingHelperItemsRepository<LogRecording>() {
 
     val recordingStateFlow = MutableStateFlow(RecordingState.IDLE)
@@ -160,7 +161,7 @@ class RecordingsRepository @Inject constructor(
         }
     }
 
-    fun createRecordingFrom(lines: List<com.f0x1d.logfox.model.LogLine>) = runOnRepoScope {
+    fun createRecordingFrom(lines: List<LogLine>) = runOnRepoScope {
         val recordingTime = System.currentTimeMillis()
 
         val recordingFile = File(

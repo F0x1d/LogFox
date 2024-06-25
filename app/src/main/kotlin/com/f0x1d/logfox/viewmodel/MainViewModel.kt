@@ -1,19 +1,19 @@
 package com.f0x1d.logfox.viewmodel
 
 import android.app.Application
-import com.f0x1d.logfox.extensions.context.hasPermissionToReadLogs
-import com.f0x1d.logfox.extensions.context.startLoggingAndService
+import android.content.Intent
+import com.f0x1d.feature.logging.service.LoggingService
+import com.f0x1d.logfox.arch.startForegroundServiceAvailable
+import com.f0x1d.logfox.arch.viewmodel.BaseViewModel
+import com.f0x1d.logfox.context.hasPermissionToReadLogs
 import com.f0x1d.logfox.extensions.sendEvent
-import com.f0x1d.logfox.utils.DateTimeFormatter
-import com.f0x1d.logfox.utils.preferences.AppPreferences
-import com.f0x1d.logfox.viewmodel.base.BaseViewModel
+import com.f0x1d.logfox.preferences.shared.AppPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val appPreferences: AppPreferences,
-    private val dateTimeFormatter: DateTimeFormatter,
     application: Application
 ): BaseViewModel(application) {
 
@@ -27,16 +27,18 @@ class MainViewModel @Inject constructor(
 
     init {
         load()
-        dateTimeFormatter.startListening()
     }
 
-    private fun load() = when (ctx.hasPermissionToReadLogs()) {
-        true -> ctx.startLoggingAndService()
+    private fun load() {
+        when (ctx.hasPermissionToReadLogs) {
+            true -> Intent(ctx, LoggingService::class.java).let {
+                if (startForegroundServiceAvailable)
+                    ctx.startForegroundService(it)
+                else
+                    ctx.startService(it)
+            }
 
-        else -> sendEvent(EVENT_TYPE_SETUP)
-    }
-
-    override fun onCleared() {
-        dateTimeFormatter.stopListening()
+            else -> sendEvent(EVENT_TYPE_SETUP)
+        }
     }
 }

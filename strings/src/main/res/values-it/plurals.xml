@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="selected_count">
+        <item quantity="one">%d elemento selezionato</item>
+        <item quantity="other">%d elementi selezionati</item>
+    </plurals>
+    <plurals name="filters_count">
+        <item quantity="one">%d filtro</item>
+        <item quantity="other">%d filtri</item>
+    </plurals>
+</resources>

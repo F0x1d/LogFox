@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
-import com.f0x1d.logfox.extensions.context.isHorizontalOrientation
+import com.f0x1d.logfox.context.isHorizontalOrientation
 import com.f0x1d.logfox.extensions.views.snackbar
 import dev.chrisbanes.insetter.applyInsetter
 

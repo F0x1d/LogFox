@@ -4,15 +4,15 @@ import android.os.Bundle
 import android.text.InputType
 import androidx.preference.Preference
 import com.f0x1d.logfox.R
-import com.f0x1d.logfox.extensions.context.applyTheme
-import com.f0x1d.logfox.extensions.context.catchingNotNumber
+import com.f0x1d.logfox.context.applyTheme
+import com.f0x1d.logfox.context.catchingNotNumber
 import com.f0x1d.logfox.extensions.fillWithStrings
-import com.f0x1d.logfox.extensions.views.widgets.observeAndUpdateSummary
-import com.f0x1d.logfox.extensions.views.widgets.observeAndUpdateSummaryForList
-import com.f0x1d.logfox.extensions.views.widgets.setupAsEditTextPreference
-import com.f0x1d.logfox.extensions.views.widgets.setupAsListPreference
+import com.f0x1d.logfox.preferences.shared.AppPreferences
 import com.f0x1d.logfox.ui.fragment.settings.base.BasePreferenceFragment
-import com.f0x1d.logfox.utils.preferences.AppPreferences
+import com.f0x1d.logfox.ui.view.observeAndUpdateSummary
+import com.f0x1d.logfox.ui.view.observeAndUpdateSummaryForList
+import com.f0x1d.logfox.ui.view.setupAsEditTextPreference
+import com.f0x1d.logfox.ui.view.setupAsListPreference
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -38,7 +38,7 @@ class SettingsUIFragment: BasePreferenceFragment() {
                 selected = { appPreferences.nightTheme },
                 onSelected = {
                     appPreferences.nightTheme = it
-                    requireActivity().applyTheme(true)
+                    requireActivity().applyTheme(it, true)
                 }
             )
 

@@ -4,9 +4,9 @@ import android.text.Html
 import android.view.View
 import android.widget.TextView
 import com.f0x1d.logfox.R
+import com.f0x1d.logfox.arch.ui.viewholder.BaseViewHolder
 import com.f0x1d.logfox.database.entity.UserFilter
 import com.f0x1d.logfox.databinding.ItemFilterBinding
-import com.f0x1d.logfox.ui.viewholder.base.BaseViewHolder
 import com.f0x1d.logfox.utils.view.OnlyUserCheckedChangeListener
 
 class FilterViewHolder(

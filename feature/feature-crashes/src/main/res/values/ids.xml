@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="action_appCrashesFragment_to_crashDetailsFragment" type="id" />
+    <item name="action_crashesFragment_to_crashDetailsFragment" type="id" />
+    <item name="action_crashesFragment_to_appCrashesFragment" type="id" />
+</resources>

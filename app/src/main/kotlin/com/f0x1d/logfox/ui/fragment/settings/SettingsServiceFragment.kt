@@ -5,20 +5,21 @@ import android.text.InputType
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
 import androidx.preference.SwitchPreferenceCompat
+import com.f0x1d.feature.logging.service.LoggingService
 import com.f0x1d.logfox.R
-import com.f0x1d.logfox.extensions.context.catchingNotNumber
-import com.f0x1d.logfox.extensions.context.toast
+import com.f0x1d.logfox.arch.isAtLeastAndroid13
+import com.f0x1d.logfox.context.catchingNotNumber
+import com.f0x1d.logfox.context.sendService
+import com.f0x1d.logfox.context.toast
 import com.f0x1d.logfox.extensions.fillWithStrings
-import com.f0x1d.logfox.extensions.isAtLeastAndroid13
-import com.f0x1d.logfox.extensions.views.widgets.observeAndUpdateSummary
-import com.f0x1d.logfox.extensions.views.widgets.observeAndUpdateSummaryForList
-import com.f0x1d.logfox.extensions.views.widgets.setupAsEditTextPreference
-import com.f0x1d.logfox.extensions.views.widgets.setupAsListPreference
-import com.f0x1d.logfox.repository.logging.LoggingRepository
+import com.f0x1d.logfox.feature.logging.core.repository.logging.LoggingRepository
+import com.f0x1d.logfox.preferences.shared.AppPreferences
+import com.f0x1d.logfox.terminals.base.Terminal
 import com.f0x1d.logfox.ui.fragment.settings.base.BasePreferenceFragment
-import com.f0x1d.logfox.utils.preferences.AppPreferences
-import com.f0x1d.logfox.utils.terminal.DefaultTerminal
-import com.f0x1d.logfox.utils.terminal.base.Terminal
+import com.f0x1d.logfox.ui.view.observeAndUpdateSummary
+import com.f0x1d.logfox.ui.view.observeAndUpdateSummaryForList
+import com.f0x1d.logfox.ui.view.setupAsEditTextPreference
+import com.f0x1d.logfox.ui.view.setupAsListPreference
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -44,13 +45,13 @@ class SettingsServiceFragment: BasePreferenceFragment() {
 
         findPreference<SwitchPreferenceCompat>("pref_use_session_cache")?.apply {
             setOnPreferenceChangeListener { _, _ ->
-                loggingRepository.restartLogging(updateTerminal = false)
+                requireContext().sendService<LoggingService>(action = LoggingService.ACTION_RESTART_LOGGING)
                 return@setOnPreferenceChangeListener true
             }
         }
         findPreference<SwitchPreferenceCompat>("pref_session_cache_save_recordings")?.apply {
             setOnPreferenceChangeListener { _, _ ->
-                loggingRepository.restartLogging(updateTerminal = false)
+                restartLogging()
                 return@setOnPreferenceChangeListener true
             }
         }
@@ -90,7 +91,7 @@ class SettingsServiceFragment: BasePreferenceFragment() {
                 selected = { appPreferences.selectedTerminalIndex },
                 onSelected = {
                     if (appPreferences.selectedTerminalIndex == it) {
-                        loggingRepository.restartLogging()
+                        restartLogging()
                         return@setupAsListPreference
                     }
 
@@ -114,7 +115,7 @@ class SettingsServiceFragment: BasePreferenceFragment() {
 
         findPreference<SwitchPreferenceCompat>("pref_start_on_boot")?.apply {
             setOnPreferenceChangeListener { preference, newValue ->
-                val badTerminal = appPreferences.selectedTerminalIndex == DefaultTerminal.INDEX
+                val badTerminal = appPreferences.selectedTerminalIndex == com.f0x1d.logfox.terminals.DefaultTerminal.INDEX
 
                 if (isAtLeastAndroid13 && newValue as Boolean && badTerminal) {
                     showAndroid13WarningDialog()
@@ -126,12 +127,16 @@ class SettingsServiceFragment: BasePreferenceFragment() {
         findPreference<SwitchPreferenceCompat>("pref_show_logs_from_app_launch")?.apply {
             setOnPreferenceChangeListener { _, newValue ->
                 if (!(newValue as Boolean)) {
-                    loggingRepository.restartLogging(updateTerminal = false)
+                    restartLogging()
                 }
 
                 return@setOnPreferenceChangeListener true
             }
         }
+    }
+
+    private fun restartLogging() {
+        requireContext().sendService<LoggingService>(action = LoggingService.ACTION_RESTART_LOGGING)
     }
 
     private fun askAboutNewTerminalRestart() {
@@ -140,7 +145,7 @@ class SettingsServiceFragment: BasePreferenceFragment() {
             .setTitle(R.string.new_terminal_selected)
             .setMessage(R.string.new_terminal_selected_question)
             .setPositiveButton(R.string.yes) { _, _ ->
-                loggingRepository.restartLogging()
+                restartLogging()
             }
             .setNeutralButton(R.string.no, null)
             .show()

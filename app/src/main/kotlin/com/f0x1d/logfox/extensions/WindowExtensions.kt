@@ -3,8 +3,10 @@ package com.f0x1d.logfox.extensions
 import android.graphics.Color
 import android.view.Window
 import androidx.core.view.WindowCompat
-import com.f0x1d.logfox.R
-import com.f0x1d.logfox.extensions.context.resolveBoolean
+import com.f0x1d.logfox.arch.contrastedNavBarAvailable
+import com.f0x1d.logfox.arch.gesturesAvailable
+import com.f0x1d.logfox.context.resolveBoolean
+import com.f0x1d.logfox.ui.R
 
 fun Window.applyNavigationBarTheme(isContrastEnforced: Boolean = true) {
     WindowCompat.getInsetsController(this, decorView).apply {
@@ -16,7 +18,7 @@ fun Window.applyNavigationBarTheme(isContrastEnforced: Boolean = true) {
 
     navigationBarColor = when {
         !contrastedNavBarAvailable -> context.getColor(
-            com.f0x1d.logfox.ui.R.color.transparent_black
+            R.color.transparent_black
         )
 
         !gesturesAvailable && isContrastEnforced -> context.getColor(

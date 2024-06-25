@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="selected_count">
+        <item quantity="one">%d выбран</item>
+        <item quantity="few">%d выбраны</item>
+        <item quantity="many">%d выбраны</item>
+    </plurals>
+    <plurals name="filters_count">
+        <item quantity="one">%d фильтр</item>
+        <item quantity="few">%d фильтра</item>
+        <item quantity="many">%d фильтров</item>
+    </plurals>
+</resources>

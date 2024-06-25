@@ -3,13 +3,12 @@ package com.f0x1d.logfox.viewmodel.recordings
 import android.app.Application
 import androidx.lifecycle.asLiveData
 import com.f0x1d.logfox.R
+import com.f0x1d.logfox.arch.viewmodel.BaseViewModel
 import com.f0x1d.logfox.database.AppDatabase
 import com.f0x1d.logfox.database.entity.LogRecording
 import com.f0x1d.logfox.extensions.sendEvent
-import com.f0x1d.logfox.repository.logging.LoggingRepository
 import com.f0x1d.logfox.repository.logging.RecordingState
 import com.f0x1d.logfox.repository.logging.RecordingsRepository
-import com.f0x1d.logfox.viewmodel.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -20,7 +19,6 @@ import javax.inject.Inject
 @HiltViewModel
 class RecordingsViewModel @Inject constructor(
     private val database: AppDatabase,
-    private val loggingRepository: LoggingRepository,
     private val recordingsRepository: RecordingsRepository,
     application: Application
 ): BaseViewModel(application) {
@@ -33,9 +31,6 @@ class RecordingsViewModel @Inject constructor(
     val cachedRecordings = database.logRecordingDao().getAllAsFlow(cached = true).toLiveData()
 
     val recordingStateData = recordingsRepository.recordingStateFlow.asLiveData()
-
-    val loggingServiceOrRecordingActive get() = loggingRepository.serviceRunningFlow.value
-            || recordingsRepository.recordingStateFlow.value != RecordingState.IDLE
 
     fun toggleStartStop() {
         if (recordingsRepository.recordingStateFlow.value == RecordingState.IDLE)

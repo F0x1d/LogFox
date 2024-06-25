@@ -1,14 +1,15 @@
 package com.f0x1d.logfox.ui.viewholder
 
 import com.bumptech.glide.Glide
+import com.f0x1d.logfox.arch.ui.viewholder.BaseViewHolder
 import com.f0x1d.logfox.databinding.ItemAppBinding
-import com.f0x1d.logfox.extensions.views.widgets.loadIcon
-import com.f0x1d.logfox.ui.viewholder.base.BaseViewHolder
+import com.f0x1d.logfox.model.InstalledApp
+import com.f0x1d.logfox.ui.view.loadIcon
 
 class AppViewHolder(
     binding: ItemAppBinding,
     click: (com.f0x1d.logfox.model.InstalledApp) -> Unit
-): BaseViewHolder<com.f0x1d.logfox.model.InstalledApp, ItemAppBinding>(binding) {
+): BaseViewHolder<InstalledApp, ItemAppBinding>(binding) {
 
     init {
         binding.apply {

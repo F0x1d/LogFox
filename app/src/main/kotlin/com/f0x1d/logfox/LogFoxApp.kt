@@ -3,8 +3,12 @@ package com.f0x1d.logfox
 import android.app.Application
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationManagerCompat
-import com.f0x1d.logfox.extensions.context.applyTheme
-import com.f0x1d.logfox.extensions.context.notificationManagerCompat
+import com.f0x1d.logfox.context.CRASHES_CHANNEL_ID
+import com.f0x1d.logfox.context.LOGGING_STATUS_CHANNEL_ID
+import com.f0x1d.logfox.context.RECORDING_STATUS_CHANNEL_ID
+import com.f0x1d.logfox.context.applyTheme
+import com.f0x1d.logfox.context.notificationManagerCompat
+import com.f0x1d.logfox.extensions.context.appPreferences
 import com.google.android.material.color.DynamicColors
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.MainScope
@@ -13,10 +17,6 @@ import kotlinx.coroutines.MainScope
 class LogFoxApp: Application() {
 
     companion object {
-        const val LOGGING_STATUS_CHANNEL_ID = "logging"
-        const val CRASHES_CHANNEL_ID = "crashes"
-        const val RECORDING_STATUS_CHANNEL_ID = "recording"
-
         val applicationScope = MainScope()
         lateinit var instance: LogFoxApp
     }
@@ -25,7 +25,7 @@ class LogFoxApp: Application() {
         super.onCreate()
         instance = this
 
-        applyTheme()
+        applyTheme(appPreferences.nightTheme)
 
         DynamicColors.applyToActivitiesIfAvailable(this)
 

@@ -6,12 +6,12 @@ import android.os.Bundle
 import android.provider.Settings
 import androidx.preference.Preference
 import com.f0x1d.logfox.BuildConfig
-import com.f0x1d.logfox.LogFoxApp
 import com.f0x1d.logfox.R
-import com.f0x1d.logfox.extensions.context.hasNotificationsPermission
-import com.f0x1d.logfox.extensions.notificationsChannelsAvailable
+import com.f0x1d.logfox.arch.notificationsChannelsAvailable
+import com.f0x1d.logfox.context.LOGGING_STATUS_CHANNEL_ID
+import com.f0x1d.logfox.context.hasNotificationsPermission
+import com.f0x1d.logfox.preferences.shared.AppPreferences
 import com.f0x1d.logfox.ui.fragment.settings.base.BasePreferenceFragment
-import com.f0x1d.logfox.utils.preferences.AppPreferences
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -46,7 +46,7 @@ class SettingsNotificationsFragment: BasePreferenceFragment() {
                     Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS).apply {
                         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         putExtra(Settings.EXTRA_APP_PACKAGE, BuildConfig.APPLICATION_ID)
-                        putExtra(Settings.EXTRA_CHANNEL_ID, LogFoxApp.LOGGING_STATUS_CHANNEL_ID)
+                        putExtra(Settings.EXTRA_CHANNEL_ID, LOGGING_STATUS_CHANNEL_ID)
                     }
                 )
                 return@setOnPreferenceClickListener true

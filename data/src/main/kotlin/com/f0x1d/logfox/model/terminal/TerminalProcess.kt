@@ -7,5 +7,5 @@ data class TerminalProcess(
     val output: InputStream,
     val error: InputStream,
     val input: OutputStream,
-    val destroy: () -> Unit
+    val destroy: () -> Unit,
 )

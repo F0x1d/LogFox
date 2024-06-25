@@ -3,10 +3,10 @@ package com.f0x1d.logfox.viewmodel.filters
 import android.app.Application
 import android.net.Uri
 import androidx.lifecycle.asLiveData
+import com.f0x1d.logfox.arch.viewmodel.BaseViewModel
 import com.f0x1d.logfox.database.AppDatabase
 import com.f0x1d.logfox.database.entity.UserFilter
 import com.f0x1d.logfox.repository.logging.FiltersRepository
-import com.f0x1d.logfox.viewmodel.base.BaseViewModel
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.lifecycle.HiltViewModel

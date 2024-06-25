@@ -3,8 +3,8 @@ package com.f0x1d.logfox.ui.fragment.base
 import android.os.Bundle
 import android.view.View
 import androidx.viewbinding.ViewBinding
+import com.f0x1d.logfox.arch.viewmodel.BaseViewModel
 import com.f0x1d.logfox.model.event.Event
-import com.f0x1d.logfox.viewmodel.base.BaseViewModel
 
 abstract class BaseViewModelFragment<T : BaseViewModel, D : ViewBinding>: BaseFragment<D>() {
 

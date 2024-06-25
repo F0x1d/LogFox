@@ -5,16 +5,16 @@ minSdk = "24"
 targetSdk = "34"
 
 kotlin = "1.9.23"
-androidGradlePlugin = "8.4.0"
+androidGradlePlugin = "8.5.0"
 ksp = "1.9.23-1.0.20"
 hilt = "2.49"
-androidx-appcompat = "1.6.1"
+androidx-appcompat = "1.7.0"
 androidx-constraintlayout = "2.1.4"
-androidx-core = "1.13.0"
+androidx-core = "1.13.1"
 androidx-collection = "1.4.0"
-androidx-fragment = "1.6.2"
+androidx-fragment = "1.8.0"
 androidx-hilt-navigation-fragment = "1.2.0"
-androidx-lifecycle = "2.7.0"
+androidx-lifecycle = "2.8.2"
 androidx-navigation = "2.7.7"
 androidx-preference = "1.2.1"
 androidx-recyclerview = "1.3.2"
@@ -22,13 +22,13 @@ androidx-room = "2.6.1"
 insetter = "0.6.1"
 shizuku = "13.1.4"
 viewpump = "2.1.1"
-material = "1.11.0"
+material = "1.12.0"
 glide = "4.16.0"
 gson = "2.10.1"
 timber = "5.0.1"
 junit = "4.13.2"
-androidx-test-ext-junit = "1.1.5"
-androidx-test-espresso = "3.5.1"
+androidx-test-ext-junit = "1.2.0"
+androidx-test-espresso = "3.6.0"
 
 [libraries]
 
@@ -41,7 +41,7 @@ androidx-hilt-navigation-fragment = { module = "androidx.hilt:hilt-navigation-fr
 androidx-lifecycle-process = { module = "androidx.lifecycle:lifecycle-process", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "androidx-lifecycle" }
-androidx-lifecycle-livedata = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "androidx-lifecycle" }
+androidx-lifecycle-service = { module = "androidx.lifecycle:lifecycle-service", version.ref = "androidx-lifecycle" }
 androidx-navigation-runtime = { module = "androidx.navigation:navigation-runtime-ktx", version.ref = "androidx-navigation" }
 androidx-navigation-fragment = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "androidx-navigation" }
 androidx-navigation-ui = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "androidx-navigation" }
@@ -98,7 +98,7 @@ androidx = [
     "androidx-lifecycle-process",
     "androidx-lifecycle-runtime",
     "androidx-lifecycle-viewmodel",
-    "androidx-lifecycle-livedata",
+    "androidx-lifecycle-service",
     "androidx-preference",
     "androidx-recyclerview",
 ]

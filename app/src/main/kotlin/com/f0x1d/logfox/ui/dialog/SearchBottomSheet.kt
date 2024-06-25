@@ -10,11 +10,10 @@ import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.databinding.SheetSearchBinding
 import com.f0x1d.logfox.ui.dialog.base.BaseBottomSheet
-import com.f0x1d.logfox.viewmodel.LogsViewModel
 
 class SearchBottomSheet: BaseBottomSheet<SheetSearchBinding>() {
 
-    private val logsViewModel by hiltNavGraphViewModels<LogsViewModel>(R.id.logsFragment)
+    private val logsViewModel by hiltNavGraphViewModels<com.f0x1d.feature.logging.viewmodel.LogsViewModel>(R.id.logsFragment)
 
     override fun inflateBinding(
         inflater: LayoutInflater,

@@ -3,12 +3,13 @@ package com.f0x1d.logfox.viewmodel.filters
 import android.app.Application
 import android.net.Uri
 import androidx.lifecycle.asLiveData
+import com.f0x1d.logfox.arch.viewmodel.BaseViewModel
 import com.f0x1d.logfox.database.AppDatabase
 import com.f0x1d.logfox.database.entity.UserFilter
 import com.f0x1d.logfox.di.viewmodel.FilterId
 import com.f0x1d.logfox.extensions.sendEvent
+import com.f0x1d.logfox.model.logline.LogLevel
 import com.f0x1d.logfox.repository.logging.FiltersRepository
-import com.f0x1d.logfox.viewmodel.base.BaseViewModel
 import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -98,7 +99,7 @@ class EditFilterViewModel @Inject constructor(
 
     private fun List<Boolean>.toEnabledLogLevels() = mapIndexed { index, value ->
         if (value)
-            enumValues<com.f0x1d.logfox.model.LogLevel>()[index]
+            enumValues<LogLevel>()[index]
         else
             null
     }.filterNotNull()

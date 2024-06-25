@@ -4,14 +4,15 @@ import android.os.Bundle
 import android.view.View
 import androidx.preference.PreferenceFragmentCompat
 import com.f0x1d.logfox.R
-import com.f0x1d.logfox.extensions.context.isHorizontalOrientation
-import com.f0x1d.logfox.extensions.views.widgets.setupBackButtonForNavController
+import com.f0x1d.logfox.context.isHorizontalOrientation
+import com.f0x1d.logfox.strings.Strings
+import com.f0x1d.logfox.ui.view.setupBackButtonForNavController
 import com.google.android.material.appbar.MaterialToolbar
 import dev.chrisbanes.insetter.applyInsetter
 
 abstract class BasePreferenceFragment: PreferenceFragmentCompat() {
 
-    open val title = com.f0x1d.logfox.ui.R.string.settings
+    open val title = Strings.settings
     open val showBackArrow = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -17,7 +17,6 @@ internal fun Project.configureKotlinAndroid(
 
     buildFeatures {
         buildConfig = true
-        aidl = true
         viewBinding = true
     }
 

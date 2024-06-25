@@ -16,11 +16,11 @@ import androidx.transition.ChangeBounds
 import androidx.transition.TransitionManager
 import com.f0x1d.logfox.NavGraphDirections
 import com.f0x1d.logfox.R
+import com.f0x1d.logfox.arch.contrastedNavBarAvailable
+import com.f0x1d.logfox.arch.gesturesAvailable
+import com.f0x1d.logfox.context.hasNotificationsPermission
+import com.f0x1d.logfox.context.isHorizontalOrientation
 import com.f0x1d.logfox.databinding.ActivityMainBinding
-import com.f0x1d.logfox.extensions.context.hasNotificationsPermission
-import com.f0x1d.logfox.extensions.context.isHorizontalOrientation
-import com.f0x1d.logfox.extensions.contrastedNavBarAvailable
-import com.f0x1d.logfox.extensions.gesturesAvailable
 import com.f0x1d.logfox.model.event.Event
 import com.f0x1d.logfox.ui.activity.base.BaseViewModelActivity
 import com.f0x1d.logfox.viewmodel.MainViewModel
@@ -141,7 +141,7 @@ class MainActivity: BaseViewModelActivity<MainViewModel, ActivityMainBinding>(),
             window.navigationBarColor = when {
                 barShown && !isHorizontalOrientation -> Color.TRANSPARENT
 
-                else -> getColor(R.color.navbar_transparent_background)
+                else -> getColor(com.f0x1d.logfox.ui.R.color.navbar_transparent_background)
             }
         } else if (gesturesAvailable) {
             window.isNavigationBarContrastEnforced = !(barShown && !isHorizontalOrientation)

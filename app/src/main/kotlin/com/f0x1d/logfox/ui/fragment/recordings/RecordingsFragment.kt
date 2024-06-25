@@ -10,20 +10,18 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.adapter.RecordingsAdapter
+import com.f0x1d.logfox.context.isHorizontalOrientation
 import com.f0x1d.logfox.database.entity.LogRecording
 import com.f0x1d.logfox.databinding.FragmentRecordingsBinding
-import com.f0x1d.logfox.extensions.context.isHorizontalOrientation
-import com.f0x1d.logfox.extensions.context.startLoggingService
 import com.f0x1d.logfox.extensions.dpToPx
-import com.f0x1d.logfox.extensions.showAreYouSureClearDialog
-import com.f0x1d.logfox.extensions.showAreYouSureDeleteDialog
-import com.f0x1d.logfox.extensions.views.widgets.setClickListenerOn
-import com.f0x1d.logfox.extensions.views.widgets.setDescription
 import com.f0x1d.logfox.model.event.Event
 import com.f0x1d.logfox.repository.logging.RecordingState
+import com.f0x1d.logfox.ui.dialog.showAreYouSureClearDialog
+import com.f0x1d.logfox.ui.dialog.showAreYouSureDeleteDialog
 import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
+import com.f0x1d.logfox.ui.view.setClickListenerOn
+import com.f0x1d.logfox.ui.view.setDescription
 import com.f0x1d.logfox.viewmodel.recordings.RecordingsViewModel
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import dev.chrisbanes.insetter.applyInsetter
@@ -84,16 +82,6 @@ class RecordingsFragment: BaseViewModelFragment<RecordingsViewModel, FragmentRec
         }
 
         recordFab.setOnClickListener {
-            if (!viewModel.loggingServiceOrRecordingActive) {
-                MaterialAlertDialogBuilder(requireContext())
-                    .setIcon(R.drawable.ic_dialog_warning)
-                    .setTitle(R.string.warning)
-                    .setMessage(R.string.recording_with_no_service_warning)
-                    .setPositiveButton(android.R.string.ok, null)
-                    .setNeutralButton(R.string.start_service) { _, _ -> requireContext().startLoggingService() }
-                    .show()
-            }
-
             viewModel.toggleStartStop()
         }
         pauseFab.setOnClickListener { viewModel.togglePauseResume() }

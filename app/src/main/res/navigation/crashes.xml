@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/crashesFragment"
-        android:name="com.f0x1d.logfox.ui.fragment.crashes.list.CrashesFragment"
+        android:name="com.f0x1d.logfox.feature.crashes.ui.fragment.list.CrashesFragment"
         android:label="CrashesFragment" />
     <action
         android:id="@+id/action_crashesFragment_to_crashDetailsFragment"
@@ -25,7 +25,7 @@
 
     <fragment
         android:id="@+id/appCrashesFragment"
-        android:name="com.f0x1d.logfox.ui.fragment.crashes.list.AppCrashesFragment"
+        android:name="com.f0x1d.logfox.feature.crashes.ui.fragment.list.AppCrashesFragment"
         android:label="AppCrashesFragment" >
         <argument
             android:name="package_name"
@@ -45,7 +45,7 @@
 
     <fragment
         android:id="@+id/crashDetailsFragment"
-        android:name="com.f0x1d.logfox.ui.fragment.crashes.CrashDetailsFragment"
+        android:name="com.f0x1d.logfox.feature.crashes.ui.fragment.CrashDetailsFragment"
         android:label="CrashDetailsFragment">
         <argument
             android:name="crash_id"

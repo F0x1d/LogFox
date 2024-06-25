@@ -4,13 +4,10 @@ import android.Manifest
 import android.app.Application
 import com.f0x1d.logfox.BuildConfig
 import com.f0x1d.logfox.R
-import com.f0x1d.logfox.extensions.context.hasPermissionToReadLogs
+import com.f0x1d.logfox.arch.viewmodel.BaseViewModel
+import com.f0x1d.logfox.context.hasPermissionToReadLogs
 import com.f0x1d.logfox.extensions.sendEvent
-import com.f0x1d.logfox.utils.preferences.AppPreferences
-import com.f0x1d.logfox.utils.terminal.DefaultTerminal
-import com.f0x1d.logfox.utils.terminal.RootTerminal
-import com.f0x1d.logfox.utils.terminal.ShizukuTerminal
-import com.f0x1d.logfox.viewmodel.base.BaseViewModel
+import com.f0x1d.logfox.preferences.shared.AppPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import javax.inject.Inject
@@ -18,8 +15,8 @@ import javax.inject.Inject
 @HiltViewModel
 class SetupViewModel @Inject constructor(
     private val appPreferences: AppPreferences,
-    private val rootTerminal: RootTerminal,
-    private val shizukuTerminal: ShizukuTerminal,
+    private val rootTerminal: com.f0x1d.logfox.terminals.RootTerminal,
+    private val shizukuTerminal: com.f0x1d.logfox.terminals.ShizukuTerminal,
     application: Application
 ): BaseViewModel(application) {
 
@@ -33,7 +30,7 @@ class SetupViewModel @Inject constructor(
 
     fun root() = launchCatching(Dispatchers.IO) {
         if (rootTerminal.isSupported()) {
-            appPreferences.selectTerminal(RootTerminal.INDEX)
+            appPreferences.selectTerminal(com.f0x1d.logfox.terminals.RootTerminal.INDEX)
 
             rootTerminal.executeNow(*command)
             checkPermission()
@@ -42,16 +39,16 @@ class SetupViewModel @Inject constructor(
     }
 
     fun adb() = launchCatching(Dispatchers.IO) {
-        if (ctx.hasPermissionToReadLogs())
+        if (ctx.hasPermissionToReadLogs)
             gotPermission()
         else {
             sendEvent(EVENT_TYPE_SHOW_ADB_DIALOG)
-            appPreferences.selectTerminal(DefaultTerminal.INDEX)
+            appPreferences.selectTerminal(com.f0x1d.logfox.terminals.DefaultTerminal.INDEX)
         }
     }
 
     fun shizuku() = launchCatching(Dispatchers.IO) {
-        appPreferences.selectTerminal(ShizukuTerminal.INDEX)
+        appPreferences.selectTerminal(com.f0x1d.logfox.terminals.ShizukuTerminal.INDEX)
 
         if (shizukuTerminal.isSupported() && shizukuTerminal.executeNow(*command).isSuccessful)
             gotPermission()
@@ -59,7 +56,7 @@ class SetupViewModel @Inject constructor(
             snackbar(R.string.shizuku_error)
     }
 
-    fun checkPermission() = if (ctx.hasPermissionToReadLogs())
+    fun checkPermission() = if (ctx.hasPermissionToReadLogs)
         gotPermission()
     else
         snackbar(R.string.no_permission_detected)

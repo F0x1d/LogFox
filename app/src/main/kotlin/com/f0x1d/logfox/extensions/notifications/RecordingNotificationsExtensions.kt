@@ -3,14 +3,14 @@ package com.f0x1d.logfox.extensions.notifications
 import android.annotation.SuppressLint
 import android.content.Context
 import androidx.core.app.NotificationCompat
-import com.f0x1d.logfox.LogFoxApp
 import com.f0x1d.logfox.R
-import com.f0x1d.logfox.extensions.PAUSE_RECORDING_INTENT_ID
-import com.f0x1d.logfox.extensions.RESUME_RECORDING_INTENT_ID
-import com.f0x1d.logfox.extensions.STOP_RECORDING_INTENT_ID
-import com.f0x1d.logfox.extensions.context.doIfNotificationsAllowed
-import com.f0x1d.logfox.extensions.context.notificationManagerCompat
-import com.f0x1d.logfox.extensions.makeBroadcastPendingIntent
+import com.f0x1d.logfox.context.RECORDING_STATUS_CHANNEL_ID
+import com.f0x1d.logfox.context.doIfNotificationsAllowed
+import com.f0x1d.logfox.context.notificationManagerCompat
+import com.f0x1d.logfox.intents.PAUSE_RECORDING_INTENT_ID
+import com.f0x1d.logfox.intents.RESUME_RECORDING_INTENT_ID
+import com.f0x1d.logfox.intents.STOP_RECORDING_INTENT_ID
+import com.f0x1d.logfox.intents.makeBroadcastPendingIntent
 import com.f0x1d.logfox.receiver.RecordingReceiver
 
 private const val RECORDING_NOTIFICATIONS_TAG = "recording"
@@ -21,10 +21,9 @@ fun Context.sendRecordingNotification() = doIfNotificationsAllowed {
     notify(
         RECORDING_NOTIFICATIONS_TAG,
         RECORDING_NOTIFICATIONS_ID,
-        NotificationCompat.Builder(this@sendRecordingNotification, LogFoxApp.RECORDING_STATUS_CHANNEL_ID)
+        NotificationCompat.Builder(this@sendRecordingNotification, RECORDING_STATUS_CHANNEL_ID)
             .setContentTitle(getString(R.string.recording))
             .setSmallIcon(R.drawable.ic_recording_notification)
-            .applyPrimaryColorIfNeeded(this@sendRecordingNotification)
             .addAction(
                 R.drawable.ic_pause,
                 getString(R.string.pause),
@@ -50,10 +49,9 @@ fun Context.sendRecordingPausedNotification() = doIfNotificationsAllowed {
     notify(
         RECORDING_NOTIFICATIONS_TAG,
         RECORDING_NOTIFICATIONS_ID,
-        NotificationCompat.Builder(this@sendRecordingPausedNotification, LogFoxApp.RECORDING_STATUS_CHANNEL_ID)
+        NotificationCompat.Builder(this@sendRecordingPausedNotification, RECORDING_STATUS_CHANNEL_ID)
             .setContentTitle(getString(R.string.recording_paused))
             .setSmallIcon(R.drawable.ic_recording_play_notification)
-            .applyPrimaryColorIfNeeded(this@sendRecordingPausedNotification)
             .addAction(
                 R.drawable.ic_play,
                 getString(R.string.resume),

@@ -11,7 +11,7 @@ import androidx.room.Query
 import androidx.room.TypeConverter
 import androidx.room.Update
 import com.f0x1d.logfox.arch.annotations.GsonSkip
-import com.f0x1d.logfox.model.LogLevel
+import com.f0x1d.logfox.model.logline.LogLevel
 import kotlinx.coroutines.flow.Flow
 
 @Keep

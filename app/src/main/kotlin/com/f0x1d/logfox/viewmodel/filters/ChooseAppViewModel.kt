@@ -2,7 +2,7 @@ package com.f0x1d.logfox.viewmodel.filters
 
 import android.app.Application
 import androidx.lifecycle.asLiveData
-import com.f0x1d.logfox.viewmodel.base.BaseViewModel
+import com.f0x1d.logfox.arch.viewmodel.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

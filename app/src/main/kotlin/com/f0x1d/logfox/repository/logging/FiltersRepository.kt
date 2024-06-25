@@ -2,6 +2,7 @@ package com.f0x1d.logfox.repository.logging
 
 import com.f0x1d.logfox.database.AppDatabase
 import com.f0x1d.logfox.database.entity.UserFilter
+import com.f0x1d.logfox.model.logline.LogLevel
 import com.f0x1d.logfox.repository.logging.base.LoggingHelperItemsRepository
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -13,7 +14,7 @@ class FiltersRepository @Inject constructor(
 
     fun create(
         including: Boolean,
-        enabledLogLevels: List<com.f0x1d.logfox.model.LogLevel>,
+        enabledLogLevels: List<LogLevel>,
         uid: String?,
         pid: String?,
         tid: String?,
@@ -46,7 +47,7 @@ class FiltersRepository @Inject constructor(
     fun update(
         userFilter: UserFilter,
         including: Boolean,
-        enabledLogLevels: List<com.f0x1d.logfox.model.LogLevel>,
+        enabledLogLevels: List<LogLevel>,
         uid: String?,
         pid: String?,
         tid: String?,

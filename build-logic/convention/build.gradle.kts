@@ -31,13 +31,13 @@ gradlePlugin {
             id = "logfox.android.library"
             implementationClass = "AndroidLibraryConventionPlugin"
         }
-        register("androidFeature") {
-            id = "logfox.android.feature"
-            implementationClass = "AndroidFeatureConventionPlugin"
-        }
         register("androidHilt") {
             id = "logfox.android.hilt"
             implementationClass = "AndroidHiltConventionPlugin"
+        }
+        register("androidFeature") {
+            id = "logfox.android.feature"
+            implementationClass = "AndroidFeatureConventionPlugin"
         }
         register("androidNavigationSafeArgs") {
             id = "logfox.android.navigation.safeargs"

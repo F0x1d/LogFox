@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/logsFragment"
-        android:name="com.f0x1d.logfox.ui.fragment.logs.LogsFragment"
+        android:name="com.f0x1d.feature.logging.ui.fragment.LogsFragment"
         android:label="LogsFragment" >
         <argument
             android:name="file_uri"
