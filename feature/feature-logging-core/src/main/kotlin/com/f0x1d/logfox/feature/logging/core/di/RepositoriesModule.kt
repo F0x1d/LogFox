@@ -1,7 +1,7 @@
 package com.f0x1d.logfox.feature.logging.core.di
 
-import com.f0x1d.logfox.feature.logging.core.repository.logging.LoggingRepository
-import com.f0x1d.logfox.feature.logging.core.repository.logging.LoggingRepositoryImpl
+import com.f0x1d.logfox.feature.logging.core.repository.LoggingRepository
+import com.f0x1d.logfox.feature.logging.core.repository.LoggingRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

@@ -25,6 +25,7 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
             implementation(project(":core:core-datetime"))
             implementation(project(":core:core-intents"))
             implementation(project(":core:core-io"))
+            implementation(project(":core:core-navigation"))
             implementation(project(":core:core-preferences"))
             implementation(project(":core:core-terminals"))
             implementation(project(":core:core-ui"))

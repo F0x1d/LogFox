@@ -12,8 +12,9 @@ import com.f0x1d.logfox.context.LOGGING_STATUS_CHANNEL_ID
 import com.f0x1d.logfox.context.activityManager
 import com.f0x1d.logfox.context.toast
 import com.f0x1d.logfox.feature.crashes.core.repository.CrashesRepository
-import com.f0x1d.logfox.feature.logging.core.repository.logging.LoggingRepository
+import com.f0x1d.logfox.feature.logging.core.repository.LoggingRepository
 import com.f0x1d.logfox.feature.logging.core.store.LoggingStore
+import com.f0x1d.logfox.feature.recordings.core.controller.RecordingController
 import com.f0x1d.logfox.intents.EXIT_APP_INTENT_ID
 import com.f0x1d.logfox.intents.makeServicePendingIntent
 import com.f0x1d.logfox.model.exception.TerminalNotSupportedException
@@ -56,6 +57,9 @@ class LoggingService : LifecycleService(), SharedPreferences.OnSharedPreferenceC
     lateinit var crashesRepository: CrashesRepository
 
     @Inject
+    lateinit var recordingController: RecordingController
+
+    @Inject
     lateinit var loggingStore: LoggingStore
 
     @Inject
@@ -96,6 +100,8 @@ class LoggingService : LifecycleService(), SharedPreferences.OnSharedPreferenceC
     private fun startLogging() {
         if (loggingJob?.isActive == true) return
 
+        // TODO: observe filters
+
         var loggingTerminal = terminals[appPreferences.selectedTerminalIndex]
         loggingInterval = appPreferences.logsUpdateInterval
         logsDisplayLimit = appPreferences.logsDisplayLimit
@@ -107,7 +113,6 @@ class LoggingService : LifecycleService(), SharedPreferences.OnSharedPreferenceC
                 while (true) {
                     loggingRepository.startLogging(
                         terminal = loggingTerminal,
-                        showLogsFromAppLaunch = appPreferences.showLogsFromAppLaunch,
                         startingId = idsCounter,
                     ).catch { throwable ->
                         if (throwable is TerminalNotSupportedException) {
@@ -135,10 +140,12 @@ class LoggingService : LifecycleService(), SharedPreferences.OnSharedPreferenceC
                         crashesRepository.readers.forEach {
                             it(logLine)
                         }
+                        recordingController.reader(logLine)
                     }
                 }
             } finally {
                 withContext(NonCancellable) {
+                    recordingController.loggingStopped()
                     clearLogs().join()
                     appPreferences.unregisterListener(this@LoggingService)
 
@@ -148,12 +155,12 @@ class LoggingService : LifecycleService(), SharedPreferences.OnSharedPreferenceC
         }
     }
 
-    fun restartLogging() = lifecycleScope.launch {
+    private fun restartLogging() = lifecycleScope.launch {
         loggingJob?.cancelAndJoin()
         startLogging()
     }
 
-    fun clearLogs() = lifecycleScope.launch {
+    private fun clearLogs() = lifecycleScope.launch {
         logsMutex.withLock {
             logs.clear()
         }

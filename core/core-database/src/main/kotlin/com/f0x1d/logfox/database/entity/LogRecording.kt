@@ -8,6 +8,7 @@ import androidx.room.Insert
 import androidx.room.PrimaryKey
 import androidx.room.Query
 import androidx.room.Update
+import com.f0x1d.logfox.model.Identifiable
 import kotlinx.coroutines.flow.Flow
 import java.io.File
 
@@ -17,8 +18,8 @@ data class LogRecording(
     @ColumnInfo(name = "date_and_time") val dateAndTime: Long,
     @ColumnInfo(name = "file") val file: File,
     @ColumnInfo(name = "is_cache_recording", defaultValue = "0") val isCacheRecording: Boolean = false,
-    @PrimaryKey(autoGenerate = true) val id: Long = 0,
-) {
+    @PrimaryKey(autoGenerate = true) override val id: Long = 0,
+): Identifiable {
     fun deleteFile() = file.delete()
 }
 
@@ -31,11 +32,14 @@ interface LogRecordingDao {
     @Query("SELECT * FROM LogRecording WHERE is_cache_recording = :cached ORDER BY date_and_time DESC")
     fun getAllAsFlow(cached: Boolean = false): Flow<List<LogRecording>>
 
-    @Query("SELECT COUNT(*) FROM LogRecording WHERE is_cache_recording = :cached")
-    suspend fun count(cached: Boolean = false): Int
+    @Query("SELECT * FROM LogRecording WHERE id = :id")
+    suspend fun getById(id: Long): LogRecording?
 
     @Query("SELECT * FROM LogRecording WHERE id = :id")
-    fun get(id: Long): Flow<LogRecording?>
+    fun getByIdAsFlow(id: Long): Flow<LogRecording?>
+
+    @Query("SELECT COUNT(*) FROM LogRecording WHERE is_cache_recording = :cached")
+    suspend fun count(cached: Boolean = false): Int
 
     @Insert
     suspend fun insert(logRecording: LogRecording): Long
@@ -46,6 +50,6 @@ interface LogRecordingDao {
     @Delete
     suspend fun delete(logRecording: LogRecording)
 
-    @Query("DELETE FROM LogRecording WHERE is_cache_recording = :deleteCacheRecordings")
-    suspend fun deleteAll(deleteCacheRecordings: Boolean = false)
+    @Query("DELETE FROM LogRecording")
+    suspend fun deleteAll()
 }

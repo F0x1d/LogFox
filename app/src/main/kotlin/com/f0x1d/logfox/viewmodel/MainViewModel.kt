@@ -6,7 +6,6 @@ import com.f0x1d.feature.logging.service.LoggingService
 import com.f0x1d.logfox.arch.startForegroundServiceAvailable
 import com.f0x1d.logfox.arch.viewmodel.BaseViewModel
 import com.f0x1d.logfox.context.hasPermissionToReadLogs
-import com.f0x1d.logfox.extensions.sendEvent
 import com.f0x1d.logfox.preferences.shared.AppPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject

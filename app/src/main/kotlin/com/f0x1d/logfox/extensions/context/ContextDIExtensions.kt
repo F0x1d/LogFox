@@ -1,7 +1,7 @@
 package com.f0x1d.logfox.extensions.context
 
 import android.content.Context
-import com.f0x1d.logfox.feature.logging.core.repository.logging.LoggingRepository
+import com.f0x1d.logfox.feature.logging.core.repository.LoggingRepository
 import com.f0x1d.logfox.preferences.shared.AppPreferences
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn

@@ -15,6 +15,7 @@ import com.f0x1d.logfox.feature.crashes.R
 import com.f0x1d.logfox.feature.crashes.adapter.CrashesAdapter
 import com.f0x1d.logfox.feature.crashes.databinding.FragmentCrashesBinding
 import com.f0x1d.logfox.feature.crashes.viewmodel.list.CrashesViewModel
+import com.f0x1d.logfox.navigation.Directions
 import com.f0x1d.logfox.ui.density.dpToPx
 import com.f0x1d.logfox.ui.dialog.showAreYouSureClearDialog
 import com.f0x1d.logfox.ui.dialog.showAreYouSureDeleteDialog
@@ -31,11 +32,11 @@ class CrashesFragment: BaseViewModelFragment<CrashesViewModel, FragmentCrashesBi
     private val adapter = CrashesAdapter(
         click = {
             val (direction, args) = when (it.count) {
-                1 -> R.id.action_crashesFragment_to_crashDetailsFragment to bundleOf(
+                1 -> Directions.action_crashesFragment_to_crashDetailsFragment to bundleOf(
                     "crash_id" to it.lastCrash.id,
                 )
 
-                else -> R.id.action_crashesFragment_to_appCrashesFragment to bundleOf(
+                else -> Directions.action_crashesFragment_to_appCrashesFragment to bundleOf(
                     "package_name" to it.lastCrash.packageName,
                     "app_name" to it.lastCrash.appName,
                 )

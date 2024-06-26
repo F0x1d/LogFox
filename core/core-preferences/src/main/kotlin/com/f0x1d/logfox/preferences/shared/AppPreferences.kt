@@ -18,8 +18,6 @@ class AppPreferences @Inject constructor(
         const val DATE_FORMAT_DEFAULT = "dd.MM"
         const val TIME_FORMAT_DEFAULT = "HH:mm:ss.SSS"
 
-        const val SESSION_CACHE_LINES_COUNT_DEFAULT = 1000
-
         const val LOGS_UPDATE_INTERVAL_DEFAULT = 300L
         const val LOGS_TEXT_SIZE_DEFAULT = 14
         const val LOGS_DISPLAY_LIMIT_DEFAULT = 10000
@@ -75,15 +73,6 @@ class AppPreferences @Inject constructor(
         get() = get("pref_show_log_content", true)
         set(value) { put("pref_show_log_content", value) }
 
-    var useSessionCache
-        get() = get("pref_use_session_cache", false)
-        set(value) { put("pref_use_session_cache", value) }
-    var saveSessionCacheToRecordings
-        get() = get("pref_session_cache_save_recordings", false)
-        set(value) { put("pref_session_cache_save_recordings", value) }
-    var sessionCacheLinesCount
-        get() = get("pref_session_cache_lines_count", SESSION_CACHE_LINES_COUNT_DEFAULT)
-        set(value) { put("pref_session_cache_lines_count", value) }
     var selectedTerminalIndex
         get() = get("pref_selected_terminal_index", 0)
         set(value) { put("pref_selected_terminal_index", value) }

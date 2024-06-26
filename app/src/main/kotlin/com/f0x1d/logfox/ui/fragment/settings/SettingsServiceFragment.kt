@@ -1,24 +1,20 @@
 package com.f0x1d.logfox.ui.fragment.settings
 
 import android.os.Bundle
-import android.text.InputType
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
 import androidx.preference.SwitchPreferenceCompat
 import com.f0x1d.feature.logging.service.LoggingService
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.arch.isAtLeastAndroid13
-import com.f0x1d.logfox.context.catchingNotNumber
 import com.f0x1d.logfox.context.sendService
 import com.f0x1d.logfox.context.toast
 import com.f0x1d.logfox.extensions.fillWithStrings
-import com.f0x1d.logfox.feature.logging.core.repository.logging.LoggingRepository
+import com.f0x1d.logfox.feature.logging.core.repository.LoggingRepository
 import com.f0x1d.logfox.preferences.shared.AppPreferences
 import com.f0x1d.logfox.terminals.base.Terminal
 import com.f0x1d.logfox.ui.fragment.settings.base.BasePreferenceFragment
-import com.f0x1d.logfox.ui.view.observeAndUpdateSummary
 import com.f0x1d.logfox.ui.view.observeAndUpdateSummaryForList
-import com.f0x1d.logfox.ui.view.setupAsEditTextPreference
 import com.f0x1d.logfox.ui.view.setupAsListPreference
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
@@ -57,7 +53,8 @@ class SettingsServiceFragment: BasePreferenceFragment() {
         }
 
         findPreference<Preference>("pref_session_cache_lines_count")?.apply {
-            setupAsEditTextPreference(
+            // TODO: return it
+            /*setupAsEditTextPreference(
                 setupViews = {
                     it.textLayout.setHint(R.string.lines)
                     it.text.inputType = InputType.TYPE_CLASS_NUMBER
@@ -76,7 +73,7 @@ class SettingsServiceFragment: BasePreferenceFragment() {
             observeAndUpdateSummary(
                 observer = this@SettingsServiceFragment,
                 defValue = AppPreferences.SESSION_CACHE_LINES_COUNT_DEFAULT
-            )
+            )*/
         }
 
         findPreference<Preference>("pref_selected_terminal_index")?.apply {

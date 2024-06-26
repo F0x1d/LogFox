@@ -12,5 +12,7 @@ android {
 dependencies {
     implementation(project(":data"))
 
+    implementation(project(":core:core-arch"))
+
     implementation(libs.bundles.shizuku)
 }

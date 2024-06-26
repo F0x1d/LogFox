@@ -14,6 +14,8 @@ import com.f0x1d.logfox.context.receiver.CopyReceiver
 import com.f0x1d.logfox.database.entity.AppCrash
 import com.f0x1d.logfox.intents.COPY_CRASH_INTENT_ID
 import com.f0x1d.logfox.intents.makeBroadcastPendingIntent
+import com.f0x1d.logfox.navigation.Directions
+import com.f0x1d.logfox.navigation.NavGraphs
 import com.f0x1d.logfox.strings.Strings
 import com.f0x1d.logfox.ui.Icons
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -48,15 +50,8 @@ internal class CrashesNotificationsControllerImpl @Inject constructor(
                     .apply {
                         if (appCrash.id != 0L) setContentIntent(
                             NavDeepLinkBuilder(context)
-                                .setGraph(
-                                    // It does not compile if included in <item name="..." type="navigation" />
-                                    context.resources.getIdentifier(
-                                        "nav_graph",
-                                        "navigation",
-                                        context.packageName,
-                                    )
-                                )
-                                .setDestination(com.f0x1d.logfox.feature.crashes.core.R.id.crashDetailsFragment)
+                                .setGraph(NavGraphs.nav_graph)
+                                .setDestination(Directions.crashDetailsFragment)
                                 .setArguments(bundleOf("crash_id" to appCrash.id))
                                 .createPendingIntent()
                         )

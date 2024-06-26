@@ -8,7 +8,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 // I completely don't like it
-// I really want to get rid of Singletons in projects
+// I really want to get rid of Singletons in project
 interface LoggingStore {
     val logs: Flow<List<LogLine>>
 

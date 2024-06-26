@@ -6,7 +6,9 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.f0x1d.logfox.model.event.Event
+import com.f0x1d.logfox.model.event.NoDataEvent
 import com.f0x1d.logfox.model.event.SnackbarEvent
+import com.f0x1d.logfox.strings.Strings
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -37,8 +39,7 @@ abstract class BaseViewModel(application: Application): AndroidViewModel(applica
 
             e.printStackTrace()
 
-            // TODO
-            // snackbar(ctx.getString(R.string.error, e.localizedMessage))
+            snackbar(ctx.getString(Strings.error, e.localizedMessage))
         }
     }
 
@@ -49,4 +50,10 @@ abstract class BaseViewModel(application: Application): AndroidViewModel(applica
             snackbarEventsData.value = SnackbarEvent(text)
         }
     }
+
+    protected fun sendEvent(type: String, data: Any) = eventsData.sendEvent(type, data)
+    protected fun sendEvent(type: String) = eventsData.sendEvent(type)
+
+    private fun MutableLiveData<Event>.sendEvent(type: String, data: Any) = postValue(Event(type, data))
+    private fun MutableLiveData<Event>.sendEvent(type: String) = postValue(NoDataEvent(type))
 }

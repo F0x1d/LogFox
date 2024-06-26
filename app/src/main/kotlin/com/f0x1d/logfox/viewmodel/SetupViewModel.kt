@@ -6,7 +6,6 @@ import com.f0x1d.logfox.BuildConfig
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.arch.viewmodel.BaseViewModel
 import com.f0x1d.logfox.context.hasPermissionToReadLogs
-import com.f0x1d.logfox.extensions.sendEvent
 import com.f0x1d.logfox.preferences.shared.AppPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers

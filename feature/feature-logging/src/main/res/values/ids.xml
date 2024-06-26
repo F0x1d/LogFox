@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <item name="logsFragment" type="id" />
-    <item name="action_logsFragment_to_logsExtendedCopyFragment" type="id" />
-    <item name="action_logsFragment_to_searchBottomSheet" type="id" />
-    <item name="action_logsFragment_to_filtersFragment" type="id" />
-    <item name="action_global_recordingsFragment" type="id" />
-</resources>

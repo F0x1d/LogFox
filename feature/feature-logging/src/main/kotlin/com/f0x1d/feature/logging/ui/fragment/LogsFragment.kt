@@ -22,6 +22,7 @@ import com.f0x1d.logfox.context.sendService
 import com.f0x1d.logfox.feature.logging.R
 import com.f0x1d.logfox.feature.logging.databinding.FragmentLogsBinding
 import com.f0x1d.logfox.model.logline.LogLine
+import com.f0x1d.logfox.navigation.Directions
 import com.f0x1d.logfox.strings.Plurals
 import com.f0x1d.logfox.strings.Strings
 import com.f0x1d.logfox.ui.Icons
@@ -36,7 +37,7 @@ import kotlinx.coroutines.flow.update
 @AndroidEntryPoint
 class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(), SharedPreferences.OnSharedPreferenceChangeListener {
 
-    override val viewModel by hiltNavGraphViewModels<LogsViewModel>(R.id.logsFragment)
+    override val viewModel by hiltNavGraphViewModels<LogsViewModel>(Directions.logsFragment)
 
     private val adapter by lazy {
         LogsAdapter(
@@ -93,10 +94,10 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
                 viewModel.selectAll()
             }
             setClickListenerOn(R.id.search_item) {
-                findNavController().navigate(R.id.action_logsFragment_to_searchBottomSheet)
+                findNavController().navigate(Directions.action_logsFragment_to_searchBottomSheet)
             }
             setClickListenerOn(R.id.filters_item) {
-                findNavController().navigate(R.id.action_logsFragment_to_filtersFragment)
+                findNavController().navigate(Directions.action_logsFragment_to_filtersFragment)
             }
             setClickListenerOn(R.id.copy_selected_item) {
                 requireContext().copyText(viewModel.selectedItemsContent)
@@ -104,7 +105,7 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
             }
             setClickListenerOn(R.id.extended_copy_selected_item) {
                 findNavController().navigate(
-                    resId = R.id.action_logsFragment_to_logsExtendedCopyFragment,
+                    resId = Directions.action_logsFragment_to_logsExtendedCopyFragment,
                     args = bundleOf(
                         "content" to viewModel.selectedItemsContent,
                     ),
@@ -113,7 +114,7 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
             setClickListenerOn(R.id.selected_to_recording_item) {
                 // TODO
                 //viewModel.selectedToRecording()
-                findNavController().navigate(R.id.action_global_recordingsFragment)
+                findNavController().navigate(Directions.action_global_recordingsFragment)
             }
             setClickListenerOn(R.id.export_selected_item) {
                 exportLogsLauncher.launch(

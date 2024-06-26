@@ -9,10 +9,10 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.f0x1d.logfox.arch.ui.fragment.BaseViewModelFragment
-import com.f0x1d.logfox.feature.crashes.R
 import com.f0x1d.logfox.feature.crashes.adapter.CrashesAdapter
 import com.f0x1d.logfox.feature.crashes.databinding.FragmentAppCrashesBinding
 import com.f0x1d.logfox.feature.crashes.viewmodel.list.AppCrashesViewModel
+import com.f0x1d.logfox.navigation.Directions
 import com.f0x1d.logfox.ui.density.dpToPx
 import com.f0x1d.logfox.ui.dialog.showAreYouSureDeleteDialog
 import com.f0x1d.logfox.ui.view.setupBackButtonForNavController
@@ -28,7 +28,7 @@ class AppCrashesFragment: BaseViewModelFragment<AppCrashesViewModel, FragmentApp
     private val adapter = CrashesAdapter(
         click = {
             findNavController().navigate(
-                resId = R.id.action_appCrashesFragment_to_crashDetailsFragment,
+                resId = Directions.action_appCrashesFragment_to_crashDetailsFragment,
                 args = bundleOf(
                     "crash_id" to it.lastCrash.id,
                 ),

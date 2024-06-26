@@ -7,7 +7,6 @@ import com.f0x1d.logfox.arch.viewmodel.BaseViewModel
 import com.f0x1d.logfox.database.AppDatabase
 import com.f0x1d.logfox.database.entity.UserFilter
 import com.f0x1d.logfox.di.viewmodel.FilterId
-import com.f0x1d.logfox.extensions.sendEvent
 import com.f0x1d.logfox.model.logline.LogLevel
 import com.f0x1d.logfox.repository.logging.FiltersRepository
 import com.google.gson.Gson

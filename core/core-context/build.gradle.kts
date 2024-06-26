@@ -1,12 +1,9 @@
 plugins {
     id("logfox.android.library")
+    id("logfox.android.hilt")
 }
 
-android {
-    namespace = "com.f0x1d.logfox.context"
-
-    buildFeatures.buildConfig = true
-}
+android.namespace = "com.f0x1d.logfox.context"
 
 dependencies {
     implementation(project(":strings"))

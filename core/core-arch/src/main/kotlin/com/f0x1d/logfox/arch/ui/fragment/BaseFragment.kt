@@ -10,6 +10,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.viewbinding.ViewBinding
+import com.f0x1d.logfox.arch.ui.snackbar
 import dev.chrisbanes.insetter.applyInsetter
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector

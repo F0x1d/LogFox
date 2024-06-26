@@ -8,14 +8,17 @@ import android.os.IBinder
 import android.os.ParcelFileDescriptor.AutoCloseInputStream
 import android.os.ParcelFileDescriptor.AutoCloseOutputStream
 import com.f0x1d.logfox.IUserService
+import com.f0x1d.logfox.arch.di.IODispatcher
 import com.f0x1d.logfox.model.terminal.TerminalProcess
 import com.f0x1d.logfox.model.terminal.TerminalResult
 import com.f0x1d.logfox.service.UserService
 import com.f0x1d.logfox.terminals.base.Terminal
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import rikka.shizuku.Shizuku
+import java.io.InputStream
+import java.io.OutputStream
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.coroutines.Continuation
@@ -24,7 +27,8 @@ import kotlin.coroutines.suspendCoroutine
 
 @Singleton
 class ShizukuTerminal @Inject constructor(
-    @ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context,
+    @IODispatcher private val ioDispatcher: CoroutineDispatcher,
 ): Terminal {
 
     companion object {
@@ -35,6 +39,8 @@ class ShizukuTerminal @Inject constructor(
     override val title = R.string.shizuku
 
     private var userService: IUserService? = null
+    private var serviceConnection: ServiceConnection? = null
+
     private val userServiceArgs = Shizuku.UserServiceArgs(ComponentName(context, UserService::class.java))
         .daemon(false)
         .processNameSuffix("service")
@@ -81,49 +87,67 @@ class ShizukuTerminal @Inject constructor(
         }
 
         var resumed = false
-        val userServiceConnection = object : ServiceConnection {
+        serviceConnection = object : ServiceConnection {
             override fun onServiceConnected(componentName: ComponentName?, binder: IBinder?) {
-                if (resumed) return
-
                 if (binder == null || !binder.pingBinder()) {
-                    resume(false)
-                    resumed = true
+                    if (resumed.not()) {
+                        resume(false)
+                        resumed = true
+                    }
                     return
                 }
 
                 userService = IUserService.Stub.asInterface(binder)
 
-                resume(true)
-                resumed = true
+                if (resumed.not()) {
+                    resume(true)
+                    resumed = true
+                }
             }
 
             override fun onServiceDisconnected(componentName: ComponentName?) {
                 userService = null
             }
+        }.also {
+            Shizuku.bindUserService(userServiceArgs, it)
         }
-
-        Shizuku.bindUserService(userServiceArgs, userServiceConnection)
     }
 
-    override suspend fun executeNow(vararg command: String) = withContext(Dispatchers.IO) {
+    override suspend fun executeNow(vararg command: String) = withContext(ioDispatcher) {
         userService?.executeNow(command.joinToString(" ")) ?: TerminalResult(3)
     }
 
     override fun execute(vararg command: String) = userService?.run {
-        val processId = execute(command.joinToString(" "))
+        runCatching {
+            val processId = execute(command.joinToString(" "))
 
-        TerminalProcess(
-            AutoCloseInputStream(processOutput(processId) ?: return@run null),
-            AutoCloseInputStream(processError(processId) ?: return@run null),
-            AutoCloseOutputStream(processInput(processId) ?: return@run null)
-        ) {
-            destroyProcess(processId)
+            TerminalProcess(
+                output = AutoCloseInputStream(processOutput(processId) ?: return@run null),
+                error = AutoCloseInputStream(processError(processId) ?: return@run null),
+                input = AutoCloseOutputStream(processInput(processId) ?: return@run null),
+            ) {
+                destroyProcess(processId)
+            }
+        }.getOrElse {
+            val emptyInputStream = object : InputStream() {
+                override fun read(): Int = 0
+            }
+            val stubOutputStream = object : OutputStream() {
+                override fun write(data: Int) = Unit
+            }
+
+            TerminalProcess(
+                output = emptyInputStream,
+                error = emptyInputStream,
+                input = stubOutputStream,
+                destroy = { },
+            )
         }
     }
 
     override suspend fun exit() {
         runCatching {
-            Shizuku.unbindUserService(userServiceArgs, null, true)
+            Shizuku.unbindUserService(userServiceArgs, serviceConnection, true)
         }
     }
 }
