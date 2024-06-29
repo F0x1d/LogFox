@@ -18,7 +18,8 @@
             android:layout_height="wrap_content"
             app:menu="@menu/choose_app_menu"
             app:navigationIcon="@drawable/ic_arrow_back"
-            app:navigationIconTint="?colorOnSurface"
+            app:navigationIconTint="?colorControlNormal"
+            app:layout_scrollFlags="enterAlways"
             android:hint="@string/apps" />
     </com.google.android.material.appbar.AppBarLayout>
 

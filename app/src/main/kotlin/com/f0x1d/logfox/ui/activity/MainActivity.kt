@@ -8,13 +8,13 @@ import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.constraintlayout.widget.ConstraintSet
+import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import androidx.transition.ChangeBounds
 import androidx.transition.TransitionManager
-import com.f0x1d.logfox.NavGraphDirections
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.arch.contrastedNavBarAvailable
 import com.f0x1d.logfox.arch.gesturesAvailable
@@ -23,6 +23,9 @@ import com.f0x1d.logfox.context.hasNotificationsPermission
 import com.f0x1d.logfox.context.isHorizontalOrientation
 import com.f0x1d.logfox.databinding.ActivityMainBinding
 import com.f0x1d.logfox.model.event.Event
+import com.f0x1d.logfox.navigation.Directions
+import com.f0x1d.logfox.strings.Strings
+import com.f0x1d.logfox.ui.Icons
 import com.f0x1d.logfox.viewmodel.MainViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,8 +38,7 @@ class MainActivity: BaseViewModelActivity<MainViewModel, ActivityMainBinding>(),
 
     private val requestNotificationPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission(),
-        {}
-    )
+    ) { }
 
     private var barShown = true
     private val barScene by lazy {
@@ -60,7 +62,7 @@ class MainActivity: BaseViewModelActivity<MainViewModel, ActivityMainBinding>(),
     @SuppressLint("InlinedApi")
     override fun ActivityMainBinding.onCreate(savedInstanceState: Bundle?) {
         val navHostFragment = supportFragmentManager.findFragmentById(
-            R.id.nav_host_fragment_content_main
+            R.id.nav_host_fragment_content_main,
         ) as NavHostFragment
         navController = navHostFragment.navController
 
@@ -73,14 +75,14 @@ class MainActivity: BaseViewModelActivity<MainViewModel, ActivityMainBinding>(),
 
         if (!hasNotificationsPermission() && !viewModel.askedNotificationsPermission) {
             MaterialAlertDialogBuilder(this@MainActivity)
-                .setIcon(R.drawable.ic_dialog_notification_important)
-                .setTitle(R.string.no_notification_permission)
-                .setMessage(R.string.notification_permission_is_required)
+                .setIcon(Icons.ic_dialog_notification_important)
+                .setTitle(Strings.no_notification_permission)
+                .setMessage(Strings.notification_permission_is_required)
                 .setCancelable(false)
                 .setPositiveButton(android.R.string.ok) { _, _ ->
                     requestNotificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
                 }
-                .setNegativeButton(R.string.close, null)
+                .setNegativeButton(Strings.close, null)
                 .show()
 
             viewModel.askedNotificationsPermission = true
@@ -108,31 +110,32 @@ class MainActivity: BaseViewModelActivity<MainViewModel, ActivityMainBinding>(),
 
         when (intent.action) {
             Intent.ACTION_VIEW -> navController.navigate(
-                NavGraphDirections.actionGlobalLogsFragment(fileUri = intent.data)
+                resId = Directions.action_global_logsFragment,
+                args = bundleOf("file_uri" to intent.data),
             )
         }
     }
 
     override fun onEvent(event: Event) {
         when (event.type) {
-            MainViewModel.EVENT_TYPE_SETUP -> navController.navigate(NavGraphDirections.actionGlobalSetupFragment())
+            MainViewModel.EVENT_TYPE_SETUP -> navController.navigate(Directions.action_global_setupFragment)
         }
     }
 
     override fun onDestinationChanged(controller: NavController, destination: NavDestination, arguments: Bundle?) {
         val barShown = when (destination.id) {
-            R.id.setupFragment -> false
-            R.id.logsExtendedCopyFragment -> false
-            R.id.filtersFragment -> false
-            R.id.editFilterFragment -> false
-            R.id.chooseAppFragment -> false
-            R.id.appCrashesFragment -> false
-            R.id.crashDetailsFragment -> false
+            Directions.setupFragment -> false
+            Directions.logsExtendedCopyFragment -> false
+            Directions.filtersFragment -> false
+            Directions.editFilterFragment -> false
+            Directions.chooseAppFragment -> false
+            Directions.appCrashesFragment -> false
+            Directions.crashDetailsFragment -> false
 
             else -> true
         }
         val animateBarTransition = when (destination.id) {
-            R.id.setupFragment -> false
+            Directions.setupFragment -> false
 
             else -> true
         }

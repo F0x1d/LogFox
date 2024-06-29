@@ -13,12 +13,9 @@
         app:liftOnScroll="true">
 
         <com.google.android.material.appbar.MaterialToolbar
+            style="@style/Widget.LogFox.Toolbar"
             android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?actionBarSize"
-            app:title="@string/settings"
-            app:titleCentered="true"
-            app:navigationIconTint="?colorOnSurface"/>
+            app:title="@string/settings" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <FrameLayout

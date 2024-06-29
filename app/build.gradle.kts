@@ -48,6 +48,7 @@ dependencies {
     implementation(project(":feature:feature-recordings"))
     implementation(project(":feature:feature-recordings-core"))
     implementation(project(":feature:feature-settings"))
+    implementation(project(":feature:feature-setup"))
 
     implementation(libs.insetter)
     implementation(libs.bundles.shizuku)

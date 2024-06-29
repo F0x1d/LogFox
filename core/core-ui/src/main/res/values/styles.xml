@@ -44,7 +44,7 @@
 
         <item name="titleCentered">true</item>
         <item name="subtitleCentered">true</item>
-        <item name="navigationIconTint">?colorOnSurface</item>
+        <item name="navigationIconTint">?colorControlNormal</item>
 
         <item name="titleTextAppearance">@style/TextAppearance.LogFox.Toolbar.Title</item>
         <item name="subtitleTextAppearance">@style/TextAppearance.LogFox.Toolbar.Subtitle</item>

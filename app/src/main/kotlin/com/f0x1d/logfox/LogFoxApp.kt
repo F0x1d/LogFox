@@ -7,6 +7,7 @@ import com.f0x1d.logfox.context.CRASHES_CHANNEL_ID
 import com.f0x1d.logfox.context.LOGGING_STATUS_CHANNEL_ID
 import com.f0x1d.logfox.context.RECORDING_STATUS_CHANNEL_ID
 import com.f0x1d.logfox.context.notificationManagerCompat
+import com.f0x1d.logfox.strings.Strings
 import com.google.android.material.color.DynamicColors
 import dagger.hilt.android.HiltAndroidApp
 
@@ -22,7 +23,7 @@ class LogFoxApp: Application() {
                 LOGGING_STATUS_CHANNEL_ID,
                 NotificationManagerCompat.IMPORTANCE_MIN
             )
-                .setName(getString(R.string.logging_status))
+                .setName(getString(Strings.logging_status))
                 .setShowBadge(false)
                 .build()
 
@@ -30,7 +31,7 @@ class LogFoxApp: Application() {
                 CRASHES_CHANNEL_ID,
                 NotificationManagerCompat.IMPORTANCE_HIGH
             )
-                .setName(getString(R.string.crashes))
+                .setName(getString(Strings.crashes))
                 .setLightsEnabled(true)
                 .setVibrationEnabled(true)
                 .build()
@@ -39,7 +40,7 @@ class LogFoxApp: Application() {
                 RECORDING_STATUS_CHANNEL_ID,
                 NotificationManagerCompat.IMPORTANCE_DEFAULT
             )
-                .setName(getString(R.string.recording_status))
+                .setName(getString(Strings.recording_status))
                 .setLightsEnabled(false)
                 .setVibrationEnabled(false)
                 .setSound(null, null)

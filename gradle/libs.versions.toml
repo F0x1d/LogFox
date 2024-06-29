@@ -76,7 +76,6 @@ android-application = { id = "com.android.application", version.ref = "androidGr
 android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp"}
 hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
-androidx-navigation-safeargs = { id = "androidx.navigation.safeargs.kotlin", version.ref = "androidx-navigation" }
 
 [bundles]
 

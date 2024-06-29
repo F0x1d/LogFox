@@ -15,7 +15,6 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
             apply(pluginId("ksp"))
 
             apply("logfox.android.hilt")
-            apply("logfox.android.navigation.safeargs")
         }
 
         extensions.configure<ApplicationExtension> {

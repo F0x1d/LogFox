@@ -15,7 +15,7 @@
         android:layout_margin="10dp"
         android:src="@drawable/ic_recording"
         android:padding="15dp"
-        app:tint="?colorOnSurface"
+        app:tint="?colorControlNormal"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/title"

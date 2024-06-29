@@ -93,7 +93,7 @@ class FiltersFragment: BaseViewModelFragment<FiltersViewModel, FragmentFiltersBi
         filtersRecycler.adapter = adapter
 
         addFab.setOnClickListener {
-            findNavController().navigate(Directions.action_editFilterFragment_to_chooseAppFragment)
+            findNavController().navigate(Directions.action_filtersFragment_to_editFilterFragment)
         }
 
         viewModel.filters.collectWithLifecycle {

@@ -39,9 +39,5 @@ gradlePlugin {
             id = "logfox.android.feature"
             implementationClass = "AndroidFeatureConventionPlugin"
         }
-        register("androidNavigationSafeArgs") {
-            id = "logfox.android.navigation.safeargs"
-            implementationClass = "AndroidNavigationSafeArgsConventionPlugin"
-        }
     }
 }

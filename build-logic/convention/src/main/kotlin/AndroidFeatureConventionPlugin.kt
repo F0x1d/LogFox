@@ -12,7 +12,6 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
         pluginManager.apply {
             apply("logfox.android.library")
             apply("logfox.android.hilt")
-            apply("logfox.android.navigation.safeargs")
         }
 
         dependencies {
