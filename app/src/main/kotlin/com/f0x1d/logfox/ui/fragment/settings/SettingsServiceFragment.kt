@@ -39,43 +39,6 @@ class SettingsServiceFragment: BasePreferenceFragment() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.settings_service)
 
-        findPreference<SwitchPreferenceCompat>("pref_use_session_cache")?.apply {
-            setOnPreferenceChangeListener { _, _ ->
-                requireContext().sendService<LoggingService>(action = LoggingService.ACTION_RESTART_LOGGING)
-                return@setOnPreferenceChangeListener true
-            }
-        }
-        findPreference<SwitchPreferenceCompat>("pref_session_cache_save_recordings")?.apply {
-            setOnPreferenceChangeListener { _, _ ->
-                restartLogging()
-                return@setOnPreferenceChangeListener true
-            }
-        }
-
-        findPreference<Preference>("pref_session_cache_lines_count")?.apply {
-            // TODO: return it
-            /*setupAsEditTextPreference(
-                setupViews = {
-                    it.textLayout.setHint(R.string.lines)
-                    it.text.inputType = InputType.TYPE_CLASS_NUMBER
-                },
-                setupDialog = { setIcon(R.drawable.ic_dialog_list) },
-                get = { appPreferences.sessionCacheLinesCount.toString() },
-                save = {
-                    requireContext().catchingNotNumber {
-                        val count = it?.toInt() ?: AppPreferences.SESSION_CACHE_LINES_COUNT_DEFAULT
-
-                        appPreferences.sessionCacheLinesCount = count.coerceAtLeast(0)
-                    }
-                }
-            )
-
-            observeAndUpdateSummary(
-                observer = this@SettingsServiceFragment,
-                defValue = AppPreferences.SESSION_CACHE_LINES_COUNT_DEFAULT
-            )*/
-        }
-
         findPreference<Preference>("pref_selected_terminal_index")?.apply {
             val filledTerminalSettings = terminals
                 .map { it.title }
@@ -94,6 +57,7 @@ class SettingsServiceFragment: BasePreferenceFragment() {
 
                     lifecycleScope.launch {
                         val selectedTerminal = terminals[it]
+
                         if (selectedTerminal.isSupported()) {
                             appPreferences.selectedTerminalIndex = it
                             askAboutNewTerminalRestart()

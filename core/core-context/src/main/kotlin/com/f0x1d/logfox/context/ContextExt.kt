@@ -17,12 +17,10 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.annotation.AttrRes
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import com.f0x1d.logfox.arch.shouldRequestNotificationsPermission
-import com.f0x1d.logfox.arch.uiModeManagerAvailable
 import com.f0x1d.logfox.strings.Strings
 import java.io.File
 import kotlin.system.exitProcess
@@ -96,18 +94,6 @@ fun Context.doIfNotificationsAllowed(block: NotificationManagerCompat.() -> Unit
     block(notificationManagerCompat)
 else
     Unit
-
-fun Context.applyTheme(
-    nightMode: Int,
-    force: Boolean = false
-) {
-    if (uiModeManagerAvailable) {
-        if (force) uiModeManager.setApplicationNightMode(
-            if (nightMode != 0) nightMode else UiModeManager.MODE_NIGHT_CUSTOM
-        )
-    } else
-        AppCompatDelegate.setDefaultNightMode(if (nightMode != 0) nightMode else AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
-}
 
 fun Context.resolveAttribute(@AttrRes attributeResId: Int) = TypedValue().let {
     when (theme.resolveAttribute(attributeResId, it, true)) {

@@ -33,7 +33,8 @@ class ShizukuTerminal @Inject constructor(
 
     companion object {
         const val INDEX = 2
-        const val SHIZUKU_PERMISSION_REQUEST_ID = 8
+
+        private const val SHIZUKU_PERMISSION_REQUEST_ID = 8
     }
 
     override val title = R.string.shizuku

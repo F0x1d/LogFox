@@ -23,9 +23,6 @@ class AppPreferences @Inject constructor(
         const val LOGS_DISPLAY_LIMIT_DEFAULT = 10000
     }
 
-    var nightTheme
-        get() = get("pref_night_theme", 0)
-        set(value) { put("pref_night_theme", value) }
     var dateFormat
         get() = getNullable("pref_date_format", DATE_FORMAT_DEFAULT)
         set(value) { put("pref_date_format", value) }
@@ -82,9 +79,6 @@ class AppPreferences @Inject constructor(
     var startOnBoot
         get() = get("pref_start_on_boot", true)
         set(value) { put("pref_start_on_boot", value) }
-    var startOnLaunch
-        get() = get("pref_start_on_launch", true)
-        set(value) { put("pref_start_on_launch", value) }
     var showLogsFromAppLaunch
         get() = get("pref_show_logs_from_app_launch", true)
         set(value) { put("pref_show_logs_from_app_launch", value) }

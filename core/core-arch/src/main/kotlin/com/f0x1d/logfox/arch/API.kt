@@ -20,5 +20,4 @@ import androidx.annotation.ChecksSdkIntAtLeast
 
 @get:ChecksSdkIntAtLeast(api = R) val canPickJSON = SDK_INT >= R
 
-@get:ChecksSdkIntAtLeast(api = S) val uiModeManagerAvailable = SDK_INT >= S
-@get:ChecksSdkIntAtLeast(api = S) val mutablePendingIntentAvailable = uiModeManagerAvailable
+@get:ChecksSdkIntAtLeast(api = S) val mutablePendingIntentAvailable = SDK_INT >= S

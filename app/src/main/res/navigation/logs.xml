@@ -34,7 +34,7 @@
 
     <fragment
         android:id="@+id/logsExtendedCopyFragment"
-        android:name="com.f0x1d.logfox.ui.fragment.logs.LogsExtendedCopyFragment"
+        android:name="com.f0x1d.feature.logging.ui.fragment.LogsExtendedCopyFragment"
         android:label="ExtendedCopyFragment" >
         <argument
             android:name="content"
@@ -48,7 +48,7 @@
 
     <fragment
         android:id="@+id/filtersFragment"
-        android:name="com.f0x1d.logfox.ui.fragment.filters.FiltersFragment"
+        android:name="com.f0x1d.logfox.feature.filters.ui.fragment.FiltersFragment"
         android:label="FiltersFragment" />
     <action
         android:id="@+id/action_filtersFragment_to_editFilterFragment"
@@ -60,7 +60,7 @@
 
     <fragment
         android:id="@+id/editFilterFragment"
-        android:name="com.f0x1d.logfox.ui.fragment.filters.EditFilterFragment"
+        android:name="com.f0x1d.logfox.feature.filters.ui.fragment.EditFilterFragment"
         android:label="EditFilterFragment">
         <argument
             android:name="filter_id"
@@ -77,6 +77,6 @@
 
     <fragment
         android:id="@+id/chooseAppFragment"
-        android:name="com.f0x1d.logfox.ui.fragment.filters.ChooseAppFragment"
+        android:name="com.f0x1d.logfox.feature.filters.ui.fragment.ChooseAppFragment"
         android:label="ChooseAppFragment" />
 </navigation>

@@ -1,16 +1,19 @@
 package com.f0x1d.logfox.terminals
 
+import com.f0x1d.logfox.arch.di.IODispatcher
 import com.f0x1d.logfox.model.terminal.TerminalProcess
 import com.f0x1d.logfox.model.terminal.TerminalResult
 import com.f0x1d.logfox.terminals.base.Terminal
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-open class DefaultTerminal @Inject constructor(): Terminal {
+open class DefaultTerminal @Inject constructor(
+    @IODispatcher protected val ioDispatcher: CoroutineDispatcher,
+): Terminal {
 
     companion object {
         const val INDEX = 0
@@ -26,13 +29,13 @@ open class DefaultTerminal @Inject constructor(): Terminal {
         .plus(commands)
         .let(Runtime.getRuntime()::exec)
 
-    override suspend fun executeNow(vararg command: String) = withContext(Dispatchers.IO) {
+    override suspend fun executeNow(vararg command: String) = withContext(ioDispatcher) {
         val process = createProcess(command)
 
-        val output = async(Dispatchers.IO) {
+        val output = async {
             process.inputStream.readBytes().decodeToString()
         }
-        val error = async(Dispatchers.IO) {
+        val error = async {
             process.errorStream.readBytes().decodeToString()
         }
         val exitCode = process.waitFor()

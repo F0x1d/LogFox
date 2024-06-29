@@ -33,6 +33,8 @@ include(":core:core-ui")
 
 include(":feature:feature-crashes")
 include(":feature:feature-crashes-core")
+include(":feature:feature-filters")
+include(":feature:feature-filters-core")
 include(":feature:feature-logging")
 include(":feature:feature-logging-core")
 include(":feature:feature-recordings")

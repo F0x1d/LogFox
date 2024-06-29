@@ -13,7 +13,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val appPreferences: AppPreferences,
-    application: Application
+    application: Application,
 ): BaseViewModel(application) {
 
     companion object {
@@ -29,15 +29,15 @@ class MainViewModel @Inject constructor(
     }
 
     private fun load() {
-        when (ctx.hasPermissionToReadLogs) {
-            true -> Intent(ctx, LoggingService::class.java).let {
+        if (ctx.hasPermissionToReadLogs) {
+            Intent(ctx, LoggingService::class.java).let {
                 if (startForegroundServiceAvailable)
                     ctx.startForegroundService(it)
                 else
                     ctx.startService(it)
             }
-
-            else -> sendEvent(EVENT_TYPE_SETUP)
+        } else {
+            sendEvent(EVENT_TYPE_SETUP)
         }
     }
 }

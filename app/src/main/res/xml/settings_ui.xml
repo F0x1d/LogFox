@@ -2,13 +2,6 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <PreferenceCategory android:title="@string/ui" app:iconSpaceReserved="false">
-        <Preference
-            android:title="@string/night_theme"
-            android:key="pref_night_theme"
-            app:iconSpaceReserved="false" />
-    </PreferenceCategory>
-
     <PreferenceCategory
         android:title="@string/date_time"
         app:iconSpaceReserved="false"

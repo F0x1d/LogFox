@@ -6,27 +6,15 @@ import androidx.core.app.NotificationManagerCompat
 import com.f0x1d.logfox.context.CRASHES_CHANNEL_ID
 import com.f0x1d.logfox.context.LOGGING_STATUS_CHANNEL_ID
 import com.f0x1d.logfox.context.RECORDING_STATUS_CHANNEL_ID
-import com.f0x1d.logfox.context.applyTheme
 import com.f0x1d.logfox.context.notificationManagerCompat
-import com.f0x1d.logfox.extensions.context.appPreferences
 import com.google.android.material.color.DynamicColors
 import dagger.hilt.android.HiltAndroidApp
-import kotlinx.coroutines.MainScope
 
 @HiltAndroidApp
 class LogFoxApp: Application() {
 
-    companion object {
-        val applicationScope = MainScope()
-        lateinit var instance: LogFoxApp
-    }
-
     override fun onCreate() {
         super.onCreate()
-        instance = this
-
-        applyTheme(appPreferences.nightTheme)
-
         DynamicColors.applyToActivitiesIfAvailable(this)
 
         notificationManagerCompat.apply {

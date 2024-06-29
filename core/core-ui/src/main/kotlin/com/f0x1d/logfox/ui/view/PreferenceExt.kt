@@ -5,7 +5,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.lifecycle.LifecycleOwner
 import androidx.preference.Preference
 import com.f0x1d.logfox.context.inputMethodManager
-import com.f0x1d.logfox.preferences.shared.AppPreferences
+import com.f0x1d.logfox.preferences.shared.appPreferences
 import com.f0x1d.logfox.strings.Strings
 import com.f0x1d.logfox.ui.databinding.DialogTextBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -89,8 +89,7 @@ inline fun <reified T> Preference.observeAndUpdateSummary(
     defValue: T,
     crossinline block: (T) -> Unit
 ) {
-    // TODO: FIX IT
-    AppPreferences(context).asLiveData(key, defValue).observe(observer) {
+    context.appPreferences.asLiveData(key, defValue).observe(observer) {
         block(it ?: return@observe)
     }
 }

@@ -18,11 +18,11 @@ import com.f0x1d.logfox.NavGraphDirections
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.arch.contrastedNavBarAvailable
 import com.f0x1d.logfox.arch.gesturesAvailable
+import com.f0x1d.logfox.arch.ui.activity.BaseViewModelActivity
 import com.f0x1d.logfox.context.hasNotificationsPermission
 import com.f0x1d.logfox.context.isHorizontalOrientation
 import com.f0x1d.logfox.databinding.ActivityMainBinding
 import com.f0x1d.logfox.model.event.Event
-import com.f0x1d.logfox.ui.activity.base.BaseViewModelActivity
 import com.f0x1d.logfox.viewmodel.MainViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint

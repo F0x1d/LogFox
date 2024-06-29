@@ -2,47 +2,6 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <Preference
-        android:summary="@string/service_required_desc"
-        android:selectable="false"
-        app:iconSpaceReserved="false" />
-
-    <PreferenceCategory
-        android:title="@string/session_cache"
-        app:iconSpaceReserved="false"
-        app:allowDividerAbove="false">
-
-        <Preference
-            android:summary="@string/session_cache_description"
-            android:selectable="false"
-            app:iconSpaceReserved="false" />
-
-        <SwitchPreferenceCompat
-            android:title="@string/use_session_cache"
-            android:key="pref_use_session_cache"
-            app:singleLineTitle="false"
-            app:widgetLayout="@layout/preference_material_switch"
-            app:iconSpaceReserved="false" />
-
-        <SwitchPreferenceCompat
-            android:title="@string/session_cache_save_recordings"
-            android:key="pref_session_cache_save_recordings"
-            app:singleLineTitle="false"
-            app:widgetLayout="@layout/preference_material_switch"
-            app:iconSpaceReserved="false" />
-
-        <Preference
-            android:title="@string/session_cache_lines_count"
-            android:key="pref_session_cache_lines_count"
-            app:singleLineTitle="false"
-            app:iconSpaceReserved="false" />
-
-        <Preference
-            android:summary="@string/session_cache_size_warning"
-            android:selectable="false"
-            app:iconSpaceReserved="false" />
-    </PreferenceCategory>
-
     <PreferenceCategory
         android:title="@string/terminal"
         app:iconSpaceReserved="false"
@@ -71,13 +30,6 @@
         <SwitchPreferenceCompat
             android:title="@string/start_on_boot"
             android:key="pref_start_on_boot"
-            android:defaultValue="true"
-            app:singleLineTitle="false"
-            app:widgetLayout="@layout/preference_material_switch"
-            app:iconSpaceReserved="false" />
-        <SwitchPreferenceCompat
-            android:title="@string/start_on_launch"
-            android:key="pref_start_on_launch"
             android:defaultValue="true"
             app:singleLineTitle="false"
             app:widgetLayout="@layout/preference_material_switch"

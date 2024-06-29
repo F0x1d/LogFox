@@ -100,8 +100,6 @@ class LoggingService : LifecycleService(), SharedPreferences.OnSharedPreferenceC
     private fun startLogging() {
         if (loggingJob?.isActive == true) return
 
-        // TODO: observe filters
-
         var loggingTerminal = terminals[appPreferences.selectedTerminalIndex]
         loggingInterval = appPreferences.logsUpdateInterval
         logsDisplayLimit = appPreferences.logsDisplayLimit
@@ -129,6 +127,8 @@ class LoggingService : LifecycleService(), SharedPreferences.OnSharedPreferenceC
                         }
                     }.collect { logLine ->
                         logsMutex.withLock {
+
+
                             logs.add(logLine)
 
                             while (logs.size > logsDisplayLimit)

@@ -23,7 +23,7 @@ class UserService(): IUserService.Stub() {
     private var latestId = 0L
     private val currentProcesses = HashMap<Long, Process>()
 
-    // Needed for shizuku
+    // Needed for shizuku v13
     @Suppress("UNUSED_PARAMETER")
     @Keep
     constructor(context: Context): this()
@@ -50,10 +50,10 @@ class UserService(): IUserService.Stub() {
     override fun executeNow(command: String?) = runBlocking(Dispatchers.IO) {
         val process = Runtime.getRuntime().exec(command)
 
-        val output = async(Dispatchers.IO) {
+        val output = async {
             process.inputStream.readBytes().decodeToString()
         }
-        val error = async(Dispatchers.IO) {
+        val error = async {
             process.errorStream.readBytes().decodeToString()
         }
         val exitCode = process.waitFor()
@@ -84,6 +84,7 @@ class UserService(): IUserService.Stub() {
 
     private fun pipeFrom(inputStream: InputStream): ParcelFileDescriptor {
         val pipe = ParcelFileDescriptor.createPipe()
+
         serviceScope?.launch(Dispatchers.IO) {
             AutoCloseOutputStream(pipe[1]).use {
                 try {
@@ -118,9 +119,7 @@ class UserService(): IUserService.Stub() {
         currentProcesses.remove(processId)?.tryDestroy()
     }
 
-    private fun Process.tryDestroy() = try {
+    private fun Process.tryDestroy() = runCatching {
         destroy()
-    } catch (e: Exception) {
-        // can't destroy, maybe already dead?
     }
 }

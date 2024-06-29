@@ -16,6 +16,7 @@ import com.f0x1d.logfox.terminals.base.Terminal
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
@@ -75,7 +76,7 @@ internal class RecordingsRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun createRecordingFrom(lines: List<LogLine>) {
+    override suspend fun createRecordingFrom(lines: List<LogLine>): Unit = withContext(ioDispatcher) {
         val recordingTime = System.currentTimeMillis()
 
         val recordingFile = File(
@@ -103,10 +104,10 @@ internal class RecordingsRepositoryImpl @Inject constructor(
     )
 
     override fun getAllAsFlow(): Flow<List<LogRecording>> =
-        database.logRecordingDao().getAllAsFlow()
+        database.logRecordingDao().getAllAsFlow().flowOn(ioDispatcher)
 
     override fun getByIdAsFlow(id: Long): Flow<LogRecording?> =
-        database.logRecordingDao().getByIdAsFlow(id)
+        database.logRecordingDao().getByIdAsFlow(id).flowOn(ioDispatcher)
 
     override suspend fun getAll(): List<LogRecording> = withContext(ioDispatcher) {
         database.logRecordingDao().getAll()

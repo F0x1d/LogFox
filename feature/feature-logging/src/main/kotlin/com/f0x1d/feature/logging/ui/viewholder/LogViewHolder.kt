@@ -4,6 +4,7 @@ import android.view.Gravity
 import androidx.appcompat.widget.PopupMenu
 import com.f0x1d.feature.logging.adapter.LogsAdapter
 import com.f0x1d.logfox.arch.ui.viewholder.BaseViewHolder
+import com.f0x1d.logfox.datetime.dateTimeFormatter
 import com.f0x1d.logfox.feature.logging.R
 import com.f0x1d.logfox.feature.logging.databinding.ItemLogBinding
 import com.f0x1d.logfox.model.logline.LogLine
@@ -14,8 +15,7 @@ class LogViewHolder(
     private val copyLog: (LogLine) -> Unit
 ): BaseViewHolder<LogLine, ItemLogBinding>(binding) {
 
-    // TODO
-    //private val dateTimeFormatter = binding.root.context.dateTimeFormatter
+    private val dateTimeFormatter = binding.root.context.dateTimeFormatter
 
     private val popupMenu: PopupMenu = PopupMenu(binding.root.context, binding.root, Gravity.END).apply {
         inflate(R.menu.log_menu)
@@ -68,9 +68,8 @@ class LogViewHolder(
 
         logText.text = buildString {
             adapter<LogsAdapter>()?.logsFormat?.apply {
-                // TODO
-                //if (date) append(dateTimeFormatter.formatDate(data.dateAndTime) + " ")
-                //if (time) append(dateTimeFormatter.formatTime(data.dateAndTime) + " ")
+                if (date) append(dateTimeFormatter.formatDate(data.dateAndTime) + " ")
+                if (time) append(dateTimeFormatter.formatTime(data.dateAndTime) + " ")
                 if (uid) append(data.uid + " ")
                 if (pid) append(data.pid + " ")
                 if (tid) append(data.tid + " ")

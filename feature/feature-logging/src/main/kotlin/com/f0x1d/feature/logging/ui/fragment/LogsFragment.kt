@@ -112,8 +112,7 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
                 )
             }
             setClickListenerOn(R.id.selected_to_recording_item) {
-                // TODO
-                //viewModel.selectedToRecording()
+                viewModel.selectedToRecording()
                 findNavController().navigate(Directions.action_global_recordingsFragment)
             }
             setClickListenerOn(R.id.export_selected_item) {

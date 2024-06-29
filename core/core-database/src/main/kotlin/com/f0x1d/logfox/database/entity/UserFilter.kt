@@ -11,6 +11,7 @@ import androidx.room.Query
 import androidx.room.TypeConverter
 import androidx.room.Update
 import com.f0x1d.logfox.arch.annotations.GsonSkip
+import com.f0x1d.logfox.model.Identifiable
 import com.f0x1d.logfox.model.logline.LogLevel
 import kotlinx.coroutines.flow.Flow
 
@@ -26,8 +27,8 @@ data class UserFilter(
     @ColumnInfo(name = "tag") val tag: String? = null,
     @ColumnInfo(name = "content") val content: String? = null,
     @ColumnInfo(name = "enabled") @GsonSkip val enabled: Boolean = true,
-    @PrimaryKey(autoGenerate = true) @GsonSkip val id: Long = 0,
-)
+    @PrimaryKey(autoGenerate = true) @GsonSkip override val id: Long = 0,
+) : Identifiable
 
 @Dao
 interface UserFilterDao {
@@ -39,7 +40,10 @@ interface UserFilterDao {
     suspend fun getAll(): List<UserFilter>
 
     @Query("SELECT * FROM UserFilter WHERE id = :id")
-    fun get(id: Long): Flow<UserFilter?>
+    fun getByIdAsFlow(id: Long): Flow<UserFilter?>
+
+    @Query("SELECT * FROM UserFilter WHERE id = :id")
+    suspend fun getById(id: Long): UserFilter?
 
     @Insert
     suspend fun insert(userFilter: UserFilter)

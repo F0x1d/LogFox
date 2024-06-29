@@ -4,15 +4,19 @@ import android.app.Application
 import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import com.f0x1d.feature.logging.di.FileUri
+import com.f0x1d.logfox.arch.coroutines.flow.updateList
+import com.f0x1d.logfox.arch.di.IODispatcher
 import com.f0x1d.logfox.arch.viewmodel.BaseViewModel
-import com.f0x1d.logfox.database.AppDatabase
 import com.f0x1d.logfox.database.entity.UserFilter
 import com.f0x1d.logfox.datetime.DateTimeFormatter
+import com.f0x1d.logfox.feature.filters.core.repository.FiltersRepository
 import com.f0x1d.logfox.feature.logging.core.model.filterAndSearch
 import com.f0x1d.logfox.feature.logging.core.store.LoggingStore
+import com.f0x1d.logfox.feature.recordings.core.repository.RecordingsRepository
 import com.f0x1d.logfox.model.logline.LogLine
 import com.f0x1d.logfox.preferences.shared.AppPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -24,27 +28,29 @@ import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.scan
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class LogsViewModel @Inject constructor(
     @FileUri val fileUri: Uri?,
-    private val database: AppDatabase,
     private val loggingStore: LoggingStore,
-    //private val recordingsRepository: RecordingsRepository,
+    private val filtersRepository: FiltersRepository,
+    private val recordingsRepository: RecordingsRepository,
     val appPreferences: AppPreferences,
     val dateTimeFormatter: DateTimeFormatter,
-    application: Application
+    @IODispatcher private val ioDispatcher: CoroutineDispatcher,
+    application: Application,
 ): BaseViewModel(application) {
 
     val query = MutableStateFlow<String?>(null)
     val queryAndFilters = query.combine(
-        database.userFilterDao().getAllAsFlow()
+        filtersRepository.getAllAsFlow(),
     ) { query, filters ->
         query to filters.filter {
             it.enabled
         }
-    }.flowOn(Dispatchers.IO)
+    }.flowOn(ioDispatcher)
 
     val paused = MutableStateFlow(false)
 
@@ -60,7 +66,7 @@ class LogsViewModel @Inject constructor(
             context = ctx,
             logsDisplayLimit = appPreferences.logsDisplayLimit,
         ) ?: loggingStore.logs,
-        database.userFilterDao().getAllAsFlow(),
+        filtersRepository.getAllAsFlow(),
         query,
         if (!viewingFile) paused else flowOf(false)
     ) { logs, filters, query, paused ->
@@ -91,27 +97,27 @@ class LogsViewModel @Inject constructor(
 
     val resumeLoggingWithBottomTouch get() = appPreferences.resumeLoggingWithBottomTouch
 
-    // TODO
-    fun selectLine(logLine: LogLine, selected: Boolean) = Unit /*selectedItems.updateList {
+    fun selectLine(logLine: LogLine, selected: Boolean) = selectedItems.updateList {
         if (selected) add(
             logLine
         ) else remove(
             logLine
         )
-    }*/
+    }
 
     fun selectAll() {
-        if (selectedItems.value == logs?.value) selectedItems.update {
+        if (selectedItems.value == logs.value) selectedItems.update {
             emptyList()
         } else selectedItems.update {
-            logs?.value ?: emptyList()
+            logs.value
         }
     }
 
-    // TODO
-    //fun selectedToRecording() = recordingsRepository.createRecordingFrom(selectedItems.value)
+    fun selectedToRecording() = viewModelScope.launch {
+        recordingsRepository.createRecordingFrom(selectedItems.value)
+    }
 
-    fun exportSelectedLogsTo(uri: Uri) = launchCatching(Dispatchers.IO) {
+    fun exportSelectedLogsTo(uri: Uri) = launchCatching(ioDispatcher) {
         ctx.contentResolver.openOutputStream(uri)?.use {
             it.write(
                 selectedItems.value.joinToString("\n") { line ->
