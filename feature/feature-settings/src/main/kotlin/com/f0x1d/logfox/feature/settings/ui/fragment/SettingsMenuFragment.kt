@@ -30,9 +30,15 @@ class SettingsMenuFragment: BasePreferenceFragment() {
             return@setOnPreferenceClickListener true
         }
 
-        val packageManager = requireContext().packageManager
-        val packageInfo = packageManager.getPackageInfo(requireContext().packageName, 0)
+        findPreference<Preference>("pref_settings_app_version")?.apply {
+            val packageManager = requireContext().packageManager
+            val packageInfo = packageManager.getPackageInfo(requireContext().packageName, 0)
 
-        findPreference<Preference>("pref_settings_app_version")?.title = "${packageInfo.versionName} (${packageInfo.versionCode})"
+            title = "${packageInfo.versionName} (${packageInfo.versionCode})"
+        }
+        findPreference<Preference>("pref_settings_links")?.setOnPreferenceClickListener {
+            findNavController().navigate(Directions.action_settingsMenuFragment_to_settingsLinksFragment)
+            return@setOnPreferenceClickListener true
+        }
     }
 }

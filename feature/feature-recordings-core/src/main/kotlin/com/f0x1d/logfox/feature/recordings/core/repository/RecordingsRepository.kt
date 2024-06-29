@@ -57,7 +57,12 @@ internal class RecordingsRepositoryImpl @Inject constructor(
                 loggingRepository.dumpLogs(terminals[appPreferences.selectedTerminalIndex])
                     .collect { line ->
                         // It is on IO!
-                        out.write((line.original + "\n").encodeToByteArray())
+                        val original = appPreferences.originalOf(
+                            logLine = line,
+                            formatDate = dateTimeFormatter::formatDate,
+                            formatTime = dateTimeFormatter::formatTime,
+                        )
+                        out.write((original + "\n").encodeToByteArray())
                     }
             }
         } catch (e: IOException) {
@@ -86,7 +91,11 @@ internal class RecordingsRepositoryImpl @Inject constructor(
 
         recordingFile.writeText(
             lines.joinToString("\n") {
-                it.original
+                appPreferences.originalOf(
+                    logLine = it,
+                    formatDate = dateTimeFormatter::formatDate,
+                    formatTime = dateTimeFormatter::formatTime,
+                )
             },
         )
 

@@ -29,7 +29,7 @@ internal fun Uri?.readFileContentsAsFlow(
                     val logLine = LogLine(id, line, context) ?: LogLine(
                         id = id,
                         content = line,
-                        original = line,
+                        originalContent = line,
                     )
 
                     logLines.add(logLine)

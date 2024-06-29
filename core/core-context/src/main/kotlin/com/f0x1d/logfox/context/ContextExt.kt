@@ -4,19 +4,16 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.ActivityManager
 import android.app.NotificationManager
-import android.app.UiModeManager
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
-import android.os.Build
 import android.util.TypedValue
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.annotation.AttrRes
-import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
@@ -26,8 +23,12 @@ import java.io.File
 import kotlin.system.exitProcess
 
 
-fun Context.copyText(text: String) = (getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager)
-    .setPrimaryClip(ClipData.newPlainText("LogFox", text))
+fun Context.copyText(text: String) = runCatching {
+    (getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager)
+        .setPrimaryClip(ClipData.newPlainText("LogFox", text))
+}.onFailure {
+    toast(Strings.error)
+}
 
 val Context.hasPermissionToReadLogs: Boolean get() = ContextCompat.checkSelfPermission(
     this,
@@ -37,7 +38,6 @@ val Context.hasPermissionToReadLogs: Boolean get() = ContextCompat.checkSelfPerm
 val Context.notificationManagerCompat get() = NotificationManagerCompat.from(this)
 val Context.notificationManager get() = getSystemService<NotificationManager>()!!
 val Context.activityManager get() = getSystemService<ActivityManager>()!!
-@get:RequiresApi(Build.VERSION_CODES.S) val Context.uiModeManager get() = getSystemService<UiModeManager>()!!
 val Context.inputMethodManager get() = getSystemService<InputMethodManager>()!!
 
 fun Context.hardRestartApp() {

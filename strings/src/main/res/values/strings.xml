@@ -149,4 +149,5 @@
     <string name="session_cache_save_recordings">Save cached sessions to recordings</string>
     <string name="session_cache_lines_count">Session cache lines count</string>
     <string name="session_cache_size_warning">Session cache is kept in RAM, so make sure not to overflow it with chosen count</string>
+    <string name="export_logs_in_original_format">Export logs in original format</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.f0x1d.logfox.feature.recordings.core.controller.reader
 
+import com.f0x1d.logfox.datetime.DateTimeFormatter
 import com.f0x1d.logfox.model.logline.LogLine
 import com.f0x1d.logfox.preferences.shared.AppPreferences
 import kotlinx.coroutines.sync.Mutex
@@ -10,8 +11,9 @@ import javax.inject.Singleton
 
 @Singleton
 class RewritingRecordingReader @Inject constructor(
-    private val appPreferences: AppPreferences
-): RecordingWithFiltersReader() {
+    appPreferences: AppPreferences,
+    dateTimeFormatter: DateTimeFormatter,
+): RecordingWithFiltersReader(appPreferences, dateTimeFormatter) {
 
     // recordedLines are cleared, so manual dumpLines call may result in some lines be lost
     // This stateLines are not cleared and are just held at the size of recordedLines
@@ -39,9 +41,10 @@ class RewritingRecordingReader @Inject constructor(
 
     override suspend fun writeToFile(content: String) = fileMutex.withLock {
         val myContent = stateLinesMutex.withLock {
-            stateLines.joinToString(separator = "\n") {
+            /*stateLines.joinToString(separator = "\n") {
                 it.original
-            }
+            }*/
+            " TODO: return it :) "
         }
 
         recordingFile?.writeText(myContent)

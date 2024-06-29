@@ -1,12 +1,17 @@
 package com.f0x1d.logfox.feature.recordings.core.controller.reader.base
 
+import com.f0x1d.logfox.datetime.DateTimeFormatter
 import com.f0x1d.logfox.model.logline.LogLine
+import com.f0x1d.logfox.preferences.shared.AppPreferences
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import java.io.File
 import javax.inject.Inject
 
-open class RecordingReader @Inject constructor(): suspend (LogLine) -> Unit {
+open class RecordingReader @Inject constructor(
+    private val appPreferences: AppPreferences,
+    private val dateTimeFormatter: DateTimeFormatter,
+): suspend (LogLine) -> Unit {
 
     private var recording = false
     var recordingTime = 0L
@@ -42,7 +47,13 @@ open class RecordingReader @Inject constructor(): suspend (LogLine) -> Unit {
             if (recordedLines.isEmpty())
                 return@withLock ""
 
-            val stringLogs = recordedLines.joinToString("\n") { it.original }
+            val stringLogs = recordedLines.joinToString("\n") {
+                appPreferences.originalOf(
+                    logLine = it,
+                    formatDate = dateTimeFormatter::formatDate,
+                    formatTime = dateTimeFormatter::formatTime,
+                )
+            }
             recordedLines.clear()
 
             return@withLock stringLogs

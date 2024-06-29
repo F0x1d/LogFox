@@ -44,7 +44,13 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
             appPreferences = viewModel.appPreferences,
             selectedItem = viewModel::selectLine,
             copyLog = {
-                requireContext().copyText(it.original)
+                requireContext().copyText(
+                    viewModel.appPreferences.originalOf(
+                        logLine = it,
+                        formatDate = viewModel.dateTimeFormatter::formatDate,
+                        formatTime = viewModel.dateTimeFormatter::formatTime,
+                    )
+                )
                 snackbar(Strings.text_copied)
             }
         )

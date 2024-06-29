@@ -45,7 +45,7 @@ fun LogLine(
             level = mapLevel(groupValues[5]),
             tag = groupValues[6].trim(),
             content = groupValues[7],
-            original = groupValues[0]
+            originalContent = groupValues[0],
         )
     }
 }.getOrNull()

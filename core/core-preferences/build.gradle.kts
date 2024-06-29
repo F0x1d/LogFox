@@ -6,6 +6,8 @@ plugins {
 android.namespace = "com.f0x1d.logfox.preferences"
 
 dependencies {
+    implementation(project(":data"))
+
     implementation(project(":core:core-database"))
 
     implementation(libs.bundles.androidx)

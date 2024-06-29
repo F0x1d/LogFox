@@ -4,14 +4,17 @@ import android.content.Context
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import com.f0x1d.logfox.database.entity.CrashType
+import com.f0x1d.logfox.model.logline.LogLine
+import com.f0x1d.logfox.model.preferences.ShowLogValues
 import com.f0x1d.logfox.preferences.shared.base.BasePreferences
 import dagger.hilt.android.qualifiers.ApplicationContext
+import java.util.Date
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class AppPreferences @Inject constructor(
-    @ApplicationContext context: Context
+    @ApplicationContext private val context: Context,
 ): BasePreferences(context) {
 
     companion object {
@@ -44,6 +47,9 @@ class AppPreferences @Inject constructor(
     var resumeLoggingWithBottomTouch
         get() = get("pref_resume_logs_with_touch", true)
         set(value) { put("pref_resume_logs_with_touch", value) }
+    var exportLogsInOriginalFormat
+        get() = get("pref_export_logs_in_original_format", true)
+        set(value) { put("pref_export_logs_in_original_format", value) }
 
     var showLogDate
         get() = get("pref_show_log_date", false)
@@ -98,7 +104,7 @@ class AppPreferences @Inject constructor(
         showLogTid,
         showLogPackage,
         showLogTag,
-        showLogContent
+        showLogContent,
     )
 
     fun collectingFor(crashType: CrashType) = get(
@@ -114,27 +120,19 @@ class AppPreferences @Inject constructor(
         putInt("pref_selected_terminal_index", index)
     }
 
-    override fun providePreferences(context: Context) = PreferenceManager.getDefaultSharedPreferences(context)
-}
+    fun originalOf(
+        logLine: LogLine,
+        formatDate: (Long) -> String = { Date(it).toLocaleString() },
+        formatTime: (Long) -> String = { Date(it).toLocaleString() },
+    ): String = if (exportLogsInOriginalFormat) {
+        logLine.originalContent
+    } else {
+        logLine.formatOriginal(
+            values = showLogValues,
+            formatDate = formatDate,
+            formatTime = formatTime,
+        )
+    }
 
-data class ShowLogValues(
-    val date: Boolean,
-    val time: Boolean,
-    val uid: Boolean,
-    val pid: Boolean,
-    val tid: Boolean,
-    val packageName: Boolean,
-    val tag: Boolean,
-    val content: Boolean
-) {
-    val asArray = booleanArrayOf(
-        date,
-        time,
-        uid,
-        pid,
-        tid,
-        packageName,
-        tag,
-        content
-    )
+    override fun providePreferences(context: Context) = PreferenceManager.getDefaultSharedPreferences(context)
 }

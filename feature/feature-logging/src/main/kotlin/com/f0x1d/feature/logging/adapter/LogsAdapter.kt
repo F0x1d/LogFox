@@ -10,7 +10,7 @@ import com.f0x1d.logfox.model.logline.LogLine
 import com.f0x1d.logfox.preferences.shared.AppPreferences
 
 class LogsAdapter(
-    appPreferences: AppPreferences,
+    private val appPreferences: AppPreferences,
     private val selectedItem: (LogLine, Boolean) -> Unit,
     private val copyLog: (LogLine) -> Unit
 ): BaseListAdapter<LogLine, ItemLogBinding>(diffCallback<LogLine>()) {
@@ -41,6 +41,6 @@ class LogsAdapter(
     override fun createHolder(layoutInflater: LayoutInflater, parent: ViewGroup) = LogViewHolder(
         binding = ItemLogBinding.inflate(layoutInflater, parent, false),
         selectedItem = selectedItem,
-        copyLog = copyLog
+        copyLog = copyLog,
     )
 }

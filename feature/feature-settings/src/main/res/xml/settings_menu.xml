@@ -30,50 +30,10 @@
             android:key="pref_settings_app_version"
             android:icon="@drawable/ic_settings_info"
             android:selectable="false" />
-    </PreferenceCategory>
-
-    <PreferenceCategory
-        android:title="@string/links"
-        app:iconSpaceReserved="false"
-        app:allowDividerAbove="false">
         <Preference
-            android:title="@string/developer"
-            android:icon="@drawable/ic_settings_person">
-
-            <intent
-                android:action="android.intent.action.VIEW"
-                android:data="https://t.me/f0x1d" />
-        </Preference>
-        <Preference
-            android:title="@string/source_code"
-            android:icon="@drawable/ic_settings_code">
-
-            <intent
-                android:action="android.intent.action.VIEW"
-                android:data="https://github.com/F0x1d/LogFox" />
-        </Preference>
-    </PreferenceCategory>
-
-    <PreferenceCategory
-        android:title="@string/telegram"
-        app:iconSpaceReserved="false"
-        app:allowDividerAbove="false">
-        <Preference
-            android:title="@string/releases"
-            android:icon="@drawable/ic_settings_releases">
-
-            <intent
-                android:action="android.intent.action.VIEW"
-                android:data="https://t.me/f0x1dsshit" />
-        </Preference>
-        <Preference
-            android:title="@string/alpha_builds"
-            android:icon="@drawable/ic_settings_handyman">
-
-            <intent
-                android:action="android.intent.action.VIEW"
-                android:data="https://t.me/f0x1dsshit_ci" />
-        </Preference>
+            android:title="@string/links"
+            android:key="pref_settings_links"
+            android:icon="@drawable/ic_add_link" />
     </PreferenceCategory>
 
 </PreferenceScreen>

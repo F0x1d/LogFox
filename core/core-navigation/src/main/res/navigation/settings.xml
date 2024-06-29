@@ -36,6 +36,13 @@
         app:exitAnim="@anim/nav_default_exit_anim"
         app:popEnterAnim="@anim/nav_default_pop_enter_anim"
         app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    <action
+        android:id="@+id/action_settingsMenuFragment_to_settingsLinksFragment"
+        app:destination="@id/settingsLinksFragment"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
+        app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+        app:popExitAnim="@anim/nav_default_pop_exit_anim" />
 
     <fragment
         android:id="@+id/settingsUIFragment"
@@ -56,4 +63,9 @@
         android:id="@+id/settingsCrashesFragment"
         android:name="com.f0x1d.logfox.feature.settings.ui.fragment.SettingsCrashesFragment"
         android:label="SettingsCrashesFragment" />
+
+    <fragment
+        android:id="@+id/settingsLinksFragment"
+        android:name="com.f0x1d.logfox.feature.settings.ui.fragment.SettingsLinksFragment"
+        android:label="SettingsLinksFragment" />
 </navigation>

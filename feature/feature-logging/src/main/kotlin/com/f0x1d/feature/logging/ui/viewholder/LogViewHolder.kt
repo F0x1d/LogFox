@@ -66,17 +66,12 @@ class LogViewHolder(
             levelView.textSize = it
         }
 
-        logText.text = buildString {
-            adapter<LogsAdapter>()?.logsFormat?.apply {
-                if (date) append(dateTimeFormatter.formatDate(data.dateAndTime) + " ")
-                if (time) append(dateTimeFormatter.formatTime(data.dateAndTime) + " ")
-                if (uid) append(data.uid + " ")
-                if (pid) append(data.pid + " ")
-                if (tid) append(data.tid + " ")
-                if (packageName && data.packageName != null) append(data.packageName + " ")
-                if (tag) append(data.tag + if (content) ": " else "")
-                if (content) append(data.content)
-            }
+        adapter<LogsAdapter>()?.logsFormat?.let { values ->
+            logText.text = data.formatOriginal(
+                values = values,
+                formatDate = dateTimeFormatter::formatDate,
+                formatTime = dateTimeFormatter::formatTime,
+            )
         }
 
         levelView.logLevel = data.level

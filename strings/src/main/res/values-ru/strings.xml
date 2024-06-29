@@ -140,4 +140,5 @@
     <string name="session_cache_save_recordings">Сохранять кэш сессий в записи</string>
     <string name="session_cache_lines_count">Количество строк в кэше сессии</string>
     <string name="session_cache_size_warning">Кэш сессии хранится в оперативной памяти, так что не переполните её выбранным значением</string>
+    <string name="export_logs_in_original_format">Экспортировать логи в исходном виде</string>
 </resources>

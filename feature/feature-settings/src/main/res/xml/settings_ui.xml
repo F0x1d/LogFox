@@ -26,6 +26,13 @@
             android:title="@string/logs_format"
             android:key="pref_logs_format"
             app:iconSpaceReserved="false" />
+        <SwitchPreferenceCompat
+            android:title="@string/export_logs_in_original_format"
+            android:key="pref_export_logs_in_original_format"
+            android:defaultValue="true"
+            app:singleLineTitle="false"
+            app:widgetLayout="@layout/preference_material_switch"
+            app:iconSpaceReserved="false" />
         <Preference
             android:title="@string/logs_update_interval"
             android:key="pref_logs_update_interval"

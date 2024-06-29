@@ -59,7 +59,13 @@ class LogsViewModel @Inject constructor(
 
     val selectedItems = MutableStateFlow(emptyList<LogLine>())
 
-    val selectedItemsContent get() = selectedItems.value.joinToString("\n") { it.original }
+    val selectedItemsContent get() = selectedItems.value.joinToString("\n") { line ->
+        appPreferences.originalOf(
+            logLine = line,
+            formatDate = dateTimeFormatter::formatDate,
+            formatTime = dateTimeFormatter::formatTime,
+        )
+    }
 
     val logs = combine(
         fileUri?.readFileContentsAsFlow(
@@ -121,7 +127,11 @@ class LogsViewModel @Inject constructor(
         ctx.contentResolver.openOutputStream(uri)?.use {
             it.write(
                 selectedItems.value.joinToString("\n") { line ->
-                    line.original
+                    appPreferences.originalOf(
+                        logLine = line,
+                        formatDate = dateTimeFormatter::formatDate,
+                        formatTime = dateTimeFormatter::formatTime,
+                    )
                 }.encodeToByteArray()
             )
         }
