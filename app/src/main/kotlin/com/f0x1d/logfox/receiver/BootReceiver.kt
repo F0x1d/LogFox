@@ -9,6 +9,7 @@ import com.f0x1d.logfox.arch.startForegroundServiceAvailable
 import com.f0x1d.logfox.context.hasPermissionToReadLogs
 import com.f0x1d.logfox.context.toast
 import com.f0x1d.logfox.preferences.shared.AppPreferences
+import com.f0x1d.logfox.terminals.ShizukuTerminal
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -20,7 +21,7 @@ class BootReceiver: BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action == Intent.ACTION_BOOT_COMPLETED && appPreferences.startOnBoot) {
-            if (appPreferences.selectedTerminalIndex == com.f0x1d.logfox.terminals.ShizukuTerminal.INDEX) {
+            if (appPreferences.selectedTerminalIndex == ShizukuTerminal.INDEX) {
                 context.toast(R.string.shizuku_reminder)
             }
 

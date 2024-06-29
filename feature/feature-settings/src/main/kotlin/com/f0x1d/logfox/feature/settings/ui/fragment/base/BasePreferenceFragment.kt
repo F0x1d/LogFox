@@ -1,10 +1,10 @@
-package com.f0x1d.logfox.ui.fragment.settings.base
+package com.f0x1d.logfox.feature.settings.ui.fragment.base
 
 import android.os.Bundle
 import android.view.View
 import androidx.preference.PreferenceFragmentCompat
-import com.f0x1d.logfox.R
 import com.f0x1d.logfox.context.isHorizontalOrientation
+import com.f0x1d.logfox.feature.settings.R
 import com.f0x1d.logfox.strings.Strings
 import com.f0x1d.logfox.ui.view.setupBackButtonForNavController
 import com.google.android.material.appbar.MaterialToolbar

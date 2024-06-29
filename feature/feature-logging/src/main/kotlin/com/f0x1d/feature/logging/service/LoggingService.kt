@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Binder
 import android.os.IBinder
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.ServiceCompat
 import androidx.lifecycle.LifecycleService
@@ -86,6 +87,7 @@ class LoggingService : LifecycleService(), SharedPreferences.OnSharedPreferenceC
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
+        Log.e("f0x1d", "got intent ${intent?.action}")
 
         when (intent?.action) {
             ACTION_RESTART_LOGGING -> restartLogging()

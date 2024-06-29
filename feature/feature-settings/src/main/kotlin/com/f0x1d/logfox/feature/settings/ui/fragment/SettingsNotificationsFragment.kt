@@ -1,28 +1,23 @@
-package com.f0x1d.logfox.ui.fragment.settings
+package com.f0x1d.logfox.feature.settings.ui.fragment
 
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
 import androidx.preference.Preference
-import com.f0x1d.logfox.BuildConfig
-import com.f0x1d.logfox.R
 import com.f0x1d.logfox.arch.notificationsChannelsAvailable
 import com.f0x1d.logfox.context.LOGGING_STATUS_CHANNEL_ID
 import com.f0x1d.logfox.context.hasNotificationsPermission
-import com.f0x1d.logfox.preferences.shared.AppPreferences
-import com.f0x1d.logfox.ui.fragment.settings.base.BasePreferenceFragment
+import com.f0x1d.logfox.feature.settings.R
+import com.f0x1d.logfox.feature.settings.ui.fragment.base.BasePreferenceFragment
+import com.f0x1d.logfox.strings.Strings
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class SettingsNotificationsFragment: BasePreferenceFragment() {
 
-    override val title = R.string.notifications
+    override val title = Strings.notifications
     override val showBackArrow = true
-
-    @Inject
-    lateinit var appPreferences: AppPreferences
 
     @SuppressLint("InlinedApi")
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -32,7 +27,7 @@ class SettingsNotificationsFragment: BasePreferenceFragment() {
             startActivity(
                 Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
                     addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    putExtra(Settings.EXTRA_APP_PACKAGE, BuildConfig.APPLICATION_ID)
+                    putExtra(Settings.EXTRA_APP_PACKAGE, requireContext().packageName)
                 }
             )
             return@setOnPreferenceClickListener true
@@ -45,7 +40,7 @@ class SettingsNotificationsFragment: BasePreferenceFragment() {
                 startActivity(
                     Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS).apply {
                         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        putExtra(Settings.EXTRA_APP_PACKAGE, BuildConfig.APPLICATION_ID)
+                        putExtra(Settings.EXTRA_APP_PACKAGE, requireContext().packageName)
                         putExtra(Settings.EXTRA_CHANNEL_ID, LOGGING_STATUS_CHANNEL_ID)
                     }
                 )

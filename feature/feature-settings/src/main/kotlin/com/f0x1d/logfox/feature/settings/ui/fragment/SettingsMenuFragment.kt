@@ -1,11 +1,11 @@
-package com.f0x1d.logfox.ui.fragment.settings
+package com.f0x1d.logfox.feature.settings.ui.fragment
 
 import android.os.Bundle
 import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
-import com.f0x1d.logfox.BuildConfig
-import com.f0x1d.logfox.R
-import com.f0x1d.logfox.ui.fragment.settings.base.BasePreferenceFragment
+import com.f0x1d.logfox.feature.settings.R
+import com.f0x1d.logfox.feature.settings.ui.fragment.base.BasePreferenceFragment
+import com.f0x1d.logfox.navigation.Directions
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -14,22 +14,25 @@ class SettingsMenuFragment: BasePreferenceFragment() {
         addPreferencesFromResource(R.xml.settings_menu)
 
         findPreference<Preference>("pref_settings_ui")?.setOnPreferenceClickListener {
-            findNavController().navigate(SettingsMenuFragmentDirections.actionSettingsMenuFragmentToSettingsUIFragment())
+            findNavController().navigate(Directions.action_settingsMenuFragment_to_settingsUIFragment)
             return@setOnPreferenceClickListener true
         }
         findPreference<Preference>("pref_settings_service")?.setOnPreferenceClickListener {
-            findNavController().navigate(SettingsMenuFragmentDirections.actionSettingsMenuFragmentToSettingsServiceFragment())
+            findNavController().navigate(Directions.action_settingsMenuFragment_to_settingsServiceFragment)
             return@setOnPreferenceClickListener true
         }
         findPreference<Preference>("pref_settings_crashes")?.setOnPreferenceClickListener {
-            findNavController().navigate(SettingsMenuFragmentDirections.actionSettingsMenuFragmentToSettingsCrashesFragment())
+            findNavController().navigate(Directions.action_settingsMenuFragment_to_settingsCrashesFragment)
             return@setOnPreferenceClickListener true
         }
         findPreference<Preference>("pref_settings_notifications")?.setOnPreferenceClickListener {
-            findNavController().navigate(SettingsMenuFragmentDirections.actionSettingsMenuFragmentToSettingsNotificationsFragment())
+            findNavController().navigate(Directions.action_settingsMenuFragment_to_settingsNotificationsFragment)
             return@setOnPreferenceClickListener true
         }
 
-        findPreference<Preference>("pref_settings_app_version")?.title = "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
+        val packageManager = requireContext().packageManager
+        val packageInfo = packageManager.getPackageInfo(requireContext().packageName, 0)
+
+        findPreference<Preference>("pref_settings_app_version")?.title = "${packageInfo.versionName} (${packageInfo.versionCode})"
     }
 }

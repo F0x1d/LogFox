@@ -6,11 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.f0x1d.logfox.R
+import com.f0x1d.logfox.arch.ui.fragment.BaseViewModelFragment
 import com.f0x1d.logfox.context.copyText
 import com.f0x1d.logfox.context.hardRestartApp
 import com.f0x1d.logfox.databinding.FragmentSetupBinding
 import com.f0x1d.logfox.model.event.Event
-import com.f0x1d.logfox.ui.fragment.base.BaseViewModelFragment
 import com.f0x1d.logfox.viewmodel.SetupViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint

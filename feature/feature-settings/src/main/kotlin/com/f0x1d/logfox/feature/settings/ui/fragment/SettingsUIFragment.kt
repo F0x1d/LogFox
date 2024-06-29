@@ -1,13 +1,15 @@
-package com.f0x1d.logfox.ui.fragment.settings
+package com.f0x1d.logfox.feature.settings.ui.fragment
 
 import android.os.Bundle
 import android.text.InputType
 import androidx.preference.Preference
-import com.f0x1d.logfox.R
 import com.f0x1d.logfox.context.catchingNotNumber
-import com.f0x1d.logfox.extensions.fillWithStrings
+import com.f0x1d.logfox.feature.settings.R
+import com.f0x1d.logfox.feature.settings.fillWithStrings
+import com.f0x1d.logfox.feature.settings.ui.fragment.base.BasePreferenceFragment
 import com.f0x1d.logfox.preferences.shared.AppPreferences
-import com.f0x1d.logfox.ui.fragment.settings.base.BasePreferenceFragment
+import com.f0x1d.logfox.strings.Strings
+import com.f0x1d.logfox.ui.Icons
 import com.f0x1d.logfox.ui.view.observeAndUpdateSummary
 import com.f0x1d.logfox.ui.view.setupAsEditTextPreference
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -17,7 +19,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class SettingsUIFragment: BasePreferenceFragment() {
 
-    override val title = R.string.ui
+    override val title = Strings.ui
     override val showBackArrow = true
 
     @Inject
@@ -28,8 +30,8 @@ class SettingsUIFragment: BasePreferenceFragment() {
 
         findPreference<Preference>("pref_date_format")?.apply {
             setupAsEditTextPreference(
-                setupViews = { it.textLayout.setHint(R.string.date_format) },
-                setupDialog = { setIcon(R.drawable.ic_dialog_date_format) },
+                setupViews = { it.textLayout.setHint(Strings.date_format) },
+                setupDialog = { setIcon(Icons.ic_dialog_date_format) },
                 get = { appPreferences.dateFormat },
                 save = {
                     appPreferences.dateFormat = it?.trim() ?: AppPreferences.DATE_FORMAT_DEFAULT
@@ -44,8 +46,8 @@ class SettingsUIFragment: BasePreferenceFragment() {
 
         findPreference<Preference>("pref_time_format")?.apply {
             setupAsEditTextPreference(
-                setupViews = { it.textLayout.setHint(R.string.time_format) },
-                setupDialog = { setIcon(R.drawable.ic_dialog_time_format) },
+                setupViews = { it.textLayout.setHint(Strings.time_format) },
+                setupDialog = { setIcon(Icons.ic_dialog_time_format) },
                 get = { appPreferences.timeFormat },
                 save = {
                     appPreferences.timeFormat = it?.trim() ?: AppPreferences.TIME_FORMAT_DEFAULT
@@ -60,18 +62,18 @@ class SettingsUIFragment: BasePreferenceFragment() {
 
         findPreference<Preference>("pref_logs_format")?.setOnPreferenceClickListener {
             MaterialAlertDialogBuilder(requireContext())
-                .setTitle(R.string.logs_format)
-                .setIcon(R.drawable.ic_dialog_list)
+                .setTitle(Strings.logs_format)
+                .setIcon(Icons.ic_dialog_list)
                 .setMultiChoiceItems(
                     intArrayOf(
-                        R.string.date,
-                        R.string.time,
-                        R.string.uid,
-                        R.string.pid,
-                        R.string.tid,
-                        R.string.package_name,
-                        R.string.tag,
-                        R.string.content
+                        Strings.date,
+                        Strings.time,
+                        Strings.uid,
+                        Strings.pid,
+                        Strings.tid,
+                        Strings.package_name,
+                        Strings.tag,
+                        Strings.content
                     ).fillWithStrings(requireContext()),
                     appPreferences.showLogValues.asArray
                 ) { _, which, checked ->
@@ -86,7 +88,7 @@ class SettingsUIFragment: BasePreferenceFragment() {
                         7 -> appPreferences.showLogContent = checked
                     }
                 }
-                .setPositiveButton(R.string.close, null)
+                .setPositiveButton(Strings.close, null)
                 .show()
             return@setOnPreferenceClickListener true
         }
@@ -94,10 +96,10 @@ class SettingsUIFragment: BasePreferenceFragment() {
         findPreference<Preference>("pref_logs_update_interval")?.apply {
             setupAsEditTextPreference(
                 setupViews = {
-                    it.textLayout.setHint(R.string.in_ms)
+                    it.textLayout.setHint(Strings.in_ms)
                     it.text.inputType = InputType.TYPE_CLASS_NUMBER
                 },
-                setupDialog = { setIcon(R.drawable.ic_dialog_timer) },
+                setupDialog = { setIcon(Icons.ic_dialog_timer) },
                 get = { appPreferences.logsUpdateInterval.toString() },
                 save = {
                     requireContext().catchingNotNumber {
@@ -115,7 +117,7 @@ class SettingsUIFragment: BasePreferenceFragment() {
         findPreference<Preference>("pref_logs_text_size")?.apply {
             setupAsEditTextPreference(
                 setupViews = { it.text.inputType = InputType.TYPE_CLASS_NUMBER },
-                setupDialog = { setIcon(R.drawable.ic_dialog_text_fields) },
+                setupDialog = { setIcon(Icons.ic_dialog_text_fields) },
                 get = { appPreferences.logsTextSize.toString() },
                 save = {
                     requireContext().catchingNotNumber {
@@ -133,10 +135,10 @@ class SettingsUIFragment: BasePreferenceFragment() {
         findPreference<Preference>("pref_logs_display_limit")?.apply {
             setupAsEditTextPreference(
                 setupViews = {
-                    it.textLayout.setHint(R.string.lines)
+                    it.textLayout.setHint(Strings.lines)
                     it.text.inputType = InputType.TYPE_CLASS_NUMBER
                 },
-                setupDialog = { setIcon(R.drawable.ic_dialog_eye) },
+                setupDialog = { setIcon(Icons.ic_dialog_eye) },
                 get = { appPreferences.logsDisplayLimit.toString() },
                 save = {
                     requireContext().catchingNotNumber {

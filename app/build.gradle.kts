@@ -41,10 +41,13 @@ dependencies {
 
     implementation(project(":feature:feature-crashes"))
     implementation(project(":feature:feature-crashes-core"))
+    implementation(project(":feature:feature-filters"))
+    implementation(project(":feature:feature-filters-core"))
     implementation(project(":feature:feature-logging"))
     implementation(project(":feature:feature-logging-core"))
     implementation(project(":feature:feature-recordings"))
     implementation(project(":feature:feature-recordings-core"))
+    implementation(project(":feature:feature-settings"))
 
     implementation(libs.insetter)
     implementation(libs.bundles.shizuku)
