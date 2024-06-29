@@ -4,10 +4,8 @@ import android.content.Context
 import android.net.Uri
 import androidx.documentfile.provider.DocumentFile
 import com.f0x1d.logfox.model.logline.LogLine
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 import java.util.LinkedList
 
 internal fun Uri?.readFileContentsAsFlow(
@@ -46,6 +44,6 @@ internal fun Uri?.readFileContentsAsFlow(
 }.catch {
     it.printStackTrace()
     emit(emptyList())
-}.flowOn(Dispatchers.IO)
+}
 
 internal fun Uri.readFileName(context: Context) = DocumentFile.fromSingleUri(context, this)?.name

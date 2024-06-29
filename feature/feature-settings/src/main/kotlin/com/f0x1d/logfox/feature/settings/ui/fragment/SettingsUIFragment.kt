@@ -10,7 +10,6 @@ import com.f0x1d.logfox.feature.settings.ui.fragment.base.BasePreferenceFragment
 import com.f0x1d.logfox.preferences.shared.AppPreferences
 import com.f0x1d.logfox.strings.Strings
 import com.f0x1d.logfox.ui.Icons
-import com.f0x1d.logfox.ui.view.observeAndUpdateSummary
 import com.f0x1d.logfox.ui.view.setupAsEditTextPreference
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
@@ -38,10 +37,9 @@ class SettingsUIFragment: BasePreferenceFragment() {
                 }
             )
 
-            observeAndUpdateSummary(
-                observer = this@SettingsUIFragment,
-                defValue = AppPreferences.DATE_FORMAT_DEFAULT
-            )
+            appPreferences.dateFormatFlow.collectWithLifecycle {
+                summary = it
+            }
         }
 
         findPreference<Preference>("pref_time_format")?.apply {
@@ -54,10 +52,9 @@ class SettingsUIFragment: BasePreferenceFragment() {
                 }
             )
 
-            observeAndUpdateSummary(
-                observer = this@SettingsUIFragment,
-                defValue = AppPreferences.TIME_FORMAT_DEFAULT
-            )
+            appPreferences.timeFormatFlow.collectWithLifecycle {
+                summary = it
+            }
         }
 
         findPreference<Preference>("pref_logs_format")?.setOnPreferenceClickListener {
@@ -108,10 +105,9 @@ class SettingsUIFragment: BasePreferenceFragment() {
                 }
             )
 
-            observeAndUpdateSummary(
-                observer = this@SettingsUIFragment,
-                defValue = AppPreferences.LOGS_UPDATE_INTERVAL_DEFAULT
-            )
+            appPreferences.logsUpdateIntervalFlow.collectWithLifecycle {
+                summary = it.toString()
+            }
         }
 
         findPreference<Preference>("pref_logs_text_size")?.apply {
@@ -126,10 +122,9 @@ class SettingsUIFragment: BasePreferenceFragment() {
                 }
             )
 
-            observeAndUpdateSummary(
-                observer = this@SettingsUIFragment,
-                defValue = AppPreferences.LOGS_TEXT_SIZE_DEFAULT
-            )
+            appPreferences.logsTextSizeFlow.collectWithLifecycle {
+                summary = it.toString()
+            }
         }
 
         findPreference<Preference>("pref_logs_display_limit")?.apply {
@@ -150,10 +145,9 @@ class SettingsUIFragment: BasePreferenceFragment() {
                 }
             )
 
-            observeAndUpdateSummary(
-                observer = this@SettingsUIFragment,
-                defValue = AppPreferences.LOGS_DISPLAY_LIMIT_DEFAULT
-            )
+            appPreferences.logsDisplayLimitFlow.collectWithLifecycle {
+                summary = it.toString()
+            }
         }
     }
 }

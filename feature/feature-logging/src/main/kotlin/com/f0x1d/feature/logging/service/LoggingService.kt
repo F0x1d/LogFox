@@ -4,11 +4,11 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Binder
 import android.os.IBinder
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.ServiceCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
+import com.f0x1d.logfox.arch.di.MainDispatcher
 import com.f0x1d.logfox.context.LOGGING_STATUS_CHANNEL_ID
 import com.f0x1d.logfox.context.activityManager
 import com.f0x1d.logfox.context.toast
@@ -26,12 +26,14 @@ import com.f0x1d.logfox.terminals.DefaultTerminal
 import com.f0x1d.logfox.terminals.base.Terminal
 import com.f0x1d.logfox.ui.Icons
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -69,6 +71,10 @@ class LoggingService : LifecycleService(), SharedPreferences.OnSharedPreferenceC
     @Inject
     lateinit var terminals: Array<Terminal>
 
+    @MainDispatcher
+    @Inject
+    lateinit var mainDispatcher: CoroutineDispatcher
+
     private val logs = LinkedList<LogLine>()
     private val logsMutex = Mutex()
     private var loggingJob: Job? = null
@@ -87,7 +93,6 @@ class LoggingService : LifecycleService(), SharedPreferences.OnSharedPreferenceC
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
-        Log.e("f0x1d", "got intent ${intent?.action}")
 
         when (intent?.action) {
             ACTION_RESTART_LOGGING -> restartLogging()
@@ -102,11 +107,19 @@ class LoggingService : LifecycleService(), SharedPreferences.OnSharedPreferenceC
     private fun startLogging() {
         if (loggingJob?.isActive == true) return
 
-        var loggingTerminal = terminals[appPreferences.selectedTerminalIndex]
-        loggingInterval = appPreferences.logsUpdateInterval
-        logsDisplayLimit = appPreferences.logsDisplayLimit
+        lifecycleScope.launch {
+            appPreferences.logsUpdateIntervalFlow
+                .onEach { loggingInterval = it }
+                .launchIn(this)
 
-        appPreferences.registerListener(this)
+            appPreferences.logsDisplayLimitFlow
+                .onEach { logsDisplayLimit = it }
+                .launchIn(this)
+        }
+
+        var loggingTerminal = terminals[appPreferences.selectedTerminalIndex]
+        //loggingInterval = appPreferences.logsUpdateInterval
+        //logsDisplayLimit = appPreferences.logsDisplayLimit
 
         loggingJob = lifecycleScope.launch {
             try {
@@ -116,7 +129,7 @@ class LoggingService : LifecycleService(), SharedPreferences.OnSharedPreferenceC
                         startingId = idsCounter,
                     ).catch { throwable ->
                         if (throwable is TerminalNotSupportedException) {
-                            if (appPreferences.fallbackToDefaultTerminal) withContext(Dispatchers.Main) {
+                            if (appPreferences.fallbackToDefaultTerminal) withContext(mainDispatcher) {
                                 toast(Strings.terminal_unavailable_falling_back)
 
                                 loggingTerminal.exit()
@@ -129,8 +142,6 @@ class LoggingService : LifecycleService(), SharedPreferences.OnSharedPreferenceC
                         }
                     }.collect { logLine ->
                         logsMutex.withLock {
-
-
                             logs.add(logLine)
 
                             while (logs.size > logsDisplayLimit)
@@ -149,7 +160,6 @@ class LoggingService : LifecycleService(), SharedPreferences.OnSharedPreferenceC
                 withContext(NonCancellable) {
                     recordingController.loggingStopped()
                     clearLogs().join()
-                    appPreferences.unregisterListener(this@LoggingService)
 
                     loggingTerminal.exit()
                 }

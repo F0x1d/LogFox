@@ -1,6 +1,5 @@
 package com.f0x1d.feature.logging.ui.fragment
 
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -35,7 +34,7 @@ import dev.chrisbanes.insetter.applyInsetter
 import kotlinx.coroutines.flow.update
 
 @AndroidEntryPoint
-class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(), SharedPreferences.OnSharedPreferenceChangeListener {
+class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>() {
 
     override val viewModel by hiltNavGraphViewModels<LogsViewModel>(Directions.logsFragment)
 
@@ -77,8 +76,6 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
     ) = FragmentLogsBinding.inflate(inflater, container, false)
 
     override fun FragmentLogsBinding.onViewCreated(view: View, savedInstanceState: Bundle?) {
-        viewModel.appPreferences.registerListener(this@LogsFragment)
-
         requireContext().isHorizontalOrientation.also { horizontalOrientation ->
             logsRecycler.applyInsetter {
                 type(navigationBars = true) {
@@ -216,6 +213,19 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
             changingState = false
         }
 
+        viewModel.apply {
+            appPreferences.logsTextSizeFlow.collectWithLifecycle {
+                adapter.textSize = it.toFloat()
+            }
+            appPreferences.logsExpandedFlow.collectWithLifecycle {
+                adapter.logsExpanded = it
+            }
+
+            appPreferences.showLogValuesFlow.collectWithLifecycle {
+                adapter.logsFormat = it
+            }
+        }
+
         requireActivity().onBackPressedDispatcher.apply {
             addCallback(viewLifecycleOwner, clearSelectionOnBackPressedCallback)
         }
@@ -280,26 +290,5 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>(),
     private fun FragmentLogsBinding.scrollLogToBottom() {
         logsRecycler.stopScroll()
         logsRecycler.scrollToPosition(adapter.itemCount - 1)
-    }
-
-    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
-        viewModel.appPreferences.apply {
-            when (key) {
-                "pref_logs_text_size" -> adapter.textSize = logsTextSize.toFloat()
-                "pref_logs_expanded" -> adapter.logsExpanded = logsExpanded
-
-                "pref_date_format", "pref_time_format" -> adapter.notifyItemRangeChanged(
-                    0,
-                    adapter.itemCount
-                )
-            }
-
-            if (key?.startsWith("pref_show_log") == true) adapter.logsFormat = showLogValues
-        }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        viewModel.appPreferences.unregisterListener(this)
     }
 }

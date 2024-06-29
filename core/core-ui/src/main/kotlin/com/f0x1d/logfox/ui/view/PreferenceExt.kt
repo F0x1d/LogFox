@@ -2,10 +2,8 @@ package com.f0x1d.logfox.ui.view
 
 import android.view.LayoutInflater
 import android.view.inputmethod.InputMethodManager
-import androidx.lifecycle.LifecycleOwner
 import androidx.preference.Preference
 import com.f0x1d.logfox.context.inputMethodManager
-import com.f0x1d.logfox.preferences.shared.appPreferences
 import com.f0x1d.logfox.strings.Strings
 import com.f0x1d.logfox.ui.databinding.DialogTextBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -65,31 +63,4 @@ fun Preference.setupAsListPreference(
         .apply(setupDialog)
         .show()
     return@setOnPreferenceClickListener true
-}
-
-fun Preference.observeAndUpdateSummaryForList(
-    observer: LifecycleOwner,
-    defValue: Int,
-    items: Array<String>
-) = observeAndUpdateSummary(observer, defValue) {
-    summary = items[it]
-}
-
-inline fun <reified T> Preference.observeAndUpdateSummary(
-    observer: LifecycleOwner,
-    defValue: T
-) {
-    observeAndUpdateSummary(observer, defValue) {
-        summary = it.toString()
-    }
-}
-
-inline fun <reified T> Preference.observeAndUpdateSummary(
-    observer: LifecycleOwner,
-    defValue: T,
-    crossinline block: (T) -> Unit
-) {
-    context.appPreferences.asLiveData(key, defValue).observe(observer) {
-        block(it ?: return@observe)
-    }
 }

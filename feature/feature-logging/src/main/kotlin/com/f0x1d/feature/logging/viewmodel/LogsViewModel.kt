@@ -17,7 +17,6 @@ import com.f0x1d.logfox.model.logline.LogLine
 import com.f0x1d.logfox.preferences.shared.AppPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
@@ -94,7 +93,7 @@ class LogsViewModel @Inject constructor(
             logs.filterAndSearch(filters, query)
         }
     }.flowOn(
-        Dispatchers.IO
+        ioDispatcher,
     ).stateIn(
         scope = viewModelScope,
         started = SharingStarted.Eagerly,

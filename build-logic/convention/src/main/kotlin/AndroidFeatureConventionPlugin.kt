@@ -37,6 +37,7 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
             ksp(library("androidx-room-compiler"))
 
             implementation(library("insetter"))
+            implementation(library("flow-preferences"))
         }
     }
 }

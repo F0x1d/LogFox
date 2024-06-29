@@ -14,7 +14,6 @@ import com.f0x1d.logfox.preferences.shared.AppPreferences
 import com.f0x1d.logfox.strings.Strings
 import com.f0x1d.logfox.terminals.base.Terminal
 import com.f0x1d.logfox.ui.Icons
-import com.f0x1d.logfox.ui.view.observeAndUpdateSummaryForList
 import com.f0x1d.logfox.ui.view.setupAsListPreference
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
@@ -67,11 +66,9 @@ class SettingsServiceFragment: BasePreferenceFragment() {
                 }
             )
 
-            observeAndUpdateSummaryForList(
-                observer = this@SettingsServiceFragment,
-                defValue = 0,
-                items = filledTerminalSettings
-            )
+            appPreferences.selectedTerminalIndexFlow.collectWithLifecycle {
+                summary = filledTerminalSettings[it]
+            }
         }
 
         findPreference<SwitchPreferenceCompat>("pref_start_on_boot")?.apply {
