@@ -36,6 +36,9 @@ interface UserFilterDao {
     @Query("SELECT * FROM UserFilter")
     fun getAllAsFlow(): Flow<List<UserFilter>>
 
+    @Query("SELECT * FROM UserFilter WHERE enabled = 1")
+    fun getAllEnabledAsFlow(): Flow<List<UserFilter>>
+
     @Query("SELECT * FROM UserFilter")
     suspend fun getAll(): List<UserFilter>
 

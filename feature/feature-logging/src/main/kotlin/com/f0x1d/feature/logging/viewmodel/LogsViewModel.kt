@@ -44,12 +44,8 @@ class LogsViewModel @Inject constructor(
 
     val query = MutableStateFlow<String?>(null)
     val queryAndFilters = query.combine(
-        filtersRepository.getAllAsFlow(),
-    ) { query, filters ->
-        query to filters.filter {
-            it.enabled
-        }
-    }.flowOn(ioDispatcher)
+        filtersRepository.getAllEnabledAsFlow(),
+    ) { query, filters -> query to filters }
 
     val paused = MutableStateFlow(false)
 
@@ -71,7 +67,7 @@ class LogsViewModel @Inject constructor(
             context = ctx,
             logsDisplayLimit = appPreferences.logsDisplayLimit,
         ) ?: loggingStore.logs,
-        filtersRepository.getAllAsFlow(),
+        filtersRepository.getAllEnabledAsFlow(),
         query,
         if (!viewingFile) paused else flowOf(false)
     ) { logs, filters, query, paused ->

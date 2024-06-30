@@ -11,7 +11,10 @@ import com.f0x1d.logfox.arch.di.MainDispatcher
 import com.f0x1d.logfox.context.LOGGING_STATUS_CHANNEL_ID
 import com.f0x1d.logfox.context.activityManager
 import com.f0x1d.logfox.context.toast
-import com.f0x1d.logfox.feature.crashes.core.repository.CrashesRepository
+import com.f0x1d.logfox.database.entity.UserFilter
+import com.f0x1d.logfox.feature.crashes.core.controller.CrashesController
+import com.f0x1d.logfox.feature.filters.core.repository.FiltersRepository
+import com.f0x1d.logfox.feature.logging.core.model.suits
 import com.f0x1d.logfox.feature.logging.core.repository.LoggingRepository
 import com.f0x1d.logfox.feature.logging.core.store.LoggingStore
 import com.f0x1d.logfox.feature.recordings.core.controller.RecordingController
@@ -30,7 +33,10 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -54,10 +60,13 @@ class LoggingService : LifecycleService() {
     lateinit var loggingRepository: LoggingRepository
 
     @Inject
-    lateinit var crashesRepository: CrashesRepository
+    lateinit var crashesController: CrashesController
 
     @Inject
     lateinit var recordingController: RecordingController
+
+    @Inject
+    lateinit var filtersRepository: FiltersRepository
 
     @Inject
     lateinit var loggingStore: LoggingStore
@@ -75,14 +84,23 @@ class LoggingService : LifecycleService() {
     private val logs = LinkedList<LogLine>()
     private val logsMutex = Mutex()
     private var loggingJob: Job? = null
-
     private var idsCounter = -1L
+
+    private lateinit var filtersState: StateFlow<List<UserFilter>>
 
     override fun onCreate() {
         super.onCreate()
 
         startForeground(-1, notification())
         startLogging()
+
+        filtersState = filtersRepository
+            .getAllEnabledAsFlow()
+            .stateIn(
+                scope = lifecycleScope,
+                started = SharingStarted.Eagerly,
+                initialValue = emptyList(),
+            )
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -132,10 +150,13 @@ class LoggingService : LifecycleService() {
 
                         loggingStore.updateLogs(logs)
 
-                        crashesRepository.readers.forEach {
+                        crashesController.readers.forEach {
                             it(logLine)
                         }
-                        recordingController.reader(logLine)
+
+                        if (logLine.suits(filtersState.value)) {
+                            recordingController.reader(logLine)
+                        }
                     }
                 }
             } finally {

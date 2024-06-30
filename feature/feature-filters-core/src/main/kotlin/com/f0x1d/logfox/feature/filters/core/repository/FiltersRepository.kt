@@ -1,19 +1,20 @@
 package com.f0x1d.logfox.feature.filters.core.repository
 
-import android.content.Context
 import com.f0x1d.logfox.arch.di.IODispatcher
 import com.f0x1d.logfox.arch.repository.DatabaseProxyRepository
 import com.f0x1d.logfox.database.AppDatabase
 import com.f0x1d.logfox.database.entity.UserFilter
 import com.f0x1d.logfox.model.logline.LogLevel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 interface FiltersRepository : DatabaseProxyRepository<UserFilter> {
+
+    fun getAllEnabledAsFlow(): Flow<List<UserFilter>>
 
     suspend fun create(
         including: Boolean,
@@ -44,10 +45,14 @@ interface FiltersRepository : DatabaseProxyRepository<UserFilter> {
 }
 
 internal class FiltersRepositoryImpl @Inject constructor(
-    @ApplicationContext private val context: Context,
     private val database: AppDatabase,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : FiltersRepository {
+
+    override fun getAllEnabledAsFlow(): Flow<List<UserFilter>> =
+        database.userFilters().getAllEnabledAsFlow()
+            .distinctUntilChanged()
+            .flowOn(ioDispatcher)
 
     override suspend fun create(
         including: Boolean,
@@ -74,7 +79,7 @@ internal class FiltersRepositoryImpl @Inject constructor(
     )
 
     override suspend fun createAll(userFilters: List<UserFilter>) = withContext(ioDispatcher) {
-        database.userFilterDao().insert(userFilters)
+        database.userFilters().insert(userFilters)
     }
 
     override suspend fun switch(userFilter: UserFilter, checked: Boolean) = update {
@@ -107,29 +112,29 @@ internal class FiltersRepositoryImpl @Inject constructor(
     private suspend fun update(newValue: () -> UserFilter) = update(newValue())
 
     override fun getAllAsFlow(): Flow<List<UserFilter>> =
-        database.userFilterDao().getAllAsFlow().flowOn(ioDispatcher)
+        database.userFilters().getAllAsFlow().flowOn(ioDispatcher)
 
     override fun getByIdAsFlow(id: Long): Flow<UserFilter?> =
-        database.userFilterDao().getByIdAsFlow(id).flowOn(ioDispatcher)
+        database.userFilters().getByIdAsFlow(id).flowOn(ioDispatcher)
 
     override suspend fun getAll(): List<UserFilter> = withContext(ioDispatcher) {
-        database.userFilterDao().getAll()
+        database.userFilters().getAll()
     }
 
     override suspend fun getById(id: Long): UserFilter? = withContext(ioDispatcher) {
-        database.userFilterDao().getById(id)
+        database.userFilters().getById(id)
     }
 
     override suspend fun update(item: UserFilter) = withContext(ioDispatcher) {
-        database.userFilterDao().update(item)
+        database.userFilters().update(item)
     }
 
     override suspend fun delete(item: UserFilter) = withContext(ioDispatcher) {
-        database.userFilterDao().delete(item)
+        database.userFilters().delete(item)
     }
 
     override suspend fun clear() = withContext(ioDispatcher) {
-        database.userFilterDao().deleteAll()
+        database.userFilters().deleteAll()
     }
 
     private fun String.nullIfEmpty() = ifEmpty { null }

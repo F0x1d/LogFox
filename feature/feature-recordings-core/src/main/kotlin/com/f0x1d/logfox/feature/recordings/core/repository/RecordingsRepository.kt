@@ -73,11 +73,11 @@ internal class RecordingsRepositoryImpl @Inject constructor(
         }
 
         LogRecording(
-            title = "${context.getString(Strings.record_file)} ${database.logRecordingDao().count() + 1}",
+            title = "${context.getString(Strings.record_file)} ${database.logRecordings().count() + 1}",
             dateAndTime = recordingTime,
             file = recordingFile,
         ).let {
-            it.copy(id = database.logRecordingDao().insert(it))
+            it.copy(id = database.logRecordings().insert(it))
         }
     }
 
@@ -100,10 +100,10 @@ internal class RecordingsRepositoryImpl @Inject constructor(
         )
 
         LogRecording(
-            title = "${context.getString(Strings.record_file)} ${database.logRecordingDao().count() + 1}",
+            title = "${context.getString(Strings.record_file)} ${database.logRecordings().count() + 1}",
             dateAndTime = recordingTime,
             file = recordingFile,
-        ).let { database.logRecordingDao().insert(it) }
+        ).let { database.logRecordings().insert(it) }
     }
 
     override suspend fun updateTitle(logRecording: LogRecording, newTitle: String) = update(
@@ -113,30 +113,30 @@ internal class RecordingsRepositoryImpl @Inject constructor(
     )
 
     override fun getAllAsFlow(): Flow<List<LogRecording>> =
-        database.logRecordingDao().getAllAsFlow().flowOn(ioDispatcher)
+        database.logRecordings().getAllAsFlow().flowOn(ioDispatcher)
 
     override fun getByIdAsFlow(id: Long): Flow<LogRecording?> =
-        database.logRecordingDao().getByIdAsFlow(id).flowOn(ioDispatcher)
+        database.logRecordings().getByIdAsFlow(id).flowOn(ioDispatcher)
 
     override suspend fun getAll(): List<LogRecording> = withContext(ioDispatcher) {
-        database.logRecordingDao().getAll()
+        database.logRecordings().getAll()
     }
 
     override suspend fun getById(id: Long): LogRecording? = withContext(ioDispatcher) {
-        database.logRecordingDao().getById(id)
+        database.logRecordings().getById(id)
     }
 
     override suspend fun update(item: LogRecording) = withContext(ioDispatcher) {
-        database.logRecordingDao().update(item)
+        database.logRecordings().update(item)
     }
 
     override suspend fun delete(item: LogRecording) = withContext(ioDispatcher) {
         item.deleteFile()
-        database.logRecordingDao().delete(item)
+        database.logRecordings().delete(item)
     }
 
     override suspend fun clear() = withContext(ioDispatcher) {
         getAll().forEach { it.deleteFile() }
-        database.logRecordingDao().deleteAll()
+        database.logRecordings().deleteAll()
     }
 }

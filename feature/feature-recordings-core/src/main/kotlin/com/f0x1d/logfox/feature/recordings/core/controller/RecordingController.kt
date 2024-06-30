@@ -4,9 +4,8 @@ import android.content.Context
 import com.f0x1d.logfox.arch.di.IODispatcher
 import com.f0x1d.logfox.database.AppDatabase
 import com.f0x1d.logfox.database.entity.LogRecording
-import com.f0x1d.logfox.database.entity.UserFilter
 import com.f0x1d.logfox.datetime.DateTimeFormatter
-import com.f0x1d.logfox.feature.recordings.core.controller.reader.RecordingWithFiltersReader
+import com.f0x1d.logfox.feature.recordings.core.controller.reader.RecordingReader
 import com.f0x1d.logfox.model.logline.LogLine
 import com.f0x1d.logfox.strings.Strings
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -28,7 +27,6 @@ interface RecordingController {
     suspend fun resume()
     suspend fun end(): LogRecording?
 
-    suspend fun filtersUpdated(filters: List<UserFilter>)
     suspend fun loggingStopped()
 }
 
@@ -41,7 +39,7 @@ internal class RecordingControllerImpl @Inject constructor(
     @ApplicationContext private val context: Context,
     private val database: AppDatabase,
     private val dateTimeFormatter: DateTimeFormatter,
-    override val reader: RecordingWithFiltersReader,
+    override val reader: RecordingReader,
     private val notificationController: RecordingNotificationController,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : RecordingController {
@@ -87,20 +85,16 @@ internal class RecordingControllerImpl @Inject constructor(
         notificationController.cancelRecordingNotification()
 
         val logRecording = LogRecording(
-            title = "${context.getString(Strings.record_file)} ${database.logRecordingDao().count() + 1}",
+            title = "${context.getString(Strings.record_file)} ${database.logRecordings().count() + 1}",
             dateAndTime = reader.recordingTime,
             file = reader.recordingFile ?: return@withContext null,
         ).let {
-            it.copy(id = database.logRecordingDao().insert(it))
+            it.copy(id = database.logRecordings().insert(it))
         }
 
         state.update { RecordingState.IDLE }
 
         return@withContext logRecording
-    }
-
-    override suspend fun filtersUpdated(filters: List<UserFilter>) = withContext(ioDispatcher) {
-        reader.updateFilters(filters)
     }
 
     override suspend fun loggingStopped(): Unit = withContext(ioDispatcher) {

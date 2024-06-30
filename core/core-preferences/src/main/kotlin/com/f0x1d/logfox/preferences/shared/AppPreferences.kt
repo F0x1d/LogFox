@@ -7,11 +7,7 @@ import com.f0x1d.logfox.database.entity.CrashType
 import com.f0x1d.logfox.model.logline.LogLine
 import com.f0x1d.logfox.model.preferences.ShowLogValues
 import com.f0x1d.logfox.preferences.shared.base.BasePreferences
-import com.fredporciuncula.flow.preferences.keyFlow
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onStart
 import java.util.Date
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -69,8 +65,6 @@ class AppPreferences @Inject constructor(
     var logsExpanded
         get() = get("pref_logs_expanded", LOGS_EXPANDED_DEFAULT)
         set(value) { put("pref_logs_expanded", value) }
-    val logsExpandedFlow get() = flowSharedPreferences.getBoolean("pref_logs_expanded", LOGS_EXPANDED_DEFAULT).asFlow()
-
     var resumeLoggingWithBottomTouch
         get() = get("pref_resume_logs_with_touch", true)
         set(value) { put("pref_resume_logs_with_touch", value) }
@@ -126,10 +120,6 @@ class AppPreferences @Inject constructor(
             put("pref_show_log_content", value)
             updateCachedShowLogsValues()
         }
-
-    val showLogValuesFlow get() = sharedPreferences.keyFlow.filter { key ->
-        key?.startsWith("pref_show_log") == true
-    }.onStart { emit("initial") }.map { showLogValues }
 
     var selectedTerminalIndex
         get() = get("pref_selected_terminal_index", TERMINAL_INDEX_DEFAULT)

@@ -13,24 +13,21 @@ class DateTimeFormatter @Inject constructor(
     private val appPreferences: AppPreferences,
 ) {
 
-    private var dateFormatter = createDateFormatter()
-    private var timeFormatter = createTimeFormatter()
+    private val dateFormatter by lazy { createFormatter(appPreferences.dateFormat) }
+    private val timeFormatter by lazy { createFormatter(appPreferences.timeFormat) }
 
-    fun formatDate(time: Long) = tryFormatBy(dateFormatter, time)
-    fun formatTime(time: Long) = tryFormatBy(timeFormatter, time)
+    fun formatDate(time: Long): String = tryFormatBy(dateFormatter, time)
+    fun formatTime(time: Long): String = tryFormatBy(timeFormatter, time)
+
+    fun formatForExport(time: Long) = formatDate(time)
+        .withReplacedBadSymbolsForFileName + "-" + formatTime(time)
+            .withReplacedBadSymbolsForFileName
 
     private fun tryFormatBy(formatter: SimpleDateFormat, time: Long) = try {
         formatter.format(time)
     } catch (e: IllegalArgumentException) {
         context.getString(Strings.error, e.localizedMessage)
     }
-
-    fun formatForExport(time: Long) = dateFormatter.format(time)
-        .withReplacedBadSymbolsForFileName + "-" + timeFormatter.format(time)
-            .withReplacedBadSymbolsForFileName
-
-    private fun createDateFormatter() = createFormatter(appPreferences.dateFormat)
-    private fun createTimeFormatter() = createFormatter(appPreferences.timeFormat)
 
     private fun createFormatter(format: String?) = SimpleDateFormat(format, Locale.getDefault())
 

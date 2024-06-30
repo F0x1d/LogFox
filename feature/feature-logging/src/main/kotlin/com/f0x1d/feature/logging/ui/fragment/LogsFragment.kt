@@ -72,7 +72,7 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>() 
 
     override fun inflateBinding(
         inflater: LayoutInflater,
-        container: ViewGroup?
+        container: ViewGroup?,
     ) = FragmentLogsBinding.inflate(inflater, container, false)
 
     override fun FragmentLogsBinding.onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -175,8 +175,10 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>() 
 
             toolbar.subtitle = subtitle
             placeholderLayout.placeholderText.setText(
-                when (subtitle.isEmpty()) {
-                    true -> Strings.waiting_for_logs
+                when {
+                    viewModel.viewingFile -> Strings.no_logs
+
+                    subtitle.isEmpty() -> Strings.waiting_for_logs
 
                     else -> Strings.all_logs_were_filtered_out
                 }

@@ -3,20 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/logs_cache_item"
-        android:title="@string/session_cache"
-        android:visible="false"
-        app:showAsAction="never" />
+        android:id="@+id/clear_item"
+        android:icon="@drawable/ic_clear_all"
+        android:title="@string/clear"
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/save_all_logs_item"
         android:title="@string/save_all_logs"
         app:showAsAction="never" />
-
-    <item
-        android:id="@+id/clear_item"
-        android:icon="@drawable/ic_clear_all"
-        android:title="@string/clear"
-        app:showAsAction="ifRoom" />
 
 </menu>

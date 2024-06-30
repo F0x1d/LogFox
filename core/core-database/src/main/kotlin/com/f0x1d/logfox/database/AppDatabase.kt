@@ -21,27 +21,27 @@ import com.f0x1d.logfox.database.entity.UserFilterDao
     entities = [
         AppCrash::class,
         LogRecording::class,
-        UserFilter::class
+        UserFilter::class,
     ],
     version = 16,
     autoMigrations = [
         AutoMigration(
             from = 12,
             to = 13,
-            spec = AppDatabase.Companion.AutoMigration12_13::class
+            spec = AppDatabase.Companion.AutoMigration12_13::class,
         ),
         AutoMigration(
             from = 13,
-            to = 14
+            to = 14,
         ),
         AutoMigration(
             from = 14,
-            to = 15
+            to = 15,
         ),
         AutoMigration(
             from = 15,
-            to = 16
-        )
+            to = 16,
+        ),
     ]
 )
 @TypeConverters(
@@ -89,7 +89,7 @@ abstract class AppDatabase: RoomDatabase() {
         class AutoMigration12_13: AutoMigrationSpec
     }
 
-    abstract fun appCrashDao(): AppCrashDao
-    abstract fun logRecordingDao(): LogRecordingDao
-    abstract fun userFilterDao(): UserFilterDao
+    abstract fun appCrashes(): AppCrashDao
+    abstract fun logRecordings(): LogRecordingDao
+    abstract fun userFilters(): UserFilterDao
 }

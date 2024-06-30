@@ -72,9 +72,6 @@ class RecordingsFragment: BaseViewModelFragment<RecordingsViewModel, FragmentRec
         }
 
         toolbar.menu.apply {
-            setClickListenerOn(R.id.logs_cache_item) {
-                // TODO: return it
-            }
             setClickListenerOn(R.id.save_all_logs_item) {
                 viewModel.saveAll()
             }

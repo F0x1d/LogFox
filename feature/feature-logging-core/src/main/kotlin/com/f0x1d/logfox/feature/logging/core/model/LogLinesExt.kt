@@ -3,9 +3,14 @@ package com.f0x1d.logfox.feature.logging.core.model
 import com.f0x1d.logfox.database.entity.UserFilter
 import com.f0x1d.logfox.model.logline.LogLine
 
-fun List<LogLine>.filterAndSearch(filters: List<UserFilter>, query: String? = null) = filterByExtendedFilters(
-    filters.filter { it.enabled }
-).let {
+fun LogLine.suits(filters: List<UserFilter>) = listOf(this)
+    .filterAndSearch(filters)
+    .isNotEmpty()
+
+fun List<LogLine>.filterAndSearch(
+    filters: List<UserFilter>,
+    query: String? = null,
+) = filterByExtendedFilters(filters).let {
     if (query == null)
         it
     else

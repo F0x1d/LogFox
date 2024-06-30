@@ -1,4 +1,4 @@
-package com.f0x1d.logfox.feature.recordings.core.controller.reader.base
+package com.f0x1d.logfox.feature.recordings.core.controller.reader
 
 import com.f0x1d.logfox.datetime.DateTimeFormatter
 import com.f0x1d.logfox.model.logline.LogLine
@@ -24,7 +24,6 @@ open class RecordingReader @Inject constructor(
     var recordingFile: File? = null
         private set
     protected val fileMutex = Mutex()
-    protected var recordedLinesSize = 1000
 
     suspend fun record(toFile: File) {
         recordingMutex.withLock {
@@ -75,10 +74,12 @@ open class RecordingReader @Inject constructor(
     override suspend fun invoke(line: LogLine) {
         val recording = recordingMutex.withLock { recording }
 
-        if (recording && shouldRecordLine(line)) linesMutex.withLock {
-            recordedLines.add(line)
-        }.also {
-            if (recordedLines.size >= recordedLinesSize)
+        if (recording && shouldRecordLine(line)) {
+            linesMutex.withLock {
+                recordedLines.add(line)
+            }
+
+            if (recordedLines.size >= appPreferences.logsDisplayLimit)
                 dumpLines()
         }
     }
