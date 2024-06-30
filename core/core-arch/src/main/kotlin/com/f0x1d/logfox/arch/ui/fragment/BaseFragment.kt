@@ -38,7 +38,7 @@ abstract class BaseFragment<T : ViewBinding>: Fragment() {
     }
 
     protected fun <T> Flow<T>.collectWithLifecycle(
-        state: Lifecycle.State = Lifecycle.State.RESUMED,
+        state: Lifecycle.State = Lifecycle.State.STARTED,
         collector: FlowCollector<T>,
     ) = viewLifecycleOwner.lifecycleScope.launch {
         viewLifecycleOwner.repeatOnLifecycle(state) {

@@ -42,7 +42,7 @@ abstract class BasePreferenceFragment: PreferenceFragmentCompat() {
     }
 
     protected fun <T> Flow<T>.collectWithLifecycle(
-        state: Lifecycle.State = Lifecycle.State.RESUMED,
+        state: Lifecycle.State = Lifecycle.State.STARTED,
         collector: FlowCollector<T>,
     ) = lifecycleScope.launch {
         repeatOnLifecycle(state) {
