@@ -8,6 +8,7 @@
         <item name="android:windowLayoutInDisplayCutoutMode" tools:targetApi="o_mr1">shortEdges</item>
 
         <item name="materialAlertDialogTheme">@style/ThemeOverlay.LogFox.MaterialAlertDialog</item>
+        <item name="materialCardViewOutlinedStyle">@style/Widget.LogFox.CardView.Outlined</item>
         <item name="bottomSheetDialogTheme">@style/ThemeOverlay.LogFox.BottomSheetDialog</item>
         <item name="preferenceTheme">@style/ThemeOverlay.LogFox.PreferenceTheme</item>
         <item name="toolbarStyle">@style/Widget.LogFox.Toolbar</item>
