@@ -50,7 +50,7 @@ class RecordingBottomSheet: BaseViewModelBottomSheet<RecordingViewModel, SheetRe
 
             viewButton.setOnClickListener {
                 findNavController().navigate(
-                    resId = Directions.action_global_logsFragment,
+                    resId = Directions.action_global_logsFragment_from_recordingBottomSheet,
                     args = bundleOf(
                         "file_uri" to logRecording.file.asUri(requireContext()),
                     ),

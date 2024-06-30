@@ -1,7 +1,6 @@
 package com.f0x1d.feature.logging.service
 
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Binder
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
@@ -32,8 +31,6 @@ import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -42,7 +39,7 @@ import java.util.LinkedList
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class LoggingService : LifecycleService(), SharedPreferences.OnSharedPreferenceChangeListener {
+class LoggingService : LifecycleService() {
 
     companion object {
         const val ACTION_RESTART_LOGGING = "logfox.RESTART_LOGGING"
@@ -79,9 +76,6 @@ class LoggingService : LifecycleService(), SharedPreferences.OnSharedPreferenceC
     private val logsMutex = Mutex()
     private var loggingJob: Job? = null
 
-    private var loggingInterval = AppPreferences.LOGS_UPDATE_INTERVAL_DEFAULT
-    private var logsDisplayLimit = AppPreferences.LOGS_DISPLAY_LIMIT_DEFAULT
-
     private var idsCounter = -1L
 
     override fun onCreate() {
@@ -107,19 +101,7 @@ class LoggingService : LifecycleService(), SharedPreferences.OnSharedPreferenceC
     private fun startLogging() {
         if (loggingJob?.isActive == true) return
 
-        lifecycleScope.launch {
-            appPreferences.logsUpdateIntervalFlow
-                .onEach { loggingInterval = it }
-                .launchIn(this)
-
-            appPreferences.logsDisplayLimitFlow
-                .onEach { logsDisplayLimit = it }
-                .launchIn(this)
-        }
-
         var loggingTerminal = terminals[appPreferences.selectedTerminalIndex]
-        //loggingInterval = appPreferences.logsUpdateInterval
-        //logsDisplayLimit = appPreferences.logsDisplayLimit
 
         loggingJob = lifecycleScope.launch {
             try {
@@ -144,7 +126,7 @@ class LoggingService : LifecycleService(), SharedPreferences.OnSharedPreferenceC
                         logsMutex.withLock {
                             logs.add(logLine)
 
-                            while (logs.size > logsDisplayLimit)
+                            while (logs.size > appPreferences.logsDisplayLimit)
                                 logs.removeFirst()
                         }
 
@@ -193,12 +175,15 @@ class LoggingService : LifecycleService(), SharedPreferences.OnSharedPreferenceC
         )
         .build()
 
-    private fun killApp() {
+    private fun killApp() = lifecycleScope.launch {
+        loggingJob?.cancelAndJoin()
+        clearLogs().join()
+
         activityManager.appTasks.forEach {
             it.finishAndRemoveTask()
         }
 
-        ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_REMOVE)
+        ServiceCompat.stopForeground(this@LoggingService, ServiceCompat.STOP_FOREGROUND_REMOVE)
         stopSelf()
     }
 
@@ -209,12 +194,5 @@ class LoggingService : LifecycleService(), SharedPreferences.OnSharedPreferenceC
 
     inner class LocalBinder : Binder() {
         val service: LoggingService get() = this@LoggingService
-    }
-
-    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
-        when (key) {
-            "pref_logs_update_interval" -> loggingInterval = appPreferences.logsUpdateInterval
-            "pref_logs_display_limit" -> logsDisplayLimit = appPreferences.logsDisplayLimit
-        }
     }
 }

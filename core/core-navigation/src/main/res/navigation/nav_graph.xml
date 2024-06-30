@@ -35,6 +35,22 @@
     </action>
 
     <action
+        android:id="@+id/action_global_logsFragment_from_recordingBottomSheet"
+        app:destination="@id/logs"
+        app:popUpTo="@id/recordings"
+        app:popUpToInclusive="true"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
+        app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+        app:popExitAnim="@anim/nav_default_pop_exit_anim">
+        <argument
+            android:name="file_uri"
+            app:argType="android.net.Uri"
+            android:defaultValue="@null"
+            app:nullable="true" />
+    </action>
+
+    <action
         android:id="@+id/action_global_recordingsFragment"
         app:destination="@id/recordings"
         app:enterAnim="@anim/nav_default_enter_anim"

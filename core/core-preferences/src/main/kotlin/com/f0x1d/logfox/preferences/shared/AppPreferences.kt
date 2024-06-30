@@ -33,6 +33,8 @@ class AppPreferences @Inject constructor(
         const val TERMINAL_INDEX_DEFAULT = 0
     }
 
+    private var cachedShowLogValues: ShowLogValues? = null
+
     var dateFormat
         get() = getNullable("pref_date_format", DATE_FORMAT_DEFAULT)
         set(value) { put("pref_date_format", value) }
@@ -78,28 +80,52 @@ class AppPreferences @Inject constructor(
 
     var showLogDate
         get() = get("pref_show_log_date", false)
-        set(value) { put("pref_show_log_date", value) }
+        set(value) {
+            put("pref_show_log_date", value)
+            updateCachedShowLogsValues()
+        }
     var showLogTime
         get() = get("pref_show_log_time", false)
-        set(value) { put("pref_show_log_time", value) }
+        set(value) {
+            put("pref_show_log_time", value)
+            updateCachedShowLogsValues()
+        }
     var showLogUid
         get() = get("pref_show_log_uid", false)
-        set(value) { put("pref_show_log_uid", value) }
+        set(value) {
+            put("pref_show_log_uid", value)
+            updateCachedShowLogsValues()
+        }
     var showLogPid
         get() = get("pref_show_log_pid", false)
-        set(value) { put("pref_show_log_pid", value) }
+        set(value) {
+            put("pref_show_log_pid", value)
+            updateCachedShowLogsValues()
+        }
     var showLogTid
         get() = get("pref_show_log_tid", false)
-        set(value) { put("pref_show_log_tid", value) }
+        set(value) {
+            put("pref_show_log_tid", value)
+            updateCachedShowLogsValues()
+        }
     var showLogPackage
         get() = get("pref_show_log_package", false)
-        set(value) { put("pref_show_log_package", value) }
+        set(value) {
+            put("pref_show_log_package", value)
+            updateCachedShowLogsValues()
+        }
     var showLogTag
         get() = get("pref_show_log_tag", true)
-        set(value) { put("pref_show_log_tag", value) }
+        set(value) {
+            put("pref_show_log_tag", value)
+            updateCachedShowLogsValues()
+        }
     var showLogContent
         get() = get("pref_show_log_content", true)
-        set(value) { put("pref_show_log_content", value) }
+        set(value) {
+            put("pref_show_log_content", value)
+            updateCachedShowLogsValues()
+        }
 
     val showLogValuesFlow get() = sharedPreferences.keyFlow.filter { key ->
         key?.startsWith("pref_show_log") == true
@@ -130,16 +156,7 @@ class AppPreferences @Inject constructor(
         get() = get("pref_asked_notifications_permission", false)
         set(value) { put("pref_asked_notifications_permission", value) }
 
-    val showLogValues get() = ShowLogValues(
-        showLogDate,
-        showLogTime,
-        showLogUid,
-        showLogPid,
-        showLogTid,
-        showLogPackage,
-        showLogTag,
-        showLogContent,
-    )
+    val showLogValues get() = cachedShowLogValues ?: updateCachedShowLogsValues()
 
     fun collectingFor(crashType: CrashType) = get(
         key = "pref_collect_${crashType.readableName.lowercase()}",
@@ -167,6 +184,17 @@ class AppPreferences @Inject constructor(
             formatTime = formatTime,
         )
     }
+
+    private fun updateCachedShowLogsValues(): ShowLogValues = ShowLogValues(
+        showLogDate,
+        showLogTime,
+        showLogUid,
+        showLogPid,
+        showLogTid,
+        showLogPackage,
+        showLogTag,
+        showLogContent,
+    ).also { cachedShowLogValues = it }
 
     override fun providePreferences(context: Context) = PreferenceManager.getDefaultSharedPreferences(context)
 }

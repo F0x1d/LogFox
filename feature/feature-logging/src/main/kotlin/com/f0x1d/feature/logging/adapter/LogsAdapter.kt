@@ -22,21 +22,9 @@ class LogsAdapter(
             notifyItemRangeChanged(0, itemCount)
         }
 
-    var textSize = appPreferences.logsTextSize.toFloat()
-        set(value) {
-            field = value
-            notifyItemRangeChanged(0, itemCount)
-        }
-    var logsExpanded = appPreferences.logsExpanded
-        set(value) {
-            field = value
-            notifyItemRangeChanged(0, itemCount)
-        }
-    var logsFormat = appPreferences.showLogValues
-        set(value) {
-            field = value
-            notifyItemRangeChanged(0, itemCount)
-        }
+    val textSize get() = appPreferences.logsTextSize.toFloat()
+    val logsExpanded get() = appPreferences.logsExpanded
+    val logsFormat get() = appPreferences.showLogValues
 
     override fun createHolder(layoutInflater: LayoutInflater, parent: ViewGroup) = LogViewHolder(
         binding = ItemLogBinding.inflate(layoutInflater, parent, false),

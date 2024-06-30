@@ -51,7 +51,7 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>() 
                     )
                 )
                 snackbar(Strings.text_copied)
-            }
+            },
         )
     }
     private var changingState = false
@@ -211,19 +211,6 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>() 
             }
 
             changingState = false
-        }
-
-        viewModel.apply {
-            appPreferences.logsTextSizeFlow.collectWithLifecycle {
-                adapter.textSize = it.toFloat()
-            }
-            appPreferences.logsExpandedFlow.collectWithLifecycle {
-                adapter.logsExpanded = it
-            }
-
-            appPreferences.showLogValuesFlow.collectWithLifecycle {
-                adapter.logsFormat = it
-            }
         }
 
         requireActivity().onBackPressedDispatcher.apply {
