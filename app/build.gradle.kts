@@ -12,7 +12,7 @@ android {
         applicationId = logFoxPackageName
 
         versionCode = 60
-        versionName = "1.5.8"
+        versionName = "2.0.0"
     }
 
     applicationVariants.all {
