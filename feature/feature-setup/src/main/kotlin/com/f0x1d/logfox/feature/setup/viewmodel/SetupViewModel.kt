@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.f0x1d.logfox.arch.viewmodel.BaseViewModel
 import com.f0x1d.logfox.context.copyText
+import com.f0x1d.logfox.context.hardRestartApp
 import com.f0x1d.logfox.context.hasPermissionToReadLogs
 import com.f0x1d.logfox.preferences.shared.AppPreferences
 import com.f0x1d.logfox.strings.Strings
@@ -28,10 +29,6 @@ class SetupViewModel @Inject constructor(
 
     val adbCommand get() = "adb shell ${command.joinToString(" ")}"
     private val command get() = arrayOf("pm", "grant", ctx.packageName, Manifest.permission.READ_LOGS)
-
-    companion object {
-        const val EVENT_TYPE_GOT_PERMISSION = "got_permission"
-    }
 
     fun root() = launchCatching {
         if (rootTerminal.isSupported()) {
@@ -71,5 +68,5 @@ class SetupViewModel @Inject constructor(
         snackbar(Strings.text_copied)
     }
 
-    private fun gotPermission() = sendEvent(EVENT_TYPE_GOT_PERMISSION)
+    private fun gotPermission() = ctx.hardRestartApp()
 }
