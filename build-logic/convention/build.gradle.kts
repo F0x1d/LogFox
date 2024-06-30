@@ -25,23 +25,32 @@ gradlePlugin {
     plugins {
         register("androidApplication") {
             id = "logfox.android.application"
-            implementationClass = "AndroidApplicationConventionPlugin"
+            implementationClass = "main.AndroidApplicationConventionPlugin"
         }
         register("androidLibrary") {
             id = "logfox.android.library"
-            implementationClass = "AndroidLibraryConventionPlugin"
+            implementationClass = "main.AndroidLibraryConventionPlugin"
         }
         register("androidCore") {
             id = "logfox.android.core"
-            implementationClass = "AndroidCoreConventionPlugin"
-        }
-        register("androidHilt") {
-            id = "logfox.android.hilt"
-            implementationClass = "AndroidHiltConventionPlugin"
+            implementationClass = "main.AndroidCoreConventionPlugin"
         }
         register("androidFeature") {
             id = "logfox.android.feature"
-            implementationClass = "AndroidFeatureConventionPlugin"
+            implementationClass = "main.feature.AndroidFeatureConventionPlugin"
+        }
+        register("androidFeatureCompose") {
+            id = "logfox.android.feature.compose"
+            implementationClass = "main.feature.AndroidComposeFeatureConventionPlugin"
+        }
+
+        register("androidHilt") {
+            id = "logfox.android.hilt"
+            implementationClass = "additional.AndroidHiltConventionPlugin"
+        }
+        register("androidCompose") {
+            id = "logfox.android.compose"
+            implementationClass = "additional.AndroidComposeConventionPlugin"
         }
     }
 }

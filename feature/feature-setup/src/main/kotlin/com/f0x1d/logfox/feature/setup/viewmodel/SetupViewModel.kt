@@ -2,8 +2,11 @@ package com.f0x1d.logfox.feature.setup.viewmodel
 
 import android.Manifest
 import android.app.Application
-import com.f0x1d.logfox.arch.di.IODispatcher
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import com.f0x1d.logfox.arch.viewmodel.BaseViewModel
+import com.f0x1d.logfox.context.copyText
 import com.f0x1d.logfox.context.hasPermissionToReadLogs
 import com.f0x1d.logfox.preferences.shared.AppPreferences
 import com.f0x1d.logfox.strings.Strings
@@ -11,7 +14,6 @@ import com.f0x1d.logfox.terminals.DefaultTerminal
 import com.f0x1d.logfox.terminals.RootTerminal
 import com.f0x1d.logfox.terminals.ShizukuTerminal
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
 
 @HiltViewModel
@@ -19,19 +21,19 @@ class SetupViewModel @Inject constructor(
     private val appPreferences: AppPreferences,
     private val rootTerminal: RootTerminal,
     private val shizukuTerminal: ShizukuTerminal,
-    @IODispatcher private val ioDispatcher: CoroutineDispatcher,
     application: Application,
 ): BaseViewModel(application) {
 
-    private val command get() = arrayOf("pm", "grant", ctx.packageName, Manifest.permission.READ_LOGS)
+    var showAdbDialog by mutableStateOf(false)
+
     val adbCommand get() = "adb shell ${command.joinToString(" ")}"
+    private val command get() = arrayOf("pm", "grant", ctx.packageName, Manifest.permission.READ_LOGS)
 
     companion object {
         const val EVENT_TYPE_GOT_PERMISSION = "got_permission"
-        const val EVENT_TYPE_SHOW_ADB_DIALOG = "adb_dialog"
     }
 
-    fun root() = launchCatching(ioDispatcher) {
+    fun root() = launchCatching {
         if (rootTerminal.isSupported()) {
             appPreferences.selectTerminal(RootTerminal.INDEX)
 
@@ -41,16 +43,16 @@ class SetupViewModel @Inject constructor(
             snackbar(Strings.no_root)
     }
 
-    fun adb() = launchCatching(ioDispatcher) {
+    fun adb() = launchCatching {
         if (ctx.hasPermissionToReadLogs)
             gotPermission()
         else {
-            sendEvent(EVENT_TYPE_SHOW_ADB_DIALOG)
+            showAdbDialog = true
             appPreferences.selectTerminal(DefaultTerminal.INDEX)
         }
     }
 
-    fun shizuku() = launchCatching(ioDispatcher) {
+    fun shizuku() = launchCatching {
         appPreferences.selectTerminal(ShizukuTerminal.INDEX)
 
         if (shizukuTerminal.isSupported() && shizukuTerminal.executeNow(*command).isSuccessful)
@@ -63,6 +65,11 @@ class SetupViewModel @Inject constructor(
         gotPermission()
     else
         snackbar(Strings.no_permission_detected)
+
+    fun copyCommand() {
+        ctx.copyText(adbCommand)
+        snackbar(Strings.text_copied)
+    }
 
     private fun gotPermission() = sendEvent(EVENT_TYPE_GOT_PERMISSION)
 }

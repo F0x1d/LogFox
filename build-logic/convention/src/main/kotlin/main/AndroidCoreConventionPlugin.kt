@@ -1,3 +1,5 @@
+package main
+
 import extensions.bundle
 import extensions.implementation
 import extensions.library

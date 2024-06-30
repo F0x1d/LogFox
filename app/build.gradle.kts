@@ -38,6 +38,7 @@ dependencies {
     implementation(project(":core:core-preferences"))
     implementation(project(":core:core-terminals"))
     implementation(project(":core:core-ui"))
+    implementation(project(":core:core-ui-compose"))
 
     implementation(project(":feature:feature-crashes"))
     implementation(project(":feature:feature-crashes-core"))

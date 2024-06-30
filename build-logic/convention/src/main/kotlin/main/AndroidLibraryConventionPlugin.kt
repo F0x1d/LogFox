@@ -1,3 +1,5 @@
+package main
+
 import com.android.build.gradle.LibraryExtension
 import extensions.configureKotlinAndroid
 import extensions.pluginId

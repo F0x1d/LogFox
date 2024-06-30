@@ -1,3 +1,5 @@
+package main
+
 import com.android.build.api.dsl.ApplicationExtension
 import extensions.configureKotlinAndroid
 import extensions.pluginId
@@ -15,6 +17,7 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
             apply(pluginId("ksp"))
 
             apply("logfox.android.hilt")
+            apply("logfox.android.compose")
         }
 
         extensions.configure<ApplicationExtension> {

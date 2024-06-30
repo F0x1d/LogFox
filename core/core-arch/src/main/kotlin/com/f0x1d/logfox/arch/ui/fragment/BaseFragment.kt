@@ -51,7 +51,7 @@ abstract class BaseFragment<T : ViewBinding>: Fragment() {
         mutableBinding = null
     }
 
-    protected fun snackbar(text: String) = requireView().snackbar(text).apply {
+    protected open fun snackbar(text: String) = requireView().snackbar(text).apply {
         view.applyInsetter {
             type(navigationBars = true) {
                 margin(vertical = resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE)

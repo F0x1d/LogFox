@@ -30,6 +30,7 @@ include(":core:core-navigation")
 include(":core:core-preferences")
 include(":core:core-terminals")
 include(":core:core-ui")
+include(":core:core-ui-compose")
 
 include(":feature:feature-crashes")
 include(":feature:feature-crashes-core")

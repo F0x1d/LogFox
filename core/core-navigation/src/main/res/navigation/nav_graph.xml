@@ -11,7 +11,7 @@
 
     <fragment
         android:id="@+id/setupFragment"
-        android:name="com.f0x1d.logfox.feature.setup.ui.fragment.SetupFragment"
+        android:name="com.f0x1d.logfox.feature.setup.ui.fragment.setup.SetupFragment"
         android:label="SetupFragment" />
 
     <action
