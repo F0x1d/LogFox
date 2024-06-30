@@ -10,10 +10,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
-import android.util.TypedValue
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import androidx.annotation.AttrRes
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
@@ -94,24 +92,6 @@ fun Context.doIfNotificationsAllowed(block: NotificationManagerCompat.() -> Unit
     block(notificationManagerCompat)
 else
     Unit
-
-fun Context.resolveAttribute(@AttrRes attributeResId: Int) = TypedValue().let {
-    when (theme.resolveAttribute(attributeResId, it, true)) {
-        true -> it
-
-        else -> null
-    }
-}
-
-fun Context.resolveBoolean(@AttrRes attributeResId: Int, defaultValue: Boolean = false) = resolveAttribute(
-    attributeResId = attributeResId
-).let {
-    when (it != null && it.type == TypedValue.TYPE_INT_BOOLEAN) {
-        true -> it.data != 0
-
-        else -> defaultValue
-    }
-}
 
 
 val Context.isHorizontalOrientation get() = resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE

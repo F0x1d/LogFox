@@ -1,5 +1,5 @@
 plugins {
-    id("logfox.android.library")
+    id("logfox.android.core")
     id("logfox.android.hilt")
 }
 
@@ -14,7 +14,6 @@ android {
 }
 
 dependencies {
-    implementation(project(":data"))
     implementation(project(":core:core-arch"))
 
     implementation(libs.androidx.room)

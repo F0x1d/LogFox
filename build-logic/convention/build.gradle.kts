@@ -31,6 +31,10 @@ gradlePlugin {
             id = "logfox.android.library"
             implementationClass = "AndroidLibraryConventionPlugin"
         }
+        register("androidCore") {
+            id = "logfox.android.core"
+            implementationClass = "AndroidCoreConventionPlugin"
+        }
         register("androidHilt") {
             id = "logfox.android.hilt"
             implementationClass = "AndroidHiltConventionPlugin"

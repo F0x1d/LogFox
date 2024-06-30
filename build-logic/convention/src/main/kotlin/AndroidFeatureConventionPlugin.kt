@@ -29,6 +29,7 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
             implementation(project(":core:core-terminals"))
             implementation(project(":core:core-ui"))
 
+            implementation(library("material"))
             implementation(bundle("androidx"))
             implementation(bundle("androidx-navigation"))
 

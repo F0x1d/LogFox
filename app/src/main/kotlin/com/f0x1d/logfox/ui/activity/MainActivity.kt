@@ -144,7 +144,7 @@ class MainActivity: BaseViewModelActivity<MainViewModel, ActivityMainBinding>(),
             window.navigationBarColor = when {
                 barShown && !isHorizontalOrientation -> Color.TRANSPARENT
 
-                else -> getColor(com.f0x1d.logfox.ui.R.color.navbar_transparent_background)
+                else -> getColor(com.f0x1d.logfox.arch.R.color.navbar_transparent_background)
             }
         } else if (gesturesAvailable) {
             window.isNavigationBarContrastEnforced = !(barShown && !isHorizontalOrientation)

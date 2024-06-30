@@ -2,9 +2,9 @@ package com.f0x1d.logfox.arch.ui.activity
 
 import android.content.Context
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewbinding.ViewBinding
+import com.f0x1d.logfox.arch.ui.enableEdgeToEdge
 import com.f0x1d.logfox.arch.ui.snackbar
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
@@ -22,7 +22,7 @@ abstract class BaseActivity<T : ViewBinding>: AppCompatActivity() {
     protected open fun T.onCreate(savedInstanceState: Bundle?) = Unit
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        enableEdgeToEdge()
+        window.enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
         inflateBinding()?.also {
