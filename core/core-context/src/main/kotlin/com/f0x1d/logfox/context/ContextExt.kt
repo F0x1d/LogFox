@@ -46,7 +46,8 @@ fun Context.hardRestartApp() {
     exitProcess(0)
 }
 
-fun Context.toast(text: Int) = Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
+fun Context.toast(text: String) = Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
+fun Context.toast(text: Int) = toast(getString(text))
 
 fun Context.shareIntent(text: String) = baseShareIntent {
     it.putExtra(Intent.EXTRA_TEXT, text)

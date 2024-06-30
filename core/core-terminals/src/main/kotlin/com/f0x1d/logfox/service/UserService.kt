@@ -9,16 +9,21 @@ import com.f0x1d.logfox.IUserService
 import com.f0x1d.logfox.model.terminal.TerminalResult
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import java.io.InputStream
+import java.io.OutputStream
 import kotlin.system.exitProcess
 
 class UserService(): IUserService.Stub() {
 
-    private var serviceScope: CoroutineScope? = null
+    private val serviceScopeJob = SupervisorJob()
+    private val serviceScope = CoroutineScope(Dispatchers.IO + serviceScopeJob)
 
     private var latestId = 0L
     private val currentProcesses = HashMap<Long, Process>()
@@ -28,17 +33,13 @@ class UserService(): IUserService.Stub() {
     @Keep
     constructor(context: Context): this()
 
-    init {
-        serviceScope = CoroutineScope(Dispatchers.IO)
-    }
-
     override fun destroy() {
+        serviceScope.cancel()
+        runBlocking { serviceScopeJob.join() }
+
         currentProcesses.values.forEach { process ->
             process.tryDestroy()
         }
-
-        serviceScope?.cancel()
-        serviceScope = null
 
         exitProcess(0)
     }
@@ -85,7 +86,7 @@ class UserService(): IUserService.Stub() {
     private fun pipeFrom(inputStream: InputStream): ParcelFileDescriptor {
         val pipe = ParcelFileDescriptor.createPipe()
 
-        serviceScope?.launch(Dispatchers.IO) {
+        serviceScope.launch {
             AutoCloseOutputStream(pipe[1]).use {
                 try {
                     inputStream.copyTo(it)
@@ -102,7 +103,7 @@ class UserService(): IUserService.Stub() {
         val process = currentProcesses[processId] ?: return null
 
         val pipe = ParcelFileDescriptor.createPipe()
-        serviceScope?.launch(Dispatchers.IO) {
+        serviceScope.launch {
             AutoCloseInputStream(pipe[0]).use {
                 try {
                     it.copyTo(process.outputStream)
@@ -117,6 +118,24 @@ class UserService(): IUserService.Stub() {
 
     override fun destroyProcess(processId: Long) {
         currentProcesses.remove(processId)?.tryDestroy()
+    }
+
+    // Cancellable implementation
+    private suspend fun InputStream.copyTo(
+        out: OutputStream,
+        bufferSize: Int = DEFAULT_BUFFER_SIZE,
+    ): Long = withContext(Dispatchers.IO) {
+        var bytesCopied: Long = 0
+        val buffer = ByteArray(bufferSize)
+        var bytes = read(buffer)
+
+        while (bytes >= 0 && isActive) {
+            out.write(buffer, 0, bytes)
+            bytesCopied += bytes
+            bytes = read(buffer)
+        }
+
+        return@withContext bytesCopied
     }
 
     private fun Process.tryDestroy() = runCatching {

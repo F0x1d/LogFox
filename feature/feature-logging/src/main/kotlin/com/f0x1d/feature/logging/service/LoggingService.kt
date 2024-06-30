@@ -7,7 +7,6 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.ServiceCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
-import com.f0x1d.logfox.arch.di.MainDispatcher
 import com.f0x1d.logfox.context.LOGGING_STATUS_CHANNEL_ID
 import com.f0x1d.logfox.context.activityManager
 import com.f0x1d.logfox.context.toast
@@ -28,7 +27,6 @@ import com.f0x1d.logfox.terminals.DefaultTerminal
 import com.f0x1d.logfox.terminals.base.Terminal
 import com.f0x1d.logfox.ui.Icons
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.cancelAndJoin
@@ -76,10 +74,6 @@ class LoggingService : LifecycleService() {
 
     @Inject
     lateinit var terminals: Array<Terminal>
-
-    @MainDispatcher
-    @Inject
-    lateinit var mainDispatcher: CoroutineDispatcher
 
     private val logs = LinkedList<LogLine>()
     private val logsMutex = Mutex()
@@ -129,7 +123,7 @@ class LoggingService : LifecycleService() {
                         startingId = idsCounter,
                     ).catch { throwable ->
                         if (throwable is TerminalNotSupportedException) {
-                            if (appPreferences.fallbackToDefaultTerminal) withContext(mainDispatcher) {
+                            if (appPreferences.fallbackToDefaultTerminal) {
                                 toast(Strings.terminal_unavailable_falling_back)
 
                                 loggingTerminal.exit()
@@ -138,6 +132,7 @@ class LoggingService : LifecycleService() {
                                 delay(10000) // waiting for 10sec before new attempt
                             }
                         } else {
+                            toast(getString(Strings.error, throwable.localizedMessage))
                             throwable.printStackTrace()
                         }
                     }.collect { logLine ->
@@ -198,7 +193,6 @@ class LoggingService : LifecycleService() {
 
     private fun killApp() = lifecycleScope.launch {
         loggingJob?.cancelAndJoin()
-        clearLogs().join()
 
         activityManager.appTasks.forEach {
             it.finishAndRemoveTask()
