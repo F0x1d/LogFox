@@ -9,7 +9,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class SettingsLinksFragment : BasePreferenceFragment() {
 
-    override val title = Strings.about_app
+    override val title = Strings.links
     override val showBackArrow = true
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {

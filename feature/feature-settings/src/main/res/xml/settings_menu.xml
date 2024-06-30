@@ -26,14 +26,14 @@
         app:iconSpaceReserved="false"
         app:allowDividerAbove="false">
         <Preference
+            android:title="@string/links"
+            android:key="pref_settings_links"
+            android:icon="@drawable/ic_add_link" />
+        <Preference
             android:title="1.0.0 (1)"
             android:key="pref_settings_app_version"
             android:icon="@drawable/ic_settings_info"
             android:selectable="false" />
-        <Preference
-            android:title="@string/links"
-            android:key="pref_settings_links"
-            android:icon="@drawable/ic_add_link" />
     </PreferenceCategory>
 
 </PreferenceScreen>

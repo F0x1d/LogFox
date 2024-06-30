@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory
-        android:title="@string/links"
+        android:title="@string/about_app"
         app:iconSpaceReserved="false"
         app:allowDividerAbove="false">
         <Preference
