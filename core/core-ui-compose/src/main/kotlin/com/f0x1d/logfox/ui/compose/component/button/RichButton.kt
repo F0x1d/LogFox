@@ -38,7 +38,7 @@ fun RichButton(
         Text(
             text = stringResource(id = text),
             style = MaterialTheme.typography.bodyLarge,
-            fontWeight = FontWeight.Bold,
+            fontWeight = FontWeight.Medium,
         )
     }
 }
