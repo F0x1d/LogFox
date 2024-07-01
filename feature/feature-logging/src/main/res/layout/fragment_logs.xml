@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        app:liftOnScroll="true">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            style="@style/Widget.LogFox.Toolbar"
+            android:id="@+id/toolbar"
+            app:title="@string/app_name"
+            app:menu="@menu/logs_menu" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/logs_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:listitem="@layout/item_log" />
+
+    <include
+        android:id="@+id/placeholder_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        layout="@layout/placeholder_logs"
+        app:layout_anchor="@id/logs_recycler"
+        app:layout_anchorGravity="center" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/scroll_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_arrow_drop_down"
+        android:visibility="gone"
+        android:layout_margin="10dp"
+        app:layout_anchor="@id/logs_recycler"
+        app:layout_anchorGravity="bottom|end"
+        android:contentDescription="@string/scroll_to_bottom"
+        android:tooltipText="@string/scroll_to_bottom"
+        tools:targetApi="o" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
