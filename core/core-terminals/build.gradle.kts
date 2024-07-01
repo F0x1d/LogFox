@@ -12,5 +12,6 @@ android {
 dependencies {
     implementation(project(":core:core-arch"))
 
+    implementation(libs.libsu)
     implementation(libs.bundles.shizuku)
 }
