@@ -43,14 +43,14 @@ internal class RecordingNotificationControllerImpl @Inject constructor(
                 .addAction(
                     Icons.ic_pause,
                     context.getString(Strings.pause),
-                    context.makeBroadcastPendingIntent(PAUSE_RECORDING_INTENT_ID, RecordingReceiver::class.java) {
+                    context.makeBroadcastPendingIntent<RecordingReceiver>(PAUSE_RECORDING_INTENT_ID) {
                         action = RecordingReceiver.ACTION_PAUSE_LOGGING
                     }
                 )
                 .addAction(
                     Icons.ic_stop,
                     context.getString(Strings.stop),
-                    context.makeBroadcastPendingIntent(STOP_RECORDING_INTENT_ID, RecordingReceiver::class.java) {
+                    context.makeBroadcastPendingIntent<RecordingReceiver>(STOP_RECORDING_INTENT_ID) {
                         action = RecordingReceiver.ACTION_STOP_LOGGING
                     }
                 )
@@ -70,19 +70,19 @@ internal class RecordingNotificationControllerImpl @Inject constructor(
                 .addAction(
                     Icons.ic_play,
                     context.getString(Strings.resume),
-                    context.makeBroadcastPendingIntent(RESUME_RECORDING_INTENT_ID, RecordingReceiver::class.java) {
+                    context.makeBroadcastPendingIntent<RecordingReceiver>(RESUME_RECORDING_INTENT_ID) {
                         action = RecordingReceiver.ACTION_RESUME_LOGGING
                     }
                 )
                 .addAction(
                     Icons.ic_stop,
                     context.getString(Strings.stop),
-                    context.makeBroadcastPendingIntent(STOP_RECORDING_INTENT_ID, RecordingReceiver::class.java) {
+                    context.makeBroadcastPendingIntent<RecordingReceiver>(STOP_RECORDING_INTENT_ID) {
                         action = RecordingReceiver.ACTION_STOP_LOGGING
                     }
                 )
                 .setDeleteIntent(
-                    context.makeBroadcastPendingIntent(STOP_RECORDING_INTENT_ID, RecordingReceiver::class.java) {
+                    context.makeBroadcastPendingIntent<RecordingReceiver>(STOP_RECORDING_INTENT_ID) {
                         action = RecordingReceiver.ACTION_STOP_LOGGING
                     }
                 )

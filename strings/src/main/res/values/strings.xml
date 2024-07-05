@@ -152,4 +152,7 @@
     <string name="export_logs_in_original_format">Export logs in original format</string>
     <string name="support_chat">Support chat</string>
     <string name="support_chat_desc">Use for fast troubleshooting</string>
+    <string name="type_crashes">%s crashes</string>
+    <string name="crashes_of">%s crashes of %s</string>
+    <string name="per_app_notifications_settings">Per app notifications settings are available in app\'s crash details and LogFox\'s system settings</string>
 </resources>

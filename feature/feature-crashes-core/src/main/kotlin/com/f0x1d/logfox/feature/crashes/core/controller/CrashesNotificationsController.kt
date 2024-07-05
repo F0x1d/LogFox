@@ -3,10 +3,13 @@ package com.f0x1d.logfox.feature.crashes.core.controller
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import androidx.core.app.NotificationChannelCompat
+import androidx.core.app.NotificationChannelGroupCompat
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.os.bundleOf
 import androidx.navigation.NavDeepLinkBuilder
-import com.f0x1d.logfox.context.CRASHES_CHANNEL_ID
+import com.f0x1d.logfox.context.CRASHES_CHANNEL_GROUP_ID
 import com.f0x1d.logfox.context.doIfNotificationsAllowed
 import com.f0x1d.logfox.context.notificationManager
 import com.f0x1d.logfox.context.notificationManagerCompat
@@ -33,11 +36,13 @@ internal class CrashesNotificationsControllerImpl @Inject constructor(
 ) : CrashesNotificationsController {
 
     override fun sendErrorNotification(appCrash: AppCrash, crashLog: String?) {
+        createNotificationChannelFor(appCrash)
+
         context.doIfNotificationsAllowed {
             notify(
                 appCrash.packageName,
                 appCrash.notificationId,
-                NotificationCompat.Builder(context, CRASHES_CHANNEL_ID)
+                NotificationCompat.Builder(context, appCrash.notificationChannelId)
                     .setContentTitle(
                         context.getString(
                             Strings.app_crashed,
@@ -60,16 +65,41 @@ internal class CrashesNotificationsControllerImpl @Inject constructor(
                     .addAction(
                         Icons.ic_copy,
                         context.getString(android.R.string.copy),
-                        context.makeBroadcastPendingIntent(
-                            COPY_CRASH_INTENT_ID, CopyReceiver::class.java, bundleOf(
+                        context.makeBroadcastPendingIntent<CopyReceiver>(
+                            id = COPY_CRASH_INTENT_ID,
+                            extras = bundleOf(
                                 Intent.EXTRA_TEXT to crashLog,
                                 CopyReceiver.EXTRA_PACKAGE_NAME to appCrash.packageName,
-                                CopyReceiver.EXTRA_NOTIFICATION_ID to appCrash.notificationId
+                                CopyReceiver.EXTRA_NOTIFICATION_ID to appCrash.notificationId,
                             )
                         )
                     )
                     .build()
             )
+        }
+    }
+
+    private fun createNotificationChannelFor(appCrash: AppCrash) {
+        val crashTypeName = appCrash.crashType.readableName
+        val groupId = "${CRASHES_CHANNEL_GROUP_ID}_$crashTypeName"
+
+        val crashesGroup = NotificationChannelGroupCompat.Builder(groupId)
+            .setName(context.getString(Strings.type_crashes, crashTypeName))
+            .build()
+
+        val appCrashesChannel = NotificationChannelCompat.Builder(
+            appCrash.notificationChannelId,
+            NotificationManagerCompat.IMPORTANCE_HIGH,
+        )
+            .setName(context.getString(Strings.crashes_of, crashTypeName, appCrash.packageName))
+            .setLightsEnabled(true)
+            .setVibrationEnabled(true)
+            .setGroup(groupId)
+            .build()
+
+        context.notificationManagerCompat.apply {
+            createNotificationChannelGroupsCompat(listOf(crashesGroup))
+            createNotificationChannelsCompat(listOf(appCrashesChannel))
         }
     }
 
@@ -86,3 +116,5 @@ internal class CrashesNotificationsControllerImpl @Inject constructor(
         }
     }
 }
+
+val AppCrash.notificationChannelId get() = "${CRASHES_CHANNEL_GROUP_ID}_${crashType.readableName}_$packageName"

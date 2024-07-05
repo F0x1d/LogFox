@@ -3,7 +3,6 @@ package com.f0x1d.logfox
 import android.app.Application
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationManagerCompat
-import com.f0x1d.logfox.context.CRASHES_CHANNEL_ID
 import com.f0x1d.logfox.context.LOGGING_STATUS_CHANNEL_ID
 import com.f0x1d.logfox.context.RECORDING_STATUS_CHANNEL_ID
 import com.f0x1d.logfox.context.notificationManagerCompat
@@ -27,15 +26,6 @@ class LogFoxApp: Application() {
                 .setShowBadge(false)
                 .build()
 
-            val crashesChannel = NotificationChannelCompat.Builder(
-                CRASHES_CHANNEL_ID,
-                NotificationManagerCompat.IMPORTANCE_HIGH
-            )
-                .setName(getString(Strings.crashes))
-                .setLightsEnabled(true)
-                .setVibrationEnabled(true)
-                .build()
-
             val recordingStatusChannel = NotificationChannelCompat.Builder(
                 RECORDING_STATUS_CHANNEL_ID,
                 NotificationManagerCompat.IMPORTANCE_DEFAULT
@@ -49,7 +39,6 @@ class LogFoxApp: Application() {
             createNotificationChannelsCompat(
                 listOf(
                     loggingStatusChannel,
-                    crashesChannel,
                     recordingStatusChannel
                 )
             )

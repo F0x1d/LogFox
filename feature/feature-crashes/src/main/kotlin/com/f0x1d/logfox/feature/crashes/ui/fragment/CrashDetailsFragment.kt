@@ -1,5 +1,6 @@
 package com.f0x1d.logfox.feature.crashes.ui.fragment
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -10,14 +11,15 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.f0x1d.logfox.arch.notificationsChannelsAvailable
 import com.f0x1d.logfox.arch.ui.fragment.BaseViewModelFragment
 import com.f0x1d.logfox.context.copyText
 import com.f0x1d.logfox.context.shareIntent
 import com.f0x1d.logfox.database.entity.AppCrash
 import com.f0x1d.logfox.feature.crashes.R
+import com.f0x1d.logfox.feature.crashes.core.controller.notificationChannelId
 import com.f0x1d.logfox.feature.crashes.databinding.FragmentCrashDetailsBinding
 import com.f0x1d.logfox.feature.crashes.viewmodel.CrashDetailsViewModel
-import com.f0x1d.logfox.model.event.Event
 import com.f0x1d.logfox.strings.Strings
 import com.f0x1d.logfox.ui.dialog.showAreYouSureDeleteDialog
 import com.f0x1d.logfox.ui.view.loadIcon
@@ -56,15 +58,7 @@ class CrashDetailsFragment: BaseViewModelFragment<CrashDetailsViewModel, Fragmen
         }
     }
 
-    override fun onEvent(event: Event) {
-        when (event.type) {
-            CrashDetailsViewModel.EVENT_TYPE_COPY_LINK -> {
-                requireContext().copyText(event.consume() ?: return)
-                snackbar(Strings.text_copied)
-            }
-        }
-    }
-
+    @SuppressLint("InlinedApi")
     private fun FragmentCrashDetailsBinding.setupFor(item: Pair<AppCrash, String?>) {
         val (appCrash, crashLog) = item
 
@@ -72,6 +66,14 @@ class CrashDetailsFragment: BaseViewModelFragment<CrashDetailsViewModel, Fragmen
             setClickListenerOn(R.id.info_item) {
                 Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
                     data = Uri.fromParts("package", appCrash.packageName, null)
+                }.let(::startActivity)
+            }
+
+            findItem(R.id.notifications_item).setVisible(notificationsChannelsAvailable)
+            setClickListenerOn(R.id.notifications_item) {
+                Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS).apply {
+                    putExtra(Settings.EXTRA_APP_PACKAGE, requireContext().packageName)
+                    putExtra(Settings.EXTRA_CHANNEL_ID, appCrash.notificationChannelId)
                 }.let(::startActivity)
             }
             setClickListenerOn(R.id.delete_item) {

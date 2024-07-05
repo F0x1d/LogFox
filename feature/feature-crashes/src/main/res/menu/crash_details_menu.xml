@@ -9,6 +9,12 @@
         app:showAsAction="always" />
 
     <item
+        android:id="@+id/notifications_item"
+        android:icon="@drawable/ic_notifications"
+        android:title="@string/notifications"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/delete_item"
         android:icon="@drawable/ic_delete"
         android:title="@string/delete"

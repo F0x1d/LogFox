@@ -18,6 +18,7 @@ import com.f0x1d.logfox.feature.logging.core.repository.LoggingRepository
 import com.f0x1d.logfox.feature.logging.core.store.LoggingStore
 import com.f0x1d.logfox.feature.recordings.core.controller.RecordingController
 import com.f0x1d.logfox.intents.EXIT_APP_INTENT_ID
+import com.f0x1d.logfox.intents.OPEN_APP_INTENT_ID
 import com.f0x1d.logfox.intents.makeServicePendingIntent
 import com.f0x1d.logfox.model.exception.TerminalNotSupportedException
 import com.f0x1d.logfox.model.logline.LogLine
@@ -74,6 +75,9 @@ class LoggingService : LifecycleService() {
 
     @Inject
     lateinit var terminals: Array<Terminal>
+
+    @Inject
+    lateinit var mainActivityPendingIntentProvider: MainActivityPendingIntentProvider
 
     private val logs = LinkedList<LogLine>()
     private val logsMutex = Mutex()
@@ -182,10 +186,11 @@ class LoggingService : LifecycleService() {
         .setContentTitle(getString(Strings.logging))
         .setSmallIcon(Icons.ic_logfox)
         .setOngoing(true)
+        .setContentIntent(mainActivityPendingIntentProvider.provide(OPEN_APP_INTENT_ID))
         .addAction(
             Icons.ic_clear,
             getString(Strings.exit),
-            makeServicePendingIntent(EXIT_APP_INTENT_ID, LoggingService::class.java) {
+            makeServicePendingIntent<LoggingService>(EXIT_APP_INTENT_ID) {
                 action = ACTION_KILL_SERVICE
             }
         )

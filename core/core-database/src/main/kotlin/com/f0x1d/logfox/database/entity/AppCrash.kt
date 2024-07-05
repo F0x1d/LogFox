@@ -1,5 +1,6 @@
 package com.f0x1d.logfox.database.entity
 
+import androidx.annotation.Keep
 import androidx.room.ColumnInfo
 import androidx.room.Dao
 import androidx.room.Delete
@@ -100,6 +101,7 @@ interface AppCrashDao {
     suspend fun _delete(crashes: List<AppCrash>)
 }
 
+@Keep
 enum class CrashType(val readableName: String) {
     JAVA("Java"),
     JNI("JNI"),

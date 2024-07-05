@@ -30,10 +30,6 @@ class CrashDetailsViewModel @Inject constructor(
     application: Application,
 ): BaseViewModel(application) {
 
-    companion object {
-        const val EVENT_TYPE_COPY_LINK = "copy_link"
-    }
-
     val crash = crashesRepository.getByIdAsFlow(crashId)
         .map {
             when (it) {

@@ -23,65 +23,56 @@ val pendingIntentFlags = if (mutablePendingIntentAvailable)
 else
     PendingIntent.FLAG_UPDATE_CURRENT
 
-fun <T : BroadcastReceiver> Context.makeBroadcastPendingIntent(
+inline fun <reified T : BroadcastReceiver> Context.makeBroadcastPendingIntent(
     id: Int,
-    clazz: Class<T>,
     setup: Intent.() -> Unit
 ) = PendingIntent.getBroadcast(
     this,
     id,
-    Intent(this, clazz).also { setup(it) },
+    Intent(this, T::class.java).also { setup(it) },
     pendingIntentFlags
 )
 
-fun <T : BroadcastReceiver> Context.makeBroadcastPendingIntent(
+inline fun <reified T : BroadcastReceiver> Context.makeBroadcastPendingIntent(
     id: Int,
-    clazz: Class<T>,
     extras: Bundle = Bundle.EMPTY
-) = makeBroadcastPendingIntent(
+) = makeBroadcastPendingIntent<T>(
     id = id,
-    clazz = clazz,
     setup = { putExtras(extras) }
 )
 
-fun <T : Service> Context.makeServicePendingIntent(
+inline fun <reified T : Service> Context.makeServicePendingIntent(
     id: Int,
-    clazz: Class<T>,
     setup: Intent.() -> Unit
 ) = PendingIntent.getService(
     this,
     id,
-    Intent(this, clazz).also { setup(it) },
+    Intent(this, T::class.java).also { setup(it) },
     pendingIntentFlags
 )
 
-fun <T : Service> Context.makeServicePendingIntent(
+inline fun <reified T : Service> Context.makeServicePendingIntent(
     id: Int,
-    clazz: Class<T>,
     extras: Bundle = Bundle.EMPTY
-) = makeServicePendingIntent(
+) = makeServicePendingIntent<T>(
     id = id,
-    clazz = clazz,
     setup = { putExtras(extras) }
 )
 
-fun <T : Activity> Context.makeActivityPendingIntent(
+inline fun <reified T : Activity> Context.makeActivityPendingIntent(
     id: Int,
-    clazz: Class<T>,
     setup: Intent.() -> Unit
 ) = PendingIntent.getActivity(
     this,
     id,
-    Intent(this, clazz).also { setup(it) },
+    Intent(this, T::class.java).also { setup(it) },
     pendingIntentFlags
 )
 
-fun <T : Activity> Context.makeActivityPendingIntent(
+inline fun <reified T : Activity> Context.makeActivityPendingIntent(
     id: Int,
-    clazz: Class<T>,
     extras: Bundle = Bundle.EMPTY
-) = makeActivityPendingIntent(
+) = makeActivityPendingIntent<T>(
     id = id,
-    clazz = clazz,
     setup = { putExtras(extras) }
 )
