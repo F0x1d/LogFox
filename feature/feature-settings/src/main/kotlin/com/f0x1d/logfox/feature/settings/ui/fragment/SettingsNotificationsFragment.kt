@@ -23,16 +23,6 @@ class SettingsNotificationsFragment: BasePreferenceFragment() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.settings_notifications)
 
-        findPreference<Preference>("pref_notifications_permission")?.setOnPreferenceClickListener {
-            startActivity(
-                Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
-                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    putExtra(Settings.EXTRA_APP_PACKAGE, requireContext().packageName)
-                }
-            )
-            return@setOnPreferenceClickListener true
-        }
-
         findPreference<Preference>("pref_logging_notification")?.apply {
             isVisible = notificationsChannelsAvailable
 
@@ -46,6 +36,20 @@ class SettingsNotificationsFragment: BasePreferenceFragment() {
                 )
                 return@setOnPreferenceClickListener true
             }
+        }
+
+        findPreference<Preference>("pref_per_app_notifications_settings")?.apply {
+            isVisible = notificationsChannelsAvailable
+        }
+
+        findPreference<Preference>("pref_notifications_permission")?.setOnPreferenceClickListener {
+            startActivity(
+                Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    putExtra(Settings.EXTRA_APP_PACKAGE, requireContext().packageName)
+                }
+            )
+            return@setOnPreferenceClickListener true
         }
     }
 
