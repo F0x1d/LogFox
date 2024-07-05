@@ -132,10 +132,13 @@ class ShizukuTerminal @Inject constructor(
     }
 
     override suspend fun exit() {
-        // With true flag it does not remove connection from cache
-        Shizuku.unbindUserService(userServiceArgs, null, false)
-        Shizuku.unbindUserService(userServiceArgs, null, true)
+        // Catching as binder might not even was received
+        runCatching {
+            // With true flag it does not remove connection from cache
+            Shizuku.unbindUserService(userServiceArgs, null, false)
+            Shizuku.unbindUserService(userServiceArgs, null, true)
 
-        userService = null
+            userService = null
+        }
     }
 }
