@@ -55,6 +55,12 @@ jobs:
         with:
           name: logfox-release
 
+      - name: Get the latest commit message
+        id: get_commit_msg
+        run: |
+          commit_message=$(git log -1 --pretty=format:'%s')
+          echo "::set-output name=message::$commit_message"
+
       - name: Send APK to Telegram
         uses: appleboy/telegram-action@master
         with:
@@ -67,4 +73,4 @@ jobs:
             *${{ github.actor }}* committed to *${{ github.repository }}*
 
             Branch: *${{ github.head_ref }}*
-            Commit message: `${{ github.event.pull_request.head.label }}`
+            Commit message: `${{ steps.get_commit_msg.outputs.message }}`

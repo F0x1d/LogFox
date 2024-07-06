@@ -21,4 +21,4 @@ jobs:
           cache: 'gradle'
 
       - name: Run tests
-        run: bash ./gradlew testDebugUnitTest -Proborazzi.test.verify=true
+        run: bash ./gradlew verifyRoborazziDebug
