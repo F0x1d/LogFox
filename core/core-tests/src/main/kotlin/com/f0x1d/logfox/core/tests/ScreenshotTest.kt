@@ -43,7 +43,9 @@ abstract class ScreenshotTestOf {
         content: @Composable () -> Unit,
     ) {
         composeRule.setContent { content() }
+
         composeRule.actions()
+        composeRule.waitForIdle()
 
         composeRule.whatToCapture().captureRoboImage()
     }

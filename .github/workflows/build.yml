@@ -35,20 +35,12 @@ jobs:
       - name: Build APK
         run: bash ./gradlew assembleRelease --stacktrace --no-daemon
 
-      - name: Upload signed APK
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: logfox.apk
+          name: logfox-release
           compression-level: 0
           path: app/build/outputs/apk/release/app-release.apk
-
-      - name: Move APK
-        run: bash mv app/build/outputs/apk/release/app-release.apk .
-
-      - uses: actions/cache/save@v4
-        with:
-          path: app-release.apk
-          key: cache-${{ github.sha }}
 
   send:
       name: Send APK
@@ -58,10 +50,10 @@ jobs:
         - name: Checkout
           uses: actions/checkout@v4
 
-        - uses: actions/cache/restore@v4
+        - name: Download APK
+          uses: actions/download-artifact@v4
           with:
-            path: app-release.apk
-            key: cache-${{ github.sha }}
+            name: logfox-release
 
         - name: Send APK to Telegram
           uses: appleboy/telegram-action@master
@@ -69,7 +61,7 @@ jobs:
             to: ${{ secrets.TELEGRAM_TO }}
             token: ${{ secrets.TELEGRAM_TOKEN }}
             format: markdown
-            document: app-release.apk
+            document: logfox-release/app-release.apk
             disable_web_page_preview: true
             message: |
               *${{ github.actor }}* committed to *${{ github.repository }}*
