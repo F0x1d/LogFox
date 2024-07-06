@@ -43,31 +43,28 @@ jobs:
           path: app/build/outputs/apk/release/app-release.apk
 
   send:
-      name: Send APK
-      runs-on: macos-latest
-      needs: build
-      steps:
-        - name: Checkout
-          uses: actions/checkout@v4
+    name: Send APK
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-        - name: Download APK
-          uses: actions/download-artifact@v4
-          with:
-            name: logfox-release
+      - name: Download APK
+        uses: actions/download-artifact@v4
+        with:
+          name: logfox-release
 
-        - name: Check directory
-          run: ls -a
+      - name: Send APK to Telegram
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          format: markdown
+          document: app-release.apk
+          disable_web_page_preview: true
+          message: |
+            *${{ github.actor }}* committed to *${{ github.repository }}*
 
-        - name: Send APK to Telegram
-          uses: appleboy/telegram-action@master
-          with:
-            to: ${{ secrets.TELEGRAM_TO }}
-            token: ${{ secrets.TELEGRAM_TOKEN }}
-            format: markdown
-            document: app-release.apk
-            disable_web_page_preview: true
-            message: |
-              *${{ github.actor }}* committed to *${{ github.repository }}*
-  
-              Branch: *${{ github.head_ref }}*
-              Commit message: `${{ github.event.pull_request.head.label }}`
+            Branch: *${{ github.head_ref }}*
+            Commit message: `${{ github.event.pull_request.head.label }}`

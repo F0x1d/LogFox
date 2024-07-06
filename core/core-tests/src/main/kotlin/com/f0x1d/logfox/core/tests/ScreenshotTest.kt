@@ -21,7 +21,7 @@ import org.robolectric.annotation.GraphicsMode
     qualifiers = RobolectricDeviceQualifiers.Pixel7,
 )
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
-abstract class ScreenshotTestOf {
+abstract class ScreenshotTest {
 
     @JvmField
     @Rule
@@ -45,10 +45,12 @@ abstract class ScreenshotTestOf {
         composeRule.setContent { content() }
 
         composeRule.actions()
-        composeRule.waitForIdle()
+        waitForIdle()
 
         composeRule.whatToCapture().captureRoboImage()
     }
+
+    protected fun waitForIdle() = composeRule.waitForIdle()
 
     protected fun String.node(): SemanticsNodeInteraction = composeRule.onNode(this)
 
