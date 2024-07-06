@@ -13,7 +13,7 @@ import javax.inject.Singleton
 @Singleton
 open class DefaultTerminal @Inject constructor(
     @IODispatcher protected val ioDispatcher: CoroutineDispatcher,
-): Terminal {
+) : Terminal {
 
     companion object {
         const val INDEX = 0
@@ -21,16 +21,10 @@ open class DefaultTerminal @Inject constructor(
 
     override val title = R.string.terminal_default
 
-    protected open val commandPrefix: Array<String>? = null
-
     override suspend fun isSupported() = true
 
-    private fun createProcess(commands: Array<out String>) = (commandPrefix ?: emptyArray())
-        .plus(commands)
-        .let(Runtime.getRuntime()::exec)
-
     override suspend fun executeNow(vararg command: String) = withContext(ioDispatcher) {
-        val process = createProcess(command)
+        val process = Runtime.getRuntime().exec(command)
 
         val output = async {
             process.inputStream.readBytes().decodeToString()
@@ -43,7 +37,7 @@ open class DefaultTerminal @Inject constructor(
         TerminalResult(exitCode, output.await(), error.await())
     }
 
-    override fun execute(vararg command: String) = createProcess(command).run {
+    override fun execute(vararg command: String) = Runtime.getRuntime().exec(command).run {
         TerminalProcess(
             output = inputStream,
             error = errorStream,
