@@ -13,7 +13,7 @@ env:
 jobs:
   build:
     name: Build APK
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -44,7 +44,7 @@ jobs:
 
   send:
       name: Send APK
-      runs-on: ubuntu-latest
+      runs-on: macos-latest
       needs: build
       steps:
         - name: Checkout
@@ -54,6 +54,9 @@ jobs:
           uses: actions/download-artifact@v4
           with:
             name: logfox-release
+
+        - name: Check directory
+          run: ls -a logfox-release
 
         - name: Send APK to Telegram
           uses: appleboy/telegram-action@master
@@ -67,4 +70,4 @@ jobs:
               *${{ github.actor }}* committed to *${{ github.repository }}*
   
               Branch: *${{ github.head_ref }}*
-              Commit message: `${{ github.event.head_commit.message }}`
+              Commit message: `${{ github.event.pull_request.head.label }}`
