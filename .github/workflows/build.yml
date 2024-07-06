@@ -39,30 +39,40 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: logfox.apk
+          compression-level: 0
           path: app/build/outputs/apk/release/app-release.apk
 
+      - name: Move APK
+        run: bash mv app/build/outputs/apk/release/app-release.apk .
+
+      - uses: actions/cache/save@v4
+        with:
+          path: app-release.apk
+          key: cache-${{ github.sha }}
+
   send:
-    name: Send APK to Telegram
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Get APK
-        uses: actions/download-artifact@v4
-        with:
-          name: logfox.apk
+      name: Send APK
+      runs-on: ubuntu-latest
+      needs: build
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v4
 
-      - name: Send APK to Telegram
-        uses: appleboy/telegram-action@master
-        with:
-          to: ${{ secrets.TELEGRAM_TO }}
-          token: ${{ secrets.TELEGRAM_TOKEN }}
-          format: markdown
-          document: logfox.apk
-          disable_web_page_preview: true
-          message: |
-            *${{ github.actor }}* committed to *${{ github.repository }}*
+        - uses: actions/cache/restore@v4
+          with:
+            path: app-release.apk
+            key: cache-${{ github.sha }}
 
-            Branch: *${{ github.ref_name }}*
-            Commit message: `${{ github.event.commits[0].message }}`
-
-            [Changes](https://github.com/${{ github.repository }}/commit/${{github.sha}})
+        - name: Send APK to Telegram
+          uses: appleboy/telegram-action@master
+          with:
+            to: ${{ secrets.TELEGRAM_TO }}
+            token: ${{ secrets.TELEGRAM_TOKEN }}
+            format: markdown
+            document: app-release.apk
+            disable_web_page_preview: true
+            message: |
+              *${{ github.actor }}* committed to *${{ github.repository }}*
+  
+              Branch: *${{ github.head_ref }}*
+              Commit message: `${{ github.event.head_commit.message }}`
