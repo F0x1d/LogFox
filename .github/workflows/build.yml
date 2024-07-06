@@ -48,21 +48,20 @@ jobs:
     needs: build
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Get the last commit message
+        id: get_commit_msg
+        run: |
+          commit_message=$(git log -1 --pretty=format:'%s')
+          echo "::set-output name=message::$commit_message"
 
       - name: Download APK
         uses: actions/download-artifact@v4
         with:
           name: logfox-release
-
-      - name: Get the last commit message
-        id: get_commit_msg
-        run: |
-          branch_name=$(echo "${{ github.head_ref }}")
-          git checkout $branch_name
-            
-          commit_message=$(git log -1 --pretty=format:'%s')
-          echo "::set-output name=message::$commit_message"
 
       - name: Send APK to Telegram
         uses: appleboy/telegram-action@master
