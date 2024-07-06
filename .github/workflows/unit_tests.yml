@@ -22,10 +22,3 @@ jobs:
 
       - name: Run tests
         run: bash ./gradlew testDebugUnitTest -Proborazzi.test.verify=true
-
-      - name: Upload report
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: report
-          path: feature/feature-setup/build/reports

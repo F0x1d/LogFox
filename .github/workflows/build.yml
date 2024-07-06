@@ -56,7 +56,7 @@ jobs:
             name: logfox-release
 
         - name: Check directory
-          run: ls -a logfox-release
+          run: ls -a
 
         - name: Send APK to Telegram
           uses: appleboy/telegram-action@master
@@ -64,7 +64,7 @@ jobs:
             to: ${{ secrets.TELEGRAM_TO }}
             token: ${{ secrets.TELEGRAM_TOKEN }}
             format: markdown
-            document: logfox-release/app-release.apk
+            document: app-release.apk
             disable_web_page_preview: true
             message: |
               *${{ github.actor }}* committed to *${{ github.repository }}*
