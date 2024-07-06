@@ -7,7 +7,7 @@ on:
 
 jobs:
   test:
-    name: Unit tests
+    name: Run unit tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -21,4 +21,4 @@ jobs:
           cache: 'gradle'
 
       - name: Run tests
-        run: bash ./gradlew testDebugUnitTests -Proborazzi.test.verify=true
+        run: bash ./gradlew testDebugUnitTest -Proborazzi.test.verify=true

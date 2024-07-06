@@ -1,9 +1,9 @@
 on:
   workflow_dispatch:
 
-  push:
+  pull_request:
     branches:
-      - 'main'
+      - 'master'
 
 env:
   KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
