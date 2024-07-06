@@ -55,9 +55,12 @@ jobs:
         with:
           name: logfox-release
 
-      - name: Get the latest commit message
+      - name: Get the last commit message
         id: get_commit_msg
         run: |
+          branch_name=$(echo "${{ github.head_ref }}")
+          git checkout $branch_name
+            
           commit_message=$(git log -1 --pretty=format:'%s')
           echo "::set-output name=message::$commit_message"
 
