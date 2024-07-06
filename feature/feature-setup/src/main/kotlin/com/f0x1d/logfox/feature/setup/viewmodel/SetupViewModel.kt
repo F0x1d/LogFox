@@ -2,13 +2,11 @@ package com.f0x1d.logfox.feature.setup.viewmodel
 
 import android.Manifest
 import android.app.Application
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import com.f0x1d.logfox.arch.viewmodel.BaseViewModel
+import com.f0x1d.logfox.arch.viewmodel.BaseStateViewModel
 import com.f0x1d.logfox.context.copyText
 import com.f0x1d.logfox.context.hardRestartApp
 import com.f0x1d.logfox.context.hasPermissionToReadLogs
+import com.f0x1d.logfox.feature.setup.ui.fragment.setup.compose.SetupScreenState
 import com.f0x1d.logfox.preferences.shared.AppPreferences
 import com.f0x1d.logfox.strings.Strings
 import com.f0x1d.logfox.terminals.DefaultTerminal
@@ -23,9 +21,10 @@ class SetupViewModel @Inject constructor(
     private val rootTerminal: RootTerminal,
     private val shizukuTerminal: ShizukuTerminal,
     application: Application,
-): BaseViewModel(application) {
-
-    var showAdbDialog by mutableStateOf(false)
+): BaseStateViewModel<SetupScreenState>(
+    initialStateProvider = { SetupScreenState() },
+    application = application,
+) {
 
     val adbCommand get() = "adb shell ${command.joinToString(" ")}"
     private val command get() = arrayOf("pm", "grant", ctx.packageName, Manifest.permission.READ_LOGS)
@@ -44,7 +43,13 @@ class SetupViewModel @Inject constructor(
         if (ctx.hasPermissionToReadLogs)
             gotPermission()
         else {
-            showAdbDialog = true
+            state {
+                copy(
+                    showAdbDialog = true,
+                    adbCommand = adbCommand,
+                )
+            }
+
             appPreferences.selectTerminal(DefaultTerminal.INDEX)
         }
     }
@@ -66,6 +71,10 @@ class SetupViewModel @Inject constructor(
     fun copyCommand() {
         ctx.copyText(adbCommand)
         snackbar(Strings.text_copied)
+    }
+
+    fun closeAdbDialog() = state {
+        copy(showAdbDialog = false)
     }
 
     private fun gotPermission() = ctx.hardRestartApp()

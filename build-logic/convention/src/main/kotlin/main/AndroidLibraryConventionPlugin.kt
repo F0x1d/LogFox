@@ -2,6 +2,7 @@ package main
 
 import com.android.build.gradle.LibraryExtension
 import extensions.configureKotlinAndroid
+import extensions.configureRobolectric
 import extensions.pluginId
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -18,6 +19,7 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
 
         extensions.configure<LibraryExtension> {
             configureKotlinAndroid(this)
+            configureRobolectric()
         }
     }
 }

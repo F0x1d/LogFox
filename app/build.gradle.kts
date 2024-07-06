@@ -1,5 +1,3 @@
-import com.android.build.gradle.internal.api.ApkVariantOutputImpl
-
 plugins {
     id("logfox.android.application")
 }
@@ -13,14 +11,6 @@ android {
 
         versionCode = 60
         versionName = "2.0.0"
-    }
-
-    applicationVariants.all {
-       outputs.all {
-            if (this is ApkVariantOutputImpl) {
-                outputFileName = "logfox-$versionName.apk"
-            }
-        }
     }
 }
 
@@ -69,6 +59,8 @@ dependencies {
     implementation(libs.bundles.androidx.navigation)
 
     testImplementation(libs.junit)
+    testImplementation(libs.robolectric)
+    testImplementation(libs.androidx.test.core)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.androidx.test.espresso.core)
 }

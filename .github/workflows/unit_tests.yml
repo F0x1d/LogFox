@@ -1,0 +1,24 @@
+on:
+  workflow_dispatch:
+
+  push:
+    branches:
+      - '**'
+
+jobs:
+  test:
+    name: Unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: oracle
+          cache: 'gradle'
+
+      - name: Run tests
+        run: bash ./gradlew testDebugUnitTests -Proborazzi.test.verify=true

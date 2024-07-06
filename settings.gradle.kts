@@ -29,6 +29,7 @@ include(":core:core-io")
 include(":core:core-navigation")
 include(":core:core-preferences")
 include(":core:core-terminals")
+include(":core:core-tests")
 include(":core:core-ui")
 include(":core:core-ui-compose")
 

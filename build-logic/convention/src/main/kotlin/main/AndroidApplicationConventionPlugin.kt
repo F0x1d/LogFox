@@ -2,6 +2,7 @@ package main
 
 import com.android.build.api.dsl.ApplicationExtension
 import extensions.configureKotlinAndroid
+import extensions.configureRobolectric
 import extensions.pluginId
 import extensions.version
 import org.gradle.api.Plugin
@@ -18,18 +19,38 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
 
             apply("logfox.android.hilt")
             apply("logfox.android.compose")
+            apply("logfox.android.unitTests")
         }
 
         extensions.configure<ApplicationExtension> {
             configureKotlinAndroid(this)
+            configureRobolectric()
 
             defaultConfig {
                 targetSdk = version("targetSdk")
+
+                val releaseSigningConfigName = "release"
+                val keyStoreFile = file("keystore/main.jks")
+
+                if (keyStoreFile.exists()) {
+                    signingConfigs {
+                        create(releaseSigningConfigName) {
+                            storeFile = keyStoreFile
+                            storePassword = System.getenv("KEY_STORE_PASSWORD")
+                            keyAlias = System.getenv("ALIAS")
+                            keyPassword = System.getenv("KEY_PASSWORD")
+                        }
+                    }
+                }
 
                 buildTypes {
                     release {
                         isMinifyEnabled = true
                         isShrinkResources = true
+
+                        if (keyStoreFile.exists()) {
+                            signingConfig = signingConfigs.getByName(releaseSigningConfigName)
+                        }
 
                         proguardFiles(
                             getDefaultProguardFile("proguard-android-optimize.txt"),

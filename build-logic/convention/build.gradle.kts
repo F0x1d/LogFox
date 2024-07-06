@@ -52,5 +52,9 @@ gradlePlugin {
             id = "logfox.android.compose"
             implementationClass = "additional.AndroidComposeConventionPlugin"
         }
+        register("androidUnitTests") {
+            id = "logfox.android.unitTests"
+            implementationClass = "additional.tests.AndroidUnitTestsConventionPlugin"
+        }
     }
 }

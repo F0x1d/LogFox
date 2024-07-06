@@ -4,7 +4,7 @@ import android.app.Application
 import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import com.f0x1d.feature.logging.di.FileUri
-import com.f0x1d.logfox.arch.coroutines.flow.updateList
+import com.f0x1d.logfox.arch.di.DefaultDispatcher
 import com.f0x1d.logfox.arch.di.IODispatcher
 import com.f0x1d.logfox.arch.viewmodel.BaseViewModel
 import com.f0x1d.logfox.database.entity.UserFilter
@@ -28,6 +28,7 @@ import kotlinx.coroutines.flow.scan
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -38,6 +39,7 @@ class LogsViewModel @Inject constructor(
     private val recordingsRepository: RecordingsRepository,
     val appPreferences: AppPreferences,
     val dateTimeFormatter: DateTimeFormatter,
+    @DefaultDispatcher private val defaultDispatcher: CoroutineDispatcher,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
     application: Application,
 ): BaseViewModel(application) {
@@ -52,7 +54,7 @@ class LogsViewModel @Inject constructor(
     val viewingFile = fileUri != null
     val viewingFileName = fileUri?.readFileName(ctx)
 
-    val selectedItems = MutableStateFlow(emptyList<LogLine>())
+    val selectedItems = MutableStateFlow(emptySet<LogLine>())
 
     val selectedItemsContent get() = selectedItems.value.joinToString("\n") { line ->
         appPreferences.originalOf(
@@ -98,7 +100,7 @@ class LogsViewModel @Inject constructor(
 
     val resumeLoggingWithBottomTouch get() = appPreferences.resumeLoggingWithBottomTouch
 
-    fun selectLine(logLine: LogLine, selected: Boolean) = selectedItems.updateList {
+    fun selectLine(logLine: LogLine, selected: Boolean) = selectedItems.updateSet {
         if (selected) add(
             logLine
         ) else remove(
@@ -108,14 +110,20 @@ class LogsViewModel @Inject constructor(
 
     fun selectAll() {
         if (selectedItems.value == logs.value) selectedItems.update {
-            emptyList()
+            emptySet()
         } else selectedItems.update {
-            logs.value
+            logs.value.toSet()
         }
     }
 
+    fun clearSelection() = selectedItems.update { emptySet() }
+
     fun selectedToRecording() = viewModelScope.launch {
-        recordingsRepository.createRecordingFrom(selectedItems.value)
+        recordingsRepository.createRecordingFrom(
+            lines = withContext(defaultDispatcher) {
+                selectedItems.value.sortedBy { it.dateAndTime }
+            },
+        )
     }
 
     fun exportSelectedLogsTo(uri: Uri) = launchCatching(ioDispatcher) {
@@ -141,6 +149,10 @@ class LogsViewModel @Inject constructor(
 
     fun pause() = paused.update { true }
     fun resume() = paused.update { false }
+
+    private fun MutableStateFlow<Set<LogLine>>.updateSet(block: MutableSet<LogLine>.() -> Unit) = update {
+        it.toMutableSet().apply(block).toSet()
+    }
 
     private data class LogsData(
         val logs: List<LogLine>,

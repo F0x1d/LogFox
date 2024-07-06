@@ -1,4 +1,4 @@
-package com.f0x1d.logfox.feature.setup.ui.fragment.setup
+package com.f0x1d.logfox.feature.setup.ui.fragment.setup.compose
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,46 +15,23 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.f0x1d.logfox.feature.setup.viewmodel.SetupViewModel
 import com.f0x1d.logfox.strings.Strings
 import com.f0x1d.logfox.ui.Icons
 import com.f0x1d.logfox.ui.compose.component.button.RichButton
+import com.f0x1d.logfox.ui.compose.preview.DayNightPreview
 import com.f0x1d.logfox.ui.compose.theme.LogFoxTheme
-
-@Composable
-internal fun SetupScreenContent(viewModel: SetupViewModel) {
-    ScreenContent(
-        onRootClick = viewModel::root,
-        onAdbClick = viewModel::adb,
-        onShizukuClick = viewModel::shizuku,
-    )
-
-    if (viewModel.showAdbDialog) {
-        AdbDialog(
-            message = stringResource(
-                id = Strings.how_to_use_adb,
-                remember { viewModel.adbCommand },
-            ),
-            onDismissed = { viewModel.showAdbDialog = false },
-            checkPermission = viewModel::checkPermission,
-            copyCommand = viewModel::copyCommand,
-        )
-    }
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ScreenContent(
-    onRootClick: () -> Unit = { },
-    onAdbClick: () -> Unit = { },
-    onShizukuClick: () -> Unit = { },
+internal fun SetupScreenContent(
+    state: SetupScreenState = SetupScreenState(),
+    listener: SetupScreenListener = MockSetupScreenListener,
 ) {
     Scaffold(
         topBar = {
@@ -73,19 +50,20 @@ private fun ScreenContent(
                 RichButton(
                     text = Strings.root,
                     icon = Icons.ic_square_root,
-                    onClick = onRootClick,
+                    onClick = listener.onRootClick,
                 )
 
                 RichButton(
+                    modifier = Modifier.testTag(SetupAdbButtonTestTag),
                     text = Strings.adb,
                     icon = Icons.ic_adb,
-                    onClick = onAdbClick,
+                    onClick = listener.onAdbClick,
                 )
 
                 RichButton(
                     text = Strings.shizuku,
                     icon = Icons.ic_terminal,
-                    onClick = onShizukuClick,
+                    onClick = listener.onShizukuClick,
                 )
 
                 Spacer(modifier = Modifier.size(10.dp))
@@ -98,6 +76,18 @@ private fun ScreenContent(
             }
         }
     }
+
+    if (state.showAdbDialog) {
+        AdbDialog(
+            message = stringResource(
+                id = Strings.how_to_use_adb,
+                state.adbCommand,
+            ),
+            onDismissed = listener.closeAdbDialog,
+            checkPermission = listener.checkPermission,
+            copyCommand = listener.copyCommand,
+        )
+    }
 }
 
 @Composable
@@ -109,7 +99,7 @@ private fun AdbDialog(
     copyCommand: () -> Unit = { },
 ) {
     AlertDialog(
-        modifier = modifier,
+        modifier = modifier.testTag(SetupAdbDialogTestTag),
         onDismissRequest = onDismissed,
         confirmButton = {
             TextButton(
@@ -137,20 +127,26 @@ private fun AdbDialog(
     )
 }
 
-@Preview
+const val SetupAdbButtonTestTag = "SetupAdbButton"
+const val SetupAdbDialogTestTag = "SetupAdbDialog"
+
+@DayNightPreview
 @Composable
-private fun ScreenContentPreview() {
+private fun SetupScreenContentPreview() {
     LogFoxTheme {
-        ScreenContent()
+        SetupScreenContent()
     }
 }
 
-@Preview
+@DayNightPreview
 @Composable
-private fun AdbDialogPreview() {
+private fun SetupScreenContentWithDialogPreview() {
     LogFoxTheme {
-        AdbDialog(
-            message = "ADB is cool!"
+        SetupScreenContent(
+            state = SetupScreenState(
+                showAdbDialog = true,
+                adbCommand = "HESOYAM",
+            )
         )
     }
 }

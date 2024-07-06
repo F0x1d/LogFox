@@ -6,5 +6,5 @@ plugins {
 android.namespace = "com.f0x1d.logfox.ui.compose"
 
 dependencies {
-
+    implementation(project(":core:core-ui"))
 }

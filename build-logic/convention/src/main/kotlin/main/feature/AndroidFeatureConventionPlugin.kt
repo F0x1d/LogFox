@@ -11,7 +11,7 @@ import org.gradle.kotlin.dsl.project
 
 class AndroidFeatureConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) = with(target) {
-        pluginManager.apply {
+        with(pluginManager) {
             apply("logfox.android.library")
             apply("logfox.android.hilt")
         }

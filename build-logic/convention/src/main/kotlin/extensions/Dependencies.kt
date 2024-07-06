@@ -8,6 +8,16 @@ internal fun DependencyHandlerScope.implementation(dependency: Any): Dependency?
     dependencyNotation = dependency,
 )
 
+internal fun DependencyHandlerScope.debugImplementation(dependency: Any): Dependency? = add(
+    configurationName = "debugImplementation",
+    dependencyNotation = dependency,
+)
+
+internal fun DependencyHandlerScope.testImplementation(dependency: Any): Dependency? = add(
+    configurationName = "testImplementation",
+    dependencyNotation = dependency,
+)
+
 internal fun DependencyHandlerScope.implementation(bundle: List<Any>): List<Dependency?> = bundle.map {
     add(
         configurationName = "implementation",
