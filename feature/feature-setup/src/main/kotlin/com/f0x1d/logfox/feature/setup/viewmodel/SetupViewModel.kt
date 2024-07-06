@@ -46,7 +46,7 @@ class SetupViewModel @Inject constructor(
             state {
                 copy(
                     showAdbDialog = true,
-                    adbCommand = adbCommand,
+                    adbCommand = this@SetupViewModel.adbCommand,
                 )
             }
 
