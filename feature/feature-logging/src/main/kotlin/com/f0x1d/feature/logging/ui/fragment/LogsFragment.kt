@@ -190,7 +190,7 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>() 
 
             clearSelectionOnBackPressedCallback.isEnabled = selecting
 
-            //adapter.selectedItems = it
+            adapter.selectedItems = it
             setupToolbarForSelection(selecting, it.size)
         }
 
@@ -247,9 +247,9 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>() 
             setupCloseButton()
 
             setNavigationOnClickListener {
-                /*viewModel.selectedItems.update {
-                    emptyList()
-                }*/
+                viewModel.selectedItems.update {
+                    emptySet()
+                }
             }
         } else if (viewModel.viewingFile)
             setupBackButtonForNavController()

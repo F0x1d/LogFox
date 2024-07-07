@@ -26,7 +26,7 @@ class SetupViewModel @Inject constructor(
     application = application,
 ) {
 
-    val adbCommand get() = "adb shell ${command.joinToString(" ")}"
+    private val adbCommand get() = "adb shell ${command.joinToString(" ")}"
     private val command get() = arrayOf("pm", "grant", ctx.packageName, Manifest.permission.READ_LOGS)
 
     fun root() = launchCatching {

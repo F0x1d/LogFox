@@ -7,6 +7,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.ServiceCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
+import com.f0x1d.logfox.arch.di.DefaultDispatcher
 import com.f0x1d.logfox.context.LOGGING_STATUS_CHANNEL_ID
 import com.f0x1d.logfox.context.activityManager
 import com.f0x1d.logfox.context.toast
@@ -28,6 +29,7 @@ import com.f0x1d.logfox.terminals.DefaultTerminal
 import com.f0x1d.logfox.terminals.base.Terminal
 import com.f0x1d.logfox.ui.Icons
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.cancelAndJoin
@@ -79,6 +81,10 @@ class LoggingService : LifecycleService() {
     @Inject
     lateinit var mainActivityPendingIntentProvider: MainActivityPendingIntentProvider
 
+    @Inject
+    @DefaultDispatcher
+    lateinit var defaultDispatcher: CoroutineDispatcher
+
     private val logs = LinkedList<LogLine>()
     private val logsMutex = Mutex()
     private var loggingJob: Job? = null
@@ -121,6 +127,16 @@ class LoggingService : LifecycleService() {
 
         loggingJob = lifecycleScope.launch {
             try {
+                launch {
+                    while (true) {
+                        delay(appPreferences.logsUpdateInterval)
+
+                        logsMutex.withLock {
+                            loggingStore.updateLogs(logs)
+                        }
+                    }
+                }
+
                 while (true) {
                     loggingRepository.startLogging(
                         terminal = loggingTerminal,
@@ -138,23 +154,25 @@ class LoggingService : LifecycleService() {
                         } else {
                             toast(getString(Strings.error, throwable.localizedMessage))
                             throwable.printStackTrace()
+
+                            delay(10000) // waiting for 10sec before new attempt
                         }
                     }.collect { logLine ->
-                        logsMutex.withLock {
-                            logs.add(logLine)
+                        withContext(defaultDispatcher) {
+                            logsMutex.withLock {
+                                logs.add(logLine)
 
-                            while (logs.size > appPreferences.logsDisplayLimit)
-                                logs.removeFirst()
-                        }
+                                while (logs.size > appPreferences.logsDisplayLimit)
+                                    logs.removeFirst()
+                            }
 
-                        loggingStore.updateLogs(logs)
+                            crashesController.readers.forEach {
+                                it(logLine)
+                            }
 
-                        crashesController.readers.forEach {
-                            it(logLine)
-                        }
-
-                        if (logLine.suits(filtersState.value)) {
-                            recordingController.reader(logLine)
+                            if (logLine.suits(filtersState.value)) {
+                                recordingController.reader(logLine)
+                            }
                         }
                     }
                 }

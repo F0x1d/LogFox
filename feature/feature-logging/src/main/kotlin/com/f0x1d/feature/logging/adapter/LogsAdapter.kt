@@ -16,7 +16,7 @@ class LogsAdapter(
 ): BaseListAdapter<LogLine, ItemLogBinding>(diffCallback<LogLine>()) {
 
     val expandedStates = mutableMapOf<Long, Boolean>()
-    var selectedItems = emptyList<LogLine>()
+    var selectedItems = emptySet<LogLine>()
         set(value) {
             field = value
             notifyItemRangeChanged(0, itemCount)
