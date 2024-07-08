@@ -3,11 +3,13 @@ package main
 import com.android.build.api.dsl.ApplicationExtension
 import extensions.configureKotlinAndroid
 import extensions.configureRobolectric
+import extensions.coreDependencies
 import extensions.pluginId
 import extensions.version
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
+import org.gradle.kotlin.dsl.dependencies
 
 class AndroidApplicationConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) = with(target) {
@@ -64,5 +66,7 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                 }
             }
         }
+
+        dependencies { coreDependencies() }
     }
 }

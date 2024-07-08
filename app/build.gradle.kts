@@ -15,21 +15,6 @@ android {
 }
 
 dependencies {
-    implementation(project(":data"))
-    implementation(project(":strings"))
-
-    implementation(project(":core:core-arch"))
-    implementation(project(":core:core-context"))
-    implementation(project(":core:core-database"))
-    implementation(project(":core:core-datetime"))
-    implementation(project(":core:core-intents"))
-    implementation(project(":core:core-io"))
-    implementation(project(":core:core-navigation"))
-    implementation(project(":core:core-preferences"))
-    implementation(project(":core:core-terminals"))
-    implementation(project(":core:core-ui"))
-    implementation(project(":core:core-ui-compose"))
-
     implementation(project(":feature:feature-crashes"))
     implementation(project(":feature:feature-crashes-core"))
     implementation(project(":feature:feature-filters"))
@@ -57,7 +42,4 @@ dependencies {
     implementation(libs.material)
 
     implementation(libs.bundles.androidx.navigation)
-
-    androidTestImplementation(libs.androidx.test.ext.junit)
-    androidTestImplementation(libs.androidx.test.espresso.core)
 }
