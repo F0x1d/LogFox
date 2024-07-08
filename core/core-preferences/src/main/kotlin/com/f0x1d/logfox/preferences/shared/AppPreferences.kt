@@ -1,6 +1,7 @@
 package com.f0x1d.logfox.preferences.shared
 
 import android.content.Context
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import com.f0x1d.logfox.database.entity.CrashType
@@ -30,6 +31,14 @@ class AppPreferences @Inject constructor(
     }
 
     private var cachedShowLogValues: ShowLogValues? = null
+
+    var nightTheme
+        get() = get("pref_night_theme", AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+        set(value) { put("pref_night_theme", value) }
+    val nightThemeFlow get() = flowSharedPreferences.getInt(
+        key = "pref_night_theme",
+        defaultValue = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM,
+    ).asFlow()
 
     var dateFormat
         get() = getNullable("pref_date_format", DATE_FORMAT_DEFAULT)

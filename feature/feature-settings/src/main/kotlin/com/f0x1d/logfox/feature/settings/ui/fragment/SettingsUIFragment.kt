@@ -2,6 +2,7 @@ package com.f0x1d.logfox.feature.settings.ui.fragment
 
 import android.os.Bundle
 import android.text.InputType
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.preference.Preference
 import com.f0x1d.logfox.context.catchingNotNumber
 import com.f0x1d.logfox.feature.settings.R
@@ -11,6 +12,7 @@ import com.f0x1d.logfox.preferences.shared.AppPreferences
 import com.f0x1d.logfox.strings.Strings
 import com.f0x1d.logfox.ui.Icons
 import com.f0x1d.logfox.ui.view.setupAsEditTextPreference
+import com.f0x1d.logfox.ui.view.setupAsListPreference
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -26,6 +28,33 @@ class SettingsUIFragment: BasePreferenceFragment() {
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.settings_ui)
+
+        findPreference<Preference>("pref_night_theme")?.apply {
+            val filledThemeSettings = intArrayOf(
+                Strings.follow_system,
+                Strings.light,
+                Strings.dark,
+            ).fillWithStrings(requireContext())
+
+            setupAsListPreference(
+                setupDialog = { setIcon(Icons.ic_dialog_theme) },
+                items = filledThemeSettings,
+                selected = { appPreferences.nightTheme.coerceAtLeast(0) },
+                onSelected = {
+                    appPreferences.nightTheme = if (it == 0) {
+                        AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+                    } else {
+                        it
+                    }
+                    AppCompatDelegate.setDefaultNightMode(appPreferences.nightTheme)
+                    requireActivity().recreate()
+                },
+            )
+
+            appPreferences.nightThemeFlow.collectWithLifecycle {
+                summary = filledThemeSettings.getOrNull(it) ?: getString(Strings.follow_system)
+            }
+        }
 
         findPreference<Preference>("pref_date_format")?.apply {
             setupAsEditTextPreference(

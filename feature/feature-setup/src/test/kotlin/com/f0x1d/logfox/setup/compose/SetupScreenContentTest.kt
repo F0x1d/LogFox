@@ -24,6 +24,13 @@ class SetupScreenContentTest : ScreenshotTest() {
     }
 
     @Test
+    fun shouldShowDarkSetupScreenContent() = screenshotTestOf {
+        LogFoxTheme(darkTheme = true) {
+            SetupScreenContent()
+        }
+    }
+
+    @Test
     fun shouldShowAdbDialogOnSetupScreenContent() = screenshotTestOf(
         whatToCapture = { SetupAdbDialogTestTag.node() },
     ) {
