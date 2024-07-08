@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        android:title="@string/terminal"
+        app:iconSpaceReserved="false"
+        app:allowDividerAbove="false">
+
+        <Preference
+            android:title="@string/terminal"
+            android:key="pref_selected_terminal_index"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
+            android:title="@string/fallback_to_default_terminal"
+            android:summary="@string/fallback_to_default_terminal_desc"
+            android:key="pref_fallback_to_default_terminal"
+            android:defaultValue="true"
+            app:singleLineTitle="false"
+            app:widgetLayout="@layout/preference_material_switch"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/service"
+        app:iconSpaceReserved="false"
+        app:allowDividerAbove="false">
+
+        <SwitchPreferenceCompat
+            android:title="@string/start_on_boot"
+            android:key="pref_start_on_boot"
+            android:defaultValue="true"
+            app:singleLineTitle="false"
+            app:widgetLayout="@layout/preference_material_switch"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
+            android:title="@string/show_logs_from_app_launch"
+            android:key="pref_show_logs_from_app_launch"
+            android:defaultValue="true"
+            app:singleLineTitle="false"
+            app:widgetLayout="@layout/preference_material_switch"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/archives"
+        app:iconSpaceReserved="false"
+        app:allowDividerAbove="false">
+
+        <SwitchPreferenceCompat
+            android:title="@string/include_device_information_in_archives"
+            android:key="pref_include_device_info_in_archives"
+            android:defaultValue="true"
+            app:singleLineTitle="false"
+            app:widgetLayout="@layout/preference_material_switch"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+</PreferenceScreen>

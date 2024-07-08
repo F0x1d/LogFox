@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="ThemeOverlay.LogFox.MaterialAlertDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog.Centered">
+        <item name="buttonBarPositiveButtonStyle">@style/Widget.LogFox.MaterialAlertDialog.Button</item>
+        <item name="buttonBarNegativeButtonStyle">@style/Widget.LogFox.MaterialAlertDialog.Button</item>
+        <item name="buttonBarNeutralButtonStyle">@style/Widget.LogFox.MaterialAlertDialog.Button</item>
+    </style>
+
+    <style name="Widget.LogFox.MaterialAlertDialog.Button" parent="Widget.Material3.Button.TextButton.Dialog">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.LogFox.BottomNavigationView.Title" parent="TextAppearance.Material3.TitleMedium">
+        <item name="android:fontFamily">@font/google_sans</item>
+    </style>
+
+    <style name="ThemeOverlay.LogFox.BottomSheetDialog" parent="ThemeOverlay.Material3.DayNight.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:enforceNavigationBarContrast" tools:targetApi="q">false</item>
+    </style>
+
+    <style name="ThemeOverlay.LogFox.PreferenceTheme" parent="PreferenceThemeOverlay">
+        <item name="android:layout">@layout/fragment_settings</item>
+    </style>
+
+    <style name="TextAppearance.LogFox.Toolbar.Title" parent="TextAppearance.Material3.ActionBar.Title">
+        <item name="fontFamily">@font/google_sans_medium</item>
+        <item name="android:fontFamily">@font/google_sans_medium</item>
+    </style>
+
+    <style name="TextAppearance.LogFox.Toolbar.Subtitle" parent="TextAppearance.Material3.ActionBar.Subtitle">
+        <item name="fontFamily">@font/google_sans</item>
+        <item name="android:fontFamily">@font/google_sans</item>
+    </style>
+
+    <style name="Widget.LogFox.Toolbar" parent="Widget.Material3.Toolbar">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">?actionBarSize</item>
+
+        <item name="titleCentered">true</item>
+        <item name="subtitleCentered">true</item>
+        <item name="navigationIconTint">?colorControlNormal</item>
+
+        <item name="titleTextAppearance">@style/TextAppearance.LogFox.Toolbar.Title</item>
+        <item name="subtitleTextAppearance">@style/TextAppearance.LogFox.Toolbar.Subtitle</item>
+    </style>
+
+    <style name="Widget.LogFox.BigButton" parent="Widget.Material3.Button.TextButton">
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:paddingTop">16dp</item>
+        <item name="android:paddingBottom">16dp</item>
+        <item name="fontFamily">@font/google_sans_medium</item>
+        <item name="android:textSize">14sp</item>
+        <item name="iconGravity">textTop</item>
+        <item name="iconSize">24dp</item>
+        <item name="iconPadding">8dp</item>
+        <item name="rippleColor">?colorControlHighlight</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.Material3.Corner.None</item>
+    </style>
+
+    <style name="Widget.LogFox.CardView.Outlined" parent="Widget.Material3.CardView.Outlined">
+        <item name="cardCornerRadius">10dp</item>
+    </style>
+</resources>

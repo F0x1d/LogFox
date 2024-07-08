@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory android:title="@string/ui" app:iconSpaceReserved="false">
+        <Preference
+            android:title="@string/night_theme"
+            android:key="pref_night_theme"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/date_time"
+        app:iconSpaceReserved="false"
+        app:allowDividerAbove="false">
+
+        <Preference
+            android:title="@string/date_format"
+            android:key="pref_date_format"
+            app:iconSpaceReserved="false" />
+        <Preference
+            android:title="@string/time_format"
+            android:key="pref_time_format"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/logs"
+        app:iconSpaceReserved="false"
+        app:allowDividerAbove="false">
+
+        <Preference
+            android:title="@string/logs_format"
+            android:key="pref_logs_format"
+            app:iconSpaceReserved="false" />
+        <SwitchPreferenceCompat
+            android:title="@string/export_logs_in_original_format"
+            android:key="pref_export_logs_in_original_format"
+            android:defaultValue="true"
+            app:singleLineTitle="false"
+            app:widgetLayout="@layout/preference_material_switch"
+            app:iconSpaceReserved="false" />
+        <Preference
+            android:title="@string/logs_update_interval"
+            android:key="pref_logs_update_interval"
+            app:iconSpaceReserved="false" />
+        <Preference
+            android:title="@string/logs_text_size"
+            android:key="pref_logs_text_size"
+            app:iconSpaceReserved="false" />
+        <Preference
+            android:title="@string/logs_display_limit"
+            android:key="pref_logs_display_limit"
+            app:iconSpaceReserved="false" />
+        <SwitchPreferenceCompat
+            android:title="@string/expanded_logs"
+            android:key="pref_logs_expanded"
+            app:singleLineTitle="false"
+            app:widgetLayout="@layout/preference_material_switch"
+            app:iconSpaceReserved="false" />
+        <SwitchPreferenceCompat
+            android:title="@string/resume_logging_with_bottom_edge_touch"
+            android:key="pref_resume_logs_with_touch"
+            android:defaultValue="true"
+            app:singleLineTitle="false"
+            app:widgetLayout="@layout/preference_material_switch"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="terminal_default">Default</string>
+    <string name="root" translatable="false">Root</string>
+    <string name="shizuku" translatable="false">Shizuku</string>
+</resources>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        app:liftOnScroll="true">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            style="@style/Widget.LogFox.Toolbar"
+            android:id="@+id/toolbar"
+            app:title="@string/recordings"
+            app:menu="@menu/recordings_menu" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recordings_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingBottom="66dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:listitem="@layout/item_recording" />
+
+    <include
+        android:id="@+id/placeholder_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        layout="@layout/placeholder_recordings"
+        app:layout_anchor="@id/recordings_recycler"
+        app:layout_anchorGravity="center" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/pause_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_pause"
+        android:visibility="gone"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="76dp"
+        android:contentDescription="@string/pause"
+        android:tooltipText="@string/pause"
+        app:layout_anchor="@id/recordings_recycler"
+        app:layout_anchorGravity="bottom|end"
+        tools:targetApi="o" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/record_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_recording"
+        android:layout_margin="10dp"
+        app:layout_anchor="@id/recordings_recycler"
+        app:layout_anchorGravity="bottom|end"
+        android:contentDescription="@string/record"
+        android:tooltipText="@string/record"
+        tools:targetApi="o" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
