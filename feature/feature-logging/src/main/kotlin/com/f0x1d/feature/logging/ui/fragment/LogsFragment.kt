@@ -125,7 +125,6 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>() 
             }
             setClickListenerOn(R.id.clear_item) {
                 requireContext().sendService<LoggingService>(action = LoggingService.ACTION_CLEAR_LOGS)
-                updateLogsList(null)
             }
             setClickListenerOn(R.id.restart_logging_item) {
                 requireContext().sendService<LoggingService>(action = LoggingService.ACTION_RESTART_LOGGING)

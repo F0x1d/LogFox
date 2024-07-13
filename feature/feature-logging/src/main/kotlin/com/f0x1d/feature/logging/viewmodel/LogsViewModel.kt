@@ -76,11 +76,12 @@ class LogsViewModel @Inject constructor(
         LogsData(logs, filters, query, paused)
     }.scan(LogsData()) { accumulator, data ->
         when {
-            !data.paused -> data
+            !data.paused
+                    // In case they were cleared
+                    || data.logs.isEmpty() -> data
 
             data.query != accumulator.query
                     || data.filters != accumulator.filters
-                    || data.logs.isNotEmpty() // Logs were cleared
             -> data.copy(
                 logs = accumulator.logs,
             )
