@@ -74,22 +74,29 @@ class LogsViewModel @Inject constructor(
         if (!viewingFile) paused else flowOf(false)
     ) { logs, filters, query, paused ->
         LogsData(logs, filters, query, paused)
-    }.scan(null as LogsData?) { accumulator, data ->
+    }.scan(LogsData()) { accumulator, data ->
         when {
             !data.paused -> data
 
-            data.query != accumulator?.query || data.filters != accumulator?.filters -> data.copy(
-                logs = accumulator?.logs ?: emptyList()
+            data.query != accumulator.query
+                    || data.filters != accumulator.filters
+                    || data.logs.isNotEmpty() // Logs were cleared
+            -> data.copy(
+                logs = accumulator.logs,
             )
 
-            else -> data.copy(logs = accumulator.logs, passing = false)
+            else -> data.copy(
+                logs = accumulator.logs,
+                passing = false,
+            )
         }
-    }.filter {
-        it?.passing == true
-    }.mapNotNull {
-        it?.run {
-            logs.filterAndSearch(filters, query)
-        }
+    }.filter { data ->
+        data.passing
+    }.mapNotNull { data ->
+        data.logs.filterAndSearch(
+            filters = data.filters,
+            query = data.query,
+        )
     }.flowOn(
         ioDispatcher,
     ).stateIn(
@@ -155,10 +162,10 @@ class LogsViewModel @Inject constructor(
     }
 
     private data class LogsData(
-        val logs: List<LogLine>,
-        val filters: List<UserFilter>,
-        val query: String?,
-        val paused: Boolean,
+        val logs: List<LogLine> = emptyList(),
+        val filters: List<UserFilter> = emptyList(),
+        val query: String? = null,
+        val paused: Boolean = false,
         val passing: Boolean = true,
     )
 }

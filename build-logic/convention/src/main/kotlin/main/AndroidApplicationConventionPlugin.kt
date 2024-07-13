@@ -65,6 +65,12 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                     }
                 }
             }
+
+            dependenciesInfo {
+                // https://gitlab.com/IzzyOnDroid/repo/-/issues/569#note_1997934495
+                includeInApk = false
+                includeInBundle = false
+            }
         }
 
         dependencies { coreDependencies() }
