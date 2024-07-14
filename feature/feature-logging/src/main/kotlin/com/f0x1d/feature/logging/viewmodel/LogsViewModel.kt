@@ -27,7 +27,6 @@ import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.scan
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -99,7 +98,7 @@ class LogsViewModel @Inject constructor(
             query = data.query,
         )
     }.flowOn(
-        ioDispatcher,
+        defaultDispatcher,
     ).stateIn(
         scope = viewModelScope,
         started = SharingStarted.Eagerly,
@@ -124,9 +123,7 @@ class LogsViewModel @Inject constructor(
         }
     }
 
-    fun clearSelection() = selectedItems.update { emptySet() }
-
-    fun selectedToRecording() = viewModelScope.launch {
+    fun selectedToRecording() = launchCatching {
         recordingsRepository.createRecordingFrom(
             lines = withContext(defaultDispatcher) {
                 selectedItems.value.sortedBy { it.dateAndTime }

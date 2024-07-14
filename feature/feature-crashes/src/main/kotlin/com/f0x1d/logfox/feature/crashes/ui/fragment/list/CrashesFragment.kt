@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,6 +23,7 @@ import com.f0x1d.logfox.ui.dialog.showAreYouSureClearDialog
 import com.f0x1d.logfox.ui.dialog.showAreYouSureDeleteDialog
 import com.f0x1d.logfox.ui.view.setClickListenerOn
 import com.google.android.material.divider.MaterialDividerItemDecoration
+import com.google.android.material.search.SearchView
 import dagger.hilt.android.AndroidEntryPoint
 import dev.chrisbanes.insetter.applyInsetter
 
@@ -50,6 +53,27 @@ class CrashesFragment: BaseViewModelFragment<CrashesViewModel, FragmentCrashesBi
             }
         },
     )
+    private val searchedAdapter = CrashesAdapter(
+        click = {
+            findNavController().navigate(
+                resId = Directions.action_crashesFragment_to_crashDetailsFragment,
+                args = bundleOf(
+                    "crash_id" to it.lastCrash.id,
+                ),
+            )
+        },
+        delete = {
+            showAreYouSureDeleteDialog {
+                viewModel.deleteCrash(it.lastCrash)
+            }
+        },
+    )
+
+    private val closeSearchOnBackPressedCallback = object : OnBackPressedCallback(false) {
+        override fun handleOnBackPressed() {
+            binding.searchView.hide()
+        }
+    }
 
     override fun inflateBinding(
         inflater: LayoutInflater,
@@ -62,10 +86,28 @@ class CrashesFragment: BaseViewModelFragment<CrashesViewModel, FragmentCrashesBi
                 padding(vertical = requireContext().isHorizontalOrientation)
             }
         }
+        searchedCrashesRecycler.applyInsetter {
+            type(navigationBars = true) {
+                padding(vertical = requireContext().isHorizontalOrientation)
+            }
+            type(ime = true) {
+                padding(vertical = requireContext().isHorizontalOrientation)
+            }
+        }
 
-        toolbar.menu.setClickListenerOn(R.id.clear_item) {
+        searchBar.menu.setClickListenerOn(R.id.clear_item) {
             showAreYouSureClearDialog {
                 viewModel.clearCrashes()
+            }
+        }
+
+        searchView.apply {
+            editText.doAfterTextChanged { text ->
+                viewModel.updateQuery(text?.toString().orEmpty())
+            }
+
+            addTransitionListener { _, _, newState ->
+                closeSearchOnBackPressedCallback.isEnabled = newState == SearchView.TransitionState.SHOWN
             }
         }
 
@@ -86,10 +128,22 @@ class CrashesFragment: BaseViewModelFragment<CrashesViewModel, FragmentCrashesBi
             adapter = this@CrashesFragment.adapter
         }
 
+        searchedCrashesRecycler.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = searchedAdapter
+        }
+
         viewModel.crashes.collectWithLifecycle {
             binding.placeholderLayout.root.isVisible = it.isEmpty()
 
             adapter.submitList(it)
+        }
+        viewModel.searchedCrashes.collectWithLifecycle {
+            searchedAdapter.submitList(it)
+        }
+
+        requireActivity().onBackPressedDispatcher.apply {
+            addCallback(viewLifecycleOwner, closeSearchOnBackPressedCallback)
         }
     }
 }

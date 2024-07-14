@@ -9,6 +9,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.os.bundleOf
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
@@ -70,6 +73,7 @@ class MainActivity: BaseViewModelActivity<MainViewModel, ActivityMainBinding>(),
         barView?.setOnItemReselectedListener {
             // Just do nothing
         }
+        setupBarInsets()
 
         navController.addOnDestinationChangedListener(this@MainActivity)
 
@@ -165,6 +169,38 @@ class MainActivity: BaseViewModelActivity<MainViewModel, ActivityMainBinding>(),
                     else -> noBarScene
                 }
                 scene.applyTo(it)
+            }
+        }
+    }
+
+    private fun ActivityMainBinding.setupBarInsets() {
+        barView?.let { view ->
+            ViewCompat.setOnApplyWindowInsetsListener(view) { _, insets ->
+                if (isHorizontalOrientation) {
+                    val statusBarInsets = insets.getInsets(WindowInsetsCompat.Type.statusBars())
+
+                    view.updatePadding(
+                        left = statusBarInsets.left,
+                        top = statusBarInsets.top,
+                        right = statusBarInsets.right,
+                        bottom = statusBarInsets.bottom,
+                    )
+                } else {
+                    val navigationBarsInsets = insets.getInsets(WindowInsetsCompat.Type.navigationBars())
+                    val imeInsets = insets.getInsets(WindowInsetsCompat.Type.ime())
+
+                    // I don't want to see it above keyboard
+                    val imeBottomInset = (imeInsets.bottom - view.height).coerceAtLeast(0)
+
+                    view.updatePadding(
+                        left = navigationBarsInsets.left,
+                        top = navigationBarsInsets.top,
+                        right = navigationBarsInsets.right,
+                        bottom = navigationBarsInsets.bottom + imeBottomInset,
+                    )
+                }
+
+                insets
             }
         }
     }

@@ -8,6 +8,7 @@ import com.f0x1d.logfox.arch.viewmodel.BaseViewModel
 import com.f0x1d.logfox.database.entity.UserFilter
 import com.f0x1d.logfox.feature.filters.core.repository.FiltersRepository
 import com.f0x1d.logfox.feature.filters.di.FilterId
+import com.f0x1d.logfox.model.InstalledApp
 import com.f0x1d.logfox.model.logline.LogLevel
 import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,7 +20,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -70,7 +70,7 @@ class EditFilterViewModel @Inject constructor(
     val tag = MutableStateFlow<String?>(null)
     val content = MutableStateFlow<String?>(null)
 
-    fun create() = viewModelScope.launch {
+    fun create() = launchCatching {
         filtersRepository.create(
             including.value,
             enabledLogLevels.toEnabledLogLevels(),
@@ -78,7 +78,7 @@ class EditFilterViewModel @Inject constructor(
         )
     }
 
-    fun update(userFilter: UserFilter) = viewModelScope.launch {
+    fun update(userFilter: UserFilter) = launchCatching {
         filtersRepository.update(
             userFilter,
             including.value,
@@ -99,7 +99,7 @@ class EditFilterViewModel @Inject constructor(
         enabledLogLevels[which] = filtering
     }
 
-    fun selectApp(app: com.f0x1d.logfox.model.InstalledApp) = packageName.update {
+    fun selectApp(app: InstalledApp) = packageName.update {
         app.packageName
     }.also {
         sendEvent(EVENT_TYPE_UPDATE_PACKAGE_NAME_TEXT)

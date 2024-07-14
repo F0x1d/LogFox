@@ -25,7 +25,6 @@ import com.google.android.material.divider.MaterialDividerItemDecoration
 import com.google.android.material.search.SearchView
 import dagger.hilt.android.AndroidEntryPoint
 import dev.chrisbanes.insetter.applyInsetter
-import kotlinx.coroutines.flow.update
 
 @AndroidEntryPoint
 class ChooseAppFragment: BaseViewModelFragment<ChooseAppViewModel, FragmentChooseAppBinding>() {
@@ -66,13 +65,15 @@ class ChooseAppFragment: BaseViewModelFragment<ChooseAppViewModel, FragmentChoos
                 searchView.show()
             }
         }
-        searchView.editText.doAfterTextChanged { editable ->
-            viewModel.query.update {
-                editable.toString()
+
+        searchView.apply {
+            editText.doAfterTextChanged { text ->
+                viewModel.updateQuery(text?.toString().orEmpty())
             }
-        }
-        searchView.addTransitionListener { _, _, newState ->
-            closeSearchOnBackPressedCallback.isEnabled = newState == SearchView.TransitionState.SHOWN
+
+            addTransitionListener { _, _, newState ->
+                closeSearchOnBackPressedCallback.isEnabled = newState == SearchView.TransitionState.SHOWN
+            }
         }
 
         listOf(appsRecycler, searchedAppsRecycler).forEach {
