@@ -88,7 +88,6 @@ class LoggingService : LifecycleService() {
     private val logs = LinkedList<LogLine>()
     private val logsMutex = Mutex()
     private var loggingJob: Job? = null
-    private var idsCounter = -1L
 
     private lateinit var filtersState: StateFlow<List<UserFilter>>
 
@@ -140,7 +139,7 @@ class LoggingService : LifecycleService() {
                 while (true) {
                     loggingRepository.startLogging(
                         terminal = loggingTerminal,
-                        startingId = idsCounter,
+                        startingId = logs.lastOrNull()?.id ?: 0,
                     ).catch { throwable ->
                         if (throwable is TerminalNotSupportedException) {
                             if (appPreferences.fallbackToDefaultTerminal) {

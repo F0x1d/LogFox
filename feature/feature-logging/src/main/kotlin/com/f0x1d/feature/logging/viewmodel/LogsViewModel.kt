@@ -116,7 +116,7 @@ class LogsViewModel @Inject constructor(
     }
 
     fun selectAll() {
-        if (selectedItems.value == logs.value) selectedItems.update {
+        if (selectedItems.value.containsAll(logs.value)) selectedItems.update {
             emptySet()
         } else selectedItems.update {
             logs.value.toSet()
