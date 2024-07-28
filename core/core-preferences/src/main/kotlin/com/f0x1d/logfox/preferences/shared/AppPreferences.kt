@@ -172,7 +172,7 @@ class AppPreferences @Inject constructor(
     )
     val crashesSortReversedOrder get() = flowSharedPreferences.getBoolean(
         key = "pref_crashes_sort_reversed_order",
-        defaultValue = false,
+        defaultValue = true,
     )
 
     fun updateCrashesSortSettings(sortType: CrashesSort, sortInReversedOrder: Boolean) {

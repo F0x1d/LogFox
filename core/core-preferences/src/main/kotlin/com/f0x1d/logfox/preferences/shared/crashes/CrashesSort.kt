@@ -19,13 +19,13 @@ enum class CrashesSort(
     NEW(
         titleRes = Strings.sort_by_new,
         sorter = { crashes ->
-            crashes.sortedByDescending { it.lastCrash.dateAndTime }
+            crashes.sortedBy { it.lastCrash.dateAndTime }
         },
     ),
     COUNT(
         titleRes = Strings.sort_by_count,
         sorter = { crashes ->
-            crashes.sortedByDescending { it.count }
+            crashes.sortedBy { it.count }
         },
     ),
 }
