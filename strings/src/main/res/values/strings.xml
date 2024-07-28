@@ -160,4 +160,5 @@
     <string name="sort_by_name">By name</string>
     <string name="sort_by_new">By novelty</string>
     <string name="sort_by_count">By crashes count</string>
+    <string name="use_separate_channels_for_crashes">Use separate notifications channels for crashes notifications</string>
 </resources>

@@ -69,7 +69,10 @@ class CrashDetailsFragment: BaseViewModelFragment<CrashDetailsViewModel, Fragmen
                 }.let(::startActivity)
             }
 
-            findItem(R.id.notifications_item).setVisible(notificationsChannelsAvailable)
+            findItem(R.id.notifications_item).setVisible(
+                notificationsChannelsAvailable
+                        && viewModel.appPreferences.useSeparateNotificationsChannelsForCrashes
+            )
             setClickListenerOn(R.id.notifications_item) {
                 Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS).apply {
                     putExtra(Settings.EXTRA_APP_PACKAGE, requireContext().packageName)

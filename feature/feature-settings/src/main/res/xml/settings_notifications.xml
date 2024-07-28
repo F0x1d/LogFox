@@ -33,6 +33,14 @@
             app:iconSpaceReserved="false" />
 
         <SwitchPreferenceCompat
+            android:title="@string/use_separate_channels_for_crashes"
+            android:key="pref_notifications_use_separate_channels"
+            android:defaultValue="true"
+            app:singleLineTitle="false"
+            app:widgetLayout="@layout/preference_material_switch"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
             android:title="@string/show_java_crashes_notifications"
             android:key="pref_notifications_java"
             android:defaultValue="true"

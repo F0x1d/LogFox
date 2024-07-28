@@ -152,6 +152,10 @@ class AppPreferences @Inject constructor(
         get() = get("pref_include_device_info_in_archives", true)
         set(value) { put("pref_include_device_info_in_archives", value) }
 
+    var useSeparateNotificationsChannelsForCrashes
+        get() = get("pref_notifications_use_separate_channels", true)
+        set(value) { put("pref_notifications_use_separate_channels", value) }
+
     var askedNotificationsPermission
         get() = get("pref_asked_notifications_permission", false)
         set(value) { put("pref_asked_notifications_permission", value) }

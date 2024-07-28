@@ -151,4 +151,5 @@
     <string name="sort_by_name">По имени</string>
     <string name="sort_by_new">По новизне</string>
     <string name="sort_by_count">По количеству сбоев</string>
+    <string name="use_separate_channels_for_crashes">Использовать разные каналы уведомлений для уведомлений о сбоях</string>
 </resources>

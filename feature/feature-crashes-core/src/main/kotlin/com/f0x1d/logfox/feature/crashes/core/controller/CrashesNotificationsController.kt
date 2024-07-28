@@ -19,6 +19,7 @@ import com.f0x1d.logfox.intents.COPY_CRASH_INTENT_ID
 import com.f0x1d.logfox.intents.makeBroadcastPendingIntent
 import com.f0x1d.logfox.navigation.Directions
 import com.f0x1d.logfox.navigation.NavGraphs
+import com.f0x1d.logfox.preferences.shared.AppPreferences
 import com.f0x1d.logfox.strings.Strings
 import com.f0x1d.logfox.ui.Icons
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -33,6 +34,7 @@ internal interface CrashesNotificationsController {
 @SuppressLint("MissingPermission")
 internal class CrashesNotificationsControllerImpl @Inject constructor(
     @ApplicationContext private val context: Context,
+    private val appPreferences: AppPreferences,
 ) : CrashesNotificationsController {
 
     override fun sendErrorNotification(appCrash: AppCrash, crashLog: String?) {
@@ -42,7 +44,14 @@ internal class CrashesNotificationsControllerImpl @Inject constructor(
             notify(
                 appCrash.packageName,
                 appCrash.notificationId,
-                NotificationCompat.Builder(context, appCrash.notificationChannelId)
+                NotificationCompat.Builder(
+                    context,
+                    if (appPreferences.useSeparateNotificationsChannelsForCrashes) {
+                        appCrash.notificationChannelId
+                    } else {
+                        CRASHES_CHANNEL_ID
+                    },
+                )
                     .setContentTitle(
                         context.getString(
                             Strings.app_crashed,
@@ -80,26 +89,41 @@ internal class CrashesNotificationsControllerImpl @Inject constructor(
     }
 
     private fun createNotificationChannelFor(appCrash: AppCrash) {
-        val crashTypeName = appCrash.crashType.readableName
-        val groupId = "${CRASHES_CHANNEL_GROUP_ID}_$crashTypeName"
+        if (appPreferences.useSeparateNotificationsChannelsForCrashes) {
+            val crashTypeName = appCrash.crashType.readableName
+            val groupId = "${CRASHES_CHANNEL_GROUP_ID}_$crashTypeName"
 
-        val crashesGroup = NotificationChannelGroupCompat.Builder(groupId)
-            .setName(context.getString(Strings.type_crashes, crashTypeName))
-            .build()
+            val crashesGroup = NotificationChannelGroupCompat.Builder(groupId)
+                .setName(context.getString(Strings.type_crashes, crashTypeName))
+                .build()
 
-        val appCrashesChannel = NotificationChannelCompat.Builder(
-            appCrash.notificationChannelId,
-            NotificationManagerCompat.IMPORTANCE_HIGH,
-        )
-            .setName(context.getString(Strings.crashes_of, crashTypeName, appCrash.packageName))
-            .setLightsEnabled(true)
-            .setVibrationEnabled(true)
-            .setGroup(groupId)
-            .build()
+            val appCrashesChannel = NotificationChannelCompat.Builder(
+                appCrash.notificationChannelId,
+                NotificationManagerCompat.IMPORTANCE_HIGH,
+            )
+                .setName(context.getString(Strings.crashes_of, crashTypeName, appCrash.packageName))
+                .setLightsEnabled(true)
+                .setVibrationEnabled(true)
+                .setGroup(groupId)
+                .build()
 
-        context.notificationManagerCompat.apply {
-            createNotificationChannelGroupsCompat(listOf(crashesGroup))
-            createNotificationChannelsCompat(listOf(appCrashesChannel))
+            context.notificationManagerCompat.apply {
+                createNotificationChannelGroupsCompat(listOf(crashesGroup))
+                createNotificationChannelsCompat(listOf(appCrashesChannel))
+            }
+        } else {
+            val crashesChannel = NotificationChannelCompat.Builder(
+                CRASHES_CHANNEL_ID,
+                NotificationManagerCompat.IMPORTANCE_HIGH,
+            )
+                .setName(context.getString(Strings.crashes))
+                .setLightsEnabled(true)
+                .setVibrationEnabled(true)
+                .build()
+
+            context.notificationManagerCompat.apply {
+                createNotificationChannelsCompat(listOf(crashesChannel))
+            }
         }
     }
 
@@ -114,6 +138,10 @@ internal class CrashesNotificationsControllerImpl @Inject constructor(
         activeNotifications.forEach {
             if (it.tag != null && it.tag.contains(".")) cancel(it.tag, it.id)
         }
+    }
+
+    companion object {
+        private const val CRASHES_CHANNEL_ID = "crashes"
     }
 }
 
