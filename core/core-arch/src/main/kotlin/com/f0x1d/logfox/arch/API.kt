@@ -13,7 +13,6 @@ import androidx.annotation.ChecksSdkIntAtLeast
 @get:ChecksSdkIntAtLeast(api = Q) val gesturesAvailable = SDK_INT >= Q
 @get:ChecksSdkIntAtLeast(api = O) val contrastedNavBarAvailable = SDK_INT >= O
 
-@get:ChecksSdkIntAtLeast(api = S) val notificationsDynamicColorAvailable = SDK_INT >= S
 @get:ChecksSdkIntAtLeast(api = O) val notificationsChannelsAvailable = SDK_INT >= O
 @get:ChecksSdkIntAtLeast(api = TIRAMISU) val shouldRequestNotificationsPermission = SDK_INT >= TIRAMISU
 @get:ChecksSdkIntAtLeast(api = O) val startForegroundServiceAvailable = notificationsChannelsAvailable

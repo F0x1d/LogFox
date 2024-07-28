@@ -14,7 +14,6 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -52,15 +51,15 @@ class FiltersViewModel @Inject constructor(
         }
     }
 
-    fun switch(userFilter: UserFilter, checked: Boolean) = viewModelScope.launch {
+    fun switch(userFilter: UserFilter, checked: Boolean) = launchCatching {
         filtersRepository.switch(userFilter, checked)
     }
 
-    fun delete(userFilter: UserFilter) = viewModelScope.launch {
+    fun delete(userFilter: UserFilter) = launchCatching {
         filtersRepository.delete(userFilter)
     }
 
-    fun clearAll() = viewModelScope.launch {
+    fun clearAll() = launchCatching {
         filtersRepository.clear()
     }
 }

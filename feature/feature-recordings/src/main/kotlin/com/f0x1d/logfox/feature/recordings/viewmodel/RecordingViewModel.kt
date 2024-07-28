@@ -17,11 +17,9 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import javax.inject.Inject
@@ -38,7 +36,6 @@ class RecordingViewModel @Inject constructor(
 
     val recording = recordingsRepository.getByIdAsFlow(recordingId)
         .distinctUntilChanged()
-        .flowOn(ioDispatcher)
         .onEach { recording ->
             currentTitle.update { recording?.title }
         }
@@ -80,7 +77,7 @@ class RecordingViewModel @Inject constructor(
         }
     }
 
-    fun updateTitle(title: String) = viewModelScope.launch {
+    fun updateTitle(title: String) = launchCatching {
         titleUpdateMutex.withLock {
             recording.value?.let {
                 recordingsRepository.updateTitle(it, title)

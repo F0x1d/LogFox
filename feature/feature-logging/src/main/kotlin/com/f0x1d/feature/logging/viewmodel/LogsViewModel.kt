@@ -27,7 +27,6 @@ import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.scan
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -74,24 +73,32 @@ class LogsViewModel @Inject constructor(
         if (!viewingFile) paused else flowOf(false)
     ) { logs, filters, query, paused ->
         LogsData(logs, filters, query, paused)
-    }.scan(null as LogsData?) { accumulator, data ->
+    }.scan(LogsData()) { accumulator, data ->
         when {
-            !data.paused -> data
+            !data.paused
+                    // In case they were cleared
+                    || data.logs.isEmpty() -> data
 
-            data.query != accumulator?.query || data.filters != accumulator?.filters -> data.copy(
-                logs = accumulator?.logs ?: emptyList()
+            data.query != accumulator.query
+                    || data.filters != accumulator.filters
+            -> data.copy(
+                logs = accumulator.logs,
             )
 
-            else -> data.copy(logs = accumulator.logs, passing = false)
+            else -> data.copy(
+                logs = accumulator.logs,
+                passing = false,
+            )
         }
-    }.filter {
-        it?.passing == true
-    }.mapNotNull {
-        it?.run {
-            logs.filterAndSearch(filters, query)
-        }
+    }.filter { data ->
+        data.passing
+    }.mapNotNull { data ->
+        data.logs.filterAndSearch(
+            filters = data.filters,
+            query = data.query,
+        )
     }.flowOn(
-        ioDispatcher,
+        defaultDispatcher,
     ).stateIn(
         scope = viewModelScope,
         started = SharingStarted.Eagerly,
@@ -109,16 +116,14 @@ class LogsViewModel @Inject constructor(
     }
 
     fun selectAll() {
-        if (selectedItems.value == logs.value) selectedItems.update {
+        if (selectedItems.value.containsAll(logs.value)) selectedItems.update {
             emptySet()
         } else selectedItems.update {
             logs.value.toSet()
         }
     }
 
-    fun clearSelection() = selectedItems.update { emptySet() }
-
-    fun selectedToRecording() = viewModelScope.launch {
+    fun selectedToRecording() = launchCatching {
         recordingsRepository.createRecordingFrom(
             lines = withContext(defaultDispatcher) {
                 selectedItems.value.sortedBy { it.dateAndTime }
@@ -155,10 +160,10 @@ class LogsViewModel @Inject constructor(
     }
 
     private data class LogsData(
-        val logs: List<LogLine>,
-        val filters: List<UserFilter>,
-        val query: String?,
-        val paused: Boolean,
+        val logs: List<LogLine> = emptyList(),
+        val filters: List<UserFilter> = emptyList(),
+        val query: String? = null,
+        val paused: Boolean = false,
         val passing: Boolean = true,
     )
 }

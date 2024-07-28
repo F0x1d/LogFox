@@ -8,6 +8,7 @@ import com.f0x1d.logfox.database.entity.CrashType
 import com.f0x1d.logfox.model.logline.LogLine
 import com.f0x1d.logfox.model.preferences.ShowLogValues
 import com.f0x1d.logfox.preferences.shared.base.BasePreferences
+import com.f0x1d.logfox.preferences.shared.crashes.CrashesSort
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.Date
 import javax.inject.Inject
@@ -49,6 +50,10 @@ class AppPreferences @Inject constructor(
         get() = getNullable("pref_time_format", TIME_FORMAT_DEFAULT)
         set(value) { put("pref_time_format", value) }
     val timeFormatFlow get() = flowSharedPreferences.getString("pref_time_format", TIME_FORMAT_DEFAULT).asFlow()
+
+    var openCrashesOnStartup
+        get() = get("pref_open_crashes_page_on_startup", false)
+        set(value) { put("pref_open_crashes_page_on_startup", value) }
 
     var logsUpdateInterval
         get() = get("pref_logs_update_interval", LOGS_UPDATE_INTERVAL_DEFAULT)
@@ -151,11 +156,29 @@ class AppPreferences @Inject constructor(
         get() = get("pref_include_device_info_in_archives", true)
         set(value) { put("pref_include_device_info_in_archives", value) }
 
+    var useSeparateNotificationsChannelsForCrashes
+        get() = get("pref_notifications_use_separate_channels", true)
+        set(value) { put("pref_notifications_use_separate_channels", value) }
+
     var askedNotificationsPermission
         get() = get("pref_asked_notifications_permission", false)
         set(value) { put("pref_asked_notifications_permission", value) }
 
     val showLogValues get() = cachedShowLogValues ?: updateCachedShowLogsValues()
+
+    val crashesSortType get() = flowSharedPreferences.getEnum(
+        key = "pref_crashes_sort_type",
+        defaultValue = CrashesSort.NEW,
+    )
+    val crashesSortReversedOrder get() = flowSharedPreferences.getBoolean(
+        key = "pref_crashes_sort_reversed_order",
+        defaultValue = true,
+    )
+
+    fun updateCrashesSortSettings(sortType: CrashesSort, sortInReversedOrder: Boolean) {
+        put("pref_crashes_sort_type", sortType.name)
+        put("pref_crashes_sort_reversed_order", sortInReversedOrder)
+    }
 
     fun collectingFor(crashType: CrashType) = get(
         key = "pref_collect_${crashType.readableName.lowercase()}",

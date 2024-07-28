@@ -25,7 +25,7 @@ class CrashDetailsViewModel @Inject constructor(
     @CrashId val crashId: Long,
     val dateTimeFormatter: DateTimeFormatter,
     private val crashesRepository: CrashesRepository,
-    private val appPreferences: AppPreferences,
+    val appPreferences: AppPreferences,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
     application: Application,
 ): BaseViewModel(application) {

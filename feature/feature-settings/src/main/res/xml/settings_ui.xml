@@ -29,6 +29,13 @@
         app:iconSpaceReserved="false"
         app:allowDividerAbove="false">
 
+        <SwitchPreferenceCompat
+            android:title="@string/open_crashes_page_on_startup"
+            android:key="pref_open_crashes_page_on_startup"
+            app:singleLineTitle="false"
+            app:widgetLayout="@layout/preference_material_switch"
+            app:iconSpaceReserved="false" />
+
         <Preference
             android:title="@string/logs_format"
             android:key="pref_logs_format"

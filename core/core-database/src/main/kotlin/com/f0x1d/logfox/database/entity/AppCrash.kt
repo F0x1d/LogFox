@@ -123,3 +123,8 @@ class FileConverter {
     @TypeConverter
     fun fromFile(value: File) = value.absolutePath
 }
+
+data class AppCrashesCount(
+    val lastCrash: AppCrash,
+    val count: Int = 1,
+)

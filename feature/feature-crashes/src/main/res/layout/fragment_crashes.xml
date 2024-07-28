@@ -12,11 +12,15 @@
         android:fitsSystemWindows="true"
         app:liftOnScroll="true">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            style="@style/Widget.LogFox.Toolbar"
-            android:id="@+id/toolbar"
+        <com.google.android.material.search.SearchBar
+            android:id="@+id/search_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             app:menu="@menu/crashes_menu"
-            app:title="@string/crashes" />
+            app:navigationIcon="@drawable/ic_search"
+            app:navigationIconTint="?colorControlNormal"
+            app:layout_scrollFlags="enterAlways"
+            android:hint="@string/crashes"/>
     </com.google.android.material.appbar.AppBarLayout>
 
     <include
@@ -35,5 +39,19 @@
         android:clipToPadding="false"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:listitem="@layout/item_crash" />
+
+    <com.google.android.material.search.SearchView
+        android:id="@+id/search_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:hint="@string/crashes"
+        app:layout_anchor="@id/search_bar">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/searched_crashes_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false" />
+    </com.google.android.material.search.SearchView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
