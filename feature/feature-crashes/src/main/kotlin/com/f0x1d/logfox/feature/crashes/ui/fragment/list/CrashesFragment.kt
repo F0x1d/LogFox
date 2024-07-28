@@ -15,13 +15,18 @@ import com.f0x1d.logfox.arch.ui.fragment.BaseViewModelFragment
 import com.f0x1d.logfox.context.isHorizontalOrientation
 import com.f0x1d.logfox.feature.crashes.R
 import com.f0x1d.logfox.feature.crashes.adapter.CrashesAdapter
+import com.f0x1d.logfox.feature.crashes.databinding.DialogSortingBinding
 import com.f0x1d.logfox.feature.crashes.databinding.FragmentCrashesBinding
+import com.f0x1d.logfox.feature.crashes.databinding.ItemSortBinding
 import com.f0x1d.logfox.feature.crashes.viewmodel.list.CrashesViewModel
 import com.f0x1d.logfox.navigation.Directions
+import com.f0x1d.logfox.preferences.shared.crashes.CrashesSort
+import com.f0x1d.logfox.strings.Strings
 import com.f0x1d.logfox.ui.density.dpToPx
 import com.f0x1d.logfox.ui.dialog.showAreYouSureClearDialog
 import com.f0x1d.logfox.ui.dialog.showAreYouSureDeleteDialog
 import com.f0x1d.logfox.ui.view.setClickListenerOn
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import com.google.android.material.search.SearchView
 import dagger.hilt.android.AndroidEntryPoint
@@ -95,9 +100,14 @@ class CrashesFragment: BaseViewModelFragment<CrashesViewModel, FragmentCrashesBi
             }
         }
 
-        searchBar.menu.setClickListenerOn(R.id.clear_item) {
-            showAreYouSureClearDialog {
-                viewModel.clearCrashes()
+        searchBar.menu.apply {
+            setClickListenerOn(R.id.sort_item) {
+                showSortDialog()
+            }
+            setClickListenerOn(R.id.clear_item) {
+                showAreYouSureClearDialog {
+                    viewModel.clearCrashes()
+                }
             }
         }
 
@@ -145,5 +155,49 @@ class CrashesFragment: BaseViewModelFragment<CrashesViewModel, FragmentCrashesBi
         requireActivity().onBackPressedDispatcher.apply {
             addCallback(viewLifecycleOwner, closeSearchOnBackPressedCallback)
         }
+    }
+
+    private fun showSortDialog() {
+        var selectedSortType = viewModel.currentSort
+        var sortInReversedOrder = viewModel.currentSortInReversedOrder
+
+        val dialogBinding = DialogSortingBinding.inflate(layoutInflater)
+        CrashesSort.entries.map { type ->
+            ItemSortBinding.inflate(layoutInflater).root.apply {
+                id = View.generateViewId()
+                text = getString(type.titleRes)
+                tag = type
+
+                setOnCheckedChangeListener { _, isChecked ->
+                    if (isChecked) {
+                        selectedSortType = type
+                    }
+                }
+            }
+        }.forEach { button ->
+            dialogBinding.rgSorting.apply {
+                addView(button)
+
+                if (button.tag == viewModel.currentSort) {
+                    check(button.id)
+                }
+            }
+        }
+
+        dialogBinding.reverseSwitch.apply {
+            isChecked = sortInReversedOrder
+            setOnCheckedChangeListener { _, isChecked -> sortInReversedOrder = isChecked }
+        }
+
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(Strings.sort)
+            .setView(dialogBinding.root)
+            .setPositiveButton(android.R.string.ok) { _, _ ->
+                viewModel.updateSort(
+                    sortType = selectedSortType,
+                    sortInReversedOrder = sortInReversedOrder,
+                )
+            }
+            .show()
     }
 }

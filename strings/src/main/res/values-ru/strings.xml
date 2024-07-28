@@ -146,4 +146,9 @@
     <string name="type_crashes">%s сбои</string>
     <string name="crashes_of">%s сбои %s</string>
     <string name="per_app_notifications_settings">Настройки персонализированных уведомлений для приложений доступны в деталях сбоя и системных настройках LogFox</string>
+    <string name="sort">Сортировка</string>
+    <string name="in_reversed_order">В обратном порядке</string>
+    <string name="sort_by_name">По имени</string>
+    <string name="sort_by_new">По новизне</string>
+    <string name="sort_by_count">По количеству сбоев</string>
 </resources>

@@ -155,4 +155,9 @@
     <string name="type_crashes">%s crashes</string>
     <string name="crashes_of">%s crashes of %s</string>
     <string name="per_app_notifications_settings">Per app notifications settings are available in app\'s crash details and LogFox\'s system settings</string>
+    <string name="sort">Sort</string>
+    <string name="in_reversed_order">In reversed order</string>
+    <string name="sort_by_name">By name</string>
+    <string name="sort_by_new">By novelty</string>
+    <string name="sort_by_count">By crashes count</string>
 </resources>

@@ -5,10 +5,10 @@ import androidx.lifecycle.viewModelScope
 import com.f0x1d.logfox.arch.di.DefaultDispatcher
 import com.f0x1d.logfox.arch.viewmodel.BaseViewModel
 import com.f0x1d.logfox.database.entity.AppCrash
+import com.f0x1d.logfox.database.entity.AppCrashesCount
 import com.f0x1d.logfox.feature.crashes.core.repository.CrashesRepository
 import com.f0x1d.logfox.feature.crashes.di.AppName
 import com.f0x1d.logfox.feature.crashes.di.PackageName
-import com.f0x1d.logfox.feature.crashes.model.AppCrashesCount
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.SharingStarted

@@ -8,6 +8,7 @@ import com.f0x1d.logfox.database.entity.CrashType
 import com.f0x1d.logfox.model.logline.LogLine
 import com.f0x1d.logfox.model.preferences.ShowLogValues
 import com.f0x1d.logfox.preferences.shared.base.BasePreferences
+import com.f0x1d.logfox.preferences.shared.crashes.CrashesSort
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.Date
 import javax.inject.Inject
@@ -156,6 +157,20 @@ class AppPreferences @Inject constructor(
         set(value) { put("pref_asked_notifications_permission", value) }
 
     val showLogValues get() = cachedShowLogValues ?: updateCachedShowLogsValues()
+
+    val crashesSortType get() = flowSharedPreferences.getEnum(
+        key = "pref_crashes_sort_type",
+        defaultValue = CrashesSort.NEW,
+    )
+    val crashesSortReversedOrder get() = flowSharedPreferences.getBoolean(
+        key = "pref_crashes_sort_reversed_order",
+        defaultValue = false,
+    )
+
+    fun updateCrashesSortSettings(sortType: CrashesSort, sortInReversedOrder: Boolean) {
+        put("pref_crashes_sort_type", sortType.name)
+        put("pref_crashes_sort_reversed_order", sortInReversedOrder)
+    }
 
     fun collectingFor(crashType: CrashType) = get(
         key = "pref_collect_${crashType.readableName.lowercase()}",

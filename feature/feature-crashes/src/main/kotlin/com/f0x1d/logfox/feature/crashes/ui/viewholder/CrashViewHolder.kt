@@ -3,8 +3,8 @@ package com.f0x1d.logfox.feature.crashes.ui.viewholder
 import android.annotation.SuppressLint
 import com.bumptech.glide.Glide
 import com.f0x1d.logfox.arch.ui.viewholder.BaseViewHolder
+import com.f0x1d.logfox.database.entity.AppCrashesCount
 import com.f0x1d.logfox.feature.crashes.databinding.ItemCrashBinding
-import com.f0x1d.logfox.feature.crashes.model.AppCrashesCount
 import com.f0x1d.logfox.strings.Strings
 import com.f0x1d.logfox.ui.view.loadIcon
 import java.util.Date
