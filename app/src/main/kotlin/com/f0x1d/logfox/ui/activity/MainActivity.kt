@@ -91,6 +91,10 @@ class MainActivity: BaseViewModelActivity<MainViewModel, ActivityMainBinding>(),
 
             viewModel.askedNotificationsPermission = true
         }
+
+        if (savedInstanceState == null && viewModel.openCrashesOnStartup) {
+            navController.navigate(Directions.crashes)
+        }
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {

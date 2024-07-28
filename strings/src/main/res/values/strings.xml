@@ -161,4 +161,5 @@
     <string name="sort_by_new">By novelty</string>
     <string name="sort_by_count">By crashes count</string>
     <string name="use_separate_channels_for_crashes">Use separate notifications channels for crashes notifications</string>
+    <string name="open_crashes_page_on_startup">Open crashes page on startup</string>
 </resources>

@@ -51,6 +51,10 @@ class AppPreferences @Inject constructor(
         set(value) { put("pref_time_format", value) }
     val timeFormatFlow get() = flowSharedPreferences.getString("pref_time_format", TIME_FORMAT_DEFAULT).asFlow()
 
+    var openCrashesOnStartup
+        get() = get("pref_open_crashes_page_on_startup", false)
+        set(value) { put("pref_open_crashes_page_on_startup", value) }
+
     var logsUpdateInterval
         get() = get("pref_logs_update_interval", LOGS_UPDATE_INTERVAL_DEFAULT)
         set(value) { put("pref_logs_update_interval", value) }

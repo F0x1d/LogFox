@@ -24,6 +24,8 @@ class MainViewModel @Inject constructor(
         get() = appPreferences.askedNotificationsPermission
         set(value) { appPreferences.askedNotificationsPermission = value }
 
+    val openCrashesOnStartup get() = appPreferences.openCrashesOnStartup
+
     init {
         load()
     }
