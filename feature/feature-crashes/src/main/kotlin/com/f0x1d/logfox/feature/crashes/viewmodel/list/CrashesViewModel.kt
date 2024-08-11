@@ -3,6 +3,7 @@ package com.f0x1d.logfox.feature.crashes.viewmodel.list
 import android.app.Application
 import androidx.lifecycle.viewModelScope
 import com.f0x1d.logfox.arch.di.DefaultDispatcher
+import com.f0x1d.logfox.arch.di.IODispatcher
 import com.f0x1d.logfox.arch.viewmodel.BaseViewModel
 import com.f0x1d.logfox.database.entity.AppCrash
 import com.f0x1d.logfox.database.entity.AppCrashesCount
@@ -11,6 +12,7 @@ import com.f0x1d.logfox.preferences.shared.AppPreferences
 import com.f0x1d.logfox.preferences.shared.crashes.CrashesSort
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
@@ -20,6 +22,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -27,6 +30,7 @@ class CrashesViewModel @Inject constructor(
     private val crashesRepository: CrashesRepository,
     private val appPreferences: AppPreferences,
     @DefaultDispatcher private val defaultDispatcher: CoroutineDispatcher,
+    @IODispatcher private val ioDispatcher: CoroutineDispatcher,
     application: Application,
 ): BaseViewModel(application) {
 
@@ -70,17 +74,23 @@ class CrashesViewModel @Inject constructor(
 
     val query = MutableStateFlow("")
 
+    @OptIn(FlowPreview::class)
     val searchedCrashes = combine(
         crashesRepository.getAllAsFlow(),
         query,
     ) { crashes, query ->
         crashes to query
     }.debounce(
-        timeoutMillis = 100,
+        timeoutMillis = SEARCH_DEBOUNCE_MILLIS,
     ).map { (crashes, query) ->
         crashes.filter { crash ->
+            val fileContentSettles = withContext(ioDispatcher) {
+                crash.logDumpFile?.readText()?.contains(query, ignoreCase = false) == true
+            }
+
             crash.packageName.contains(query, ignoreCase = true)
                     || crash.appName?.contains(query, ignoreCase = true) == true
+                    || fileContentSettles
         }.map { AppCrashesCount(it) }
     }.flowOn(
         defaultDispatcher,
@@ -114,4 +124,8 @@ class CrashesViewModel @Inject constructor(
         val sortType: CrashesSort,
         val sortInReversedOrder: Boolean,
     )
+
+    companion object {
+        private const val SEARCH_DEBOUNCE_MILLIS = 500L
+    }
 }

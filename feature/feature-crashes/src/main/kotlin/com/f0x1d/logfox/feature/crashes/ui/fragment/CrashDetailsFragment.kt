@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.f0x1d.logfox.arch.notificationsChannelsAvailable
@@ -107,6 +108,12 @@ class CrashDetailsFragment: BaseViewModelFragment<CrashDetailsViewModel, Fragmen
             zipCrashLauncher.launch("crash-$pkg-$formattedDate.zip")
         }
 
+        viewModel.appPreferences.wrapCrashLogLines.let { wrap ->
+            logText.isVisible = wrap
+            logTextScrollableContainer.isVisible = wrap.not()
+        }
+
         logText.text = crashLog
+        logTextScrollable.text = crashLog
     }
 }

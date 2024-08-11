@@ -85,6 +85,9 @@ class AppPreferences @Inject constructor(
     var exportLogsInOriginalFormat
         get() = get("pref_export_logs_in_original_format", true)
         set(value) { put("pref_export_logs_in_original_format", value) }
+    var wrapCrashLogLines
+        get() = get("pref_wrap_crash_log_lines", true)
+        set(value) { put("pref_wrap_crash_log_lines", value) }
 
     var showLogDate
         get() = get("pref_show_log_date", false)

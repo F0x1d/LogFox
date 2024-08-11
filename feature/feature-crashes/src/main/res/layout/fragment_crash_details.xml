@@ -140,22 +140,29 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/actions_card">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <TextView
+                    android:id="@+id/log_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textIsSelectable="true"
+                    android:padding="15dp"
+                    android:visibility="gone"
+                    tools:text="@tools:sample/lorem/random" />
+
+                <HorizontalScrollView
+                    android:id="@+id/log_text_scrollable_container"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:scrollbars="none">
 
                     <TextView
-                        android:id="@+id/log_text"
-                        android:layout_width="0dp"
+                        android:id="@+id/log_text_scrollable"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="15dp"
                         android:textIsSelectable="true"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
+                        android:padding="15dp"
                         tools:text="@tools:sample/lorem/random" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                </HorizontalScrollView>
             </com.google.android.material.card.MaterialCardView>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.f0x1d.logfox.ui.view.CustomNestedScrollView>

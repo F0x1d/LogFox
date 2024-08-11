@@ -47,6 +47,13 @@
             app:singleLineTitle="false"
             app:widgetLayout="@layout/preference_material_switch"
             app:iconSpaceReserved="false" />
+        <SwitchPreferenceCompat
+            android:title="@string/wrap_log_lines_in_details"
+            android:key="pref_wrap_crash_log_lines"
+            android:defaultValue="true"
+            app:singleLineTitle="false"
+            app:widgetLayout="@layout/preference_material_switch"
+            app:iconSpaceReserved="false" />
         <Preference
             android:title="@string/logs_update_interval"
             android:key="pref_logs_update_interval"

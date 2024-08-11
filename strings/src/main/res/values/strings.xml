@@ -162,4 +162,5 @@
     <string name="sort_by_count">By crashes count</string>
     <string name="use_separate_channels_for_crashes">Use separate notifications channels for crashes notifications</string>
     <string name="open_crashes_page_on_startup">Open crashes page on startup</string>
+    <string name="wrap_log_lines_in_details">Wrap log lines in details</string>
 </resources>
