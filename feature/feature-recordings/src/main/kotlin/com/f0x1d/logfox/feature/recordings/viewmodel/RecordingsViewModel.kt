@@ -2,6 +2,7 @@ package com.f0x1d.logfox.feature.recordings.viewmodel
 
 import android.app.Application
 import com.f0x1d.logfox.arch.viewmodel.BaseViewModel
+import com.f0x1d.logfox.arch.viewmodel.Event
 import com.f0x1d.logfox.database.entity.LogRecording
 import com.f0x1d.logfox.feature.recordings.core.controller.RecordingController
 import com.f0x1d.logfox.feature.recordings.core.controller.RecordingState
@@ -18,10 +19,6 @@ class RecordingsViewModel @Inject constructor(
     application: Application,
 ): BaseViewModel(application) {
 
-    companion object {
-        const val EVENT_TYPE_RECORDING_SAVED = "recording_saved"
-    }
-
     val recordings = recordingsRepository.getAllAsFlow()
         .distinctUntilChanged()
 
@@ -32,7 +29,7 @@ class RecordingsViewModel @Inject constructor(
             recordingController.record()
         else
             recordingController.end().also {
-                sendEvent(EVENT_TYPE_RECORDING_SAVED, it ?: return@also)
+                sendEvent(OpenRecording(it))
             }
     }
 
@@ -50,7 +47,7 @@ class RecordingsViewModel @Inject constructor(
     fun saveAll() = launchCatching {
         snackbar(Strings.saving_logs)
         recordingsRepository.saveAll().also {
-            sendEvent(EVENT_TYPE_RECORDING_SAVED, it)
+            sendEvent(OpenRecording(it))
         }
     }
 
@@ -58,3 +55,7 @@ class RecordingsViewModel @Inject constructor(
         recordingsRepository.delete(logRecording)
     }
 }
+
+data class OpenRecording(
+    val recording: LogRecording?,
+) : Event

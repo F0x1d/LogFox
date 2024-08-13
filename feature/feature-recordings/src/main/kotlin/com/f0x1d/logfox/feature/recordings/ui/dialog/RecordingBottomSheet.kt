@@ -9,9 +9,9 @@ import androidx.core.os.bundleOf
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.f0x1d.logfox.arch.asUri
+import com.f0x1d.logfox.arch.shareFileIntent
 import com.f0x1d.logfox.arch.ui.dialog.BaseViewModelBottomSheet
-import com.f0x1d.logfox.context.asUri
-import com.f0x1d.logfox.context.shareFileIntent
 import com.f0x1d.logfox.feature.recordings.databinding.SheetRecordingBinding
 import com.f0x1d.logfox.feature.recordings.viewmodel.RecordingViewModel
 import com.f0x1d.logfox.navigation.Directions
@@ -57,13 +57,13 @@ class RecordingBottomSheet: BaseViewModelBottomSheet<RecordingViewModel, SheetRe
                 )
             }
             exportButton.setOnClickListener {
-                logExportLauncher.launch("${viewModel.dateTimeFormatter.formatForExport(logRecording.dateAndTime)}.log")
+                logExportLauncher.launch("${viewModel.formatForExport(logRecording.dateAndTime)}.log")
             }
             shareButton.setOnClickListener {
                 requireContext().shareFileIntent(logRecording.file)
             }
             zipButton.setOnClickListener {
-                zipLogLauncher.launch("${viewModel.dateTimeFormatter.formatForExport(logRecording.dateAndTime)}.zip")
+                zipLogLauncher.launch("${viewModel.formatForExport(logRecording.dateAndTime)}.zip")
             }
         }
 

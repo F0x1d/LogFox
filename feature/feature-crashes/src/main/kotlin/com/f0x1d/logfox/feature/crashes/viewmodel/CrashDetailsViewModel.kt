@@ -4,13 +4,13 @@ import android.app.Application
 import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import com.f0x1d.logfox.arch.di.IODispatcher
+import com.f0x1d.logfox.arch.io.exportToZip
+import com.f0x1d.logfox.arch.io.putZipEntry
 import com.f0x1d.logfox.arch.viewmodel.BaseViewModel
 import com.f0x1d.logfox.database.entity.AppCrash
 import com.f0x1d.logfox.datetime.DateTimeFormatter
 import com.f0x1d.logfox.feature.crashes.core.repository.CrashesRepository
 import com.f0x1d.logfox.feature.crashes.di.CrashId
-import com.f0x1d.logfox.io.exportToZip
-import com.f0x1d.logfox.io.putZipEntry
 import com.f0x1d.logfox.model.deviceData
 import com.f0x1d.logfox.preferences.shared.AppPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,12 +23,12 @@ import javax.inject.Inject
 @HiltViewModel
 class CrashDetailsViewModel @Inject constructor(
     @CrashId val crashId: Long,
-    val dateTimeFormatter: DateTimeFormatter,
     private val crashesRepository: CrashesRepository,
-    val appPreferences: AppPreferences,
+    private val appPreferences: AppPreferences,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
+    dateTimeFormatter: DateTimeFormatter,
     application: Application,
-): BaseViewModel(application) {
+): BaseViewModel(application), DateTimeFormatter by dateTimeFormatter {
 
     val crash = crashesRepository.getByIdAsFlow(crashId)
         .map {
@@ -45,6 +45,9 @@ class CrashDetailsViewModel @Inject constructor(
             started = SharingStarted.Eagerly,
             initialValue = null,
         )
+
+    val wrapCrashLogLines get() = appPreferences.wrapCrashLogLines
+    val useSeparateNotificationsChannelsForCrashes get() = appPreferences.useSeparateNotificationsChannelsForCrashes
 
     fun exportCrashToZip(uri: Uri) = launchCatching(ioDispatcher) {
         val (appCrash, crashLog) = crash.value ?: return@launchCatching

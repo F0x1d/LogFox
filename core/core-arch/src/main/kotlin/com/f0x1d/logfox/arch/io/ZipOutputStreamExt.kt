@@ -1,4 +1,4 @@
-package com.f0x1d.logfox.io
+package com.f0x1d.logfox.arch.io
 
 import java.io.File
 import java.util.zip.ZipEntry

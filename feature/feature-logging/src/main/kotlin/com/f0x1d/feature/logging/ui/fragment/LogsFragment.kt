@@ -14,10 +14,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.f0x1d.feature.logging.adapter.LogsAdapter
 import com.f0x1d.feature.logging.service.LoggingService
 import com.f0x1d.feature.logging.viewmodel.LogsViewModel
+import com.f0x1d.logfox.arch.copyText
+import com.f0x1d.logfox.arch.isHorizontalOrientation
+import com.f0x1d.logfox.arch.sendService
 import com.f0x1d.logfox.arch.ui.fragment.BaseViewModelFragment
-import com.f0x1d.logfox.context.copyText
-import com.f0x1d.logfox.context.isHorizontalOrientation
-import com.f0x1d.logfox.context.sendService
 import com.f0x1d.logfox.feature.logging.R
 import com.f0x1d.logfox.feature.logging.databinding.FragmentLogsBinding
 import com.f0x1d.logfox.model.logline.LogLine
@@ -40,15 +40,13 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>() 
 
     private val adapter by lazy {
         LogsAdapter(
-            appPreferences = viewModel.appPreferences,
+            textSizeProvider = viewModel::logsTextSize,
+            logsExpandedProvider = viewModel::logsExpanded,
+            logsFormatProvider = viewModel::logsFormat,
             selectedItem = viewModel::selectLine,
             copyLog = {
                 requireContext().copyText(
-                    viewModel.appPreferences.originalOf(
-                        logLine = it,
-                        formatDate = viewModel.dateTimeFormatter::formatDate,
-                        formatTime = viewModel.dateTimeFormatter::formatTime,
-                    )
+                    text = viewModel.originalOf(it),
                 )
                 snackbar(Strings.text_copied)
             },
@@ -120,7 +118,7 @@ class LogsFragment: BaseViewModelFragment<LogsViewModel, FragmentLogsBinding>() 
             }
             setClickListenerOn(R.id.export_selected_item) {
                 exportLogsLauncher.launch(
-                    "${viewModel.dateTimeFormatter.formatForExport(System.currentTimeMillis())}.log"
+                    "${viewModel.formatForExport(System.currentTimeMillis())}.log"
                 )
             }
             setClickListenerOn(R.id.clear_item) {

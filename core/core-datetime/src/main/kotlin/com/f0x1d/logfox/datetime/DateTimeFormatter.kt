@@ -8,18 +8,25 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.Locale
 import javax.inject.Inject
 
-class DateTimeFormatter @Inject constructor(
+interface DateTimeFormatter {
+    fun formatDate(time: Long): String
+    fun formatTime(time: Long): String
+
+    fun formatForExport(time: Long): String
+}
+
+internal class DateTimeFormatterImpl @Inject constructor(
     @ApplicationContext private val context: Context,
     private val appPreferences: AppPreferences,
-) {
+) : DateTimeFormatter {
 
     private val dateFormatter by lazy { createFormatter(appPreferences.dateFormat) }
     private val timeFormatter by lazy { createFormatter(appPreferences.timeFormat) }
 
-    fun formatDate(time: Long): String = tryFormatBy(dateFormatter, time)
-    fun formatTime(time: Long): String = tryFormatBy(timeFormatter, time)
+    override fun formatDate(time: Long): String = tryFormatBy(dateFormatter, time)
+    override fun formatTime(time: Long): String = tryFormatBy(timeFormatter, time)
 
-    fun formatForExport(time: Long) = formatDate(time)
+    override fun formatForExport(time: Long) = formatDate(time)
         .withReplacedBadSymbolsForFileName + "-" + formatTime(time)
             .withReplacedBadSymbolsForFileName
 

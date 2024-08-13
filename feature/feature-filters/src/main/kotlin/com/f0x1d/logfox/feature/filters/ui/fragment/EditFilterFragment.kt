@@ -9,13 +9,13 @@ import android.widget.EditText
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.doAfterTextChanged
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
-import androidx.lifecycle.asLiveData
 import androidx.navigation.fragment.findNavController
 import com.f0x1d.logfox.arch.ui.fragment.BaseViewModelFragment
+import com.f0x1d.logfox.arch.viewmodel.Event
 import com.f0x1d.logfox.feature.filters.R
 import com.f0x1d.logfox.feature.filters.databinding.FragmentEditFilterBinding
 import com.f0x1d.logfox.feature.filters.viewmodel.EditFilterViewModel
-import com.f0x1d.logfox.model.event.Event
+import com.f0x1d.logfox.feature.filters.viewmodel.UpdatePackageNameText
 import com.f0x1d.logfox.model.logline.LogLevel
 import com.f0x1d.logfox.navigation.Directions
 import com.f0x1d.logfox.strings.Strings
@@ -87,11 +87,11 @@ class EditFilterFragment: BaseViewModelFragment<EditFilterViewModel, FragmentEdi
             findNavController().popBackStack()
         }
 
-        viewModel.filter.collectWithLifecycle {
-            viewModel.including.asLiveData().observe(viewLifecycleOwner) { enabled ->
-                updateIncludingButton(enabled)
-            }
+        viewModel.including.collectWithLifecycle { enabled ->
+            updateIncludingButton(enabled)
+        }
 
+        viewModel.filter.collectWithLifecycle {
             viewModel.uid.toText(uidText)
             viewModel.pid.toText(pidText)
             viewModel.tid.toText(tidText)
@@ -117,8 +117,10 @@ class EditFilterFragment: BaseViewModelFragment<EditFilterViewModel, FragmentEdi
     }
 
     override fun onEvent(event: Event) {
-        when (event.type) {
-            EditFilterViewModel.EVENT_TYPE_UPDATE_PACKAGE_NAME_TEXT -> {
+        super.onEvent(event)
+
+        when (event) {
+            is UpdatePackageNameText -> {
                 binding.packageNameText.setText(viewModel.packageName.value)
             }
         }

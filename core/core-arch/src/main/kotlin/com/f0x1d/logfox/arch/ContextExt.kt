@@ -1,4 +1,4 @@
-package com.f0x1d.logfox.context
+package com.f0x1d.logfox.arch
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -15,7 +15,6 @@ import android.widget.Toast
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
-import com.f0x1d.logfox.arch.shouldRequestNotificationsPermission
 import com.f0x1d.logfox.strings.Strings
 import java.io.File
 import kotlin.system.exitProcess

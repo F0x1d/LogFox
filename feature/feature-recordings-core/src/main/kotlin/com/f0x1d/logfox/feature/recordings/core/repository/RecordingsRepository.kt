@@ -4,7 +4,7 @@ import android.content.Context
 import com.f0x1d.logfox.arch.di.IODispatcher
 import com.f0x1d.logfox.arch.di.MainDispatcher
 import com.f0x1d.logfox.arch.repository.DatabaseProxyRepository
-import com.f0x1d.logfox.context.toast
+import com.f0x1d.logfox.arch.toast
 import com.f0x1d.logfox.database.AppDatabase
 import com.f0x1d.logfox.database.entity.LogRecording
 import com.f0x1d.logfox.datetime.DateTimeFormatter

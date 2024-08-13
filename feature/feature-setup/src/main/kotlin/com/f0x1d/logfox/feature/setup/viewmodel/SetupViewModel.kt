@@ -2,10 +2,10 @@ package com.f0x1d.logfox.feature.setup.viewmodel
 
 import android.Manifest
 import android.app.Application
+import com.f0x1d.logfox.arch.copyText
+import com.f0x1d.logfox.arch.hardRestartApp
+import com.f0x1d.logfox.arch.hasPermissionToReadLogs
 import com.f0x1d.logfox.arch.viewmodel.BaseStateViewModel
-import com.f0x1d.logfox.context.copyText
-import com.f0x1d.logfox.context.hardRestartApp
-import com.f0x1d.logfox.context.hasPermissionToReadLogs
 import com.f0x1d.logfox.feature.setup.ui.fragment.setup.compose.SetupScreenState
 import com.f0x1d.logfox.preferences.shared.AppPreferences
 import com.f0x1d.logfox.strings.Strings

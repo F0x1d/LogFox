@@ -9,11 +9,8 @@ internal fun DependencyHandlerScope.coreDependencies(withCompose: Boolean = true
     implementation(project(":strings"))
 
     implementation(project(":core:core-arch"))
-    implementation(project(":core:core-context"))
     implementation(project(":core:core-database"))
     implementation(project(":core:core-datetime"))
-    implementation(project(":core:core-intents"))
-    implementation(project(":core:core-io"))
     implementation(project(":core:core-navigation"))
     implementation(project(":core:core-preferences"))
     implementation(project(":core:core-terminals"))

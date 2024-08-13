@@ -21,15 +21,16 @@ import androidx.transition.TransitionManager
 import com.f0x1d.logfox.R
 import com.f0x1d.logfox.arch.contrastedNavBarAvailable
 import com.f0x1d.logfox.arch.gesturesAvailable
+import com.f0x1d.logfox.arch.hasNotificationsPermission
+import com.f0x1d.logfox.arch.isHorizontalOrientation
 import com.f0x1d.logfox.arch.ui.activity.BaseViewModelActivity
-import com.f0x1d.logfox.context.hasNotificationsPermission
-import com.f0x1d.logfox.context.isHorizontalOrientation
+import com.f0x1d.logfox.arch.viewmodel.Event
 import com.f0x1d.logfox.databinding.ActivityMainBinding
-import com.f0x1d.logfox.model.event.Event
 import com.f0x1d.logfox.navigation.Directions
 import com.f0x1d.logfox.strings.Strings
 import com.f0x1d.logfox.ui.Icons
 import com.f0x1d.logfox.viewmodel.MainViewModel
+import com.f0x1d.logfox.viewmodel.OpenSetup
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -125,8 +126,10 @@ class MainActivity: BaseViewModelActivity<MainViewModel, ActivityMainBinding>(),
     }
 
     override fun onEvent(event: Event) {
-        when (event.type) {
-            MainViewModel.EVENT_TYPE_SETUP -> navController.navigate(Directions.action_global_setupFragment)
+        super.onEvent(event)
+
+        when (event) {
+            is OpenSetup -> navController.navigate(Directions.action_global_setupFragment)
         }
     }
 

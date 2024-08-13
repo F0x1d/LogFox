@@ -1,4 +1,4 @@
-package com.f0x1d.logfox.context
+package com.f0x1d.logfox.arch
 
 import android.content.Context
 import android.net.Uri

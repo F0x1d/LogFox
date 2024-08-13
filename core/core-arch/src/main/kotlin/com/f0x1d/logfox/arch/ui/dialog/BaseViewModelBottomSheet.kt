@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.viewbinding.ViewBinding
 import com.f0x1d.logfox.arch.viewmodel.BaseViewModel
-import com.f0x1d.logfox.model.event.Event
+import com.f0x1d.logfox.arch.viewmodel.Event
 
 abstract class BaseViewModelBottomSheet<T : BaseViewModel, D : ViewBinding>: BaseBottomSheet<D>() {
 
@@ -12,12 +12,7 @@ abstract class BaseViewModelBottomSheet<T : BaseViewModel, D : ViewBinding>: Bas
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        viewModel.eventsData.observe(viewLifecycleOwner) {
-            if (it.isConsumed) return@observe
-
-            onEvent(it)
-        }
+        viewModel.eventsFlow.collectWithLifecycle(collector = ::onEvent)
     }
 
     open fun onEvent(event: Event) = Unit

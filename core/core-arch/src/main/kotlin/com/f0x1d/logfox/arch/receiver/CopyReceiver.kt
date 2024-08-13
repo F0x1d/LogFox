@@ -1,11 +1,11 @@
-package com.f0x1d.logfox.context.receiver
+package com.f0x1d.logfox.arch.receiver
 
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import com.f0x1d.logfox.context.copyText
-import com.f0x1d.logfox.context.notificationManagerCompat
-import com.f0x1d.logfox.context.toast
+import com.f0x1d.logfox.arch.copyText
+import com.f0x1d.logfox.arch.notificationManagerCompat
+import com.f0x1d.logfox.arch.toast
 import com.f0x1d.logfox.strings.Strings
 
 class CopyReceiver: BroadcastReceiver() {

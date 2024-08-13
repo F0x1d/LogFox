@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewbinding.ViewBinding
+import com.f0x1d.logfox.arch.ui.base.SimpleLifecycleOwner
 import com.f0x1d.logfox.arch.ui.enableEdgeToEdge
 import com.f0x1d.logfox.arch.ui.snackbar
 import dagger.hilt.EntryPoint
@@ -14,7 +15,7 @@ import dev.chrisbanes.insetter.applyInsetter
 import io.github.inflationx.viewpump.ViewPump
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
 
-abstract class BaseActivity<T : ViewBinding>: AppCompatActivity() {
+abstract class BaseActivity<T : ViewBinding>: AppCompatActivity(), SimpleLifecycleOwner {
 
     protected lateinit var binding: T
 

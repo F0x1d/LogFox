@@ -4,9 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import com.f0x1d.logfox.arch.databinding.FragmentComposeBinding
 import com.f0x1d.logfox.arch.ui.fragment.BaseViewModelFragment
 import com.f0x1d.logfox.arch.ui.snackbar
@@ -23,15 +21,7 @@ abstract class BaseComposeViewModelFragment<T : BaseViewModel> : BaseViewModelFr
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        binding.composeView.apply {
-            consumeWindowInsets = false
-            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
-
-            setContent {
-                this@BaseComposeViewModelFragment.Content()
-            }
-        }
+        binding.composeView.setup { Content() }
     }
 
     override fun snackbar(text: String): Snackbar = requireView().snackbar(text).apply {

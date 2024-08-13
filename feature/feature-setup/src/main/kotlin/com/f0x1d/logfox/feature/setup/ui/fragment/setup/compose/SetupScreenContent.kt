@@ -48,21 +48,36 @@ internal fun SetupScreenContent(
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 RichButton(
-                    text = Strings.root,
-                    icon = Icons.ic_square_root,
+                    text = { Text(text = stringResource(id = Strings.root)) },
+                    icon = {
+                        Icon(
+                            painter = painterResource(id = Icons.ic_square_root),
+                            contentDescription = null,
+                        )
+                    },
                     onClick = listener.onRootClick,
                 )
 
                 RichButton(
                     modifier = Modifier.testTag(SetupAdbButtonTestTag),
-                    text = Strings.adb,
-                    icon = Icons.ic_adb,
+                    text = { Text(text = stringResource(id = Strings.adb)) },
+                    icon = {
+                        Icon(
+                            painter = painterResource(id = Icons.ic_adb),
+                            contentDescription = null,
+                        )
+                    },
                     onClick = listener.onAdbClick,
                 )
 
                 RichButton(
-                    text = Strings.shizuku,
-                    icon = Icons.ic_terminal,
+                    text = { Text(text = stringResource(id = Strings.shizuku)) },
+                    icon = {
+                        Icon(
+                            painter = painterResource(id = Icons.ic_terminal),
+                            contentDescription = null,
+                        )
+                    },
                     onClick = listener.onShizukuClick,
                 )
 

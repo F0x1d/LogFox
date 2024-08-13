@@ -4,12 +4,12 @@ import android.app.Application
 import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import com.f0x1d.logfox.arch.di.IODispatcher
+import com.f0x1d.logfox.arch.io.exportToZip
+import com.f0x1d.logfox.arch.io.putZipEntry
 import com.f0x1d.logfox.arch.viewmodel.BaseViewModel
 import com.f0x1d.logfox.datetime.DateTimeFormatter
 import com.f0x1d.logfox.feature.recordings.core.repository.RecordingsRepository
 import com.f0x1d.logfox.feature.recordings.di.RecordingId
-import com.f0x1d.logfox.io.exportToZip
-import com.f0x1d.logfox.io.putZipEntry
 import com.f0x1d.logfox.model.deviceData
 import com.f0x1d.logfox.preferences.shared.AppPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,12 +27,12 @@ import javax.inject.Inject
 @HiltViewModel
 class RecordingViewModel @Inject constructor(
     @RecordingId val recordingId: Long,
-    val dateTimeFormatter: DateTimeFormatter,
     private val recordingsRepository: RecordingsRepository,
     private val appPreferences: AppPreferences,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
+    dateTimeFormatter: DateTimeFormatter,
     application: Application
-): BaseViewModel(application) {
+): BaseViewModel(application), DateTimeFormatter by dateTimeFormatter {
 
     val recording = recordingsRepository.getByIdAsFlow(recordingId)
         .distinctUntilChanged()

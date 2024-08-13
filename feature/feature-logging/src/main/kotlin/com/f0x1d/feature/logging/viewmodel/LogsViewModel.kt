@@ -36,12 +36,12 @@ class LogsViewModel @Inject constructor(
     private val loggingStore: LoggingStore,
     private val filtersRepository: FiltersRepository,
     private val recordingsRepository: RecordingsRepository,
-    val appPreferences: AppPreferences,
-    val dateTimeFormatter: DateTimeFormatter,
+    private val appPreferences: AppPreferences,
     @DefaultDispatcher private val defaultDispatcher: CoroutineDispatcher,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
+    dateTimeFormatter: DateTimeFormatter,
     application: Application,
-): BaseViewModel(application) {
+): BaseViewModel(application), DateTimeFormatter by dateTimeFormatter {
 
     val query = MutableStateFlow<String?>(null)
     val queryAndFilters = query.combine(
@@ -58,8 +58,8 @@ class LogsViewModel @Inject constructor(
     val selectedItemsContent get() = selectedItems.value.joinToString("\n") { line ->
         appPreferences.originalOf(
             logLine = line,
-            formatDate = dateTimeFormatter::formatDate,
-            formatTime = dateTimeFormatter::formatTime,
+            formatDate = ::formatDate,
+            formatTime = ::formatTime,
         )
     }
 
@@ -106,6 +106,9 @@ class LogsViewModel @Inject constructor(
     )
 
     val resumeLoggingWithBottomTouch get() = appPreferences.resumeLoggingWithBottomTouch
+    val logsTextSize get() = appPreferences.logsTextSize.toFloat()
+    val logsExpanded get() = appPreferences.logsExpanded
+    val logsFormat get() = appPreferences.showLogValues
 
     fun selectLine(logLine: LogLine, selected: Boolean) = selectedItems.updateSet {
         if (selected) add(
@@ -137,8 +140,8 @@ class LogsViewModel @Inject constructor(
                 selectedItems.value.joinToString("\n") { line ->
                     appPreferences.originalOf(
                         logLine = line,
-                        formatDate = dateTimeFormatter::formatDate,
-                        formatTime = dateTimeFormatter::formatTime,
+                        formatDate = ::formatDate,
+                        formatTime = ::formatTime,
                     )
                 }.encodeToByteArray()
             )
@@ -154,6 +157,12 @@ class LogsViewModel @Inject constructor(
 
     fun pause() = paused.update { true }
     fun resume() = paused.update { false }
+
+    fun originalOf(logLine: LogLine): String = appPreferences.originalOf(
+        logLine = logLine,
+        formatDate = ::formatDate,
+        formatTime = ::formatTime,
+    )
 
     private fun MutableStateFlow<Set<LogLine>>.updateSet(block: MutableSet<LogLine>.() -> Unit) = update {
         it.toMutableSet().apply(block).toSet()

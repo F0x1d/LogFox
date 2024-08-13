@@ -7,10 +7,12 @@ import com.f0x1d.logfox.arch.adapter.BaseListAdapter
 import com.f0x1d.logfox.feature.logging.databinding.ItemLogBinding
 import com.f0x1d.logfox.model.diffCallback
 import com.f0x1d.logfox.model.logline.LogLine
-import com.f0x1d.logfox.preferences.shared.AppPreferences
+import com.f0x1d.logfox.model.preferences.ShowLogValues
 
 class LogsAdapter(
-    private val appPreferences: AppPreferences,
+    private val textSizeProvider: () -> Float,
+    private val logsExpandedProvider: () -> Boolean,
+    private val logsFormatProvider: () -> ShowLogValues,
     private val selectedItem: (LogLine, Boolean) -> Unit,
     private val copyLog: (LogLine) -> Unit
 ): BaseListAdapter<LogLine, ItemLogBinding>(diffCallback<LogLine>()) {
@@ -22,9 +24,9 @@ class LogsAdapter(
             notifyItemRangeChanged(0, itemCount)
         }
 
-    val textSize get() = appPreferences.logsTextSize.toFloat()
-    val logsExpanded get() = appPreferences.logsExpanded
-    val logsFormat get() = appPreferences.showLogValues
+    val textSize get() = textSizeProvider()
+    val logsExpanded get() = logsExpandedProvider()
+    val logsFormat get() = logsFormatProvider()
 
     override fun createHolder(layoutInflater: LayoutInflater, parent: ViewGroup) = LogViewHolder(
         binding = ItemLogBinding.inflate(layoutInflater, parent, false),

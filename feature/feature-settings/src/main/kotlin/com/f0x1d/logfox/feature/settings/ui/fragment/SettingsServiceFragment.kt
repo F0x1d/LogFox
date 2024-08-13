@@ -5,7 +5,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
 import androidx.preference.SwitchPreferenceCompat
 import com.f0x1d.logfox.arch.isAtLeastAndroid13
-import com.f0x1d.logfox.context.toast
+import com.f0x1d.logfox.arch.toast
 import com.f0x1d.logfox.feature.settings.LoggingServiceDelegate
 import com.f0x1d.logfox.feature.settings.R
 import com.f0x1d.logfox.feature.settings.fillWithStrings

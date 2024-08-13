@@ -12,10 +12,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.f0x1d.logfox.arch.copyText
 import com.f0x1d.logfox.arch.notificationsChannelsAvailable
+import com.f0x1d.logfox.arch.shareIntent
 import com.f0x1d.logfox.arch.ui.fragment.BaseViewModelFragment
-import com.f0x1d.logfox.context.copyText
-import com.f0x1d.logfox.context.shareIntent
 import com.f0x1d.logfox.database.entity.AppCrash
 import com.f0x1d.logfox.feature.crashes.R
 import com.f0x1d.logfox.feature.crashes.core.controller.notificationChannelId
@@ -72,7 +72,7 @@ class CrashDetailsFragment: BaseViewModelFragment<CrashDetailsViewModel, Fragmen
 
             findItem(R.id.notifications_item).setVisible(
                 notificationsChannelsAvailable
-                        && viewModel.appPreferences.useSeparateNotificationsChannelsForCrashes
+                        && viewModel.useSeparateNotificationsChannelsForCrashes
             )
             setClickListenerOn(R.id.notifications_item) {
                 Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS).apply {
@@ -103,12 +103,12 @@ class CrashDetailsFragment: BaseViewModelFragment<CrashDetailsViewModel, Fragmen
 
         zipButton.setOnClickListener {
             val pkg = appCrash.packageName.replace(".", "-")
-            val formattedDate = viewModel.dateTimeFormatter.formatForExport(appCrash.dateAndTime)
+            val formattedDate = viewModel.formatForExport(appCrash.dateAndTime)
             
             zipCrashLauncher.launch("crash-$pkg-$formattedDate.zip")
         }
 
-        viewModel.appPreferences.wrapCrashLogLines.let { wrap ->
+        viewModel.wrapCrashLogLines.let { wrap ->
             logText.isVisible = wrap
             logTextScrollableContainer.isVisible = wrap.not()
         }

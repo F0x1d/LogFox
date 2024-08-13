@@ -4,9 +4,9 @@ import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationManagerCompat
-import com.f0x1d.logfox.context.LOGGING_STATUS_CHANNEL_ID
-import com.f0x1d.logfox.context.RECORDING_STATUS_CHANNEL_ID
-import com.f0x1d.logfox.context.notificationManagerCompat
+import com.f0x1d.logfox.arch.LOGGING_STATUS_CHANNEL_ID
+import com.f0x1d.logfox.arch.RECORDING_STATUS_CHANNEL_ID
+import com.f0x1d.logfox.arch.notificationManagerCompat
 import com.f0x1d.logfox.preferences.shared.AppPreferences
 import com.f0x1d.logfox.strings.Strings
 import com.google.android.material.color.DynamicColors

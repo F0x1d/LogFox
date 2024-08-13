@@ -9,15 +9,16 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.f0x1d.logfox.arch.isHorizontalOrientation
 import com.f0x1d.logfox.arch.ui.fragment.BaseViewModelFragment
-import com.f0x1d.logfox.context.isHorizontalOrientation
+import com.f0x1d.logfox.arch.viewmodel.Event
 import com.f0x1d.logfox.database.entity.LogRecording
 import com.f0x1d.logfox.feature.recordings.R
 import com.f0x1d.logfox.feature.recordings.adapter.RecordingsAdapter
 import com.f0x1d.logfox.feature.recordings.core.controller.RecordingState
 import com.f0x1d.logfox.feature.recordings.databinding.FragmentRecordingsBinding
+import com.f0x1d.logfox.feature.recordings.viewmodel.OpenRecording
 import com.f0x1d.logfox.feature.recordings.viewmodel.RecordingsViewModel
-import com.f0x1d.logfox.model.event.Event
 import com.f0x1d.logfox.navigation.Directions
 import com.f0x1d.logfox.strings.Strings
 import com.f0x1d.logfox.ui.Icons
@@ -148,8 +149,10 @@ class RecordingsFragment: BaseViewModelFragment<RecordingsViewModel, FragmentRec
     }
 
     override fun onEvent(event: Event) {
-        when (event.type) {
-            RecordingsViewModel.EVENT_TYPE_RECORDING_SAVED -> openDetails(event.consume<LogRecording>())
+        super.onEvent(event)
+
+        when (event) {
+            is OpenRecording -> openDetails(event.recording)
         }
     }
 

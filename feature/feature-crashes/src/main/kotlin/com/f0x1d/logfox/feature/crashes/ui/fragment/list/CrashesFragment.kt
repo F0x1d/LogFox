@@ -11,8 +11,8 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.f0x1d.logfox.arch.isHorizontalOrientation
 import com.f0x1d.logfox.arch.ui.fragment.BaseViewModelFragment
-import com.f0x1d.logfox.context.isHorizontalOrientation
 import com.f0x1d.logfox.feature.crashes.R
 import com.f0x1d.logfox.feature.crashes.adapter.CrashesAdapter
 import com.f0x1d.logfox.feature.crashes.databinding.DialogSortingBinding

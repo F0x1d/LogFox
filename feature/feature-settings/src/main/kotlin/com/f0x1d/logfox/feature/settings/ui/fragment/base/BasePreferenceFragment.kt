@@ -2,21 +2,16 @@ package com.f0x1d.logfox.feature.settings.ui.fragment.base
 
 import android.os.Bundle
 import android.view.View
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.preference.PreferenceFragmentCompat
-import com.f0x1d.logfox.context.isHorizontalOrientation
+import com.f0x1d.logfox.arch.isHorizontalOrientation
+import com.f0x1d.logfox.arch.ui.base.SimpleFragmentLifecycleOwner
 import com.f0x1d.logfox.feature.settings.R
 import com.f0x1d.logfox.strings.Strings
 import com.f0x1d.logfox.ui.view.setupBackButtonForNavController
 import com.google.android.material.appbar.MaterialToolbar
 import dev.chrisbanes.insetter.applyInsetter
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.FlowCollector
-import kotlinx.coroutines.launch
 
-abstract class BasePreferenceFragment: PreferenceFragmentCompat() {
+abstract class BasePreferenceFragment: PreferenceFragmentCompat(), SimpleFragmentLifecycleOwner {
 
     open val title = Strings.settings
     open val showBackArrow = false
@@ -38,15 +33,6 @@ abstract class BasePreferenceFragment: PreferenceFragmentCompat() {
                     padding(vertical = requireContext().isHorizontalOrientation)
                 }
             }
-        }
-    }
-
-    protected fun <T> Flow<T>.collectWithLifecycle(
-        state: Lifecycle.State = Lifecycle.State.STARTED,
-        collector: FlowCollector<T>,
-    ) = lifecycleScope.launch {
-        repeatOnLifecycle(state) {
-            collect(collector)
         }
     }
 }

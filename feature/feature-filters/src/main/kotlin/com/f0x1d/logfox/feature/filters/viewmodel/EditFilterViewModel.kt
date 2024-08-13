@@ -5,6 +5,7 @@ import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import com.f0x1d.logfox.arch.di.IODispatcher
 import com.f0x1d.logfox.arch.viewmodel.BaseViewModel
+import com.f0x1d.logfox.arch.viewmodel.Event
 import com.f0x1d.logfox.database.entity.UserFilter
 import com.f0x1d.logfox.feature.filters.core.repository.FiltersRepository
 import com.f0x1d.logfox.feature.filters.di.FilterId
@@ -30,10 +31,6 @@ class EditFilterViewModel @Inject constructor(
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
     application: Application,
 ): BaseViewModel(application) {
-
-    companion object {
-        const val EVENT_TYPE_UPDATE_PACKAGE_NAME_TEXT = "update_package_name_text"
-    }
 
     val filter = filtersRepository.getByIdAsFlow(filterId ?: -1L)
         .distinctUntilChanged()
@@ -102,7 +99,7 @@ class EditFilterViewModel @Inject constructor(
     fun selectApp(app: InstalledApp) = packageName.update {
         app.packageName
     }.also {
-        sendEvent(EVENT_TYPE_UPDATE_PACKAGE_NAME_TEXT)
+        sendEvent(UpdatePackageNameText)
     }
 
     private fun List<Boolean>.toEnabledLogLevels() = mapIndexed { index, value ->
@@ -112,3 +109,5 @@ class EditFilterViewModel @Inject constructor(
             null
     }.filterNotNull()
 }
+
+data object UpdatePackageNameText : Event

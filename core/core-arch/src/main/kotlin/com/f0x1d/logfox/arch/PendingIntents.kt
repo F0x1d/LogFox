@@ -1,4 +1,4 @@
-package com.f0x1d.logfox.intents
+package com.f0x1d.logfox.arch
 
 import android.app.Activity
 import android.app.PendingIntent
@@ -7,7 +7,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import com.f0x1d.logfox.arch.mutablePendingIntentAvailable
 
 const val CRASH_DETAILS_INTENT_ID = 0
 const val COPY_CRASH_INTENT_ID = 1

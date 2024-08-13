@@ -1,4 +1,4 @@
-package com.f0x1d.logfox.context
+package com.f0x1d.logfox.arch
 
 const val LOGGING_STATUS_CHANNEL_ID = "logging"
 const val RECORDING_STATUS_CHANNEL_ID = "recording"

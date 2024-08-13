@@ -5,9 +5,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
 import androidx.preference.Preference
+import com.f0x1d.logfox.arch.LOGGING_STATUS_CHANNEL_ID
+import com.f0x1d.logfox.arch.hasNotificationsPermission
 import com.f0x1d.logfox.arch.notificationsChannelsAvailable
-import com.f0x1d.logfox.context.LOGGING_STATUS_CHANNEL_ID
-import com.f0x1d.logfox.context.hasNotificationsPermission
 import com.f0x1d.logfox.feature.settings.R
 import com.f0x1d.logfox.feature.settings.ui.fragment.base.BasePreferenceFragment
 import com.f0x1d.logfox.strings.Strings

@@ -7,10 +7,13 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.ServiceCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
+import com.f0x1d.logfox.arch.EXIT_APP_INTENT_ID
+import com.f0x1d.logfox.arch.LOGGING_STATUS_CHANNEL_ID
+import com.f0x1d.logfox.arch.OPEN_APP_INTENT_ID
+import com.f0x1d.logfox.arch.activityManager
 import com.f0x1d.logfox.arch.di.DefaultDispatcher
-import com.f0x1d.logfox.context.LOGGING_STATUS_CHANNEL_ID
-import com.f0x1d.logfox.context.activityManager
-import com.f0x1d.logfox.context.toast
+import com.f0x1d.logfox.arch.makeServicePendingIntent
+import com.f0x1d.logfox.arch.toast
 import com.f0x1d.logfox.database.entity.UserFilter
 import com.f0x1d.logfox.feature.crashes.core.controller.CrashesController
 import com.f0x1d.logfox.feature.filters.core.repository.FiltersRepository
@@ -18,9 +21,6 @@ import com.f0x1d.logfox.feature.logging.core.model.suits
 import com.f0x1d.logfox.feature.logging.core.repository.LoggingRepository
 import com.f0x1d.logfox.feature.logging.core.store.LoggingStore
 import com.f0x1d.logfox.feature.recordings.core.controller.RecordingController
-import com.f0x1d.logfox.intents.EXIT_APP_INTENT_ID
-import com.f0x1d.logfox.intents.OPEN_APP_INTENT_ID
-import com.f0x1d.logfox.intents.makeServicePendingIntent
 import com.f0x1d.logfox.model.exception.TerminalNotSupportedException
 import com.f0x1d.logfox.model.logline.LogLine
 import com.f0x1d.logfox.preferences.shared.AppPreferences

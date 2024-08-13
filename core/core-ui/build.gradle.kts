@@ -6,7 +6,7 @@ plugins {
 android.namespace = "com.f0x1d.logfox.ui"
 
 dependencies {
-    implementation(project(":core:core-context"))
+    implementation(project(":core:core-arch"))
     implementation(project(":core:core-preferences"))
 
     implementation(libs.insetter)

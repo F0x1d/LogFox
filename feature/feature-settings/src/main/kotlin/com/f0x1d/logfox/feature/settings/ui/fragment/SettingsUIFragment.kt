@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.text.InputType
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.preference.Preference
-import com.f0x1d.logfox.context.catchingNotNumber
+import com.f0x1d.logfox.arch.catchingNotNumber
 import com.f0x1d.logfox.feature.settings.R
 import com.f0x1d.logfox.feature.settings.fillWithStrings
 import com.f0x1d.logfox.feature.settings.ui.fragment.base.BasePreferenceFragment

@@ -42,7 +42,7 @@ abstract class ScreenshotTest {
         whatToCapture: SemanticsNodeInteractionsProvider.() -> SemanticsNodeInteraction = { onRoot() },
         content: @Composable () -> Unit,
     ) {
-        composeRule.setContent { content() }
+        composeRule.setContent(content)
 
         composeRule.actions()
         waitForIdle()
