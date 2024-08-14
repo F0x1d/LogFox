@@ -139,7 +139,7 @@ class MainActivity: BaseViewModelActivity<MainViewModel, ActivityMainBinding>(),
             Directions.logsExtendedCopyFragment -> false
             Directions.filtersFragment -> false
             Directions.editFilterFragment -> false
-            Directions.chooseAppFragment -> false
+            Directions.appsPickerFragment -> false
             Directions.appCrashesFragment -> false
             Directions.crashDetailsFragment -> false
 

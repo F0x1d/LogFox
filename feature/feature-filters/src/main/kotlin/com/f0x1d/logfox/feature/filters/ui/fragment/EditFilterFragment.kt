@@ -78,7 +78,7 @@ class EditFilterFragment: BaseViewModelFragment<EditFilterViewModel, FragmentEdi
 
         selectAppButton.setOnClickListener {
             findNavController().navigate(
-                Directions.action_editFilterFragment_to_chooseAppFragment,
+                Directions.action_editFilterFragment_to_appsPickerFragment,
             )
         }
 

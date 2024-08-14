@@ -15,28 +15,21 @@ dependencyResolutionManagement {
     }
 }
 
-include(":app")
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
-include(":data")
-include(":strings")
+include(
+    ":app",
+    ":data",
+    ":strings",
+)
 
-include(":core:core-arch")
-include(":core:core-database")
-include(":core:core-datetime")
-include(":core:core-navigation")
-include(":core:core-preferences")
-include(":core:core-terminals")
-include(":core:core-tests")
-include(":core:core-ui")
-include(":core:core-ui-compose")
+private val modulesDirectories = setOf("core", "feature")
+requireNotNull(rootDir.listFiles()).filter { file ->
+    file.isDirectory && file.name in modulesDirectories
+}.forEach { file ->
+    val modules = requireNotNull(file.listFiles())
 
-include(":feature:feature-crashes")
-include(":feature:feature-crashes-core")
-include(":feature:feature-filters")
-include(":feature:feature-filters-core")
-include(":feature:feature-logging")
-include(":feature:feature-logging-core")
-include(":feature:feature-recordings")
-include(":feature:feature-recordings-core")
-include(":feature:feature-settings")
-include(":feature:feature-setup")
+    modules.filter(File::isDirectory).forEach { moduleFile ->
+        include(":${file.name}:${moduleFile.name}")
+    }
+}

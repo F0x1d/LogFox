@@ -4,6 +4,8 @@ import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationManagerCompat
+import coil.ImageLoader
+import coil.ImageLoaderFactory
 import com.f0x1d.logfox.arch.LOGGING_STATUS_CHANNEL_ID
 import com.f0x1d.logfox.arch.RECORDING_STATUS_CHANNEL_ID
 import com.f0x1d.logfox.arch.notificationManagerCompat
@@ -14,10 +16,13 @@ import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
 
 @HiltAndroidApp
-class LogFoxApp: Application() {
+class LogFoxApp: Application(), ImageLoaderFactory {
 
     @Inject
     lateinit var appPreferences: AppPreferences
+
+    @Inject
+    lateinit var imageLoader: ImageLoader
 
     override fun onCreate() {
         super.onCreate()
@@ -51,4 +56,6 @@ class LogFoxApp: Application() {
             )
         }
     }
+
+    override fun newImageLoader(): ImageLoader = imageLoader
 }

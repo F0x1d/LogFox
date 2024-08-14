@@ -7,6 +7,7 @@ import com.f0x1d.logfox.arch.di.IODispatcher
 import com.f0x1d.logfox.arch.viewmodel.BaseViewModel
 import com.f0x1d.logfox.arch.viewmodel.Event
 import com.f0x1d.logfox.database.entity.UserFilter
+import com.f0x1d.logfox.feature.apps.picker.viewmodel.AppsPickerResultHandler
 import com.f0x1d.logfox.feature.filters.core.repository.FiltersRepository
 import com.f0x1d.logfox.feature.filters.di.FilterId
 import com.f0x1d.logfox.model.InstalledApp
@@ -30,7 +31,7 @@ class EditFilterViewModel @Inject constructor(
     private val gson: Gson,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
     application: Application,
-): BaseViewModel(application) {
+): BaseViewModel(application), AppsPickerResultHandler {
 
     val filter = filtersRepository.getByIdAsFlow(filterId ?: -1L)
         .distinctUntilChanged()
@@ -96,10 +97,13 @@ class EditFilterViewModel @Inject constructor(
         enabledLogLevels[which] = filtering
     }
 
-    fun selectApp(app: InstalledApp) = packageName.update {
-        app.packageName
-    }.also {
-        sendEvent(UpdatePackageNameText)
+    override fun onAppSelected(app: InstalledApp): Boolean {
+        packageName.update {
+            app.packageName
+        }.also {
+            sendEvent(UpdatePackageNameText)
+        }
+        return true
     }
 
     private fun List<Boolean>.toEnabledLogLevels() = mapIndexed { index, value ->

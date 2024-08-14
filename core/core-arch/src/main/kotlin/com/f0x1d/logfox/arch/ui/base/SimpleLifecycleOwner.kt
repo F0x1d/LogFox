@@ -17,7 +17,8 @@ interface SimpleLifecycleOwner {
         state: Lifecycle.State = Lifecycle.State.STARTED,
         collector: FlowCollector<T>,
     ) {
-        val lifecycle = getViewLifecycleOwner()?.lifecycle ?: lifecycle
+        val viewLifecycleOwner = runCatching { getViewLifecycleOwner() }.getOrNull()
+        val lifecycle = viewLifecycleOwner?.lifecycle ?: lifecycle
 
         lifecycle.coroutineScope.launch {
             lifecycle.repeatOnLifecycle(state) {

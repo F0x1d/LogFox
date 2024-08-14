@@ -31,6 +31,7 @@ dependencies {
     implementation(libs.viewpump)
     implementation(libs.gson)
 
+    implementation(libs.coil)
     implementation(libs.glide)
     ksp(libs.glide.compiler)
 

@@ -40,17 +40,15 @@ fun RichButton(
 
 @DayNightPreview
 @Composable
-private fun RichButtonAdbPreview() {
-    LogFoxTheme {
-        RichButton(
-            text = { Text(text = "ADB") },
-            icon = {
-                Icon(
-                    painter = painterResource(id = Icons.ic_adb),
-                    contentDescription = null,
-                )
-            },
-            onClick = { },
-        )
-    }
+private fun RichButtonAdbPreview() = LogFoxTheme {
+    RichButton(
+        text = { Text(text = "ADB") },
+        icon = {
+            Icon(
+                painter = painterResource(id = Icons.ic_adb),
+                contentDescription = null,
+            )
+        },
+        onClick = { },
+    )
 }
