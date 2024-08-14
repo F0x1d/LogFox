@@ -6,5 +6,5 @@ plugins {
 android.namespace = "com.f0x1d.logfox.datetime"
 
 dependencies {
-    implementation(project(":core:core-preferences"))
+    implementation(projects.core.corePreferences)
 }

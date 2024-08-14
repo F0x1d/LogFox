@@ -5,11 +5,8 @@ plugins {
 android.namespace = "com.f0x1d.logfox.feature.filters"
 
 dependencies {
-    implementation(project(":feature:feature-filters-core"))
-    implementation(project(":feature:feature-apps-picker"))
+    implementation(projects.feature.featureAppsPicker)
+    implementation(projects.feature.featureFiltersCore)
 
     implementation(libs.gson)
-
-    implementation(libs.glide)
-    ksp(libs.glide.compiler)
 }

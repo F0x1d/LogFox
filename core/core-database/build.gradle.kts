@@ -14,7 +14,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:core-arch"))
+    implementation(projects.core.coreArch)
 
     implementation(libs.androidx.room)
     implementation(libs.androidx.room.runtime)

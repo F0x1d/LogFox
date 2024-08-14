@@ -7,11 +7,18 @@ import com.f0x1d.logfox.database.entity.AppCrash
 import com.f0x1d.logfox.feature.crashes.core.controller.CrashesNotificationsController
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 interface CrashesRepository : DatabaseProxyRepository<AppCrash> {
+    suspend fun getAllByDateAndTime(
+        dateAndTime: Long,
+        packageName: String,
+    ): List<AppCrash>
+    suspend fun insert(appCrash: AppCrash): Long
+
     suspend fun deleteAllByPackageName(appCrash: AppCrash)
 }
 
@@ -22,7 +29,9 @@ internal class CrashesRepositoryImpl @Inject constructor(
 ) : CrashesRepository {
 
     override fun getAllAsFlow(): Flow<List<AppCrash>> =
-        database.appCrashes().getAllAsFlow().flowOn(ioDispatcher)
+        database.appCrashes().getAllAsFlow()
+            .distinctUntilChanged()
+            .flowOn(ioDispatcher)
 
     override fun getByIdAsFlow(id: Long): Flow<AppCrash?> =
         database.appCrashes().getByIdAsFlow(id).flowOn(ioDispatcher)
@@ -33,6 +42,20 @@ internal class CrashesRepositoryImpl @Inject constructor(
 
     override suspend fun getById(id: Long): AppCrash? = withContext(ioDispatcher) {
         database.appCrashes().getById(id)
+    }
+
+    override suspend fun getAllByDateAndTime(
+        dateAndTime: Long,
+        packageName: String
+    ): List<AppCrash> = withContext(ioDispatcher) {
+        database.appCrashes().getAllByDateAndTime(
+            dateAndTime = dateAndTime,
+            packageName = packageName,
+        )
+    }
+
+    override suspend fun insert(appCrash: AppCrash): Long = withContext(ioDispatcher) {
+        database.appCrashes().insert(appCrash)
     }
 
     override suspend fun deleteAllByPackageName(appCrash: AppCrash) = withContext(ioDispatcher) {

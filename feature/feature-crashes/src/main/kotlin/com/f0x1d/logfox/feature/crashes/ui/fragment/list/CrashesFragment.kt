@@ -8,7 +8,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
-import androidx.fragment.app.viewModels
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.f0x1d.logfox.arch.isHorizontalOrientation
@@ -35,7 +35,7 @@ import dev.chrisbanes.insetter.applyInsetter
 @AndroidEntryPoint
 class CrashesFragment: BaseViewModelFragment<CrashesViewModel, FragmentCrashesBinding>() {
 
-    override val viewModel by viewModels<CrashesViewModel>()
+    override val viewModel by hiltNavGraphViewModels<CrashesViewModel>(Directions.crashesFragment)
 
     private val adapter = CrashesAdapter(
         click = {
@@ -103,6 +103,9 @@ class CrashesFragment: BaseViewModelFragment<CrashesViewModel, FragmentCrashesBi
         searchBar.menu.apply {
             setClickListenerOn(R.id.sort_item) {
                 showSortDialog()
+            }
+            setClickListenerOn(R.id.blacklist_item) {
+                findNavController().navigate(Directions.action_crashesFragment_to_appsPickerFragment)
             }
             setClickListenerOn(R.id.clear_item) {
                 showAreYouSureClearDialog {

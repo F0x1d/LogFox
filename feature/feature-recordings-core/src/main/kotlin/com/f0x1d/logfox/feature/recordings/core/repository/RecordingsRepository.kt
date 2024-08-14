@@ -16,6 +16,7 @@ import com.f0x1d.logfox.terminals.base.Terminal
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -113,7 +114,9 @@ internal class RecordingsRepositoryImpl @Inject constructor(
     )
 
     override fun getAllAsFlow(): Flow<List<LogRecording>> =
-        database.logRecordings().getAllAsFlow().flowOn(ioDispatcher)
+        database.logRecordings().getAllAsFlow()
+            .distinctUntilChanged()
+            .flowOn(ioDispatcher)
 
     override fun getByIdAsFlow(id: Long): Flow<LogRecording?> =
         database.logRecordings().getByIdAsFlow(id).flowOn(ioDispatcher)

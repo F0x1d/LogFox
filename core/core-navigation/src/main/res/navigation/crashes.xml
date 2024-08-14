@@ -22,6 +22,13 @@
         app:exitAnim="@anim/nav_default_exit_anim"
         app:popEnterAnim="@anim/nav_default_pop_enter_anim"
         app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
+    <action
+        android:id="@+id/action_crashesFragment_to_appsPickerFragment"
+        app:destination="@id/appsPickerFragment"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
+        app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+        app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
 
     <fragment
         android:id="@+id/appCrashesFragment"
@@ -52,4 +59,9 @@
             app:argType="long"
             android:defaultValue="-1L" />
     </fragment>
+
+    <fragment
+        android:id="@+id/appsPickerFragment"
+        android:name="com.f0x1d.logfox.feature.apps.picker.ui.fragment.picker.AppsPickerFragment"
+        android:label="AppsPickerFragment" />
 </navigation>

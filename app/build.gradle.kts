@@ -9,22 +9,22 @@ android {
     defaultConfig {
         applicationId = logFoxPackageName
 
-        versionCode = 61
-        versionName = "2.0.1"
+        versionCode = 62
+        versionName = "2.0.2"
     }
 }
 
 dependencies {
-    implementation(project(":feature:feature-crashes"))
-    implementation(project(":feature:feature-crashes-core"))
-    implementation(project(":feature:feature-filters"))
-    implementation(project(":feature:feature-filters-core"))
-    implementation(project(":feature:feature-logging"))
-    implementation(project(":feature:feature-logging-core"))
-    implementation(project(":feature:feature-recordings"))
-    implementation(project(":feature:feature-recordings-core"))
-    implementation(project(":feature:feature-settings"))
-    implementation(project(":feature:feature-setup"))
+    implementation(projects.feature.featureCrashes)
+    implementation(projects.feature.featureCrashesCore)
+    implementation(projects.feature.featureFilters)
+    implementation(projects.feature.featureFiltersCore)
+    implementation(projects.feature.featureLogging)
+    implementation(projects.feature.featureLoggingCore)
+    implementation(projects.feature.featureRecordings)
+    implementation(projects.feature.featureRecordingsCore)
+    implementation(projects.feature.featureSettings)
+    implementation(projects.feature.featureSetup)
 
     implementation(libs.insetter)
     implementation(libs.bundles.shizuku)

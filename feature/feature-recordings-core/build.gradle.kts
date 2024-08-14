@@ -5,5 +5,5 @@ plugins {
 android.namespace = "com.f0x1d.logfox.feature.recordings.core"
 
 dependencies {
-    implementation(project(":feature:feature-logging-core"))
+    implementation(projects.feature.featureLoggingCore)
 }

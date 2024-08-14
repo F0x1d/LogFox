@@ -11,6 +11,8 @@ import com.f0x1d.logfox.database.entity.AllowedLevelsConverter
 import com.f0x1d.logfox.database.entity.AppCrash
 import com.f0x1d.logfox.database.entity.AppCrashDao
 import com.f0x1d.logfox.database.entity.CrashTypeConverter
+import com.f0x1d.logfox.database.entity.DisabledApp
+import com.f0x1d.logfox.database.entity.DisabledAppDao
 import com.f0x1d.logfox.database.entity.FileConverter
 import com.f0x1d.logfox.database.entity.LogRecording
 import com.f0x1d.logfox.database.entity.LogRecordingDao
@@ -22,8 +24,9 @@ import com.f0x1d.logfox.database.entity.UserFilterDao
         AppCrash::class,
         LogRecording::class,
         UserFilter::class,
+        DisabledApp::class,
     ],
-    version = 16,
+    version = 17,
     autoMigrations = [
         AutoMigration(
             from = 12,
@@ -41,6 +44,10 @@ import com.f0x1d.logfox.database.entity.UserFilterDao
         AutoMigration(
             from = 15,
             to = 16,
+        ),
+        AutoMigration(
+            from = 16,
+            to = 17,
         ),
     ]
 )
@@ -92,4 +99,5 @@ abstract class AppDatabase: RoomDatabase() {
     abstract fun appCrashes(): AppCrashDao
     abstract fun logRecordings(): LogRecordingDao
     abstract fun userFilters(): UserFilterDao
+    abstract fun disabledApps(): DisabledAppDao
 }

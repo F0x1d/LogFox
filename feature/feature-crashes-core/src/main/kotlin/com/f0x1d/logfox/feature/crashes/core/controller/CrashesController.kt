@@ -2,8 +2,9 @@ package com.f0x1d.logfox.feature.crashes.core.controller
 
 import android.content.Context
 import com.f0x1d.logfox.arch.di.IODispatcher
-import com.f0x1d.logfox.database.AppDatabase
 import com.f0x1d.logfox.database.entity.AppCrash
+import com.f0x1d.logfox.feature.crashes.core.repository.CrashesRepository
+import com.f0x1d.logfox.feature.crashes.core.repository.DisabledAppsRepository
 import com.f0x1d.logfox.feature.crashes.core.repository.reader.ANRDetector
 import com.f0x1d.logfox.feature.crashes.core.repository.reader.JNICrashDetector
 import com.f0x1d.logfox.feature.crashes.core.repository.reader.JavaCrashDetector
@@ -22,7 +23,8 @@ interface CrashesController {
 internal class CrashesControllerImpl @Inject constructor(
     @ApplicationContext private val context: Context,
     private val notificationsController: CrashesNotificationsController,
-    private val database: AppDatabase,
+    private val crashesRepository: CrashesRepository,
+    private val disabledAppsRepository: DisabledAppsRepository,
     private val appPreferences: AppPreferences,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : CrashesController {
@@ -40,42 +42,48 @@ internal class CrashesControllerImpl @Inject constructor(
         ANRDetector(context, this::collectCrash),
     )
 
-    private suspend fun collectCrash(it: AppCrash, lines: List<LogLine>) = withContext(ioDispatcher) {
+    private suspend fun collectCrash(appCrash: AppCrash, lines: List<LogLine>) {
+        if (disabledAppsRepository.isDisabledFor(appCrash.packageName)) {
+            return
+        }
+
         // Don't handle if already present in data
-        database.appCrashes().getAllByDateAndTime(
-            dateAndTime = it.dateAndTime,
-            packageName = it.packageName
+        crashesRepository.getAllByDateAndTime(
+            dateAndTime = appCrash.dateAndTime,
+            packageName = appCrash.packageName
         ).also {
-            if (it.isNotEmpty()) return@withContext
+            if (it.isNotEmpty()) return
         }
 
         val crashLog = lines.joinToString("\n") {
             it.content
         }
 
-        val sendNotificationIfNeeded = { appCrash: AppCrash ->
-            if (appPreferences.showingNotificationsFor(appCrash.crashType)) {
-                notificationsController.sendErrorNotification(appCrash, crashLog)
+        val sendNotificationIfNeeded = { crash: AppCrash ->
+            if (appPreferences.showingNotificationsFor(crash.crashType)) {
+                notificationsController.sendErrorNotification(crash, crashLog)
             }
         }
 
-        val logFile = File(logsDir, "${it.dateAndTime}-crash.log").apply {
-            writeText(crashLog)
+        val logFile = withContext(ioDispatcher) {
+            File(logsDir, "${appCrash.dateAndTime}-crash.log").apply {
+                writeText(crashLog)
+            }
         }
 
-        val appCrash = it.copy(
+        val appCrashWithLog = appCrash.copy(
             logFile = logFile,
             logDumpFile = null, // TODO: return log dumps!
         )
 
-        if (appPreferences.collectingFor(appCrash.crashType)) {
-            val appCrashWithId = appCrash.copy(
-                id = database.appCrashes().insert(appCrash)
+        if (appPreferences.collectingFor(appCrashWithLog.crashType)) {
+            val appCrashWithId = appCrashWithLog.copy(
+                id = crashesRepository.insert(appCrashWithLog),
             )
 
             sendNotificationIfNeeded(appCrashWithId)
         } else {
-            sendNotificationIfNeeded(appCrash)
+            sendNotificationIfNeeded(appCrashWithLog)
         }
     }
 }

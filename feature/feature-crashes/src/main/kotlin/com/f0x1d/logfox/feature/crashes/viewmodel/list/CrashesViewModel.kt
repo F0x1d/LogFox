@@ -7,12 +7,17 @@ import com.f0x1d.logfox.arch.di.IODispatcher
 import com.f0x1d.logfox.arch.viewmodel.BaseViewModel
 import com.f0x1d.logfox.database.entity.AppCrash
 import com.f0x1d.logfox.database.entity.AppCrashesCount
+import com.f0x1d.logfox.database.entity.DisabledApp
+import com.f0x1d.logfox.feature.apps.picker.viewmodel.AppsPickerResultHandler
 import com.f0x1d.logfox.feature.crashes.core.repository.CrashesRepository
+import com.f0x1d.logfox.feature.crashes.core.repository.DisabledAppsRepository
+import com.f0x1d.logfox.model.InstalledApp
 import com.f0x1d.logfox.preferences.shared.AppPreferences
 import com.f0x1d.logfox.preferences.shared.crashes.CrashesSort
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.channelFlow
@@ -23,17 +28,19 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class CrashesViewModel @Inject constructor(
     private val crashesRepository: CrashesRepository,
+    private val disabledAppsRepository: DisabledAppsRepository,
     private val appPreferences: AppPreferences,
     @DefaultDispatcher private val defaultDispatcher: CoroutineDispatcher,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
     application: Application,
-): BaseViewModel(application) {
+): BaseViewModel(application), AppsPickerResultHandler {
 
     val currentSort get() = appPreferences.crashesSortType.get()
     val currentSortInReversedOrder get() = appPreferences.crashesSortReversedOrder.get()
@@ -125,6 +132,26 @@ class CrashesViewModel @Inject constructor(
 
     fun clearCrashes() = launchCatching {
         crashesRepository.clear()
+    }
+
+    override val supportsMultiplySelection: Boolean = true
+
+    override val checkedAppPackageNames: Flow<Set<String>> =
+        disabledAppsRepository.getAllAsFlow().map { apps ->
+            apps.map(DisabledApp::packageName).toSet()
+        }
+
+    override fun onAppChecked(app: InstalledApp, checked: Boolean) {
+        viewModelScope.launch {
+            disabledAppsRepository.checkApp(app.packageName, checked)
+        }
+    }
+
+    override fun onAppSelected(app: InstalledApp): Boolean {
+        viewModelScope.launch {
+            disabledAppsRepository.checkApp(app.packageName)
+        }
+        return false
     }
 
     private data class CrashesWithSort(

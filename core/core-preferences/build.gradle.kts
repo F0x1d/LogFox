@@ -6,7 +6,7 @@ plugins {
 android.namespace = "com.f0x1d.logfox.preferences"
 
 dependencies {
-    implementation(project(":core:core-database"))
+    implementation(projects.core.coreDatabase)
 
     implementation(libs.flow.preferences)
 }

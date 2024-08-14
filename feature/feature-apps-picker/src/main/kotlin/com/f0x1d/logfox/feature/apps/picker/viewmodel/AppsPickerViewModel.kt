@@ -68,7 +68,8 @@ class AppsPickerViewModel @Inject constructor(
 
         query.map { query ->
             installedApps.filter { app ->
-                app.title.contains(query) || app.packageName.contains(query)
+                app.title.contains(query, ignoreCase = true)
+                        || app.packageName.contains(query, ignoreCase = true)
             }
         }.flowOn(
             defaultDispatcher,

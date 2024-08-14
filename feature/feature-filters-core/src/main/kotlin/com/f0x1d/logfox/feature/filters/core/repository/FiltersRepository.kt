@@ -112,7 +112,9 @@ internal class FiltersRepositoryImpl @Inject constructor(
     private suspend fun update(newValue: () -> UserFilter) = update(newValue())
 
     override fun getAllAsFlow(): Flow<List<UserFilter>> =
-        database.userFilters().getAllAsFlow().flowOn(ioDispatcher)
+        database.userFilters().getAllAsFlow()
+            .distinctUntilChanged()
+            .flowOn(ioDispatcher)
 
     override fun getByIdAsFlow(id: Long): Flow<UserFilter?> =
         database.userFilters().getByIdAsFlow(id).flowOn(ioDispatcher)

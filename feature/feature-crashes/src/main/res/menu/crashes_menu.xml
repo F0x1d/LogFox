@@ -9,6 +9,12 @@
         app:showAsAction="ifRoom" />
 
     <item
+        android:id="@+id/blacklist_item"
+        android:icon="@drawable/ic_block"
+        android:title="@string/blacklist"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/clear_item"
         android:icon="@drawable/ic_clear_all"
         android:title="@string/clear"
