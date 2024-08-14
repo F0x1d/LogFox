@@ -15,29 +15,15 @@ android {
 }
 
 dependencies {
-    implementation(projects.feature.featureCrashes)
-    implementation(projects.feature.featureCrashesCore)
-    implementation(projects.feature.featureFilters)
-    implementation(projects.feature.featureFiltersCore)
-    implementation(projects.feature.featureLogging)
-    implementation(projects.feature.featureLoggingCore)
-    implementation(projects.feature.featureRecordings)
-    implementation(projects.feature.featureRecordingsCore)
-    implementation(projects.feature.featureSettings)
-    implementation(projects.feature.featureSetup)
+    implementation(projects.feature.crashes)
+    implementation(projects.feature.filters)
+    implementation(projects.feature.logging)
+    implementation(projects.feature.recordings)
+    implementation(projects.feature.settings)
+    implementation(projects.feature.setup)
 
-    implementation(libs.insetter)
-    implementation(libs.bundles.shizuku)
     implementation(libs.viewpump)
-    implementation(libs.gson)
-
     implementation(libs.coil)
-    implementation(libs.glide)
-    ksp(libs.glide.compiler)
-
-    implementation(libs.androidx.room)
-    implementation(libs.androidx.room.runtime)
-    ksp(libs.androidx.room.compiler)
 
     implementation(libs.bundles.androidx)
     implementation(libs.material)
