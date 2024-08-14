@@ -7,6 +7,7 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentSetOf
 
 data class AppsPickerScreenState(
+    val topBarTitle: String = "Apps",
     val apps: ImmutableList<InstalledApp> = persistentListOf(),
     val checkedAppPackageNames: ImmutableSet<String> = persistentSetOf(),
     val searchedApps: ImmutableList<InstalledApp> = persistentListOf(),

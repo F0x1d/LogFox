@@ -1,6 +1,7 @@
 package com.f0x1d.logfox.feature.crashes.viewmodel.list
 
 import android.app.Application
+import android.content.Context
 import androidx.lifecycle.viewModelScope
 import com.f0x1d.logfox.arch.di.DefaultDispatcher
 import com.f0x1d.logfox.arch.di.IODispatcher
@@ -14,6 +15,7 @@ import com.f0x1d.logfox.feature.crashes.core.repository.DisabledAppsRepository
 import com.f0x1d.logfox.model.InstalledApp
 import com.f0x1d.logfox.preferences.shared.AppPreferences
 import com.f0x1d.logfox.preferences.shared.crashes.CrashesSort
+import com.f0x1d.logfox.strings.Strings
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.delay
@@ -140,6 +142,9 @@ class CrashesViewModel @Inject constructor(
         disabledAppsRepository.getAllAsFlow().map { apps ->
             apps.map(DisabledApp::packageName).toSet()
         }
+
+    override fun provideTopAppBarTitle(context: Context): String =
+        context.getString(Strings.blacklist)
 
     override fun onAppChecked(app: InstalledApp, checked: Boolean) {
         viewModelScope.launch {

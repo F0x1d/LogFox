@@ -1,15 +1,19 @@
 package com.f0x1d.logfox.feature.apps.picker.viewmodel
 
 import android.annotation.SuppressLint
+import android.content.Context
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.f0x1d.logfox.model.InstalledApp
+import com.f0x1d.logfox.strings.Strings
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
 interface AppsPickerResultHandler {
     val supportsMultiplySelection: Boolean get() = false
     val checkedAppPackageNames: Flow<Set<String>> get() = flowOf(emptySet())
+
+    fun provideTopAppBarTitle(context: Context) = context.getString(Strings.apps)
 
     fun onAppChecked(app: InstalledApp, checked: Boolean) = Unit
 

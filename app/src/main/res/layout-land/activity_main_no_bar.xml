@@ -15,7 +15,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/navigation_rail"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:navGraph="@navigation/nav_graph"
         tools:layout="@layout/fragment_logs" />
 
     <com.f0x1d.logfox.ui.view.CustomApplyInsetsNavigationRailView

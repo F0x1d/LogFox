@@ -93,7 +93,15 @@ private fun AppsSearchBar(
         onSearch = { /* noop */ },
         active = state.searchActive,
         onActiveChange = listener.onSearchActiveChanged,
-        placeholder = { Text(text = stringResource(id = Strings.apps)) },
+        placeholder = { 
+            Text(
+                text = if (state.searchActive) {
+                    stringResource(id = Strings.apps)
+                } else {
+                    state.topBarTitle
+                },
+            ) 
+        },
         leadingIcon = { NavigationBackButton(onClick = listener.onBackClicked) },
     ) {
         AppsContent(

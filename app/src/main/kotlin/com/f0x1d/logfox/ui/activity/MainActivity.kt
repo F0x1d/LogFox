@@ -27,6 +27,7 @@ import com.f0x1d.logfox.arch.ui.activity.BaseViewModelActivity
 import com.f0x1d.logfox.arch.viewmodel.Event
 import com.f0x1d.logfox.databinding.ActivityMainBinding
 import com.f0x1d.logfox.navigation.Directions
+import com.f0x1d.logfox.navigation.NavGraphs
 import com.f0x1d.logfox.strings.Strings
 import com.f0x1d.logfox.ui.Icons
 import com.f0x1d.logfox.viewmodel.MainViewModel
@@ -38,7 +39,14 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity: BaseViewModelActivity<MainViewModel, ActivityMainBinding>(), NavController.OnDestinationChangedListener {
 
     override val viewModel by viewModels<MainViewModel>()
-    private lateinit var navController: NavController
+
+    private val navController by lazy {
+        val navHostFragment = supportFragmentManager.findFragmentById(
+            R.id.nav_host_fragment_content_main,
+        ) as NavHostFragment
+
+        navHostFragment.navController
+    }
 
     private val requestNotificationPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission(),
@@ -65,18 +73,12 @@ class MainActivity: BaseViewModelActivity<MainViewModel, ActivityMainBinding>(),
 
     @SuppressLint("InlinedApi")
     override fun ActivityMainBinding.onCreate(savedInstanceState: Bundle?) {
-        val navHostFragment = supportFragmentManager.findFragmentById(
-            R.id.nav_host_fragment_content_main,
-        ) as NavHostFragment
-        navController = navHostFragment.navController
+        setupNavigation()
 
-        barView?.setupWithNavController(navController)
         barView?.setOnItemReselectedListener {
             // Just do nothing
         }
         setupBarInsets()
-
-        navController.addOnDestinationChangedListener(this@MainActivity)
 
         if (!hasNotificationsPermission() && !viewModel.askedNotificationsPermission) {
             MaterialAlertDialogBuilder(this@MainActivity)
@@ -92,10 +94,22 @@ class MainActivity: BaseViewModelActivity<MainViewModel, ActivityMainBinding>(),
 
             viewModel.askedNotificationsPermission = true
         }
+    }
 
-        if (savedInstanceState == null && viewModel.openCrashesOnStartup) {
-            navController.navigate(Directions.crashes)
+    private fun ActivityMainBinding.setupNavigation() {
+        navController.graph = navController.navInflater.inflate(NavGraphs.nav_graph).apply {
+            setStartDestination(
+                startDestId = if (viewModel.openCrashesOnStartup) {
+                    Directions.crashes
+                } else {
+                    Directions.logs
+                },
+            )
         }
+
+        barView?.setupWithNavController(navController)
+
+        navController.addOnDestinationChangedListener(this@MainActivity)
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
