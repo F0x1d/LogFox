@@ -10,12 +10,16 @@ import com.f0x1d.logfox.arch.viewmodel.BaseViewModel
 import com.f0x1d.logfox.database.entity.AppCrash
 import com.f0x1d.logfox.datetime.DateTimeFormatter
 import com.f0x1d.logfox.feature.crashes.core.repository.CrashesRepository
+import com.f0x1d.logfox.feature.crashes.core.repository.DisabledAppsRepository
 import com.f0x1d.logfox.feature.crashes.di.CrashId
 import com.f0x1d.logfox.model.deviceData
 import com.f0x1d.logfox.preferences.shared.AppPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
@@ -24,6 +28,7 @@ import javax.inject.Inject
 class CrashDetailsViewModel @Inject constructor(
     @CrashId val crashId: Long,
     private val crashesRepository: CrashesRepository,
+    private val disabledAppsRepository: DisabledAppsRepository,
     private val appPreferences: AppPreferences,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
     dateTimeFormatter: DateTimeFormatter,
@@ -39,6 +44,19 @@ class CrashDetailsViewModel @Inject constructor(
                     it to it.logFile?.readText()
                 }.getOrNull()
             }
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Eagerly,
+            initialValue = null,
+        )
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val blacklisted = crashesRepository.getByIdAsFlow(crashId)
+        .flatMapLatest { crash ->
+            crash?.let {
+                disabledAppsRepository.disabledForFlow(it.packageName)
+            } ?: flowOf(null)
         }
         .stateIn(
             scope = viewModelScope,
@@ -72,6 +90,10 @@ class CrashDetailsViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun changeBlacklist(appCrash: AppCrash) = launchCatching {
+        disabledAppsRepository.checkApp(appCrash.packageName)
     }
 
     fun deleteCrash(appCrash: AppCrash) = launchCatching {

@@ -46,7 +46,7 @@ class AppsPickerFragment: BaseComposeViewModelFragment<AppsPickerViewModel>() {
                 state to checkedApps
             }.map { (state, checkedAppPackageNames) ->
                 state.copy(
-                    topBarTitle = handler.provideTopAppBarTitle(requireContext()),
+                    topBarTitle = handler.providePickerTopAppBarTitle(requireContext()),
                     checkedAppPackageNames = checkedAppPackageNames.toImmutableSet(),
                     multiplySelectionEnabled = handler.supportsMultiplySelection,
                 )

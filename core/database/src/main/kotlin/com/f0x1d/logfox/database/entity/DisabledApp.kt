@@ -35,6 +35,9 @@ interface DisabledAppDao {
     @Query("SELECT * FROM DisabledApp WHERE package_name = :packageName")
     suspend fun getByPackageName(packageName: String): DisabledApp?
 
+    @Query("SELECT * FROM DisabledApp WHERE package_name = :packageName")
+    fun getByPackageNameAsFlow(packageName: String): Flow<DisabledApp?>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(item: DisabledApp)
 

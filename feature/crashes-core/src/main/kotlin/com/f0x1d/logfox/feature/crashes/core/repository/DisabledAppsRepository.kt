@@ -8,11 +8,13 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 interface DisabledAppsRepository : DatabaseProxyRepository<DisabledApp> {
     suspend fun isDisabledFor(packageName: String): Boolean
+    fun disabledForFlow(packageName: String): Flow<Boolean>
 
     suspend fun checkApp(packageName: String)
     suspend fun checkApp(packageName: String, checked: Boolean)
@@ -26,6 +28,12 @@ internal class DisabledAppsRepositoryImpl @Inject constructor(
     override suspend fun isDisabledFor(packageName: String): Boolean = withContext(ioDispatcher) {
         database.disabledApps().getByPackageName(packageName) != null
     }
+
+    override fun disabledForFlow(packageName: String): Flow<Boolean> =
+        database.disabledApps()
+            .getByPackageNameAsFlow(packageName)
+            .map { it != null }
+            .flowOn(ioDispatcher)
 
     override suspend fun checkApp(packageName: String) = checkApp(
         packageName = packageName,

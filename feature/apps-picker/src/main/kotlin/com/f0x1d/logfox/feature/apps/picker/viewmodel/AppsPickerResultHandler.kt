@@ -13,7 +13,7 @@ interface AppsPickerResultHandler {
     val supportsMultiplySelection: Boolean get() = false
     val checkedAppPackageNames: Flow<Set<String>> get() = flowOf(emptySet())
 
-    fun provideTopAppBarTitle(context: Context) = context.getString(Strings.apps)
+    fun providePickerTopAppBarTitle(context: Context) = context.getString(Strings.apps)
 
     fun onAppChecked(app: InstalledApp, checked: Boolean) = Unit
 

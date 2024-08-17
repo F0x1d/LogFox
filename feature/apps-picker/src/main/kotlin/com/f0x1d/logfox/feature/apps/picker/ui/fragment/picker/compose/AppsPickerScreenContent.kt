@@ -1,6 +1,7 @@
 package com.f0x1d.logfox.feature.apps.picker.ui.fragment.picker.compose
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -125,6 +126,7 @@ private fun LoadingContent(modifier: Modifier = Modifier) {
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun AppsContent(
     items: ImmutableList<InstalledApp>,
@@ -142,7 +144,7 @@ private fun AppsContent(
             key = { _, item -> item.id },
             contentType = { _, item -> item.javaClass },
         ) { index, item ->
-            Column {
+            Column(modifier = Modifier.animateItemPlacement()) {
                 AppContent(
                     item = item,
                     isChecked = remember(checkedItems) {
@@ -166,7 +168,7 @@ private fun AppsContent(
 }
 
 @Composable
-private fun AppContent(
+internal fun AppContent(
     item: InstalledApp,
     isChecked: Boolean,
     onClick: (InstalledApp) -> Unit,
@@ -218,7 +220,7 @@ private fun AppContent(
     }
 }
 
-private val MockApps = persistentListOf(
+internal val MockApps = persistentListOf(
     InstalledApp("LogFox", "com.f0x1d.logfox"),
     InstalledApp("Sense", "com.f0x1d.sense"),
 )

@@ -143,7 +143,7 @@ class CrashesViewModel @Inject constructor(
             apps.map(DisabledApp::packageName).toSet()
         }
 
-    override fun provideTopAppBarTitle(context: Context): String =
+    override fun providePickerTopAppBarTitle(context: Context): String =
         context.getString(Strings.blacklist)
 
     override fun onAppChecked(app: InstalledApp, checked: Boolean) {

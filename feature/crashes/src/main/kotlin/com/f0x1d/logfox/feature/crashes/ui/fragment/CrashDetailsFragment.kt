@@ -22,7 +22,9 @@ import com.f0x1d.logfox.feature.crashes.core.controller.notificationChannelId
 import com.f0x1d.logfox.feature.crashes.databinding.FragmentCrashDetailsBinding
 import com.f0x1d.logfox.feature.crashes.viewmodel.CrashDetailsViewModel
 import com.f0x1d.logfox.strings.Strings
+import com.f0x1d.logfox.ui.Icons
 import com.f0x1d.logfox.ui.dialog.showAreYouSureDeleteDialog
+import com.f0x1d.logfox.ui.dialog.showAreYouSureDialog
 import com.f0x1d.logfox.ui.view.loadIcon
 import com.f0x1d.logfox.ui.view.setClickListenerOn
 import com.f0x1d.logfox.ui.view.setupBackButtonForNavController
@@ -53,9 +55,27 @@ class CrashDetailsFragment: BaseViewModelFragment<CrashDetailsViewModel, Fragmen
         }
 
         toolbar.setupBackButtonForNavController()
+        toolbar.menu.apply {
+            findItem(R.id.notifications_item).setVisible(
+                notificationsChannelsAvailable
+                        && viewModel.useSeparateNotificationsChannelsForCrashes
+            )
+        }
 
         viewModel.crash.collectWithLifecycle {
             setupFor(it ?: return@collectWithLifecycle)
+        }
+
+        viewModel.blacklisted.collectWithLifecycle { blacklisted ->
+            toolbar.menu.findItem(R.id.blacklist_item).apply {
+                if (blacklisted == null) {
+                    isVisible = false
+                } else {
+                    isVisible = true
+                    setIcon(if (blacklisted) Icons.ic_check_circle else Icons.ic_block)
+                    setTitle(if (blacklisted) Strings.remove_from_blacklist else Strings.add_to_blacklist)
+                }
+            }
         }
     }
 
@@ -69,16 +89,23 @@ class CrashDetailsFragment: BaseViewModelFragment<CrashDetailsViewModel, Fragmen
                     data = Uri.fromParts("package", appCrash.packageName, null)
                 }.let(::startActivity)
             }
-
-            findItem(R.id.notifications_item).setVisible(
-                notificationsChannelsAvailable
-                        && viewModel.useSeparateNotificationsChannelsForCrashes
-            )
             setClickListenerOn(R.id.notifications_item) {
                 Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS).apply {
                     putExtra(Settings.EXTRA_APP_PACKAGE, requireContext().packageName)
                     putExtra(Settings.EXTRA_CHANNEL_ID, appCrash.notificationChannelId)
                 }.let(::startActivity)
+            }
+            setClickListenerOn(R.id.blacklist_item) {
+                if (viewModel.blacklisted.value == false) {
+                    showAreYouSureDialog(
+                        title = Strings.blacklist,
+                        message = Strings.warning_blacklist,
+                    ) {
+                        viewModel.changeBlacklist(appCrash)
+                    }
+                } else {
+                    viewModel.changeBlacklist(appCrash)
+                }
             }
             setClickListenerOn(R.id.delete_item) {
                 showAreYouSureDeleteDialog {
