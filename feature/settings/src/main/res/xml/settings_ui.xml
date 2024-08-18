@@ -7,6 +7,14 @@
             android:title="@string/night_theme"
             android:key="pref_night_theme"
             app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
+            android:title="@string/monet"
+            android:key="pref_monet_enabled"
+            android:defaultValue="true"
+            app:singleLineTitle="false"
+            app:widgetLayout="@layout/preference_material_switch"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
     <PreferenceCategory

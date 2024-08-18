@@ -5,6 +5,7 @@ import android.text.InputType
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.preference.Preference
 import com.f0x1d.logfox.arch.catchingNotNumber
+import com.f0x1d.logfox.arch.monetAvailable
 import com.f0x1d.logfox.feature.settings.R
 import com.f0x1d.logfox.feature.settings.fillWithStrings
 import com.f0x1d.logfox.feature.settings.ui.fragment.base.BasePreferenceFragment
@@ -53,6 +54,14 @@ class SettingsUIFragment: BasePreferenceFragment() {
 
             appPreferences.nightThemeFlow.collectWithLifecycle {
                 summary = filledThemeSettings.getOrNull(it) ?: getString(Strings.follow_system)
+            }
+        }
+
+        findPreference<Preference>("pref_monet_enabled")?.apply {
+            isVisible = monetAvailable
+            setOnPreferenceChangeListener { _, _ ->
+                requireActivity().recreate()
+                return@setOnPreferenceChangeListener true
             }
         }
 

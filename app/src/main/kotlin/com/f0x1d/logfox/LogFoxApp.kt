@@ -12,6 +12,7 @@ import com.f0x1d.logfox.arch.notificationManagerCompat
 import com.f0x1d.logfox.preferences.shared.AppPreferences
 import com.f0x1d.logfox.strings.Strings
 import com.google.android.material.color.DynamicColors
+import com.google.android.material.color.DynamicColorsOptions
 import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
 
@@ -27,7 +28,12 @@ class LogFoxApp: Application(), ImageLoaderFactory {
     override fun onCreate() {
         super.onCreate()
         AppCompatDelegate.setDefaultNightMode(appPreferences.nightTheme)
-        DynamicColors.applyToActivitiesIfAvailable(this)
+        DynamicColors.applyToActivitiesIfAvailable(
+            this,
+            DynamicColorsOptions.Builder()
+                .setPrecondition { _, _ -> appPreferences.monetEnabled }
+                .build()
+        )
 
         notificationManagerCompat.apply {
             val loggingStatusChannel = NotificationChannelCompat.Builder(

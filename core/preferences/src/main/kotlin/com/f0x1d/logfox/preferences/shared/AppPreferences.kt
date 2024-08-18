@@ -41,6 +41,10 @@ class AppPreferences @Inject constructor(
         defaultValue = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM,
     ).asFlow()
 
+    var monetEnabled
+        get() = get("pref_monet_enabled", true)
+        set(value) { put("pref_monet_enabled", value) }
+
     var dateFormat
         get() = getNullable("pref_date_format", DATE_FORMAT_DEFAULT)
         set(value) { put("pref_date_format", value) }
