@@ -5,10 +5,17 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
+import android.text.Spannable
+import android.text.style.BackgroundColorSpan
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.widget.SearchView
+import androidx.core.text.toSpannable
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -22,6 +29,7 @@ import com.f0x1d.logfox.feature.crashes.core.controller.notificationChannelId
 import com.f0x1d.logfox.feature.crashes.databinding.FragmentCrashDetailsBinding
 import com.f0x1d.logfox.feature.crashes.viewmodel.CrashDetailsViewModel
 import com.f0x1d.logfox.strings.Strings
+import com.f0x1d.logfox.ui.Colors
 import com.f0x1d.logfox.ui.Icons
 import com.f0x1d.logfox.ui.dialog.showAreYouSureDeleteDialog
 import com.f0x1d.logfox.ui.dialog.showAreYouSureDialog
@@ -30,6 +38,7 @@ import com.f0x1d.logfox.ui.view.setClickListenerOn
 import com.f0x1d.logfox.ui.view.setupBackButtonForNavController
 import dagger.hilt.android.AndroidEntryPoint
 import dev.chrisbanes.insetter.applyInsetter
+import java.util.Locale
 
 @AndroidEntryPoint
 class CrashDetailsFragment: BaseViewModelFragment<CrashDetailsViewModel, FragmentCrashDetailsBinding>() {
@@ -40,6 +49,12 @@ class CrashDetailsFragment: BaseViewModelFragment<CrashDetailsViewModel, Fragmen
         ActivityResultContracts.CreateDocument("application/zip"),
     ) {
         viewModel.exportCrashToZip(it ?: return@registerForActivityResult)
+    }
+
+    private val closeSearchOnBackPressedCallback = object : OnBackPressedCallback(false) {
+        override fun handleOnBackPressed() {
+            binding.searchItem.collapseActionView()
+        }
     }
 
     override fun inflateBinding(
@@ -61,6 +76,29 @@ class CrashDetailsFragment: BaseViewModelFragment<CrashDetailsViewModel, Fragmen
                         && viewModel.useSeparateNotificationsChannelsForCrashes
             )
         }
+        searchItem.setOnActionExpandListener(
+            object : MenuItem.OnActionExpandListener {
+                override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
+                    closeSearchOnBackPressedCallback.isEnabled = false
+                    return true
+                }
+
+                override fun onMenuItemActionExpand(item: MenuItem): Boolean {
+                    closeSearchOnBackPressedCallback.isEnabled = true
+                    return true
+                }
+            }
+        )
+        (searchItem.actionView as SearchView).setOnQueryTextListener(
+            object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean = true
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    searchInLog(newText ?: return false)
+                    return true
+                }
+            }
+        )
 
         viewModel.crash.collectWithLifecycle {
             setupFor(it ?: return@collectWithLifecycle)
@@ -77,6 +115,36 @@ class CrashDetailsFragment: BaseViewModelFragment<CrashDetailsViewModel, Fragmen
                 }
             }
         }
+
+        requireActivity().onBackPressedDispatcher.apply {
+            addCallback(viewLifecycleOwner, closeSearchOnBackPressedCallback)
+        }
+    }
+
+    private fun FragmentCrashDetailsBinding.searchInLog(text: String) {
+        var stackTrace = viewModel.crash.value?.second ?: return
+        var query = text
+
+        val span = stackTrace.toSpannable()
+        if (query.isNotEmpty()) {
+            query = query.lowercase(Locale.ENGLISH)
+            stackTrace = stackTrace.lowercase(Locale.ENGLISH)
+
+            val size = query.length
+            var index = 0
+            val highlightColor = requireContext().getColor(Colors.md_theme_primaryContainer)
+            while (stackTrace.indexOf(query, index).also { index = it } != -1) {
+                span.setSpan(
+                    BackgroundColorSpan(highlightColor),
+                    index,
+                    index + size,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+                index += size
+            }
+        }
+        logText.setText(span, TextView.BufferType.SPANNABLE)
+        logTextScrollable.setText(span, TextView.BufferType.SPANNABLE)
     }
 
     @SuppressLint("InlinedApi")
@@ -143,4 +211,7 @@ class CrashDetailsFragment: BaseViewModelFragment<CrashDetailsViewModel, Fragmen
         logText.text = crashLog
         logTextScrollable.text = crashLog
     }
+
+    private val FragmentCrashDetailsBinding.searchItem get() =
+        toolbar.menu.findItem(R.id.search_item)
 }

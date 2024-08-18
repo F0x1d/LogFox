@@ -4,7 +4,6 @@ import android.app.Application
 import android.content.Context
 import androidx.lifecycle.viewModelScope
 import com.f0x1d.logfox.arch.di.DefaultDispatcher
-import com.f0x1d.logfox.arch.di.IODispatcher
 import com.f0x1d.logfox.arch.viewmodel.BaseViewModel
 import com.f0x1d.logfox.database.entity.AppCrash
 import com.f0x1d.logfox.database.entity.AppCrashesCount
@@ -18,12 +17,9 @@ import com.f0x1d.logfox.preferences.shared.crashes.CrashesSort
 import com.f0x1d.logfox.strings.Strings
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.channelFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
@@ -31,7 +27,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -40,7 +35,6 @@ class CrashesViewModel @Inject constructor(
     private val disabledAppsRepository: DisabledAppsRepository,
     private val appPreferences: AppPreferences,
     @DefaultDispatcher private val defaultDispatcher: CoroutineDispatcher,
-    @IODispatcher private val ioDispatcher: CoroutineDispatcher,
     application: Application,
 ): BaseViewModel(application), AppsPickerResultHandler {
 
@@ -84,38 +78,23 @@ class CrashesViewModel @Inject constructor(
 
     val query = MutableStateFlow("")
 
-    val searchedCrashes = channelFlow {
-        combine(crashesRepository.getAllAsFlow(), query) { crashes, query ->
-            crashes to query
-        }.collectLatest { (crashes, query) ->
-
-            fun AppCrash.suits(query: String): Boolean =
-                packageName.contains(query, ignoreCase = true)
-                        || appName?.contains(query, ignoreCase = true) == true
-
-            val filteredCrashes = withContext(defaultDispatcher) {
-                crashes.filter { it.suits(query) }.map { AppCrashesCount(it) }
-            }
-
-            send(filteredCrashes)
-            delay(SEARCH_DEBOUNCE_MILLIS) // Maybe no need to search content for now
-
-            val deeplyFilteredCrashes = withContext(defaultDispatcher) {
-                crashes.filter { crash ->
-                    val fileContentSettles = withContext(ioDispatcher) {
-                        crash.logFile?.readText()?.contains(query, ignoreCase = true) == true
-                    }
-
-                    crash.suits(query) || fileContentSettles
-                }.map { AppCrashesCount(it) }
-            }
-            send(deeplyFilteredCrashes)
+    val searchedCrashes = combine(
+        crashesRepository.getAllAsFlow(),
+        query,
+    ) { crashes, query -> crashes to query }
+        .map { (crashes, query) ->
+            crashes.filter { crash ->
+                crash.packageName.contains(query, ignoreCase = true)
+                        || crash.appName?.contains(query, ignoreCase = true) == true
+            }.map { AppCrashesCount(it) }
         }
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.Eagerly,
-        initialValue = emptyList(),
-    )
+        .distinctUntilChanged()
+        .flowOn(defaultDispatcher)
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Eagerly,
+            initialValue = emptyList(),
+        )
 
     fun updateQuery(query: String) = this.query.update { query }
 
