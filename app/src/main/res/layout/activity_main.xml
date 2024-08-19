@@ -15,7 +15,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
-        app:navGraph="@navigation/nav_graph"
         tools:layout="@layout/fragment_logs" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView

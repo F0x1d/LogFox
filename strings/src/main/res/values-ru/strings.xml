@@ -153,4 +153,8 @@
     <string name="sort_by_count">По количеству сбоев</string>
     <string name="use_separate_channels_for_crashes">Использовать разные каналы уведомлений для уведомлений о сбоях</string>
     <string name="open_crashes_page_on_startup">Открывать вкладку сбоев при запуске</string>
+    <string name="wrap_log_lines_in_details">Перенос строк в деталях лога</string>
+    <string name="blacklist">Черный список</string>
+    <string name="add_to_blacklist">Добавить в черный список</string>
+    <string name="remove_from_blacklist">Убрать из черного списка</string>
 </resources>

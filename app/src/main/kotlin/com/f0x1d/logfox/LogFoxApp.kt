@@ -4,25 +4,36 @@ import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationManagerCompat
-import com.f0x1d.logfox.context.LOGGING_STATUS_CHANNEL_ID
-import com.f0x1d.logfox.context.RECORDING_STATUS_CHANNEL_ID
-import com.f0x1d.logfox.context.notificationManagerCompat
+import coil.ImageLoader
+import coil.ImageLoaderFactory
+import com.f0x1d.logfox.arch.LOGGING_STATUS_CHANNEL_ID
+import com.f0x1d.logfox.arch.RECORDING_STATUS_CHANNEL_ID
+import com.f0x1d.logfox.arch.notificationManagerCompat
 import com.f0x1d.logfox.preferences.shared.AppPreferences
 import com.f0x1d.logfox.strings.Strings
 import com.google.android.material.color.DynamicColors
+import com.google.android.material.color.DynamicColorsOptions
 import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
 
 @HiltAndroidApp
-class LogFoxApp: Application() {
+class LogFoxApp: Application(), ImageLoaderFactory {
 
     @Inject
     lateinit var appPreferences: AppPreferences
 
+    @Inject
+    lateinit var imageLoader: ImageLoader
+
     override fun onCreate() {
         super.onCreate()
         AppCompatDelegate.setDefaultNightMode(appPreferences.nightTheme)
-        DynamicColors.applyToActivitiesIfAvailable(this)
+        DynamicColors.applyToActivitiesIfAvailable(
+            this,
+            DynamicColorsOptions.Builder()
+                .setPrecondition { _, _ -> appPreferences.monetEnabled }
+                .build()
+        )
 
         notificationManagerCompat.apply {
             val loggingStatusChannel = NotificationChannelCompat.Builder(
@@ -51,4 +62,6 @@ class LogFoxApp: Application() {
             )
         }
     }
+
+    override fun newImageLoader(): ImageLoader = imageLoader
 }

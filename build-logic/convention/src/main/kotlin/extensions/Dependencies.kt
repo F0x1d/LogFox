@@ -8,20 +8,17 @@ internal fun DependencyHandlerScope.coreDependencies(withCompose: Boolean = true
     implementation(project(":data"))
     implementation(project(":strings"))
 
-    implementation(project(":core:core-arch"))
-    implementation(project(":core:core-context"))
-    implementation(project(":core:core-database"))
-    implementation(project(":core:core-datetime"))
-    implementation(project(":core:core-intents"))
-    implementation(project(":core:core-io"))
-    implementation(project(":core:core-navigation"))
-    implementation(project(":core:core-preferences"))
-    implementation(project(":core:core-terminals"))
-    implementation(project(":core:core-ui"))
+    implementation(project(":core:arch"))
+    implementation(project(":core:database"))
+    implementation(project(":core:datetime"))
+    implementation(project(":core:navigation"))
+    implementation(project(":core:preferences"))
+    implementation(project(":core:terminals"))
+    implementation(project(":core:ui"))
 
     if (withCompose) {
-        implementation(project(":core:core-ui-compose"))
-        testImplementation(project(":core:core-tests"))
+        implementation(project(":core:ui-compose"))
+        testImplementation(project(":core:tests"))
     }
 }
 

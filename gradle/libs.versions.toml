@@ -5,17 +5,18 @@ minSdk = "24"
 targetSdk = "34"
 
 kotlin = "2.0.0"
-androidGradlePlugin = "8.5.0"
+kotlinx-immutable-collections = "0.3.7"
+androidGradlePlugin = "8.5.2"
 ksp = "2.0.0-1.0.22"
 hilt = "2.49"
 androidx-appcompat = "1.7.0"
 androidx-constraintlayout = "2.1.4"
 androidx-core = "1.13.1"
-androidx-collection = "1.4.0"
-androidx-fragment = "1.8.1"
-androidx-activity = "1.9.0"
+androidx-collection = "1.4.3"
+androidx-fragment = "1.8.2"
+androidx-activity = "1.9.1"
 androidx-hilt-navigation-fragment = "1.2.0"
-androidx-lifecycle = "2.8.3"
+androidx-lifecycle = "2.8.4"
 androidx-navigation = "2.7.7"
 androidx-preference = "1.2.1"
 androidx-recyclerview = "1.3.2"
@@ -27,12 +28,13 @@ shizuku = "13.1.4"
 viewpump = "2.1.1"
 material = "1.12.0"
 glide = "4.16.0"
+coil = "2.7.0"
 gson = "2.10.1"
 flow-preferences = "1.9.1"
 timber = "5.0.1"
 libsu = "6.0.0"
 junit = "4.13.2"
-robolectric = "4.12.2"
+robolectric = "4.13"
 roborazzi = "1.21.0"
 androidx-test-core = "1.6.1"
 androidx-test-ext-junit = "1.2.1"
@@ -40,6 +42,7 @@ androidx-test-espresso = "3.6.1"
 
 [libraries]
 
+kotlinx-immutable-collections = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinx-immutable-collections" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }
 androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "androidx-constraintlayout" }
 androidx-core = { module = "androidx.core:core-ktx", version.ref = "androidx-core" }
@@ -76,6 +79,9 @@ hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt"
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 glide-compiler = { module = "com.github.bumptech.glide:ksp", version.ref = "glide" }
+coil = { module = "io.coil-kt:coil", version.ref = "coil" }
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
+coil-test = { module = "io.coil-kt:coil-test", version.ref = "coil" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 flow-preferences = { module = "com.fredporciuncula:flow-preferences", version.ref = "flow-preferences" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }

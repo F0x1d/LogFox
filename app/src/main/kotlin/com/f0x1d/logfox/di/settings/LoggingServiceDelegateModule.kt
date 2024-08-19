@@ -2,7 +2,7 @@ package com.f0x1d.logfox.di.settings
 
 import android.content.Context
 import com.f0x1d.feature.logging.service.LoggingService
-import com.f0x1d.logfox.context.sendService
+import com.f0x1d.logfox.arch.sendService
 import com.f0x1d.logfox.feature.settings.LoggingServiceDelegate
 import dagger.Binds
 import dagger.Module

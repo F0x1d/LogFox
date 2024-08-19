@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/sort_item"
+        android:icon="@drawable/ic_sort"
+        android:title="@string/sort"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/blacklist_item"
+        android:icon="@drawable/ic_block"
+        android:title="@string/blacklist"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/clear_item"
+        android:icon="@drawable/ic_clear_all"
+        android:title="@string/clear"
+        app:showAsAction="ifRoom" />
+
+</menu>

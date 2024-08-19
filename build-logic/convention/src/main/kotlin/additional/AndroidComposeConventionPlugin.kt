@@ -5,6 +5,7 @@ import com.android.build.api.dsl.CommonExtension
 import com.android.build.api.dsl.LibraryExtension
 import extensions.bundle
 import extensions.implementation
+import extensions.library
 import extensions.pluginId
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -24,6 +25,7 @@ class AndroidComposeConventionPlugin : Plugin<Project> {
         }
 
         dependencies {
+            implementation(library("kotlinx-immutable-collections"))
             implementation(bundle("androidx-compose"))
         }
     }
