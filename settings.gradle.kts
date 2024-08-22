@@ -24,12 +24,16 @@ include(
 )
 
 private val modulesDirectories = setOf("core", "feature")
+private val submoduleNameRegex = "^[A-Za-z0-9\\-_]+\$".toRegex()
+
 requireNotNull(rootDir.listFiles()).filter { file ->
     file.isDirectory && file.name in modulesDirectories
 }.forEach { file ->
     val modules = requireNotNull(file.listFiles())
 
     modules.filter(File::isDirectory).forEach { moduleFile ->
-        include(":${file.name}:${moduleFile.name}")
+        if (submoduleNameRegex.matches(moduleFile.name)) {
+            include(":${file.name}:${moduleFile.name}")
+        }
     }
 }
