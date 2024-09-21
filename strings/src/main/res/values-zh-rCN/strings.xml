@@ -140,4 +140,22 @@
     <string name="session_cache_save_recordings">保存缓存的会话到录制</string>
     <string name="session_cache_lines_count">缓存会话行数</string>
     <string name="session_cache_size_warning">缓存会话保存在 RAM 中，请确保所选行数不会溢出</string>
+    <string name="export_logs_in_original_format">以原始格式导出日志</string>
+    <string name="support_chat">技术支持</string>
+    <string name="support_chat_desc">用于快速排除故障</string>
+    <string name="type_crashes">%s 崩溃</string>
+    <string name="crashes_of">%2$s 的 %1$s 崩溃</string>
+    <string name="per_app_notifications_settings">每个应用的通知设置可在应用程序的崩溃详细信息和 LogFox 的系统设置中找到</string>
+    <string name="sort">排序方式</string>
+    <string name="in_reversed_order">逆序排序</string>
+    <string name="sort_by_name">按名字</string>
+    <string name="sort_by_new">按新旧顺序</string>
+    <string name="sort_by_count">按崩溃次数</string>
+    <string name="use_separate_channels_for_crashes">使用单独的渠道发送崩溃通知</string>
+    <string name="open_crashes_page_on_startup">启动时打开崩溃界面</string>
+    <string name="wrap_log_lines_in_details">在详细信息中换行</string>
+    <string name="blacklist">黑名单</string>
+    <string name="add_to_blacklist">添加到黑名单</string>
+    <string name="remove_from_blacklist">从黑名单中移除</string>
+    <string name="warning_blacklist">您确定要将此应用添加到黑名单吗？LogFox 将不会监听列入黑名单应用的崩溃</string>
 </resources>
