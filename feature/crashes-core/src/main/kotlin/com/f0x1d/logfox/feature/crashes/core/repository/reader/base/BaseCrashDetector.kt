@@ -69,7 +69,7 @@ internal abstract class BaseCrashDetector(
         lines: List<LogLine>,
     ) = context.run {
         val appName = try {
-            packageManager.getPackageInfo(crashedAppPackageName, 0).applicationInfo.let {
+            packageManager.getPackageInfo(crashedAppPackageName, 0).applicationInfo?.let {
                 packageManager.getApplicationLabel(it).toString()
             }
         } catch (e: Exception) {

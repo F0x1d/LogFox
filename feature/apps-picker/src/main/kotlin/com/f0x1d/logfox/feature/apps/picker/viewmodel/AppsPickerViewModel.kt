@@ -54,7 +54,7 @@ class AppsPickerViewModel @Inject constructor(
 
         val installedApps = packageManager.getInstalledPackages(0).map {
             InstalledApp(
-                title = it.applicationInfo.loadLabel(packageManager).toString(),
+                title = it.applicationInfo?.loadLabel(packageManager).toString(),
                 packageName = it.packageName,
             )
         }.sortedBy(InstalledApp::title)
