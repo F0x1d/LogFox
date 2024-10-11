@@ -18,6 +18,8 @@ class AndroidCoreConventionPlugin : Plugin<Project> {
             implementation(project(":data"))
             implementation(project(":strings"))
 
+            implementation(library("timber"))
+
             implementation(library("material"))
             implementation(bundle("androidx"))
         }

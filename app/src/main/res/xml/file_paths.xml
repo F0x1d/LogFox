@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <paths>
+    <files-path name="files" path="." />
     <files-path name="recordings" path="recordings" />
     <files-path name="dumps" path="dumps" />
 </paths>

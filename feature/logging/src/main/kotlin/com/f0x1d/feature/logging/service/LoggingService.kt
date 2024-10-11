@@ -42,6 +42,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import java.util.LinkedList
 import javax.inject.Inject
 
@@ -109,6 +110,7 @@ class LoggingService : LifecycleService() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
 
+        Timber.d("got command ${intent?.action}")
         when (intent?.action) {
             ACTION_RESTART_LOGGING -> restartLogging()
             ACTION_CLEAR_LOGS -> clearLogs()
@@ -120,9 +122,12 @@ class LoggingService : LifecycleService() {
     }
 
     private fun startLogging() {
+        Timber.d("startLogging")
         if (loggingJob?.isActive == true) return
 
         var loggingTerminal = terminals[appPreferences.selectedTerminalIndex]
+
+        Timber.d("selected terminal $loggingTerminal")
 
         loggingJob = lifecycleScope.launch {
             try {
@@ -131,16 +136,21 @@ class LoggingService : LifecycleService() {
                         delay(appPreferences.logsUpdateInterval)
 
                         logsMutex.withLock {
+                            Timber.d("sending update logs to store")
                             loggingStore.updateLogs(logs)
                         }
                     }
                 }
 
                 while (true) {
+                    Timber.d("in loop starting")
+
                     loggingRepository.startLogging(
                         terminal = loggingTerminal,
                         startingId = logs.lastOrNull()?.id ?: 0,
                     ).catch { throwable ->
+                        Timber.e(throwable)
+
                         if (throwable is TerminalNotSupportedException) {
                             if (appPreferences.fallbackToDefaultTerminal) {
                                 toast(Strings.terminal_unavailable_falling_back)
@@ -176,6 +186,7 @@ class LoggingService : LifecycleService() {
                     }
                 }
             } finally {
+                Timber.d("finally block")
                 withContext(NonCancellable) {
                     recordingController.loggingStopped()
                     clearLogs().join()
@@ -187,11 +198,16 @@ class LoggingService : LifecycleService() {
     }
 
     private fun restartLogging() = lifecycleScope.launch {
+        Timber.d("restaring logs")
+
         loggingJob?.cancelAndJoin()
+        Timber.d("cancelled loggingJob")
+
         startLogging()
     }
 
     private fun clearLogs() = lifecycleScope.launch {
+        Timber.d("clearing logs")
         logsMutex.withLock {
             logs.clear()
         }
@@ -214,7 +230,10 @@ class LoggingService : LifecycleService() {
         .build()
 
     private fun killApp() = lifecycleScope.launch {
+        Timber.d("killing app")
+
         loggingJob?.cancelAndJoin()
+        Timber.d("cancelled loggingJob and now can stop app")
 
         activityManager.appTasks.forEach {
             it.finishAndRemoveTask()

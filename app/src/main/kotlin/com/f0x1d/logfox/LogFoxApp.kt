@@ -8,12 +8,14 @@ import coil.ImageLoader
 import coil.ImageLoaderFactory
 import com.f0x1d.logfox.arch.LOGGING_STATUS_CHANNEL_ID
 import com.f0x1d.logfox.arch.RECORDING_STATUS_CHANNEL_ID
+import com.f0x1d.logfox.arch.logs.TimberFileTree
 import com.f0x1d.logfox.arch.notificationManagerCompat
 import com.f0x1d.logfox.preferences.shared.AppPreferences
 import com.f0x1d.logfox.strings.Strings
 import com.google.android.material.color.DynamicColors
 import com.google.android.material.color.DynamicColorsOptions
 import dagger.hilt.android.HiltAndroidApp
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltAndroidApp
@@ -25,8 +27,17 @@ class LogFoxApp: Application(), ImageLoaderFactory {
     @Inject
     lateinit var imageLoader: ImageLoader
 
+    @Inject
+    lateinit var timberFileTree: TimberFileTree
+
     override fun onCreate() {
         super.onCreate()
+
+        if (BuildConfig.DEBUG) {
+            Timber.plant(timberFileTree)
+        }
+        Timber.d("onCreate")
+
         AppCompatDelegate.setDefaultNightMode(appPreferences.nightTheme)
         DynamicColors.applyToActivitiesIfAvailable(
             this,

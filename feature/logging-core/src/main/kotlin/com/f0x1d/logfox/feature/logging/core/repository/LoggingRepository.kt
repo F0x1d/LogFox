@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import timber.log.Timber
 import javax.inject.Inject
 
 interface LoggingRepository {
@@ -71,12 +72,15 @@ internal class LoggingRepositoryImpl @Inject constructor(
         startingId: Long = 0,
     ) {
         if (terminal.isSupported().not()) {
+            Timber.d("terminal $terminal is not supported")
             throw TerminalNotSupportedException()
         }
 
         val process = terminal.execute(*command) ?: throw TerminalNotSupportedException()
+        Timber.d("started process")
 
         var idsCounter = startingId
+        Timber.d("starting with id $idsCounter")
 
         try {
             process.output.bufferedReader().useLines {
@@ -84,7 +88,11 @@ internal class LoggingRepositoryImpl @Inject constructor(
                 // avoiding getting the same line after logging restart because of
                 // WARNING: -T 0 invalid, setting to 1
                 for (line in it) {
+                    Timber.d("got line $line")
+
                     val logLine = LogLine(idsCounter++, line, context) ?: continue
+                    Timber.d("successfully parsed $line to $logLine")
+
                     if (!droppedFirst) {
                         droppedFirst = true
                         continue
@@ -94,6 +102,7 @@ internal class LoggingRepositoryImpl @Inject constructor(
                 }
             }
         } finally {
+            Timber.d("destroying process")
             runCatching {
                 process.destroy()
             }

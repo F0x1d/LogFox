@@ -22,6 +22,7 @@ dependencies {
     implementation(projects.feature.settings)
     implementation(projects.feature.setup)
 
+    implementation(libs.timber)
     implementation(libs.viewpump)
     implementation(libs.coil)
 

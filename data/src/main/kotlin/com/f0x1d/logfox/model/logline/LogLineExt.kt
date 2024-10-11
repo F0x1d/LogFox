@@ -3,6 +3,7 @@ package com.f0x1d.logfox.model.logline
 import android.content.Context
 import androidx.collection.LruCache
 import com.f0x1d.logfox.model.UIDS_MAPPINGS
+import timber.log.Timber
 
 private val logRegex = "(.{14}) (.{5,}?) (.{1,5}) (.{1,5}) (.) (.+?): (.+)".toRegex()
 // time, uid, pid, tid, level, tag, message
@@ -15,7 +16,11 @@ fun LogLine(
     line: String,
     context: Context
 ) = runCatching {
-    logRegex.find(line.trim())?.run {
+    logRegex.find(line.trim()).also { matchResult ->
+        if (matchResult == null) {
+            Timber.d("matchResult is null for $line")
+        }
+    }?.run {
         val uid = groupValues[2].replace(" ", "")
         val integerUid = uid.toIntOrNull() ?: UIDS_MAPPINGS[uid] ?: uidRegex.find(uid)?.run {
             100_000 * groupValues[1].toInt() + 10_000 + groupValues[2].toInt()
@@ -48,6 +53,8 @@ fun LogLine(
             originalContent = groupValues[0],
         )
     }
+}.onFailure { th ->
+    Timber.e("error while parsing", th)
 }.getOrNull()
 
 private fun mapLevel(level: String) = LogLevel.entries.find {
