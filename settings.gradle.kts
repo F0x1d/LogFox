@@ -15,6 +15,8 @@ dependencyResolutionManagement {
     }
 }
 
+rootProject.name = "LogFox"
+
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 include(
@@ -31,9 +33,13 @@ requireNotNull(rootDir.listFiles()).filter { file ->
 }.forEach { file ->
     val modules = requireNotNull(file.listFiles())
 
-    modules.filter(File::isDirectory).forEach { moduleFile ->
-        if (submoduleNameRegex.matches(moduleFile.name)) {
+    modules
+        .filter { module ->
+            module.isDirectory
+                    && File(module, "build.gradle.kts").exists()
+                    && submoduleNameRegex.matches(module.name)
+        }
+        .forEach { moduleFile ->
             include(":${file.name}:${moduleFile.name}")
         }
-    }
 }

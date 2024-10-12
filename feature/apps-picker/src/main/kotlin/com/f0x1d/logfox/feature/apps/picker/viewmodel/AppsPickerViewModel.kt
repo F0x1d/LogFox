@@ -8,11 +8,10 @@ import com.f0x1d.logfox.model.InstalledApp
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
@@ -23,9 +22,6 @@ class AppsPickerViewModel @Inject constructor(
     initialStateProvider = { AppsPickerScreenState() },
     application = application,
 ) {
-
-    private val query = MutableStateFlow("")
-
     init {
         load()
     }
@@ -43,10 +39,8 @@ class AppsPickerViewModel @Inject constructor(
         copy(searchActive = active)
     }
 
-    fun updateQuery(text: String) = state {
-        copy(query = text)
-    }.also {
-        query.update { text }
+    fun updateQuery(query: String) = state {
+        copy(query = query)
     }
 
     private fun load() = launchCatching(defaultDispatcher) {
@@ -66,7 +60,9 @@ class AppsPickerViewModel @Inject constructor(
             )
         }
 
-        query.map { query ->
+        uiState.map { state ->
+            state.query
+        }.distinctUntilChanged().map { query ->
             installedApps.filter { app ->
                 app.title.contains(query, ignoreCase = true)
                         || app.packageName.contains(query, ignoreCase = true)
