@@ -2,7 +2,6 @@ package com.f0x1d.logfox.model
 
 import android.annotation.SuppressLint
 import androidx.recyclerview.widget.DiffUtil
-import com.f0x1d.logfox.model.logline.LogLine
 
 interface Identifiable {
     val id: Any
