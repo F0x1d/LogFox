@@ -140,4 +140,22 @@
     <string name="session_cache_save_recordings">Salva le sessioni memorizzate nella cache nelle registrazioni</string>
     <string name="session_cache_lines_count">Conteggio delle righe della cache di sessione</string>
     <string name="session_cache_size_warning">La cache della sessione viene mantenuta nella RAM, quindi assicurati di non sovraccaricarla con il conteggio scelto</string>
+    <string name="export_logs_in_original_format">Esporta i log nel formato originale</string>
+    <string name="support_chat">Chat di supporto</string>
+    <string name="support_chat_desc">Utilizza per una rapida risoluzione dei problemi</string>
+    <string name="type_crashes">%s arresti anomali</string>
+    <string name="crashes_of">%s arresti anomali di %s</string>
+    <string name="per_app_notifications_settings">Le impostazioni delle notifiche per app sono disponibili nei dettagli degli arresti anomali dell\'app e nelle impostazioni di sistema di LogFox</string>
+    <string name="sort">Ordinamento</string>
+    <string name="in_reversed_order">In ordine inverso</string>
+    <string name="sort_by_name">Per nome</string>
+    <string name="sort_by_new">Per novità</string>
+    <string name="sort_by_count">Per numero di arresti anomali</string>
+    <string name="use_separate_channels_for_crashes">Utilizza canali di notifica separati per le notifiche di arresti anomali</string>
+    <string name="open_crashes_page_on_startup">Apri la pagina degli arresti anomali all\'avvio</string>
+    <string name="wrap_log_lines_in_details">Avvolgi le righe del registro nei dettagli</string>
+    <string name="blacklist">Blacklist</string>
+    <string name="add_to_blacklist">Aggiungi alla blacklist</string>
+    <string name="remove_from_blacklist">Rimuovi dalla blacklist</string>
+    <string name="warning_blacklist">Vuoi davvero aggiungere questa app alla blacklist? LogFox non rileva arresti anomali per le app nella blacklist</string>
 </resources>
