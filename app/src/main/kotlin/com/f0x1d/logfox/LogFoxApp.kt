@@ -33,7 +33,7 @@ class LogFoxApp: Application(), ImageLoaderFactory {
     override fun onCreate() {
         super.onCreate()
 
-        if (BuildConfig.DEBUG) {
+        if (BuildConfig.DEBUG && LOGGING_ENABLED) {
             Timber.plant(timberFileTree)
         }
         Timber.d("onCreate")
@@ -75,4 +75,8 @@ class LogFoxApp: Application(), ImageLoaderFactory {
     }
 
     override fun newImageLoader(): ImageLoader = imageLoader
+
+    companion object {
+        private const val LOGGING_ENABLED = false
+    }
 }
