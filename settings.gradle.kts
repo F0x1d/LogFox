@@ -25,21 +25,30 @@ include(
     ":strings",
 )
 
-private val modulesDirectories = setOf("core", "feature")
-private val submoduleNameRegex = "^[A-Za-z0-9\\-_]+\$".toRegex()
+includeRecursive(File("core"))
+includeRecursive(File("feature"))
 
-requireNotNull(rootDir.listFiles()).filter { file ->
-    file.isDirectory && file.name in modulesDirectories
-}.forEach { file ->
-    val modules = requireNotNull(file.listFiles())
+private fun includeRecursive(
+    directory: File,
+    parentDirectoriesNames: List<String> = listOf(directory.name),
+) {
+    fun File.isModule(): Boolean = File(this, "build.gradle.kts").isFile
 
-    modules
-        .filter { module ->
-            module.isDirectory
-                    && File(module, "build.gradle.kts").exists()
-                    && submoduleNameRegex.matches(module.name)
-        }
-        .forEach { moduleFile ->
-            include(":${file.name}:${moduleFile.name}")
-        }
+    if (directory.isModule()) {
+        val moduleName = parentDirectoriesNames.joinToString(
+            prefix = ":",
+            separator = ":",
+        )
+
+        include(moduleName)
+    } else {
+        directory
+            .listFiles()
+            ?.forEach { file ->
+                includeRecursive(
+                    directory = file,
+                    parentDirectoriesNames = parentDirectoriesNames + file.name,
+                )
+            }
+    }
 }
