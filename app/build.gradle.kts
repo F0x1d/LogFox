@@ -15,13 +15,14 @@ android {
 }
 
 dependencies {
-    implementation(projects.feature.crashes)
-    implementation(projects.feature.filters)
-    implementation(projects.feature.logging)
-    implementation(projects.feature.recordings)
+    implementation(projects.feature.crashes.impl)
+    implementation(projects.feature.filters.impl)
+    implementation(projects.feature.logging.impl)
+    implementation(projects.feature.recordings.impl)
     implementation(projects.feature.settings)
     implementation(projects.feature.setup)
 
+    implementation(libs.timber)
     implementation(libs.viewpump)
     implementation(libs.coil)
 

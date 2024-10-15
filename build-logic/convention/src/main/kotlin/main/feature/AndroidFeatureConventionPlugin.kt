@@ -19,6 +19,7 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
         dependencies {
             coreDependencies(withCompose = false)
 
+            implementation(library("timber"))
             implementation(library("material"))
             implementation(bundle("androidx"))
             implementation(bundle("androidx-navigation"))

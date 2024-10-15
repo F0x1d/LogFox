@@ -5,7 +5,7 @@ import org.gradle.kotlin.dsl.DependencyHandlerScope
 import org.gradle.kotlin.dsl.project
 
 internal fun DependencyHandlerScope.coreDependencies(withCompose: Boolean = true) {
-    implementation(project(":data"))
+    implementation(project(":shared"))
     implementation(project(":strings"))
 
     implementation(project(":core:arch"))
@@ -43,10 +43,7 @@ internal fun DependencyHandlerScope.androidTestImplementation(dependency: Any): 
 )
 
 internal fun DependencyHandlerScope.implementation(bundle: List<Any>): List<Dependency?> = bundle.map {
-    add(
-        configurationName = "implementation",
-        dependencyNotation = it,
-    )
+    implementation(it)
 }
 
 internal fun DependencyHandlerScope.ksp(dependency: Any): Dependency? = add(

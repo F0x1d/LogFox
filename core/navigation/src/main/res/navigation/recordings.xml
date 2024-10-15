@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/recordingsFragment"
-        android:name="com.f0x1d.logfox.feature.recordings.ui.fragment.RecordingsFragment"
+        android:name="com.f0x1d.logfox.feature.recordings.impl.ui.fragment.RecordingsFragment"
         android:label="RecordingsFragment" />
     <action
         android:id="@+id/action_recordingsFragment_to_recordingBottomSheet"
@@ -14,7 +14,7 @@
 
     <dialog
         android:id="@+id/recordingBottomSheet"
-        android:name="com.f0x1d.logfox.feature.recordings.ui.dialog.RecordingBottomSheet"
+        android:name="com.f0x1d.logfox.feature.recordings.impl.ui.dialog.RecordingBottomSheet"
         android:label="RecordingBottomSheet" >
         <argument
             android:name="recording_id"

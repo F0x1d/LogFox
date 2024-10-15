@@ -15,8 +15,10 @@ class AndroidCoreConventionPlugin : Plugin<Project> {
         }
 
         dependencies {
-            implementation(project(":data"))
+            implementation(project(":shared"))
             implementation(project(":strings"))
+
+            implementation(library("timber"))
 
             implementation(library("material"))
             implementation(bundle("androidx"))

@@ -3,6 +3,9 @@ package com.f0x1d.logfox.feature.settings.ui.fragment
 import android.os.Bundle
 import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
+import com.f0x1d.logfox.arch.logs.timberLogFile
+import com.f0x1d.logfox.arch.shareFileIntent
+import com.f0x1d.logfox.feature.settings.BuildConfig
 import com.f0x1d.logfox.feature.settings.R
 import com.f0x1d.logfox.feature.settings.ui.fragment.base.BasePreferenceFragment
 import com.f0x1d.logfox.navigation.Directions
@@ -30,15 +33,23 @@ class SettingsMenuFragment: BasePreferenceFragment() {
             return@setOnPreferenceClickListener true
         }
 
+        findPreference<Preference>("pref_settings_links")?.setOnPreferenceClickListener {
+            findNavController().navigate(Directions.action_settingsMenuFragment_to_settingsLinksFragment)
+            return@setOnPreferenceClickListener true
+        }
         findPreference<Preference>("pref_settings_app_version")?.apply {
             val packageManager = requireContext().packageManager
             val packageInfo = packageManager.getPackageInfo(requireContext().packageName, 0)
 
             title = "${packageInfo.versionName} (${packageInfo.versionCode})"
         }
-        findPreference<Preference>("pref_settings_links")?.setOnPreferenceClickListener {
-            findNavController().navigate(Directions.action_settingsMenuFragment_to_settingsLinksFragment)
-            return@setOnPreferenceClickListener true
+        findPreference<Preference>("pref_settings_share_logs")?.apply {
+            isVisible = BuildConfig.DEBUG
+
+            setOnPreferenceClickListener {
+                requireContext().shareFileIntent(requireContext().timberLogFile)
+                return@setOnPreferenceClickListener true
+            }
         }
     }
 }

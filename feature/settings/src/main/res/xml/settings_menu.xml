@@ -34,6 +34,9 @@
             android:key="pref_settings_app_version"
             android:icon="@drawable/ic_settings_info"
             android:selectable="false" />
+        <Preference
+            android:title="@string/share_logs"
+            android:key="pref_settings_share_logs" />
     </PreferenceCategory>
 
 </PreferenceScreen>
