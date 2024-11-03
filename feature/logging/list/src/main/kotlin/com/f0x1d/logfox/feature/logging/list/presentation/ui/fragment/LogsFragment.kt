@@ -161,7 +161,9 @@ class LogsFragment : BaseFragment<FragmentLogsBinding>() {
             processSelectedItems(selectedItems = state.selectedItems)
             processPaused(paused = state.paused)
 
-            updateLogsList(items = state.logs)
+            if (state.logsChanged) {
+                updateLogsList(items = state.logs)
+            }
         }
 
         requireActivity().onBackPressedDispatcher.apply {
