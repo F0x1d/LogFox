@@ -1,9 +1,9 @@
 package com.f0x1d.logfox.feature.crashes.impl.di
 
-import com.f0x1d.logfox.feature.crashes.api.repository.CrashesRepository
-import com.f0x1d.logfox.feature.crashes.api.repository.DisabledAppsRepository
-import com.f0x1d.logfox.feature.crashes.impl.repository.CrashesRepositoryImpl
-import com.f0x1d.logfox.feature.crashes.impl.repository.DisabledAppsRepositoryImpl
+import com.f0x1d.logfox.feature.crashes.api.data.CrashesRepository
+import com.f0x1d.logfox.feature.crashes.api.data.DisabledAppsRepository
+import com.f0x1d.logfox.feature.crashes.impl.data.CrashesRepositoryImpl
+import com.f0x1d.logfox.feature.crashes.impl.data.DisabledAppsRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

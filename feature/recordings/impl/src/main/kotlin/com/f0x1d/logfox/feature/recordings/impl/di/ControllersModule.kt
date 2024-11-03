@@ -1,9 +1,9 @@
 package com.f0x1d.logfox.feature.recordings.impl.di
 
-import com.f0x1d.logfox.feature.recordings.api.controller.RecordingController
-import com.f0x1d.logfox.feature.recordings.api.controller.RecordingNotificationController
-import com.f0x1d.logfox.feature.recordings.impl.controller.RecordingControllerImpl
-import com.f0x1d.logfox.feature.recordings.impl.controller.RecordingNotificationControllerImpl
+import com.f0x1d.logfox.feature.recordings.api.data.RecordingController
+import com.f0x1d.logfox.feature.recordings.api.data.RecordingNotificationController
+import com.f0x1d.logfox.feature.recordings.impl.data.RecordingControllerImpl
+import com.f0x1d.logfox.feature.recordings.impl.data.RecordingNotificationControllerImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

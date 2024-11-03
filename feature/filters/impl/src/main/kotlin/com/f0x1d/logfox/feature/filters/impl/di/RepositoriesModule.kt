@@ -1,7 +1,7 @@
 package com.f0x1d.logfox.feature.filters.impl.di
 
-import com.f0x1d.logfox.feature.filters.api.repository.FiltersRepository
-import com.f0x1d.logfox.feature.filters.impl.repository.FiltersRepositoryImpl
+import com.f0x1d.logfox.feature.filters.api.data.FiltersRepository
+import com.f0x1d.logfox.feature.filters.impl.data.FiltersRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

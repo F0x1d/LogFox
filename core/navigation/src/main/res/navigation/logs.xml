@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/logsFragment"
-        android:name="com.f0x1d.logfox.feature.logging.impl.ui.fragment.LogsFragment"
+        android:name="com.f0x1d.logfox.feature.logging.list.presentation.ui.fragment.LogsFragment"
         android:label="LogsFragment" >
         <argument
             android:name="file_uri"
@@ -34,7 +34,7 @@
 
     <fragment
         android:id="@+id/logsExtendedCopyFragment"
-        android:name="com.f0x1d.logfox.feature.logging.impl.ui.fragment.LogsExtendedCopyFragment"
+        android:name="com.f0x1d.logfox.feature.logging.extended.copy.presentation.ui.LogsExtendedCopyFragment"
         android:label="ExtendedCopyFragment" >
         <argument
             android:name="content"
@@ -43,12 +43,12 @@
 
     <dialog
         android:id="@+id/searchBottomSheet"
-        android:name="com.f0x1d.logfox.feature.logging.impl.ui.dialog.SearchBottomSheet"
+        android:name="com.f0x1d.logfox.feature.logging.search.presentation.ui.SearchLogsBottomSheetFragment"
         android:label="SearchBottomSheet" />
 
     <fragment
         android:id="@+id/filtersFragment"
-        android:name="com.f0x1d.logfox.feature.filters.impl.ui.fragment.FiltersFragment"
+        android:name="com.f0x1d.logfox.feature.filters.list.presentation.ui.fragment.FiltersFragment"
         android:label="FiltersFragment" />
     <action
         android:id="@+id/action_filtersFragment_to_editFilterFragment"
@@ -60,7 +60,7 @@
 
     <fragment
         android:id="@+id/editFilterFragment"
-        android:name="com.f0x1d.logfox.feature.filters.impl.ui.fragment.EditFilterFragment"
+        android:name="com.f0x1d.logfox.feature.filters.edit.presentation.ui.EditFilterFragment"
         android:label="EditFilterFragment">
         <argument
             android:name="filter_id"
@@ -77,6 +77,6 @@
 
     <fragment
         android:id="@+id/appsPickerFragment"
-        android:name="com.f0x1d.logfox.feature.apps.picker.ui.fragment.picker.AppsPickerFragment"
+        android:name="com.f0x1d.logfox.feature.apps.picker.presentation.ui.AppsPickerFragment"
         android:label="AppsPickerFragment" />
 </navigation>

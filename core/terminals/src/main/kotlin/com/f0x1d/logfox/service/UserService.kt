@@ -6,7 +6,7 @@ import android.os.ParcelFileDescriptor.AutoCloseInputStream
 import android.os.ParcelFileDescriptor.AutoCloseOutputStream
 import androidx.annotation.Keep
 import com.f0x1d.logfox.IUserService
-import com.f0x1d.logfox.model.terminal.TerminalResult
+import com.f0x1d.logfox.models.TerminalResult
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -20,7 +20,7 @@ import java.io.InputStream
 import java.io.OutputStream
 import kotlin.system.exitProcess
 
-class UserService(): IUserService.Stub() {
+class UserService() : IUserService.Stub() {
 
     private val serviceScopeJob = SupervisorJob()
     private val serviceScope = CoroutineScope(Dispatchers.IO + serviceScopeJob)
@@ -31,7 +31,7 @@ class UserService(): IUserService.Stub() {
     // Needed for shizuku v13
     @Suppress("UNUSED_PARAMETER")
     @Keep
-    constructor(context: Context): this()
+    constructor(context: Context) : this()
 
     override fun destroy() {
         serviceScope.cancel()

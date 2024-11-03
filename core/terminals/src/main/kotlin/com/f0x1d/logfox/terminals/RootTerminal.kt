@@ -1,8 +1,8 @@
 package com.f0x1d.logfox.terminals
 
 import com.f0x1d.logfox.arch.di.IODispatcher
-import com.f0x1d.logfox.model.terminal.TerminalProcess
-import com.f0x1d.logfox.model.terminal.TerminalResult
+import com.f0x1d.logfox.models.TerminalProcess
+import com.f0x1d.logfox.models.TerminalResult
 import com.f0x1d.logfox.terminals.base.Terminal
 import com.topjohnwu.superuser.Shell
 import kotlinx.coroutines.CoroutineDispatcher

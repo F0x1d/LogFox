@@ -1,7 +1,7 @@
 package com.f0x1d.logfox.feature.recordings.impl.di
 
-import com.f0x1d.logfox.feature.recordings.api.repository.RecordingsRepository
-import com.f0x1d.logfox.feature.recordings.impl.repository.RecordingsRepositoryImpl
+import com.f0x1d.logfox.feature.recordings.api.data.RecordingsRepository
+import com.f0x1d.logfox.feature.recordings.impl.data.RecordingsRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

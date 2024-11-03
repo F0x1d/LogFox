@@ -9,8 +9,8 @@ import android.os.ParcelFileDescriptor.AutoCloseInputStream
 import android.os.ParcelFileDescriptor.AutoCloseOutputStream
 import com.f0x1d.logfox.IUserService
 import com.f0x1d.logfox.arch.di.IODispatcher
-import com.f0x1d.logfox.model.terminal.TerminalProcess
-import com.f0x1d.logfox.model.terminal.TerminalResult
+import com.f0x1d.logfox.models.TerminalProcess
+import com.f0x1d.logfox.models.TerminalResult
 import com.f0x1d.logfox.service.UserService
 import com.f0x1d.logfox.strings.Strings
 import com.f0x1d.logfox.terminals.base.Terminal
