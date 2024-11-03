@@ -3,10 +3,10 @@ package com.f0x1d.logfox.receiver
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import com.f0x1d.feature.logging.service.LoggingService
 import com.f0x1d.logfox.arch.hasPermissionToReadLogs
 import com.f0x1d.logfox.arch.startForegroundServiceAvailable
 import com.f0x1d.logfox.arch.toast
+import com.f0x1d.logfox.feature.logging.service.presentation.LoggingService
 import com.f0x1d.logfox.preferences.shared.AppPreferences
 import com.f0x1d.logfox.strings.Strings
 import com.f0x1d.logfox.terminals.ShizukuTerminal
@@ -26,7 +26,7 @@ class BootReceiver: BroadcastReceiver() {
             }
 
             if (context.hasPermissionToReadLogs) {
-                Intent(context, LoggingService::class.java).let {
+                Intent(context, com.f0x1d.logfox.feature.logging.service.presentation.LoggingService::class.java).let {
                     if (startForegroundServiceAvailable)
                         context.startForegroundService(it)
                     else

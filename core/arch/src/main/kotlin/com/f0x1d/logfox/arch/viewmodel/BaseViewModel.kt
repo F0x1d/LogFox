@@ -4,28 +4,43 @@ import android.app.Application
 import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.f0x1d.logfox.strings.Strings
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
-abstract class BaseViewModel(
+abstract class BaseViewModel<S, A>(
+    initialStateProvider: () -> S,
     application: Application,
 ) : AndroidViewModel(application) {
+    val state: StateFlow<S> get() = mutableState.asStateFlow()
+    val actions: Flow<A> get() = actionsChannel.receiveAsFlow()
 
-    private val eventsChannel = Channel<Event>(capacity = Channel.BUFFERED)
-    val eventsFlow = eventsChannel.receiveAsFlow()
+    val currentState: S get() = mutableState.value
 
     protected val ctx: Context get() = getApplication()
 
+    private val mutableState = MutableStateFlow(initialStateProvider())
+    private val actionsChannel = Channel<A>(capacity = Channel.UNLIMITED)
+
+    protected fun reduce(block: S.() -> S) = mutableState.update(block)
+
+    protected fun sendAction(action: A) {
+        actionsChannel.trySend(action)
+    }
+
     protected fun launchCatching(
         context: CoroutineContext = Dispatchers.Main,
-        errorBlock: suspend CoroutineScope.() -> Unit = {},
+        errorBlock: suspend CoroutineScope.() -> Unit = { },
         block: suspend CoroutineScope.() -> Unit,
     ) = viewModelScope.launch(context) {
         try {
@@ -38,17 +53,6 @@ abstract class BaseViewModel(
             errorBlock(this)
 
             e.printStackTrace()
-
-            snackbar(ctx.getString(Strings.error, e.localizedMessage))
-        }
-    }
-
-    protected fun snackbar(id: Int) = snackbar(ctx.getString(id))
-    protected fun snackbar(text: String) = sendEvent(ShowSnackbar(text))
-
-    protected fun sendEvent(event: Event) {
-        viewModelScope.launch {
-            eventsChannel.send(event)
         }
     }
 }
