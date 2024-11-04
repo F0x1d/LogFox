@@ -1,5 +1,5 @@
 plugins {
-    id("logfox.android.feature")
+    id("logfox.android.feature.compose")
 }
 
 android.namespace = "com.f0x1d.logfox.feature.recordings.list"

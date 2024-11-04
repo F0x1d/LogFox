@@ -9,8 +9,8 @@ android {
     defaultConfig {
         applicationId = logFoxPackageName
 
-        versionCode = 63
-        versionName = "2.0.3"
+        versionCode = 64
+        versionName = "2.0.4"
     }
 }
 

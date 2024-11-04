@@ -46,7 +46,7 @@ class LogsViewModel @Inject constructor(
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
     dateTimeFormatter: DateTimeFormatter,
     application: Application,
-): BaseViewModel<LogsState, LogsAction>(
+) : BaseViewModel<LogsState, LogsAction>(
     initialStateProvider = { LogsState() },
     application = application,
 ), DateTimeFormatter by dateTimeFormatter {
@@ -58,9 +58,12 @@ class LogsViewModel @Inject constructor(
     val logsExpanded get() = appPreferences.logsExpanded
     val logsFormat get() = appPreferences.showLogValues
 
-    val selectedItemsContent get() = currentState.selectedItems.joinToString("\n") {
-        originalOf(it)
-    }
+    val selectedItemsContent get() = currentState
+        .selectedItems
+        .sortedBy { it.dateAndTime }
+        .joinToString("\n") {
+            originalOf(it)
+        }
 
     init {
         load()
@@ -71,7 +74,11 @@ class LogsViewModel @Inject constructor(
             state
                 .map { it.selectedItems }
                 .distinctUntilChanged()
-                .onEach { selectedLogLinesDataSource.updateSelectedLines(it.toList()) }
+                .onEach { lines ->
+                    selectedLogLinesDataSource.updateSelectedLines(
+                        selectedLines = lines.sortedBy { it.dateAndTime },
+                    )
+                }
                 .launchIn(this)
 
             combine(
@@ -119,7 +126,7 @@ class LogsViewModel @Inject constructor(
                     logs = data.logs.filterAndSearch(
                         filters = data.filters,
                         query = data.query,
-                    )
+                    ),
                 )
             }.flowOn(
                 defaultDispatcher,
@@ -129,6 +136,7 @@ class LogsViewModel @Inject constructor(
                         logs = data.logs,
                         query = data.query,
                         filters = data.filters,
+                        logsChanged = true,
                     )
                 }
             }.launchIn(this)
@@ -143,7 +151,8 @@ class LogsViewModel @Inject constructor(
                 ) else remove(
                     logLine
                 )
-            }
+            },
+            logsChanged = false,
         )
     }
 
@@ -154,6 +163,7 @@ class LogsViewModel @Inject constructor(
             } else {
                 logs.toSet()
             },
+            logsChanged = false,
         )
     }
 
@@ -171,9 +181,9 @@ class LogsViewModel @Inject constructor(
         }
     }
 
-    fun switchState() = reduce { copy(paused = paused.not()) }
-    fun pause() = reduce { copy(paused = true) }
-    fun resume() = reduce { copy(paused = false) }
+    fun switchState() = reduce { copy(paused = paused.not(), logsChanged = false) }
+    fun pause() = reduce { copy(paused = true, logsChanged = false) }
+    fun resume() = reduce { copy(paused = false, logsChanged = false) }
 
     fun originalOf(logLine: LogLine): String = appPreferences.originalOf(
         logLine = logLine,
@@ -182,7 +192,10 @@ class LogsViewModel @Inject constructor(
     )
 
     fun clearSelection() = reduce {
-        copy(selectedItems = emptySet())
+        copy(
+            selectedItems = emptySet(),
+            logsChanged = false,
+        )
     }
 
     private data class LogsData(

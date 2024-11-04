@@ -2,17 +2,19 @@ package com.f0x1d.logfox.feature.setup.presentation.ui
 
 import android.os.Bundle
 import android.view.View
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.f0x1d.logfox.arch.presentation.ui.fragment.compose.BaseComposeFragment
 import com.f0x1d.logfox.feature.setup.presentation.SetupAction
 import com.f0x1d.logfox.feature.setup.presentation.SetupViewModel
 import com.f0x1d.logfox.feature.setup.presentation.ui.compose.SetupScreenContent
 import com.f0x1d.logfox.ui.compose.theme.LogFoxTheme
 import dagger.hilt.android.AndroidEntryPoint
-import dev.chrisbanes.insetter.applyInsetter
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SetupFragment : BaseComposeFragment() {
@@ -30,15 +32,15 @@ class SetupFragment : BaseComposeFragment() {
         )
     }
 
+    private val snackbarHostState = SnackbarHostState()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.actions.collectWithLifecycle { action ->
             when (action) {
-                is SetupAction.ShowSnackbar -> snackbar(action.textResId).apply {
-                    this.view.applyInsetter {
-                        type(navigationBars = true) { margin() }
-                    }
+                is SetupAction.ShowSnackbar -> lifecycleScope.launch {
+                    snackbarHostState.showSnackbar(getString(action.textResId))
                 }
             }
         }
@@ -52,6 +54,7 @@ class SetupFragment : BaseComposeFragment() {
             SetupScreenContent(
                 state = state,
                 listener = listener,
+                snackbarHostState = snackbarHostState,
             )
         }
     }
