@@ -11,7 +11,7 @@ import com.f0x1d.logfox.arch.presentation.ui.base.SimpleFragmentLifecycleOwner
 import com.f0x1d.logfox.arch.presentation.ui.snackbar
 import dev.chrisbanes.insetter.applyInsetter
 
-abstract class BaseFragment<T : ViewBinding>: Fragment(), SimpleFragmentLifecycleOwner {
+abstract class BaseFragment<T : ViewBinding> : Fragment(), SimpleFragmentLifecycleOwner {
 
     private var mutableBinding: T? = null
     protected val binding: T get() = mutableBinding!!

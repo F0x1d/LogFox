@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.os.bundleOf
-import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.f0x1d.logfox.arch.asUri
@@ -15,11 +14,12 @@ import com.f0x1d.logfox.arch.shareFileIntent
 import com.f0x1d.logfox.feature.recordings.details.databinding.SheetRecordingDetailsBinding
 import com.f0x1d.logfox.feature.recordings.details.presentation.RecordingDetailsViewModel
 import com.f0x1d.logfox.navigation.Directions
+import com.f0x1d.logfox.ui.view.applyExtendedTextWatcher
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Date
 
 @AndroidEntryPoint
-class RecordingDetailsBottomSheetFragment: BaseBottomSheetFragment<SheetRecordingDetailsBinding>() {
+class RecordingDetailsBottomSheetFragment : BaseBottomSheetFragment<SheetRecordingDetailsBinding>() {
 
     private val viewModel by viewModels<RecordingDetailsViewModel>()
 
@@ -67,10 +67,12 @@ class RecordingDetailsBottomSheetFragment: BaseBottomSheetFragment<SheetRecordin
             }
         }
 
-        title.doAfterTextChanged { viewModel.updateTitle(it?.toString().orEmpty()) }
+        val textWatcher = title.applyExtendedTextWatcher {
+            viewModel.updateTitle(it?.toString().orEmpty())
+        }
 
         viewModel.state.collectWithLifecycle { state ->
-            title.setText(viewModel.currentTitle.orEmpty())
+            textWatcher.setText(viewModel.currentTitle.orEmpty())
 
             val logRecording = state.recording ?: return@collectWithLifecycle
 

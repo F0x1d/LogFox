@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/recordingsFragment"
-        android:name="com.f0x1d.logfox.feature.recordings.list.presentation.ui.fragment.RecordingsFragment"
+        android:name="com.f0x1d.logfox.feature.recordings.list.presentation.ui.RecordingsFragment"
         android:label="RecordingsFragment" />
     <action
         android:id="@+id/action_recordingsFragment_to_recordingBottomSheet"

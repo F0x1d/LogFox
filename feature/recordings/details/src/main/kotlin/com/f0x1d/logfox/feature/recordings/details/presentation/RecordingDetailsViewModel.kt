@@ -34,6 +34,7 @@ class RecordingDetailsViewModel @Inject constructor(
     application = application,
 ), DateTimeFormatter by dateTimeFormatter {
     var currentTitle: String? = null
+        private set
 
     private val titleUpdateMutex = Mutex()
 
@@ -83,6 +84,8 @@ class RecordingDetailsViewModel @Inject constructor(
 
     fun updateTitle(title: String) = launchCatching {
         titleUpdateMutex.withLock {
+            currentTitle = title
+
             currentState.recording?.let {
                 recordingsRepository.updateTitle(it, title)
             }

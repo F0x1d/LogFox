@@ -16,6 +16,8 @@ android {
 dependencies {
     implementation(projects.core.arch)
 
+    compileOnly(libs.androidx.compose.runtime)
+
     implementation(libs.androidx.room)
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)

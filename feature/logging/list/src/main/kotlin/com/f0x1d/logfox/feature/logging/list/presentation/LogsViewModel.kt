@@ -46,7 +46,7 @@ class LogsViewModel @Inject constructor(
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
     dateTimeFormatter: DateTimeFormatter,
     application: Application,
-): BaseViewModel<LogsState, LogsAction>(
+) : BaseViewModel<LogsState, LogsAction>(
     initialStateProvider = { LogsState() },
     application = application,
 ), DateTimeFormatter by dateTimeFormatter {
