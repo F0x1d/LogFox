@@ -16,6 +16,7 @@ import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.util.lerp
 import com.f0x1d.logfox.feature.recordings.api.data.RecordingState
 import com.f0x1d.logfox.strings.Strings
 import com.f0x1d.logfox.ui.Icons
@@ -112,13 +113,19 @@ internal fun RecordingControlsItem(
             )
         },
     ) { measurables, constraints ->
-        val gapWidth = gapWidthDp.roundToPx()
+        val gapWidth = gapWidthDp.toPx()
         val halfGapWidth = gapWidth / 2f
 
         val maxWidth = constraints.maxWidth
         val halfWidth = maxWidth / 2f
-        val pauseWidth = halfWidth - halfGapWidth
-        val recordWidth = (maxWidth - (pauseWidth + halfGapWidth) * pauseShownFraction).toInt()
+        val pauseWidth = (halfWidth - halfGapWidth).toInt()
+        //val recordWidth = (maxWidth - (pauseWidth + halfGapWidth) * pauseShownFraction).toInt()
+
+        val recordWidth = lerp(
+            start = maxWidth,
+            stop = pauseWidth,
+            fraction = pauseShownFraction,
+        )
 
         val recordPlaceable = measurables
             .first { it.layoutId == RecordingsControlItem.RECORD }
@@ -134,19 +141,23 @@ internal fun RecordingControlsItem(
                 .first { it.layoutId == RecordingsControlItem.PAUSE }
                 .measure(
                     constraints = constraints.copy(
-                        maxWidth = pauseWidth.toInt(),
-                        minWidth = pauseWidth.toInt(),
+                        maxWidth = pauseWidth,
+                        minWidth = pauseWidth,
                     ),
                 )
         } else {
             null
         }
 
-        layout(constraints.maxWidth, recordPlaceable.height) {
+        layout(maxWidth, recordPlaceable.height) {
             recordPlaceable.placeRelative(x = 0, y = 0)
 
             pausePlaceable?.placeRelative(
-                x = (constraints.maxWidth - (recordWidth - halfGapWidth) * pauseShownFraction).toInt(),
+                x = lerp(
+                    start = maxWidth,
+                    stop = (recordWidth + gapWidth).toInt(),
+                    fraction = pauseShownFraction,
+                ),
                 y = 0,
             )
         }
