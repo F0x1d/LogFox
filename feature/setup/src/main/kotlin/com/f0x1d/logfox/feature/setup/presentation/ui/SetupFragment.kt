@@ -12,7 +12,6 @@ import com.f0x1d.logfox.arch.presentation.ui.fragment.compose.BaseComposeFragmen
 import com.f0x1d.logfox.feature.setup.presentation.SetupAction
 import com.f0x1d.logfox.feature.setup.presentation.SetupViewModel
 import com.f0x1d.logfox.feature.setup.presentation.ui.compose.SetupScreenContent
-import com.f0x1d.logfox.ui.compose.theme.LogFoxTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -48,14 +47,12 @@ class SetupFragment : BaseComposeFragment() {
 
     @Composable
     override fun Content() {
-        LogFoxTheme {
-            val state by viewModel.state.collectAsState()
+        val state by viewModel.state.collectAsState()
 
-            SetupScreenContent(
-                state = state,
-                listener = listener,
-                snackbarHostState = snackbarHostState,
-            )
-        }
+        SetupScreenContent(
+            state = state,
+            listener = listener,
+            snackbarHostState = snackbarHostState,
+        )
     }
 }

@@ -10,7 +10,7 @@ import androidx.room.PrimaryKey
 import androidx.room.Query
 import androidx.room.TypeConverter
 import androidx.room.Update
-import com.f0x1d.logfox.arch.annotations.GsonSkip
+import com.f0x1d.logfox.database.annotations.GsonSkip
 import com.f0x1d.logfox.model.Identifiable
 import com.f0x1d.logfox.model.logline.LogLevel
 import kotlinx.coroutines.flow.Flow

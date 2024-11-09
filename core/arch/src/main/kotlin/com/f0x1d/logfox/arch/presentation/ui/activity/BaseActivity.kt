@@ -44,12 +44,9 @@ abstract class BaseActivity<T : ViewBinding>: AppCompatActivity(), SimpleLifecyc
     }
 
     override fun attachBaseContext(newBase: Context) {
-        val entryPoint = EntryPointAccessors.fromApplication(
-            context = newBase,
-            entryPoint = ViewPumpEntryPoint::class.java,
-        )
+        val entryPoint = EntryPointAccessors.fromApplication<ViewPumpEntryPoint>(newBase)
 
-        super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase, entryPoint.viewPump()))
+        super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase, entryPoint.viewPump))
     }
 
     protected fun snackbar(text: String) = binding.root.snackbar(text).apply {
@@ -65,6 +62,6 @@ abstract class BaseActivity<T : ViewBinding>: AppCompatActivity(), SimpleLifecyc
     @EntryPoint
     @InstallIn(SingletonComponent::class)
     internal interface ViewPumpEntryPoint {
-        fun viewPump(): ViewPump
+        val viewPump: ViewPump
     }
 }

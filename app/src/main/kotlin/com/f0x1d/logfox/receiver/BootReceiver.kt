@@ -14,7 +14,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class BootReceiver: BroadcastReceiver() {
+class BootReceiver : BroadcastReceiver() {
 
     @Inject
     lateinit var appPreferences: AppPreferences
@@ -26,7 +26,7 @@ class BootReceiver: BroadcastReceiver() {
             }
 
             if (context.hasPermissionToReadLogs) {
-                Intent(context, com.f0x1d.logfox.feature.logging.service.presentation.LoggingService::class.java).let {
+                Intent(context, LoggingService::class.java).let {
                     if (startForegroundServiceAvailable)
                         context.startForegroundService(it)
                     else
