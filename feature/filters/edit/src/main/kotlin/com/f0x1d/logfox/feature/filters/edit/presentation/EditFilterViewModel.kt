@@ -47,7 +47,7 @@ class EditFilterViewModel @Inject constructor(
                 .collect { filter ->
                     if (filter == null) return@collect
 
-                    val enabledLogLevels = List(7) { false }.toMutableList()
+                    val enabledLogLevels = List(LogLevel.entries.size) { false }.toMutableList()
                     val allowedLevels = filter.allowedLevels.map { it.ordinal }
                     for (i in 0 until enabledLogLevels.size) {
                         enabledLogLevels[i] = allowedLevels.contains(i)
