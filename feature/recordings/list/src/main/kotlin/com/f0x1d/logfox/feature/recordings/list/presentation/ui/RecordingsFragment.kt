@@ -16,7 +16,6 @@ import com.f0x1d.logfox.feature.recordings.list.presentation.RecordingsAction
 import com.f0x1d.logfox.feature.recordings.list.presentation.RecordingsViewModel
 import com.f0x1d.logfox.feature.recordings.list.presentation.ui.compose.RecordingsScreenContent
 import com.f0x1d.logfox.navigation.Directions
-import com.f0x1d.logfox.ui.compose.theme.LogFoxTheme
 import com.f0x1d.logfox.ui.dialog.showAreYouSureClearDialog
 import com.f0x1d.logfox.ui.dialog.showAreYouSureDeleteDialog
 import dagger.hilt.android.AndroidEntryPoint
@@ -63,15 +62,13 @@ class RecordingsFragment : BaseComposeFragment() {
 
     @Composable
     override fun Content() {
-        LogFoxTheme {
-            val state by viewModel.state.collectAsState()
+        val state by viewModel.state.collectAsState()
 
-            RecordingsScreenContent(
-                state = state,
-                listener = listener,
-                snackbarHostState = snackbarHostState,
-            )
-        }
+        RecordingsScreenContent(
+            state = state,
+            listener = listener,
+            snackbarHostState = snackbarHostState,
+        )
     }
 
     private fun openDetails(recording: LogRecording?) = recording?.id?.also {

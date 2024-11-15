@@ -8,7 +8,7 @@ import javax.inject.Qualifier
 
 @Module
 @InstallIn(SingletonComponent::class)
-object UtilsModule {
+internal object UtilsModule {
 
     @NullString
     @Provides

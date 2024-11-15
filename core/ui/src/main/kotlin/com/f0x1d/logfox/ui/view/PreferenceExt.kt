@@ -2,8 +2,8 @@ package com.f0x1d.logfox.ui.view
 
 import android.view.LayoutInflater
 import android.view.inputmethod.InputMethodManager
+import androidx.core.content.getSystemService
 import androidx.preference.Preference
-import com.f0x1d.logfox.arch.inputMethodManager
 import com.f0x1d.logfox.strings.Strings
 import com.f0x1d.logfox.ui.databinding.DialogTextBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -35,7 +35,7 @@ fun Preference.setupAsEditTextPreference(
                     setSelection(text?.length ?: 0)
 
                     postDelayed({
-                        context.inputMethodManager.showSoftInput(
+                        context.getSystemService<InputMethodManager>()?.showSoftInput(
                             this,
                             InputMethodManager.SHOW_IMPLICIT
                         )

@@ -12,7 +12,6 @@ import com.f0x1d.logfox.feature.apps.picker.AppsPickerResultHandler
 import com.f0x1d.logfox.feature.apps.picker.presentation.AppsPickerState
 import com.f0x1d.logfox.feature.apps.picker.presentation.AppsPickerViewModel
 import com.f0x1d.logfox.feature.apps.picker.presentation.ui.compose.AppsPickerScreenContent
-import com.f0x1d.logfox.ui.compose.theme.LogFoxTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.flow.Flow
@@ -57,14 +56,12 @@ class AppsPickerFragment : BaseComposeFragment() {
 
     @Composable
     override fun Content() {
-        LogFoxTheme {
-            val state by uiState.collectAsState(initial = viewModel.currentState)
+        val state by uiState.collectAsState(initial = viewModel.currentState)
 
-            AppsPickerScreenContent(
-                state = state,
-                listener = listener,
-            )
-        }
+        AppsPickerScreenContent(
+            state = state,
+            listener = listener,
+        )
     }
 
     @SuppressLint("RestrictedApi")

@@ -9,16 +9,15 @@ import com.f0x1d.logfox.preferences.shared.AppPreferences
 import com.f0x1d.logfox.terminals.base.Terminal
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.channels.ProducerScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.flow.FlowCollector
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
+import kotlinx.coroutines.yield
 import timber.log.Timber
+import java.io.BufferedReader
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
 
@@ -31,7 +30,7 @@ internal class LoggingRepositoryImpl @Inject constructor(
     override fun startLogging(
         terminal: Terminal,
         startingId: Long,
-    ): Flow<LogLine> = channelFlow {
+    ): Flow<LogLine> = flow {
         val command = LoggingRepository.COMMAND + when (appPreferences.showLogsFromAppLaunch) {
             true -> LoggingRepository.SHOW_LOGS_FROM_NOW_FLAGS
 
@@ -45,7 +44,7 @@ internal class LoggingRepositoryImpl @Inject constructor(
         )
     }.flowOn(ioDispatcher)
 
-    override fun dumpLogs(terminal: Terminal): Flow<LogLine> = channelFlow {
+    override fun dumpLogs(terminal: Terminal): Flow<LogLine> = flow {
         val command = LoggingRepository.COMMAND + LoggingRepository.DUMP_FLAG
 
         emitLines(
@@ -55,7 +54,7 @@ internal class LoggingRepositoryImpl @Inject constructor(
         )
     }.flowOn(ioDispatcher)
 
-    private suspend fun ProducerScope<LogLine>.emitLines(
+    private suspend fun FlowCollector<LogLine>.emitLines(
         terminal: Terminal,
         command: Array<String>,
         startingId: Long = 0,
@@ -72,39 +71,32 @@ internal class LoggingRepositoryImpl @Inject constructor(
         Timber.d("starting with id $idsCounter")
 
         try {
-            val readerScope = CoroutineScope(ioDispatcher + SupervisorJob())
-            invokeOnClose { readerScope.cancel() }
+            Timber.d("started scope")
 
-            process.output.bufferedReader().useLines { linesSequence ->
+            process.output.bufferedReader().use { reader ->
                 var droppedFirst = !appPreferences.showLogsFromAppLaunch
                 // avoiding getting the same line after logging restart because of
                 // WARNING: -T 0 invalid, setting to 1
-                val iterator = linesSequence.iterator()
+                Timber.d("got reader")
 
-                var looping = true
-                while (looping) {
+                while (true) {
                     withTimeout(10.seconds) {
-                        readerScope.launch {
-                            if (iterator.hasNext().not()) {
-                                looping = false
-                            } else {
-                                val line = iterator.next()
-                                Timber.d("got line $line")
+                        Timber.d("started awaiting line")
+                        val line = reader.readLineCancellable()
+                        Timber.d("got line $line")
 
-                                val logLine = LogLine(
-                                    id = idsCounter++,
-                                    line = line,
-                                    context = context,
-                                )
-                                Timber.d("successfully parsed $line to $logLine")
+                        val logLine = LogLine(
+                            id = idsCounter++,
+                            line = line,
+                            context = context,
+                        )
+                        Timber.d("successfully parsed $line to $logLine")
 
-                                if (droppedFirst.not()) {
-                                    droppedFirst = true
-                                } else {
-                                    logLine?.let { send(it) }
-                                }
-                            }
-                        }.join()
+                        if (droppedFirst.not()) {
+                            droppedFirst = true
+                        } else {
+                            logLine?.let { emit(it) }
+                        }
                     }
                 }
             }
@@ -114,5 +106,17 @@ internal class LoggingRepositoryImpl @Inject constructor(
                 process.destroy()
             }
         }
+    }
+
+    private suspend fun BufferedReader.readLineCancellable(): String = withContext(ioDispatcher) {
+        while (true) {
+            yield()
+
+            if (ready()) {
+                return@withContext readLine()
+            }
+        }
+
+        "not reachable"
     }
 }

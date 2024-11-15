@@ -6,13 +6,12 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.EntryPointAccessors
 import dagger.hilt.components.SingletonComponent
 
-val Context.dateTimeFormatter get() = EntryPointAccessors.fromApplication(
-    context = this,
-    entryPoint = DateTimeFormatterEntryPoint::class.java,
-).dateTimeFormatter()
+val Context.dateTimeFormatter get() = EntryPointAccessors
+    .fromApplication<DateTimeFormatterEntryPoint>(this)
+    .dateTimeFormatter
 
 @EntryPoint
 @InstallIn(SingletonComponent::class)
 private interface DateTimeFormatterEntryPoint {
-    fun dateTimeFormatter(): DateTimeFormatter
+    val dateTimeFormatter: DateTimeFormatter
 }

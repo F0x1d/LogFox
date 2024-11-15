@@ -1,8 +1,9 @@
-package com.f0x1d.logfox.arch.di
+package com.f0x1d.logfox.di
 
-import com.f0x1d.logfox.arch.annotations.GsonSkip
+import com.f0x1d.logfox.database.annotations.GsonSkip
 import com.google.gson.ExclusionStrategy
 import com.google.gson.FieldAttributes
+import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
@@ -16,7 +17,7 @@ object GsonModule {
 
     @Provides
     @Singleton
-    fun provideGson() = GsonBuilder()
+    fun provideGson(): Gson = GsonBuilder()
         .addSerializationExclusionStrategy(
             object : ExclusionStrategy {
                 override fun shouldSkipField(f: FieldAttributes) = f.getAnnotation(GsonSkip::class.java) != null

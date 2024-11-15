@@ -157,21 +157,17 @@ const val SetupAdbDialogTestTag = "SetupAdbDialog"
 
 @DayNightPreview
 @Composable
-private fun SetupScreenContentPreview() {
-    LogFoxTheme {
-        SetupScreenContent()
-    }
+private fun SetupScreenContentPreview() = LogFoxTheme {
+    SetupScreenContent()
 }
 
 @DayNightPreview
 @Composable
-private fun SetupScreenContentWithDialogPreview() {
-    LogFoxTheme {
-        SetupScreenContent(
-            state = SetupState(
-                showAdbDialog = true,
-                adbCommand = "HESOYAM",
-            )
+private fun SetupScreenContentWithDialogPreview() = LogFoxTheme {
+    SetupScreenContent(
+        state = SetupState(
+            showAdbDialog = true,
+            adbCommand = "HESOYAM",
         )
-    }
+    )
 }
