@@ -150,7 +150,7 @@ class LoggingService : LifecycleService() {
                         terminal = loggingTerminal,
                         startingId = logs.lastOrNull()?.id ?: 0,
                     ).catch { throwable ->
-                        Timber.e(throwable)
+                        Timber.e("logging flow threw smth", throwable)
 
                         if (throwable is TerminalNotSupportedException) {
                             if (appPreferences.fallbackToDefaultTerminal) {

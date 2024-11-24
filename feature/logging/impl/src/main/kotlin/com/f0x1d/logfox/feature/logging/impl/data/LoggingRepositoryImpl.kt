@@ -9,13 +9,13 @@ import com.f0x1d.logfox.preferences.shared.AppPreferences
 import com.f0x1d.logfox.terminals.base.Terminal
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
-import kotlinx.coroutines.yield
 import timber.log.Timber
 import java.io.BufferedReader
 import javax.inject.Inject
@@ -110,11 +110,11 @@ internal class LoggingRepositoryImpl @Inject constructor(
 
     private suspend fun BufferedReader.readLineCancellable(): String = withContext(ioDispatcher) {
         while (true) {
-            yield()
-
             if (ready()) {
                 return@withContext readLine()
             }
+
+            delay(100L)
         }
 
         "not reachable"

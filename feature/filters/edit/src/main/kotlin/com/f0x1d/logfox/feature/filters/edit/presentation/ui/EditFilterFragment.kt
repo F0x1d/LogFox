@@ -92,7 +92,7 @@ class EditFilterFragment : BaseFragment<FragmentEditFilterBinding>() {
         tidText.doAfterTextChanged { viewModel.tid = it?.toString().orEmpty() }
         packageNameText.doAfterTextChanged { viewModel.packageName = it?.toString().orEmpty() }
         tagText.doAfterTextChanged { viewModel.tag = it?.toString().orEmpty() }
-        contentText.doAfterTextChanged { viewModel.tag = it?.toString().orEmpty() }
+        contentText.doAfterTextChanged { viewModel.content = it?.toString().orEmpty() }
 
         viewModel.state.collectWithLifecycle { state ->
             updateIncludingButton(state.including)
