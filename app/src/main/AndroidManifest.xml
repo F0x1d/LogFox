@@ -14,10 +14,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.LogFox"
-        android:localeConfig="@xml/locales_config">
+        android:localeConfig="@xml/locales_config"
+        android:enableOnBackInvokedCallback="true">
 
         <activity
-            android:name=".ui.activity.MainActivity"
+            android:name=".presentation.ui.activity.MainActivity"
             android:windowSoftInputMode="adjustResize"
             android:launchMode="singleInstance"
             android:exported="true">
@@ -29,7 +30,7 @@
         </activity>
 
         <activity
-            android:name=".ui.activity.OpenFileActivity"
+            android:name=".presentation.ui.activity.OpenFileActivity"
             android:documentLaunchMode="always"
             android:excludeFromRecents="true"
             android:theme="@style/Theme.LogFox.Translucent"

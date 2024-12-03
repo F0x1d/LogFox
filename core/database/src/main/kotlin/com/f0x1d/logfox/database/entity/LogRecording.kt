@@ -1,5 +1,6 @@
 package com.f0x1d.logfox.database.entity
 
+import androidx.compose.runtime.Immutable
 import androidx.room.ColumnInfo
 import androidx.room.Dao
 import androidx.room.Delete
@@ -12,6 +13,7 @@ import com.f0x1d.logfox.model.Identifiable
 import kotlinx.coroutines.flow.Flow
 import java.io.File
 
+@Immutable
 @Entity
 data class LogRecording(
     @ColumnInfo(name = "title") val title: String,

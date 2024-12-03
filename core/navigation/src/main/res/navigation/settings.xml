@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/settingsMenuFragment"
-        android:name="com.f0x1d.logfox.feature.settings.ui.fragment.SettingsMenuFragment"
+        android:name="com.f0x1d.logfox.feature.settings.presentation.ui.fragment.SettingsMenuFragment"
         android:label="SettingsMenuFragment" />
     <action
         android:id="@+id/action_settingsMenuFragment_to_settingsUIFragment"
@@ -46,26 +46,26 @@
 
     <fragment
         android:id="@+id/settingsUIFragment"
-        android:name="com.f0x1d.logfox.feature.settings.ui.fragment.SettingsUIFragment"
+        android:name="com.f0x1d.logfox.feature.settings.presentation.ui.fragment.SettingsUIFragment"
         android:label="SettingsUIFragment" />
 
     <fragment
         android:id="@+id/settingsServiceFragment"
-        android:name="com.f0x1d.logfox.feature.settings.ui.fragment.SettingsServiceFragment"
+        android:name="com.f0x1d.logfox.feature.settings.presentation.ui.fragment.SettingsServiceFragment"
         android:label="SettingsServiceFragment" />
 
     <fragment
         android:id="@+id/settingsNotificationsFragment"
-        android:name="com.f0x1d.logfox.feature.settings.ui.fragment.SettingsNotificationsFragment"
+        android:name="com.f0x1d.logfox.feature.settings.presentation.ui.fragment.SettingsNotificationsFragment"
         android:label="SettingsNotificationsFragment" />
 
     <fragment
         android:id="@+id/settingsCrashesFragment"
-        android:name="com.f0x1d.logfox.feature.settings.ui.fragment.SettingsCrashesFragment"
+        android:name="com.f0x1d.logfox.feature.settings.presentation.ui.fragment.SettingsCrashesFragment"
         android:label="SettingsCrashesFragment" />
 
     <fragment
         android:id="@+id/settingsLinksFragment"
-        android:name="com.f0x1d.logfox.feature.settings.ui.fragment.SettingsLinksFragment"
+        android:name="com.f0x1d.logfox.feature.settings.presentation.ui.fragment.SettingsLinksFragment"
         android:label="SettingsLinksFragment" />
 </navigation>

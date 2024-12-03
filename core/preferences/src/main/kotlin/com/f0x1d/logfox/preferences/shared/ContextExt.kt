@@ -6,13 +6,12 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.EntryPointAccessors
 import dagger.hilt.components.SingletonComponent
 
-val Context.appPreferences get() = EntryPointAccessors.fromApplication(
-    context = this,
-    entryPoint = AppPreferencesEntryPoint::class.java,
-).appPreferences()
+val Context.appPreferences get() = EntryPointAccessors
+    .fromApplication<AppPreferencesEntryPoint>(this)
+    .appPreferences
 
 @EntryPoint
 @InstallIn(SingletonComponent::class)
 private interface AppPreferencesEntryPoint {
-    fun appPreferences(): AppPreferences
+    val appPreferences: AppPreferences
 }

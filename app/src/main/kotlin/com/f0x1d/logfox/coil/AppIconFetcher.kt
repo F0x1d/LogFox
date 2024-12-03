@@ -8,7 +8,7 @@ import coil.fetch.FetchResult
 import coil.fetch.Fetcher
 import coil.request.Options
 import com.f0x1d.logfox.arch.di.IODispatcher
-import com.f0x1d.logfox.model.InstalledApp
+import com.f0x1d.logfox.feature.apps.picker.InstalledApp
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
@@ -35,9 +35,9 @@ class AppIconFetcher(
     class Factory @Inject constructor(
         @ApplicationContext private val context: Context,
         @IODispatcher private val ioDispatcher: CoroutineDispatcher,
-    ) : Fetcher.Factory<InstalledApp> {
+    ) : Fetcher.Factory<com.f0x1d.logfox.feature.apps.picker.InstalledApp> {
         override fun create(
-            data: InstalledApp,
+            data: com.f0x1d.logfox.feature.apps.picker.InstalledApp,
             options: Options,
             imageLoader: ImageLoader,
         ): Fetcher = AppIconFetcher(

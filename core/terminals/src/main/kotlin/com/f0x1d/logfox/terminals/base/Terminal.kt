@@ -1,7 +1,7 @@
 package com.f0x1d.logfox.terminals.base
 
-import com.f0x1d.logfox.model.terminal.TerminalProcess
-import com.f0x1d.logfox.model.terminal.TerminalResult
+import com.f0x1d.logfox.models.TerminalProcess
+import com.f0x1d.logfox.models.TerminalResult
 
 interface Terminal {
     val title: Int
