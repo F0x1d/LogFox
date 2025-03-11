@@ -158,4 +158,5 @@
     <string name="add_to_blacklist">添加到黑名单</string>
     <string name="remove_from_blacklist">从黑名单中移除</string>
     <string name="warning_blacklist">您确定要将此应用添加到黑名单吗？LogFox 将不会监听列入黑名单应用的崩溃</string>
+    <string name="share_logs">分享日志</string>
 </resources>
