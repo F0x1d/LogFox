@@ -1,1 +1,6 @@
-Best LogCat reader for Android, which supports filters, recordings, crashes observing and etc. Also it is beautiful.
+- Material You design
+- [Shizuku](https://shizuku.rikka.app/), Root & ADB support
+- Record logs and export to ZIP with device info
+- Observe and get notifications about Java/JNI crashes and ANRs
+- Powerful filters for logs
+- Accessibility support
