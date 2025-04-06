@@ -158,4 +158,5 @@
     <string name="add_to_blacklist">Aggiungi alla blacklist</string>
     <string name="remove_from_blacklist">Rimuovi dalla blacklist</string>
     <string name="warning_blacklist">Vuoi davvero aggiungere questa app alla blacklist? LogFox non rileva arresti anomali per le app nella blacklist</string>
+    <string name="share_logs">Condividi log</string>
 </resources>
