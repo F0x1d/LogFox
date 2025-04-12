@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="selected_count">
+        <item quantity="other">已選擇 %d 項</item>
+    </plurals>
+    <plurals name="filters_count">
+        <item quantity="other">%d 個過濾器</item>
+    </plurals>
+</resources>
