@@ -1,1 +1,1 @@
-Yet another LogCat reader for Android
+LogCat readers are allowed to be beautiful and useful!
