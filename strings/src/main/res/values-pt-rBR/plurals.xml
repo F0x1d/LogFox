@@ -2,10 +2,12 @@
 <resources>
     <plurals name="selected_count">
         <item quantity="one">%d item selecionado</item>
+        <item quantity="many">%d de itens selecionados</item>
         <item quantity="other">%d itens selecionados</item>
     </plurals>
     <plurals name="filters_count">
         <item quantity="one">%d filtro</item>
+        <item quantity="many">%d de filtros</item>
         <item quantity="other">%d filtros</item>
     </plurals>
 </resources>
