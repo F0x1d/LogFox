@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <locale-config xmlns:android="http://schemas.android.com/apk/res/android">
    <locale android:name="en"/> <!-- English -->
+   <locale android:name="it"/> <!-- Italian -->
+   <locale android:name="pt-BR"/> <!-- Portuguese (Brazil) -->
    <locale android:name="ru"/> <!-- Russian -->
+   <locale android:name="tr/"> <!-- Turkish -->
    <locale android:name="zh-CN"/> <!-- Chinese (Simplified) -->
 </locale-config>
