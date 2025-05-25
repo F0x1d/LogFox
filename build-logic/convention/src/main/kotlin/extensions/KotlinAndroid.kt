@@ -25,6 +25,10 @@ internal fun Project.configureKotlinAndroid(
         targetCompatibility = JavaVersion.VERSION_17
     }
 
+    lint {
+        disable.add("NullSafeMutableLiveData")
+    }
+
     extensions.configure<KotlinAndroidProjectExtension>("kotlin") {
         jvmToolchain(JavaVersion.VERSION_17.toString().toInt())
     }
