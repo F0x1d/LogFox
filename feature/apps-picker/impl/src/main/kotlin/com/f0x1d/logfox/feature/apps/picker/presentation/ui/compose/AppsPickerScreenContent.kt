@@ -1,7 +1,6 @@
 package com.f0x1d.logfox.feature.apps.picker.presentation.ui.compose
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -129,7 +128,6 @@ private fun LoadingContent(modifier: Modifier = Modifier) {
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun AppsContent(
     items: ImmutableList<InstalledApp>,
@@ -147,7 +145,7 @@ private fun AppsContent(
             key = { _, item -> item.id },
             contentType = { _, item -> item.javaClass },
         ) { index, item ->
-            Column(modifier = Modifier.animateItemPlacement()) {
+            Column(modifier = Modifier.animateItem()) {
                 AppContent(
                     item = item,
                     isChecked = remember(checkedItems) {

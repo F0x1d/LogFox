@@ -118,7 +118,7 @@ class CrashTypeConverter {
 
 class FileConverter {
     @TypeConverter
-    fun toFile(value: String) = File(value)
+    fun toFile(value: String?) = File(value)
 
     @TypeConverter
     fun fromFile(value: File) = value.absolutePath
