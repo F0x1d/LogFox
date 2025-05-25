@@ -35,9 +35,9 @@ class AppIconFetcher(
     class Factory @Inject constructor(
         @ApplicationContext private val context: Context,
         @IODispatcher private val ioDispatcher: CoroutineDispatcher,
-    ) : Fetcher.Factory<com.f0x1d.logfox.feature.apps.picker.InstalledApp> {
+    ) : Fetcher.Factory<InstalledApp> {
         override fun create(
-            data: com.f0x1d.logfox.feature.apps.picker.InstalledApp,
+            data: InstalledApp,
             options: Options,
             imageLoader: ImageLoader,
         ): Fetcher = AppIconFetcher(

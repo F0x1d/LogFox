@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!-- Glossary: (use or modify globally)
 log: registro
 logging: coleta/coleta de registros
@@ -5,8 +6,6 @@ crashes: falhas
 backend: backend
 blacklist: ignored apps
 -->
-
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="crashes">Falhas</string>
     <string name="pause">Pausar</string>
