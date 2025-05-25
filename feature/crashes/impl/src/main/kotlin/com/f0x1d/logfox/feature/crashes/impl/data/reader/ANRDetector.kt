@@ -17,12 +17,14 @@ internal class ANRDetector(
     override fun foundFirstLine(line: LogLine) =
         line.tag == commonTag && line.content.startsWith("ANR in ")
 
-    override fun packageFromCollected(lines: List<LogLine>) = lines.first().run {
-        content.indexOf(" (").let {
-            if (it == -1)
-                content.substring(7)
-            else
-                content.substring(7, it)
+    override fun packageFromCollected(lines: List<LogLine>) = runCatching {
+        lines.first().run {
+            content.indexOf(" (").let {
+                if (it == -1)
+                    content.substring(7)
+                else
+                    content.substring(7, it)
+            }
         }
-    }
+    }.getOrElse { "unknown" }
 }

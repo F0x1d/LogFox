@@ -37,14 +37,17 @@ internal abstract class BaseCrashDetector(
             collectedLines.add(line)
         } else {
             linesModifier(collectedLines)
-            collected(
-                makeAppCrash(
-                    crashedAppPackageName = packageFromCollected(collectedLines),
-                    crashType = crashType,
-                    lines = collectedLines
-                ),
-                collectedLines
-            )
+
+            if (collectedLines.isNotEmpty()) {
+                collected(
+                    makeAppCrash(
+                        crashedAppPackageName = packageFromCollected(collectedLines),
+                        crashType = crashType,
+                        lines = collectedLines
+                    ),
+                    collectedLines
+                )
+            }
 
             collecting = false
             collectedFirstLine = null
@@ -80,7 +83,7 @@ internal abstract class BaseCrashDetector(
             appName = appName,
             packageName = crashedAppPackageName,
             crashType = crashType,
-            dateAndTime = lines.first().dateAndTime
+            dateAndTime = lines.firstOrNull()?.dateAndTime ?: System.currentTimeMillis()
         )
     }
 }

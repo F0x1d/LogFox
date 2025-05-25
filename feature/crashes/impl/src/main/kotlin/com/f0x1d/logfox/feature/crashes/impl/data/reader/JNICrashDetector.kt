@@ -33,18 +33,18 @@ internal class JNICrashDetector(
                 firstLineTime + appPreferences.logsUpdateInterval + 1000 > System.currentTimeMillis()
     }
 
-    override fun packageFromCollected(lines: List<LogLine>): String {
+    override fun packageFromCollected(lines: List<LogLine>): String = runCatching {
         lines.forEach {
             if (it.content.contains(">>> ") && it.content.contains(" <<<")) {
-                return it.content.substring(
+                return@runCatching it.content.substring(
                     it.content.indexOf(">>> "),
                     it.content.indexOf(" <<<")
                 ).drop(4)
             }
         }
 
-        return "???"
-    }
+        "unknown"
+    }.getOrElse { "unknown" }
 
     private val LogLine.firstJNICrashLine
         get() = debugTag && content == "*** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***"

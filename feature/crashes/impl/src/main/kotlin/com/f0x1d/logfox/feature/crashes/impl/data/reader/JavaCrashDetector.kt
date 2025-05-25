@@ -17,8 +17,10 @@ internal class JavaCrashDetector(
     override fun foundFirstLine(line: LogLine) =
         line.tag == commonTag && line.content.startsWith("FATAL EXCEPTION: ")
 
-    override fun packageFromCollected(lines: List<LogLine>) = lines[1].content.substring(
-        startIndex = 9,
-        endIndex = lines[1].content.indexOf(","),
-    )
+    override fun packageFromCollected(lines: List<LogLine>) = runCatching {
+        lines[1].content.substring(
+            startIndex = 9,
+            endIndex = lines[1].content.indexOf(","),
+        )
+    }.getOrElse { "unknown" }
 }
