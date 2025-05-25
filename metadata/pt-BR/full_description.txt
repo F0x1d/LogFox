@@ -1,0 +1,6 @@
+- Design em Material You
+- Suporte ao [Shizuku](https://shizuku.rikka.app/), Root, e ADB.
+- Grave os registros e exporte-os para um ZIP com as informações do dispositivo
+- Observa e receba notificações de falhas do Java/JNI e de ANRs
+- Filtros poderosos para os registros
+- Suporte à acessibilidade
