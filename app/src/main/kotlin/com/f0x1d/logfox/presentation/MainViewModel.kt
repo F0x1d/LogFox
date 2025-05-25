@@ -5,6 +5,7 @@ import android.content.Intent
 import com.f0x1d.logfox.arch.hasPermissionToReadLogs
 import com.f0x1d.logfox.arch.startForegroundServiceAvailable
 import com.f0x1d.logfox.arch.viewmodel.BaseViewModel
+import com.f0x1d.logfox.feature.logging.service.presentation.LoggingService
 import com.f0x1d.logfox.preferences.shared.AppPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -29,7 +30,7 @@ class MainViewModel @Inject constructor(
 
     private fun load() {
         if (ctx.hasPermissionToReadLogs) {
-            Intent(ctx, com.f0x1d.logfox.feature.logging.service.presentation.LoggingService::class.java).let {
+            Intent(ctx, LoggingService::class.java).let {
                 if (startForegroundServiceAvailable)
                     ctx.startForegroundService(it)
                 else

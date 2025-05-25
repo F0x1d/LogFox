@@ -1,9 +1,13 @@
-on:
-  workflow_dispatch:
+name: Build APK
 
-  push:
-    branches:
-      - 'master'
+on:
+  workflow_call:
+    inputs:
+      checkout_keystore:
+        description: 'Whether to checkout keystore repository'
+        required: false
+        type: boolean
+        default: true
 
 env:
   KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
@@ -26,6 +30,7 @@ jobs:
           cache: 'gradle'
 
       - name: Checkout keystore repository
+        if: ${{ inputs.checkout_keystore }}
         uses: actions/checkout@v4
         with:
           repository: ${{ secrets.KEYSTORE_GIT_REPOSITORY }}
@@ -40,4 +45,4 @@ jobs:
         with:
           name: logfox-release
           compression-level: 0
-          path: app/build/outputs/apk/release/app-release.apk
+          path: app/build/outputs/apk/release/app-release.apk 

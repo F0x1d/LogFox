@@ -1,0 +1,16 @@
+on:
+  workflow_dispatch:
+
+  push:
+    branches:
+      - 'master'
+
+env:
+  KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
+  ALIAS: ${{ secrets.ALIAS }}
+  KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+
+jobs:
+  build:
+    uses: ./.github/workflows/build_apk_job.yml
+    secrets: inherit
