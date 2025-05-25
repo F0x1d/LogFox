@@ -6,4 +6,5 @@
    <locale android:name="ru"/> <!-- Russian -->
    <locale android:name="tr/"> <!-- Turkish -->
    <locale android:name="zh-CN"/> <!-- Chinese (Simplified) -->
+   <locale android:name="zh-TW"/> <!-- Chinese (Traditional) -->
 </locale-config>
