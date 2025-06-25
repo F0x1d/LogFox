@@ -166,4 +166,5 @@ blacklist: ignored apps
     <string name="remove_from_blacklist">Parar de ignorar app</string>
     <string name="warning_blacklist">Você tem certeza que quer ignorar esse app? O LogFox não coleta as falhas desses apps</string>
     <string name="share_logs">Compartilhar registros</string>
+    <string name="ui">Interface</string>
 </resources>

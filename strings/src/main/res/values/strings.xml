@@ -37,7 +37,7 @@
     <string name="delete">Delete</string>
     <string name="resume">Resume</string>
     <string name="foxbin" translatable="false">foxbin</string>
-    <string name="ui" translatable="false">UI</string>
+    <string name="ui">UI</string>
     <string name="logs_update_interval">Logs update interval</string>
     <string name="in_ms">In ms</string>
     <string name="this_is_not_a_number">This is not a number</string>
