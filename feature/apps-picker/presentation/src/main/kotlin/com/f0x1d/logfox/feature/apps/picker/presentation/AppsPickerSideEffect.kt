@@ -3,7 +3,7 @@ package com.f0x1d.logfox.feature.apps.picker.presentation
 import com.f0x1d.logfox.feature.apps.picker.InstalledApp
 import kotlinx.collections.immutable.ImmutableList
 
-sealed interface AppsPickerSideEffect {
+internal sealed interface AppsPickerSideEffect {
     // Business logic side effects
     data object LoadApps : AppsPickerSideEffect
     data class FilterApps(

@@ -3,7 +3,7 @@ package com.f0x1d.logfox.feature.apps.picker.presentation
 import com.f0x1d.logfox.feature.apps.picker.InstalledApp
 import kotlinx.collections.immutable.ImmutableList
 
-sealed interface AppsPickerCommand {
+internal sealed interface AppsPickerCommand {
     data object BackPressed : AppsPickerCommand
     data class SearchActiveChanged(val active: Boolean) : AppsPickerCommand
     data class QueryChanged(val query: String) : AppsPickerCommand
