@@ -23,10 +23,6 @@
         <item name="android:enforceNavigationBarContrast" tools:targetApi="q">false</item>
     </style>
 
-    <style name="ThemeOverlay.LogFox.PreferenceTheme" parent="PreferenceThemeOverlay">
-        <item name="android:layout">@layout/fragment_settings</item>
-    </style>
-
     <style name="TextAppearance.LogFox.Toolbar.Title" parent="TextAppearance.Material3.ActionBar.Title">
         <item name="fontFamily">@font/google_sans_medium</item>
         <item name="android:fontFamily">@font/google_sans_medium</item>

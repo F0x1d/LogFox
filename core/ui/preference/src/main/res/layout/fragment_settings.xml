@@ -13,7 +13,7 @@
         app:liftOnScroll="true">
 
         <com.google.android.material.appbar.MaterialToolbar
-            style="@style/Widget.LogFox.Toolbar"
+            style="?toolbarStyle"
             android:id="@+id/toolbar"
             app:title="@string/settings" />
     </com.google.android.material.appbar.AppBarLayout>

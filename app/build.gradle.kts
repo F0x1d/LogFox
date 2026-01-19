@@ -24,6 +24,7 @@ dependencies {
     implementation(projects.strings)
     implementation(projects.core.tea.android)
     implementation(projects.core.ui.base)
+    implementation(projects.core.ui.preference)
     implementation(projects.core.ui.icons)
     implementation(projects.core.ui.compose.fragment)
     implementation(projects.core.ui.glide)

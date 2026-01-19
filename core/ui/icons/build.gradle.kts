@@ -5,3 +5,7 @@ plugins {
 android {
     namespace = "com.f0x1d.logfox.core.ui.icons"
 }
+
+dependencies {
+    implementation(libs.material)
+}
