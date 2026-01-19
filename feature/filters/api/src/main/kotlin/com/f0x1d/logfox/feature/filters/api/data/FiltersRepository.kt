@@ -1,11 +1,10 @@
 package com.f0x1d.logfox.feature.filters.api.data
 
-import com.f0x1d.logfox.arch.repository.DatabaseProxyRepository
-import com.f0x1d.logfox.database.entity.UserFilter
-import com.f0x1d.logfox.model.logline.LogLevel
+import com.f0x1d.logfox.feature.database.model.UserFilter
+import com.f0x1d.logfox.feature.logging.api.model.LogLevel
 import kotlinx.coroutines.flow.Flow
 
-interface FiltersRepository : DatabaseProxyRepository<UserFilter> {
+interface FiltersRepository {
 
     fun getAllEnabledAsFlow(): Flow<List<UserFilter>>
 
@@ -35,4 +34,18 @@ interface FiltersRepository : DatabaseProxyRepository<UserFilter> {
         tag: String?,
         content: String?,
     )
+
+    fun getAllAsFlow(): Flow<List<UserFilter>>
+
+    fun getByIdAsFlow(id: Long): Flow<UserFilter?>
+
+    suspend fun getAll(): List<UserFilter>
+
+    suspend fun getById(id: Long): UserFilter?
+
+    suspend fun update(item: UserFilter)
+
+    suspend fun delete(item: UserFilter)
+
+    suspend fun clear()
 }

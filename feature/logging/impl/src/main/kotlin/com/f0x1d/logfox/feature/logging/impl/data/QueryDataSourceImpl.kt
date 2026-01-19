@@ -1,7 +1,6 @@
 package com.f0x1d.logfox.feature.logging.impl.data
 
-import com.f0x1d.logfox.arch.di.DefaultDispatcher
-import com.f0x1d.logfox.feature.logging.api.data.QueryDataSource
+import com.f0x1d.logfox.core.di.DefaultDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -5,10 +5,12 @@ minSdk = "24"
 targetSdk = "35"
 
 kotlin = "2.1.20"
+kotlinx-coroutines = "1.9.0"
 kotlinx-immutable-collections = "0.3.7"
 androidGradlePlugin = "8.7.3"
 ksp = "2.1.20-1.0.32"
 hilt = "2.56.1"
+javax-inject = "1"
 androidx-appcompat = "1.7.0"
 androidx-constraintlayout = "2.2.1"
 androidx-core = "1.16.0"
@@ -42,6 +44,7 @@ androidx-test-espresso = "3.6.1"
 
 [libraries]
 
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 kotlinx-immutable-collections = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinx-immutable-collections" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }
 androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "androidx-constraintlayout" }
@@ -77,6 +80,7 @@ viewpump = { module = "io.github.inflationx:viewpump", version.ref = "viewpump" 
 material = { module = "com.google.android.material:material", version.ref = "material" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
+javax-inject = { module = "javax.inject:javax.inject", version.ref = "javax-inject" }
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 glide-compiler = { module = "com.github.bumptech.glide:ksp", version.ref = "glide" }
 coil = { module = "io.coil-kt:coil", version.ref = "coil" }
@@ -101,6 +105,7 @@ kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", v
 [plugins]
 
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
 android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
@@ -108,6 +113,18 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp"}
 hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
+
+# Convention plugins
+logfox-android-application = { id = "logfox.android.application", version = "unspecified" }
+logfox-android-library = { id = "logfox.android.library", version = "unspecified" }
+logfox-kotlin-jvm = { id = "logfox.kotlin.jvm", version = "unspecified" }
+logfox-android-feature = { id = "logfox.android.feature", version = "unspecified" }
+logfox-android-feature-compose = { id = "logfox.android.feature.compose", version = "unspecified" }
+logfox-android-hilt = { id = "logfox.android.hilt", version = "unspecified" }
+logfox-android-compose = { id = "logfox.android.compose", version = "unspecified" }
+logfox-android-parcelize = { id = "logfox.android.parcelize", version = "unspecified" }
+logfox-android-room = { id = "logfox.android.room", version = "unspecified" }
+logfox-android-tests-snapshot = { id = "logfox.android.tests.snapshot", version = "unspecified" }
 
 [bundles]
 

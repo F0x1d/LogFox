@@ -1,0 +1,87 @@
+package com.f0x1d.logfox.feature.recordings.presentation.list.ui
+
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.core.os.bundleOf
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
+import com.f0x1d.logfox.core.presentation.ui.fragment.compose.BaseComposeFragment
+import com.f0x1d.logfox.feature.database.model.LogRecording
+import com.f0x1d.logfox.feature.recordings.presentation.list.RecordingsCommand
+import com.f0x1d.logfox.feature.recordings.presentation.list.RecordingsSideEffect
+import com.f0x1d.logfox.feature.recordings.presentation.list.RecordingsViewModel
+import com.f0x1d.logfox.feature.recordings.presentation.list.ui.compose.RecordingsScreenContent
+import com.f0x1d.logfox.navigation.Directions
+import com.f0x1d.logfox.core.presentation.dialog.showAreYouSureClearDialog
+import com.f0x1d.logfox.core.presentation.dialog.showAreYouSureDeleteDialog
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+
+@AndroidEntryPoint
+internal class RecordingsFragment : BaseComposeFragment() {
+
+    private val viewModel by viewModels<RecordingsViewModel>()
+
+    @Composable
+    override fun Content() {
+        val state by viewModel.state.collectAsState()
+        val snackbarHostState = remember { SnackbarHostState() }
+        val scope = rememberCoroutineScope()
+
+        val lifecycleOwner = LocalLifecycleOwner.current
+        LaunchedEffect(lifecycleOwner, viewModel.sideEffects) {
+            lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.sideEffects.collect { sideEffect ->
+                    when (sideEffect) {
+                        is RecordingsSideEffect.ShowSnackbar -> scope.launch {
+                            snackbarHostState.showSnackbar(sideEffect.text)
+                        }
+                        is RecordingsSideEffect.OpenRecording -> openDetails(sideEffect.recording)
+                        // Business logic side effects - handled by EffectHandler, ignored here
+                        else -> Unit
+                    }
+                }
+            }
+        }
+
+        val listener = remember {
+            RecordingsScreenListener(
+                onRecordingClick = { openDetails(it) },
+                onRecordingDeleteClick = {
+                    showAreYouSureDeleteDialog {
+                        viewModel.send(RecordingsCommand.Delete(it))
+                    }
+                },
+                onStartStopClick = { viewModel.send(RecordingsCommand.ToggleStartStop) },
+                onPauseResumeClick = { viewModel.send(RecordingsCommand.TogglePauseResume) },
+                onClearClick = {
+                    showAreYouSureClearDialog {
+                        viewModel.send(RecordingsCommand.ClearRecordings)
+                    }
+                },
+                onSaveAllClick = { viewModel.send(RecordingsCommand.SaveAll) },
+            )
+        }
+
+        RecordingsScreenContent(
+            state = state,
+            listener = listener,
+            snackbarHostState = snackbarHostState,
+        )
+    }
+
+    private fun openDetails(recording: LogRecording?) = recording?.id?.also {
+        findNavController().navigate(
+            resId = Directions.action_recordingsFragment_to_recordingBottomSheet,
+            args = bundleOf("recording_id" to it),
+        )
+    }
+}

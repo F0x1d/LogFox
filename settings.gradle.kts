@@ -19,11 +19,8 @@ rootProject.name = "LogFox"
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
-include(
-    ":app",
-    ":shared",
-    ":strings",
-)
+include(":app")
+include(":strings")
 
 includeRecursive(File("core"))
 includeRecursive(File("feature"))

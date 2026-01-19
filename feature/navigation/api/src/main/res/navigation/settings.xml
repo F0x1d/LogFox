@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/settings"
+    app:startDestination="@id/settingsMenuFragment">
+
+    <fragment
+        android:id="@+id/settingsMenuFragment"
+        android:name="com.f0x1d.logfox.feature.preferences.presentation.ui.PreferencesMenuFragment"
+        android:label="SettingsMenuFragment" />
+    <action
+        android:id="@+id/action_settingsMenuFragment_to_settingsUIFragment"
+        app:destination="@id/settingsUIFragment"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
+        app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+        app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    <action
+        android:id="@+id/action_settingsMenuFragment_to_settingsServiceFragment"
+        app:destination="@id/settingsServiceFragment"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
+        app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+        app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    <action
+        android:id="@+id/action_settingsMenuFragment_to_settingsNotificationsFragment"
+        app:destination="@id/settingsNotificationsFragment"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
+        app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+        app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    <action
+        android:id="@+id/action_settingsMenuFragment_to_settingsCrashesFragment"
+        app:destination="@id/settingsCrashesFragment"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
+        app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+        app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    <action
+        android:id="@+id/action_settingsMenuFragment_to_settingsLinksFragment"
+        app:destination="@id/settingsLinksFragment"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
+        app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+        app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+
+    <fragment
+        android:id="@+id/settingsUIFragment"
+        android:name="com.f0x1d.logfox.feature.preferences.presentation.ui.PreferencesUIFragment"
+        android:label="SettingsUIFragment" />
+
+    <fragment
+        android:id="@+id/settingsServiceFragment"
+        android:name="com.f0x1d.logfox.feature.preferences.presentation.ui.PreferencesServiceFragment"
+        android:label="SettingsServiceFragment" />
+
+    <fragment
+        android:id="@+id/settingsNotificationsFragment"
+        android:name="com.f0x1d.logfox.feature.preferences.presentation.ui.PreferencesNotificationsFragment"
+        android:label="SettingsNotificationsFragment" />
+
+    <fragment
+        android:id="@+id/settingsCrashesFragment"
+        android:name="com.f0x1d.logfox.feature.preferences.presentation.ui.PreferencesCrashesFragment"
+        android:label="SettingsCrashesFragment" />
+
+    <fragment
+        android:id="@+id/settingsLinksFragment"
+        android:name="com.f0x1d.logfox.feature.preferences.presentation.ui.PreferencesLinksFragment"
+        android:label="SettingsLinksFragment" />
+</navigation>

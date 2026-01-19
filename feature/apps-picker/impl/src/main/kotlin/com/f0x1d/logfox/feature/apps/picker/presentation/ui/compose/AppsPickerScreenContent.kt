@@ -40,11 +40,11 @@ import com.f0x1d.logfox.feature.apps.picker.InstalledApp
 import com.f0x1d.logfox.feature.apps.picker.presentation.AppsPickerState
 import com.f0x1d.logfox.feature.apps.picker.presentation.ui.AppsPickerScreenListener
 import com.f0x1d.logfox.feature.apps.picker.presentation.ui.MockAppsPickerScreenListener
-import com.f0x1d.logfox.strings.Strings
-import com.f0x1d.logfox.ui.compose.component.button.NavigationBackButton
-import com.f0x1d.logfox.ui.compose.component.search.TopSearchBar
-import com.f0x1d.logfox.ui.compose.preview.DayNightPreview
-import com.f0x1d.logfox.ui.compose.theme.LogFoxTheme
+import com.f0x1d.logfox.feature.strings.Strings
+import com.f0x1d.logfox.compose.designsystem.component.search.TopSearchBar
+import com.f0x1d.logfox.compose.base.preview.DayNightPreview
+import com.f0x1d.logfox.compose.designsystem.component.button.NavigationBackButton
+import com.f0x1d.logfox.compose.designsystem.theme.LogFoxTheme
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentListOf

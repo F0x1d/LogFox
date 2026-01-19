@@ -1,6 +1,6 @@
 package com.f0x1d.logfox.feature.crashes.impl.data.reader.base
 
-import com.f0x1d.logfox.model.logline.LogLine
+import com.f0x1d.logfox.feature.logging.api.model.LogLine
 
 internal class DefaultChecker {
 

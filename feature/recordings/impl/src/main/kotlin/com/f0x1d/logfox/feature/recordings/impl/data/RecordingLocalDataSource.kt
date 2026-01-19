@@ -1,0 +1,18 @@
+package com.f0x1d.logfox.feature.recordings.impl.data
+
+import com.f0x1d.logfox.feature.database.model.LogRecording
+import com.f0x1d.logfox.feature.logging.api.model.LogLine
+import com.f0x1d.logfox.feature.recordings.api.data.RecordingState
+import kotlinx.coroutines.flow.StateFlow
+
+internal interface RecordingLocalDataSource {
+    val recordingState: StateFlow<RecordingState>
+    val reader: suspend (LogLine) -> Unit
+
+    suspend fun record()
+    suspend fun pause()
+    suspend fun resume()
+    suspend fun end(): LogRecording?
+
+    suspend fun loggingStopped()
+}

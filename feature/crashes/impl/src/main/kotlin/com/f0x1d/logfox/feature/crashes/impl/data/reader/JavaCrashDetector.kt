@@ -1,10 +1,10 @@
 package com.f0x1d.logfox.feature.crashes.impl.data.reader
 
 import android.content.Context
-import com.f0x1d.logfox.database.entity.AppCrash
-import com.f0x1d.logfox.database.entity.CrashType
+import com.f0x1d.logfox.feature.database.model.AppCrash
+import com.f0x1d.logfox.feature.database.model.CrashType
 import com.f0x1d.logfox.feature.crashes.impl.data.reader.base.BaseCrashDetector
-import com.f0x1d.logfox.model.logline.LogLine
+import com.f0x1d.logfox.feature.logging.api.model.LogLine
 
 internal class JavaCrashDetector(
     context: Context,

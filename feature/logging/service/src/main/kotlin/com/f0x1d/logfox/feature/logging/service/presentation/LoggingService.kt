@@ -7,27 +7,32 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.ServiceCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
-import com.f0x1d.logfox.arch.EXIT_APP_INTENT_ID
-import com.f0x1d.logfox.arch.LOGGING_STATUS_CHANNEL_ID
-import com.f0x1d.logfox.arch.OPEN_APP_INTENT_ID
-import com.f0x1d.logfox.arch.activityManager
-import com.f0x1d.logfox.arch.di.DefaultDispatcher
-import com.f0x1d.logfox.arch.makeServicePendingIntent
-import com.f0x1d.logfox.arch.toast
-import com.f0x1d.logfox.database.entity.UserFilter
-import com.f0x1d.logfox.feature.crashes.api.data.CrashesController
-import com.f0x1d.logfox.feature.filters.api.data.FiltersRepository
-import com.f0x1d.logfox.feature.logging.api.data.LoggingRepository
-import com.f0x1d.logfox.feature.logging.api.data.LogsDataSource
-import com.f0x1d.logfox.feature.logging.api.model.suits
-import com.f0x1d.logfox.feature.recordings.api.data.RecordingController
-import com.f0x1d.logfox.model.exception.TerminalNotSupportedException
-import com.f0x1d.logfox.model.logline.LogLine
-import com.f0x1d.logfox.preferences.shared.AppPreferences
-import com.f0x1d.logfox.strings.Strings
-import com.f0x1d.logfox.terminals.DefaultTerminal
-import com.f0x1d.logfox.terminals.base.Terminal
-import com.f0x1d.logfox.ui.Icons
+import com.f0x1d.logfox.core.context.EXIT_APP_INTENT_ID
+import com.f0x1d.logfox.core.context.LOGGING_STATUS_CHANNEL_ID
+import com.f0x1d.logfox.core.context.OPEN_APP_INTENT_ID
+import com.f0x1d.logfox.core.context.activityManager
+import com.f0x1d.logfox.core.context.makeServicePendingIntent
+import com.f0x1d.logfox.core.context.toast
+import com.f0x1d.logfox.core.di.DefaultDispatcher
+import com.f0x1d.logfox.core.presentation.Icons
+import com.f0x1d.logfox.feature.crashes.api.domain.ProcessLogLineCrashesUseCase
+import com.f0x1d.logfox.feature.database.model.UserFilter
+import com.f0x1d.logfox.feature.filters.api.domain.GetAllEnabledFiltersFlowUseCase
+import com.f0x1d.logfox.feature.filters.api.model.suits
+import com.f0x1d.logfox.feature.logging.api.domain.StartLoggingUseCase
+import com.f0x1d.logfox.feature.logging.api.domain.UpdateLogsUseCase
+import com.f0x1d.logfox.feature.preferences.domain.GetLogsDisplayLimitUseCase
+import com.f0x1d.logfox.feature.preferences.domain.GetLogsUpdateIntervalUseCase
+import com.f0x1d.logfox.feature.preferences.domain.ShouldFallbackToDefaultTerminalUseCase
+import com.f0x1d.logfox.feature.logging.api.model.LogLine
+import com.f0x1d.logfox.feature.recordings.api.domain.NotifyLoggingStoppedUseCase
+import com.f0x1d.logfox.feature.recordings.api.domain.ProcessLogLineRecordingUseCase
+import com.f0x1d.logfox.feature.strings.Strings
+import com.f0x1d.logfox.feature.terminals.base.Terminal
+import com.f0x1d.logfox.feature.terminals.domain.ExitTerminalUseCase
+import com.f0x1d.logfox.feature.terminals.domain.GetDefaultTerminalUseCase
+import com.f0x1d.logfox.feature.terminals.domain.GetSelectedTerminalUseCase
+import com.f0x1d.logfox.feature.terminals.exception.TerminalNotSupportedException
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
@@ -60,25 +65,40 @@ class LoggingService : LifecycleService() {
     private val binder = LocalBinder()
 
     @Inject
-    lateinit var loggingRepository: LoggingRepository
+    lateinit var startLoggingUseCase: StartLoggingUseCase
 
     @Inject
-    lateinit var crashesController: CrashesController
+    lateinit var updateLogsUseCase: UpdateLogsUseCase
 
     @Inject
-    lateinit var recordingController: RecordingController
+    lateinit var processLogLineCrashesUseCase: ProcessLogLineCrashesUseCase
 
     @Inject
-    lateinit var filtersRepository: FiltersRepository
+    lateinit var processLogLineRecordingUseCase: ProcessLogLineRecordingUseCase
 
     @Inject
-    lateinit var logsDataSource: LogsDataSource
+    lateinit var notifyLoggingStoppedUseCase: NotifyLoggingStoppedUseCase
 
     @Inject
-    lateinit var appPreferences: AppPreferences
+    lateinit var getAllEnabledFiltersFlowUseCase: GetAllEnabledFiltersFlowUseCase
 
     @Inject
-    lateinit var terminals: Array<Terminal>
+    lateinit var getSelectedTerminalUseCase: GetSelectedTerminalUseCase
+
+    @Inject
+    lateinit var getDefaultTerminalUseCase: GetDefaultTerminalUseCase
+
+    @Inject
+    lateinit var exitTerminalUseCase: ExitTerminalUseCase
+
+    @Inject
+    lateinit var getLogsUpdateIntervalUseCase: GetLogsUpdateIntervalUseCase
+
+    @Inject
+    lateinit var getLogsDisplayLimitUseCase: GetLogsDisplayLimitUseCase
+
+    @Inject
+    lateinit var shouldFallbackToDefaultTerminalUseCase: ShouldFallbackToDefaultTerminalUseCase
 
     @Inject
     lateinit var mainActivityPendingIntentProvider: MainActivityPendingIntentProvider
@@ -99,8 +119,7 @@ class LoggingService : LifecycleService() {
         startForeground(-1, notification())
         startLogging()
 
-        filtersState = filtersRepository
-            .getAllEnabledAsFlow()
+        filtersState = getAllEnabledFiltersFlowUseCase()
             .stateIn(
                 scope = lifecycleScope,
                 started = SharingStarted.Eagerly,
@@ -126,7 +145,7 @@ class LoggingService : LifecycleService() {
         Timber.d("startLogging")
         if (loggingJob?.isActive == true) return
 
-        var loggingTerminal = terminals[appPreferences.selectedTerminalIndex]
+        var loggingTerminal = getSelectedTerminalUseCase()
 
         Timber.d("selected terminal $loggingTerminal")
 
@@ -134,11 +153,11 @@ class LoggingService : LifecycleService() {
             try {
                 launch {
                     while (true) {
-                        delay(appPreferences.logsUpdateInterval)
+                        delay(getLogsUpdateIntervalUseCase())
 
                         logsMutex.withLock {
                             Timber.d("sending update logs to store")
-                            logsDataSource.updateLogs(logs)
+                            updateLogsUseCase(logs)
                         }
                     }
                 }
@@ -146,18 +165,18 @@ class LoggingService : LifecycleService() {
                 while (true) {
                     Timber.d("in loop starting")
 
-                    loggingRepository.startLogging(
+                    startLoggingUseCase(
                         terminal = loggingTerminal,
                         startingId = logs.lastOrNull()?.id ?: 0,
                     ).catch { throwable ->
-                        Timber.e("logging flow threw smth", throwable)
+                        Timber.e("logging flow threw smth ${throwable.localizedMessage}")
 
                         if (throwable is TerminalNotSupportedException) {
-                            if (appPreferences.fallbackToDefaultTerminal) {
+                            if (shouldFallbackToDefaultTerminalUseCase()) {
                                 toast(Strings.terminal_unavailable_falling_back)
 
-                                loggingTerminal.exit()
-                                loggingTerminal = terminals[DefaultTerminal.INDEX]
+                                exitTerminalUseCase(loggingTerminal)
+                                loggingTerminal = getDefaultTerminalUseCase()
                             } else {
                                 delay(10000) // waiting for 10sec before new attempt
                             }
@@ -172,16 +191,14 @@ class LoggingService : LifecycleService() {
                             logsMutex.withLock {
                                 logs.add(logLine)
 
-                                while (logs.size > appPreferences.logsDisplayLimit)
+                                while (logs.size > getLogsDisplayLimitUseCase())
                                     logs.removeFirst()
                             }
 
-                            crashesController.readers.forEach {
-                                it(logLine)
-                            }
+                            processLogLineCrashesUseCase(logLine)
 
                             if (logLine.suits(filtersState.value)) {
-                                recordingController.reader(logLine)
+                                processLogLineRecordingUseCase(logLine)
                             }
                         }
                     }
@@ -189,10 +206,10 @@ class LoggingService : LifecycleService() {
             } finally {
                 Timber.d("finally block")
                 withContext(NonCancellable) {
-                    recordingController.loggingStopped()
+                    notifyLoggingStoppedUseCase()
                     clearLogs().join()
 
-                    loggingTerminal.exit()
+                    exitTerminalUseCase(loggingTerminal)
                 }
             }
         }
@@ -213,7 +230,7 @@ class LoggingService : LifecycleService() {
             logs.clear()
         }
 
-        logsDataSource.updateLogs(emptyList())
+        updateLogsUseCase(emptyList())
     }
 
     private fun notification() = NotificationCompat.Builder(this, LOGGING_STATUS_CHANNEL_ID)

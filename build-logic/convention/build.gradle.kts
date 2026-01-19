@@ -1,20 +1,8 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     `kotlin-dsl`
 }
 
 group = "com.f0x1d.logfox.buildlogic"
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
-}
-tasks.withType<KotlinCompile>().configureEach {
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
-    }
-}
 
 dependencies {
     compileOnly(projectLibs.android.gradle.plugin)
@@ -25,36 +13,44 @@ gradlePlugin {
     plugins {
         register("androidApplication") {
             id = "logfox.android.application"
-            implementationClass = "main.AndroidApplicationConventionPlugin"
+            implementationClass = "com.f0x1d.logfox.buildlogic.main.AndroidApplicationConventionPlugin"
         }
         register("androidLibrary") {
             id = "logfox.android.library"
-            implementationClass = "main.AndroidLibraryConventionPlugin"
+            implementationClass = "com.f0x1d.logfox.buildlogic.main.AndroidLibraryConventionPlugin"
         }
-        register("androidCore") {
-            id = "logfox.android.core"
-            implementationClass = "main.AndroidCoreConventionPlugin"
+        register("kotlinJvm") {
+            id = "logfox.kotlin.jvm"
+            implementationClass = "com.f0x1d.logfox.buildlogic.main.KotlinJvmConventionPlugin"
         }
         register("androidFeature") {
             id = "logfox.android.feature"
-            implementationClass = "main.feature.AndroidFeatureConventionPlugin"
+            implementationClass = "com.f0x1d.logfox.buildlogic.main.feature.AndroidFeatureConventionPlugin"
         }
         register("androidFeatureCompose") {
             id = "logfox.android.feature.compose"
-            implementationClass = "main.feature.AndroidComposeFeatureConventionPlugin"
+            implementationClass = "com.f0x1d.logfox.buildlogic.main.feature.AndroidComposeFeatureConventionPlugin"
         }
 
         register("androidHilt") {
             id = "logfox.android.hilt"
-            implementationClass = "additional.AndroidHiltConventionPlugin"
+            implementationClass = "com.f0x1d.logfox.buildlogic.additional.AndroidHiltConventionPlugin"
         }
         register("androidCompose") {
             id = "logfox.android.compose"
-            implementationClass = "additional.AndroidComposeConventionPlugin"
+            implementationClass = "com.f0x1d.logfox.buildlogic.additional.AndroidComposeConventionPlugin"
         }
-        register("androidUnitTests") {
-            id = "logfox.android.unitTests"
-            implementationClass = "additional.tests.AndroidUnitTestsConventionPlugin"
+        register("androidParcelize") {
+            id = "logfox.android.parcelize"
+            implementationClass = "com.f0x1d.logfox.buildlogic.additional.AndroidParcelizeConventionPlugin"
+        }
+        register("androidRoom") {
+            id = "logfox.android.room"
+            implementationClass = "com.f0x1d.logfox.buildlogic.additional.AndroidRoomConventionPlugin"
+        }
+        register("androidTestsSnapshot") {
+            id = "logfox.android.tests.snapshot"
+            implementationClass = "com.f0x1d.logfox.buildlogic.additional.tests.AndroidSnapshotTestsConventionPlugin"
         }
     }
 }

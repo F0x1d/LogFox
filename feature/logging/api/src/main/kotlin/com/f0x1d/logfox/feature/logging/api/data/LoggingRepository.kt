@@ -1,7 +1,7 @@
 package com.f0x1d.logfox.feature.logging.api.data
 
-import com.f0x1d.logfox.model.logline.LogLine
-import com.f0x1d.logfox.terminals.base.Terminal
+import com.f0x1d.logfox.feature.logging.api.model.LogLine
+import com.f0x1d.logfox.feature.terminals.base.Terminal
 import kotlinx.coroutines.flow.Flow
 
 interface LoggingRepository {

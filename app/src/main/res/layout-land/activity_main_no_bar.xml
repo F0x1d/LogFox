@@ -17,7 +17,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         tools:layout="@layout/fragment_logs" />
 
-    <com.f0x1d.logfox.ui.view.CustomApplyInsetsNavigationRailView
+    <com.f0x1d.logfox.core.presentation.view.CustomApplyInsetsNavigationRailView
         android:id="@+id/navigation_rail"
         android:layout_width="wrap_content"
         android:layout_height="0dp"

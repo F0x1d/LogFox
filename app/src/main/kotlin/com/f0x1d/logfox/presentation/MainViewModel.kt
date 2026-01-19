@@ -1,43 +1,30 @@
 package com.f0x1d.logfox.presentation
 
-import android.app.Application
-import android.content.Intent
-import com.f0x1d.logfox.arch.hasPermissionToReadLogs
-import com.f0x1d.logfox.arch.startForegroundServiceAvailable
-import com.f0x1d.logfox.arch.viewmodel.BaseViewModel
-import com.f0x1d.logfox.feature.logging.service.presentation.LoggingService
-import com.f0x1d.logfox.preferences.shared.AppPreferences
+import com.f0x1d.logfox.core.tea.BaseStoreViewModel
+import com.f0x1d.logfox.feature.preferences.data.CrashesSettingsRepository
+import com.f0x1d.logfox.feature.preferences.data.NotificationsSettingsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(
-    private val appPreferences: AppPreferences,
-    application: Application,
-) : BaseViewModel<MainState, MainAction>(
-    initialStateProvider = { MainState },
-    application = application,
-) {
-    var askedNotificationsPermission
-        get() = appPreferences.askedNotificationsPermission
-        set(value) { appPreferences.askedNotificationsPermission = value }
-
-    val openCrashesOnStartup get() = appPreferences.openCrashesOnStartup
-
-    init {
-        load()
-    }
-
-    private fun load() {
-        if (ctx.hasPermissionToReadLogs) {
-            Intent(ctx, LoggingService::class.java).let {
-                if (startForegroundServiceAvailable)
-                    ctx.startForegroundService(it)
-                else
-                    ctx.startService(it)
+internal class MainViewModel
+    @Inject
+    constructor(
+        reducer: MainReducer,
+        effectHandler: MainEffectHandler,
+        private val notificationsSettingsRepository: NotificationsSettingsRepository,
+        private val crashesSettingsRepository: CrashesSettingsRepository,
+    ) : BaseStoreViewModel<MainState, MainCommand, MainSideEffect>(
+            initialState = MainState,
+            reducer = reducer,
+            effectHandlers = listOf(effectHandler),
+            initialSideEffect = MainSideEffect.StartLoggingServiceIfNeeded,
+        ) {
+        var askedNotificationsPermission
+            get() = notificationsSettingsRepository.askedNotificationsPermission
+            set(value) {
+                notificationsSettingsRepository.askedNotificationsPermission = value
             }
-        } else {
-            sendAction(MainAction.OpenSetup)
-        }
+
+        val openCrashesOnStartup get() = crashesSettingsRepository.openCrashesOnStartup
     }
-}

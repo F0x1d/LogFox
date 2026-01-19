@@ -1,0 +1,12 @@
+plugins {
+    alias(libs.plugins.logfox.android.library)
+}
+
+android {
+    namespace = "com.f0x1d.logfox.feature.copy.impl"
+}
+
+dependencies {
+    implementation(projects.core.context)
+    implementation(projects.strings)
+}

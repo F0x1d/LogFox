@@ -19,18 +19,18 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.transition.ChangeBounds
 import androidx.transition.TransitionManager
 import com.f0x1d.logfox.R
-import com.f0x1d.logfox.arch.contrastedNavBarAvailable
-import com.f0x1d.logfox.arch.gesturesAvailable
-import com.f0x1d.logfox.arch.hasNotificationsPermission
-import com.f0x1d.logfox.arch.isHorizontalOrientation
-import com.f0x1d.logfox.arch.presentation.ui.activity.BaseActivity
+import com.f0x1d.logfox.core.compat.contrastedNavBarAvailable
+import com.f0x1d.logfox.core.compat.gesturesAvailable
+import com.f0x1d.logfox.core.context.hasNotificationsPermission
+import com.f0x1d.logfox.core.context.isHorizontalOrientation
+import com.f0x1d.logfox.core.presentation.ui.activity.BaseActivity
 import com.f0x1d.logfox.databinding.ActivityMainBinding
 import com.f0x1d.logfox.navigation.Directions
 import com.f0x1d.logfox.navigation.NavGraphs
-import com.f0x1d.logfox.presentation.MainAction
+import com.f0x1d.logfox.presentation.MainSideEffect
 import com.f0x1d.logfox.presentation.MainViewModel
-import com.f0x1d.logfox.strings.Strings
-import com.f0x1d.logfox.ui.Icons
+import com.f0x1d.logfox.feature.strings.Strings
+import com.f0x1d.logfox.core.presentation.Icons
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -94,9 +94,10 @@ class MainActivity: BaseActivity<ActivityMainBinding>(), NavController.OnDestina
             viewModel.askedNotificationsPermission = true
         }
 
-        viewModel.actions.collectWithLifecycle { action ->
-            when (action) {
-                is MainAction.OpenSetup -> navController.navigate(Directions.action_global_setupFragment)
+        viewModel.sideEffects.collectWithLifecycle { sideEffect ->
+            when (sideEffect) {
+                MainSideEffect.OpenSetup -> navController.navigate(Directions.action_global_setupFragment)
+                MainSideEffect.StartLoggingServiceIfNeeded -> Unit // Handled by EffectHandler
             }
         }
     }
@@ -166,7 +167,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(), NavController.OnDestina
             window.navigationBarColor = when {
                 barShown && !isHorizontalOrientation -> Color.TRANSPARENT
 
-                else -> getColor(com.f0x1d.logfox.arch.R.color.navbar_transparent_background)
+                else -> getColor(com.f0x1d.logfox.core.presentation.R.color.navbar_transparent_background)
             }
         } else if (gesturesAvailable) {
             window.isNavigationBarContrastEnforced = !(barShown && !isHorizontalOrientation)

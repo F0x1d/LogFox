@@ -6,5 +6,17 @@ android.namespace = "com.f0x1d.logfox.feature.recordings.impl"
 
 dependencies {
     implementation(projects.feature.recordings.api)
+    implementation(projects.feature.recordings.presentation)
     implementation(projects.feature.logging.api)
+
+    implementation(projects.core.di)
+    implementation(projects.core.context)
+    implementation(projects.feature.database.api)
+    implementation(projects.feature.datetime.api)
+    implementation(projects.feature.preferences.api)
+    implementation(projects.feature.terminals.api)
+    implementation(projects.core.presentation)
+    implementation(projects.strings)
+
+
 }

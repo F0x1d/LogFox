@@ -1,6 +1,6 @@
 package com.f0x1d.logfox.di
 
-import com.f0x1d.logfox.database.annotations.GsonSkip
+import com.f0x1d.logfox.core.utils.GsonSkip
 import com.google.gson.ExclusionStrategy
 import com.google.gson.FieldAttributes
 import com.google.gson.Gson

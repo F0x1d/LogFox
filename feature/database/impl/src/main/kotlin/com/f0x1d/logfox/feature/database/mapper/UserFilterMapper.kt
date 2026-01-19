@@ -1,0 +1,30 @@
+package com.f0x1d.logfox.feature.database.mapper
+
+import com.f0x1d.logfox.feature.database.entity.UserFilterEntity
+import com.f0x1d.logfox.feature.database.model.UserFilter
+
+internal fun UserFilterEntity.toDomain() = UserFilter(
+    id = id,
+    including = including,
+    allowedLevels = allowedLevels,
+    uid = uid,
+    pid = pid,
+    tid = tid,
+    packageName = packageName,
+    tag = tag,
+    content = content,
+    enabled = enabled,
+)
+
+internal fun UserFilter.toEntity() = UserFilterEntity(
+    id = id,
+    including = including,
+    allowedLevels = allowedLevels,
+    uid = uid,
+    pid = pid,
+    tid = tid,
+    packageName = packageName,
+    tag = tag,
+    content = content,
+    enabled = enabled,
+)
