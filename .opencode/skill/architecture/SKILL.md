@@ -1,7 +1,11 @@
-# Architecture Decision Record: Android Application Architecture
+---
+name: Android Architecture
+description: This skill defines the only right architecture for android projects. Activate when doing big tasks (related to several files and their interconnections) in android projects
+---
 
-## Context
-This document defines the architectural rules and patterns for building Android applications in this project. It establishes conventions for state management, layer separation, dependency injection, modularization, and UI patterns using both Views and Jetpack Compose.
+# Architecture Skill: Android Application Architecture
+
+This skill defines the architectural rules and patterns for building Android applications in this project. It establishes conventions for state management, layer separation, dependency injection, modularization, and UI patterns using both Views and Jetpack Compose.
 
 ---
 
@@ -292,89 +296,6 @@ internal class AuthViewModel @Inject constructor(
 typealias AuthStore = Store<AuthState, AuthCommand, AuthSideEffect>
 ```
 
-### Complete Data Flow
-```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                              UI LAYER                                       │
-│  ┌─────────────────────────────────────────────────────────────────────┐   │
-│  │                         Fragment / Composable                        │   │
-│  │  ┌─────────────┐    ┌─────────────┐    ┌─────────────────────────┐  │   │
-│  │  │   render()  │◄───│    state    │    │   handleSideEffect()    │  │   │
-│  │  │  (UI state) │    │  StateFlow  │    │  (navigation/toast)     │  │   │
-│  │  └─────────────┘    └─────────────┘    └─────────────────────────┘  │   │
-│  │         │                  ▲                       ▲                 │   │
-│  │         │ send(Command)    │                       │ sideEffects     │   │
-│  │         ▼                  │                       │ SharedFlow      │   │
-│  │  ┌─────────────────────────┴───────────────────────┴─────────────┐  │   │
-│  │  │                        ViewModel                               │  │   │
-│  │  └───────────────────────────────────────────────────────────────┘  │   │
-│  └─────────────────────────────────────────────────────────────────────┘   │
-└─────────────────────────────────────────────────────────────────────────────┘
-                                  │
-                                  ▼
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                             STORE                                           │
-│  ┌─────────────┐         ┌─────────────┐         ┌─────────────────────┐   │
-│  │   Command   │ ──────► │   Reducer   │ ──────► │     SideEffect      │   │
-│  │             │         │ (pure func) │         │                     │   │
-│  └─────────────┘         └─────────────┘         └─────────────────────┘   │
-│                                 │                     │         │           │
-│                                 ▼                     │         │           │
-│                          ┌───────────┐                │         │           │
-│                          │   State   │                │         │           │
-│                          │  (new)    │                │         │           │
-│                          └───────────┘                │         │           │
-│                                                       │         │           │
-│                          ┌────────────────────────────┘         │           │
-│                          │                                      │           │
-│                          ▼                                      ▼           │
-│               ┌───────────────────┐                   ┌─────────────────┐  │
-│               │  EffectHandler(s) │                   │  UI (Fragment)  │  │
-│               │  (network, etc.)  │                   │ (nav, toast)    │  │
-│               └───────────────────┘                   └─────────────────┘  │
-│                          │                                                  │
-│                          │ onCommand (suspend)                              │
-│                          │ withContext(Main)                                │
-│                          ▼                                                  │
-│                    ┌───────────┐                                            │
-│                    │   Store   │                                            │
-│                    │  (send)   │  ◄── Must be called from Main thread       │
-│                    └───────────┘                                            │
-└─────────────────────────────────────────────────────────────────────────────┘
-                                  │
-                                  │ via Use Cases
-                                  ▼
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                          DOMAIN LAYER                                       │
-│  ┌─────────────────────────────────────────────────────────────────────┐   │
-│  │                          Use Cases                                   │   │
-│  │              (invoke operator, returns Result<T>)                    │   │
-│  └─────────────────────────────────────────────────────────────────────┘   │
-└─────────────────────────────────────────────────────────────────────────────┘
-                                  │
-                                  ▼
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                           DATA LAYER                                        │
-│  ┌─────────────────────────────────────────────────────────────────────┐   │
-│  │                   Repository Implementations                         │   │
-│  └─────────────────────────────────────────────────────────────────────┘   │
-│                    ┌─────────────┴─────────────┐                           │
-│                    ▼                           ▼                            │
-│  ┌─────────────────────────┐    ┌─────────────────────────┐                │
-│  │   Remote Data Source    │    │    Local Data Source    │                │
-│  └─────────────────────────┘    └─────────────────────────┘                │
-└─────────────────────────────────────────────────────────────────────────────┘
-```
-
-### Key Flow Steps
-1. **User Action**: Fragment receives user input, calls `viewModel.send(Command)`
-2. **Reducer**: Store passes Command to Reducer, which returns new State + SideEffects
-3. **State Update**: Store updates StateFlow, Fragment receives new state via `render()`
-4. **SideEffect Emission**: Store emits SideEffects to SharedFlow (for UI) AND passes to EffectHandlers
-5. **UI SideEffects**: Fragment receives SideEffects via `handleSideEffect()`, performs navigation/toast
-6. **Business SideEffects**: EffectHandlers process SideEffects asynchronously (network, persistence)
-7. **Feedback**: EffectHandlers call `onCommand` (suspend) which uses `withContext(Main)` to call `Store.send()`
-
 ---
 
 ## 2. Clean Architecture
@@ -387,14 +308,10 @@ Each feature/module contains three layers:
 
 ### Dependency Rules
 ```
-┌─────────────────┐
-│  Presentation   │ ──────► Domain (api module)
-└─────────────────┘
-                              ▲
-┌─────────────────┐           │
-│      Data       │ ──────────┘
-│  (impl module)  │
-└─────────────────┘
+Presentation ──────► Domain (api module)
+                      ▲
+Data         ─────────┘
+(impl module)
 ```
 
 **Critical Rules:**
@@ -456,15 +373,6 @@ internal class MarkOnboardingCompletedUseCaseImpl @Inject constructor(
 
     override suspend fun invoke() {
         onboardingRepository.markOnboardingCompleted()
-    }
-}
-
-// Usage in ViewModel - clean call-site
-private fun login(email: String, password: String) {
-    viewModelScope.launch {
-        loginUseCase(email, password) // Clean call-site via invoke operator
-            .onSuccess { user -> /* handle success */ }
-            .onFailure { error -> /* handle error */ }
     }
 }
 ```
@@ -1151,24 +1059,18 @@ feature/common/
 ### Dependency Rules Between Modules
 
 ```
-┌─────────────────────────────────────────────────────┐
-│                    :app                             │
-│  (depends on all presentation and impl modules)     │
-└─────────────────────────────────────────────────────┘
-                         │
-         ┌───────────────┼───────────────┐
-         ▼               ▼               ▼
-┌─────────────┐   ┌─────────────┐   ┌─────────────┐
-│ :feature:   │   │ :feature:   │   │ :core:      │
-│ auth:       │   │ profile:    │   │ network:    │
-│ presentation│   │ presentation│   │ impl        │
-└─────────────┘   └─────────────┘   └─────────────┘
-      │                 │                 │
-      ▼                 ▼                 ▼
-┌─────────────┐   ┌─────────────┐   ┌─────────────┐
-│ :feature:   │   │ :feature:   │   │ :core:      │
-│ auth:api    │   │ profile:api │   │ network:api │
-└─────────────┘   └─────────────┘   └─────────────┘
+                    :app
+ (depends on all presentation and impl modules)
+                     │
+     ┌───────────────┼───────────────┐
+     ▼               ▼               ▼
+:feature:       :feature:       :core:
+auth:           profile:        network:
+presentation    presentation    impl
+     │               │               │
+     ▼               ▼               ▼
+:feature:       :feature:       :core:
+auth:api        profile:api     network:api
 ```
 
 **Critical Rules:**

@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.logfox.android.feature.compose)
+    alias(libs.plugins.logfox.android.tests.snapshot)
 }
 
 android.namespace = "com.f0x1d.logfox.feature.setup.presentation"

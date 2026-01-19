@@ -4,6 +4,7 @@
 .externalNativeBuild
 .gradle
 .idea
+.kotlin
 build
 /app/release
 /captures

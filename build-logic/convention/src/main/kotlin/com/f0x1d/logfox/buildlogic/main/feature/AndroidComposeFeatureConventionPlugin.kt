@@ -10,7 +10,6 @@ class AndroidComposeFeatureConventionPlugin : Plugin<Project> {
         with(pluginManager) {
             apply(AndroidFeatureConventionPlugin::class.java)
             apply(AndroidComposeConventionPlugin::class.java)
-            apply(AndroidSnapshotTestsConventionPlugin::class.java)
         }
     }
 }
