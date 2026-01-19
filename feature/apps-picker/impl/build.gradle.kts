@@ -5,7 +5,7 @@ plugins {
 android.namespace = "com.f0x1d.logfox.feature.apps.picker.impl"
 
 dependencies {
-    implementation(projects.feature.appsPicker.api)
+    api(projects.feature.appsPicker.api)
 
     implementation(libs.bundles.androidx)
 }

@@ -5,7 +5,7 @@ plugins {
 android.namespace = "com.f0x1d.logfox.feature.setup.impl"
 
 dependencies {
-    implementation(projects.feature.setup.api)
+    api(projects.feature.setup.api)
 
     implementation(projects.core.context)
     implementation(projects.feature.copy.impl)

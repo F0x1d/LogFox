@@ -20,7 +20,6 @@ android {
 }
 
 dependencies {
-    implementation(projects.feature.logging.api)
     implementation(projects.feature.notifications.api)
     implementation(projects.strings)
     implementation(projects.core.presentation)
@@ -30,17 +29,13 @@ dependencies {
     implementation(projects.core.utils)
     implementation(projects.feature.navigation.api)
 
-    implementation(projects.feature.database.api)
     implementation(projects.feature.database.impl)
 
-    implementation(projects.feature.terminals.api)
     implementation(projects.feature.terminals.impl)
 
-    implementation(projects.feature.preferences.api)
     implementation(projects.feature.preferences.impl)
     implementation(projects.feature.preferences.presentation)
 
-    implementation(projects.feature.appsPicker.api)
     implementation(projects.feature.appsPicker.impl)
     implementation(projects.feature.appsPicker.presentation)
 

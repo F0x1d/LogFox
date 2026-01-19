@@ -16,7 +16,7 @@ dependencies {
     implementation(projects.feature.preferences.api)
     implementation(projects.core.presentation)
 
-    implementation(projects.feature.crashes.api)
+    api(projects.feature.crashes.api)
 
     implementation(libs.bundles.androidx)
     implementation(libs.bundles.androidx.navigation)
