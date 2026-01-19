@@ -3,8 +3,8 @@ package com.f0x1d.logfox.feature.filters.presentation.list.viewholder
 import android.text.Html
 import android.view.View
 import android.widget.TextView
-import com.f0x1d.logfox.core.presentation.view.OnlyUserCheckedChangeListener
-import com.f0x1d.logfox.core.presentation.viewholder.BaseViewHolder
+import com.f0x1d.logfox.core.ui.view.OnlyUserCheckedChangeListener
+import com.f0x1d.logfox.core.recycler.viewholder.BaseViewHolder
 import com.f0x1d.logfox.feature.database.model.UserFilter
 import com.f0x1d.logfox.feature.filters.presentation.databinding.ItemFilterBinding
 import com.f0x1d.logfox.feature.strings.Strings

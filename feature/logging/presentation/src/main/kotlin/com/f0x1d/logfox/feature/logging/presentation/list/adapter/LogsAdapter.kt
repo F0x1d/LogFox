@@ -2,7 +2,7 @@ package com.f0x1d.logfox.feature.logging.presentation.list.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.f0x1d.logfox.core.presentation.adapter.BaseListAdapter
+import com.f0x1d.logfox.core.recycler.adapter.BaseListAdapter
 import com.f0x1d.logfox.core.recycler.diffCallback
 import com.f0x1d.logfox.feature.logging.api.model.LogLine
 import com.f0x1d.logfox.feature.logging.api.model.ShowLogValues

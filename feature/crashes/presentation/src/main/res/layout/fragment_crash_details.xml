@@ -19,7 +19,7 @@
             app:navigationIcon="@drawable/ic_arrow_back" />
     </com.google.android.material.appbar.AppBarLayout>
 
-    <com.f0x1d.logfox.core.presentation.view.CustomNestedScrollView
+    <com.f0x1d.logfox.core.ui.view.CustomNestedScrollView
         android:id="@+id/scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -165,6 +165,6 @@
                 </HorizontalScrollView>
             </com.google.android.material.card.MaterialCardView>
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </com.f0x1d.logfox.core.presentation.view.CustomNestedScrollView>
+    </com.f0x1d.logfox.core.ui.view.CustomNestedScrollView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

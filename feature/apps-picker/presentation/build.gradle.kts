@@ -9,10 +9,11 @@ dependencies {
 
     implementation(projects.strings)
     implementation(projects.core.di)
-    implementation(projects.core.presentation)
+    implementation(projects.core.ui.compose.fragment)
+    implementation(projects.core.ui.icons)
     implementation(projects.core.tea.android)
-    implementation(projects.core.compose.designSystem)
-    implementation(projects.core.compose.base)
+    implementation(projects.core.ui.compose.designSystem)
+    implementation(projects.core.ui.compose.base)
 
     implementation(libs.bundles.androidx)
     implementation(libs.bundles.androidx.navigation)

@@ -12,11 +12,11 @@ import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.f0x1d.logfox.core.context.isHorizontalOrientation
-import com.f0x1d.logfox.core.presentation.density.dpToPx
-import com.f0x1d.logfox.core.presentation.dialog.showAreYouSureClearDialog
-import com.f0x1d.logfox.core.presentation.dialog.showAreYouSureDeleteDialog
-import com.f0x1d.logfox.core.presentation.view.setClickListenerOn
 import com.f0x1d.logfox.core.tea.BaseStoreFragment
+import com.f0x1d.logfox.core.ui.dialog.showAreYouSureClearDialog
+import com.f0x1d.logfox.core.ui.dialog.showAreYouSureDeleteDialog
+import com.f0x1d.logfox.core.ui.view.density.dpToPx
+import com.f0x1d.logfox.core.ui.view.setClickListenerOn
 import com.f0x1d.logfox.feature.crashes.presentation.R
 import com.f0x1d.logfox.feature.crashes.presentation.common.adapter.CrashesAdapter
 import com.f0x1d.logfox.feature.crashes.presentation.databinding.DialogSortingBinding

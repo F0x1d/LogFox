@@ -14,7 +14,7 @@ dependencies {
     implementation(projects.feature.database.api)
     implementation(projects.feature.navigation.api)
     implementation(projects.feature.preferences.api)
-    implementation(projects.core.presentation)
+    implementation(projects.core.ui.icons)
 
     api(projects.feature.crashes.api)
 

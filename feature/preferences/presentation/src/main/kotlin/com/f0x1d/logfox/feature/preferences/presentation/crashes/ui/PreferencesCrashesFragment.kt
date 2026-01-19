@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import com.f0x1d.logfox.core.context.isHorizontalOrientation
-import com.f0x1d.logfox.core.presentation.view.setupBackButtonForNavController
+import com.f0x1d.logfox.core.ui.view.setupBackButtonForNavController
 import com.f0x1d.logfox.core.tea.BaseStorePreferenceFragment
 import com.f0x1d.logfox.feature.preferences.presentation.R
 import com.f0x1d.logfox.feature.preferences.presentation.crashes.PreferencesCrashesCommand

@@ -13,7 +13,12 @@ dependencies {
     implementation(projects.feature.logging.api)
     implementation(projects.feature.database.api)
     implementation(projects.core.di)
-    implementation(projects.core.presentation)
+    implementation(projects.core.tea.android)
+    implementation(projects.core.ui.base)
+    implementation(projects.core.ui.icons)
+    implementation(projects.core.ui.view)
+    implementation(projects.core.ui.dialog)
+    implementation(projects.core.recycler)
     implementation(projects.feature.navigation.api)
 
     implementation(projects.strings)

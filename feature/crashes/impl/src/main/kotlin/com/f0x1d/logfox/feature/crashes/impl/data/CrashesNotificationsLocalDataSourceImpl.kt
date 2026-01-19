@@ -15,7 +15,7 @@ import com.f0x1d.logfox.core.context.makeBroadcastPendingIntent
 import com.f0x1d.logfox.core.context.notificationManager
 import com.f0x1d.logfox.core.context.notificationManagerCompat
 import com.f0x1d.logfox.core.copy.CopyReceiver
-import com.f0x1d.logfox.core.presentation.Icons
+import com.f0x1d.logfox.core.ui.icons.Icons
 import com.f0x1d.logfox.feature.crashes.api.data.notificationChannelId
 import com.f0x1d.logfox.feature.database.model.AppCrash
 import com.f0x1d.logfox.feature.notifications.api.CRASHES_CHANNEL_GROUP_ID

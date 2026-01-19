@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import com.f0x1d.logfox.core.presentation.view.setupBackButtonForNavController
+import com.f0x1d.logfox.core.ui.view.setupBackButtonForNavController
 import com.f0x1d.logfox.core.tea.BaseStoreFragment
 import com.f0x1d.logfox.feature.logging.presentation.databinding.FragmentLogsExtendedCopyBinding
 import com.f0x1d.logfox.feature.logging.presentation.extended.LogsExtendedCopyCommand

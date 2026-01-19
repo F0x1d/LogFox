@@ -13,7 +13,7 @@ import com.f0x1d.logfox.core.context.activityManager
 import com.f0x1d.logfox.core.context.makeServicePendingIntent
 import com.f0x1d.logfox.core.context.toast
 import com.f0x1d.logfox.core.di.DefaultDispatcher
-import com.f0x1d.logfox.core.presentation.Icons
+import com.f0x1d.logfox.core.ui.icons.Icons
 import com.f0x1d.logfox.feature.crashes.api.domain.ProcessLogLineCrashesUseCase
 import com.f0x1d.logfox.feature.database.model.UserFilter
 import com.f0x1d.logfox.feature.filters.api.domain.GetAllEnabledFiltersFlowUseCase

@@ -10,9 +10,9 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.findNavController
-import com.f0x1d.logfox.core.presentation.dialog.showAreYouSureClearDialog
-import com.f0x1d.logfox.core.presentation.dialog.showAreYouSureDeleteDialog
-import com.f0x1d.logfox.core.presentation.ui.fragment.compose.BaseComposeFragment
+import com.f0x1d.logfox.core.ui.dialog.showAreYouSureClearDialog
+import com.f0x1d.logfox.core.ui.dialog.showAreYouSureDeleteDialog
+import com.f0x1d.logfox.core.ui.compose.BaseComposeFragment
 import com.f0x1d.logfox.feature.database.model.LogRecording
 import com.f0x1d.logfox.feature.recordings.presentation.list.RecordingsCommand
 import com.f0x1d.logfox.feature.recordings.presentation.list.RecordingsSideEffect

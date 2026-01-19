@@ -22,7 +22,12 @@ android {
 dependencies {
     implementation(projects.feature.notifications.api)
     implementation(projects.strings)
-    implementation(projects.core.presentation)
+    implementation(projects.core.tea.android)
+    implementation(projects.core.ui.base)
+    implementation(projects.core.ui.icons)
+    implementation(projects.core.ui.compose.fragment)
+    implementation(projects.core.ui.glide)
+    implementation(projects.core.ui.view)
     implementation(projects.core.context)
     implementation(projects.core.logging)
     implementation(projects.core.di)

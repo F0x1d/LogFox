@@ -8,11 +8,12 @@ android.namespace = "com.f0x1d.logfox.feature.setup.presentation"
 dependencies {
     implementation(projects.feature.setup.api)
 
-    implementation(projects.core.presentation)
+    implementation(projects.core.ui.compose.fragment)
+    implementation(projects.core.ui.icons)
     implementation(projects.core.context)
     implementation(projects.core.tea.android)
     implementation(projects.feature.terminals.api)
-    implementation(projects.core.compose.designSystem)
+    implementation(projects.core.ui.compose.designSystem)
     implementation(projects.strings)
 
     implementation(libs.bundles.androidx)

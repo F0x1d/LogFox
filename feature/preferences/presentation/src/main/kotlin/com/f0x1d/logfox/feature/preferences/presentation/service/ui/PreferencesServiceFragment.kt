@@ -7,10 +7,10 @@ import androidx.preference.Preference
 import androidx.preference.SwitchPreferenceCompat
 import com.f0x1d.logfox.core.context.isHorizontalOrientation
 import com.f0x1d.logfox.core.context.toast
-import com.f0x1d.logfox.core.presentation.Icons
-import com.f0x1d.logfox.core.presentation.view.setupAsListPreference
-import com.f0x1d.logfox.core.presentation.view.setupBackButtonForNavController
 import com.f0x1d.logfox.core.tea.BaseStorePreferenceFragment
+import com.f0x1d.logfox.core.ui.icons.Icons
+import com.f0x1d.logfox.core.ui.preference.setupAsListPreference
+import com.f0x1d.logfox.core.ui.view.setupBackButtonForNavController
 import com.f0x1d.logfox.feature.preferences.presentation.R
 import com.f0x1d.logfox.feature.preferences.presentation.service.PreferencesServiceCommand
 import com.f0x1d.logfox.feature.preferences.presentation.service.PreferencesServiceSideEffect

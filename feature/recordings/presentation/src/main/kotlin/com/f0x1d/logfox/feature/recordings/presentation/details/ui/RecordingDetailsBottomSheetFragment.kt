@@ -10,7 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.f0x1d.logfox.core.context.asUri
 import com.f0x1d.logfox.core.context.shareFileIntent
-import com.f0x1d.logfox.core.presentation.view.applyExtendedTextWatcher
+import com.f0x1d.logfox.core.ui.view.applyExtendedTextWatcher
 import com.f0x1d.logfox.core.tea.BaseStoreBottomSheetFragment
 import com.f0x1d.logfox.feature.recordings.presentation.databinding.SheetRecordingDetailsBinding
 import com.f0x1d.logfox.feature.recordings.presentation.details.RecordingDetailsCommand
@@ -46,7 +46,7 @@ internal class RecordingDetailsBottomSheetFragment :
         it?.let { uri -> send(RecordingDetailsCommand.ExportFile(uri)) }
     }
 
-    private var textWatcher: com.f0x1d.logfox.core.presentation.view.ExtendedTextWatcher? = null
+    private var textWatcher: com.f0x1d.logfox.core.ui.view.ExtendedTextWatcher? = null
 
     override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) = SheetRecordingDetailsBinding.inflate(inflater, container, false)
 

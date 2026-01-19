@@ -4,8 +4,12 @@ plugins {
 
 android {
     namespace = "com.f0x1d.logfox.core.recycler"
+
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
-    implementation(libs.androidx.recyclerview)
+    api(libs.androidx.recyclerview)
 }

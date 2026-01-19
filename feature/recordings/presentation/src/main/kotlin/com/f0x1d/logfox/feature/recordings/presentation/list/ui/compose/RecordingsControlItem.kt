@@ -20,7 +20,7 @@ import androidx.compose.ui.util.lerp
 import com.f0x1d.logfox.compose.base.preview.DayNightPreview
 import com.f0x1d.logfox.compose.designsystem.component.button.VerticalButton
 import com.f0x1d.logfox.compose.designsystem.theme.LogFoxTheme
-import com.f0x1d.logfox.core.presentation.Icons
+import com.f0x1d.logfox.core.ui.icons.Icons
 import com.f0x1d.logfox.feature.recordings.api.data.RecordingState
 import com.f0x1d.logfox.feature.strings.Strings
 

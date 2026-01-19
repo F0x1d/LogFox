@@ -9,7 +9,7 @@ import com.f0x1d.logfox.core.context.STOP_RECORDING_INTENT_ID
 import com.f0x1d.logfox.core.context.doIfNotificationsAllowed
 import com.f0x1d.logfox.core.context.makeBroadcastPendingIntent
 import com.f0x1d.logfox.core.context.notificationManagerCompat
-import com.f0x1d.logfox.core.presentation.Icons
+import com.f0x1d.logfox.core.ui.icons.Icons
 import com.f0x1d.logfox.feature.notifications.api.RECORDING_STATUS_CHANNEL_ID
 import com.f0x1d.logfox.feature.recordings.presentation.receiver.RecordingReceiver
 import com.f0x1d.logfox.feature.strings.Strings

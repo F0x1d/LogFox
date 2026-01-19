@@ -8,11 +8,11 @@ import androidx.preference.Preference
 import com.f0x1d.logfox.core.compat.monetAvailable
 import com.f0x1d.logfox.core.context.catchingNotNumber
 import com.f0x1d.logfox.core.context.isHorizontalOrientation
-import com.f0x1d.logfox.core.presentation.Icons
-import com.f0x1d.logfox.core.presentation.view.setupAsEditTextPreference
-import com.f0x1d.logfox.core.presentation.view.setupAsListPreference
-import com.f0x1d.logfox.core.presentation.view.setupBackButtonForNavController
 import com.f0x1d.logfox.core.tea.BaseStorePreferenceFragment
+import com.f0x1d.logfox.core.ui.icons.Icons
+import com.f0x1d.logfox.core.ui.preference.setupAsEditTextPreference
+import com.f0x1d.logfox.core.ui.preference.setupAsListPreference
+import com.f0x1d.logfox.core.ui.view.setupBackButtonForNavController
 import com.f0x1d.logfox.feature.preferences.presentation.R
 import com.f0x1d.logfox.feature.preferences.presentation.fillWithStrings
 import com.f0x1d.logfox.feature.preferences.presentation.ui.settings.PreferencesUICommand

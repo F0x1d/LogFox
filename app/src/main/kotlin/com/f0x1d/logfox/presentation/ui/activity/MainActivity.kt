@@ -23,8 +23,8 @@ import com.f0x1d.logfox.core.compat.contrastedNavBarAvailable
 import com.f0x1d.logfox.core.compat.gesturesAvailable
 import com.f0x1d.logfox.core.context.hasNotificationsPermission
 import com.f0x1d.logfox.core.context.isHorizontalOrientation
-import com.f0x1d.logfox.core.presentation.Icons
-import com.f0x1d.logfox.core.presentation.ui.activity.BaseActivity
+import com.f0x1d.logfox.core.ui.base.activity.BaseActivity
+import com.f0x1d.logfox.core.ui.icons.Icons
 import com.f0x1d.logfox.databinding.ActivityMainBinding
 import com.f0x1d.logfox.feature.strings.Strings
 import com.f0x1d.logfox.navigation.Directions
@@ -186,7 +186,7 @@ class MainActivity :
                 barShown && !isHorizontalOrientation -> Color.TRANSPARENT
 
                 else -> getColor(
-                    com.f0x1d.logfox.core.presentation.R.color.navbar_transparent_background,
+                    com.f0x1d.logfox.core.ui.theme.R.color.navbar_transparent_background,
                 )
             }
         } else if (gesturesAvailable) {

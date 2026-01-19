@@ -16,6 +16,6 @@ dependencies {
     implementation(projects.feature.datetime.api)
     implementation(projects.feature.preferences.api)
     implementation(projects.feature.terminals.api)
-    implementation(projects.core.presentation)
+    implementation(projects.core.ui.icons)
     implementation(projects.strings)
 }

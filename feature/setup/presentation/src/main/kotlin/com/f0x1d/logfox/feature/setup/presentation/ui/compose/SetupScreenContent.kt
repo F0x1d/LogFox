@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import com.f0x1d.logfox.compose.base.preview.DayNightPreview
 import com.f0x1d.logfox.compose.designsystem.component.button.RichButton
 import com.f0x1d.logfox.compose.designsystem.theme.LogFoxTheme
-import com.f0x1d.logfox.core.presentation.Icons
+import com.f0x1d.logfox.core.ui.icons.Icons
 import com.f0x1d.logfox.feature.setup.presentation.SetupState
 import com.f0x1d.logfox.feature.setup.presentation.ui.MockSetupScreenListener
 import com.f0x1d.logfox.feature.setup.presentation.ui.SetupScreenListener

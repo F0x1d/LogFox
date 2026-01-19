@@ -2,7 +2,7 @@ package com.f0x1d.logfox.feature.logging.presentation.list.viewholder
 
 import android.view.Gravity
 import androidx.appcompat.widget.PopupMenu
-import com.f0x1d.logfox.core.presentation.viewholder.BaseViewHolder
+import com.f0x1d.logfox.core.recycler.viewholder.BaseViewHolder
 import com.f0x1d.logfox.feature.datetime.impl.dateTimeFormatter
 import com.f0x1d.logfox.feature.logging.api.model.LogLine
 import com.f0x1d.logfox.feature.logging.presentation.R

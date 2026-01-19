@@ -16,7 +16,7 @@ dependencies {
     implementation(projects.feature.database.api)
     implementation(projects.feature.preferences.api)
     implementation(projects.feature.terminals.api)
-    implementation(projects.core.presentation)
+    implementation(projects.core.ui.icons)
     implementation(projects.strings)
 
     implementation(libs.bundles.androidx)

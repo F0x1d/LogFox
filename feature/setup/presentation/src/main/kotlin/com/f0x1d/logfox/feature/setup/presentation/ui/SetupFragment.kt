@@ -11,7 +11,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.f0x1d.logfox.core.context.hardRestartApp
-import com.f0x1d.logfox.core.presentation.ui.fragment.compose.BaseComposeFragment
+import com.f0x1d.logfox.core.ui.compose.BaseComposeFragment
 import com.f0x1d.logfox.feature.setup.presentation.SetupCommand
 import com.f0x1d.logfox.feature.setup.presentation.SetupSideEffect
 import com.f0x1d.logfox.feature.setup.presentation.SetupViewModel

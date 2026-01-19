@@ -3,7 +3,7 @@ package com.f0x1d.logfox.feature.crashes.presentation.common.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
-import com.f0x1d.logfox.core.presentation.adapter.BaseListAdapter
+import com.f0x1d.logfox.core.recycler.adapter.BaseListAdapter
 import com.f0x1d.logfox.feature.crashes.presentation.common.viewholder.CrashViewHolder
 import com.f0x1d.logfox.feature.crashes.presentation.databinding.ItemCrashBinding
 import com.f0x1d.logfox.feature.database.model.AppCrashesCount
