@@ -18,4 +18,6 @@ sealed interface CrashDetailsCommand {
     data class ChangeBlacklist(val appCrash: AppCrash) : CrashDetailsCommand
 
     data class DeleteCrash(val appCrash: AppCrash) : CrashDetailsCommand
+
+    data object CopyCrashLog : CrashDetailsCommand
 }

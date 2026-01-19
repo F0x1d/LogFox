@@ -34,4 +34,10 @@ sealed interface LogsCommand {
     data object Resume : LogsCommand
 
     data object ClearSelection : LogsCommand
+
+    data class CopyLog(val logLine: LogLine) : LogsCommand
+
+    data object CopySelectedLogs : LogsCommand
+
+    data class CopyFormattedText(val text: String) : LogsCommand
 }

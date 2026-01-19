@@ -56,11 +56,8 @@ internal class LogsFragment :
             selectedItem = { logLine, selected ->
                 send(LogsCommand.SelectLine(logLine, selected))
             },
-            copyLog = {
-                requireContext().copyText(
-                    text = viewModel.originalOf(it),
-                )
-                snackbar(Strings.text_copied)
+            copyLog = { logLine ->
+                send(LogsCommand.CopyLog(logLine))
             },
         )
     }
@@ -109,8 +106,7 @@ internal class LogsFragment :
                 findNavController().navigate(Directions.action_logsFragment_to_filtersFragment)
             }
             setClickListenerOn(R.id.copy_selected_item) {
-                requireContext().copyText(viewModel.getSelectedItemsContent())
-                snackbar(Strings.text_copied)
+                send(LogsCommand.CopySelectedLogs)
             }
             setClickListenerOn(R.id.extended_copy_selected_item) {
                 findNavController().navigate(
@@ -196,6 +192,11 @@ internal class LogsFragment :
         when (sideEffect) {
             is LogsSideEffect.NavigateToRecordings -> {
                 findNavController().navigate(Directions.action_global_recordingsFragment)
+            }
+
+            is LogsSideEffect.CopyText -> {
+                requireContext().copyText(sideEffect.text)
+                snackbar(Strings.text_copied)
             }
 
             // Business logic side effects - handled by EffectHandler

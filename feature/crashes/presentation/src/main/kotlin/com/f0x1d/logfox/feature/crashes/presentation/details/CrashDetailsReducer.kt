@@ -48,5 +48,16 @@ internal class CrashDetailsReducer @Inject constructor() : Reducer<CrashDetailsS
         is CrashDetailsCommand.DeleteCrash -> state.withSideEffects(
             CrashDetailsSideEffect.DeleteCrash(command.appCrash),
         )
+
+        is CrashDetailsCommand.CopyCrashLog -> {
+            val crashLog = state.crashLog
+            if (crashLog != null) {
+                state.withSideEffects(
+                    CrashDetailsSideEffect.CopyText(crashLog),
+                )
+            } else {
+                state.noSideEffects()
+            }
+        }
     }
 }

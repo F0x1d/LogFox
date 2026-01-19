@@ -121,5 +121,25 @@ internal class LogsReducer @Inject constructor() : Reducer<LogsState, LogsComman
                 LogsSideEffect.UpdateSelectedLogLines(selectedLines = emptyList()),
             )
         }
+
+        is LogsCommand.CopyLog -> {
+            state.withSideEffects(
+                LogsSideEffect.FormatAndCopyLog(command.logLine),
+            )
+        }
+
+        is LogsCommand.CopySelectedLogs -> {
+            state.withSideEffects(
+                LogsSideEffect.FormatAndCopyLogs(
+                    logLines = state.selectedItems.sortedBy { it.dateAndTime },
+                ),
+            )
+        }
+
+        is LogsCommand.CopyFormattedText -> {
+            state.withSideEffects(
+                LogsSideEffect.CopyText(command.text),
+            )
+        }
     }
 }

@@ -165,8 +165,30 @@ internal class LogsEffectHandler @Inject constructor(
                 }
             }
 
+            is LogsSideEffect.FormatAndCopyLog -> {
+                val formattedText = formatLogLineUseCase(
+                    logLine = effect.logLine,
+                    formatDate = dateTimeFormatter::formatDate,
+                    formatTime = dateTimeFormatter::formatTime,
+                )
+                onCommand(LogsCommand.CopyFormattedText(formattedText))
+            }
+
+            is LogsSideEffect.FormatAndCopyLogs -> {
+                val formattedText = effect.logLines.joinToString("\n") { line ->
+                    formatLogLineUseCase(
+                        logLine = line,
+                        formatDate = dateTimeFormatter::formatDate,
+                        formatTime = dateTimeFormatter::formatTime,
+                    )
+                }
+                onCommand(LogsCommand.CopyFormattedText(formattedText))
+            }
+
             // UI side effects - handled by Fragment
-            is LogsSideEffect.NavigateToRecordings -> {
+            is LogsSideEffect.NavigateToRecordings,
+            is LogsSideEffect.CopyText,
+            -> {
                 Unit
             }
         }

@@ -14,4 +14,7 @@ sealed interface CrashDetailsSideEffect {
     data class ChangeBlacklist(val appCrash: AppCrash) : CrashDetailsSideEffect
 
     data class DeleteCrash(val appCrash: AppCrash) : CrashDetailsSideEffect
+
+    // UI side effects
+    data class CopyText(val text: String) : CrashDetailsSideEffect
 }

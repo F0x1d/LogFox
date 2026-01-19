@@ -111,6 +111,9 @@ internal class CrashDetailsEffectHandler @Inject constructor(
             is CrashDetailsSideEffect.DeleteCrash -> {
                 deleteCrashUseCase(effect.appCrash)
             }
+
+            // UI side effects - handled by Fragment
+            is CrashDetailsSideEffect.CopyText -> Unit
         }
     }
 }

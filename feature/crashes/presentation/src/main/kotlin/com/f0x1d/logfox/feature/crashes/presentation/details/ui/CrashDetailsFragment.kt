@@ -143,8 +143,7 @@ internal class CrashDetailsFragment :
         )
 
         copyButton.setOnClickListener {
-            requireContext().copyText(viewModel.state.value.crashLog.orEmpty())
-            snackbar(Strings.text_copied)
+            viewModel.send(CrashDetailsCommand.CopyCrashLog)
         }
 
         shareButton.setOnClickListener {
@@ -185,8 +184,15 @@ internal class CrashDetailsFragment :
     }
 
     override fun handleSideEffect(sideEffect: CrashDetailsSideEffect) {
-        // Business logic side effects are handled by EffectHandler
-        // UI side effects would be handled here
+        when (sideEffect) {
+            is CrashDetailsSideEffect.CopyText -> {
+                requireContext().copyText(sideEffect.text)
+                snackbar(Strings.text_copied)
+            }
+
+            // Business logic side effects are handled by EffectHandler
+            else -> Unit
+        }
     }
 
     @SuppressLint("InlinedApi")
