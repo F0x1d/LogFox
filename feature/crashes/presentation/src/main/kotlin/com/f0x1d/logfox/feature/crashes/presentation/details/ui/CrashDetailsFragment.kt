@@ -21,6 +21,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.f0x1d.logfox.core.compat.notificationsChannelsAvailable
 import com.f0x1d.logfox.core.context.shareIntent
+import com.f0x1d.logfox.core.copy.copyText
 import com.f0x1d.logfox.core.presentation.Colors
 import com.f0x1d.logfox.core.presentation.Icons
 import com.f0x1d.logfox.core.presentation.dialog.showAreYouSureDeleteDialog
@@ -29,7 +30,6 @@ import com.f0x1d.logfox.core.presentation.view.loadIcon
 import com.f0x1d.logfox.core.presentation.view.setClickListenerOn
 import com.f0x1d.logfox.core.presentation.view.setupBackButtonForNavController
 import com.f0x1d.logfox.core.tea.BaseStoreFragment
-import com.f0x1d.logfox.feature.copy.impl.copyText
 import com.f0x1d.logfox.feature.crashes.api.data.notificationChannelId
 import com.f0x1d.logfox.feature.crashes.presentation.R
 import com.f0x1d.logfox.feature.crashes.presentation.databinding.FragmentCrashDetailsBinding

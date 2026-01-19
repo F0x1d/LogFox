@@ -16,7 +16,7 @@ dependencies {
     implementation(projects.core.presentation)
     implementation(projects.core.di)
     implementation(projects.core.context)
-    implementation(projects.feature.copy.impl)
+    implementation(projects.core.copy)
     implementation(projects.feature.datetime.impl)
     implementation(projects.feature.navigation.api)
 

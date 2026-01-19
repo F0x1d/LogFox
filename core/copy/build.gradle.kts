@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.f0x1d.logfox.feature.copy.impl"
+    namespace = "com.f0x1d.logfox.core.copy"
 }
 
 dependencies {

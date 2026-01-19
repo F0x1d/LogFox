@@ -10,7 +10,7 @@ dependencies {
     implementation(projects.strings)
     implementation(projects.core.di)
     implementation(projects.core.context)
-    implementation(projects.feature.copy.impl)
+    implementation(projects.core.copy)
     implementation(projects.feature.database.api)
     implementation(projects.feature.navigation.api)
     implementation(projects.feature.preferences.api)

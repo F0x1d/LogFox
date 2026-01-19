@@ -11,13 +11,13 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.f0x1d.logfox.core.context.isHorizontalOrientation
+import com.f0x1d.logfox.core.copy.copyText
 import com.f0x1d.logfox.core.presentation.Icons
 import com.f0x1d.logfox.core.presentation.view.invalidateNavigationButton
 import com.f0x1d.logfox.core.presentation.view.setClickListenerOn
 import com.f0x1d.logfox.core.presentation.view.setupBackButtonForNavController
 import com.f0x1d.logfox.core.presentation.view.setupCloseButton
 import com.f0x1d.logfox.core.tea.BaseStoreFragment
-import com.f0x1d.logfox.feature.copy.impl.copyText
 import com.f0x1d.logfox.feature.database.model.UserFilter
 import com.f0x1d.logfox.feature.logging.api.model.LogLine
 import com.f0x1d.logfox.feature.logging.api.presentation.LoggingServiceDelegate

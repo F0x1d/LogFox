@@ -1,4 +1,4 @@
-package com.f0x1d.logfox.feature.copy.impl
+package com.f0x1d.logfox.core.copy
 
 import android.content.BroadcastReceiver
 import android.content.Context

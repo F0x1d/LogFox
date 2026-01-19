@@ -18,7 +18,7 @@ dependencies {
     implementation(projects.core.io)
     implementation(projects.core.compat)
     implementation(projects.core.context)
-    implementation(projects.feature.copy.impl)
+    implementation(projects.core.copy)
     implementation(projects.feature.datetime.api)
     implementation(projects.feature.navigation.api)
 

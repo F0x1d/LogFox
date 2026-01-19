@@ -8,7 +8,7 @@ dependencies {
     api(projects.feature.setup.api)
 
     implementation(projects.core.context)
-    implementation(projects.feature.copy.impl)
+    implementation(projects.core.copy)
     implementation(projects.feature.preferences.api)
     implementation(projects.feature.terminals.api)
 
