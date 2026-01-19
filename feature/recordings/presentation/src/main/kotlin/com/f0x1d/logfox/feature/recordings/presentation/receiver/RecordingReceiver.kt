@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class RecordingReceiver: BroadcastReceiver() {
+class RecordingReceiver : BroadcastReceiver() {
 
     companion object {
         const val ACTION_PAUSE_LOGGING = "logfox.PAUSE_LOGGING"

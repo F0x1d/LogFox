@@ -41,7 +41,9 @@ class SetupFragment : BaseComposeFragment() {
                         is SetupSideEffect.ShowSnackbar -> scope.launch {
                             snackbarHostState.showSnackbar(context.getString(sideEffect.textResId))
                         }
+
                         is SetupSideEffect.RestartApp -> context.hardRestartApp()
+
                         // Business logic side effects - handled by EffectHandler, ignore here
                         else -> Unit
                     }

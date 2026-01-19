@@ -25,10 +25,7 @@ data class AppCrash(
 enum class CrashType(val readableName: String) {
     JAVA("Java"),
     JNI("JNI"),
-    ANR("ANR")
+    ANR("ANR"),
 }
 
-data class AppCrashesCount(
-    val lastCrash: AppCrash,
-    val count: Int = 1,
-)
+data class AppCrashesCount(val lastCrash: AppCrash, val count: Int = 1)

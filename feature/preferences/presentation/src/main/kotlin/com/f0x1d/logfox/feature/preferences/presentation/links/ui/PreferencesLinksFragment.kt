@@ -17,12 +17,13 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.chrisbanes.insetter.applyInsetter
 
 @AndroidEntryPoint
-internal class PreferencesLinksFragment : BaseStorePreferenceFragment<
-    PreferencesLinksState,
-    PreferencesLinksCommand,
-    PreferencesLinksSideEffect,
-    PreferencesLinksViewModel,
->() {
+internal class PreferencesLinksFragment :
+    BaseStorePreferenceFragment<
+        PreferencesLinksState,
+        PreferencesLinksCommand,
+        PreferencesLinksSideEffect,
+        PreferencesLinksViewModel,
+        >() {
 
     override val viewModel by viewModels<PreferencesLinksViewModel>()
 

@@ -11,12 +11,9 @@ internal class ServiceSettingsRepositoryImpl @Inject constructor(
     private val localDataSource: ServiceSettingsLocalDataSource,
 ) : ServiceSettingsRepository {
 
-    override fun startOnBoot(): PreferenceStateFlow<Boolean> =
-        localDataSource.startOnBoot().asPreferenceStateFlow()
+    override fun startOnBoot(): PreferenceStateFlow<Boolean> = localDataSource.startOnBoot().asPreferenceStateFlow()
 
-    override fun showLogsFromAppLaunch(): PreferenceStateFlow<Boolean> =
-        localDataSource.showLogsFromAppLaunch().asPreferenceStateFlow()
+    override fun showLogsFromAppLaunch(): PreferenceStateFlow<Boolean> = localDataSource.showLogsFromAppLaunch().asPreferenceStateFlow()
 
-    override fun includeDeviceInfoInArchives(): PreferenceStateFlow<Boolean> =
-        localDataSource.includeDeviceInfoInArchives().asPreferenceStateFlow()
+    override fun includeDeviceInfoInArchives(): PreferenceStateFlow<Boolean> = localDataSource.includeDeviceInfoInArchives().asPreferenceStateFlow()
 }

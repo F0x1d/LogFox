@@ -26,7 +26,8 @@ internal class LogsViewModel @Inject constructor(
     reducer = reducer,
     effectHandlers = listOf(effectHandler),
     initialSideEffect = LogsSideEffect.LoadLogs,
-), DateTimeFormatter by dateTimeFormatter {
+),
+    DateTimeFormatter by dateTimeFormatter {
 
     val viewingFile = fileUri != null
     val viewingFileName = fileUri?.readFileName(context)

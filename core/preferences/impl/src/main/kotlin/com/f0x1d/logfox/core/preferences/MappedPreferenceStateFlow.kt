@@ -15,8 +15,7 @@ internal class MappedPreferenceStateFlowImpl<T : Any, R : Any>(
     override val replayCache: List<R> get() = listOf(value)
 
     @Suppress("UNCHECKED_CAST")
-    override suspend fun collect(collector: FlowCollector<R>): Nothing =
-        preference.asFlow().map(mapGet).collect(collector) as Nothing
+    override suspend fun collect(collector: FlowCollector<R>): Nothing = preference.asFlow().map(mapGet).collect(collector) as Nothing
 
     override fun set(value: R) {
         preference.set(mapSet(value))

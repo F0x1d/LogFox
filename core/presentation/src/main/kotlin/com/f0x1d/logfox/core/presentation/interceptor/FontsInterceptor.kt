@@ -8,7 +8,7 @@ import com.f0x1d.logfox.core.presentation.R
 import io.github.inflationx.viewpump.InflateResult
 import io.github.inflationx.viewpump.Interceptor
 
-class FontsInterceptor(context: Context): Interceptor {
+class FontsInterceptor(context: Context) : Interceptor {
 
     private val boldSansTypeface = ResourcesCompat.getFont(context, R.font.google_sans_medium)
     private val fontsMap = mapOf(
@@ -21,7 +21,7 @@ class FontsInterceptor(context: Context): Interceptor {
         R.id.clear_search_button to boldSansTypeface,
         R.id.log_levels_button to boldSansTypeface,
         R.id.time_text to boldSansTypeface,
-        R.id.including_button to boldSansTypeface
+        R.id.including_button to boldSansTypeface,
     )
 
     override fun intercept(chain: Interceptor.Chain): InflateResult {
@@ -29,8 +29,9 @@ class FontsInterceptor(context: Context): Interceptor {
 
         result.view?.apply {
             fontsMap[id]?.also {
-                if (this is TextView)
+                if (this is TextView) {
                     typeface = it
+                }
             }
         }
 

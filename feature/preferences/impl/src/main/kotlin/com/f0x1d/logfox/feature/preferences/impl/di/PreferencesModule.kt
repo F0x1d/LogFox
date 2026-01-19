@@ -50,7 +50,9 @@ internal interface PreferencesModule {
     // UI Settings
     @Binds
     @Singleton
-    fun bindUISettingsLocalDataSource(impl: UISettingsLocalDataSourceImpl): UISettingsLocalDataSource
+    fun bindUISettingsLocalDataSource(
+        impl: UISettingsLocalDataSourceImpl,
+    ): UISettingsLocalDataSource
 
     @Binds
     @Singleton
@@ -59,7 +61,9 @@ internal interface PreferencesModule {
     // Logs Settings
     @Binds
     @Singleton
-    fun bindLogsSettingsLocalDataSource(impl: LogsSettingsLocalDataSourceImpl): LogsSettingsLocalDataSource
+    fun bindLogsSettingsLocalDataSource(
+        impl: LogsSettingsLocalDataSourceImpl,
+    ): LogsSettingsLocalDataSource
 
     @Binds
     @Singleton
@@ -68,61 +72,89 @@ internal interface PreferencesModule {
     // DateTime Settings
     @Binds
     @Singleton
-    fun bindDateTimeSettingsLocalDataSource(impl: DateTimeSettingsLocalDataSourceImpl): DateTimeSettingsLocalDataSource
+    fun bindDateTimeSettingsLocalDataSource(
+        impl: DateTimeSettingsLocalDataSourceImpl,
+    ): DateTimeSettingsLocalDataSource
 
     @Binds
     @Singleton
-    fun bindDateTimeSettingsRepository(impl: DateTimeSettingsRepositoryImpl): DateTimeSettingsRepository
+    fun bindDateTimeSettingsRepository(
+        impl: DateTimeSettingsRepositoryImpl,
+    ): DateTimeSettingsRepository
 
     // Terminal Settings
     @Binds
     @Singleton
-    fun bindTerminalSettingsLocalDataSource(impl: TerminalSettingsLocalDataSourceImpl): TerminalSettingsLocalDataSource
+    fun bindTerminalSettingsLocalDataSource(
+        impl: TerminalSettingsLocalDataSourceImpl,
+    ): TerminalSettingsLocalDataSource
 
     @Binds
     @Singleton
-    fun bindTerminalSettingsRepository(impl: TerminalSettingsRepositoryImpl): TerminalSettingsRepository
+    fun bindTerminalSettingsRepository(
+        impl: TerminalSettingsRepositoryImpl,
+    ): TerminalSettingsRepository
 
     // Crashes Settings
     @Binds
     @Singleton
-    fun bindCrashesSettingsLocalDataSource(impl: CrashesSettingsLocalDataSourceImpl): CrashesSettingsLocalDataSource
+    fun bindCrashesSettingsLocalDataSource(
+        impl: CrashesSettingsLocalDataSourceImpl,
+    ): CrashesSettingsLocalDataSource
 
     @Binds
     @Singleton
-    fun bindCrashesSettingsRepository(impl: CrashesSettingsRepositoryImpl): CrashesSettingsRepository
+    fun bindCrashesSettingsRepository(
+        impl: CrashesSettingsRepositoryImpl,
+    ): CrashesSettingsRepository
 
     // Service Settings
     @Binds
     @Singleton
-    fun bindServiceSettingsLocalDataSource(impl: ServiceSettingsLocalDataSourceImpl): ServiceSettingsLocalDataSource
+    fun bindServiceSettingsLocalDataSource(
+        impl: ServiceSettingsLocalDataSourceImpl,
+    ): ServiceSettingsLocalDataSource
 
     @Binds
     @Singleton
-    fun bindServiceSettingsRepository(impl: ServiceSettingsRepositoryImpl): ServiceSettingsRepository
+    fun bindServiceSettingsRepository(
+        impl: ServiceSettingsRepositoryImpl,
+    ): ServiceSettingsRepository
 
     // Notifications Settings
     @Binds
     @Singleton
-    fun bindNotificationsSettingsLocalDataSource(impl: NotificationsSettingsLocalDataSourceImpl): NotificationsSettingsLocalDataSource
+    fun bindNotificationsSettingsLocalDataSource(
+        impl: NotificationsSettingsLocalDataSourceImpl,
+    ): NotificationsSettingsLocalDataSource
 
     @Binds
     @Singleton
-    fun bindNotificationsSettingsRepository(impl: NotificationsSettingsRepositoryImpl): NotificationsSettingsRepository
+    fun bindNotificationsSettingsRepository(
+        impl: NotificationsSettingsRepositoryImpl,
+    ): NotificationsSettingsRepository
 
     // Use Cases
     @Binds
-    fun bindGetLogsUpdateIntervalUseCase(impl: GetLogsUpdateIntervalUseCaseImpl): GetLogsUpdateIntervalUseCase
+    fun bindGetLogsUpdateIntervalUseCase(
+        impl: GetLogsUpdateIntervalUseCaseImpl,
+    ): GetLogsUpdateIntervalUseCase
 
     @Binds
-    fun bindGetLogsDisplayLimitUseCase(impl: GetLogsDisplayLimitUseCaseImpl): GetLogsDisplayLimitUseCase
+    fun bindGetLogsDisplayLimitUseCase(
+        impl: GetLogsDisplayLimitUseCaseImpl,
+    ): GetLogsDisplayLimitUseCase
 
     @Binds
-    fun bindShouldFallbackToDefaultTerminalUseCase(impl: ShouldFallbackToDefaultTerminalUseCaseImpl): ShouldFallbackToDefaultTerminalUseCase
+    fun bindShouldFallbackToDefaultTerminalUseCase(
+        impl: ShouldFallbackToDefaultTerminalUseCaseImpl,
+    ): ShouldFallbackToDefaultTerminalUseCase
 
     @Binds
     fun bindGetStartOnBootUseCase(impl: GetStartOnBootUseCaseImpl): GetStartOnBootUseCase
 
     @Binds
-    fun bindGetSelectedTerminalTypeUseCase(impl: GetSelectedTerminalTypeUseCaseImpl): GetSelectedTerminalTypeUseCase
+    fun bindGetSelectedTerminalTypeUseCase(
+        impl: GetSelectedTerminalTypeUseCaseImpl,
+    ): GetSelectedTerminalTypeUseCase
 }

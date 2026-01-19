@@ -9,7 +9,5 @@ import javax.inject.Inject
 internal class GetRecordingStateFlowUseCaseImpl @Inject constructor(
     private val recordingLocalDataSource: RecordingLocalDataSource,
 ) : GetRecordingStateFlowUseCase {
-    override fun invoke(): StateFlow<RecordingState> {
-        return recordingLocalDataSource.recordingState
-    }
+    override fun invoke(): StateFlow<RecordingState> = recordingLocalDataSource.recordingState
 }

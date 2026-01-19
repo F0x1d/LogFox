@@ -18,61 +18,62 @@ const val RESUME_RECORDING_INTENT_ID = 5
 const val STOP_RECORDING_INTENT_ID = 6
 const val OPEN_APP_INTENT_ID = 7
 
-val pendingIntentFlags = if (mutablePendingIntentAvailable)
+val pendingIntentFlags = if (mutablePendingIntentAvailable) {
     PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-else
+} else {
     PendingIntent.FLAG_UPDATE_CURRENT
+}
 
 inline fun <reified T : BroadcastReceiver> Context.makeBroadcastPendingIntent(
     id: Int,
-    setup: Intent.() -> Unit
+    setup: Intent.() -> Unit,
 ) = PendingIntent.getBroadcast(
     this,
     id,
     Intent(this, T::class.java).also { setup(it) },
-    pendingIntentFlags
+    pendingIntentFlags,
 )
 
 inline fun <reified T : BroadcastReceiver> Context.makeBroadcastPendingIntent(
     id: Int,
-    extras: Bundle = Bundle.EMPTY
+    extras: Bundle = Bundle.EMPTY,
 ) = makeBroadcastPendingIntent<T>(
     id = id,
-    setup = { putExtras(extras) }
+    setup = { putExtras(extras) },
 )
 
 inline fun <reified T : Service> Context.makeServicePendingIntent(
     id: Int,
-    setup: Intent.() -> Unit
+    setup: Intent.() -> Unit,
 ) = PendingIntent.getService(
     this,
     id,
     Intent(this, T::class.java).also { setup(it) },
-    pendingIntentFlags
+    pendingIntentFlags,
 )
 
 inline fun <reified T : Service> Context.makeServicePendingIntent(
     id: Int,
-    extras: Bundle = Bundle.EMPTY
+    extras: Bundle = Bundle.EMPTY,
 ) = makeServicePendingIntent<T>(
     id = id,
-    setup = { putExtras(extras) }
+    setup = { putExtras(extras) },
 )
 
 inline fun <reified T : Activity> Context.makeActivityPendingIntent(
     id: Int,
-    setup: Intent.() -> Unit
+    setup: Intent.() -> Unit,
 ) = PendingIntent.getActivity(
     this,
     id,
     Intent(this, T::class.java).also { setup(it) },
-    pendingIntentFlags
+    pendingIntentFlags,
 )
 
 inline fun <reified T : Activity> Context.makeActivityPendingIntent(
     id: Int,
-    extras: Bundle = Bundle.EMPTY
+    extras: Bundle = Bundle.EMPTY,
 ) = makeActivityPendingIntent<T>(
     id = id,
-    setup = { putExtras(extras) }
+    setup = { putExtras(extras) },
 )

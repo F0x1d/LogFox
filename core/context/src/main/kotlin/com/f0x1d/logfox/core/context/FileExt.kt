@@ -8,5 +8,5 @@ import java.io.File
 fun File.asUri(context: Context): Uri = FileProvider.getUriForFile(
     context,
     "${context.packageName}.provider",
-    this
+    this,
 )

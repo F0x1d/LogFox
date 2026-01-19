@@ -26,19 +26,13 @@ import dagger.hilt.components.SingletonComponent
 internal interface LoggingUseCaseModule {
 
     @Binds
-    fun bindGetLogsFlowUseCase(
-        impl: GetLogsFlowUseCaseImpl,
-    ): GetLogsFlowUseCase
+    fun bindGetLogsFlowUseCase(impl: GetLogsFlowUseCaseImpl): GetLogsFlowUseCase
 
     @Binds
-    fun bindGetQueryFlowUseCase(
-        impl: GetQueryFlowUseCaseImpl,
-    ): GetQueryFlowUseCase
+    fun bindGetQueryFlowUseCase(impl: GetQueryFlowUseCaseImpl): GetQueryFlowUseCase
 
     @Binds
-    fun bindUpdateQueryUseCase(
-        impl: UpdateQueryUseCaseImpl,
-    ): UpdateQueryUseCase
+    fun bindUpdateQueryUseCase(impl: UpdateQueryUseCaseImpl): UpdateQueryUseCase
 
     @Binds
     fun bindGetSelectedLogLinesFlowUseCase(
@@ -51,17 +45,11 @@ internal interface LoggingUseCaseModule {
     ): UpdateSelectedLogLinesUseCase
 
     @Binds
-    fun bindUpdateLogsUseCase(
-        impl: UpdateLogsUseCaseImpl,
-    ): UpdateLogsUseCase
+    fun bindUpdateLogsUseCase(impl: UpdateLogsUseCaseImpl): UpdateLogsUseCase
 
     @Binds
-    fun bindStartLoggingUseCase(
-        impl: StartLoggingUseCaseImpl,
-    ): StartLoggingUseCase
+    fun bindStartLoggingUseCase(impl: StartLoggingUseCaseImpl): StartLoggingUseCase
 
     @Binds
-    fun bindFormatLogLineUseCase(
-        impl: FormatLogLineUseCaseImpl,
-    ): FormatLogLineUseCase
+    fun bindFormatLogLineUseCase(impl: FormatLogLineUseCaseImpl): FormatLogLineUseCase
 }

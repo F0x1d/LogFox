@@ -32,7 +32,9 @@ internal interface AppCrashDao {
     suspend fun getAllByPackageName(packageName: String): List<AppCrashEntity>
 
     // This includes deleted ones as it will help to skip them
-    @Query("SELECT * FROM AppCrash WHERE date_and_time = :dateAndTime AND package_name = :packageName")
+    @Query(
+        "SELECT * FROM AppCrash WHERE date_and_time = :dateAndTime AND package_name = :packageName",
+    )
     suspend fun getAllByDateAndTime(dateAndTime: Long, packageName: String): List<AppCrashEntity>
 
     @Insert
@@ -48,11 +50,10 @@ internal interface AppCrashDao {
         update(appCrash.copy(isDeleted = true, deletedTime = System.currentTimeMillis()))
     }
 
-    @Query("UPDATE AppCrash SET is_deleted = 1, deleted_time = :time WHERE package_name = :packageName")
-    suspend fun deleteByPackageName(
-        packageName: String,
-        time: Long = System.currentTimeMillis()
+    @Query(
+        "UPDATE AppCrash SET is_deleted = 1, deleted_time = :time WHERE package_name = :packageName",
     )
+    suspend fun deleteByPackageName(packageName: String, time: Long = System.currentTimeMillis())
 
     @Query("UPDATE AppCrash SET is_deleted = 1, deleted_time = :time")
     suspend fun deleteAll(time: Long = System.currentTimeMillis())

@@ -8,6 +8,9 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.f0x1d.logfox.core.presentation.density.dpToPx
+import com.f0x1d.logfox.core.presentation.dialog.showAreYouSureDeleteDialog
+import com.f0x1d.logfox.core.presentation.view.setupBackButtonForNavController
 import com.f0x1d.logfox.core.tea.BaseStoreFragment
 import com.f0x1d.logfox.feature.crashes.presentation.appcrashes.AppCrashesCommand
 import com.f0x1d.logfox.feature.crashes.presentation.appcrashes.AppCrashesSideEffect
@@ -16,21 +19,19 @@ import com.f0x1d.logfox.feature.crashes.presentation.appcrashes.AppCrashesViewMo
 import com.f0x1d.logfox.feature.crashes.presentation.common.adapter.CrashesAdapter
 import com.f0x1d.logfox.feature.crashes.presentation.databinding.FragmentAppCrashesBinding
 import com.f0x1d.logfox.navigation.Directions
-import com.f0x1d.logfox.core.presentation.density.dpToPx
-import com.f0x1d.logfox.core.presentation.dialog.showAreYouSureDeleteDialog
-import com.f0x1d.logfox.core.presentation.view.setupBackButtonForNavController
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import dev.chrisbanes.insetter.applyInsetter
 
 @AndroidEntryPoint
-internal class AppCrashesFragment : BaseStoreFragment<
-    FragmentAppCrashesBinding,
-    AppCrashesState,
-    AppCrashesCommand,
-    AppCrashesSideEffect,
-    AppCrashesViewModel,
->() {
+internal class AppCrashesFragment :
+    BaseStoreFragment<
+        FragmentAppCrashesBinding,
+        AppCrashesState,
+        AppCrashesCommand,
+        AppCrashesSideEffect,
+        AppCrashesViewModel,
+        >() {
 
     override val viewModel by viewModels<AppCrashesViewModel>()
 
@@ -50,10 +51,7 @@ internal class AppCrashesFragment : BaseStoreFragment<
         },
     )
 
-    override fun inflateBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-    ) = FragmentAppCrashesBinding.inflate(inflater, container, false)
+    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) = FragmentAppCrashesBinding.inflate(inflater, container, false)
 
     override fun FragmentAppCrashesBinding.onViewCreated(view: View, savedInstanceState: Bundle?) {
         crashesRecycler.applyInsetter {
@@ -71,12 +69,12 @@ internal class AppCrashesFragment : BaseStoreFragment<
             addItemDecoration(
                 MaterialDividerItemDecoration(
                     requireContext(),
-                    LinearLayoutManager.VERTICAL
+                    LinearLayoutManager.VERTICAL,
                 ).apply {
                     dividerInsetStart = 80.dpToPx.toInt()
                     dividerInsetEnd = 10.dpToPx.toInt()
                     isLastItemDecorated = false
-                }
+                },
             )
 
             adapter = this@AppCrashesFragment.adapter

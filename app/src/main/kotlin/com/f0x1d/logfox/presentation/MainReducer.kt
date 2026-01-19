@@ -7,14 +7,16 @@ import javax.inject.Inject
 
 internal class MainReducer @Inject constructor() : Reducer<MainState, MainCommand, MainSideEffect> {
 
-    override fun reduce(state: MainState, command: MainCommand): ReduceResult<MainState, MainSideEffect> =
-        when (command) {
-            MainCommand.Load -> state.withSideEffects(
-                MainSideEffect.StartLoggingServiceIfNeeded,
-            )
+    override fun reduce(
+        state: MainState,
+        command: MainCommand,
+    ): ReduceResult<MainState, MainSideEffect> = when (command) {
+        MainCommand.Load -> state.withSideEffects(
+            MainSideEffect.StartLoggingServiceIfNeeded,
+        )
 
-            MainCommand.ShowSetup -> state.withSideEffects(
-                MainSideEffect.OpenSetup,
-            )
-        }
+        MainCommand.ShowSetup -> state.withSideEffects(
+            MainSideEffect.OpenSetup,
+        )
+    }
 }

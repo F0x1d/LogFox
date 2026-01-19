@@ -17,12 +17,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
-import com.f0x1d.logfox.feature.recordings.api.data.RecordingState
-import com.f0x1d.logfox.feature.strings.Strings
-import com.f0x1d.logfox.core.presentation.Icons
 import com.f0x1d.logfox.compose.base.preview.DayNightPreview
 import com.f0x1d.logfox.compose.designsystem.component.button.VerticalButton
 import com.f0x1d.logfox.compose.designsystem.theme.LogFoxTheme
+import com.f0x1d.logfox.core.presentation.Icons
+import com.f0x1d.logfox.feature.recordings.api.data.RecordingState
+import com.f0x1d.logfox.feature.strings.Strings
 
 @Composable
 internal fun RecordingControlsItem(
@@ -31,7 +31,8 @@ internal fun RecordingControlsItem(
     onStartStopClick: () -> Unit = { },
     onPauseResumeClick: () -> Unit = { },
 ) {
-    val pauseVisible = recordingState == RecordingState.RECORDING || recordingState == RecordingState.PAUSED
+    val pauseVisible =
+        recordingState == RecordingState.RECORDING || recordingState == RecordingState.PAUSED
     val pauseShownFraction by animateFloatAsState(
         targetValue = if (pauseVisible) {
             1f
@@ -61,11 +62,11 @@ internal fun RecordingControlsItem(
                 when (recordingState) {
                     RecordingState.IDLE,
                     RecordingState.SAVING,
-                        -> Icons.ic_recording to Strings.record
+                    -> Icons.ic_recording to Strings.record
 
                     RecordingState.RECORDING,
                     RecordingState.PAUSED,
-                        -> Icons.ic_stop to Strings.stop
+                    -> Icons.ic_stop to Strings.stop
                 }
             }
 
@@ -89,10 +90,10 @@ internal fun RecordingControlsItem(
                     RecordingState.IDLE,
                     RecordingState.SAVING,
                     RecordingState.RECORDING,
-                        -> Icons.ic_pause to Strings.pause
+                    -> Icons.ic_pause to Strings.pause
 
                     RecordingState.PAUSED,
-                        -> Icons.ic_play to Strings.resume
+                    -> Icons.ic_play to Strings.resume
                 }
             }
 
@@ -119,7 +120,7 @@ internal fun RecordingControlsItem(
         val maxWidth = constraints.maxWidth
         val halfWidth = maxWidth / 2f
         val pauseWidth = (halfWidth - halfGapWidth).toInt()
-        //val recordWidth = (maxWidth - (pauseWidth + halfGapWidth) * pauseShownFraction).toInt()
+        // val recordWidth = (maxWidth - (pauseWidth + halfGapWidth) * pauseShownFraction).toInt()
 
         val recordWidth = lerp(
             start = maxWidth,

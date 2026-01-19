@@ -65,7 +65,8 @@ internal class SetupEffectHandler @Inject constructor(
 
             // UI side effects - handled by Fragment
             is SetupSideEffect.ShowSnackbar,
-            is SetupSideEffect.RestartApp -> Unit
+            is SetupSideEffect.RestartApp,
+            -> Unit
         }
     }
 }

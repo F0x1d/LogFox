@@ -47,10 +47,7 @@ internal class LogsEffectHandler @Inject constructor(
     private val viewingFile = fileUri != null
     private val pausedFlow = MutableStateFlow(false)
 
-    override suspend fun handle(
-        effect: LogsSideEffect,
-        onCommand: suspend (LogsCommand) -> Unit,
-    ) {
+    override suspend fun handle(effect: LogsSideEffect, onCommand: suspend (LogsCommand) -> Unit) {
         when (effect) {
             is LogsSideEffect.LoadLogs -> {
                 combine(

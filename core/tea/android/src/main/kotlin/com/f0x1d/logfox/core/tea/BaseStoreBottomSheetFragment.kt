@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 
 /**
  * Base BottomSheetDialogFragment for TEA architecture with ViewBinding support.
- * 
+ *
  * Features:
  * - Automatic state collection via [render]
  * - Automatic side effect handling via [handleSideEffect]
@@ -32,7 +32,7 @@ abstract class BaseStoreBottomSheetFragment<
     Command,
     SideEffect,
     VM : BaseStoreViewModel<State, Command, SideEffect>,
-> : BottomSheetDialogFragment() {
+    > : BottomSheetDialogFragment() {
 
     private var _binding: VB? = null
     protected val binding: VB get() = _binding!!

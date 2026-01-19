@@ -2,10 +2,10 @@ package com.f0x1d.logfox.feature.crashes.presentation.appcrashes
 
 import com.f0x1d.logfox.core.di.DefaultDispatcher
 import com.f0x1d.logfox.core.tea.EffectHandler
-import com.f0x1d.logfox.feature.database.model.AppCrashesCount
 import com.f0x1d.logfox.feature.crashes.api.domain.DeleteCrashUseCase
 import com.f0x1d.logfox.feature.crashes.api.domain.GetAllCrashesFlowUseCase
 import com.f0x1d.logfox.feature.crashes.presentation.appcrashes.di.PackageName
+import com.f0x1d.logfox.feature.database.model.AppCrashesCount
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map

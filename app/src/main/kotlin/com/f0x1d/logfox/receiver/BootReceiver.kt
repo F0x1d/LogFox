@@ -22,10 +22,7 @@ class BootReceiver : BroadcastReceiver() {
     @Inject
     lateinit var getSelectedTerminalTypeUseCase: GetSelectedTerminalTypeUseCase
 
-    override fun onReceive(
-        context: Context,
-        intent: Intent,
-    ) {
+    override fun onReceive(context: Context, intent: Intent) {
         if (intent.action == Intent.ACTION_BOOT_COMPLETED && getStartOnBootUseCase()) {
             if (getSelectedTerminalTypeUseCase() == TerminalType.Shizuku) {
                 context.toast(Strings.shizuku_reminder)

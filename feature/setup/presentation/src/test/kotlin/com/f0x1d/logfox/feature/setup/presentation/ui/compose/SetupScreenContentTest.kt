@@ -4,11 +4,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import com.f0x1d.logfox.core.tests.screenshot.ScreenshotTest
+import com.f0x1d.logfox.compose.designsystem.theme.LogFoxTheme
 import com.f0x1d.logfox.core.tests.compose.clickOn
+import com.f0x1d.logfox.core.tests.screenshot.ScreenshotTest
 import com.f0x1d.logfox.feature.setup.presentation.SetupState
 import com.f0x1d.logfox.feature.setup.presentation.ui.MockSetupScreenListener
-import com.f0x1d.logfox.compose.designsystem.theme.LogFoxTheme
 import org.junit.Test
 
 class SetupScreenContentTest : ScreenshotTest() {

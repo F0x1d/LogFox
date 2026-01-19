@@ -8,8 +8,7 @@ import com.f0x1d.logfox.core.tea.withSideEffects
 import com.f0x1d.logfox.feature.terminals.base.TerminalType
 import javax.inject.Inject
 
-internal class PreferencesServiceReducer @Inject constructor() :
-    Reducer<PreferencesServiceState, PreferencesServiceCommand, PreferencesServiceSideEffect> {
+internal class PreferencesServiceReducer @Inject constructor() : Reducer<PreferencesServiceState, PreferencesServiceCommand, PreferencesServiceSideEffect> {
 
     override fun reduce(
         state: PreferencesServiceState,
@@ -32,7 +31,9 @@ internal class PreferencesServiceReducer @Inject constructor() :
                 state.withSideEffects(PreferencesServiceSideEffect.RestartLogging)
             } else {
                 // Different terminal, check if it's supported
-                state.withSideEffects(PreferencesServiceSideEffect.CheckTerminalSupport(command.type))
+                state.withSideEffects(
+                    PreferencesServiceSideEffect.CheckTerminalSupport(command.type),
+                )
             }
         }
 

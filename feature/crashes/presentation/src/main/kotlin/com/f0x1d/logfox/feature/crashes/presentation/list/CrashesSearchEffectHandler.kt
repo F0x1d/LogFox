@@ -30,8 +30,8 @@ internal class CrashesSearchEffectHandler @Inject constructor(
                 ) { crashes, query -> crashes to query }
                     .map { (crashes, query) ->
                         crashes.filter { crash ->
-                            crash.packageName.contains(query, ignoreCase = true)
-                                    || crash.appName?.contains(query, ignoreCase = true) == true
+                            crash.packageName.contains(query, ignoreCase = true) ||
+                                crash.appName?.contains(query, ignoreCase = true) == true
                         }.map { AppCrashesCount(it) }
                     }
                     .distinctUntilChanged()

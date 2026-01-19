@@ -39,7 +39,9 @@ abstract class ScreenshotTest {
 
     protected fun screenshotTestOf(
         actions: SemanticsNodeInteractionsProvider.() -> Unit = { },
-        whatToCapture: SemanticsNodeInteractionsProvider.() -> SemanticsNodeInteraction = { onRoot() },
+        whatToCapture: SemanticsNodeInteractionsProvider.() -> SemanticsNodeInteraction = {
+            onRoot()
+        },
         content: @Composable () -> Unit,
     ) {
         composeRule.setContent(content)

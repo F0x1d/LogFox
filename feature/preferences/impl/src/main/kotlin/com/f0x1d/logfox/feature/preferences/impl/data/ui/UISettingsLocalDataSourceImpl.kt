@@ -11,7 +11,8 @@ import javax.inject.Singleton
 @Singleton
 internal class UISettingsLocalDataSourceImpl @Inject constructor(
     @ApplicationContext context: Context,
-) : BasePreferences(context), UISettingsLocalDataSource {
+) : BasePreferences(context),
+    UISettingsLocalDataSource {
 
     override fun nightTheme(): Preference<Int> = intPreference(
         key = KEY_NIGHT_THEME,

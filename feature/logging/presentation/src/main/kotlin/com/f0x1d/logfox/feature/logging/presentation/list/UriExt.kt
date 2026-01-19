@@ -5,15 +5,12 @@ import android.net.Uri
 import androidx.documentfile.provider.DocumentFile
 import com.f0x1d.logfox.feature.logging.api.model.LogLevel
 import com.f0x1d.logfox.feature.logging.api.model.LogLine
-import com.f0x1d.logfox.feature.logging.api.model.LogLine as LogLineFactory
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import java.util.LinkedList
+import com.f0x1d.logfox.feature.logging.api.model.LogLine as LogLineFactory
 
-internal fun Uri?.readFileContentsAsFlow(
-    context: Context,
-    logsDisplayLimit: Int,
-) = flow {
+internal fun Uri?.readFileContentsAsFlow(context: Context, logsDisplayLimit: Int) = flow {
     val inputStream = this@readFileContentsAsFlow
         ?.let(context.contentResolver::openInputStream)
 
@@ -40,8 +37,9 @@ internal fun Uri?.readFileContentsAsFlow(
                     )
 
                     logLines.add(logLine)
-                    if (logLines.size >= logsDisplayLimit)
+                    if (logLines.size >= logsDisplayLimit) {
                         logLines.removeFirst()
+                    }
 
                     id -= 1
                 }

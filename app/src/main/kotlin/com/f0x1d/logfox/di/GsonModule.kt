@@ -22,7 +22,7 @@ object GsonModule {
             object : ExclusionStrategy {
                 override fun shouldSkipField(f: FieldAttributes) = f.getAnnotation(GsonSkip::class.java) != null
                 override fun shouldSkipClass(clazz: Class<*>?) = false
-            }
+            },
         )
         .create()
 }

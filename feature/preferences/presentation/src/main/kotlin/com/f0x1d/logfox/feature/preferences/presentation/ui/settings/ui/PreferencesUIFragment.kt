@@ -32,7 +32,7 @@ internal class PreferencesUIFragment :
         PreferencesUICommand,
         PreferencesUISideEffect,
         PreferencesUIViewModel,
-    >() {
+        >() {
     override val viewModel by viewModels<PreferencesUIViewModel>()
 
     private val filledThemeSettings by lazy {
@@ -43,10 +43,7 @@ internal class PreferencesUIFragment :
         ).fillWithStrings(requireContext())
     }
 
-    override fun onCreatePreferences(
-        savedInstanceState: Bundle?,
-        rootKey: String?,
-    ) {
+    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.settings_ui)
 
         findPreference<Preference>("pref_night_theme")?.apply {
@@ -165,10 +162,7 @@ internal class PreferencesUIFragment :
         }
     }
 
-    override fun onViewCreated(
-        view: View,
-        savedInstanceState: Bundle?,
-    ) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         view.findViewById<MaterialToolbar>(R.id.toolbar).apply {

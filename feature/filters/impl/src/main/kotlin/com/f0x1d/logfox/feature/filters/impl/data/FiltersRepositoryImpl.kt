@@ -17,10 +17,9 @@ internal class FiltersRepositoryImpl @Inject constructor(
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : FiltersRepository {
 
-    override fun getAllEnabledAsFlow(): Flow<List<UserFilter>> =
-        userFilterRepository.getAllEnabledAsFlow()
-            .distinctUntilChanged()
-            .flowOn(ioDispatcher)
+    override fun getAllEnabledAsFlow(): Flow<List<UserFilter>> = userFilterRepository.getAllEnabledAsFlow()
+        .distinctUntilChanged()
+        .flowOn(ioDispatcher)
 
     override suspend fun create(
         including: Boolean,
@@ -30,7 +29,7 @@ internal class FiltersRepositoryImpl @Inject constructor(
         tid: String?,
         packageName: String?,
         tag: String?,
-        content: String?
+        content: String?,
     ) = createAll(
         listOf(
             UserFilter(
@@ -41,9 +40,9 @@ internal class FiltersRepositoryImpl @Inject constructor(
                 tid = tid?.nullIfEmpty(),
                 packageName = packageName?.nullIfEmpty(),
                 tag = tag?.nullIfEmpty(),
-                content = content?.nullIfEmpty()
-            )
-        )
+                content = content?.nullIfEmpty(),
+            ),
+        ),
     )
 
     override suspend fun createAll(userFilters: List<UserFilter>) = withContext(ioDispatcher) {
@@ -63,7 +62,7 @@ internal class FiltersRepositoryImpl @Inject constructor(
         tid: String?,
         packageName: String?,
         tag: String?,
-        content: String?
+        content: String?,
     ) = update {
         userFilter.copy(
             including = including,
@@ -73,19 +72,17 @@ internal class FiltersRepositoryImpl @Inject constructor(
             tid = tid?.nullIfEmpty(),
             packageName = packageName?.nullIfEmpty(),
             tag = tag?.nullIfEmpty(),
-            content = content?.nullIfEmpty()
+            content = content?.nullIfEmpty(),
         )
     }
 
     private suspend fun update(newValue: () -> UserFilter) = update(newValue())
 
-    override fun getAllAsFlow(): Flow<List<UserFilter>> =
-        userFilterRepository.getAllAsFlow()
-            .distinctUntilChanged()
-            .flowOn(ioDispatcher)
+    override fun getAllAsFlow(): Flow<List<UserFilter>> = userFilterRepository.getAllAsFlow()
+        .distinctUntilChanged()
+        .flowOn(ioDispatcher)
 
-    override fun getByIdAsFlow(id: Long): Flow<UserFilter?> =
-        userFilterRepository.getByIdAsFlow(id).flowOn(ioDispatcher)
+    override fun getByIdAsFlow(id: Long): Flow<UserFilter?> = userFilterRepository.getByIdAsFlow(id).flowOn(ioDispatcher)
 
     override suspend fun getAll(): List<UserFilter> = withContext(ioDispatcher) {
         userFilterRepository.getAll()

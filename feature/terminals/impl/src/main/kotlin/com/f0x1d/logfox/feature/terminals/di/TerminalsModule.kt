@@ -1,14 +1,14 @@
 package com.f0x1d.logfox.feature.terminals.di
 
 import com.f0x1d.logfox.feature.terminals.DefaultTerminal
-import com.f0x1d.logfox.feature.terminals.RootTerminal as RootTerminalImpl
-import com.f0x1d.logfox.feature.terminals.ShizukuTerminal as ShizukuTerminalImpl
 import com.f0x1d.logfox.feature.terminals.base.Terminal
 import com.f0x1d.logfox.feature.terminals.base.TerminalType
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import com.f0x1d.logfox.feature.terminals.RootTerminal as RootTerminalImpl
+import com.f0x1d.logfox.feature.terminals.ShizukuTerminal as ShizukuTerminalImpl
 
 @Module
 @InstallIn(SingletonComponent::class)

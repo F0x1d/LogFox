@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 
 /**
  * Base Fragment for TEA architecture with ViewBinding support.
- * 
+ *
  * Features:
  * - Automatic state collection via [render]
  * - Automatic side effect handling via [handleSideEffect]
@@ -32,7 +32,7 @@ abstract class BaseStoreFragment<
     Command,
     SideEffect,
     VM : BaseStoreViewModel<State, Command, SideEffect>,
-> : Fragment() {
+    > : Fragment() {
 
     private var _binding: VB? = null
     protected val binding: VB get() = _binding!!

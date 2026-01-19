@@ -11,7 +11,8 @@ import javax.inject.Singleton
 @Singleton
 internal class CrashesSettingsLocalDataSourceImpl @Inject constructor(
     @ApplicationContext context: Context,
-) : BasePreferences(context), CrashesSettingsLocalDataSource {
+) : BasePreferences(context),
+    CrashesSettingsLocalDataSource {
 
     override fun openCrashesOnStartup(): Preference<Boolean> = booleanPreference(
         key = KEY_OPEN_CRASHES_ON_STARTUP,
@@ -33,17 +34,15 @@ internal class CrashesSettingsLocalDataSourceImpl @Inject constructor(
         defaultValue = true,
     )
 
-    override fun collectingFor(crashTypeName: String): Boolean =
-        booleanPreference(
-            key = "pref_collect_${crashTypeName.lowercase()}",
-            defaultValue = true,
-        ).get()
+    override fun collectingFor(crashTypeName: String): Boolean = booleanPreference(
+        key = "pref_collect_${crashTypeName.lowercase()}",
+        defaultValue = true,
+    ).get()
 
-    override fun showingNotificationsFor(crashTypeName: String): Boolean =
-        booleanPreference(
-            key = "pref_notifications_${crashTypeName.lowercase()}",
-            defaultValue = true,
-        ).get()
+    override fun showingNotificationsFor(crashTypeName: String): Boolean = booleanPreference(
+        key = "pref_notifications_${crashTypeName.lowercase()}",
+        defaultValue = true,
+    ).get()
 
     override fun useSeparateNotificationsChannelsForCrashes(): Preference<Boolean> = booleanPreference(
         key = KEY_USE_SEPARATE_NOTIFICATIONS_CHANNELS,

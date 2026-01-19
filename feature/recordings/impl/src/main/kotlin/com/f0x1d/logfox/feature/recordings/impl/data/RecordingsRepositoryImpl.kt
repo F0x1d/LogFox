@@ -52,7 +52,9 @@ internal class RecordingsRepositoryImpl @Inject constructor(
         try {
             FileOutputStream(recordingFile, true).use { out ->
                 loggingRepository
-                    .dumpLogs(terminals.getValue(terminalSettingsRepository.selectedTerminalType().value))
+                    .dumpLogs(
+                        terminals.getValue(terminalSettingsRepository.selectedTerminalType().value),
+                    )
                     .collect { line ->
                         // It is on IO!
                         val original = formatLogLineUseCase(
@@ -71,7 +73,9 @@ internal class RecordingsRepositoryImpl @Inject constructor(
         }
 
         LogRecording(
-            title = "${context.getString(Strings.record_file)} ${logRecordingRepository.count() + 1}",
+            title = "${context.getString(
+                Strings.record_file,
+            )} ${logRecordingRepository.count() + 1}",
             dateAndTime = recordingTime,
             file = recordingFile,
         ).let {
@@ -98,16 +102,15 @@ internal class RecordingsRepositoryImpl @Inject constructor(
         )
 
         LogRecording(
-            title = "${context.getString(Strings.record_file)} ${logRecordingRepository.count() + 1}",
+            title = "${context.getString(
+                Strings.record_file,
+            )} ${logRecordingRepository.count() + 1}",
             dateAndTime = recordingTime,
             file = recordingFile,
         ).let { logRecordingRepository.insert(it) }
     }
 
-    override suspend fun updateTitle(
-        logRecording: LogRecording,
-        newTitle: String,
-    ) = update(
+    override suspend fun updateTitle(logRecording: LogRecording, newTitle: String) = update(
         logRecording.copy(
             title = newTitle,
         ),
@@ -118,8 +121,7 @@ internal class RecordingsRepositoryImpl @Inject constructor(
         .distinctUntilChanged()
         .flowOn(ioDispatcher)
 
-    override fun getByIdAsFlow(id: Long): Flow<LogRecording?> =
-        logRecordingRepository.getByIdAsFlow(id).flowOn(ioDispatcher)
+    override fun getByIdAsFlow(id: Long): Flow<LogRecording?> = logRecordingRepository.getByIdAsFlow(id).flowOn(ioDispatcher)
 
     override suspend fun getAll(): List<LogRecording> = withContext(ioDispatcher) {
         logRecordingRepository.getAll()

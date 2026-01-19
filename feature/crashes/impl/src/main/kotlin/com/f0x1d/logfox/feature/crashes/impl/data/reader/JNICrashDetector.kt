@@ -19,36 +19,36 @@ internal class JNICrashDetector(
 
     private var firstLineTime = 0L
 
-    override fun foundFirstLine(line: LogLine) =
-        line.firstJNICrashLine.also {
-            if (it) firstLineTime = System.currentTimeMillis()
-        }
+    override fun foundFirstLine(line: LogLine) = line.firstJNICrashLine.also {
+        if (it) firstLineTime = System.currentTimeMillis()
+    }
 
     override fun stillCollecting(line: LogLine): Boolean {
         if (line.firstJNICrashLine) return false
 
         return super.stillCollecting(line) ||
             // + 1000 for case logsUpdateInterval is really small
-            firstLineTime + logsSettingsRepository.logsUpdateInterval().value + 1000 > System.currentTimeMillis()
+            firstLineTime + logsSettingsRepository.logsUpdateInterval().value + 1000 >
+            System.currentTimeMillis()
     }
 
-    override fun packageFromCollected(lines: List<LogLine>): String =
-        runCatching {
-            lines.forEach {
-                if (it.content.contains(">>> ") && it.content.contains(" <<<")) {
-                    return@runCatching it.content
-                        .substring(
-                            it.content.indexOf(">>> "),
-                            it.content.indexOf(" <<<"),
-                        ).drop(4)
-                }
+    override fun packageFromCollected(lines: List<LogLine>): String = runCatching {
+        lines.forEach {
+            if (it.content.contains(">>> ") && it.content.contains(" <<<")) {
+                return@runCatching it.content
+                    .substring(
+                        it.content.indexOf(">>> "),
+                        it.content.indexOf(" <<<"),
+                    ).drop(4)
             }
+        }
 
-            "unknown"
-        }.getOrElse { "unknown" }
+        "unknown"
+    }.getOrElse { "unknown" }
 
     private val LogLine.firstJNICrashLine
-        get() = debugTag && content == "*** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***"
+        get() = debugTag &&
+            content == "*** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***"
 
     private val LogLine.debugTag
         get() = tag.startsWith("DEBUG")

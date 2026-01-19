@@ -95,6 +95,7 @@ class AppsPickerFragment : Fragment() {
             is AppsPickerSideEffect.PopBackStack -> {
                 findNavController().popBackStack()
             }
+
             // Business logic side effects are handled by EffectHandler
             else -> Unit
         }

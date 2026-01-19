@@ -5,11 +5,11 @@ import android.util.AttributeSet
 import com.google.android.material.navigationrail.NavigationRailView
 import dev.chrisbanes.insetter.applyInsetter
 
-class CustomApplyInsetsNavigationRailView: NavigationRailView {
+class CustomApplyInsetsNavigationRailView : NavigationRailView {
 
-    constructor(ctx: Context): super(ctx)
+    constructor(ctx: Context) : super(ctx)
 
-    constructor(ctx: Context, attrs: AttributeSet): super(ctx, attrs) {
+    constructor(ctx: Context, attrs: AttributeSet) : super(ctx, attrs) {
         applyInsetter {
             type(
                 navigationBars = true,

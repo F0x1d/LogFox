@@ -6,13 +6,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class PreferencesUIViewModel
-    @Inject
-    constructor(
-        reducer: PreferencesUIReducer,
-        effectHandler: PreferencesUIEffectHandler,
-    ) : BaseStoreViewModel<PreferencesUIState, PreferencesUICommand, PreferencesUISideEffect>(
-            initialState = PreferencesUIState(),
-            reducer = reducer,
-            effectHandlers = listOf(effectHandler),
-            initialSideEffect = PreferencesUISideEffect.LoadPreferences,
-        )
+@Inject
+constructor(
+    reducer: PreferencesUIReducer,
+    effectHandler: PreferencesUIEffectHandler,
+) : BaseStoreViewModel<PreferencesUIState, PreferencesUICommand, PreferencesUISideEffect>(
+    initialState = PreferencesUIState(),
+    reducer = reducer,
+    effectHandlers = listOf(effectHandler),
+    initialSideEffect = PreferencesUISideEffect.LoadPreferences,
+)

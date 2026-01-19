@@ -7,11 +7,7 @@ sealed interface CrashDetailsSideEffect {
     // Business logic side effects
     data object LoadCrash : CrashDetailsSideEffect
 
-    data class ExportCrashToZip(
-        val uri: Uri,
-        val appCrash: AppCrash,
-        val crashLog: String?,
-    ) : CrashDetailsSideEffect
+    data class ExportCrashToZip(val uri: Uri, val appCrash: AppCrash, val crashLog: String?) : CrashDetailsSideEffect
 
     data class ChangeBlacklist(val appCrash: AppCrash) : CrashDetailsSideEffect
 

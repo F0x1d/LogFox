@@ -27,7 +27,8 @@ internal class CrashesViewModel @Inject constructor(
     reducer = reducer,
     effectHandlers = listOf(effectHandler, searchEffectHandler),
     initialSideEffect = CrashesSideEffect.LoadCrashes,
-), AppsPickerResultHandler {
+),
+    AppsPickerResultHandler {
 
     val currentState: CrashesState get() = state.value
 
@@ -60,8 +61,7 @@ internal class CrashesViewModel @Inject constructor(
             apps.map(DisabledApp::packageName).toSet()
         }
 
-    override fun providePickerTopAppBarTitle(context: Context): String =
-        context.getString(Strings.blacklist)
+    override fun providePickerTopAppBarTitle(context: Context): String = context.getString(Strings.blacklist)
 
     override fun onAppChecked(app: InstalledApp, checked: Boolean) {
         send(CrashesCommand.CheckAppDisabled(app.packageName, checked))

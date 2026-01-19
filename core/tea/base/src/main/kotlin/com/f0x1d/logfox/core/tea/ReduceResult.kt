@@ -9,5 +9,4 @@ fun <State, SideEffect> State.withSideEffects(
     vararg sideEffects: SideEffect,
 ): ReduceResult<State, SideEffect> = ReduceResult(this, sideEffects.toList())
 
-fun <State, SideEffect> State.noSideEffects(): ReduceResult<State, SideEffect> =
-    ReduceResult(this, emptyList())
+fun <State, SideEffect> State.noSideEffects(): ReduceResult<State, SideEffect> = ReduceResult(this, emptyList())

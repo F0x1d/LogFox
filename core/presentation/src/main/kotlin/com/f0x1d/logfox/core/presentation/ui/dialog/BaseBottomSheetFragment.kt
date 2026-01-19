@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.launch
 
-abstract class BaseBottomSheetFragment<T : ViewBinding>: BottomSheetDialogFragment() {
+abstract class BaseBottomSheetFragment<T : ViewBinding> : BottomSheetDialogFragment() {
 
     private var mutableBinding: T? = null
     protected val binding: T get() = mutableBinding!!
@@ -26,7 +26,11 @@ abstract class BaseBottomSheetFragment<T : ViewBinding>: BottomSheetDialogFragme
     abstract fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?): T?
     protected open fun T.onViewCreated(view: View, savedInstanceState: Bundle?) = Unit
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View? {
         inflateBinding(inflater, container)?.also {
             mutableBinding = it
             return it.root

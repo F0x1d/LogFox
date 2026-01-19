@@ -13,8 +13,9 @@ import javax.inject.Singleton
 internal object DynamicColorAvailabilityProviderModule {
     @Provides
     @Singleton
-    fun provideDynamicColorAvailabilityProvider(uiSettingsRepository: UISettingsRepository): DynamicColorAvailabilityProvider =
-        object : DynamicColorAvailabilityProvider {
-            override fun isDynamicColorAvailable(): Boolean = uiSettingsRepository.monetEnabled().value
-        }
+    fun provideDynamicColorAvailabilityProvider(
+        uiSettingsRepository: UISettingsRepository,
+    ): DynamicColorAvailabilityProvider = object : DynamicColorAvailabilityProvider {
+        override fun isDynamicColorAvailable(): Boolean = uiSettingsRepository.monetEnabled().value
+    }
 }

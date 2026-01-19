@@ -55,7 +55,9 @@ internal fun AppsPickerScreenContent(
     state: AppsPickerState = AppsPickerState(),
     listener: AppsPickerScreenListener = MockAppsPickerScreenListener,
 ) {
-    CompositionLocalProvider(LocalMultiplySelectionEnabled provides state.multiplySelectionEnabled) {
+    CompositionLocalProvider(
+        LocalMultiplySelectionEnabled provides state.multiplySelectionEnabled,
+    ) {
         Scaffold(
             topBar = {
                 AppsSearchBar(
@@ -96,14 +98,14 @@ private fun AppsSearchBar(
         onSearch = { /* noop */ },
         active = state.searchActive,
         onActiveChange = listener.onSearchActiveChanged,
-        placeholder = { 
+        placeholder = {
             Text(
                 text = if (state.searchActive) {
                     stringResource(id = Strings.apps)
                 } else {
                     state.topBarTitle
                 },
-            ) 
+            )
         },
         leadingIcon = { NavigationBackButton(onClick = listener.onBackClicked) },
     ) {
@@ -154,13 +156,13 @@ private fun AppsContent(
                     onClick = listener.onAppClicked,
                     onChecked = listener.onAppChecked,
                 )
-                
+
                 if (index != items.lastIndex) {
                     HorizontalDivider(
                         modifier = Modifier.padding(
                             start = 80.dp,
                             end = 10.dp,
-                        )
+                        ),
                     )
                 }
             }

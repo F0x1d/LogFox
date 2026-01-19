@@ -6,8 +6,7 @@ import com.f0x1d.logfox.core.tea.noSideEffects
 import com.f0x1d.logfox.core.tea.withSideEffects
 import javax.inject.Inject
 
-internal class LogsReducer @Inject constructor() :
-    Reducer<LogsState, LogsCommand, LogsSideEffect> {
+internal class LogsReducer @Inject constructor() : Reducer<LogsState, LogsCommand, LogsSideEffect> {
 
     override fun reduce(
         state: LogsState,

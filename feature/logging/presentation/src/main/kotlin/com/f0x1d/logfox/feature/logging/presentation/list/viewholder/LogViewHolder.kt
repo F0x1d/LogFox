@@ -4,20 +4,24 @@ import android.view.Gravity
 import androidx.appcompat.widget.PopupMenu
 import com.f0x1d.logfox.core.presentation.viewholder.BaseViewHolder
 import com.f0x1d.logfox.feature.datetime.impl.dateTimeFormatter
+import com.f0x1d.logfox.feature.logging.api.model.LogLine
 import com.f0x1d.logfox.feature.logging.presentation.R
 import com.f0x1d.logfox.feature.logging.presentation.databinding.ItemLogBinding
-import com.f0x1d.logfox.feature.logging.api.model.LogLine
 import com.f0x1d.logfox.feature.logging.presentation.list.adapter.LogsAdapter
 
 class LogViewHolder(
     binding: ItemLogBinding,
     private val selectedItem: (LogLine, Boolean) -> Unit,
-    private val copyLog: (LogLine) -> Unit
-): BaseViewHolder<LogLine, ItemLogBinding>(binding) {
+    private val copyLog: (LogLine) -> Unit,
+) : BaseViewHolder<LogLine, ItemLogBinding>(binding) {
 
     private val dateTimeFormatter = binding.root.context.dateTimeFormatter
 
-    private val popupMenu: PopupMenu = PopupMenu(binding.root.context, binding.root, Gravity.END).apply {
+    private val popupMenu: PopupMenu = PopupMenu(
+        binding.root.context,
+        binding.root,
+        Gravity.END,
+    ).apply {
         inflate(R.menu.log_menu)
         setForceShowIcon(true)
 
@@ -27,6 +31,7 @@ class LogViewHolder(
                     selectItem()
                     true
                 }
+
                 R.id.copy_item -> {
                     copyLog(currentItem ?: return@setOnMenuItemClickListener false)
                     true
@@ -42,18 +47,20 @@ class LogViewHolder(
             root.setOnClickListener {
                 val adapter = adapter<LogsAdapter>() ?: return@setOnClickListener
 
-                if (adapter.selectedItems.isNotEmpty())
+                if (adapter.selectedItems.isNotEmpty()) {
                     selectItem()
-                else
+                } else {
                     expandOrCollapseItem()
+                }
             }
             root.setOnLongClickListener {
                 val adapter = adapter<LogsAdapter>() ?: return@setOnLongClickListener true
 
-                if (adapter.selectedItems.isNotEmpty())
+                if (adapter.selectedItems.isNotEmpty()) {
                     expandOrCollapseItem()
-                else
+                } else {
                     popupMenu.show()
+                }
 
                 return@setOnLongClickListener true
             }

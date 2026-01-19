@@ -24,14 +24,14 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.f0x1d.logfox.compose.base.preview.DayNightPreview
+import com.f0x1d.logfox.compose.designsystem.component.button.RichButton
+import com.f0x1d.logfox.compose.designsystem.theme.LogFoxTheme
+import com.f0x1d.logfox.core.presentation.Icons
 import com.f0x1d.logfox.feature.setup.presentation.SetupState
 import com.f0x1d.logfox.feature.setup.presentation.ui.MockSetupScreenListener
 import com.f0x1d.logfox.feature.setup.presentation.ui.SetupScreenListener
 import com.f0x1d.logfox.feature.strings.Strings
-import com.f0x1d.logfox.core.presentation.Icons
-import com.f0x1d.logfox.compose.base.preview.DayNightPreview
-import com.f0x1d.logfox.compose.designsystem.component.button.RichButton
-import com.f0x1d.logfox.compose.designsystem.theme.LogFoxTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -146,7 +146,9 @@ private fun AdbDialog(
                 Text(text = stringResource(id = android.R.string.copy))
             }
         },
-        icon = { Icon(painter = painterResource(id = Icons.ic_dialog_adb), contentDescription = null) },
+        icon = {
+            Icon(painter = painterResource(id = Icons.ic_dialog_adb), contentDescription = null)
+        },
         title = { Text(text = stringResource(id = Strings.adb)) },
         text = { Text(text = message) },
     )
@@ -168,6 +170,6 @@ private fun SetupScreenContentWithDialogPreview() = LogFoxTheme {
         state = SetupState(
             showAdbDialog = true,
             adbCommand = "HESOYAM",
-        )
+        ),
     )
 }

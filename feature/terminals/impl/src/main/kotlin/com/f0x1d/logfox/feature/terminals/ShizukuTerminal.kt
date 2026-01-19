@@ -9,13 +9,13 @@ import android.os.ParcelFileDescriptor.AutoCloseInputStream
 import android.os.ParcelFileDescriptor.AutoCloseOutputStream
 import com.f0x1d.logfox.core.di.IODispatcher
 import com.f0x1d.logfox.feature.strings.Strings
-import com.f0x1d.logfox.feature.terminals.presentation.IUserService
 import com.f0x1d.logfox.feature.terminals.base.Terminal
 import com.f0x1d.logfox.feature.terminals.base.TerminalType
 import com.f0x1d.logfox.feature.terminals.impl.BuildConfig
 import com.f0x1d.logfox.feature.terminals.impl.R
 import com.f0x1d.logfox.feature.terminals.model.TerminalProcess
 import com.f0x1d.logfox.feature.terminals.model.TerminalResult
+import com.f0x1d.logfox.feature.terminals.presentation.IUserService
 import com.f0x1d.logfox.feature.terminals.presentation.service.UserService
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
@@ -31,7 +31,7 @@ import kotlin.coroutines.suspendCoroutine
 internal class ShizukuTerminal @Inject constructor(
     @ApplicationContext private val context: Context,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
-): Terminal {
+) : Terminal {
 
     companion object {
         private const val SHIZUKU_PERMISSION_REQUEST_ID = 8
@@ -50,7 +50,7 @@ internal class ShizukuTerminal @Inject constructor(
             .version(
                 context.run {
                     packageManager.getPackageInfo(packageName, 0).versionCode
-                }
+                },
             )
             .tag(context.getString(Strings.app_name))
     }
@@ -58,9 +58,11 @@ internal class ShizukuTerminal @Inject constructor(
     override suspend fun isSupported() = suspendCoroutine {
         when {
             !Shizuku.pingBinder() -> it.resume(false)
+
             Shizuku.isPreV11() -> it.resume(false)
 
             Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED -> it.resumeWithServiceBinding()
+
             Shizuku.shouldShowRequestPermissionRationale() -> it.resume(false)
 
             else -> {
@@ -70,7 +72,6 @@ internal class ShizukuTerminal @Inject constructor(
 
                         when (grantResult == PackageManager.PERMISSION_GRANTED) {
                             true -> it.resumeWithServiceBinding()
-
                             else -> it.resume(false)
                         }
 

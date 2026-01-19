@@ -1,21 +1,20 @@
 package com.f0x1d.logfox.feature.crashes.impl.data.reader
 
 import android.content.Context
+import com.f0x1d.logfox.feature.crashes.impl.data.reader.base.BaseCrashDetector
 import com.f0x1d.logfox.feature.database.model.AppCrash
 import com.f0x1d.logfox.feature.database.model.CrashType
-import com.f0x1d.logfox.feature.crashes.impl.data.reader.base.BaseCrashDetector
 import com.f0x1d.logfox.feature.logging.api.model.LogLine
 
 internal class JavaCrashDetector(
     context: Context,
     collected: suspend (AppCrash, List<LogLine>) -> Unit,
-): BaseCrashDetector(context, collected) {
+) : BaseCrashDetector(context, collected) {
 
     override val crashType = CrashType.JAVA
     override val commonTag = "AndroidRuntime"
 
-    override fun foundFirstLine(line: LogLine) =
-        line.tag == commonTag && line.content.startsWith("FATAL EXCEPTION: ")
+    override fun foundFirstLine(line: LogLine) = line.tag == commonTag && line.content.startsWith("FATAL EXCEPTION: ")
 
     override fun packageFromCollected(lines: List<LogLine>) = runCatching {
         lines[1].content.substring(

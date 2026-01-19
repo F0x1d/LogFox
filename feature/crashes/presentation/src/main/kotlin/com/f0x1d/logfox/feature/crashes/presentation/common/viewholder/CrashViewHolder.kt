@@ -2,18 +2,18 @@ package com.f0x1d.logfox.feature.crashes.presentation.common.viewholder
 
 import android.annotation.SuppressLint
 import com.bumptech.glide.Glide
-import com.f0x1d.logfox.core.presentation.viewholder.BaseViewHolder
-import com.f0x1d.logfox.feature.database.model.AppCrashesCount
-import com.f0x1d.logfox.feature.crashes.presentation.databinding.ItemCrashBinding
-import com.f0x1d.logfox.feature.strings.Strings
 import com.f0x1d.logfox.core.presentation.view.loadIcon
+import com.f0x1d.logfox.core.presentation.viewholder.BaseViewHolder
+import com.f0x1d.logfox.feature.crashes.presentation.databinding.ItemCrashBinding
+import com.f0x1d.logfox.feature.database.model.AppCrashesCount
+import com.f0x1d.logfox.feature.strings.Strings
 import java.util.Date
 
 class CrashViewHolder(
     binding: ItemCrashBinding,
     click: (AppCrashesCount) -> Unit,
-    delete: (AppCrashesCount) -> Unit
-): BaseViewHolder<AppCrashesCount, ItemCrashBinding>(binding) {
+    delete: (AppCrashesCount) -> Unit,
+) : BaseViewHolder<AppCrashesCount, ItemCrashBinding>(binding) {
 
     init {
         binding.apply {
@@ -37,7 +37,9 @@ class CrashViewHolder(
         dateText.text = when (data.count) {
             1 -> "${data.lastCrash.crashType.readableName} • $localeString"
 
-            else -> "${root.context.getString(Strings.crashes)}: ${data.count} • ${data.lastCrash.packageName}"
+            else -> "${root.context.getString(
+                Strings.crashes,
+            )}: ${data.count} • ${data.lastCrash.packageName}"
         }
     }
 

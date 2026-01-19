@@ -11,6 +11,5 @@ internal class NotificationsSettingsRepositoryImpl @Inject constructor(
     private val localDataSource: NotificationsSettingsLocalDataSource,
 ) : NotificationsSettingsRepository {
 
-    override fun askedNotificationsPermission(): PreferenceStateFlow<Boolean> =
-        localDataSource.askedNotificationsPermission().asPreferenceStateFlow()
+    override fun askedNotificationsPermission(): PreferenceStateFlow<Boolean> = localDataSource.askedNotificationsPermission().asPreferenceStateFlow()
 }

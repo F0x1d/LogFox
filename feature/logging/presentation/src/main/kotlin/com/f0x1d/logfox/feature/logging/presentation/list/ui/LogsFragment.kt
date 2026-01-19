@@ -10,9 +10,14 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.f0x1d.logfox.feature.copy.impl.copyText
 import com.f0x1d.logfox.core.context.isHorizontalOrientation
+import com.f0x1d.logfox.core.presentation.Icons
+import com.f0x1d.logfox.core.presentation.view.invalidateNavigationButton
+import com.f0x1d.logfox.core.presentation.view.setClickListenerOn
+import com.f0x1d.logfox.core.presentation.view.setupBackButtonForNavController
+import com.f0x1d.logfox.core.presentation.view.setupCloseButton
 import com.f0x1d.logfox.core.tea.BaseStoreFragment
+import com.f0x1d.logfox.feature.copy.impl.copyText
 import com.f0x1d.logfox.feature.database.model.UserFilter
 import com.f0x1d.logfox.feature.logging.api.model.LogLine
 import com.f0x1d.logfox.feature.logging.api.presentation.LoggingServiceDelegate
@@ -26,24 +31,20 @@ import com.f0x1d.logfox.feature.logging.presentation.list.adapter.LogsAdapter
 import com.f0x1d.logfox.feature.strings.Plurals
 import com.f0x1d.logfox.feature.strings.Strings
 import com.f0x1d.logfox.navigation.Directions
-import com.f0x1d.logfox.core.presentation.Icons
-import com.f0x1d.logfox.core.presentation.view.invalidateNavigationButton
-import com.f0x1d.logfox.core.presentation.view.setClickListenerOn
-import com.f0x1d.logfox.core.presentation.view.setupBackButtonForNavController
-import com.f0x1d.logfox.core.presentation.view.setupCloseButton
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import dev.chrisbanes.insetter.applyInsetter
 import javax.inject.Inject
 
 @AndroidEntryPoint
-internal class LogsFragment : BaseStoreFragment<
-    FragmentLogsBinding,
-    LogsState,
-    LogsCommand,
-    LogsSideEffect,
-    LogsViewModel,
->() {
+internal class LogsFragment :
+    BaseStoreFragment<
+        FragmentLogsBinding,
+        LogsState,
+        LogsCommand,
+        LogsSideEffect,
+        LogsViewModel,
+        >() {
 
     override val viewModel by viewModels<LogsViewModel>()
 
@@ -81,10 +82,7 @@ internal class LogsFragment : BaseStoreFragment<
 
     private var lastPauseEventTimeMillis = 0L
 
-    override fun inflateBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-    ) = FragmentLogsBinding.inflate(inflater, container, false)
+    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) = FragmentLogsBinding.inflate(inflater, container, false)
 
     override fun FragmentLogsBinding.onViewCreated(view: View, savedInstanceState: Bundle?) {
         requireContext().isHorizontalOrientation.also { horizontalOrientation ->
@@ -118,14 +116,16 @@ internal class LogsFragment : BaseStoreFragment<
                 snackbar(Strings.text_copied)
             }
             setClickListenerOn(R.id.extended_copy_selected_item) {
-                findNavController().navigate(Directions.action_logsFragment_to_logsExtendedCopyFragment)
+                findNavController().navigate(
+                    Directions.action_logsFragment_to_logsExtendedCopyFragment,
+                )
             }
             setClickListenerOn(R.id.selected_to_recording_item) {
                 send(LogsCommand.SelectedToRecording)
             }
             setClickListenerOn(R.id.export_selected_item) {
                 exportLogsLauncher.launch(
-                    "${viewModel.formatForExport(System.currentTimeMillis())}.log"
+                    "${viewModel.formatForExport(System.currentTimeMillis())}.log",
                 )
             }
             setClickListenerOn(R.id.clear_item) {
@@ -147,7 +147,8 @@ internal class LogsFragment : BaseStoreFragment<
             object : RecyclerView.OnScrollListener() {
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     if (viewModel.state.value.paused && !recyclerView.canScrollVertically(1)) {
-                        val enoughTimePassed = (System.currentTimeMillis() - lastPauseEventTimeMillis) > 300
+                        val enoughTimePassed =
+                            (System.currentTimeMillis() - lastPauseEventTimeMillis) > 300
                         if (viewModel.resumeLoggingWithBottomTouch && enoughTimePassed) {
                             send(LogsCommand.Resume)
                         }
@@ -190,33 +191,39 @@ internal class LogsFragment : BaseStoreFragment<
             is LogsSideEffect.NavigateToRecordings -> {
                 findNavController().navigate(Directions.action_global_recordingsFragment)
             }
+
             // Business logic side effects - handled by EffectHandler
             else -> Unit
         }
     }
 
-    private fun FragmentLogsBinding.processQueryAndFilters(query: String?, filters: List<UserFilter>) {
+    private fun FragmentLogsBinding.processQueryAndFilters(
+        query: String?,
+        filters: List<UserFilter>,
+    ) {
         val subtitle = buildString {
             if (query != null) {
                 append(query)
 
-                if (filters.isNotEmpty())
+                if (filters.isNotEmpty()) {
                     append(", ")
+                }
             }
 
-            if (filters.isNotEmpty())
-                append(resources.getQuantityString(Plurals.filters_count, filters.size, filters.size))
+            if (filters.isNotEmpty()) {
+                append(
+                    resources.getQuantityString(Plurals.filters_count, filters.size, filters.size),
+                )
+            }
         }
 
         toolbar.subtitle = subtitle
         placeholderLayout.placeholderText.setText(
             when {
                 viewModel.viewingFile -> Strings.no_logs
-
                 subtitle.isEmpty() -> Strings.waiting_for_logs
-
                 else -> Strings.all_logs_were_filtered_out
-            }
+            },
         )
     }
 
@@ -248,7 +255,12 @@ internal class LogsFragment : BaseStoreFragment<
         }
         val visibleDuringSelection = { itemId: Int -> setVisibility(itemId, selecting) }
         val invisibleDuringSelection = { itemId: Int -> setVisibility(itemId, !selecting) }
-        val visibleOnlyInDefault = { itemId: Int -> setVisibility(itemId, !selecting && !viewModel.viewingFile) }
+        val visibleOnlyInDefault = { itemId: Int ->
+            setVisibility(
+                itemId,
+                !selecting && !viewModel.viewingFile,
+            )
+        }
 
         visibleOnlyInDefault(R.id.pause_item)
         visibleDuringSelection(R.id.select_all_item)
@@ -261,7 +273,6 @@ internal class LogsFragment : BaseStoreFragment<
         title = when {
             selecting -> resources.getQuantityString(Plurals.selected_count, count, count)
             viewModel.viewingFile -> viewModel.viewingFileName
-
             else -> getString(Strings.app_name)
         }
 

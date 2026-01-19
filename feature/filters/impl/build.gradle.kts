@@ -12,5 +12,4 @@ dependencies {
     implementation(projects.feature.logging.api)
 
     implementation(libs.gson)
-
 }

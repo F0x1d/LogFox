@@ -16,7 +16,6 @@ internal class ExecuteGrantViaShizukuUseCaseImpl @Inject constructor(
     private val grantCommand: Array<String>
         get() = arrayOf("pm", "grant", context.packageName, Manifest.permission.READ_LOGS)
 
-    override suspend fun invoke(): Boolean {
-        return shizukuTerminal.isSupported() && shizukuTerminal.executeNow(*grantCommand).isSuccessful
-    }
+    override suspend fun invoke(): Boolean = shizukuTerminal.isSupported() &&
+        shizukuTerminal.executeNow(*grantCommand).isSuccessful
 }

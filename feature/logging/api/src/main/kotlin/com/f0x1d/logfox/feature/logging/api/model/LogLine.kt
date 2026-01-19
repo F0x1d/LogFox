@@ -27,7 +27,11 @@ data class LogLine(
             if (uid) append(this@LogLine.uid + " ")
             if (pid) append(this@LogLine.pid + " ")
             if (tid) append(this@LogLine.tid + " ")
-            if (packageName && this@LogLine.packageName != null) append(this@LogLine.packageName + " ")
+            if (packageName &&
+                this@LogLine.packageName != null
+            ) {
+                append(this@LogLine.packageName + " ")
+            }
             if (tag) append(this@LogLine.tag + if (content) ": " else "")
             if (content) append(this@LogLine.content)
         }

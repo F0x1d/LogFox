@@ -6,10 +6,7 @@ import android.util.AttributeSet
 import com.f0x1d.logfox.feature.logging.api.model.LogLevel
 import com.google.android.material.textview.MaterialTextView
 
-class LogLevelView(
-    context: Context,
-    attributeSet: AttributeSet
-): MaterialTextView(context, attributeSet) {
+class LogLevelView(context: Context, attributeSet: AttributeSet) : MaterialTextView(context, attributeSet) {
 
     var logLevel: LogLevel? = null
         set(value) {

@@ -31,7 +31,7 @@ internal class CrashDetailsReducer @Inject constructor() : Reducer<CrashDetailsS
                         uri = command.uri,
                         appCrash = appCrash,
                         crashLog = state.crashLog,
-                    )
+                    ),
                 )
             } else {
                 state.noSideEffects()

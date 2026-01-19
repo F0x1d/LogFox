@@ -11,9 +11,7 @@ internal class DateTimeSettingsRepositoryImpl @Inject constructor(
     private val localDataSource: DateTimeSettingsLocalDataSource,
 ) : DateTimeSettingsRepository {
 
-    override fun dateFormat(): PreferenceStateFlow<String> =
-        localDataSource.dateFormat().asPreferenceStateFlow()
+    override fun dateFormat(): PreferenceStateFlow<String> = localDataSource.dateFormat().asPreferenceStateFlow()
 
-    override fun timeFormat(): PreferenceStateFlow<String> =
-        localDataSource.timeFormat().asPreferenceStateFlow()
+    override fun timeFormat(): PreferenceStateFlow<String> = localDataSource.timeFormat().asPreferenceStateFlow()
 }

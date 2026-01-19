@@ -8,7 +8,5 @@ import javax.inject.Inject
 internal class EndRecordingUseCaseImpl @Inject constructor(
     private val recordingLocalDataSource: RecordingLocalDataSource,
 ) : EndRecordingUseCase {
-    override suspend fun invoke(): LogRecording? {
-        return recordingLocalDataSource.end()
-    }
+    override suspend fun invoke(): LogRecording? = recordingLocalDataSource.end()
 }

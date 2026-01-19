@@ -16,9 +16,7 @@ internal interface DataSourcesModule {
 
     @Binds
     @Singleton
-    fun bindRecordingLocalDataSource(
-        impl: RecordingLocalDataSourceImpl,
-    ): RecordingLocalDataSource
+    fun bindRecordingLocalDataSource(impl: RecordingLocalDataSourceImpl): RecordingLocalDataSource
 
     @Binds
     fun bindRecordingNotificationsLocalDataSource(

@@ -31,7 +31,9 @@ internal class RecordingLocalDataSourceImpl @Inject constructor(
     private val recordingsDir = File("${context.filesDir.absolutePath}/recordings").apply {
         if (!exists()) mkdirs()
     }
-    private val cacheRecordingsDir = File("${context.filesDir.absolutePath}/recordings/cache").apply {
+    private val cacheRecordingsDir = File(
+        "${context.filesDir.absolutePath}/recordings/cache",
+    ).apply {
         if (!exists()) mkdirs()
     }
 
@@ -44,8 +46,8 @@ internal class RecordingLocalDataSourceImpl @Inject constructor(
         reader.record(
             File(
                 recordingsDir,
-                "${dateTimeFormatter.formatForExport(System.currentTimeMillis())}.log"
-            )
+                "${dateTimeFormatter.formatForExport(System.currentTimeMillis())}.log",
+            ),
         )
 
         notificationsLocalDataSource.sendRecordingNotification()
@@ -69,7 +71,9 @@ internal class RecordingLocalDataSourceImpl @Inject constructor(
         notificationsLocalDataSource.cancelRecordingNotification()
 
         val logRecording = LogRecording(
-            title = "${context.getString(Strings.record_file)} ${logRecordingRepository.count() + 1}",
+            title = "${context.getString(
+                Strings.record_file,
+            )} ${logRecordingRepository.count() + 1}",
             dateAndTime = reader.recordingTime,
             file = reader.recordingFile ?: return@withContext null,
         ).let {
@@ -84,7 +88,10 @@ internal class RecordingLocalDataSourceImpl @Inject constructor(
     override suspend fun loggingStopped(): Unit = withContext(ioDispatcher) {
         when (state.value) {
             RecordingState.RECORDING,
-            RecordingState.PAUSED -> { end() }
+            RecordingState.PAUSED,
+            -> {
+                end()
+            }
 
             else -> Unit
         }

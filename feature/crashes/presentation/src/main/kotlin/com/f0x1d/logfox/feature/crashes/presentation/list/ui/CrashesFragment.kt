@@ -12,6 +12,10 @@ import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.f0x1d.logfox.core.context.isHorizontalOrientation
+import com.f0x1d.logfox.core.presentation.density.dpToPx
+import com.f0x1d.logfox.core.presentation.dialog.showAreYouSureClearDialog
+import com.f0x1d.logfox.core.presentation.dialog.showAreYouSureDeleteDialog
+import com.f0x1d.logfox.core.presentation.view.setClickListenerOn
 import com.f0x1d.logfox.core.tea.BaseStoreFragment
 import com.f0x1d.logfox.feature.crashes.presentation.R
 import com.f0x1d.logfox.feature.crashes.presentation.common.adapter.CrashesAdapter
@@ -22,13 +26,9 @@ import com.f0x1d.logfox.feature.crashes.presentation.list.CrashesCommand
 import com.f0x1d.logfox.feature.crashes.presentation.list.CrashesSideEffect
 import com.f0x1d.logfox.feature.crashes.presentation.list.CrashesState
 import com.f0x1d.logfox.feature.crashes.presentation.list.CrashesViewModel
-import com.f0x1d.logfox.navigation.Directions
 import com.f0x1d.logfox.feature.preferences.CrashesSort
 import com.f0x1d.logfox.feature.strings.Strings
-import com.f0x1d.logfox.core.presentation.density.dpToPx
-import com.f0x1d.logfox.core.presentation.dialog.showAreYouSureClearDialog
-import com.f0x1d.logfox.core.presentation.dialog.showAreYouSureDeleteDialog
-import com.f0x1d.logfox.core.presentation.view.setClickListenerOn
+import com.f0x1d.logfox.navigation.Directions
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import com.google.android.material.search.SearchView
@@ -36,13 +36,14 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.chrisbanes.insetter.applyInsetter
 
 @AndroidEntryPoint
-internal class CrashesFragment : BaseStoreFragment<
-    FragmentCrashesBinding,
-    CrashesState,
-    CrashesCommand,
-    CrashesSideEffect,
-    CrashesViewModel,
->() {
+internal class CrashesFragment :
+    BaseStoreFragment<
+        FragmentCrashesBinding,
+        CrashesState,
+        CrashesCommand,
+        CrashesSideEffect,
+        CrashesViewModel,
+        >() {
 
     override val viewModel by hiltNavGraphViewModels<CrashesViewModel>(Directions.crashesFragment)
 
@@ -89,10 +90,7 @@ internal class CrashesFragment : BaseStoreFragment<
         }
     }
 
-    override fun inflateBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?
-    ) = FragmentCrashesBinding.inflate(inflater, container, false)
+    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) = FragmentCrashesBinding.inflate(inflater, container, false)
 
     override fun FragmentCrashesBinding.onViewCreated(view: View, savedInstanceState: Bundle?) {
         crashesRecycler.applyInsetter {
@@ -114,7 +112,9 @@ internal class CrashesFragment : BaseStoreFragment<
                 showSortDialog()
             }
             setClickListenerOn(R.id.blacklist_item) {
-                findNavController().navigate(Directions.action_crashesFragment_to_appsPickerFragment)
+                findNavController().navigate(
+                    Directions.action_crashesFragment_to_appsPickerFragment,
+                )
             }
             setClickListenerOn(R.id.clear_item) {
                 showAreYouSureClearDialog {
@@ -129,7 +129,8 @@ internal class CrashesFragment : BaseStoreFragment<
             }
 
             addTransitionListener { _, _, newState ->
-                closeSearchOnBackPressedCallback.isEnabled = newState == SearchView.TransitionState.SHOWN
+                closeSearchOnBackPressedCallback.isEnabled =
+                    newState == SearchView.TransitionState.SHOWN
             }
         }
 
@@ -144,7 +145,7 @@ internal class CrashesFragment : BaseStoreFragment<
                     dividerInsetStart = 80.dpToPx.toInt()
                     dividerInsetEnd = 10.dpToPx.toInt()
                     isLastItemDecorated = false
-                }
+                },
             )
 
             adapter = this@CrashesFragment.adapter

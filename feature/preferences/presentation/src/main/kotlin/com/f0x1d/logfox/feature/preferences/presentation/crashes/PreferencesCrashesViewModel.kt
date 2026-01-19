@@ -5,10 +5,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-internal class PreferencesCrashesViewModel @Inject constructor(
-    reducer: PreferencesCrashesReducer,
-) : BaseStoreViewModel<PreferencesCrashesState, PreferencesCrashesCommand, PreferencesCrashesSideEffect>(
-    initialState = PreferencesCrashesState,
-    reducer = reducer,
-    effectHandlers = emptyList(),
-)
+internal class PreferencesCrashesViewModel @Inject constructor(reducer: PreferencesCrashesReducer) :
+    BaseStoreViewModel<PreferencesCrashesState, PreferencesCrashesCommand, PreferencesCrashesSideEffect>(
+        initialState = PreferencesCrashesState,
+        reducer = reducer,
+        effectHandlers = emptyList(),
+    )

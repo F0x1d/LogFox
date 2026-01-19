@@ -11,9 +11,7 @@ internal class UISettingsRepositoryImpl @Inject constructor(
     private val localDataSource: UISettingsLocalDataSource,
 ) : UISettingsRepository {
 
-    override fun nightTheme(): PreferenceStateFlow<Int> =
-        localDataSource.nightTheme().asPreferenceStateFlow()
+    override fun nightTheme(): PreferenceStateFlow<Int> = localDataSource.nightTheme().asPreferenceStateFlow()
 
-    override fun monetEnabled(): PreferenceStateFlow<Boolean> =
-        localDataSource.monetEnabled().asPreferenceStateFlow()
+    override fun monetEnabled(): PreferenceStateFlow<Boolean> = localDataSource.monetEnabled().asPreferenceStateFlow()
 }

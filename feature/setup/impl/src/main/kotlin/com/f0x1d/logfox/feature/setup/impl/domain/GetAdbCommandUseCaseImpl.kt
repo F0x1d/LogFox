@@ -10,7 +10,5 @@ internal class GetAdbCommandUseCaseImpl @Inject constructor(
     @ApplicationContext private val context: Context,
 ) : GetAdbCommandUseCase {
 
-    override fun invoke(): String {
-        return "adb shell pm grant ${context.packageName} ${Manifest.permission.READ_LOGS}"
-    }
+    override fun invoke(): String = "adb shell pm grant ${context.packageName} ${Manifest.permission.READ_LOGS}"
 }

@@ -4,8 +4,8 @@ import android.widget.CompoundButton
 
 class OnlyUserCheckedChangeListener(
     private val buttonView: CompoundButton,
-    private val listener: CompoundButton.OnCheckedChangeListener
-): CompoundButton.OnCheckedChangeListener {
+    private val listener: CompoundButton.OnCheckedChangeListener,
+) : CompoundButton.OnCheckedChangeListener {
 
     var enabled = true
 

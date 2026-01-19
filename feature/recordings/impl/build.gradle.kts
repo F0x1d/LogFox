@@ -18,6 +18,4 @@ dependencies {
     implementation(projects.feature.terminals.api)
     implementation(projects.core.presentation)
     implementation(projects.strings)
-
-
 }

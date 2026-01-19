@@ -12,7 +12,7 @@ fun Preference.setupAsEditTextPreference(
     setupViews: (DialogTextBinding) -> Unit,
     setupDialog: MaterialAlertDialogBuilder.() -> Unit,
     get: () -> String?,
-    save: (String?) -> Unit
+    save: (String?) -> Unit,
 ) = setOnPreferenceClickListener {
     val dialogBinding = DialogTextBinding.inflate(LayoutInflater.from(context))
     setupViews(dialogBinding)
@@ -37,7 +37,7 @@ fun Preference.setupAsEditTextPreference(
                     postDelayed({
                         context.getSystemService<InputMethodManager>()?.showSoftInput(
                             this,
-                            InputMethodManager.SHOW_IMPLICIT
+                            InputMethodManager.SHOW_IMPLICIT,
                         )
                     }, 100)
                 }
@@ -51,7 +51,7 @@ fun Preference.setupAsListPreference(
     setupDialog: MaterialAlertDialogBuilder.() -> Unit,
     items: Array<String>,
     selected: () -> Int,
-    onSelected: (Int) -> Unit
+    onSelected: (Int) -> Unit,
 ) = setOnPreferenceClickListener {
     MaterialAlertDialogBuilder(context)
         .setTitle(title)

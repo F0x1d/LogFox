@@ -8,8 +8,5 @@ import javax.inject.Inject
 internal class SwitchFilterUseCaseImpl @Inject constructor(
     private val filtersRepository: FiltersRepository,
 ) : SwitchFilterUseCase {
-    override suspend fun invoke(
-        userFilter: UserFilter,
-        checked: Boolean,
-    ) = filtersRepository.switch(userFilter, checked)
+    override suspend fun invoke(userFilter: UserFilter, checked: Boolean) = filtersRepository.switch(userFilter, checked)
 }

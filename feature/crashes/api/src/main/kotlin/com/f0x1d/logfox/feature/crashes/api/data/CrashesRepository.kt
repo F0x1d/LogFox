@@ -12,10 +12,7 @@ interface CrashesRepository {
 
     suspend fun getById(id: Long): AppCrash?
 
-    suspend fun getAllByDateAndTime(
-        dateAndTime: Long,
-        packageName: String,
-    ): List<AppCrash>
+    suspend fun getAllByDateAndTime(dateAndTime: Long, packageName: String): List<AppCrash>
 
     suspend fun insert(appCrash: AppCrash): Long
 

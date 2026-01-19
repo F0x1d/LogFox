@@ -8,13 +8,14 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.f0x1d.logfox.core.presentation.viewholder.BaseViewHolder
 
-abstract class BaseListAdapter<T, D : ViewBinding>(
-    diffUtil: DiffUtil.ItemCallback<T>,
-): ListAdapter<T, BaseViewHolder<T, D>>(diffUtil) {
+abstract class BaseListAdapter<T, D : ViewBinding>(diffUtil: DiffUtil.ItemCallback<T>) : ListAdapter<T, BaseViewHolder<T, D>>(diffUtil) {
 
     protected var recyclerView: RecyclerView? = null
 
-    abstract fun createHolder(layoutInflater: LayoutInflater, parent: ViewGroup): BaseViewHolder<T, D>
+    abstract fun createHolder(
+        layoutInflater: LayoutInflater,
+        parent: ViewGroup,
+    ): BaseViewHolder<T, D>
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = createHolder(
         layoutInflater = LayoutInflater.from(parent.context),

@@ -11,7 +11,8 @@ import javax.inject.Singleton
 @Singleton
 internal class DateTimeSettingsLocalDataSourceImpl @Inject constructor(
     @ApplicationContext context: Context,
-) : BasePreferences(context), DateTimeSettingsLocalDataSource {
+) : BasePreferences(context),
+    DateTimeSettingsLocalDataSource {
 
     override fun dateFormat(): Preference<String> = stringPreference(
         key = KEY_DATE_FORMAT,

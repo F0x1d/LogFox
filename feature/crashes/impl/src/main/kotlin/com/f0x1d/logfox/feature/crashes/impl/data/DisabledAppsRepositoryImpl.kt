@@ -1,9 +1,9 @@
 package com.f0x1d.logfox.feature.crashes.impl.data
 
 import com.f0x1d.logfox.core.di.IODispatcher
+import com.f0x1d.logfox.feature.crashes.api.data.DisabledAppsRepository
 import com.f0x1d.logfox.feature.database.data.DisabledAppRepository
 import com.f0x1d.logfox.feature.database.model.DisabledApp
-import com.f0x1d.logfox.feature.crashes.api.data.DisabledAppsRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -21,11 +21,10 @@ internal class DisabledAppsRepositoryImpl @Inject constructor(
         disabledAppRepository.getByPackageName(packageName) != null
     }
 
-    override fun disabledForFlow(packageName: String): Flow<Boolean> =
-        disabledAppRepository
-            .getByPackageNameAsFlow(packageName)
-            .map { it != null }
-            .flowOn(ioDispatcher)
+    override fun disabledForFlow(packageName: String): Flow<Boolean> = disabledAppRepository
+        .getByPackageNameAsFlow(packageName)
+        .map { it != null }
+        .flowOn(ioDispatcher)
 
     override suspend fun checkApp(packageName: String) = checkApp(
         packageName = packageName,
@@ -42,13 +41,11 @@ internal class DisabledAppsRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getAllAsFlow(): Flow<List<DisabledApp>> =
-        disabledAppRepository.getAllAsFlow()
-            .distinctUntilChanged()
-            .flowOn(ioDispatcher)
+    override fun getAllAsFlow(): Flow<List<DisabledApp>> = disabledAppRepository.getAllAsFlow()
+        .distinctUntilChanged()
+        .flowOn(ioDispatcher)
 
-    override fun getByIdAsFlow(id: Long): Flow<DisabledApp?> =
-        disabledAppRepository.getByIdAsFlow(id).flowOn(ioDispatcher)
+    override fun getByIdAsFlow(id: Long): Flow<DisabledApp?> = disabledAppRepository.getByIdAsFlow(id).flowOn(ioDispatcher)
 
     override suspend fun getAll(): List<DisabledApp> = withContext(ioDispatcher) {
         disabledAppRepository.getAll()

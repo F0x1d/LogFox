@@ -6,8 +6,7 @@ import com.f0x1d.logfox.core.tea.noSideEffects
 import com.f0x1d.logfox.core.tea.withSideEffects
 import javax.inject.Inject
 
-internal class RecordingsReducer @Inject constructor() :
-    Reducer<RecordingsState, RecordingsCommand, RecordingsSideEffect> {
+internal class RecordingsReducer @Inject constructor() : Reducer<RecordingsState, RecordingsCommand, RecordingsSideEffect> {
 
     override fun reduce(
         state: RecordingsState,

@@ -8,7 +8,7 @@ data class ShowLogValues(
     val tid: Boolean,
     val packageName: Boolean,
     val tag: Boolean,
-    val content: Boolean
+    val content: Boolean,
 ) {
     val asArray = booleanArrayOf(
         date,
@@ -18,6 +18,6 @@ data class ShowLogValues(
         tid,
         packageName,
         tag,
-        content
+        content,
     )
 }

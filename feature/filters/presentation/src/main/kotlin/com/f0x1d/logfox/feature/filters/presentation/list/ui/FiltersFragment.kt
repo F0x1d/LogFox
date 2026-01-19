@@ -10,6 +10,10 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.f0x1d.logfox.core.presentation.dialog.showAreYouSureClearDialog
+import com.f0x1d.logfox.core.presentation.dialog.showAreYouSureDeleteDialog
+import com.f0x1d.logfox.core.presentation.view.setClickListenerOn
+import com.f0x1d.logfox.core.presentation.view.setupBackButtonForNavController
 import com.f0x1d.logfox.core.tea.BaseStoreFragment
 import com.f0x1d.logfox.feature.filters.presentation.R
 import com.f0x1d.logfox.feature.filters.presentation.databinding.FragmentFiltersBinding
@@ -19,20 +23,17 @@ import com.f0x1d.logfox.feature.filters.presentation.list.FiltersState
 import com.f0x1d.logfox.feature.filters.presentation.list.FiltersViewModel
 import com.f0x1d.logfox.feature.filters.presentation.list.adapter.FiltersAdapter
 import com.f0x1d.logfox.navigation.Directions
-import com.f0x1d.logfox.core.presentation.dialog.showAreYouSureClearDialog
-import com.f0x1d.logfox.core.presentation.dialog.showAreYouSureDeleteDialog
-import com.f0x1d.logfox.core.presentation.view.setClickListenerOn
-import com.f0x1d.logfox.core.presentation.view.setupBackButtonForNavController
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-internal class FiltersFragment : BaseStoreFragment<
-    FragmentFiltersBinding,
-    FiltersState,
-    FiltersCommand,
-    FiltersSideEffect,
-    FiltersViewModel,
->() {
+internal class FiltersFragment :
+    BaseStoreFragment<
+        FragmentFiltersBinding,
+        FiltersState,
+        FiltersCommand,
+        FiltersSideEffect,
+        FiltersViewModel,
+        >() {
 
     override val viewModel by viewModels<FiltersViewModel>()
 
@@ -65,10 +66,7 @@ internal class FiltersFragment : BaseStoreFragment<
         uri?.let { send(FiltersCommand.ExportAll(it)) }
     }
 
-    override fun inflateBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-    ) = FragmentFiltersBinding.inflate(inflater, container, false)
+    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) = FragmentFiltersBinding.inflate(inflater, container, false)
 
     override fun FragmentFiltersBinding.onViewCreated(view: View, savedInstanceState: Bundle?) {
         toolbar.setupBackButtonForNavController()

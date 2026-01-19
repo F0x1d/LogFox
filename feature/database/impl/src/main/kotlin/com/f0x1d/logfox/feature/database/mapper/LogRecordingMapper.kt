@@ -10,9 +10,7 @@ internal fun LogRecordingEntity.toDomain() = LogRecording(
     file = file,
 )
 
-internal fun LogRecording.toEntity(
-    isCacheRecording: Boolean = false,
-) = LogRecordingEntity(
+internal fun LogRecording.toEntity(isCacheRecording: Boolean = false) = LogRecordingEntity(
     id = id,
     title = title,
     dateAndTime = dateAndTime,

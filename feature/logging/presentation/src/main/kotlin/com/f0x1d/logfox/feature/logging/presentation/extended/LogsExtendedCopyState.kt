@@ -1,5 +1,3 @@
 package com.f0x1d.logfox.feature.logging.presentation.extended
 
-data class LogsExtendedCopyState(
-    val text: String? = null,
-)
+data class LogsExtendedCopyState(val text: String? = null)

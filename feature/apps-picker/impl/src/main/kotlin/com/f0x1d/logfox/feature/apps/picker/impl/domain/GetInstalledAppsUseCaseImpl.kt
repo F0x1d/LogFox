@@ -10,6 +10,5 @@ internal class GetInstalledAppsUseCaseImpl @Inject constructor(
     private val installedAppsDataSource: InstalledAppsDataSource,
 ) : GetInstalledAppsUseCase {
 
-    override suspend fun invoke(): ImmutableList<InstalledApp> =
-        installedAppsDataSource.getInstalledApps()
+    override suspend fun invoke(): ImmutableList<InstalledApp> = installedAppsDataSource.getInstalledApps()
 }

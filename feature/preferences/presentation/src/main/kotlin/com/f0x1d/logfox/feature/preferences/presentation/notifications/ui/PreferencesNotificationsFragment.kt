@@ -7,11 +7,11 @@ import android.provider.Settings
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.preference.Preference
-import com.f0x1d.logfox.feature.notifications.api.LOGGING_STATUS_CHANNEL_ID
 import com.f0x1d.logfox.core.context.hasNotificationsPermission
 import com.f0x1d.logfox.core.context.isHorizontalOrientation
 import com.f0x1d.logfox.core.presentation.view.setupBackButtonForNavController
 import com.f0x1d.logfox.core.tea.BaseStorePreferenceFragment
+import com.f0x1d.logfox.feature.notifications.api.LOGGING_STATUS_CHANNEL_ID
 import com.f0x1d.logfox.feature.preferences.presentation.R
 import com.f0x1d.logfox.feature.preferences.presentation.notifications.PreferencesNotificationsCommand
 import com.f0x1d.logfox.feature.preferences.presentation.notifications.PreferencesNotificationsSideEffect
@@ -23,12 +23,13 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.chrisbanes.insetter.applyInsetter
 
 @AndroidEntryPoint
-internal class PreferencesNotificationsFragment : BaseStorePreferenceFragment<
-    PreferencesNotificationsState,
-    PreferencesNotificationsCommand,
-    PreferencesNotificationsSideEffect,
-    PreferencesNotificationsViewModel,
->() {
+internal class PreferencesNotificationsFragment :
+    BaseStorePreferenceFragment<
+        PreferencesNotificationsState,
+        PreferencesNotificationsCommand,
+        PreferencesNotificationsSideEffect,
+        PreferencesNotificationsViewModel,
+        >() {
 
     override val viewModel by viewModels<PreferencesNotificationsViewModel>()
 
@@ -69,8 +70,8 @@ internal class PreferencesNotificationsFragment : BaseStorePreferenceFragment<
         super.onStart()
         send(
             PreferencesNotificationsCommand.PermissionChecked(
-                hasPermission = requireContext().hasNotificationsPermission()
-            )
+                hasPermission = requireContext().hasNotificationsPermission(),
+            ),
         )
     }
 
@@ -95,7 +96,7 @@ internal class PreferencesNotificationsFragment : BaseStorePreferenceFragment<
                         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         putExtra(Settings.EXTRA_APP_PACKAGE, requireContext().packageName)
                         putExtra(Settings.EXTRA_CHANNEL_ID, LOGGING_STATUS_CHANNEL_ID)
-                    }
+                    },
                 )
             }
 
@@ -104,7 +105,7 @@ internal class PreferencesNotificationsFragment : BaseStorePreferenceFragment<
                     Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
                         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         putExtra(Settings.EXTRA_APP_PACKAGE, requireContext().packageName)
-                    }
+                    },
                 )
             }
         }

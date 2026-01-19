@@ -251,6 +251,7 @@ fun LogFoxTheme(
         }
 
         darkTheme -> darkScheme
+
         else -> lightScheme
     }
 

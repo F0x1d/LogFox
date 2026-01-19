@@ -26,7 +26,5 @@ internal interface TerminalsUseCaseModule {
     ): GetDefaultTerminalUseCase
 
     @Binds
-    fun bindExitTerminalUseCase(
-        impl: ExitTerminalUseCaseImpl,
-    ): ExitTerminalUseCase
+    fun bindExitTerminalUseCase(impl: ExitTerminalUseCaseImpl): ExitTerminalUseCase
 }

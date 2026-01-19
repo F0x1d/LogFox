@@ -17,9 +17,9 @@ dependencies {
     api(projects.core.compose.designSystem)
     api(projects.core.compat)
     api(projects.core.recycler)
-    
+
     implementation(projects.strings)
-    
+
     implementation(libs.bundles.androidx)
     implementation(libs.bundles.androidx.compose)
     implementation(libs.bundles.androidx.navigation)

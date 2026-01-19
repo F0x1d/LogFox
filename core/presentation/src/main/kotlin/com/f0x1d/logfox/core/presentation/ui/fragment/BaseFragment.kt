@@ -24,7 +24,11 @@ abstract class BaseFragment<T : ViewBinding> : Fragment() {
     abstract fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?): T?
     protected open fun T.onViewCreated(view: View, savedInstanceState: Bundle?) = Unit
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View? {
         inflateBinding(inflater, container)?.also {
             mutableBinding = it
             return it.root
@@ -56,7 +60,10 @@ abstract class BaseFragment<T : ViewBinding> : Fragment() {
     protected open fun snackbar(text: String) = requireView().snackbar(text).apply {
         view.applyInsetter {
             type(navigationBars = true) {
-                margin(vertical = resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE)
+                margin(
+                    vertical =
+                    resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE,
+                )
             }
         }
     }

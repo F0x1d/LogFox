@@ -5,16 +5,13 @@ import androidx.collection.LruCache
 import timber.log.Timber
 
 private val logRegex = "(.{14}) (.{5,}?) (.{1,5}) (.{1,5}) (.) (.+?): (.+)".toRegex()
+
 // time, uid, pid, tid, level, tag, message
 private val uidRegex = "u(.+?).*a(.+)".toRegex()
 
 private val uidsCache = LruCache<String, String>(200)
 
-fun LogLine(
-    id: Long,
-    line: String,
-    context: Context
-) = runCatching {
+fun LogLine(id: Long, line: String, context: Context) = runCatching {
     logRegex.find(line.trim()).also { matchResult ->
         if (matchResult == null) {
             Timber.d("matchResult is null for $line")
@@ -145,7 +142,7 @@ internal val UIDS_MAPPINGS = mapOf(
 
     9997 reverseTo "everybody", /* shared between all apps in the same profile */
     9998 reverseTo "misc", /* access to misc storage */
-    9999 reverseTo "nobody"
+    9999 reverseTo "nobody",
 )
 
 private infix fun <A, B> A.reverseTo(that: B): Pair<B, A> = Pair(that, this)

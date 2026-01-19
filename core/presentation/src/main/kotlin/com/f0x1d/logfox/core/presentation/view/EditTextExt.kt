@@ -31,7 +31,9 @@ class ExtendedTextWatcher(
     }
 }
 
-fun EditText.applyExtendedTextWatcher(doAfterTextChanged: (e: Editable?) -> Unit): ExtendedTextWatcher = ExtendedTextWatcher(
+fun EditText.applyExtendedTextWatcher(
+    doAfterTextChanged: (e: Editable?) -> Unit,
+): ExtendedTextWatcher = ExtendedTextWatcher(
     editText = this,
     doAfterTextChanged = doAfterTextChanged,
 )

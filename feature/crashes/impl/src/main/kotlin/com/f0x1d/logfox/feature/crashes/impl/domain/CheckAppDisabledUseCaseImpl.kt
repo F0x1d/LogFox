@@ -7,9 +7,7 @@ import javax.inject.Inject
 internal class CheckAppDisabledUseCaseImpl @Inject constructor(
     private val disabledAppsRepository: DisabledAppsRepository,
 ) : CheckAppDisabledUseCase {
-    override suspend fun invoke(packageName: String) =
-        disabledAppsRepository.checkApp(packageName)
+    override suspend fun invoke(packageName: String) = disabledAppsRepository.checkApp(packageName)
 
-    override suspend fun invoke(packageName: String, checked: Boolean) =
-        disabledAppsRepository.checkApp(packageName, checked)
+    override suspend fun invoke(packageName: String, checked: Boolean) = disabledAppsRepository.checkApp(packageName, checked)
 }

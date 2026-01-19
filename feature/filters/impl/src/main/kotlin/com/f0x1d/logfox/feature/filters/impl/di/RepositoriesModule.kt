@@ -12,7 +12,5 @@ import dagger.hilt.components.SingletonComponent
 internal interface RepositoriesModule {
 
     @Binds
-    fun bindFiltersRepository(
-        filtersRepositoryImpl: FiltersRepositoryImpl,
-    ): FiltersRepository
+    fun bindFiltersRepository(filtersRepositoryImpl: FiltersRepositoryImpl): FiltersRepository
 }

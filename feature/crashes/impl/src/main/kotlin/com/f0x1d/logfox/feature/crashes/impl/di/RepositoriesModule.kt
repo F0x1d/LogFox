@@ -14,9 +14,7 @@ import dagger.hilt.components.SingletonComponent
 internal interface RepositoriesModule {
 
     @Binds
-    fun bindCrashesRepository(
-        crashesRepositoryImpl: CrashesRepositoryImpl,
-    ): CrashesRepository
+    fun bindCrashesRepository(crashesRepositoryImpl: CrashesRepositoryImpl): CrashesRepository
 
     @Binds
     fun provideDisabledAppsRepository(

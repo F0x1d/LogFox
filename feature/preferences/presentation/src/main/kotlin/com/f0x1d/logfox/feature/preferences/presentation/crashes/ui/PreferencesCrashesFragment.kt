@@ -17,12 +17,13 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.chrisbanes.insetter.applyInsetter
 
 @AndroidEntryPoint
-internal class PreferencesCrashesFragment : BaseStorePreferenceFragment<
-    PreferencesCrashesState,
-    PreferencesCrashesCommand,
-    PreferencesCrashesSideEffect,
-    PreferencesCrashesViewModel,
->() {
+internal class PreferencesCrashesFragment :
+    BaseStorePreferenceFragment<
+        PreferencesCrashesState,
+        PreferencesCrashesCommand,
+        PreferencesCrashesSideEffect,
+        PreferencesCrashesViewModel,
+        >() {
 
     override val viewModel by viewModels<PreferencesCrashesViewModel>()
 

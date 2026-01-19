@@ -16,20 +16,18 @@ import com.f0x1d.logfox.feature.logging.presentation.search.SearchLogsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-internal class SearchLogsBottomSheetFragment : BaseStoreBottomSheetFragment<
-    SheetSearchBinding,
-    SearchLogsState,
-    SearchLogsCommand,
-    SearchLogsSideEffect,
-    SearchLogsViewModel,
->() {
+internal class SearchLogsBottomSheetFragment :
+    BaseStoreBottomSheetFragment<
+        SheetSearchBinding,
+        SearchLogsState,
+        SearchLogsCommand,
+        SearchLogsSideEffect,
+        SearchLogsViewModel,
+        >() {
 
     override val viewModel by viewModels<SearchLogsViewModel>()
 
-    override fun inflateBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-    ) = SheetSearchBinding.inflate(inflater, container, false)
+    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) = SheetSearchBinding.inflate(inflater, container, false)
 
     override fun SheetSearchBinding.onViewCreated(view: View, savedInstanceState: Bundle?) {
         clearSearchButton.setOnClickListener {
@@ -59,6 +57,7 @@ internal class SearchLogsBottomSheetFragment : BaseStoreBottomSheetFragment<
     override fun handleSideEffect(sideEffect: SearchLogsSideEffect) {
         when (sideEffect) {
             is SearchLogsSideEffect.Dismiss -> dismiss()
+
             // Business logic side effects - handled by EffectHandler
             else -> Unit
         }

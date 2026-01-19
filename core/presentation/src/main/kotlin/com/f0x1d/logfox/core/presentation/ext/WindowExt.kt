@@ -25,11 +25,11 @@ fun Window.enableEdgeToEdge(isContrastEnforced: Boolean = true) {
 
     navigationBarColor = when {
         !contrastedNavBarAvailable -> context.getColor(
-            R.color.transparent_black
+            R.color.transparent_black,
         )
 
         !gesturesAvailable && isContrastEnforced -> context.getColor(
-            R.color.navbar_transparent_background
+            R.color.navbar_transparent_background,
         )
 
         else -> Color.TRANSPARENT
@@ -39,7 +39,6 @@ fun Window.enableEdgeToEdge(isContrastEnforced: Boolean = true) {
 private fun Context.resolveAttribute(@AttrRes attributeResId: Int) = TypedValue().let {
     when (theme.resolveAttribute(attributeResId, it, true)) {
         true -> it
-
         else -> null
     }
 }
@@ -49,7 +48,6 @@ private fun Context.resolveBoolean(@AttrRes attributeResId: Int, defaultValue: B
 ).let {
     when (it != null && it.type == TypedValue.TYPE_INT_BOOLEAN) {
         true -> it.data != 0
-
         else -> defaultValue
     }
 }

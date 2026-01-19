@@ -20,7 +20,7 @@ import kotlin.system.exitProcess
 
 val Context.hasPermissionToReadLogs: Boolean get() = ContextCompat.checkSelfPermission(
     this,
-    Manifest.permission.READ_LOGS
+    Manifest.permission.READ_LOGS,
 ) == PackageManager.PERMISSION_GRANTED
 
 val Context.notificationManagerCompat get() = NotificationManagerCompat.from(this)
@@ -68,20 +68,21 @@ fun Context.catchingNotNumber(block: () -> Unit) = try {
     toast(Strings.this_is_not_a_number)
 }
 
-inline fun <reified T> Context.sendService(
-    action: String,
-) = startService(Intent(this, T::class.java).setAction(action))
+inline fun <reified T> Context.sendService(action: String) = startService(Intent(this, T::class.java).setAction(action))
 
 @SuppressLint("InlinedApi")
-fun Context.hasNotificationsPermission() = if (shouldRequestNotificationsPermission)
-    ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
-else
+fun Context.hasNotificationsPermission() = if (shouldRequestNotificationsPermission) {
+    ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) ==
+        PackageManager.PERMISSION_GRANTED
+} else {
     true
+}
 
-fun Context.doIfNotificationsAllowed(block: NotificationManagerCompat.() -> Unit) = if (hasNotificationsPermission())
+fun Context.doIfNotificationsAllowed(block: NotificationManagerCompat.() -> Unit) = if (hasNotificationsPermission()) {
     block(notificationManagerCompat)
-else
+} else {
     Unit
+}
 
-
-val Context.isHorizontalOrientation get() = resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+val Context.isHorizontalOrientation get() = resources.configuration.orientation ==
+    Configuration.ORIENTATION_LANDSCAPE

@@ -13,6 +13,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import com.f0x1d.logfox.core.presentation.dialog.showAreYouSureClearDialog
+import com.f0x1d.logfox.core.presentation.dialog.showAreYouSureDeleteDialog
 import com.f0x1d.logfox.core.presentation.ui.fragment.compose.BaseComposeFragment
 import com.f0x1d.logfox.feature.database.model.LogRecording
 import com.f0x1d.logfox.feature.recordings.presentation.list.RecordingsCommand
@@ -20,8 +22,6 @@ import com.f0x1d.logfox.feature.recordings.presentation.list.RecordingsSideEffec
 import com.f0x1d.logfox.feature.recordings.presentation.list.RecordingsViewModel
 import com.f0x1d.logfox.feature.recordings.presentation.list.ui.compose.RecordingsScreenContent
 import com.f0x1d.logfox.navigation.Directions
-import com.f0x1d.logfox.core.presentation.dialog.showAreYouSureClearDialog
-import com.f0x1d.logfox.core.presentation.dialog.showAreYouSureDeleteDialog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -44,7 +44,9 @@ internal class RecordingsFragment : BaseComposeFragment() {
                         is RecordingsSideEffect.ShowSnackbar -> scope.launch {
                             snackbarHostState.showSnackbar(sideEffect.text)
                         }
+
                         is RecordingsSideEffect.OpenRecording -> openDetails(sideEffect.recording)
+
                         // Business logic side effects - handled by EffectHandler, ignored here
                         else -> Unit
                     }

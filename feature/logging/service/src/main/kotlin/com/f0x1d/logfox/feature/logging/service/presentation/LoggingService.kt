@@ -8,7 +8,6 @@ import androidx.core.app.ServiceCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import com.f0x1d.logfox.core.context.EXIT_APP_INTENT_ID
-import com.f0x1d.logfox.feature.notifications.api.LOGGING_STATUS_CHANNEL_ID
 import com.f0x1d.logfox.core.context.OPEN_APP_INTENT_ID
 import com.f0x1d.logfox.core.context.activityManager
 import com.f0x1d.logfox.core.context.makeServicePendingIntent
@@ -21,10 +20,11 @@ import com.f0x1d.logfox.feature.filters.api.domain.GetAllEnabledFiltersFlowUseCa
 import com.f0x1d.logfox.feature.filters.api.model.suits
 import com.f0x1d.logfox.feature.logging.api.domain.StartLoggingUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.UpdateLogsUseCase
+import com.f0x1d.logfox.feature.logging.api.model.LogLine
+import com.f0x1d.logfox.feature.notifications.api.LOGGING_STATUS_CHANNEL_ID
 import com.f0x1d.logfox.feature.preferences.domain.GetLogsDisplayLimitUseCase
 import com.f0x1d.logfox.feature.preferences.domain.GetLogsUpdateIntervalUseCase
 import com.f0x1d.logfox.feature.preferences.domain.ShouldFallbackToDefaultTerminalUseCase
-import com.f0x1d.logfox.feature.logging.api.model.LogLine
 import com.f0x1d.logfox.feature.recordings.api.domain.NotifyLoggingStoppedUseCase
 import com.f0x1d.logfox.feature.recordings.api.domain.ProcessLogLineRecordingUseCase
 import com.f0x1d.logfox.feature.strings.Strings
@@ -134,7 +134,6 @@ class LoggingService : LifecycleService() {
         when (intent?.action) {
             ACTION_RESTART_LOGGING -> restartLogging()
             ACTION_CLEAR_LOGS -> clearLogs()
-
             ACTION_KILL_SERVICE -> killApp()
         }
 
@@ -191,8 +190,9 @@ class LoggingService : LifecycleService() {
                             logsMutex.withLock {
                                 logs.add(logLine)
 
-                                while (logs.size > getLogsDisplayLimitUseCase())
+                                while (logs.size > getLogsDisplayLimitUseCase()) {
                                     logs.removeFirst()
+                                }
                             }
 
                             processLogLineCrashesUseCase(logLine)
@@ -243,7 +243,7 @@ class LoggingService : LifecycleService() {
             getString(Strings.exit),
             makeServicePendingIntent<LoggingService>(EXIT_APP_INTENT_ID) {
                 action = ACTION_KILL_SERVICE
-            }
+            },
         )
         .build()
 

@@ -72,7 +72,9 @@ internal class RecordingsEffectHandler @Inject constructor(
             }
 
             is RecordingsSideEffect.SaveAll -> {
-                onCommand(RecordingsCommand.ShowSavingSnackbar(context.getString(Strings.saving_logs)))
+                onCommand(
+                    RecordingsCommand.ShowSavingSnackbar(context.getString(Strings.saving_logs)),
+                )
                 val recording = saveAllRecordingsUseCase()
                 onCommand(RecordingsCommand.SaveAllCompleted(recording))
             }
@@ -83,6 +85,7 @@ internal class RecordingsEffectHandler @Inject constructor(
 
             // UI side effects - handled by Fragment, ignored here
             is RecordingsSideEffect.ShowSnackbar -> Unit
+
             is RecordingsSideEffect.OpenRecording -> Unit
         }
     }

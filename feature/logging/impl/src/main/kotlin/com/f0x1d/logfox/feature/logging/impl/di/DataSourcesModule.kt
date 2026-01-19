@@ -16,14 +16,10 @@ import dagger.hilt.components.SingletonComponent
 internal interface DataSourcesModule {
 
     @Binds
-    fun bindLogsDataSource(
-        logsDataSourceImpl: LogsDataSourceImpl,
-    ): LogsDataSource
+    fun bindLogsDataSource(logsDataSourceImpl: LogsDataSourceImpl): LogsDataSource
 
     @Binds
-    fun bindQueryDataSource(
-        queryDataSourceImpl: QueryDataSourceImpl,
-    ): QueryDataSource
+    fun bindQueryDataSource(queryDataSourceImpl: QueryDataSourceImpl): QueryDataSource
 
     @Binds
     fun bindSelectedLogLinesDataSource(

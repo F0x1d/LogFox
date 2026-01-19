@@ -7,8 +7,8 @@ import com.f0x1d.logfox.feature.logging.api.model.LogLine
 
 internal abstract class BaseCrashDetector(
     private val context: Context,
-    private val collected: suspend (AppCrash, List<LogLine>) -> Unit
-): suspend (LogLine) -> Unit {
+    private val collected: suspend (AppCrash, List<LogLine>) -> Unit,
+) : suspend (LogLine) -> Unit {
 
     protected abstract val crashType: CrashType
     protected open val commonTag: String? = null
@@ -43,9 +43,9 @@ internal abstract class BaseCrashDetector(
                     makeAppCrash(
                         crashedAppPackageName = packageFromCollected(collectedLines),
                         crashType = crashType,
-                        lines = collectedLines
+                        lines = collectedLines,
                     ),
-                    collectedLines
+                    collectedLines,
                 )
             }
 
@@ -83,7 +83,7 @@ internal abstract class BaseCrashDetector(
             appName = appName,
             packageName = crashedAppPackageName,
             crashType = crashType,
-            dateAndTime = lines.firstOrNull()?.dateAndTime ?: System.currentTimeMillis()
+            dateAndTime = lines.firstOrNull()?.dateAndTime ?: System.currentTimeMillis(),
         )
     }
 }

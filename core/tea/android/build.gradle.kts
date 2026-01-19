@@ -18,6 +18,6 @@ dependencies {
     api(libs.androidx.fragment)
     api(libs.androidx.preference)
     api(libs.material)
-    
+
     implementation(libs.androidx.compose.runtime)
 }

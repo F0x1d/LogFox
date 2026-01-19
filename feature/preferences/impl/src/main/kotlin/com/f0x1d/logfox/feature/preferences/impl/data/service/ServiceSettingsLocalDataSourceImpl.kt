@@ -10,7 +10,8 @@ import javax.inject.Singleton
 @Singleton
 internal class ServiceSettingsLocalDataSourceImpl @Inject constructor(
     @ApplicationContext context: Context,
-) : BasePreferences(context), ServiceSettingsLocalDataSource {
+) : BasePreferences(context),
+    ServiceSettingsLocalDataSource {
 
     override fun startOnBoot(): Preference<Boolean> = booleanPreference(
         key = KEY_START_ON_BOOT,

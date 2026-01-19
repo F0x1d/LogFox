@@ -7,7 +7,7 @@ import com.f0x1d.logfox.core.context.notificationManagerCompat
 import com.f0x1d.logfox.core.context.toast
 import com.f0x1d.logfox.feature.strings.Strings
 
-class CopyReceiver: BroadcastReceiver() {
+class CopyReceiver : BroadcastReceiver() {
 
     companion object {
         const val EXTRA_PACKAGE_NAME = "package_name"
@@ -20,7 +20,7 @@ class CopyReceiver: BroadcastReceiver() {
 
         context.notificationManagerCompat.cancel(
             intent.getStringExtra(EXTRA_PACKAGE_NAME),
-            intent.getIntExtra(EXTRA_NOTIFICATION_ID, 0)
+            intent.getIntExtra(EXTRA_NOTIFICATION_ID, 0),
         )
     }
 }

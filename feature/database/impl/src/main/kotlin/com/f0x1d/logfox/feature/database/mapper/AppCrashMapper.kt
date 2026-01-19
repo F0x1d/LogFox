@@ -13,10 +13,7 @@ internal fun AppCrashEntity.toDomain() = AppCrash(
     logDumpFile = logDumpFile,
 )
 
-internal fun AppCrash.toEntity(
-    isDeleted: Boolean = false,
-    deletedTime: Long? = null,
-) = AppCrashEntity(
+internal fun AppCrash.toEntity(isDeleted: Boolean = false, deletedTime: Long? = null) = AppCrashEntity(
     id = id,
     appName = appName,
     packageName = packageName,

@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.f0x1d.logfox.core.context.asUri
 import com.f0x1d.logfox.core.context.shareFileIntent
+import com.f0x1d.logfox.core.presentation.view.applyExtendedTextWatcher
 import com.f0x1d.logfox.core.tea.BaseStoreBottomSheetFragment
 import com.f0x1d.logfox.feature.recordings.presentation.databinding.SheetRecordingDetailsBinding
 import com.f0x1d.logfox.feature.recordings.presentation.details.RecordingDetailsCommand
@@ -17,42 +18,42 @@ import com.f0x1d.logfox.feature.recordings.presentation.details.RecordingDetails
 import com.f0x1d.logfox.feature.recordings.presentation.details.RecordingDetailsState
 import com.f0x1d.logfox.feature.recordings.presentation.details.RecordingDetailsViewModel
 import com.f0x1d.logfox.navigation.Directions
-import com.f0x1d.logfox.core.presentation.view.applyExtendedTextWatcher
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Date
 
 @AndroidEntryPoint
-internal class RecordingDetailsBottomSheetFragment : BaseStoreBottomSheetFragment<
-    SheetRecordingDetailsBinding,
-    RecordingDetailsState,
-    RecordingDetailsCommand,
-    RecordingDetailsSideEffect,
-    RecordingDetailsViewModel,
->() {
+internal class RecordingDetailsBottomSheetFragment :
+    BaseStoreBottomSheetFragment<
+        SheetRecordingDetailsBinding,
+        RecordingDetailsState,
+        RecordingDetailsCommand,
+        RecordingDetailsSideEffect,
+        RecordingDetailsViewModel,
+        >() {
 
     override val viewModel by viewModels<RecordingDetailsViewModel>()
 
     private val zipLogLauncher = registerForActivityResult(
-        ActivityResultContracts.CreateDocument("application/zip")
+        ActivityResultContracts.CreateDocument("application/zip"),
     ) {
         it?.let { uri -> send(RecordingDetailsCommand.ExportZipFile(uri)) }
     }
 
     // no plain because android will append .txt itself
     private val logExportLauncher = registerForActivityResult(
-        ActivityResultContracts.CreateDocument("text/*")
+        ActivityResultContracts.CreateDocument("text/*"),
     ) {
         it?.let { uri -> send(RecordingDetailsCommand.ExportFile(uri)) }
     }
 
     private var textWatcher: com.f0x1d.logfox.core.presentation.view.ExtendedTextWatcher? = null
 
-    override fun inflateBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-    ) = SheetRecordingDetailsBinding.inflate(inflater, container, false)
+    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) = SheetRecordingDetailsBinding.inflate(inflater, container, false)
 
-    override fun SheetRecordingDetailsBinding.onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun SheetRecordingDetailsBinding.onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         viewButton.setOnClickListener {
             viewModel.state.value.recording?.let { logRecording ->
                 findNavController().navigate(
@@ -66,7 +67,9 @@ internal class RecordingDetailsBottomSheetFragment : BaseStoreBottomSheetFragmen
 
         exportButton.setOnClickListener {
             viewModel.state.value.recording?.let { logRecording ->
-                logExportLauncher.launch("${viewModel.formatForExport(logRecording.dateAndTime)}.log")
+                logExportLauncher.launch(
+                    "${viewModel.formatForExport(logRecording.dateAndTime)}.log",
+                )
             }
         }
 

@@ -26,19 +26,13 @@ import dagger.hilt.components.SingletonComponent
 internal interface CrashesUseCaseModule {
 
     @Binds
-    fun bindGetAllCrashesFlowUseCase(
-        impl: GetAllCrashesFlowUseCaseImpl,
-    ): GetAllCrashesFlowUseCase
+    fun bindGetAllCrashesFlowUseCase(impl: GetAllCrashesFlowUseCaseImpl): GetAllCrashesFlowUseCase
 
     @Binds
-    fun bindGetCrashByIdFlowUseCase(
-        impl: GetCrashByIdFlowUseCaseImpl,
-    ): GetCrashByIdFlowUseCase
+    fun bindGetCrashByIdFlowUseCase(impl: GetCrashByIdFlowUseCaseImpl): GetCrashByIdFlowUseCase
 
     @Binds
-    fun bindDeleteCrashUseCase(
-        impl: DeleteCrashUseCaseImpl,
-    ): DeleteCrashUseCase
+    fun bindDeleteCrashUseCase(impl: DeleteCrashUseCaseImpl): DeleteCrashUseCase
 
     @Binds
     fun bindDeleteAllCrashesByPackageNameUseCase(
@@ -46,9 +40,7 @@ internal interface CrashesUseCaseModule {
     ): DeleteAllCrashesByPackageNameUseCase
 
     @Binds
-    fun bindClearAllCrashesUseCase(
-        impl: ClearAllCrashesUseCaseImpl,
-    ): ClearAllCrashesUseCase
+    fun bindClearAllCrashesUseCase(impl: ClearAllCrashesUseCaseImpl): ClearAllCrashesUseCase
 
     @Binds
     fun bindUpdateCrashesSearchQueryUseCase(

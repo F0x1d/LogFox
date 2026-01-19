@@ -11,10 +11,14 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 internal interface LogRecordingDao {
 
-    @Query("SELECT * FROM LogRecording WHERE is_cache_recording = :cached ORDER BY date_and_time DESC")
+    @Query(
+        "SELECT * FROM LogRecording WHERE is_cache_recording = :cached ORDER BY date_and_time DESC",
+    )
     suspend fun getAll(cached: Boolean = false): List<LogRecordingEntity>
 
-    @Query("SELECT * FROM LogRecording WHERE is_cache_recording = :cached ORDER BY date_and_time DESC")
+    @Query(
+        "SELECT * FROM LogRecording WHERE is_cache_recording = :cached ORDER BY date_and_time DESC",
+    )
     fun getAllAsFlow(cached: Boolean = false): Flow<List<LogRecordingEntity>>
 
     @Query("SELECT * FROM LogRecording WHERE id = :id")

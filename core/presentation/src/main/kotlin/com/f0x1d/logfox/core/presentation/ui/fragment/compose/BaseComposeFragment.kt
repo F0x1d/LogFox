@@ -8,9 +8,9 @@ import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import com.f0x1d.logfox.compose.designsystem.theme.LogFoxTheme
 import com.f0x1d.logfox.core.presentation.databinding.FragmentComposeBinding
 import com.f0x1d.logfox.core.presentation.ui.fragment.BaseFragment
-import com.f0x1d.logfox.compose.designsystem.theme.LogFoxTheme
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.android.EntryPointAccessors
@@ -24,10 +24,7 @@ abstract class BaseComposeFragment : BaseFragment<FragmentComposeBinding>() {
             .dynamicColorAvailabilityProvider
     }
 
-    override fun inflateBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-    ) = FragmentComposeBinding.inflate(inflater, container, false)
+    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) = FragmentComposeBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

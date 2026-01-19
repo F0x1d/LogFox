@@ -6,8 +6,7 @@ import com.f0x1d.logfox.core.tea.noSideEffects
 import com.f0x1d.logfox.core.tea.withSideEffects
 import javax.inject.Inject
 
-internal class PreferencesNotificationsReducer @Inject constructor() :
-    Reducer<PreferencesNotificationsState, PreferencesNotificationsCommand, PreferencesNotificationsSideEffect> {
+internal class PreferencesNotificationsReducer @Inject constructor() : Reducer<PreferencesNotificationsState, PreferencesNotificationsCommand, PreferencesNotificationsSideEffect> {
 
     override fun reduce(
         state: PreferencesNotificationsState,
@@ -26,7 +25,9 @@ internal class PreferencesNotificationsReducer @Inject constructor() :
         }
 
         is PreferencesNotificationsCommand.OpenNotificationsPermissionSettings -> {
-            state.withSideEffects(PreferencesNotificationsSideEffect.OpenAppNotificationSettings)
+            state.withSideEffects(
+                PreferencesNotificationsSideEffect.OpenAppNotificationSettings,
+            )
         }
     }
 }

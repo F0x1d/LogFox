@@ -13,16 +13,11 @@ sealed interface CrashesCommand {
         val sortInReversedOrder: Boolean,
     ) : CrashesCommand
 
-    data class SearchedCrashesLoaded(
-        val searchedCrashes: List<AppCrashesCount>,
-    ) : CrashesCommand
+    data class SearchedCrashesLoaded(val searchedCrashes: List<AppCrashesCount>) : CrashesCommand
 
     data class UpdateQuery(val query: String) : CrashesCommand
 
-    data class UpdateSort(
-        val sortType: CrashesSort,
-        val sortInReversedOrder: Boolean,
-    ) : CrashesCommand
+    data class UpdateSort(val sortType: CrashesSort, val sortInReversedOrder: Boolean) : CrashesCommand
 
     data class DeleteCrashesByPackageName(val appCrash: AppCrash) : CrashesCommand
 
@@ -30,8 +25,5 @@ sealed interface CrashesCommand {
 
     data object ClearCrashes : CrashesCommand
 
-    data class CheckAppDisabled(
-        val packageName: String,
-        val disabled: Boolean? = null,
-    ) : CrashesCommand
+    data class CheckAppDisabled(val packageName: String, val disabled: Boolean? = null) : CrashesCommand
 }

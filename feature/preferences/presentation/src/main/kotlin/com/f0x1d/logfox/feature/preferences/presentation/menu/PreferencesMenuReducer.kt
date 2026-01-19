@@ -6,9 +6,7 @@ import com.f0x1d.logfox.core.tea.withSideEffects
 import java.io.File
 import javax.inject.Inject
 
-internal class PreferencesMenuReducer @Inject constructor(
-    private val timberLogFile: File,
-) : Reducer<PreferencesMenuState, PreferencesMenuCommand, PreferencesMenuSideEffect> {
+internal class PreferencesMenuReducer @Inject constructor(private val timberLogFile: File) : Reducer<PreferencesMenuState, PreferencesMenuCommand, PreferencesMenuSideEffect> {
 
     override fun reduce(
         state: PreferencesMenuState,

@@ -11,7 +11,8 @@ import javax.inject.Singleton
 @Singleton
 internal class LogsSettingsLocalDataSourceImpl @Inject constructor(
     @ApplicationContext context: Context,
-) : BasePreferences(context), LogsSettingsLocalDataSource {
+) : BasePreferences(context),
+    LogsSettingsLocalDataSource {
 
     override fun logsUpdateInterval(): Preference<Long> = longPreference(
         key = KEY_LOGS_UPDATE_INTERVAL,

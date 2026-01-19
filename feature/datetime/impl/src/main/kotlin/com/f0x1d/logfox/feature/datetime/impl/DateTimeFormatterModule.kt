@@ -11,7 +11,5 @@ import dagger.hilt.components.SingletonComponent
 internal interface DateTimeFormatterModule {
 
     @Binds
-    fun bindDateTimeFormatter(
-        dateTimeFormatterImpl: DateTimeFormatterImpl,
-    ): DateTimeFormatter
+    fun bindDateTimeFormatter(dateTimeFormatterImpl: DateTimeFormatterImpl): DateTimeFormatter
 }

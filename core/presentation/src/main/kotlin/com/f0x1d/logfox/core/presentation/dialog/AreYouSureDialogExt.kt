@@ -9,7 +9,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 fun FragmentActivity.showAreYouSureDialog(
     title: Int,
     message: Int = Strings.are_you_sure,
-    okClicked: () -> Unit
+    okClicked: () -> Unit,
 ) = MaterialAlertDialogBuilder(this)
     .setIcon(Icons.ic_dialog_warning)
     .setTitle(title)
@@ -39,7 +39,5 @@ fun Fragment.showAreYouSureDialog(
     okClicked = okClicked,
 )
 
-fun Fragment.showAreYouSureDeleteDialog(okClicked: () -> Unit) =
-    requireActivity().showAreYouSureDeleteDialog(okClicked)
-fun Fragment.showAreYouSureClearDialog(okClicked: () -> Unit) =
-    requireActivity().showAreYouSureClearDialog(okClicked)
+fun Fragment.showAreYouSureDeleteDialog(okClicked: () -> Unit) = requireActivity().showAreYouSureDeleteDialog(okClicked)
+fun Fragment.showAreYouSureClearDialog(okClicked: () -> Unit) = requireActivity().showAreYouSureClearDialog(okClicked)

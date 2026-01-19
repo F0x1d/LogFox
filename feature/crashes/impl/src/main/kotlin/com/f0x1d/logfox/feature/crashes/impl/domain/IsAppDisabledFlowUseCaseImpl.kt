@@ -8,6 +8,5 @@ import javax.inject.Inject
 internal class IsAppDisabledFlowUseCaseImpl @Inject constructor(
     private val disabledAppsRepository: DisabledAppsRepository,
 ) : IsAppDisabledFlowUseCase {
-    override fun invoke(packageName: String): Flow<Boolean> =
-        disabledAppsRepository.disabledForFlow(packageName)
+    override fun invoke(packageName: String): Flow<Boolean> = disabledAppsRepository.disabledForFlow(packageName)
 }

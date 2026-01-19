@@ -20,18 +20,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.f0x1d.logfox.core.compat.notificationsChannelsAvailable
-import com.f0x1d.logfox.feature.copy.impl.copyText
 import com.f0x1d.logfox.core.context.shareIntent
-import com.f0x1d.logfox.core.tea.BaseStoreFragment
-import com.f0x1d.logfox.feature.database.model.AppCrash
-import com.f0x1d.logfox.feature.crashes.api.data.notificationChannelId
-import com.f0x1d.logfox.feature.crashes.presentation.R
-import com.f0x1d.logfox.feature.crashes.presentation.databinding.FragmentCrashDetailsBinding
-import com.f0x1d.logfox.feature.crashes.presentation.details.CrashDetailsCommand
-import com.f0x1d.logfox.feature.crashes.presentation.details.CrashDetailsSideEffect
-import com.f0x1d.logfox.feature.crashes.presentation.details.CrashDetailsState
-import com.f0x1d.logfox.feature.crashes.presentation.details.CrashDetailsViewModel
-import com.f0x1d.logfox.feature.strings.Strings
 import com.f0x1d.logfox.core.presentation.Colors
 import com.f0x1d.logfox.core.presentation.Icons
 import com.f0x1d.logfox.core.presentation.dialog.showAreYouSureDeleteDialog
@@ -39,19 +28,31 @@ import com.f0x1d.logfox.core.presentation.dialog.showAreYouSureDialog
 import com.f0x1d.logfox.core.presentation.view.loadIcon
 import com.f0x1d.logfox.core.presentation.view.setClickListenerOn
 import com.f0x1d.logfox.core.presentation.view.setupBackButtonForNavController
+import com.f0x1d.logfox.core.tea.BaseStoreFragment
+import com.f0x1d.logfox.feature.copy.impl.copyText
+import com.f0x1d.logfox.feature.crashes.api.data.notificationChannelId
+import com.f0x1d.logfox.feature.crashes.presentation.R
+import com.f0x1d.logfox.feature.crashes.presentation.databinding.FragmentCrashDetailsBinding
+import com.f0x1d.logfox.feature.crashes.presentation.details.CrashDetailsCommand
+import com.f0x1d.logfox.feature.crashes.presentation.details.CrashDetailsSideEffect
+import com.f0x1d.logfox.feature.crashes.presentation.details.CrashDetailsState
+import com.f0x1d.logfox.feature.crashes.presentation.details.CrashDetailsViewModel
+import com.f0x1d.logfox.feature.database.model.AppCrash
+import com.f0x1d.logfox.feature.strings.Strings
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import dev.chrisbanes.insetter.applyInsetter
 import java.util.Locale
 
 @AndroidEntryPoint
-internal class CrashDetailsFragment : BaseStoreFragment<
-    FragmentCrashDetailsBinding,
-    CrashDetailsState,
-    CrashDetailsCommand,
-    CrashDetailsSideEffect,
-    CrashDetailsViewModel,
->() {
+internal class CrashDetailsFragment :
+    BaseStoreFragment<
+        FragmentCrashDetailsBinding,
+        CrashDetailsState,
+        CrashDetailsCommand,
+        CrashDetailsSideEffect,
+        CrashDetailsViewModel,
+        >() {
 
     override val viewModel by viewModels<CrashDetailsViewModel>()
 
@@ -67,12 +68,12 @@ internal class CrashDetailsFragment : BaseStoreFragment<
         }
     }
 
-    override fun inflateBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-    ) = FragmentCrashDetailsBinding.inflate(inflater, container, false)
+    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) = FragmentCrashDetailsBinding.inflate(inflater, container, false)
 
-    override fun FragmentCrashDetailsBinding.onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun FragmentCrashDetailsBinding.onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         scrollView.applyInsetter {
             type(navigationBars = true) {
                 padding(vertical = true)
@@ -82,8 +83,8 @@ internal class CrashDetailsFragment : BaseStoreFragment<
         toolbar.setupBackButtonForNavController()
         toolbar.menu.apply {
             findItem(R.id.notifications_item).setVisible(
-                notificationsChannelsAvailable
-                        && viewModel.useSeparateNotificationsChannelsForCrashes
+                notificationsChannelsAvailable &&
+                    viewModel.useSeparateNotificationsChannelsForCrashes,
             )
 
             setClickListenerOn(R.id.info_item) {
@@ -133,7 +134,7 @@ internal class CrashDetailsFragment : BaseStoreFragment<
                     closeSearchOnBackPressedCallback.isEnabled = true
                     return true
                 }
-            }
+            },
         )
         (searchItem.actionView as SearchView).setOnQueryTextListener(
             object : SearchView.OnQueryTextListener {
@@ -143,7 +144,7 @@ internal class CrashDetailsFragment : BaseStoreFragment<
                     searchInLog(newText ?: return false)
                     return true
                 }
-            }
+            },
         )
 
         copyButton.setOnClickListener {
@@ -178,7 +179,9 @@ internal class CrashDetailsFragment : BaseStoreFragment<
             } else {
                 isVisible = true
                 setIcon(if (state.blacklisted) Icons.ic_check_circle else Icons.ic_block)
-                setTitle(if (state.blacklisted) Strings.remove_from_blacklist else Strings.add_to_blacklist)
+                setTitle(
+                    if (state.blacklisted) Strings.remove_from_blacklist else Strings.add_to_blacklist,
+                )
             }
         }
     }
@@ -222,7 +225,7 @@ internal class CrashDetailsFragment : BaseStoreFragment<
                     BackgroundColorSpan(highlightColor),
                     index,
                     index + size,
-                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE,
                 )
                 index += size
             }

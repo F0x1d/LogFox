@@ -48,9 +48,7 @@ internal interface RecordingsUseCaseModule {
     ): GetRecordingByIdFlowUseCase
 
     @Binds
-    fun bindDeleteRecordingUseCase(
-        impl: DeleteRecordingUseCaseImpl,
-    ): DeleteRecordingUseCase
+    fun bindDeleteRecordingUseCase(impl: DeleteRecordingUseCaseImpl): DeleteRecordingUseCase
 
     @Binds
     fun bindClearAllRecordingsUseCase(
@@ -58,9 +56,7 @@ internal interface RecordingsUseCaseModule {
     ): ClearAllRecordingsUseCase
 
     @Binds
-    fun bindSaveAllRecordingsUseCase(
-        impl: SaveAllRecordingsUseCaseImpl,
-    ): SaveAllRecordingsUseCase
+    fun bindSaveAllRecordingsUseCase(impl: SaveAllRecordingsUseCaseImpl): SaveAllRecordingsUseCase
 
     @Binds
     fun bindUpdateRecordingTitleUseCase(
@@ -83,24 +79,16 @@ internal interface RecordingsUseCaseModule {
     ): NotifyLoggingStoppedUseCase
 
     @Binds
-    fun bindStartRecordingUseCase(
-        impl: StartRecordingUseCaseImpl,
-    ): StartRecordingUseCase
+    fun bindStartRecordingUseCase(impl: StartRecordingUseCaseImpl): StartRecordingUseCase
 
     @Binds
-    fun bindPauseRecordingUseCase(
-        impl: PauseRecordingUseCaseImpl,
-    ): PauseRecordingUseCase
+    fun bindPauseRecordingUseCase(impl: PauseRecordingUseCaseImpl): PauseRecordingUseCase
 
     @Binds
-    fun bindResumeRecordingUseCase(
-        impl: ResumeRecordingUseCaseImpl,
-    ): ResumeRecordingUseCase
+    fun bindResumeRecordingUseCase(impl: ResumeRecordingUseCaseImpl): ResumeRecordingUseCase
 
     @Binds
-    fun bindEndRecordingUseCase(
-        impl: EndRecordingUseCaseImpl,
-    ): EndRecordingUseCase
+    fun bindEndRecordingUseCase(impl: EndRecordingUseCaseImpl): EndRecordingUseCase
 
     @Binds
     fun bindGetRecordingStateFlowUseCase(

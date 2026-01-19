@@ -10,10 +10,7 @@ import javax.inject.Inject
 internal class StartLoggingUseCaseImpl @Inject constructor(
     private val loggingRepository: LoggingRepository,
 ) : StartLoggingUseCase {
-    override fun invoke(
-        terminal: Terminal,
-        startingId: Long,
-    ): Flow<LogLine> = loggingRepository.startLogging(
+    override fun invoke(terminal: Terminal, startingId: Long): Flow<LogLine> = loggingRepository.startLogging(
         terminal = terminal,
         startingId = startingId,
     )

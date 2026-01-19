@@ -20,66 +20,66 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 internal class RecordingDetailsEffectHandler
-    @Inject
-    constructor(
-        @ApplicationContext private val context: Context,
-        @RecordingId private val recordingId: Long,
-        private val getRecordingByIdFlowUseCase: GetRecordingByIdFlowUseCase,
-        private val updateRecordingTitleUseCase: UpdateRecordingTitleUseCase,
-        private val serviceSettingsRepository: ServiceSettingsRepository,
-        @IODispatcher private val ioDispatcher: CoroutineDispatcher,
-    ) : EffectHandler<RecordingDetailsSideEffect, RecordingDetailsCommand> {
-        private val titleUpdateMutex = Mutex()
+@Inject
+constructor(
+    @ApplicationContext private val context: Context,
+    @RecordingId private val recordingId: Long,
+    private val getRecordingByIdFlowUseCase: GetRecordingByIdFlowUseCase,
+    private val updateRecordingTitleUseCase: UpdateRecordingTitleUseCase,
+    private val serviceSettingsRepository: ServiceSettingsRepository,
+    @IODispatcher private val ioDispatcher: CoroutineDispatcher,
+) : EffectHandler<RecordingDetailsSideEffect, RecordingDetailsCommand> {
+    private val titleUpdateMutex = Mutex()
 
-        override suspend fun handle(
-            effect: RecordingDetailsSideEffect,
-            onCommand: suspend (RecordingDetailsCommand) -> Unit,
-        ) {
-            when (effect) {
-                is RecordingDetailsSideEffect.LoadRecording -> {
-                    getRecordingByIdFlowUseCase(recordingId)
-                        .distinctUntilChanged()
-                        .take(1)
-                        .collect { recording ->
-                            onCommand(RecordingDetailsCommand.RecordingLoaded(recording))
-                        }
-                }
+    override suspend fun handle(
+        effect: RecordingDetailsSideEffect,
+        onCommand: suspend (RecordingDetailsCommand) -> Unit,
+    ) {
+        when (effect) {
+            is RecordingDetailsSideEffect.LoadRecording -> {
+                getRecordingByIdFlowUseCase(recordingId)
+                    .distinctUntilChanged()
+                    .take(1)
+                    .collect { recording ->
+                        onCommand(RecordingDetailsCommand.RecordingLoaded(recording))
+                    }
+            }
 
-                is RecordingDetailsSideEffect.ExportFile -> {
-                    withContext(ioDispatcher) {
-                        context.contentResolver.openOutputStream(effect.uri)?.use { outputStream ->
-                            effect.recording.file.inputStream().use { inputStream ->
-                                inputStream.copyTo(outputStream)
-                            }
+            is RecordingDetailsSideEffect.ExportFile -> {
+                withContext(ioDispatcher) {
+                    context.contentResolver.openOutputStream(effect.uri)?.use { outputStream ->
+                        effect.recording.file.inputStream().use { inputStream ->
+                            inputStream.copyTo(outputStream)
                         }
                     }
                 }
+            }
 
-                is RecordingDetailsSideEffect.ExportZipFile -> {
-                    withContext(ioDispatcher) {
-                        context.contentResolver.openOutputStream(effect.uri)?.use {
-                            it.exportToZip {
-                                if (serviceSettingsRepository.includeDeviceInfoInArchives().value) {
-                                    putZipEntry(
-                                        "device.txt",
-                                        deviceData.encodeToByteArray(),
-                                    )
-                                }
-
+            is RecordingDetailsSideEffect.ExportZipFile -> {
+                withContext(ioDispatcher) {
+                    context.contentResolver.openOutputStream(effect.uri)?.use {
+                        it.exportToZip {
+                            if (serviceSettingsRepository.includeDeviceInfoInArchives().value) {
                                 putZipEntry(
-                                    name = "recorded.log",
-                                    file = effect.recording.file,
+                                    "device.txt",
+                                    deviceData.encodeToByteArray(),
                                 )
                             }
+
+                            putZipEntry(
+                                name = "recorded.log",
+                                file = effect.recording.file,
+                            )
                         }
                     }
                 }
+            }
 
-                is RecordingDetailsSideEffect.UpdateTitle -> {
-                    titleUpdateMutex.withLock {
-                        updateRecordingTitleUseCase(effect.recording, effect.title)
-                    }
+            is RecordingDetailsSideEffect.UpdateTitle -> {
+                titleUpdateMutex.withLock {
+                    updateRecordingTitleUseCase(effect.recording, effect.title)
                 }
             }
         }
     }
+}

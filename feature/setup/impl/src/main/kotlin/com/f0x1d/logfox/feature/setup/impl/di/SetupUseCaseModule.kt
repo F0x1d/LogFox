@@ -32,9 +32,7 @@ internal interface SetupUseCaseModule {
     ): ExecuteGrantViaShizukuUseCase
 
     @Binds
-    fun bindSelectTerminalUseCase(
-        impl: SelectTerminalUseCaseImpl,
-    ): SelectTerminalUseCase
+    fun bindSelectTerminalUseCase(impl: SelectTerminalUseCaseImpl): SelectTerminalUseCase
 
     @Binds
     fun bindCheckReadLogsPermissionUseCase(
@@ -42,12 +40,8 @@ internal interface SetupUseCaseModule {
     ): CheckReadLogsPermissionUseCase
 
     @Binds
-    fun bindCopyToClipboardUseCase(
-        impl: CopyToClipboardUseCaseImpl,
-    ): CopyToClipboardUseCase
+    fun bindCopyToClipboardUseCase(impl: CopyToClipboardUseCaseImpl): CopyToClipboardUseCase
 
     @Binds
-    fun bindGetAdbCommandUseCase(
-        impl: GetAdbCommandUseCaseImpl,
-    ): GetAdbCommandUseCase
+    fun bindGetAdbCommandUseCase(impl: GetAdbCommandUseCaseImpl): GetAdbCommandUseCase
 }

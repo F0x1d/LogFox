@@ -23,9 +23,7 @@ internal interface DataSourcesModule {
     ): CrashesSearchLocalDataSource
 
     @Binds
-    fun bindCrashesLocalDataSource(
-        impl: CrashesLocalDataSourceImpl,
-    ): CrashesLocalDataSource
+    fun bindCrashesLocalDataSource(impl: CrashesLocalDataSourceImpl): CrashesLocalDataSource
 
     @Binds
     fun bindCrashesNotificationsLocalDataSource(

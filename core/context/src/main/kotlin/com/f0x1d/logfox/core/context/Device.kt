@@ -12,7 +12,7 @@ internal class Device {
         "SUPPORTED_ABIS" to Build.SUPPORTED_ABIS.joinToString(),
         "MANUFACTURER" to Build.MANUFACTURER,
         "BRAND" to Build.BRAND,
-        "MODEL" to Build.MODEL
+        "MODEL" to Build.MODEL,
     )
         .map { "${it.key}: ${it.value}" }
         .joinToString("\n")

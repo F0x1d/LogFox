@@ -1,9 +1,9 @@
 package com.f0x1d.logfox.feature.crashes.impl.data
 
 import com.f0x1d.logfox.core.di.IODispatcher
+import com.f0x1d.logfox.feature.crashes.api.data.CrashesRepository
 import com.f0x1d.logfox.feature.database.data.AppCrashRepository
 import com.f0x1d.logfox.feature.database.model.AppCrash
-import com.f0x1d.logfox.feature.crashes.api.data.CrashesRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -17,13 +17,11 @@ internal class CrashesRepositoryImpl @Inject constructor(
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : CrashesRepository {
 
-    override fun getAllAsFlow(): Flow<List<AppCrash>> =
-        appCrashRepository.getAllAsFlow()
-            .distinctUntilChanged()
-            .flowOn(ioDispatcher)
+    override fun getAllAsFlow(): Flow<List<AppCrash>> = appCrashRepository.getAllAsFlow()
+        .distinctUntilChanged()
+        .flowOn(ioDispatcher)
 
-    override fun getByIdAsFlow(id: Long): Flow<AppCrash?> =
-        appCrashRepository.getByIdAsFlow(id).flowOn(ioDispatcher)
+    override fun getByIdAsFlow(id: Long): Flow<AppCrash?> = appCrashRepository.getByIdAsFlow(id).flowOn(ioDispatcher)
 
     override suspend fun getAll(): List<AppCrash> = withContext(ioDispatcher) {
         appCrashRepository.getAll()
@@ -35,7 +33,7 @@ internal class CrashesRepositoryImpl @Inject constructor(
 
     override suspend fun getAllByDateAndTime(
         dateAndTime: Long,
-        packageName: String
+        packageName: String,
     ): List<AppCrash> = withContext(ioDispatcher) {
         appCrashRepository.getAllByDateAndTime(
             dateAndTime = dateAndTime,

@@ -12,7 +12,8 @@ import javax.inject.Singleton
 @Singleton
 internal class TerminalSettingsLocalDataSourceImpl @Inject constructor(
     @ApplicationContext context: Context,
-) : BasePreferences(context), TerminalSettingsLocalDataSource {
+) : BasePreferences(context),
+    TerminalSettingsLocalDataSource {
 
     init {
         migrateTerminalIndexToType()

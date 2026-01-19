@@ -6,10 +6,7 @@ import com.bumptech.glide.Priority
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.data.DataFetcher
 
-class IconDataFetcher(
-    private val context: Context,
-    private val packageName: String
-): DataFetcher<Drawable> {
+class IconDataFetcher(private val context: Context, private val packageName: String) : DataFetcher<Drawable> {
 
     override fun loadData(priority: Priority, callback: DataFetcher.DataCallback<in Drawable>) {
         try {

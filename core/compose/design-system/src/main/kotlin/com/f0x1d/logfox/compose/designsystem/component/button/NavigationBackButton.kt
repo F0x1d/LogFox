@@ -10,16 +10,13 @@ import com.f0x1d.logfox.compose.designsystem.Icons
 import com.f0x1d.logfox.compose.designsystem.theme.LogFoxTheme
 
 @Composable
-fun NavigationBackButton(
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
+fun NavigationBackButton(onClick: () -> Unit, modifier: Modifier = Modifier) {
     IconButton(
         modifier = modifier,
         onClick = onClick,
     ) {
         Icon(
-            painter = painterResource(id = Icons.ic_arrow_back), 
+            painter = painterResource(id = Icons.ic_arrow_back),
             contentDescription = null,
         )
     }

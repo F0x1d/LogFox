@@ -19,7 +19,7 @@ object LogsViewModelModule {
     @ViewModelScoped
     @FileUri
     fun provideDeepLinkIntent(savedStateHandle: SavedStateHandle) = savedStateHandle.get<Intent>(
-        NavController.KEY_DEEP_LINK_INTENT
+        NavController.KEY_DEEP_LINK_INTENT,
     )?.data ?: savedStateHandle.get<Uri>("file_uri")
 }
 

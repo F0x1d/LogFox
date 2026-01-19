@@ -1,9 +1,9 @@
 package com.f0x1d.logfox.feature.crashes.presentation.appcrashes
 
 import com.f0x1d.logfox.core.tea.BaseStoreViewModel
-import com.f0x1d.logfox.feature.database.model.AppCrash
 import com.f0x1d.logfox.feature.crashes.presentation.appcrashes.di.AppName
 import com.f0x1d.logfox.feature.crashes.presentation.appcrashes.di.PackageName
+import com.f0x1d.logfox.feature.database.model.AppCrash
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

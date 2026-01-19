@@ -17,7 +17,8 @@ internal class EditFilterViewModel @Inject constructor(
     reducer = reducer,
     effectHandlers = listOf(effectHandler),
     initialSideEffect = EditFilterSideEffect.LoadFilter(filterId),
-), AppsPickerResultHandler {
+),
+    AppsPickerResultHandler {
 
     override fun onAppSelected(app: InstalledApp): Boolean {
         send(EditFilterCommand.AppSelected(app.packageName))

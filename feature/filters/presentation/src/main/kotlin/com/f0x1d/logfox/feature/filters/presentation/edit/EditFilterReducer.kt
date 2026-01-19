@@ -8,9 +8,7 @@ import com.f0x1d.logfox.feature.filters.presentation.edit.di.FilterId
 import com.f0x1d.logfox.feature.logging.api.model.LogLevel
 import javax.inject.Inject
 
-internal class EditFilterReducer @Inject constructor(
-    @FilterId private val filterId: Long?,
-) : Reducer<EditFilterState, EditFilterCommand, EditFilterSideEffect> {
+internal class EditFilterReducer @Inject constructor(@FilterId private val filterId: Long?) : Reducer<EditFilterState, EditFilterCommand, EditFilterSideEffect> {
 
     override fun reduce(
         state: EditFilterState,
@@ -106,7 +104,10 @@ internal class EditFilterReducer @Inject constructor(
         }
     }
 
-    private fun List<Boolean>.toEnabledLogLevels(): List<LogLevel> = mapIndexedNotNull { index, value ->
+    private fun List<Boolean>.toEnabledLogLevels(): List<LogLevel> = mapIndexedNotNull {
+            index,
+            value,
+        ->
         if (value) LogLevel.entries[index] else null
     }
 }

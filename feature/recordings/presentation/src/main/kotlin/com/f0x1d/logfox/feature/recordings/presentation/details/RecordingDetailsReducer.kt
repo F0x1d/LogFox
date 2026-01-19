@@ -6,8 +6,7 @@ import com.f0x1d.logfox.core.tea.noSideEffects
 import com.f0x1d.logfox.core.tea.withSideEffects
 import javax.inject.Inject
 
-internal class RecordingDetailsReducer @Inject constructor() :
-    Reducer<RecordingDetailsState, RecordingDetailsCommand, RecordingDetailsSideEffect> {
+internal class RecordingDetailsReducer @Inject constructor() : Reducer<RecordingDetailsState, RecordingDetailsCommand, RecordingDetailsSideEffect> {
 
     override fun reduce(
         state: RecordingDetailsState,
@@ -36,7 +35,9 @@ internal class RecordingDetailsReducer @Inject constructor() :
         is RecordingDetailsCommand.ExportZipFile -> {
             val recording = state.recording
             if (recording != null) {
-                state.withSideEffects(RecordingDetailsSideEffect.ExportZipFile(command.uri, recording))
+                state.withSideEffects(
+                    RecordingDetailsSideEffect.ExportZipFile(command.uri, recording),
+                )
             } else {
                 state.noSideEffects()
             }
@@ -46,7 +47,9 @@ internal class RecordingDetailsReducer @Inject constructor() :
             val recording = state.recording
             if (recording != null) {
                 state.copy(currentTitle = command.title)
-                    .withSideEffects(RecordingDetailsSideEffect.UpdateTitle(command.title, recording))
+                    .withSideEffects(
+                        RecordingDetailsSideEffect.UpdateTitle(command.title, recording),
+                    )
             } else {
                 state.noSideEffects()
             }

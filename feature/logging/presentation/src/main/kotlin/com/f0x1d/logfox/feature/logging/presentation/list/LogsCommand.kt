@@ -13,10 +13,7 @@ sealed interface LogsCommand {
         val filters: List<UserFilter>,
     ) : LogsCommand
 
-    data class SelectLine(
-        val logLine: LogLine,
-        val selected: Boolean,
-    ) : LogsCommand
+    data class SelectLine(val logLine: LogLine, val selected: Boolean) : LogsCommand
 
     data object SelectAll : LogsCommand
 

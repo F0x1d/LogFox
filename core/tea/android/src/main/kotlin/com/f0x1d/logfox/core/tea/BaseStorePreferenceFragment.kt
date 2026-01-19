@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 
 /**
  * Base PreferenceFragment for TEA architecture.
- * 
+ *
  * Features:
  * - Automatic state collection via [render]
  * - Automatic side effect handling via [handleSideEffect]
@@ -26,7 +26,7 @@ abstract class BaseStorePreferenceFragment<
     Command,
     SideEffect,
     VM : BaseStoreViewModel<State, Command, SideEffect>,
-> : PreferenceFragmentCompat() {
+    > : PreferenceFragmentCompat() {
 
     /**
      * The ViewModel for this fragment. Should be obtained via `by viewModels()` or similar.

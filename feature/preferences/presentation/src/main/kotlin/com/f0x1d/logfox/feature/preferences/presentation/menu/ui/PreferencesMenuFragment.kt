@@ -20,12 +20,13 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.chrisbanes.insetter.applyInsetter
 
 @AndroidEntryPoint
-internal class PreferencesMenuFragment : BaseStorePreferenceFragment<
-    PreferencesMenuState,
-    PreferencesMenuCommand,
-    PreferencesMenuSideEffect,
-    PreferencesMenuViewModel,
->() {
+internal class PreferencesMenuFragment :
+    BaseStorePreferenceFragment<
+        PreferencesMenuState,
+        PreferencesMenuCommand,
+        PreferencesMenuSideEffect,
+        PreferencesMenuViewModel,
+        >() {
 
     override val viewModel by viewModels<PreferencesMenuViewModel>()
 
@@ -87,23 +88,33 @@ internal class PreferencesMenuFragment : BaseStorePreferenceFragment<
     override fun handleSideEffect(sideEffect: PreferencesMenuSideEffect) {
         when (sideEffect) {
             is PreferencesMenuSideEffect.NavigateToUISettings -> {
-                findNavController().navigate(Directions.action_settingsMenuFragment_to_settingsUIFragment)
+                findNavController().navigate(
+                    Directions.action_settingsMenuFragment_to_settingsUIFragment,
+                )
             }
 
             is PreferencesMenuSideEffect.NavigateToServiceSettings -> {
-                findNavController().navigate(Directions.action_settingsMenuFragment_to_settingsServiceFragment)
+                findNavController().navigate(
+                    Directions.action_settingsMenuFragment_to_settingsServiceFragment,
+                )
             }
 
             is PreferencesMenuSideEffect.NavigateToCrashesSettings -> {
-                findNavController().navigate(Directions.action_settingsMenuFragment_to_settingsCrashesFragment)
+                findNavController().navigate(
+                    Directions.action_settingsMenuFragment_to_settingsCrashesFragment,
+                )
             }
 
             is PreferencesMenuSideEffect.NavigateToNotificationsSettings -> {
-                findNavController().navigate(Directions.action_settingsMenuFragment_to_settingsNotificationsFragment)
+                findNavController().navigate(
+                    Directions.action_settingsMenuFragment_to_settingsNotificationsFragment,
+                )
             }
 
             is PreferencesMenuSideEffect.NavigateToLinks -> {
-                findNavController().navigate(Directions.action_settingsMenuFragment_to_settingsLinksFragment)
+                findNavController().navigate(
+                    Directions.action_settingsMenuFragment_to_settingsLinksFragment,
+                )
             }
 
             is PreferencesMenuSideEffect.ShareLogs -> {

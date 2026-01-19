@@ -9,6 +9,6 @@ android {
 
 dependencies {
     implementation(projects.core.di)
-    
+
     implementation(libs.timber)
 }

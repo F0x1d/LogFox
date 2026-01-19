@@ -9,13 +9,6 @@ import com.f0x1d.logfox.feature.preferences.data.UISettingsRepository
 import kotlinx.coroutines.flow.combine
 import javax.inject.Inject
 
-private data class LogsPreferences(
-    val showLogValues: ShowLogValues,
-    val logsUpdateInterval: Long,
-    val logsTextSize: Int,
-    val logsDisplayLimit: Int,
-)
-
 internal class PreferencesUIEffectHandler @Inject constructor(
     private val uiSettingsRepository: UISettingsRepository,
     private val dateTimeSettingsRepository: DateTimeSettingsRepository,
@@ -55,7 +48,12 @@ internal class PreferencesUIEffectHandler @Inject constructor(
                         listOf(packageName, tag, content) to (updateInterval to textSize)
                     },
                     logsSettingsRepository.logsDisplayLimit(),
-                ) { (nightTheme, dateFormat, timeFormat), showFirst, (showSecond, intervals), displayLimit ->
+                ) {
+                        (nightTheme, dateFormat, timeFormat),
+                        showFirst,
+                        (showSecond, intervals),
+                        displayLimit,
+                    ->
                     val showLogValues = ShowLogValues(
                         date = showFirst[0] as Boolean,
                         time = showFirst[1] as Boolean,

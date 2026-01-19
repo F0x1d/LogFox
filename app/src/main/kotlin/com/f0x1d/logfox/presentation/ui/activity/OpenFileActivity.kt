@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class OpenFileActivity: AppCompatActivity() {
+class OpenFileActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -15,7 +15,7 @@ class OpenFileActivity: AppCompatActivity() {
                 action = intent.action
                 setDataAndType(intent.data, intent.type)
                 replaceExtras(intent)
-            }
+            },
         )
         finish()
     }

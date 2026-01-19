@@ -2,6 +2,4 @@ package com.f0x1d.logfox.feature.filters.presentation.list
 
 import com.f0x1d.logfox.feature.database.model.UserFilter
 
-data class FiltersState(
-    val filters: List<UserFilter> = emptyList(),
-)
+data class FiltersState(val filters: List<UserFilter> = emptyList())

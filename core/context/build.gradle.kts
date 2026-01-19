@@ -8,7 +8,7 @@ android {
 
 dependencies {
     api(projects.core.compat)
-    
+
     implementation(projects.strings)
     api(libs.androidx.core)
 }

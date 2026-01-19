@@ -6,10 +6,7 @@ import kotlinx.collections.immutable.ImmutableList
 internal sealed interface AppsPickerSideEffect {
     // Business logic side effects
     data object LoadApps : AppsPickerSideEffect
-    data class FilterApps(
-        val query: String,
-        val apps: ImmutableList<InstalledApp>,
-    ) : AppsPickerSideEffect
+    data class FilterApps(val query: String, val apps: ImmutableList<InstalledApp>) : AppsPickerSideEffect
 
     // UI side effects
     data object PopBackStack : AppsPickerSideEffect

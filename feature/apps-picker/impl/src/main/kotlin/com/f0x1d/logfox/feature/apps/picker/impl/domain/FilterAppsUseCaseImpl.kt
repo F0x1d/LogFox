@@ -12,7 +12,7 @@ internal class FilterAppsUseCaseImpl @Inject constructor() : FilterAppsUseCase {
         query: String,
         apps: ImmutableList<InstalledApp>,
     ): ImmutableList<InstalledApp> = apps.filter { app ->
-        app.title.contains(query, ignoreCase = true)
-                || app.packageName.contains(query, ignoreCase = true)
+        app.title.contains(query, ignoreCase = true) ||
+            app.packageName.contains(query, ignoreCase = true)
     }.toImmutableList()
 }

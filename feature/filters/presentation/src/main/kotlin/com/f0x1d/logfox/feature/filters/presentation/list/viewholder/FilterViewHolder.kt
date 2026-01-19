@@ -3,22 +3,23 @@ package com.f0x1d.logfox.feature.filters.presentation.list.viewholder
 import android.text.Html
 import android.view.View
 import android.widget.TextView
+import com.f0x1d.logfox.core.presentation.view.OnlyUserCheckedChangeListener
 import com.f0x1d.logfox.core.presentation.viewholder.BaseViewHolder
 import com.f0x1d.logfox.feature.database.model.UserFilter
 import com.f0x1d.logfox.feature.filters.presentation.databinding.ItemFilterBinding
 import com.f0x1d.logfox.feature.strings.Strings
-import com.f0x1d.logfox.core.presentation.view.OnlyUserCheckedChangeListener
 
 class FilterViewHolder(
     binding: ItemFilterBinding,
     click: (UserFilter) -> Unit,
     delete: (UserFilter) -> Unit,
-    checked: (UserFilter, Boolean) -> Unit
-): BaseViewHolder<UserFilter, ItemFilterBinding>(binding) {
+    checked: (UserFilter, Boolean) -> Unit,
+) : BaseViewHolder<UserFilter, ItemFilterBinding>(binding) {
 
-    private val checkedListener = OnlyUserCheckedChangeListener(binding.enabledBox) { _, isChecked ->
-        checked(currentItem ?: return@OnlyUserCheckedChangeListener, isChecked)
-    }
+    private val checkedListener =
+        OnlyUserCheckedChangeListener(binding.enabledBox) { _, isChecked ->
+            checked(currentItem ?: return@OnlyUserCheckedChangeListener, isChecked)
+        }
 
     init {
         binding.apply {
@@ -34,7 +35,12 @@ class FilterViewHolder(
 
     override fun ItemFilterBinding.bindTo(data: UserFilter) {
         includingText.setText(if (data.including) Strings.including else Strings.excluding)
-        allowedLevelsText.setTextOrMakeGoneIfEmpty(Strings.log_levels, data.allowedLevels.joinToString { it.letter })
+        allowedLevelsText.setTextOrMakeGoneIfEmpty(
+            Strings.log_levels,
+            data.allowedLevels.joinToString {
+                it.letter
+            },
+        )
         uidText.setTextOrMakeGoneIfEmpty(Strings.uid, data.uid)
         pidText.setTextOrMakeGoneIfEmpty(Strings.pid, data.pid)
         tidText.setTextOrMakeGoneIfEmpty(Strings.tid, data.tid)

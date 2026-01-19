@@ -24,12 +24,13 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.chrisbanes.insetter.applyInsetter
 
 @AndroidEntryPoint
-internal class PreferencesServiceFragment : BaseStorePreferenceFragment<
-    PreferencesServiceState,
-    PreferencesServiceCommand,
-    PreferencesServiceSideEffect,
-    PreferencesServiceViewModel,
->() {
+internal class PreferencesServiceFragment :
+    BaseStorePreferenceFragment<
+        PreferencesServiceState,
+        PreferencesServiceCommand,
+        PreferencesServiceSideEffect,
+        PreferencesServiceViewModel,
+        >() {
 
     override val viewModel by viewModels<PreferencesServiceViewModel>()
 
