@@ -21,6 +21,7 @@ dependencies {
     implementation(projects.feature.navigation.api)
 
     implementation(projects.strings)
+    implementation(libs.androidx.documentfile)
     implementation(libs.bundles.androidx)
     implementation(libs.bundles.androidx.navigation)
     implementation(libs.material)

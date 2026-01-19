@@ -7,7 +7,9 @@ import com.f0x1d.logfox.feature.datetime.api.DateTimeFormatter
 import com.f0x1d.logfox.feature.logging.api.domain.FormatLogLineUseCase
 import com.f0x1d.logfox.feature.logging.api.model.LogLine
 import com.f0x1d.logfox.feature.logging.presentation.di.FileUri
-import com.f0x1d.logfox.feature.preferences.data.LogsSettingsRepository
+import com.f0x1d.logfox.feature.preferences.domain.GetLogsExpandedUseCase
+import com.f0x1d.logfox.feature.preferences.domain.GetLogsTextSizeUseCase
+import com.f0x1d.logfox.feature.preferences.domain.GetResumeLoggingWithBottomTouchUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
@@ -18,7 +20,9 @@ internal class LogsViewModel @Inject constructor(
     @FileUri val fileUri: Uri?,
     reducer: LogsReducer,
     effectHandler: LogsEffectHandler,
-    private val logsSettingsRepository: LogsSettingsRepository,
+    private val getResumeLoggingWithBottomTouchUseCase: GetResumeLoggingWithBottomTouchUseCase,
+    private val getLogsTextSizeUseCase: GetLogsTextSizeUseCase,
+    private val getLogsExpandedUseCase: GetLogsExpandedUseCase,
     private val formatLogLineUseCase: FormatLogLineUseCase,
     dateTimeFormatter: DateTimeFormatter,
 ) : BaseStoreViewModel<LogsState, LogsCommand, LogsSideEffect>(
@@ -32,9 +36,9 @@ internal class LogsViewModel @Inject constructor(
     val viewingFile = fileUri != null
     val viewingFileName = fileUri?.readFileName(context)
 
-    val resumeLoggingWithBottomTouch get() = logsSettingsRepository.resumeLoggingWithBottomTouch().value
-    val logsTextSize get() = logsSettingsRepository.logsTextSize().value.toFloat()
-    val logsExpanded get() = logsSettingsRepository.logsExpanded().value
+    val resumeLoggingWithBottomTouch get() = getResumeLoggingWithBottomTouchUseCase()
+    val logsTextSize get() = getLogsTextSizeUseCase().toFloat()
+    val logsExpanded get() = getLogsExpandedUseCase()
     val logsFormat get() = formatLogLineUseCase.showLogValues()
 
     fun getSelectedItemsContent(): String = state.value

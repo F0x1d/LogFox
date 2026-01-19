@@ -9,7 +9,7 @@ class OnlyUserCheckedChangeListener(
 
     var enabled = true
 
-    override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
+    override fun onCheckedChanged(buttonView: CompoundButton, isChecked: Boolean) {
         if (enabled) listener.onCheckedChanged(buttonView, isChecked)
     }
 

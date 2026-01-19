@@ -10,7 +10,11 @@ internal class PreferenceStateFlowImpl<T : Any>(private val preference: Preferen
     override val replayCache: List<T> get() = listOf(value)
 
     @Suppress("UNCHECKED_CAST")
-    override suspend fun collect(collector: FlowCollector<T>): Nothing = preference.asFlow().collect(collector) as Nothing
+    override suspend fun collect(collector: FlowCollector<T>): Nothing {
+        while (true) {
+            preference.asFlow().collect(collector)
+        }
+    }
 
     override fun set(value: T) {
         preference.set(value)

@@ -4,7 +4,8 @@ import android.net.Uri
 import com.f0x1d.logfox.core.tea.BaseStoreViewModel
 import com.f0x1d.logfox.feature.database.model.AppCrash
 import com.f0x1d.logfox.feature.datetime.api.DateTimeFormatter
-import com.f0x1d.logfox.feature.preferences.data.CrashesSettingsRepository
+import com.f0x1d.logfox.feature.preferences.domain.GetUseSeparateNotificationsChannelsForCrashesUseCase
+import com.f0x1d.logfox.feature.preferences.domain.GetWrapCrashLogLinesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -15,7 +16,8 @@ constructor(
     reducer: CrashDetailsReducer,
     effectHandler: CrashDetailsEffectHandler,
     blacklistEffectHandler: CrashDetailsBlacklistEffectHandler,
-    private val crashesSettingsRepository: CrashesSettingsRepository,
+    private val getWrapCrashLogLinesUseCase: GetWrapCrashLogLinesUseCase,
+    private val getUseSeparateNotificationsChannelsForCrashesUseCase: GetUseSeparateNotificationsChannelsForCrashesUseCase,
     dateTimeFormatter: DateTimeFormatter,
 ) : BaseStoreViewModel<CrashDetailsState, CrashDetailsCommand, CrashDetailsSideEffect>(
     initialState = CrashDetailsState(),
@@ -24,8 +26,8 @@ constructor(
     initialSideEffect = CrashDetailsSideEffect.LoadCrash,
 ),
     DateTimeFormatter by dateTimeFormatter {
-    val wrapCrashLogLines get() = crashesSettingsRepository.wrapCrashLogLines().value
-    val useSeparateNotificationsChannelsForCrashes get() = crashesSettingsRepository.useSeparateNotificationsChannelsForCrashes().value
+    val wrapCrashLogLines get() = getWrapCrashLogLinesUseCase()
+    val useSeparateNotificationsChannelsForCrashes get() = getUseSeparateNotificationsChannelsForCrashesUseCase()
 
     val currentState: CrashDetailsState get() = state.value
 

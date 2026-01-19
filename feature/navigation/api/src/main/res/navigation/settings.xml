@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/settingsMenuFragment"
-        android:name="com.f0x1d.logfox.feature.preferences.presentation.ui.PreferencesMenuFragment"
+        android:name="com.f0x1d.logfox.feature.preferences.presentation.menu.ui.PreferencesMenuFragment"
         android:label="SettingsMenuFragment" />
     <action
         android:id="@+id/action_settingsMenuFragment_to_settingsUIFragment"
@@ -46,26 +46,26 @@
 
     <fragment
         android:id="@+id/settingsUIFragment"
-        android:name="com.f0x1d.logfox.feature.preferences.presentation.ui.PreferencesUIFragment"
+        android:name="com.f0x1d.logfox.feature.preferences.presentation.ui.settings.ui.PreferencesUIFragment"
         android:label="SettingsUIFragment" />
 
     <fragment
         android:id="@+id/settingsServiceFragment"
-        android:name="com.f0x1d.logfox.feature.preferences.presentation.ui.PreferencesServiceFragment"
+        android:name="com.f0x1d.logfox.feature.preferences.presentation.service.ui.PreferencesServiceFragment"
         android:label="SettingsServiceFragment" />
 
     <fragment
         android:id="@+id/settingsNotificationsFragment"
-        android:name="com.f0x1d.logfox.feature.preferences.presentation.ui.PreferencesNotificationsFragment"
+        android:name="com.f0x1d.logfox.feature.preferences.presentation.notifications.ui.PreferencesNotificationsFragment"
         android:label="SettingsNotificationsFragment" />
 
     <fragment
         android:id="@+id/settingsCrashesFragment"
-        android:name="com.f0x1d.logfox.feature.preferences.presentation.ui.PreferencesCrashesFragment"
+        android:name="com.f0x1d.logfox.feature.preferences.presentation.crashes.ui.PreferencesCrashesFragment"
         android:label="SettingsCrashesFragment" />
 
     <fragment
         android:id="@+id/settingsLinksFragment"
-        android:name="com.f0x1d.logfox.feature.preferences.presentation.ui.PreferencesLinksFragment"
+        android:name="com.f0x1d.logfox.feature.preferences.presentation.links.ui.PreferencesLinksFragment"
         android:label="SettingsLinksFragment" />
 </navigation>

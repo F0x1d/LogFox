@@ -1,8 +1,9 @@
 package com.f0x1d.logfox.presentation
 
 import com.f0x1d.logfox.core.tea.BaseStoreViewModel
-import com.f0x1d.logfox.feature.preferences.data.CrashesSettingsRepository
-import com.f0x1d.logfox.feature.preferences.data.NotificationsSettingsRepository
+import com.f0x1d.logfox.feature.preferences.domain.GetAskedNotificationsPermissionUseCase
+import com.f0x1d.logfox.feature.preferences.domain.GetOpenCrashesOnStartupUseCase
+import com.f0x1d.logfox.feature.preferences.domain.SetAskedNotificationsPermissionUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -10,8 +11,9 @@ import javax.inject.Inject
 internal class MainViewModel @Inject constructor(
     reducer: MainReducer,
     effectHandler: MainEffectHandler,
-    private val notificationsSettingsRepository: NotificationsSettingsRepository,
-    private val crashesSettingsRepository: CrashesSettingsRepository,
+    private val getAskedNotificationsPermissionUseCase: GetAskedNotificationsPermissionUseCase,
+    private val setAskedNotificationsPermissionUseCase: SetAskedNotificationsPermissionUseCase,
+    private val getOpenCrashesOnStartupUseCase: GetOpenCrashesOnStartupUseCase,
 ) : BaseStoreViewModel<MainState, MainCommand, MainSideEffect>(
     initialState = MainState,
     reducer = reducer,
@@ -20,10 +22,10 @@ internal class MainViewModel @Inject constructor(
 ) {
 
     var askedNotificationsPermission
-        get() = notificationsSettingsRepository.askedNotificationsPermission().value
+        get() = getAskedNotificationsPermissionUseCase()
         set(value) {
-            notificationsSettingsRepository.askedNotificationsPermission().set(value)
+            setAskedNotificationsPermissionUseCase(value)
         }
 
-    val openCrashesOnStartup get() = crashesSettingsRepository.openCrashesOnStartup().value
+    val openCrashesOnStartup get() = getOpenCrashesOnStartupUseCase()
 }
