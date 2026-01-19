@@ -13,6 +13,7 @@ android {
 dependencies {
     implementation(projects.feature.preferences.api)
     implementation(projects.feature.logging.api)
+    implementation(projects.feature.notifications.api)
     implementation(projects.feature.terminals.api)
     implementation(projects.core.presentation)
     implementation(projects.core.context)

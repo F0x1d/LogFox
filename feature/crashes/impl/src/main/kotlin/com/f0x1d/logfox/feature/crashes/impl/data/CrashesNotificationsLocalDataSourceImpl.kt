@@ -10,7 +10,7 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.os.bundleOf
 import androidx.navigation.NavDeepLinkBuilder
 import com.f0x1d.logfox.core.context.COPY_CRASH_INTENT_ID
-import com.f0x1d.logfox.core.context.CRASHES_CHANNEL_GROUP_ID
+import com.f0x1d.logfox.feature.notifications.api.CRASHES_CHANNEL_GROUP_ID
 import com.f0x1d.logfox.core.context.doIfNotificationsAllowed
 import com.f0x1d.logfox.core.context.makeBroadcastPendingIntent
 import com.f0x1d.logfox.core.context.notificationManager

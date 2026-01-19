@@ -7,7 +7,7 @@ import android.provider.Settings
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.preference.Preference
-import com.f0x1d.logfox.core.context.LOGGING_STATUS_CHANNEL_ID
+import com.f0x1d.logfox.feature.notifications.api.LOGGING_STATUS_CHANNEL_ID
 import com.f0x1d.logfox.core.context.hasNotificationsPermission
 import com.f0x1d.logfox.core.context.isHorizontalOrientation
 import com.f0x1d.logfox.core.presentation.view.setupBackButtonForNavController

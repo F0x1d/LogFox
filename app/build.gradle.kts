@@ -21,6 +21,7 @@ android {
 
 dependencies {
     implementation(projects.feature.logging.api)
+    implementation(projects.feature.notifications.api)
     implementation(projects.strings)
     implementation(projects.core.presentation)
     implementation(projects.core.context)

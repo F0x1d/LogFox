@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import androidx.core.app.NotificationCompat
 import com.f0x1d.logfox.core.context.PAUSE_RECORDING_INTENT_ID
-import com.f0x1d.logfox.core.context.RECORDING_STATUS_CHANNEL_ID
+import com.f0x1d.logfox.feature.notifications.api.RECORDING_STATUS_CHANNEL_ID
 import com.f0x1d.logfox.core.context.RESUME_RECORDING_INTENT_ID
 import com.f0x1d.logfox.core.context.STOP_RECORDING_INTENT_ID
 import com.f0x1d.logfox.core.context.doIfNotificationsAllowed

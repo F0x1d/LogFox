@@ -8,7 +8,7 @@ import androidx.core.app.ServiceCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import com.f0x1d.logfox.core.context.EXIT_APP_INTENT_ID
-import com.f0x1d.logfox.core.context.LOGGING_STATUS_CHANNEL_ID
+import com.f0x1d.logfox.feature.notifications.api.LOGGING_STATUS_CHANNEL_ID
 import com.f0x1d.logfox.core.context.OPEN_APP_INTENT_ID
 import com.f0x1d.logfox.core.context.activityManager
 import com.f0x1d.logfox.core.context.makeServicePendingIntent

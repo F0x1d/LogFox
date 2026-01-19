@@ -6,8 +6,8 @@ import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationManagerCompat
 import coil.ImageLoader
 import coil.ImageLoaderFactory
-import com.f0x1d.logfox.core.context.LOGGING_STATUS_CHANNEL_ID
-import com.f0x1d.logfox.core.context.RECORDING_STATUS_CHANNEL_ID
+import com.f0x1d.logfox.feature.notifications.api.LOGGING_STATUS_CHANNEL_ID
+import com.f0x1d.logfox.feature.notifications.api.RECORDING_STATUS_CHANNEL_ID
 import com.f0x1d.logfox.core.context.notificationManagerCompat
 import com.f0x1d.logfox.core.logging.TimberFileTree
 import com.f0x1d.logfox.feature.preferences.data.UISettingsRepository
