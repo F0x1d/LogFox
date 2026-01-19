@@ -14,6 +14,10 @@ class KotlinJvmConventionPlugin : Plugin<Project> {
 
         extensions.configure(KotlinJvmProjectExtension::class.java) {
             jvmToolchain(JVM_VERSION)
+
+            compilerOptions {
+                freeCompilerArgs.add("-Xannotation-default-target=param-property")
+            }
         }
     }
 }

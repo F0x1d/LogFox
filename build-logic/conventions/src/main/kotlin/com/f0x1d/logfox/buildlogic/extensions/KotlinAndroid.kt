@@ -12,11 +12,11 @@ internal fun Project.configureKotlinAndroid(commonExtension: CommonExtension<*, 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    lint {
-        disable.add("NullSafeMutableLiveData")
-    }
-
     extensions.configure<KotlinAndroidProjectExtension>("kotlin") {
         jvmToolchain(JVM_VERSION)
+
+        compilerOptions {
+            freeCompilerArgs.add("-Xannotation-default-target=param-property")
+        }
     }
 }

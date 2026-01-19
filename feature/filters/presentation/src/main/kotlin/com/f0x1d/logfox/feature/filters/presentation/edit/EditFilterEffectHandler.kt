@@ -40,31 +40,29 @@ internal class EditFilterEffectHandler @Inject constructor(
             }
 
             is EditFilterSideEffect.SaveFilter -> {
-                runCatching {
-                    if (effect.filter == null) {
-                        createFilterUseCase(
-                            including = effect.including,
-                            enabledLogLevels = effect.enabledLogLevels,
-                            uid = effect.uid,
-                            pid = effect.pid,
-                            tid = effect.tid,
-                            packageName = effect.packageName,
-                            tag = effect.tag,
-                            content = effect.content,
-                        )
-                    } else {
-                        updateFilterUseCase(
-                            userFilter = effect.filter,
-                            including = effect.including,
-                            enabledLogLevels = effect.enabledLogLevels,
-                            uid = effect.uid,
-                            pid = effect.pid,
-                            tid = effect.tid,
-                            packageName = effect.packageName,
-                            tag = effect.tag,
-                            content = effect.content,
-                        )
-                    }
+                if (effect.filter == null) {
+                    createFilterUseCase(
+                        including = effect.including,
+                        enabledLogLevels = effect.enabledLogLevels,
+                        uid = effect.uid,
+                        pid = effect.pid,
+                        tid = effect.tid,
+                        packageName = effect.packageName,
+                        tag = effect.tag,
+                        content = effect.content,
+                    )
+                } else {
+                    updateFilterUseCase(
+                        userFilter = effect.filter,
+                        including = effect.including,
+                        enabledLogLevels = effect.enabledLogLevels,
+                        uid = effect.uid,
+                        pid = effect.pid,
+                        tid = effect.tid,
+                        packageName = effect.packageName,
+                        tag = effect.tag,
+                        content = effect.content,
+                    )
                 }
             }
 

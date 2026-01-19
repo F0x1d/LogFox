@@ -65,23 +65,11 @@ internal class FiltersEffectHandler @Inject constructor(
                 }
             }
 
-            is FiltersSideEffect.SwitchFilter -> {
-                runCatching {
-                    switchFilterUseCase(effect.filter, effect.checked)
-                }
-            }
+            is FiltersSideEffect.SwitchFilter -> switchFilterUseCase(effect.filter, effect.checked)
 
-            is FiltersSideEffect.DeleteFilter -> {
-                runCatching {
-                    deleteFilterUseCase(effect.filter)
-                }
-            }
+            is FiltersSideEffect.DeleteFilter -> deleteFilterUseCase(effect.filter)
 
-            is FiltersSideEffect.ClearAllFilters -> {
-                runCatching {
-                    clearAllFiltersUseCase()
-                }
-            }
+            is FiltersSideEffect.ClearAllFilters -> clearAllFiltersUseCase()
         }
     }
 }

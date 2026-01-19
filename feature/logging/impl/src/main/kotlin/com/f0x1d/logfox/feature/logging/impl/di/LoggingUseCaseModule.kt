@@ -2,22 +2,26 @@ package com.f0x1d.logfox.feature.logging.impl.di
 
 import com.f0x1d.logfox.feature.logging.api.domain.FormatLogLineUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.GetLogsFlowUseCase
+import com.f0x1d.logfox.feature.logging.api.domain.GetPausedFlowUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.GetQueryFlowUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.GetSelectedLogLinesFlowUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.GetShowLogValuesFlowUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.GetShowLogValuesUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.StartLoggingUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.UpdateLogsUseCase
+import com.f0x1d.logfox.feature.logging.api.domain.UpdatePausedUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.UpdateQueryUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.UpdateSelectedLogLinesUseCase
 import com.f0x1d.logfox.feature.logging.impl.domain.FormatLogLineUseCaseImpl
 import com.f0x1d.logfox.feature.logging.impl.domain.GetLogsFlowUseCaseImpl
+import com.f0x1d.logfox.feature.logging.impl.domain.GetPausedFlowUseCaseImpl
 import com.f0x1d.logfox.feature.logging.impl.domain.GetQueryFlowUseCaseImpl
 import com.f0x1d.logfox.feature.logging.impl.domain.GetSelectedLogLinesFlowUseCaseImpl
 import com.f0x1d.logfox.feature.logging.impl.domain.GetShowLogValuesFlowUseCaseImpl
 import com.f0x1d.logfox.feature.logging.impl.domain.GetShowLogValuesUseCaseImpl
 import com.f0x1d.logfox.feature.logging.impl.domain.StartLoggingUseCaseImpl
 import com.f0x1d.logfox.feature.logging.impl.domain.UpdateLogsUseCaseImpl
+import com.f0x1d.logfox.feature.logging.impl.domain.UpdatePausedUseCaseImpl
 import com.f0x1d.logfox.feature.logging.impl.domain.UpdateQueryUseCaseImpl
 import com.f0x1d.logfox.feature.logging.impl.domain.UpdateSelectedLogLinesUseCaseImpl
 import dagger.Binds
@@ -62,4 +66,10 @@ internal interface LoggingUseCaseModule {
 
     @Binds
     fun bindGetShowLogValuesFlowUseCase(impl: GetShowLogValuesFlowUseCaseImpl): GetShowLogValuesFlowUseCase
+
+    @Binds
+    fun bindGetPausedFlowUseCase(impl: GetPausedFlowUseCaseImpl): GetPausedFlowUseCase
+
+    @Binds
+    fun bindUpdatePausedUseCase(impl: UpdatePausedUseCaseImpl): UpdatePausedUseCase
 }

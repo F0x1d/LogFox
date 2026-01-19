@@ -11,8 +11,10 @@ import com.f0x1d.logfox.feature.filters.api.domain.GetAllEnabledFiltersFlowUseCa
 import com.f0x1d.logfox.feature.filters.api.model.filterAndSearch
 import com.f0x1d.logfox.feature.logging.api.domain.FormatLogLineUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.GetLogsFlowUseCase
+import com.f0x1d.logfox.feature.logging.api.domain.GetPausedFlowUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.GetQueryFlowUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.GetShowLogValuesFlowUseCase
+import com.f0x1d.logfox.feature.logging.api.domain.UpdatePausedUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.UpdateSelectedLogLinesUseCase
 import com.f0x1d.logfox.feature.logging.api.model.LogLine
 import com.f0x1d.logfox.feature.logging.presentation.di.FileUri
@@ -23,7 +25,6 @@ import com.f0x1d.logfox.feature.preferences.domain.logs.GetResumeLoggingWithBott
 import com.f0x1d.logfox.feature.recordings.api.domain.CreateRecordingFromLinesUseCase
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flowOf
@@ -47,13 +48,14 @@ internal class LogsEffectHandler @Inject constructor(
     private val getLogsTextSizeFlowUseCase: GetLogsTextSizeFlowUseCase,
     private val getLogsExpandedFlowUseCase: GetLogsExpandedFlowUseCase,
     private val formatLogLineUseCase: FormatLogLineUseCase,
+    private val getPausedFlowUseCase: GetPausedFlowUseCase,
+    private val updatePausedUseCase: UpdatePausedUseCase,
     private val dateTimeFormatter: DateTimeFormatter,
     @DefaultDispatcher private val defaultDispatcher: CoroutineDispatcher,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : EffectHandler<LogsSideEffect, LogsCommand> {
 
     private val viewingFile = fileUri != null
-    private val pausedFlow = MutableStateFlow(false)
 
     override suspend fun handle(effect: LogsSideEffect, onCommand: suspend (LogsCommand) -> Unit) {
         when (effect) {
@@ -65,7 +67,7 @@ internal class LogsEffectHandler @Inject constructor(
                     ) ?: getLogsFlowUseCase(),
                     getAllEnabledFiltersFlowUseCase(),
                     getQueryFlowUseCase(),
-                    if (!viewingFile) pausedFlow else flowOf(false),
+                    if (!viewingFile) getPausedFlowUseCase() else flowOf(false),
                 ) { logs, filters, query, paused ->
                     LogsData(
                         logs = logs,
@@ -133,7 +135,7 @@ internal class LogsEffectHandler @Inject constructor(
             }
 
             is LogsSideEffect.PauseStateChanged -> {
-                pausedFlow.value = effect.paused
+                updatePausedUseCase(effect.paused)
             }
 
             is LogsSideEffect.UpdateSelectedLogLines -> {

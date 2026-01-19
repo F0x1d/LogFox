@@ -19,9 +19,7 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-internal class RecordingDetailsEffectHandler
-@Inject
-constructor(
+internal class RecordingDetailsEffectHandler @Inject constructor(
     @ApplicationContext private val context: Context,
     @RecordingId private val recordingId: Long,
     private val getRecordingByIdFlowUseCase: GetRecordingByIdFlowUseCase,
