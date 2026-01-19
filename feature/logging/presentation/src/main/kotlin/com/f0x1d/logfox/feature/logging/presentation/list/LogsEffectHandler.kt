@@ -12,9 +12,9 @@ import com.f0x1d.logfox.feature.filters.api.model.filterAndSearch
 import com.f0x1d.logfox.feature.logging.api.domain.FormatLogLineUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.GetLogsFlowUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.GetQueryFlowUseCase
+import com.f0x1d.logfox.feature.logging.api.domain.GetShowLogValuesFlowUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.UpdateSelectedLogLinesUseCase
 import com.f0x1d.logfox.feature.logging.api.model.LogLine
-import com.f0x1d.logfox.feature.logging.api.model.ShowLogValues
 import com.f0x1d.logfox.feature.logging.presentation.di.FileUri
 import com.f0x1d.logfox.feature.preferences.data.LogsSettingsRepository
 import com.f0x1d.logfox.feature.recordings.api.domain.CreateRecordingFromLinesUseCase
@@ -38,6 +38,7 @@ internal class LogsEffectHandler @Inject constructor(
     private val getAllEnabledFiltersFlowUseCase: GetAllEnabledFiltersFlowUseCase,
     private val updateSelectedLogLinesUseCase: UpdateSelectedLogLinesUseCase,
     private val createRecordingFromLinesUseCase: CreateRecordingFromLinesUseCase,
+    private val getShowLogValuesFlowUseCase: GetShowLogValuesFlowUseCase,
     private val logsSettingsRepository: LogsSettingsRepository,
     private val formatLogLineUseCase: FormatLogLineUseCase,
     private val dateTimeFormatter: DateTimeFormatter,
@@ -112,51 +113,13 @@ internal class LogsEffectHandler @Inject constructor(
                     logsSettingsRepository.resumeLoggingWithBottomTouch(),
                     logsSettingsRepository.logsTextSize(),
                     logsSettingsRepository.logsExpanded(),
-                    logsSettingsRepository.showLogDate(),
-                    logsSettingsRepository.showLogTime(),
-                ) { resumeLoggingWithBottomTouch, logsTextSize, logsExpanded, showDate, showTime ->
-                    PreferencesDataPart1(
+                    getShowLogValuesFlowUseCase(),
+                ) { resumeLoggingWithBottomTouch, logsTextSize, logsExpanded, logsFormat ->
+                    LogsCommand.PreferencesUpdated(
                         resumeLoggingWithBottomTouch = resumeLoggingWithBottomTouch,
                         logsTextSize = logsTextSize.toFloat(),
                         logsExpanded = logsExpanded,
-                        showLogDate = showDate,
-                        showLogTime = showTime,
-                    )
-                }.combine(
-                    combine(
-                        logsSettingsRepository.showLogUid(),
-                        logsSettingsRepository.showLogPid(),
-                        logsSettingsRepository.showLogTid(),
-                        logsSettingsRepository.showLogPackage(),
-                        logsSettingsRepository.showLogTag(),
-                    ) { showUid, showPid, showTid, showPackage, showTag ->
-                        PreferencesDataPart2(
-                            showLogUid = showUid,
-                            showLogPid = showPid,
-                            showLogTid = showTid,
-                            showLogPackage = showPackage,
-                            showLogTag = showTag,
-                        )
-                    },
-                ) { part1, part2 ->
-                    part1 to part2
-                }.combine(
-                    logsSettingsRepository.showLogContent(),
-                ) { (part1, part2), showContent ->
-                    LogsCommand.PreferencesUpdated(
-                        resumeLoggingWithBottomTouch = part1.resumeLoggingWithBottomTouch,
-                        logsTextSize = part1.logsTextSize,
-                        logsExpanded = part1.logsExpanded,
-                        logsFormat = ShowLogValues(
-                            date = part1.showLogDate,
-                            time = part1.showLogTime,
-                            uid = part2.showLogUid,
-                            pid = part2.showLogPid,
-                            tid = part2.showLogTid,
-                            packageName = part2.showLogPackage,
-                            tag = part2.showLogTag,
-                            content = showContent,
-                        ),
+                        logsFormat = logsFormat,
                     )
                 }.collect { command ->
                     onCommand(command)
@@ -209,21 +172,5 @@ internal class LogsEffectHandler @Inject constructor(
         val query: String? = null,
         val paused: Boolean = false,
         val passing: Boolean = true,
-    )
-
-    private data class PreferencesDataPart1(
-        val resumeLoggingWithBottomTouch: Boolean,
-        val logsTextSize: Float,
-        val logsExpanded: Boolean,
-        val showLogDate: Boolean,
-        val showLogTime: Boolean,
-    )
-
-    private data class PreferencesDataPart2(
-        val showLogUid: Boolean,
-        val showLogPid: Boolean,
-        val showLogTid: Boolean,
-        val showLogPackage: Boolean,
-        val showLogTag: Boolean,
     )
 }
