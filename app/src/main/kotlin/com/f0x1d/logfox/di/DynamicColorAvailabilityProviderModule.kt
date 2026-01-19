@@ -15,6 +15,6 @@ internal object DynamicColorAvailabilityProviderModule {
     @Singleton
     fun provideDynamicColorAvailabilityProvider(uiSettingsRepository: UISettingsRepository): DynamicColorAvailabilityProvider =
         object : DynamicColorAvailabilityProvider {
-            override fun isDynamicColorAvailable(): Boolean = uiSettingsRepository.monetEnabled
+            override fun isDynamicColorAvailable(): Boolean = uiSettingsRepository.monetEnabled().value
         }
 }

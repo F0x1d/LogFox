@@ -1,7 +1,9 @@
 package com.f0x1d.logfox.feature.preferences.data
 
+import com.f0x1d.logfox.core.preferences.PreferenceStateFlow
+
 interface ServiceSettingsRepository {
-    var startOnBoot: Boolean
-    var showLogsFromAppLaunch: Boolean
-    var includeDeviceInfoInArchives: Boolean
+    fun startOnBoot(): PreferenceStateFlow<Boolean>
+    fun showLogsFromAppLaunch(): PreferenceStateFlow<Boolean>
+    fun includeDeviceInfoInArchives(): PreferenceStateFlow<Boolean>
 }

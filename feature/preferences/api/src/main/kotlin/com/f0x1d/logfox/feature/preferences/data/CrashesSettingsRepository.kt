@@ -1,23 +1,17 @@
 package com.f0x1d.logfox.feature.preferences.data
 
+import com.f0x1d.logfox.core.preferences.PreferenceStateFlow
 import com.f0x1d.logfox.feature.preferences.CrashesSort
-import com.fredporciuncula.flow.preferences.Preference
 
 interface CrashesSettingsRepository {
-    var openCrashesOnStartup: Boolean
-    var wrapCrashLogLines: Boolean
+    fun openCrashesOnStartup(): PreferenceStateFlow<Boolean>
+    fun wrapCrashLogLines(): PreferenceStateFlow<Boolean>
 
-    val crashesSortType: Preference<CrashesSort>
-    val crashesSortReversedOrder: Preference<Boolean>
-
-    fun updateCrashesSortSettings(
-        sortType: CrashesSort,
-        sortInReversedOrder: Boolean,
-    )
+    fun crashesSortType(): PreferenceStateFlow<CrashesSort>
+    fun crashesSortReversedOrder(): PreferenceStateFlow<Boolean>
 
     fun collectingFor(crashTypeName: String): Boolean
-
     fun showingNotificationsFor(crashTypeName: String): Boolean
 
-    var useSeparateNotificationsChannelsForCrashes: Boolean
+    fun useSeparateNotificationsChannelsForCrashes(): PreferenceStateFlow<Boolean>
 }

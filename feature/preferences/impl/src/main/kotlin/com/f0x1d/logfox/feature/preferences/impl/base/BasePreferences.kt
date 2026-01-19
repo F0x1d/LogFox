@@ -2,9 +2,9 @@ package com.f0x1d.logfox.feature.preferences.impl.base
 
 import android.content.Context
 import android.content.SharedPreferences
-import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import com.fredporciuncula.flow.preferences.FlowSharedPreferences
+import com.fredporciuncula.flow.preferences.Preference
 
 internal abstract class BasePreferences(
     context: Context,
@@ -14,43 +14,28 @@ internal abstract class BasePreferences(
 
     protected open fun providePreferences(context: Context): SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
 
-    @Suppress("UNCHECKED_CAST")
-    protected inline fun <reified T> put(
+    protected fun booleanPreference(
         key: String,
-        value: T?,
-    ) = sharedPreferences.edit {
-        when (value) {
-            null -> putString(key, null)
-            is String -> putString(key, value)
-            is Boolean -> putBoolean(key, value)
-            is Int -> putInt(key, value)
-            is Long -> putLong(key, value)
-            is Float -> putFloat(key, value)
-            is Set<*> -> putStringSet(key, value as Set<String>)
-        }
-    }
+        defaultValue: Boolean,
+    ): Preference<Boolean> = flowSharedPreferences.getBoolean(key, defaultValue)
 
-    protected inline fun <reified T> get(
+    protected fun intPreference(
+        key: String,
+        defaultValue: Int,
+    ): Preference<Int> = flowSharedPreferences.getInt(key, defaultValue)
+
+    protected fun longPreference(
+        key: String,
+        defaultValue: Long,
+    ): Preference<Long> = flowSharedPreferences.getLong(key, defaultValue)
+
+    protected fun stringPreference(
+        key: String,
+        defaultValue: String,
+    ): Preference<String> = flowSharedPreferences.getString(key, defaultValue)
+
+    protected inline fun <reified T : Enum<T>> enumPreference(
         key: String,
         defaultValue: T,
-    ): T =
-        when (defaultValue) {
-            is Boolean -> sharedPreferences.getBoolean(key, defaultValue) as T
-            is Int -> sharedPreferences.getInt(key, defaultValue) as T
-            is Long -> sharedPreferences.getLong(key, defaultValue) as T
-            is Float -> sharedPreferences.getFloat(key, defaultValue) as T
-            else -> error("Type of $defaultValue is not supported")
-        }
-
-    @Suppress("UNCHECKED_CAST")
-    protected inline fun <reified T> getNullable(
-        key: String,
-        defaultValue: T?,
-    ): T? =
-        when (defaultValue) {
-            null -> sharedPreferences.getString(key, defaultValue) as T?
-            is String -> sharedPreferences.getString(key, defaultValue) as T?
-            is Set<*> -> sharedPreferences.getStringSet(key, defaultValue as Set<String>) as T?
-            else -> error("Type of $defaultValue is not supported")
-        }
+    ): Preference<T> = flowSharedPreferences.getEnum(key, defaultValue)
 }

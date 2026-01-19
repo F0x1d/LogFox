@@ -9,6 +9,7 @@ import com.f0x1d.logfox.feature.database.model.UserFilter
 import com.f0x1d.logfox.feature.datetime.api.DateTimeFormatter
 import com.f0x1d.logfox.feature.filters.api.domain.GetAllEnabledFiltersFlowUseCase
 import com.f0x1d.logfox.feature.filters.api.model.filterAndSearch
+import com.f0x1d.logfox.feature.logging.api.domain.FormatLogLineUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.GetLogsFlowUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.GetQueryFlowUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.UpdateSelectedLogLinesUseCase
@@ -28,133 +29,131 @@ import kotlinx.coroutines.flow.scan
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-internal class LogsEffectHandler
-    @Inject
-    constructor(
-        @ApplicationContext private val context: Context,
-        @FileUri private val fileUri: Uri?,
-        private val getLogsFlowUseCase: GetLogsFlowUseCase,
-        private val getQueryFlowUseCase: GetQueryFlowUseCase,
-        private val getAllEnabledFiltersFlowUseCase: GetAllEnabledFiltersFlowUseCase,
-        private val updateSelectedLogLinesUseCase: UpdateSelectedLogLinesUseCase,
-        private val createRecordingFromLinesUseCase: CreateRecordingFromLinesUseCase,
-        private val logsSettingsRepository: LogsSettingsRepository,
-        private val dateTimeFormatter: DateTimeFormatter,
-        @DefaultDispatcher private val defaultDispatcher: CoroutineDispatcher,
-        @IODispatcher private val ioDispatcher: CoroutineDispatcher,
-    ) : EffectHandler<LogsSideEffect, LogsCommand> {
-        private val viewingFile = fileUri != null
-        private val pausedFlow = MutableStateFlow(false)
+internal class LogsEffectHandler @Inject constructor(
+    @ApplicationContext private val context: Context,
+    @FileUri private val fileUri: Uri?,
+    private val getLogsFlowUseCase: GetLogsFlowUseCase,
+    private val getQueryFlowUseCase: GetQueryFlowUseCase,
+    private val getAllEnabledFiltersFlowUseCase: GetAllEnabledFiltersFlowUseCase,
+    private val updateSelectedLogLinesUseCase: UpdateSelectedLogLinesUseCase,
+    private val createRecordingFromLinesUseCase: CreateRecordingFromLinesUseCase,
+    private val logsSettingsRepository: LogsSettingsRepository,
+    private val formatLogLineUseCase: FormatLogLineUseCase,
+    private val dateTimeFormatter: DateTimeFormatter,
+    @DefaultDispatcher private val defaultDispatcher: CoroutineDispatcher,
+    @IODispatcher private val ioDispatcher: CoroutineDispatcher,
+) : EffectHandler<LogsSideEffect, LogsCommand> {
 
-        override suspend fun handle(
-            effect: LogsSideEffect,
-            onCommand: suspend (LogsCommand) -> Unit,
-        ) {
-            when (effect) {
-                is LogsSideEffect.LoadLogs -> {
-                    combine(
-                        fileUri?.readFileContentsAsFlow(
-                            context = context,
-                            logsDisplayLimit = logsSettingsRepository.logsDisplayLimit,
-                        ) ?: getLogsFlowUseCase(),
-                        getAllEnabledFiltersFlowUseCase(),
-                        getQueryFlowUseCase(),
-                        if (!viewingFile) pausedFlow else flowOf(false),
-                    ) { logs, filters, query, paused ->
-                        LogsData(
-                            logs = logs,
-                            filters = filters,
-                            query = query,
-                            paused = paused,
-                        )
-                    }.scan(LogsData()) { accumulator, data ->
-                        when {
-                            !data.paused || data.logs.isEmpty() -> {
-                                data
-                            }
+    private val viewingFile = fileUri != null
+    private val pausedFlow = MutableStateFlow(false)
 
-                            data.query != accumulator.query ||
-                                data.filters != accumulator.filters -> {
-                                data.copy(
-                                    logs = accumulator.logs,
-                                )
-                            }
-
-                            else -> {
-                                data.copy(
-                                    logs = accumulator.logs,
-                                    passing = false,
-                                )
-                            }
+    override suspend fun handle(
+        effect: LogsSideEffect,
+        onCommand: suspend (LogsCommand) -> Unit,
+    ) {
+        when (effect) {
+            is LogsSideEffect.LoadLogs -> {
+                combine(
+                    fileUri?.readFileContentsAsFlow(
+                        context = context,
+                        logsDisplayLimit = logsSettingsRepository.logsDisplayLimit().value,
+                    ) ?: getLogsFlowUseCase(),
+                    getAllEnabledFiltersFlowUseCase(),
+                    getQueryFlowUseCase(),
+                    if (!viewingFile) pausedFlow else flowOf(false),
+                ) { logs, filters, query, paused ->
+                    LogsData(
+                        logs = logs,
+                        filters = filters,
+                        query = query,
+                        paused = paused,
+                    )
+                }.scan(LogsData()) { accumulator, data ->
+                    when {
+                        !data.paused || data.logs.isEmpty() -> {
+                            data
                         }
-                    }.filter { data ->
-                        data.passing
-                    }.mapNotNull { data ->
-                        data.copy(
-                            logs =
-                                data.logs.filterAndSearch(
-                                    filters = data.filters,
-                                    query = data.query,
-                                ),
-                        )
-                    }.flowOn(defaultDispatcher)
-                        .collect { data ->
-                            onCommand(
-                                LogsCommand.LogsLoaded(
-                                    logs = data.logs,
-                                    query = data.query,
-                                    filters = data.filters,
-                                ),
+
+                        data.query != accumulator.query ||
+                            data.filters != accumulator.filters -> {
+                            data.copy(
+                                logs = accumulator.logs,
                             )
                         }
-                }
 
-                is LogsSideEffect.PauseStateChanged -> {
-                    pausedFlow.value = effect.paused
-                }
-
-                is LogsSideEffect.UpdateSelectedLogLines -> {
-                    updateSelectedLogLinesUseCase(selectedLines = effect.selectedLines)
-                }
-
-                is LogsSideEffect.CreateRecordingFromLines -> {
-                    withContext(defaultDispatcher) {
-                        runCatching {
-                            createRecordingFromLinesUseCase(lines = effect.lines)
+                        else -> {
+                            data.copy(
+                                logs = accumulator.logs,
+                                passing = false,
+                            )
                         }
                     }
-                }
-
-                is LogsSideEffect.ExportLogsTo -> {
-                    withContext(ioDispatcher) {
-                        runCatching {
-                            val content =
-                                effect.lines.joinToString("\n") { line ->
-                                    logsSettingsRepository.originalOf(
-                                        logLine = line,
-                                        formatDate = dateTimeFormatter::formatDate,
-                                        formatTime = dateTimeFormatter::formatTime,
-                                    )
-                                }
-                            context.contentResolver.openOutputStream(effect.uri)?.use {
-                                it.write(content.encodeToByteArray())
-                            }
-                        }
+                }.filter { data ->
+                    data.passing
+                }.mapNotNull { data ->
+                    data.copy(
+                        logs = data.logs.filterAndSearch(
+                            filters = data.filters,
+                            query = data.query,
+                        ),
+                    )
+                }.flowOn(defaultDispatcher)
+                    .collect { data ->
+                        onCommand(
+                            LogsCommand.LogsLoaded(
+                                logs = data.logs,
+                                query = data.query,
+                                filters = data.filters,
+                            ),
+                        )
                     }
-                }
+            }
 
-                // UI side effects - handled by Fragment
-                is LogsSideEffect.NavigateToRecordings -> {
-                    Unit
+            is LogsSideEffect.PauseStateChanged -> {
+                pausedFlow.value = effect.paused
+            }
+
+            is LogsSideEffect.UpdateSelectedLogLines -> {
+                updateSelectedLogLinesUseCase(selectedLines = effect.selectedLines)
+            }
+
+            is LogsSideEffect.CreateRecordingFromLines -> {
+                withContext(defaultDispatcher) {
+                    runCatching {
+                        createRecordingFromLinesUseCase(lines = effect.lines)
+                    }
                 }
             }
-        }
 
-        private data class LogsData(
-            val logs: List<LogLine> = emptyList(),
-            val filters: List<UserFilter> = emptyList(),
-            val query: String? = null,
-            val paused: Boolean = false,
-            val passing: Boolean = true,
-        )
+            is LogsSideEffect.ExportLogsTo -> {
+                withContext(ioDispatcher) {
+                    runCatching {
+                        val content = effect.lines.joinToString("\n") { line ->
+                            formatLogLineUseCase(
+                                logLine = line,
+                                formatDate = dateTimeFormatter::formatDate,
+                                formatTime = dateTimeFormatter::formatTime,
+                            )
+                        }
+                        context.contentResolver.openOutputStream(effect.uri)?.use {
+                            it.write(content.encodeToByteArray())
+                        }
+                    }
+                }
+            }
+
+            // UI side effects - handled by Fragment
+            is LogsSideEffect.NavigateToRecordings -> {
+                Unit
+            }
+        }
     }
+
+    private data class LogsData(
+        val logs: List<LogLine> = emptyList(),
+        val filters: List<UserFilter> = emptyList(),
+        val query: String? = null,
+        val paused: Boolean = false,
+        val passing: Boolean = true,
+    )
+}

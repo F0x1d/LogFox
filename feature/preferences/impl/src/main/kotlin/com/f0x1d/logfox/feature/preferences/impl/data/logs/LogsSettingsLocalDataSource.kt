@@ -1,31 +1,21 @@
 package com.f0x1d.logfox.feature.preferences.impl.data.logs
 
-import com.f0x1d.logfox.feature.logging.api.model.ShowLogValues
-import kotlinx.coroutines.flow.Flow
+import com.fredporciuncula.flow.preferences.Preference
 
 internal interface LogsSettingsLocalDataSource {
-    var logsUpdateInterval: Long
-    val logsUpdateIntervalFlow: Flow<Long>
+    fun logsUpdateInterval(): Preference<Long>
+    fun logsTextSize(): Preference<Int>
+    fun logsDisplayLimit(): Preference<Int>
+    fun logsExpanded(): Preference<Boolean>
+    fun resumeLoggingWithBottomTouch(): Preference<Boolean>
+    fun exportLogsInOriginalFormat(): Preference<Boolean>
 
-    var logsTextSize: Int
-    val logsTextSizeFlow: Flow<Int>
-
-    var logsDisplayLimit: Int
-    val logsDisplayLimitFlow: Flow<Int>
-
-    var logsExpanded: Boolean
-    var resumeLoggingWithBottomTouch: Boolean
-    var exportLogsInOriginalFormat: Boolean
-
-    var showLogDate: Boolean
-    var showLogTime: Boolean
-    var showLogUid: Boolean
-    var showLogPid: Boolean
-    var showLogTid: Boolean
-    var showLogPackage: Boolean
-    var showLogTag: Boolean
-    var showLogContent: Boolean
-
-    val showLogValues: ShowLogValues
-    val showLogValuesFlow: Flow<ShowLogValues>
+    fun showLogDate(): Preference<Boolean>
+    fun showLogTime(): Preference<Boolean>
+    fun showLogUid(): Preference<Boolean>
+    fun showLogPid(): Preference<Boolean>
+    fun showLogTid(): Preference<Boolean>
+    fun showLogPackage(): Preference<Boolean>
+    fun showLogTag(): Preference<Boolean>
+    fun showLogContent(): Preference<Boolean>
 }

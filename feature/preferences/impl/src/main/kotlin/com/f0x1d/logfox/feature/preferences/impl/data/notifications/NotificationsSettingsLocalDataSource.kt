@@ -1,5 +1,7 @@
 package com.f0x1d.logfox.feature.preferences.impl.data.notifications
 
+import com.fredporciuncula.flow.preferences.Preference
+
 internal interface NotificationsSettingsLocalDataSource {
-    var askedNotificationsPermission: Boolean
+    fun askedNotificationsPermission(): Preference<Boolean>
 }

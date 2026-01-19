@@ -1,33 +1,24 @@
 package com.f0x1d.logfox.feature.preferences.impl.data.terminal
 
+import com.f0x1d.logfox.core.preferences.PreferenceStateFlow
+import com.f0x1d.logfox.core.preferences.asMappedPreferenceStateFlow
+import com.f0x1d.logfox.core.preferences.asPreferenceStateFlow
 import com.f0x1d.logfox.feature.preferences.data.TerminalSettingsRepository
 import com.f0x1d.logfox.feature.terminals.base.TerminalType
-import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-internal class TerminalSettingsRepositoryImpl
-    @Inject
-    constructor(
-        private val localDataSource: TerminalSettingsLocalDataSource,
-    ) : TerminalSettingsRepository {
-        override var selectedTerminalType: TerminalType
-            get() = localDataSource.selectedTerminalType
-            set(value) {
-                localDataSource.selectedTerminalType = value
-            }
+internal class TerminalSettingsRepositoryImpl @Inject constructor(
+    private val localDataSource: TerminalSettingsLocalDataSource,
+) : TerminalSettingsRepository {
 
-        override val selectedTerminalTypeFlow: Flow<TerminalType>
-            get() = localDataSource.selectedTerminalTypeFlow
+    override fun selectedTerminalType(): PreferenceStateFlow<TerminalType> =
+        localDataSource.selectedTerminalTypeKey().asMappedPreferenceStateFlow(
+            mapGet = TerminalType::fromKey,
+            mapSet = TerminalType::key,
+        )
 
-        override var fallbackToDefaultTerminal: Boolean
-            get() = localDataSource.fallbackToDefaultTerminal
-            set(value) {
-                localDataSource.fallbackToDefaultTerminal = value
-            }
-
-        override fun selectTerminal(type: TerminalType) {
-            localDataSource.selectTerminal(type)
-        }
-    }
+    override fun fallbackToDefaultTerminal(): PreferenceStateFlow<Boolean> =
+        localDataSource.fallbackToDefaultTerminal().asPreferenceStateFlow()
+}

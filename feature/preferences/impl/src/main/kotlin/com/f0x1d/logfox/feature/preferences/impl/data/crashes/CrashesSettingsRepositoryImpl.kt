@@ -1,49 +1,35 @@
 package com.f0x1d.logfox.feature.preferences.impl.data.crashes
 
+import com.f0x1d.logfox.core.preferences.PreferenceStateFlow
+import com.f0x1d.logfox.core.preferences.asPreferenceStateFlow
 import com.f0x1d.logfox.feature.preferences.CrashesSort
 import com.f0x1d.logfox.feature.preferences.data.CrashesSettingsRepository
-import com.fredporciuncula.flow.preferences.Preference
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-internal class CrashesSettingsRepositoryImpl
-    @Inject
-    constructor(
-        private val localDataSource: CrashesSettingsLocalDataSource,
-    ) : CrashesSettingsRepository {
-        override var openCrashesOnStartup: Boolean
-            get() = localDataSource.openCrashesOnStartup
-            set(value) {
-                localDataSource.openCrashesOnStartup = value
-            }
+internal class CrashesSettingsRepositoryImpl @Inject constructor(
+    private val localDataSource: CrashesSettingsLocalDataSource,
+) : CrashesSettingsRepository {
 
-        override var wrapCrashLogLines: Boolean
-            get() = localDataSource.wrapCrashLogLines
-            set(value) {
-                localDataSource.wrapCrashLogLines = value
-            }
+    override fun openCrashesOnStartup(): PreferenceStateFlow<Boolean> =
+        localDataSource.openCrashesOnStartup().asPreferenceStateFlow()
 
-        override val crashesSortType: Preference<CrashesSort>
-            get() = localDataSource.crashesSortType
+    override fun wrapCrashLogLines(): PreferenceStateFlow<Boolean> =
+        localDataSource.wrapCrashLogLines().asPreferenceStateFlow()
 
-        override val crashesSortReversedOrder: Preference<Boolean>
-            get() = localDataSource.crashesSortReversedOrder
+    override fun crashesSortType(): PreferenceStateFlow<CrashesSort> =
+        localDataSource.crashesSortType().asPreferenceStateFlow()
 
-        override fun updateCrashesSortSettings(
-            sortType: CrashesSort,
-            sortInReversedOrder: Boolean,
-        ) {
-            localDataSource.updateCrashesSortSettings(sortType, sortInReversedOrder)
-        }
+    override fun crashesSortReversedOrder(): PreferenceStateFlow<Boolean> =
+        localDataSource.crashesSortReversedOrder().asPreferenceStateFlow()
 
-        override fun collectingFor(crashTypeName: String): Boolean = localDataSource.collectingFor(crashTypeName)
+    override fun collectingFor(crashTypeName: String): Boolean =
+        localDataSource.collectingFor(crashTypeName)
 
-        override fun showingNotificationsFor(crashTypeName: String): Boolean = localDataSource.showingNotificationsFor(crashTypeName)
+    override fun showingNotificationsFor(crashTypeName: String): Boolean =
+        localDataSource.showingNotificationsFor(crashTypeName)
 
-        override var useSeparateNotificationsChannelsForCrashes: Boolean
-            get() = localDataSource.useSeparateNotificationsChannelsForCrashes
-            set(value) {
-                localDataSource.useSeparateNotificationsChannelsForCrashes = value
-            }
-    }
+    override fun useSeparateNotificationsChannelsForCrashes(): PreferenceStateFlow<Boolean> =
+        localDataSource.useSeparateNotificationsChannelsForCrashes().asPreferenceStateFlow()
+}

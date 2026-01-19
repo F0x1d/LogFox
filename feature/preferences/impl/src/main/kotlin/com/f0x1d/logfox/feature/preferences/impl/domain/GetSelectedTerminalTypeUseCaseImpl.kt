@@ -5,10 +5,9 @@ import com.f0x1d.logfox.feature.preferences.domain.GetSelectedTerminalTypeUseCas
 import com.f0x1d.logfox.feature.terminals.base.TerminalType
 import javax.inject.Inject
 
-internal class GetSelectedTerminalTypeUseCaseImpl
-    @Inject
-    constructor(
-        private val terminalSettingsRepository: TerminalSettingsRepository,
-    ) : GetSelectedTerminalTypeUseCase {
-        override fun invoke(): TerminalType = terminalSettingsRepository.selectedTerminalType
-    }
+internal class GetSelectedTerminalTypeUseCaseImpl @Inject constructor(
+    private val terminalSettingsRepository: TerminalSettingsRepository,
+) : GetSelectedTerminalTypeUseCase {
+
+    override fun invoke(): TerminalType = terminalSettingsRepository.selectedTerminalType().value
+}

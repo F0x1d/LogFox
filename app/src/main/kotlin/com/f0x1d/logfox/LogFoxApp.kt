@@ -39,12 +39,12 @@ class LogFoxApp :
         }
         Timber.d("onCreate")
 
-        AppCompatDelegate.setDefaultNightMode(uiSettingsRepository.nightTheme)
+        AppCompatDelegate.setDefaultNightMode(uiSettingsRepository.nightTheme().value)
         DynamicColors.applyToActivitiesIfAvailable(
             this,
             DynamicColorsOptions
                 .Builder()
-                .setPrecondition { _, _ -> uiSettingsRepository.monetEnabled }
+                .setPrecondition { _, _ -> uiSettingsRepository.monetEnabled().value }
                 .build(),
         )
 

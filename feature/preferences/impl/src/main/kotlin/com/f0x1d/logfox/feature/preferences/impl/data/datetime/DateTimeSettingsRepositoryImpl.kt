@@ -1,31 +1,19 @@
 package com.f0x1d.logfox.feature.preferences.impl.data.datetime
 
+import com.f0x1d.logfox.core.preferences.PreferenceStateFlow
+import com.f0x1d.logfox.core.preferences.asPreferenceStateFlow
 import com.f0x1d.logfox.feature.preferences.data.DateTimeSettingsRepository
-import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-internal class DateTimeSettingsRepositoryImpl
-    @Inject
-    constructor(
-        private val localDataSource: DateTimeSettingsLocalDataSource,
-    ) : DateTimeSettingsRepository {
-        override var dateFormat: String?
-            get() = localDataSource.dateFormat
-            set(value) {
-                localDataSource.dateFormat = value
-            }
+internal class DateTimeSettingsRepositoryImpl @Inject constructor(
+    private val localDataSource: DateTimeSettingsLocalDataSource,
+) : DateTimeSettingsRepository {
 
-        override val dateFormatFlow: Flow<String>
-            get() = localDataSource.dateFormatFlow
+    override fun dateFormat(): PreferenceStateFlow<String> =
+        localDataSource.dateFormat().asPreferenceStateFlow()
 
-        override var timeFormat: String?
-            get() = localDataSource.timeFormat
-            set(value) {
-                localDataSource.timeFormat = value
-            }
-
-        override val timeFormatFlow: Flow<String>
-            get() = localDataSource.timeFormatFlow
-    }
+    override fun timeFormat(): PreferenceStateFlow<String> =
+        localDataSource.timeFormat().asPreferenceStateFlow()
+}

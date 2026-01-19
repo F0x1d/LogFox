@@ -24,8 +24,8 @@ internal class CrashDetailsViewModel
             initialSideEffect = CrashDetailsSideEffect.LoadCrash,
         ),
         DateTimeFormatter by dateTimeFormatter {
-        val wrapCrashLogLines get() = crashesSettingsRepository.wrapCrashLogLines
-        val useSeparateNotificationsChannelsForCrashes get() = crashesSettingsRepository.useSeparateNotificationsChannelsForCrashes
+        val wrapCrashLogLines get() = crashesSettingsRepository.wrapCrashLogLines().value
+        val useSeparateNotificationsChannelsForCrashes get() = crashesSettingsRepository.useSeparateNotificationsChannelsForCrashes().value
 
         val currentState: CrashDetailsState get() = state.value
 

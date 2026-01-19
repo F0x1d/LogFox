@@ -1,5 +1,6 @@
 package com.f0x1d.logfox.feature.logging.impl.di
 
+import com.f0x1d.logfox.feature.logging.api.domain.FormatLogLineUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.GetLogsFlowUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.GetQueryFlowUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.GetSelectedLogLinesFlowUseCase
@@ -7,6 +8,7 @@ import com.f0x1d.logfox.feature.logging.api.domain.StartLoggingUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.UpdateLogsUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.UpdateQueryUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.UpdateSelectedLogLinesUseCase
+import com.f0x1d.logfox.feature.logging.impl.domain.FormatLogLineUseCaseImpl
 import com.f0x1d.logfox.feature.logging.impl.domain.GetLogsFlowUseCaseImpl
 import com.f0x1d.logfox.feature.logging.impl.domain.GetQueryFlowUseCaseImpl
 import com.f0x1d.logfox.feature.logging.impl.domain.GetSelectedLogLinesFlowUseCaseImpl
@@ -57,4 +59,9 @@ internal interface LoggingUseCaseModule {
     fun bindStartLoggingUseCase(
         impl: StartLoggingUseCaseImpl,
     ): StartLoggingUseCase
+
+    @Binds
+    fun bindFormatLogLineUseCase(
+        impl: FormatLogLineUseCaseImpl,
+    ): FormatLogLineUseCase
 }

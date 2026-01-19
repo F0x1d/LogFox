@@ -15,8 +15,8 @@ internal class DateTimeFormatterImpl
         @ApplicationContext private val context: Context,
         private val dateTimeSettingsRepository: DateTimeSettingsRepository,
     ) : DateTimeFormatter {
-        private val dateFormatter by lazy { createFormatter(dateTimeSettingsRepository.dateFormat) }
-        private val timeFormatter by lazy { createFormatter(dateTimeSettingsRepository.timeFormat) }
+        private val dateFormatter by lazy { createFormatter(dateTimeSettingsRepository.dateFormat().value) }
+        private val timeFormatter by lazy { createFormatter(dateTimeSettingsRepository.timeFormat().value) }
 
         override fun formatDate(time: Long): String = tryFormatBy(dateFormatter, time)
 

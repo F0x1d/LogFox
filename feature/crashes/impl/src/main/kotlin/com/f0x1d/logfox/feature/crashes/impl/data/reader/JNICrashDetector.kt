@@ -29,7 +29,7 @@ internal class JNICrashDetector(
 
         return super.stillCollecting(line) ||
             // + 1000 for case logsUpdateInterval is really small
-            firstLineTime + logsSettingsRepository.logsUpdateInterval + 1000 > System.currentTimeMillis()
+            firstLineTime + logsSettingsRepository.logsUpdateInterval().value + 1000 > System.currentTimeMillis()
     }
 
     override fun packageFromCollected(lines: List<LogLine>): String =

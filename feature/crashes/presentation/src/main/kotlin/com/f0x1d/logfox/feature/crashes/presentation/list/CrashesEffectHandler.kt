@@ -34,8 +34,8 @@ internal class CrashesEffectHandler
                 is CrashesSideEffect.LoadCrashes -> {
                     combine(
                         getAllCrashesFlowUseCase(),
-                        crashesSettingsRepository.crashesSortType.asFlow(),
-                        crashesSettingsRepository.crashesSortReversedOrder.asFlow(),
+                        crashesSettingsRepository.crashesSortType(),
+                        crashesSettingsRepository.crashesSortReversedOrder(),
                     ) { crashes, sortType, sortInReversedOrder ->
                         val groupedCrashes = crashes.groupBy { it.packageName }
 
@@ -70,10 +70,8 @@ internal class CrashesEffectHandler
                 }
 
                 is CrashesSideEffect.UpdateSortPreferences -> {
-                    crashesSettingsRepository.updateCrashesSortSettings(
-                        sortType = effect.sortType,
-                        sortInReversedOrder = effect.sortInReversedOrder,
-                    )
+                    crashesSettingsRepository.crashesSortType().set(effect.sortType)
+                    crashesSettingsRepository.crashesSortReversedOrder().set(effect.sortInReversedOrder)
                 }
 
                 is CrashesSideEffect.DeleteCrashesByPackageName -> {

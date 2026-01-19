@@ -5,10 +5,11 @@ plugins {
 android.namespace = "com.f0x1d.logfox.feature.preferences.api"
 
 dependencies {
-    implementation(projects.feature.logging.api)
+    api(projects.core.preferences.api)
+
     implementation(projects.feature.database.api)
     implementation(projects.feature.terminals.api)
     implementation(projects.strings)
+
     implementation(libs.bundles.androidx)
-    implementation(libs.flow.preferences)
 }

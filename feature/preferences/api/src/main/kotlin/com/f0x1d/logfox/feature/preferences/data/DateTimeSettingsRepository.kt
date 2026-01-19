@@ -1,6 +1,6 @@
 package com.f0x1d.logfox.feature.preferences.data
 
-import kotlinx.coroutines.flow.Flow
+import com.f0x1d.logfox.core.preferences.PreferenceStateFlow
 
 interface DateTimeSettingsRepository {
     companion object {
@@ -8,9 +8,6 @@ interface DateTimeSettingsRepository {
         const val TIME_FORMAT_DEFAULT = "HH:mm:ss.SSS"
     }
 
-    var dateFormat: String?
-    val dateFormatFlow: Flow<String>
-
-    var timeFormat: String?
-    val timeFormatFlow: Flow<String>
+    fun dateFormat(): PreferenceStateFlow<String>
+    fun timeFormat(): PreferenceStateFlow<String>
 }

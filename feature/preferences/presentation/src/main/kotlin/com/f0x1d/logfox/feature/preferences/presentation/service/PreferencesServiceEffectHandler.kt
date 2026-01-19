@@ -9,62 +9,60 @@ import com.f0x1d.logfox.feature.terminals.base.TerminalType
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
-internal class PreferencesServiceEffectHandler
-    @Inject
-    constructor(
-        @ApplicationContext private val context: Context,
-        private val terminalSettingsRepository: TerminalSettingsRepository,
-        private val terminals: Map<TerminalType, @JvmSuppressWildcards Terminal>,
-        private val loggingServiceDelegate: LoggingServiceDelegate,
-    ) : EffectHandler<PreferencesServiceSideEffect, PreferencesServiceCommand> {
-        override suspend fun handle(
-            effect: PreferencesServiceSideEffect,
-            onCommand: suspend (PreferencesServiceCommand) -> Unit,
-        ) {
-            when (effect) {
-                is PreferencesServiceSideEffect.LoadPreferences -> {
-                    terminalSettingsRepository.selectedTerminalTypeFlow.collect { selectedType ->
-                        onCommand(
-                            PreferencesServiceCommand.PreferencesLoaded(
-                                selectedTerminalType = selectedType,
-                                terminalNames =
-                                    TerminalType.entries.map { type ->
-                                        context.getString(terminals.getValue(type).title)
-                                    },
-                            ),
-                        )
-                    }
-                }
+internal class PreferencesServiceEffectHandler @Inject constructor(
+    @ApplicationContext private val context: Context,
+    private val terminalSettingsRepository: TerminalSettingsRepository,
+    private val terminals: Map<TerminalType, @JvmSuppressWildcards Terminal>,
+    private val loggingServiceDelegate: LoggingServiceDelegate,
+) : EffectHandler<PreferencesServiceSideEffect, PreferencesServiceCommand> {
 
-                is PreferencesServiceSideEffect.CheckTerminalSupport -> {
-                    val terminal = terminals.getValue(effect.type)
-                    if (terminal.isSupported()) {
-                        onCommand(PreferencesServiceCommand.TerminalSupported(effect.type))
-                    } else {
-                        onCommand(PreferencesServiceCommand.TerminalNotSupported)
-                    }
+    override suspend fun handle(
+        effect: PreferencesServiceSideEffect,
+        onCommand: suspend (PreferencesServiceCommand) -> Unit,
+    ) {
+        when (effect) {
+            is PreferencesServiceSideEffect.LoadPreferences -> {
+                terminalSettingsRepository.selectedTerminalType().collect { selectedType ->
+                    onCommand(
+                        PreferencesServiceCommand.PreferencesLoaded(
+                            selectedTerminalType = selectedType,
+                            terminalNames = TerminalType.entries.map { type ->
+                                context.getString(terminals.getValue(type).title)
+                            },
+                        ),
+                    )
                 }
+            }
 
-                is PreferencesServiceSideEffect.SaveTerminalType -> {
-                    terminalSettingsRepository.selectedTerminalType = effect.type
+            is PreferencesServiceSideEffect.CheckTerminalSupport -> {
+                val terminal = terminals.getValue(effect.type)
+                if (terminal.isSupported()) {
+                    onCommand(PreferencesServiceCommand.TerminalSupported(effect.type))
+                } else {
+                    onCommand(PreferencesServiceCommand.TerminalNotSupported)
                 }
+            }
 
-                is PreferencesServiceSideEffect.RestartLogging -> {
-                    loggingServiceDelegate.restartLogging()
-                }
+            is PreferencesServiceSideEffect.SaveTerminalType -> {
+                terminalSettingsRepository.selectedTerminalType().set(effect.type)
+            }
 
-                // UI side effects - handled by Fragment
-                is PreferencesServiceSideEffect.ShowTerminalRestartDialog -> {
-                    Unit
-                }
+            is PreferencesServiceSideEffect.RestartLogging -> {
+                loggingServiceDelegate.restartLogging()
+            }
 
-                is PreferencesServiceSideEffect.ShowTerminalUnavailableToast -> {
-                    Unit
-                }
+            // UI side effects - handled by Fragment
+            is PreferencesServiceSideEffect.ShowTerminalRestartDialog -> {
+                Unit
+            }
 
-                is PreferencesServiceSideEffect.ShowAndroid13WarningDialog -> {
-                    Unit
-                }
+            is PreferencesServiceSideEffect.ShowTerminalUnavailableToast -> {
+                Unit
+            }
+
+            is PreferencesServiceSideEffect.ShowAndroid13WarningDialog -> {
+                Unit
             }
         }
     }
+}

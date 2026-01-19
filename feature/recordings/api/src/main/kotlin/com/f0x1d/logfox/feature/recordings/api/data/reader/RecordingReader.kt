@@ -1,6 +1,7 @@
 package com.f0x1d.logfox.feature.recordings.api.data.reader
 
 import com.f0x1d.logfox.feature.datetime.api.DateTimeFormatter
+import com.f0x1d.logfox.feature.logging.api.domain.FormatLogLineUseCase
 import com.f0x1d.logfox.feature.logging.api.model.LogLine
 import com.f0x1d.logfox.feature.preferences.data.LogsSettingsRepository
 import kotlinx.coroutines.sync.Mutex
@@ -8,93 +9,88 @@ import kotlinx.coroutines.sync.withLock
 import java.io.File
 import javax.inject.Inject
 
-open class RecordingReader
-    @Inject
-    constructor(
-        private val logsSettingsRepository: LogsSettingsRepository,
-        private val dateTimeFormatter: DateTimeFormatter,
-    ) : suspend (LogLine) -> Unit {
-        private var recording = false
-        var recordingTime = 0L
-            private set
-        private val recordingMutex = Mutex()
+open class RecordingReader @Inject constructor(
+    private val logsSettingsRepository: LogsSettingsRepository,
+    private val formatLogLineUseCase: FormatLogLineUseCase,
+    private val dateTimeFormatter: DateTimeFormatter,
+) : suspend (LogLine) -> Unit {
 
-        private val recordedLines = mutableListOf<LogLine>()
-        private val linesMutex = Mutex()
+    private var recording = false
+    var recordingTime = 0L
+        private set
+    private val recordingMutex = Mutex()
 
-        var recordingFile: File? = null
-            private set
-        protected val fileMutex = Mutex()
+    private val recordedLines = mutableListOf<LogLine>()
+    private val linesMutex = Mutex()
 
-        suspend fun record(toFile: File) {
-            recordingMutex.withLock {
-                recording = true
-                recordingTime = System.currentTimeMillis()
-            }
+    var recordingFile: File? = null
+        private set
+    protected val fileMutex = Mutex()
 
-            fileMutex.withLock {
-                recordingFile = toFile
-            }
+    suspend fun record(toFile: File) {
+        recordingMutex.withLock {
+            recording = true
+            recordingTime = System.currentTimeMillis()
         }
 
-        suspend fun stopRecording() {
-            updateRecording(false)
-            dumpLines()
+        fileMutex.withLock {
+            recordingFile = toFile
         }
-
-        suspend fun dumpLines() {
-            val content =
-                linesMutex.withLock {
-                    if (recordedLines.isEmpty()) {
-                        return@withLock ""
-                    }
-
-                    val stringLogs =
-                        recordedLines.joinToString("\n") {
-                            logsSettingsRepository.originalOf(
-                                logLine = it,
-                                formatDate = dateTimeFormatter::formatDate,
-                                formatTime = dateTimeFormatter::formatTime,
-                            )
-                        }
-                    recordedLines.clear()
-
-                    return@withLock stringLogs
-                }
-
-            if (content.isNotEmpty()) {
-                writeToFile(content)
-            }
-        }
-
-        suspend fun updateRecording(recording: Boolean) =
-            recordingMutex.withLock {
-                this.recording = recording
-            }
-
-        suspend fun copyFileTo(file: File) =
-            fileMutex.withLock {
-                recordingFile?.copyTo(file)
-            }
-
-        override suspend fun invoke(line: LogLine) {
-            val recording = recordingMutex.withLock { recording }
-
-            if (recording && shouldRecordLine(line)) {
-                linesMutex.withLock {
-                    recordedLines.add(line)
-                }
-
-                if (recordedLines.size >= logsSettingsRepository.logsDisplayLimit) {
-                    dumpLines()
-                }
-            }
-        }
-
-        protected open suspend fun writeToFile(content: String) =
-            fileMutex.withLock {
-                recordingFile?.appendText(content + "\n")
-            }
-
-        protected open suspend fun shouldRecordLine(line: LogLine) = true
     }
+
+    suspend fun stopRecording() {
+        updateRecording(false)
+        dumpLines()
+    }
+
+    suspend fun dumpLines() {
+        val content = linesMutex.withLock {
+            if (recordedLines.isEmpty()) {
+                return@withLock ""
+            }
+
+            val stringLogs = recordedLines.joinToString("\n") {
+                formatLogLineUseCase(
+                    logLine = it,
+                    formatDate = dateTimeFormatter::formatDate,
+                    formatTime = dateTimeFormatter::formatTime,
+                )
+            }
+            recordedLines.clear()
+
+            return@withLock stringLogs
+        }
+
+        if (content.isNotEmpty()) {
+            writeToFile(content)
+        }
+    }
+
+    suspend fun updateRecording(recording: Boolean) = recordingMutex.withLock {
+        this.recording = recording
+    }
+
+    suspend fun copyFileTo(file: File) = fileMutex.withLock {
+        recordingFile?.copyTo(file)
+    }
+
+    override suspend fun invoke(line: LogLine) {
+        val recording = recordingMutex.withLock { recording }
+
+        if (recording && shouldRecordLine(line)) {
+            linesMutex.withLock {
+                recordedLines.add(line)
+            }
+
+            if (recordedLines.size >= logsSettingsRepository.logsDisplayLimit().value) {
+                dumpLines()
+            }
+        }
+    }
+
+    protected open suspend fun writeToFile(content: String) = fileMutex.withLock {
+        recordingFile?.appendText(content + "\n")
+    }
+
+    protected open suspend fun shouldRecordLine(line: LogLine) = true
+}

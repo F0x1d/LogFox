@@ -59,7 +59,7 @@ internal class RecordingDetailsEffectHandler
                     withContext(ioDispatcher) {
                         context.contentResolver.openOutputStream(effect.uri)?.use {
                             it.exportToZip {
-                                if (serviceSettingsRepository.includeDeviceInfoInArchives) {
+                                if (serviceSettingsRepository.includeDeviceInfoInArchives().value) {
                                     putZipEntry(
                                         "device.txt",
                                         deviceData.encodeToByteArray(),

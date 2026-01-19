@@ -36,7 +36,7 @@ internal class LoggingRepositoryImpl
             flow {
                 val command =
                     LoggingRepository.COMMAND +
-                        when (serviceSettingsRepository.showLogsFromAppLaunch) {
+                        when (serviceSettingsRepository.showLogsFromAppLaunch().value) {
                             true -> LoggingRepository.SHOW_LOGS_FROM_NOW_FLAGS
                             else -> emptyArray()
                         }
@@ -79,7 +79,7 @@ internal class LoggingRepositoryImpl
                 Timber.d("started scope")
 
                 process.output.bufferedReader().use { reader ->
-                    var droppedFirst = !serviceSettingsRepository.showLogsFromAppLaunch
+                    var droppedFirst = !serviceSettingsRepository.showLogsFromAppLaunch().value
                     // avoiding getting the same line after logging restart because of
                     // WARNING: -T 0 invalid, setting to 1
                     Timber.d("got reader")

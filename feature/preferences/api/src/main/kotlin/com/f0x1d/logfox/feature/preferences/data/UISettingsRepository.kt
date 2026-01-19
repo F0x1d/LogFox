@@ -1,10 +1,8 @@
 package com.f0x1d.logfox.feature.preferences.data
 
-import kotlinx.coroutines.flow.Flow
+import com.f0x1d.logfox.core.preferences.PreferenceStateFlow
 
 interface UISettingsRepository {
-    var nightTheme: Int
-    val nightThemeFlow: Flow<Int>
-
-    var monetEnabled: Boolean
+    fun nightTheme(): PreferenceStateFlow<Int>
+    fun monetEnabled(): PreferenceStateFlow<Boolean>
 }

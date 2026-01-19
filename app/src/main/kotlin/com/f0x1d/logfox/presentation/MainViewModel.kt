@@ -7,24 +7,23 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-internal class MainViewModel
-    @Inject
-    constructor(
-        reducer: MainReducer,
-        effectHandler: MainEffectHandler,
-        private val notificationsSettingsRepository: NotificationsSettingsRepository,
-        private val crashesSettingsRepository: CrashesSettingsRepository,
-    ) : BaseStoreViewModel<MainState, MainCommand, MainSideEffect>(
-            initialState = MainState,
-            reducer = reducer,
-            effectHandlers = listOf(effectHandler),
-            initialSideEffect = MainSideEffect.StartLoggingServiceIfNeeded,
-        ) {
-        var askedNotificationsPermission
-            get() = notificationsSettingsRepository.askedNotificationsPermission
-            set(value) {
-                notificationsSettingsRepository.askedNotificationsPermission = value
-            }
+internal class MainViewModel @Inject constructor(
+    reducer: MainReducer,
+    effectHandler: MainEffectHandler,
+    private val notificationsSettingsRepository: NotificationsSettingsRepository,
+    private val crashesSettingsRepository: CrashesSettingsRepository,
+) : BaseStoreViewModel<MainState, MainCommand, MainSideEffect>(
+    initialState = MainState,
+    reducer = reducer,
+    effectHandlers = listOf(effectHandler),
+    initialSideEffect = MainSideEffect.StartLoggingServiceIfNeeded,
+) {
 
-        val openCrashesOnStartup get() = crashesSettingsRepository.openCrashesOnStartup
-    }
+    var askedNotificationsPermission
+        get() = notificationsSettingsRepository.askedNotificationsPermission().value
+        set(value) {
+            notificationsSettingsRepository.askedNotificationsPermission().set(value)
+        }
+
+    val openCrashesOnStartup get() = crashesSettingsRepository.openCrashesOnStartup().value
+}

@@ -1,8 +1,6 @@
 package com.f0x1d.logfox.feature.preferences.data
 
-import com.f0x1d.logfox.feature.logging.api.model.LogLine
-import com.f0x1d.logfox.feature.logging.api.model.ShowLogValues
-import kotlinx.coroutines.flow.Flow
+import com.f0x1d.logfox.core.preferences.PreferenceStateFlow
 
 interface LogsSettingsRepository {
     companion object {
@@ -12,34 +10,19 @@ interface LogsSettingsRepository {
         const val LOGS_DISPLAY_LIMIT_DEFAULT = 10000
     }
 
-    var logsUpdateInterval: Long
-    val logsUpdateIntervalFlow: Flow<Long>
+    fun logsUpdateInterval(): PreferenceStateFlow<Long>
+    fun logsTextSize(): PreferenceStateFlow<Int>
+    fun logsDisplayLimit(): PreferenceStateFlow<Int>
+    fun logsExpanded(): PreferenceStateFlow<Boolean>
+    fun resumeLoggingWithBottomTouch(): PreferenceStateFlow<Boolean>
+    fun exportLogsInOriginalFormat(): PreferenceStateFlow<Boolean>
 
-    var logsTextSize: Int
-    val logsTextSizeFlow: Flow<Int>
-
-    var logsDisplayLimit: Int
-    val logsDisplayLimitFlow: Flow<Int>
-
-    var logsExpanded: Boolean
-    var resumeLoggingWithBottomTouch: Boolean
-    var exportLogsInOriginalFormat: Boolean
-
-    var showLogDate: Boolean
-    var showLogTime: Boolean
-    var showLogUid: Boolean
-    var showLogPid: Boolean
-    var showLogTid: Boolean
-    var showLogPackage: Boolean
-    var showLogTag: Boolean
-    var showLogContent: Boolean
-
-    val showLogValues: ShowLogValues
-    val showLogValuesFlow: Flow<ShowLogValues>
-
-    fun originalOf(
-        logLine: LogLine,
-        formatDate: (Long) -> String,
-        formatTime: (Long) -> String,
-    ): String
+    fun showLogDate(): PreferenceStateFlow<Boolean>
+    fun showLogTime(): PreferenceStateFlow<Boolean>
+    fun showLogUid(): PreferenceStateFlow<Boolean>
+    fun showLogPid(): PreferenceStateFlow<Boolean>
+    fun showLogTid(): PreferenceStateFlow<Boolean>
+    fun showLogPackage(): PreferenceStateFlow<Boolean>
+    fun showLogTag(): PreferenceStateFlow<Boolean>
+    fun showLogContent(): PreferenceStateFlow<Boolean>
 }

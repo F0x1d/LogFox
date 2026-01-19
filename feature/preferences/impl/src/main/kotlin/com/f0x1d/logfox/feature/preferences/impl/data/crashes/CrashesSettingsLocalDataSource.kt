@@ -4,20 +4,14 @@ import com.f0x1d.logfox.feature.preferences.CrashesSort
 import com.fredporciuncula.flow.preferences.Preference
 
 internal interface CrashesSettingsLocalDataSource {
-    var openCrashesOnStartup: Boolean
-    var wrapCrashLogLines: Boolean
+    fun openCrashesOnStartup(): Preference<Boolean>
+    fun wrapCrashLogLines(): Preference<Boolean>
 
-    val crashesSortType: Preference<CrashesSort>
-    val crashesSortReversedOrder: Preference<Boolean>
-
-    fun updateCrashesSortSettings(
-        sortType: CrashesSort,
-        sortInReversedOrder: Boolean,
-    )
+    fun crashesSortType(): Preference<CrashesSort>
+    fun crashesSortReversedOrder(): Preference<Boolean>
 
     fun collectingFor(crashTypeName: String): Boolean
-
     fun showingNotificationsFor(crashTypeName: String): Boolean
 
-    var useSeparateNotificationsChannelsForCrashes: Boolean
+    fun useSeparateNotificationsChannelsForCrashes(): Preference<Boolean>
 }

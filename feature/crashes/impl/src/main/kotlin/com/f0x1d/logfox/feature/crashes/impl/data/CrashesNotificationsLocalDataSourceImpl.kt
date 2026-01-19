@@ -46,7 +46,7 @@ internal class CrashesNotificationsLocalDataSourceImpl
                     NotificationCompat
                         .Builder(
                             context,
-                            if (crashesSettingsRepository.useSeparateNotificationsChannelsForCrashes) {
+                            if (crashesSettingsRepository.useSeparateNotificationsChannelsForCrashes().value) {
                                 appCrash.notificationChannelId
                             } else {
                                 CRASHES_CHANNEL_ID
@@ -88,7 +88,7 @@ internal class CrashesNotificationsLocalDataSourceImpl
         }
 
         private fun createNotificationChannelFor(appCrash: AppCrash) {
-            if (crashesSettingsRepository.useSeparateNotificationsChannelsForCrashes) {
+            if (crashesSettingsRepository.useSeparateNotificationsChannelsForCrashes().value) {
                 val crashTypeName = appCrash.crashType.readableName
                 val groupId = "${CRASHES_CHANNEL_GROUP_ID}_$crashTypeName"
 

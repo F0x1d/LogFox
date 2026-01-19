@@ -63,7 +63,7 @@ internal class CrashDetailsEffectHandler
                     withContext(ioDispatcher) {
                         application.contentResolver.openOutputStream(effect.uri)?.use {
                             it.exportToZip {
-                                if (serviceSettingsRepository.includeDeviceInfoInArchives) {
+                                if (serviceSettingsRepository.includeDeviceInfoInArchives().value) {
                                     putZipEntry(
                                         name = "device.txt",
                                         content = deviceData.encodeToByteArray(),
