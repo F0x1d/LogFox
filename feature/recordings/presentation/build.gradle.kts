@@ -9,7 +9,6 @@ android {
 
 dependencies {
     implementation(projects.feature.recordings.api)
-    implementation(projects.feature.logging.api)
     implementation(projects.feature.database.api)
     implementation(projects.feature.preferences.api)
     implementation(projects.core.presentation)

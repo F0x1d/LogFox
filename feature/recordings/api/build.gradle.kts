@@ -9,7 +9,6 @@ dependencies {
     implementation(projects.feature.database.api)
     implementation(projects.feature.datetime.api)
     implementation(projects.feature.preferences.api)
-    implementation(projects.strings)
 
     implementation(libs.bundles.androidx)
 }

@@ -9,7 +9,6 @@ android {
 
 dependencies {
     implementation(projects.feature.logging.api)
-    implementation(projects.feature.crashes.api)
     implementation(projects.feature.filters.api)
     implementation(projects.feature.recordings.api)
     implementation(projects.feature.database.api)
