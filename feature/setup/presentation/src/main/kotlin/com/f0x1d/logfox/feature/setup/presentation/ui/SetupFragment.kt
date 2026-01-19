@@ -1,17 +1,15 @@
 package com.f0x1d.logfox.feature.setup.presentation.ui
 
+import android.annotation.SuppressLint
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.repeatOnLifecycle
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.f0x1d.logfox.core.context.hardRestartApp
 import com.f0x1d.logfox.core.presentation.ui.fragment.compose.BaseComposeFragment
 import com.f0x1d.logfox.feature.setup.presentation.SetupCommand
@@ -26,27 +24,25 @@ class SetupFragment : BaseComposeFragment() {
 
     private val viewModel by viewModels<SetupViewModel>()
 
+    @SuppressLint("LocalContextGetResourceValueCall")
     @Composable
     override fun Content() {
-        val state by viewModel.state.collectAsState()
+        val state by viewModel.state.collectAsStateWithLifecycle()
         val context = LocalContext.current
         val snackbarHostState = remember { SnackbarHostState() }
         val scope = rememberCoroutineScope()
 
-        val lifecycleOwner = LocalLifecycleOwner.current
-        LaunchedEffect(lifecycleOwner, viewModel.sideEffects) {
-            lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.sideEffects.collect { sideEffect ->
-                    when (sideEffect) {
-                        is SetupSideEffect.ShowSnackbar -> scope.launch {
-                            snackbarHostState.showSnackbar(context.getString(sideEffect.textResId))
-                        }
-
-                        is SetupSideEffect.RestartApp -> context.hardRestartApp()
-
-                        // Business logic side effects - handled by EffectHandler, ignore here
-                        else -> Unit
+        LaunchedEffect(viewModel) {
+            viewModel.sideEffects.collect { sideEffect ->
+                when (sideEffect) {
+                    is SetupSideEffect.ShowSnackbar -> scope.launch {
+                        snackbarHostState.showSnackbar(context.getString(sideEffect.textResId))
                     }
+
+                    is SetupSideEffect.RestartApp -> context.hardRestartApp()
+
+                    // Business logic side effects - handled by EffectHandler, ignore here
+                    else -> Unit
                 }
             }
         }

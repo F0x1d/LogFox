@@ -3,15 +3,12 @@ package com.f0x1d.logfox.feature.recordings.presentation.list.ui
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.compose.LocalLifecycleOwner
-import androidx.lifecycle.repeatOnLifecycle
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.findNavController
 import com.f0x1d.logfox.core.presentation.dialog.showAreYouSureClearDialog
 import com.f0x1d.logfox.core.presentation.dialog.showAreYouSureDeleteDialog
@@ -32,24 +29,21 @@ internal class RecordingsFragment : BaseComposeFragment() {
 
     @Composable
     override fun Content() {
-        val state by viewModel.state.collectAsState()
+        val state by viewModel.state.collectAsStateWithLifecycle()
         val snackbarHostState = remember { SnackbarHostState() }
         val scope = rememberCoroutineScope()
 
-        val lifecycleOwner = LocalLifecycleOwner.current
-        LaunchedEffect(lifecycleOwner, viewModel.sideEffects) {
-            lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.sideEffects.collect { sideEffect ->
-                    when (sideEffect) {
-                        is RecordingsSideEffect.ShowSnackbar -> scope.launch {
-                            snackbarHostState.showSnackbar(sideEffect.text)
-                        }
-
-                        is RecordingsSideEffect.OpenRecording -> openDetails(sideEffect.recording)
-
-                        // Business logic side effects - handled by EffectHandler, ignored here
-                        else -> Unit
+        LaunchedEffect(viewModel) {
+            viewModel.sideEffects.collect { sideEffect ->
+                when (sideEffect) {
+                    is RecordingsSideEffect.ShowSnackbar -> scope.launch {
+                        snackbarHostState.showSnackbar(sideEffect.text)
                     }
+
+                    is RecordingsSideEffect.OpenRecording -> openDetails(sideEffect.recording)
+
+                    // Business logic side effects - handled by EffectHandler, ignored here
+                    else -> Unit
                 }
             }
         }
