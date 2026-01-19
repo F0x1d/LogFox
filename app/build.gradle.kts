@@ -1,6 +1,6 @@
 plugins {
-    id("logfox.android.application")
-    id("logfox.android.hilt")
+    alias(libs.plugins.logfox.android.application)
+    alias(libs.plugins.logfox.android.hilt)
 }
 
 android {
