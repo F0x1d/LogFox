@@ -9,7 +9,10 @@ import com.f0x1d.logfox.feature.crashes.api.domain.DeleteCrashUseCase
 import com.f0x1d.logfox.feature.crashes.api.domain.GetAllCrashesFlowUseCase
 import com.f0x1d.logfox.feature.crashes.api.domain.UpdateCrashesSearchQueryUseCase
 import com.f0x1d.logfox.feature.database.model.AppCrashesCount
-import com.f0x1d.logfox.feature.preferences.data.CrashesSettingsRepository
+import com.f0x1d.logfox.feature.preferences.domain.crashes.GetCrashesSortReversedOrderFlowUseCase
+import com.f0x1d.logfox.feature.preferences.domain.crashes.GetCrashesSortTypeFlowUseCase
+import com.f0x1d.logfox.feature.preferences.domain.crashes.SetCrashesSortReversedOrderUseCase
+import com.f0x1d.logfox.feature.preferences.domain.crashes.SetCrashesSortTypeUseCase
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -25,7 +28,10 @@ constructor(
     private val clearAllCrashesUseCase: ClearAllCrashesUseCase,
     private val checkAppDisabledUseCase: CheckAppDisabledUseCase,
     private val updateCrashesSearchQueryUseCase: UpdateCrashesSearchQueryUseCase,
-    private val crashesSettingsRepository: CrashesSettingsRepository,
+    private val getCrashesSortTypeFlowUseCase: GetCrashesSortTypeFlowUseCase,
+    private val setCrashesSortTypeUseCase: SetCrashesSortTypeUseCase,
+    private val getCrashesSortReversedOrderFlowUseCase: GetCrashesSortReversedOrderFlowUseCase,
+    private val setCrashesSortReversedOrderUseCase: SetCrashesSortReversedOrderUseCase,
     @DefaultDispatcher private val defaultDispatcher: CoroutineDispatcher,
 ) : EffectHandler<CrashesSideEffect, CrashesCommand> {
     override suspend fun handle(
@@ -36,8 +42,8 @@ constructor(
             is CrashesSideEffect.LoadCrashes -> {
                 combine(
                     getAllCrashesFlowUseCase(),
-                    crashesSettingsRepository.crashesSortType(),
-                    crashesSettingsRepository.crashesSortReversedOrder(),
+                    getCrashesSortTypeFlowUseCase(),
+                    getCrashesSortReversedOrderFlowUseCase(),
                 ) { crashes, sortType, sortInReversedOrder ->
                     val groupedCrashes = crashes.groupBy { it.packageName }
 
@@ -76,10 +82,8 @@ constructor(
             }
 
             is CrashesSideEffect.UpdateSortPreferences -> {
-                crashesSettingsRepository.crashesSortType().set(effect.sortType)
-                crashesSettingsRepository.crashesSortReversedOrder().set(
-                    effect.sortInReversedOrder,
-                )
+                setCrashesSortTypeUseCase(effect.sortType)
+                setCrashesSortReversedOrderUseCase(effect.sortInReversedOrder)
             }
 
             is CrashesSideEffect.DeleteCrashesByPackageName -> {

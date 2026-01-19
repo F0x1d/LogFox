@@ -3,16 +3,66 @@ package com.f0x1d.logfox.feature.preferences.presentation.ui.settings
 import androidx.appcompat.app.AppCompatDelegate
 import com.f0x1d.logfox.core.tea.EffectHandler
 import com.f0x1d.logfox.feature.logging.api.model.ShowLogValues
-import com.f0x1d.logfox.feature.preferences.data.DateTimeSettingsRepository
-import com.f0x1d.logfox.feature.preferences.data.LogsSettingsRepository
-import com.f0x1d.logfox.feature.preferences.data.UISettingsRepository
+import com.f0x1d.logfox.feature.preferences.domain.datetime.GetDateFormatFlowUseCase
+import com.f0x1d.logfox.feature.preferences.domain.datetime.GetTimeFormatFlowUseCase
+import com.f0x1d.logfox.feature.preferences.domain.datetime.SetDateFormatUseCase
+import com.f0x1d.logfox.feature.preferences.domain.datetime.SetTimeFormatUseCase
+import com.f0x1d.logfox.feature.preferences.domain.logs.GetLogsDisplayLimitFlowUseCase
+import com.f0x1d.logfox.feature.preferences.domain.logs.GetLogsTextSizeFlowUseCase
+import com.f0x1d.logfox.feature.preferences.domain.logs.GetLogsUpdateIntervalFlowUseCase
+import com.f0x1d.logfox.feature.preferences.domain.logs.GetShowLogContentFlowUseCase
+import com.f0x1d.logfox.feature.preferences.domain.logs.GetShowLogDateFlowUseCase
+import com.f0x1d.logfox.feature.preferences.domain.logs.GetShowLogPackageFlowUseCase
+import com.f0x1d.logfox.feature.preferences.domain.logs.GetShowLogPidFlowUseCase
+import com.f0x1d.logfox.feature.preferences.domain.logs.GetShowLogTagFlowUseCase
+import com.f0x1d.logfox.feature.preferences.domain.logs.GetShowLogTidFlowUseCase
+import com.f0x1d.logfox.feature.preferences.domain.logs.GetShowLogTimeFlowUseCase
+import com.f0x1d.logfox.feature.preferences.domain.logs.GetShowLogUidFlowUseCase
+import com.f0x1d.logfox.feature.preferences.domain.logs.SetLogsDisplayLimitUseCase
+import com.f0x1d.logfox.feature.preferences.domain.logs.SetLogsTextSizeUseCase
+import com.f0x1d.logfox.feature.preferences.domain.logs.SetLogsUpdateIntervalUseCase
+import com.f0x1d.logfox.feature.preferences.domain.logs.SetShowLogContentUseCase
+import com.f0x1d.logfox.feature.preferences.domain.logs.SetShowLogDateUseCase
+import com.f0x1d.logfox.feature.preferences.domain.logs.SetShowLogPackageUseCase
+import com.f0x1d.logfox.feature.preferences.domain.logs.SetShowLogPidUseCase
+import com.f0x1d.logfox.feature.preferences.domain.logs.SetShowLogTagUseCase
+import com.f0x1d.logfox.feature.preferences.domain.logs.SetShowLogTidUseCase
+import com.f0x1d.logfox.feature.preferences.domain.logs.SetShowLogTimeUseCase
+import com.f0x1d.logfox.feature.preferences.domain.logs.SetShowLogUidUseCase
+import com.f0x1d.logfox.feature.preferences.domain.ui.GetNightThemeFlowUseCase
+import com.f0x1d.logfox.feature.preferences.domain.ui.SetNightThemeUseCase
 import kotlinx.coroutines.flow.combine
 import javax.inject.Inject
 
 internal class PreferencesUIEffectHandler @Inject constructor(
-    private val uiSettingsRepository: UISettingsRepository,
-    private val dateTimeSettingsRepository: DateTimeSettingsRepository,
-    private val logsSettingsRepository: LogsSettingsRepository,
+    private val getNightThemeFlowUseCase: GetNightThemeFlowUseCase,
+    private val setNightThemeUseCase: SetNightThemeUseCase,
+    private val getDateFormatFlowUseCase: GetDateFormatFlowUseCase,
+    private val setDateFormatUseCase: SetDateFormatUseCase,
+    private val getTimeFormatFlowUseCase: GetTimeFormatFlowUseCase,
+    private val setTimeFormatUseCase: SetTimeFormatUseCase,
+    private val getShowLogDateFlowUseCase: GetShowLogDateFlowUseCase,
+    private val setShowLogDateUseCase: SetShowLogDateUseCase,
+    private val getShowLogTimeFlowUseCase: GetShowLogTimeFlowUseCase,
+    private val setShowLogTimeUseCase: SetShowLogTimeUseCase,
+    private val getShowLogUidFlowUseCase: GetShowLogUidFlowUseCase,
+    private val setShowLogUidUseCase: SetShowLogUidUseCase,
+    private val getShowLogPidFlowUseCase: GetShowLogPidFlowUseCase,
+    private val setShowLogPidUseCase: SetShowLogPidUseCase,
+    private val getShowLogTidFlowUseCase: GetShowLogTidFlowUseCase,
+    private val setShowLogTidUseCase: SetShowLogTidUseCase,
+    private val getShowLogPackageFlowUseCase: GetShowLogPackageFlowUseCase,
+    private val setShowLogPackageUseCase: SetShowLogPackageUseCase,
+    private val getShowLogTagFlowUseCase: GetShowLogTagFlowUseCase,
+    private val setShowLogTagUseCase: SetShowLogTagUseCase,
+    private val getShowLogContentFlowUseCase: GetShowLogContentFlowUseCase,
+    private val setShowLogContentUseCase: SetShowLogContentUseCase,
+    private val getLogsUpdateIntervalFlowUseCase: GetLogsUpdateIntervalFlowUseCase,
+    private val setLogsUpdateIntervalUseCase: SetLogsUpdateIntervalUseCase,
+    private val getLogsTextSizeFlowUseCase: GetLogsTextSizeFlowUseCase,
+    private val setLogsTextSizeUseCase: SetLogsTextSizeUseCase,
+    private val getLogsDisplayLimitFlowUseCase: GetLogsDisplayLimitFlowUseCase,
+    private val setLogsDisplayLimitUseCase: SetLogsDisplayLimitUseCase,
 ) : EffectHandler<PreferencesUISideEffect, PreferencesUICommand> {
 
     override suspend fun handle(
@@ -23,31 +73,31 @@ internal class PreferencesUIEffectHandler @Inject constructor(
             is PreferencesUISideEffect.LoadPreferences -> {
                 combine(
                     combine(
-                        uiSettingsRepository.nightTheme(),
-                        dateTimeSettingsRepository.dateFormat(),
-                        dateTimeSettingsRepository.timeFormat(),
+                        getNightThemeFlowUseCase(),
+                        getDateFormatFlowUseCase(),
+                        getTimeFormatFlowUseCase(),
                     ) { nightTheme, dateFormat, timeFormat ->
                         Triple(nightTheme, dateFormat, timeFormat)
                     },
                     combine(
-                        logsSettingsRepository.showLogDate(),
-                        logsSettingsRepository.showLogTime(),
-                        logsSettingsRepository.showLogUid(),
-                        logsSettingsRepository.showLogPid(),
-                        logsSettingsRepository.showLogTid(),
+                        getShowLogDateFlowUseCase(),
+                        getShowLogTimeFlowUseCase(),
+                        getShowLogUidFlowUseCase(),
+                        getShowLogPidFlowUseCase(),
+                        getShowLogTidFlowUseCase(),
                     ) { date, time, uid, pid, tid ->
                         listOf(date, time, uid, pid, tid)
                     },
                     combine(
-                        logsSettingsRepository.showLogPackage(),
-                        logsSettingsRepository.showLogTag(),
-                        logsSettingsRepository.showLogContent(),
-                        logsSettingsRepository.logsUpdateInterval(),
-                        logsSettingsRepository.logsTextSize(),
+                        getShowLogPackageFlowUseCase(),
+                        getShowLogTagFlowUseCase(),
+                        getShowLogContentFlowUseCase(),
+                        getLogsUpdateIntervalFlowUseCase(),
+                        getLogsTextSizeFlowUseCase(),
                     ) { packageName, tag, content, updateInterval, textSize ->
                         listOf(packageName, tag, content) to (updateInterval to textSize)
                     },
-                    logsSettingsRepository.logsDisplayLimit(),
+                    getLogsDisplayLimitFlowUseCase(),
                 ) {
                         (nightTheme, dateFormat, timeFormat),
                         showFirst,
@@ -84,41 +134,41 @@ internal class PreferencesUIEffectHandler @Inject constructor(
                 } else {
                     effect.themeIndex
                 }
-                uiSettingsRepository.nightTheme().set(theme)
+                setNightThemeUseCase(theme)
                 AppCompatDelegate.setDefaultNightMode(theme)
             }
 
             is PreferencesUISideEffect.SaveDateFormat -> {
-                dateTimeSettingsRepository.dateFormat().set(effect.format)
+                setDateFormatUseCase(effect.format)
             }
 
             is PreferencesUISideEffect.SaveTimeFormat -> {
-                dateTimeSettingsRepository.timeFormat().set(effect.format)
+                setTimeFormatUseCase(effect.format)
             }
 
             is PreferencesUISideEffect.SaveLogsFormat -> {
                 when (effect.which) {
-                    0 -> logsSettingsRepository.showLogDate().set(effect.checked)
-                    1 -> logsSettingsRepository.showLogTime().set(effect.checked)
-                    2 -> logsSettingsRepository.showLogUid().set(effect.checked)
-                    3 -> logsSettingsRepository.showLogPid().set(effect.checked)
-                    4 -> logsSettingsRepository.showLogTid().set(effect.checked)
-                    5 -> logsSettingsRepository.showLogPackage().set(effect.checked)
-                    6 -> logsSettingsRepository.showLogTag().set(effect.checked)
-                    7 -> logsSettingsRepository.showLogContent().set(effect.checked)
+                    0 -> setShowLogDateUseCase(effect.checked)
+                    1 -> setShowLogTimeUseCase(effect.checked)
+                    2 -> setShowLogUidUseCase(effect.checked)
+                    3 -> setShowLogPidUseCase(effect.checked)
+                    4 -> setShowLogTidUseCase(effect.checked)
+                    5 -> setShowLogPackageUseCase(effect.checked)
+                    6 -> setShowLogTagUseCase(effect.checked)
+                    7 -> setShowLogContentUseCase(effect.checked)
                 }
             }
 
             is PreferencesUISideEffect.SaveLogsUpdateInterval -> {
-                logsSettingsRepository.logsUpdateInterval().set(effect.interval)
+                setLogsUpdateIntervalUseCase(effect.interval)
             }
 
             is PreferencesUISideEffect.SaveLogsTextSize -> {
-                logsSettingsRepository.logsTextSize().set(effect.size)
+                setLogsTextSizeUseCase(effect.size)
             }
 
             is PreferencesUISideEffect.SaveLogsDisplayLimit -> {
-                logsSettingsRepository.logsDisplayLimit().set(effect.limit)
+                setLogsDisplayLimitUseCase(effect.limit)
             }
 
             // UI side effects - handled by Fragment

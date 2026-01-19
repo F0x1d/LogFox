@@ -4,8 +4,8 @@ import android.net.Uri
 import com.f0x1d.logfox.core.tea.BaseStoreViewModel
 import com.f0x1d.logfox.feature.database.model.AppCrash
 import com.f0x1d.logfox.feature.datetime.api.DateTimeFormatter
-import com.f0x1d.logfox.feature.preferences.domain.GetUseSeparateNotificationsChannelsForCrashesUseCase
-import com.f0x1d.logfox.feature.preferences.domain.GetWrapCrashLogLinesUseCase
+import com.f0x1d.logfox.feature.preferences.domain.crashes.GetUseSeparateNotificationsChannelsForCrashesUseCase
+import com.f0x1d.logfox.feature.preferences.domain.crashes.GetWrapCrashLogLinesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

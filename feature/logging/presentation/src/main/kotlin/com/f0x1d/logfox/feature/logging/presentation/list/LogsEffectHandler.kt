@@ -16,7 +16,10 @@ import com.f0x1d.logfox.feature.logging.api.domain.GetShowLogValuesFlowUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.UpdateSelectedLogLinesUseCase
 import com.f0x1d.logfox.feature.logging.api.model.LogLine
 import com.f0x1d.logfox.feature.logging.presentation.di.FileUri
-import com.f0x1d.logfox.feature.preferences.data.LogsSettingsRepository
+import com.f0x1d.logfox.feature.preferences.domain.logs.GetLogsDisplayLimitUseCase
+import com.f0x1d.logfox.feature.preferences.domain.logs.GetLogsExpandedFlowUseCase
+import com.f0x1d.logfox.feature.preferences.domain.logs.GetLogsTextSizeFlowUseCase
+import com.f0x1d.logfox.feature.preferences.domain.logs.GetResumeLoggingWithBottomTouchFlowUseCase
 import com.f0x1d.logfox.feature.recordings.api.domain.CreateRecordingFromLinesUseCase
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
@@ -39,7 +42,10 @@ internal class LogsEffectHandler @Inject constructor(
     private val updateSelectedLogLinesUseCase: UpdateSelectedLogLinesUseCase,
     private val createRecordingFromLinesUseCase: CreateRecordingFromLinesUseCase,
     private val getShowLogValuesFlowUseCase: GetShowLogValuesFlowUseCase,
-    private val logsSettingsRepository: LogsSettingsRepository,
+    private val getLogsDisplayLimitUseCase: GetLogsDisplayLimitUseCase,
+    private val getResumeLoggingWithBottomTouchFlowUseCase: GetResumeLoggingWithBottomTouchFlowUseCase,
+    private val getLogsTextSizeFlowUseCase: GetLogsTextSizeFlowUseCase,
+    private val getLogsExpandedFlowUseCase: GetLogsExpandedFlowUseCase,
     private val formatLogLineUseCase: FormatLogLineUseCase,
     private val dateTimeFormatter: DateTimeFormatter,
     @DefaultDispatcher private val defaultDispatcher: CoroutineDispatcher,
@@ -55,7 +61,7 @@ internal class LogsEffectHandler @Inject constructor(
                 combine(
                     fileUri?.readFileContentsAsFlow(
                         context = context,
-                        logsDisplayLimit = logsSettingsRepository.logsDisplayLimit().value,
+                        logsDisplayLimit = getLogsDisplayLimitUseCase(),
                     ) ?: getLogsFlowUseCase(),
                     getAllEnabledFiltersFlowUseCase(),
                     getQueryFlowUseCase(),
@@ -110,9 +116,9 @@ internal class LogsEffectHandler @Inject constructor(
 
             is LogsSideEffect.ObservePreferences -> {
                 combine(
-                    logsSettingsRepository.resumeLoggingWithBottomTouch(),
-                    logsSettingsRepository.logsTextSize(),
-                    logsSettingsRepository.logsExpanded(),
+                    getResumeLoggingWithBottomTouchFlowUseCase(),
+                    getLogsTextSizeFlowUseCase(),
+                    getLogsExpandedFlowUseCase(),
                     getShowLogValuesFlowUseCase(),
                 ) { resumeLoggingWithBottomTouch, logsTextSize, logsExpanded, logsFormat ->
                     LogsCommand.PreferencesUpdated(

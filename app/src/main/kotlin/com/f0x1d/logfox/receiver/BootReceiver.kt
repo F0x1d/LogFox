@@ -7,8 +7,8 @@ import com.f0x1d.logfox.core.compat.startForegroundServiceAvailable
 import com.f0x1d.logfox.core.context.hasPermissionToReadLogs
 import com.f0x1d.logfox.core.context.toast
 import com.f0x1d.logfox.feature.logging.service.presentation.LoggingService
-import com.f0x1d.logfox.feature.preferences.domain.GetSelectedTerminalTypeUseCase
-import com.f0x1d.logfox.feature.preferences.domain.GetStartOnBootUseCase
+import com.f0x1d.logfox.feature.preferences.domain.service.GetStartOnBootUseCase
+import com.f0x1d.logfox.feature.preferences.domain.terminal.GetSelectedTerminalTypeUseCase
 import com.f0x1d.logfox.feature.strings.Strings
 import com.f0x1d.logfox.feature.terminals.base.TerminalType
 import dagger.hilt.android.AndroidEntryPoint

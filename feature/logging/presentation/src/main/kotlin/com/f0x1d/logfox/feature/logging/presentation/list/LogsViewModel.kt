@@ -8,9 +8,9 @@ import com.f0x1d.logfox.feature.logging.api.domain.FormatLogLineUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.GetShowLogValuesUseCase
 import com.f0x1d.logfox.feature.logging.api.model.LogLine
 import com.f0x1d.logfox.feature.logging.presentation.di.FileUri
-import com.f0x1d.logfox.feature.preferences.domain.GetLogsExpandedUseCase
-import com.f0x1d.logfox.feature.preferences.domain.GetLogsTextSizeUseCase
-import com.f0x1d.logfox.feature.preferences.domain.GetResumeLoggingWithBottomTouchUseCase
+import com.f0x1d.logfox.feature.preferences.domain.logs.GetLogsExpandedUseCase
+import com.f0x1d.logfox.feature.preferences.domain.logs.GetLogsTextSizeUseCase
+import com.f0x1d.logfox.feature.preferences.domain.logs.GetResumeLoggingWithBottomTouchUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject

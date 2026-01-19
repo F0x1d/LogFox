@@ -3,7 +3,8 @@ package com.f0x1d.logfox.feature.preferences.presentation.service
 import android.content.Context
 import com.f0x1d.logfox.core.tea.EffectHandler
 import com.f0x1d.logfox.feature.logging.api.presentation.LoggingServiceDelegate
-import com.f0x1d.logfox.feature.preferences.data.TerminalSettingsRepository
+import com.f0x1d.logfox.feature.preferences.domain.terminal.GetSelectedTerminalTypeFlowUseCase
+import com.f0x1d.logfox.feature.preferences.domain.terminal.SetSelectedTerminalTypeUseCase
 import com.f0x1d.logfox.feature.terminals.base.Terminal
 import com.f0x1d.logfox.feature.terminals.base.TerminalType
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -11,7 +12,8 @@ import javax.inject.Inject
 
 internal class PreferencesServiceEffectHandler @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val terminalSettingsRepository: TerminalSettingsRepository,
+    private val getSelectedTerminalTypeFlowUseCase: GetSelectedTerminalTypeFlowUseCase,
+    private val setSelectedTerminalTypeUseCase: SetSelectedTerminalTypeUseCase,
     private val terminals: Map<TerminalType, @JvmSuppressWildcards Terminal>,
     private val loggingServiceDelegate: LoggingServiceDelegate,
 ) : EffectHandler<PreferencesServiceSideEffect, PreferencesServiceCommand> {
@@ -22,7 +24,7 @@ internal class PreferencesServiceEffectHandler @Inject constructor(
     ) {
         when (effect) {
             is PreferencesServiceSideEffect.LoadPreferences -> {
-                terminalSettingsRepository.selectedTerminalType().collect { selectedType ->
+                getSelectedTerminalTypeFlowUseCase().collect { selectedType ->
                     onCommand(
                         PreferencesServiceCommand.PreferencesLoaded(
                             selectedTerminalType = selectedType,
@@ -44,7 +46,7 @@ internal class PreferencesServiceEffectHandler @Inject constructor(
             }
 
             is PreferencesServiceSideEffect.SaveTerminalType -> {
-                terminalSettingsRepository.selectedTerminalType().set(effect.type)
+                setSelectedTerminalTypeUseCase(effect.type)
             }
 
             is PreferencesServiceSideEffect.RestartLogging -> {

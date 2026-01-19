@@ -22,13 +22,12 @@ import com.f0x1d.logfox.feature.logging.api.domain.StartLoggingUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.UpdateLogsUseCase
 import com.f0x1d.logfox.feature.logging.api.model.LogLine
 import com.f0x1d.logfox.feature.notifications.api.LOGGING_STATUS_CHANNEL_ID
-import com.f0x1d.logfox.feature.preferences.domain.GetLogsDisplayLimitUseCase
-import com.f0x1d.logfox.feature.preferences.domain.GetLogsUpdateIntervalUseCase
-import com.f0x1d.logfox.feature.preferences.domain.ShouldFallbackToDefaultTerminalUseCase
+import com.f0x1d.logfox.feature.preferences.domain.logs.GetLogsDisplayLimitUseCase
+import com.f0x1d.logfox.feature.preferences.domain.logs.GetLogsUpdateIntervalUseCase
+import com.f0x1d.logfox.feature.preferences.domain.terminal.ShouldFallbackToDefaultTerminalUseCase
 import com.f0x1d.logfox.feature.recordings.api.domain.NotifyLoggingStoppedUseCase
 import com.f0x1d.logfox.feature.recordings.api.domain.ProcessLogLineRecordingUseCase
 import com.f0x1d.logfox.feature.strings.Strings
-import com.f0x1d.logfox.feature.terminals.base.Terminal
 import com.f0x1d.logfox.feature.terminals.domain.ExitTerminalUseCase
 import com.f0x1d.logfox.feature.terminals.domain.GetDefaultTerminalUseCase
 import com.f0x1d.logfox.feature.terminals.domain.GetSelectedTerminalUseCase

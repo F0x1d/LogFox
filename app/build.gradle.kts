@@ -10,8 +10,8 @@ android {
     defaultConfig {
         applicationId = logFoxPackageName
 
-        versionCode = 67
-        versionName = "2.0.7"
+        versionCode = 68
+        versionName = "2.1.0"
     }
 
     buildFeatures {

@@ -6,7 +6,7 @@ import com.f0x1d.logfox.core.di.IODispatcher
 import com.f0x1d.logfox.core.io.exportToZip
 import com.f0x1d.logfox.core.io.putZipEntry
 import com.f0x1d.logfox.core.tea.EffectHandler
-import com.f0x1d.logfox.feature.preferences.data.ServiceSettingsRepository
+import com.f0x1d.logfox.feature.preferences.domain.service.GetIncludeDeviceInfoInArchivesUseCase
 import com.f0x1d.logfox.feature.recordings.api.domain.GetRecordingByIdFlowUseCase
 import com.f0x1d.logfox.feature.recordings.api.domain.UpdateRecordingTitleUseCase
 import com.f0x1d.logfox.feature.recordings.presentation.di.RecordingId
@@ -26,7 +26,7 @@ constructor(
     @RecordingId private val recordingId: Long,
     private val getRecordingByIdFlowUseCase: GetRecordingByIdFlowUseCase,
     private val updateRecordingTitleUseCase: UpdateRecordingTitleUseCase,
-    private val serviceSettingsRepository: ServiceSettingsRepository,
+    private val getIncludeDeviceInfoInArchivesUseCase: GetIncludeDeviceInfoInArchivesUseCase,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : EffectHandler<RecordingDetailsSideEffect, RecordingDetailsCommand> {
     private val titleUpdateMutex = Mutex()
@@ -59,7 +59,7 @@ constructor(
                 withContext(ioDispatcher) {
                     context.contentResolver.openOutputStream(effect.uri)?.use {
                         it.exportToZip {
-                            if (serviceSettingsRepository.includeDeviceInfoInArchives().value) {
+                            if (getIncludeDeviceInfoInArchivesUseCase()) {
                                 putZipEntry(
                                     "device.txt",
                                     deviceData.encodeToByteArray(),

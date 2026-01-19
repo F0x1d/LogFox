@@ -8,16 +8,6 @@ Yet another LogCat reader for Android
 [![release](https://img.shields.io/github/v/release/F0x1d/LogFox)](https://github.com/F0x1d/LogFox/releases/latest)
 [![downloads](https://img.shields.io/github/downloads/F0x1d/LogFox/total)](https://github.com/F0x1d/LogFox/releases/latest)
 
-## Status
-
-I am no longer interested in this project, so I am stopping maintaining it
-
-## Tech
-
-I started it as a student interested in Android development. 
-Now, as an accomplished and experienced engineer, I see that this project requires a complete refactoring.
-Do not copy or reuse patterns used in LogFox
-
 ## Features
 
 - [Shizuku](https://shizuku.rikka.app/), Root & ADB support

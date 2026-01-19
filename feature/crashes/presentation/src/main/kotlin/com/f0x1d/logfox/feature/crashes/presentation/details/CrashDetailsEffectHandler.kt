@@ -10,8 +10,9 @@ import com.f0x1d.logfox.feature.crashes.api.domain.CheckAppDisabledUseCase
 import com.f0x1d.logfox.feature.crashes.api.domain.DeleteCrashUseCase
 import com.f0x1d.logfox.feature.crashes.api.domain.GetCrashByIdFlowUseCase
 import com.f0x1d.logfox.feature.crashes.presentation.details.di.CrashId
-import com.f0x1d.logfox.feature.preferences.data.CrashesSettingsRepository
-import com.f0x1d.logfox.feature.preferences.data.ServiceSettingsRepository
+import com.f0x1d.logfox.feature.preferences.domain.crashes.GetUseSeparateNotificationsChannelsForCrashesFlowUseCase
+import com.f0x1d.logfox.feature.preferences.domain.crashes.GetWrapCrashLogLinesFlowUseCase
+import com.f0x1d.logfox.feature.preferences.domain.service.GetIncludeDeviceInfoInArchivesUseCase
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.combine
@@ -25,8 +26,9 @@ internal class CrashDetailsEffectHandler @Inject constructor(
     private val getCrashByIdFlowUseCase: GetCrashByIdFlowUseCase,
     private val deleteCrashUseCase: DeleteCrashUseCase,
     private val checkAppDisabledUseCase: CheckAppDisabledUseCase,
-    private val crashesSettingsRepository: CrashesSettingsRepository,
-    private val serviceSettingsRepository: ServiceSettingsRepository,
+    private val getWrapCrashLogLinesFlowUseCase: GetWrapCrashLogLinesFlowUseCase,
+    private val getUseSeparateNotificationsChannelsForCrashesFlowUseCase: GetUseSeparateNotificationsChannelsForCrashesFlowUseCase,
+    private val getIncludeDeviceInfoInArchivesUseCase: GetIncludeDeviceInfoInArchivesUseCase,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
     private val application: Application,
 ) : EffectHandler<CrashDetailsSideEffect, CrashDetailsCommand> {
@@ -61,8 +63,8 @@ internal class CrashDetailsEffectHandler @Inject constructor(
 
             is CrashDetailsSideEffect.ObservePreferences -> {
                 combine(
-                    crashesSettingsRepository.wrapCrashLogLines(),
-                    crashesSettingsRepository.useSeparateNotificationsChannelsForCrashes(),
+                    getWrapCrashLogLinesFlowUseCase(),
+                    getUseSeparateNotificationsChannelsForCrashesFlowUseCase(),
                 ) { wrapCrashLogLines, useSeparateNotificationsChannelsForCrashes ->
                     CrashDetailsCommand.PreferencesUpdated(
                         wrapCrashLogLines = wrapCrashLogLines,
@@ -77,7 +79,7 @@ internal class CrashDetailsEffectHandler @Inject constructor(
                 withContext(ioDispatcher) {
                     application.contentResolver.openOutputStream(effect.uri)?.use {
                         it.exportToZip {
-                            if (serviceSettingsRepository.includeDeviceInfoInArchives().value) {
+                            if (getIncludeDeviceInfoInArchivesUseCase()) {
                                 putZipEntry(
                                     name = "device.txt",
                                     content = deviceData.encodeToByteArray(),
