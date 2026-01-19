@@ -12,16 +12,22 @@ internal class LogsReducer @Inject constructor() : Reducer<LogsState, LogsComman
         state: LogsState,
         command: LogsCommand,
     ): ReduceResult<LogsState, LogsSideEffect> = when (command) {
-        is LogsCommand.Load -> {
-            state.withSideEffects(LogsSideEffect.LoadLogs)
-        }
-
         is LogsCommand.LogsLoaded -> {
             state.copy(
                 logs = command.logs,
                 query = command.query,
                 filters = command.filters,
                 logsChanged = true,
+            ).noSideEffects()
+        }
+
+        is LogsCommand.PreferencesUpdated -> {
+            state.copy(
+                resumeLoggingWithBottomTouch = command.resumeLoggingWithBottomTouch,
+                logsTextSize = command.logsTextSize,
+                logsExpanded = command.logsExpanded,
+                logsFormat = command.logsFormat,
+                logsChanged = false,
             ).noSideEffects()
         }
 

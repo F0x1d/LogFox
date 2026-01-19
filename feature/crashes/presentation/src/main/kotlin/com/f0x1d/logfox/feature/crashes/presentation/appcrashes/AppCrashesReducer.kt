@@ -12,8 +12,6 @@ internal class AppCrashesReducer @Inject constructor() : Reducer<AppCrashesState
         state: AppCrashesState,
         command: AppCrashesCommand,
     ): ReduceResult<AppCrashesState, AppCrashesSideEffect> = when (command) {
-        is AppCrashesCommand.Load -> state.withSideEffects(AppCrashesSideEffect.LoadCrashes)
-
         is AppCrashesCommand.CrashesLoaded -> state.copy(
             crashes = command.crashes,
         ).noSideEffects()

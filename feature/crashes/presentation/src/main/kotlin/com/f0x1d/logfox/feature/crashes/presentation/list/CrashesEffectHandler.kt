@@ -7,6 +7,7 @@ import com.f0x1d.logfox.feature.crashes.api.domain.ClearAllCrashesUseCase
 import com.f0x1d.logfox.feature.crashes.api.domain.DeleteAllCrashesByPackageNameUseCase
 import com.f0x1d.logfox.feature.crashes.api.domain.DeleteCrashUseCase
 import com.f0x1d.logfox.feature.crashes.api.domain.GetAllCrashesFlowUseCase
+import com.f0x1d.logfox.feature.crashes.api.domain.UpdateCrashesSearchQueryUseCase
 import com.f0x1d.logfox.feature.database.model.AppCrashesCount
 import com.f0x1d.logfox.feature.preferences.data.CrashesSettingsRepository
 import kotlinx.coroutines.CoroutineDispatcher
@@ -23,6 +24,7 @@ constructor(
     private val deleteCrashUseCase: DeleteCrashUseCase,
     private val clearAllCrashesUseCase: ClearAllCrashesUseCase,
     private val checkAppDisabledUseCase: CheckAppDisabledUseCase,
+    private val updateCrashesSearchQueryUseCase: UpdateCrashesSearchQueryUseCase,
     private val crashesSettingsRepository: CrashesSettingsRepository,
     @DefaultDispatcher private val defaultDispatcher: CoroutineDispatcher,
 ) : EffectHandler<CrashesSideEffect, CrashesCommand> {
@@ -67,6 +69,10 @@ constructor(
                             ),
                         )
                     }
+            }
+
+            is CrashesSideEffect.UpdateSearchQuery -> {
+                updateCrashesSearchQueryUseCase(effect.query)
             }
 
             is CrashesSideEffect.UpdateSortPreferences -> {

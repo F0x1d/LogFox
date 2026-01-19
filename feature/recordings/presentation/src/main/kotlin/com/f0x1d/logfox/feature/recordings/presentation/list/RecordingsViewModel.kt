@@ -12,5 +12,5 @@ internal class RecordingsViewModel @Inject constructor(
     initialState = RecordingsState(),
     reducer = reducer,
     effectHandlers = listOf(effectHandler),
-    initialSideEffect = RecordingsSideEffect.LoadRecordings,
+    initialSideEffects = listOf(RecordingsSideEffect.LoadRecordings),
 )

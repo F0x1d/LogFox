@@ -12,5 +12,5 @@ internal class AppsPickerViewModel @Inject constructor(
     initialState = AppsPickerState(),
     reducer = reducer,
     effectHandlers = listOf(effectHandler),
-    initialSideEffect = AppsPickerSideEffect.LoadApps,
+    initialSideEffects = listOf(AppsPickerSideEffect.LoadApps),
 )

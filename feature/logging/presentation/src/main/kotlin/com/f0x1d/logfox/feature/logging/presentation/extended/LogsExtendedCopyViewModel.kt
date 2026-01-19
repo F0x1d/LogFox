@@ -12,5 +12,5 @@ internal class LogsExtendedCopyViewModel @Inject constructor(
     initialState = LogsExtendedCopyState(),
     reducer = reducer,
     effectHandlers = listOf(effectHandler),
-    initialSideEffect = LogsExtendedCopySideEffect.LoadSelectedLines,
+    initialSideEffects = listOf(LogsExtendedCopySideEffect.LoadSelectedLines),
 )

@@ -53,9 +53,6 @@ internal class LogsFragment :
 
     private val adapter by lazy {
         LogsAdapter(
-            textSizeProvider = viewModel::logsTextSize,
-            logsExpandedProvider = viewModel::logsExpanded,
-            logsFormatProvider = viewModel::logsFormat,
             selectedItem = { logLine, selected ->
                 send(LogsCommand.SelectLine(logLine, selected))
             },
@@ -149,7 +146,7 @@ internal class LogsFragment :
                     if (viewModel.state.value.paused && !recyclerView.canScrollVertically(1)) {
                         val enoughTimePassed =
                             (System.currentTimeMillis() - lastPauseEventTimeMillis) > 300
-                        if (viewModel.resumeLoggingWithBottomTouch && enoughTimePassed) {
+                        if (viewModel.state.value.resumeLoggingWithBottomTouch && enoughTimePassed) {
                             send(LogsCommand.Resume)
                         }
                     } else {
@@ -161,7 +158,7 @@ internal class LogsFragment :
         )
 
         scrollFab.setOnClickListener {
-            if (viewModel.resumeLoggingWithBottomTouch) {
+            if (viewModel.state.value.resumeLoggingWithBottomTouch) {
                 send(LogsCommand.Resume)
             } else {
                 scrollLogToBottom()
@@ -177,9 +174,18 @@ internal class LogsFragment :
         binding.processQueryAndFilters(
             query = state.query,
             filters = state.filters,
+            viewingFile = state.viewingFile,
         )
-        binding.processSelectedItems(selectedItems = state.selectedItems)
+        binding.processSelectedItems(
+            selectedItems = state.selectedItems,
+            viewingFile = state.viewingFile,
+            viewingFileName = state.viewingFileName,
+        )
         binding.processPaused(paused = state.paused)
+
+        adapter.textSize = state.logsTextSize
+        adapter.logsExpanded = state.logsExpanded
+        adapter.logsFormat = state.logsFormat
 
         if (state.logsChanged) {
             binding.updateLogsList(items = state.logs)
@@ -200,6 +206,7 @@ internal class LogsFragment :
     private fun FragmentLogsBinding.processQueryAndFilters(
         query: String?,
         filters: List<UserFilter>,
+        viewingFile: Boolean,
     ) {
         val subtitle = buildString {
             if (query != null) {
@@ -220,20 +227,29 @@ internal class LogsFragment :
         toolbar.subtitle = subtitle
         placeholderLayout.placeholderText.setText(
             when {
-                viewModel.viewingFile -> Strings.no_logs
+                viewingFile -> Strings.no_logs
                 subtitle.isEmpty() -> Strings.waiting_for_logs
                 else -> Strings.all_logs_were_filtered_out
             },
         )
     }
 
-    private fun FragmentLogsBinding.processSelectedItems(selectedItems: Set<LogLine>) {
+    private fun FragmentLogsBinding.processSelectedItems(
+        selectedItems: Set<LogLine>,
+        viewingFile: Boolean,
+        viewingFileName: String?,
+    ) {
         val selecting = selectedItems.isNotEmpty()
 
         clearSelectionOnBackPressedCallback.isEnabled = selecting
 
         adapter.selectedItems = selectedItems
-        setupToolbarForSelection(selecting, selectedItems.size)
+        setupToolbarForSelection(
+            selecting = selecting,
+            count = selectedItems.size,
+            viewingFile = viewingFile,
+            viewingFileName = viewingFileName,
+        )
     }
 
     private fun FragmentLogsBinding.processPaused(paused: Boolean) {
@@ -249,7 +265,12 @@ internal class LogsFragment :
         }
     }
 
-    private fun FragmentLogsBinding.setupToolbarForSelection(selecting: Boolean, count: Int) = toolbar.apply {
+    private fun FragmentLogsBinding.setupToolbarForSelection(
+        selecting: Boolean,
+        count: Int,
+        viewingFile: Boolean,
+        viewingFileName: String?,
+    ) = toolbar.apply {
         val setVisibility = { itemId: Int, visible: Boolean ->
             menu.findItem(itemId).isVisible = visible
         }
@@ -258,7 +279,7 @@ internal class LogsFragment :
         val visibleOnlyInDefault = { itemId: Int ->
             setVisibility(
                 itemId,
-                !selecting && !viewModel.viewingFile,
+                !selecting && !viewingFile,
             )
         }
 
@@ -272,7 +293,7 @@ internal class LogsFragment :
 
         title = when {
             selecting -> resources.getQuantityString(Plurals.selected_count, count, count)
-            viewModel.viewingFile -> viewModel.viewingFileName
+            viewingFile -> viewingFileName
             else -> getString(Strings.app_name)
         }
 
@@ -282,7 +303,7 @@ internal class LogsFragment :
             setNavigationOnClickListener {
                 send(LogsCommand.ClearSelection)
             }
-        } else if (viewModel.viewingFile) {
+        } else if (viewingFile) {
             setupBackButtonForNavController()
         } else {
             invalidateNavigationButton()

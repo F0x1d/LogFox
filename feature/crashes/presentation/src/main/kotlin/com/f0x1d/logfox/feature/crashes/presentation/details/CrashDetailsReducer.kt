@@ -12,8 +12,6 @@ internal class CrashDetailsReducer @Inject constructor() : Reducer<CrashDetailsS
         state: CrashDetailsState,
         command: CrashDetailsCommand,
     ): ReduceResult<CrashDetailsState, CrashDetailsSideEffect> = when (command) {
-        is CrashDetailsCommand.Load -> state.withSideEffects(CrashDetailsSideEffect.LoadCrash)
-
         is CrashDetailsCommand.CrashLoaded -> state.copy(
             crash = command.crash,
             crashLog = command.crashLog,
@@ -21,6 +19,11 @@ internal class CrashDetailsReducer @Inject constructor() : Reducer<CrashDetailsS
 
         is CrashDetailsCommand.BlacklistStatusLoaded -> state.copy(
             blacklisted = command.blacklisted,
+        ).noSideEffects()
+
+        is CrashDetailsCommand.PreferencesUpdated -> state.copy(
+            wrapCrashLogLines = command.wrapCrashLogLines,
+            useSeparateNotificationsChannelsForCrashes = command.useSeparateNotificationsChannelsForCrashes,
         ).noSideEffects()
 
         is CrashDetailsCommand.ExportCrashToZip -> {

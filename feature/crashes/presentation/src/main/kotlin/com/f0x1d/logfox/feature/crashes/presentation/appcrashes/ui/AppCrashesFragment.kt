@@ -60,7 +60,6 @@ internal class AppCrashesFragment :
             }
         }
 
-        toolbar.title = viewModel.appName ?: viewModel.packageName
         toolbar.setupBackButtonForNavController()
 
         crashesRecycler.apply {
@@ -82,6 +81,7 @@ internal class AppCrashesFragment :
     }
 
     override fun render(state: AppCrashesState) {
+        binding.toolbar.title = state.appName ?: state.packageName
         adapter.submitList(state.crashes)
     }
 

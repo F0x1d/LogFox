@@ -12,7 +12,7 @@ abstract class BaseStoreViewModel<State, Command, SideEffect>(
     initialState: State,
     reducer: Reducer<State, Command, SideEffect>,
     effectHandlers: List<EffectHandler<SideEffect, Command>>,
-    initialSideEffect: SideEffect? = null,
+    initialSideEffects: List<SideEffect> = emptyList(),
 ) : ViewModel() {
 
     private val store = Store(
@@ -26,7 +26,7 @@ abstract class BaseStoreViewModel<State, Command, SideEffect>(
     val sideEffects: SharedFlow<SideEffect> = store.sideEffects
 
     init {
-        initialSideEffect?.let { effect ->
+        initialSideEffects.forEach { effect ->
             effectHandlers.forEach { handler ->
                 viewModelScope.launch {
                     handler.handle(effect) { cmd ->

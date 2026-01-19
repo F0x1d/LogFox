@@ -4,11 +4,14 @@ import android.net.Uri
 import com.f0x1d.logfox.feature.database.model.AppCrash
 
 sealed interface CrashDetailsCommand {
-    data object Load : CrashDetailsCommand
-
     data class CrashLoaded(val crash: AppCrash, val crashLog: String?) : CrashDetailsCommand
 
     data class BlacklistStatusLoaded(val blacklisted: Boolean?) : CrashDetailsCommand
+
+    data class PreferencesUpdated(
+        val wrapCrashLogLines: Boolean,
+        val useSeparateNotificationsChannelsForCrashes: Boolean,
+    ) : CrashDetailsCommand
 
     data class ExportCrashToZip(val uri: Uri) : CrashDetailsCommand
 

@@ -29,7 +29,9 @@ import com.f0x1d.logfox.databinding.ActivityMainBinding
 import com.f0x1d.logfox.feature.strings.Strings
 import com.f0x1d.logfox.navigation.Directions
 import com.f0x1d.logfox.navigation.NavGraphs
+import com.f0x1d.logfox.presentation.MainCommand
 import com.f0x1d.logfox.presentation.MainSideEffect
+import com.f0x1d.logfox.presentation.MainState
 import com.f0x1d.logfox.presentation.MainViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
@@ -75,14 +77,28 @@ class MainActivity :
 
     @SuppressLint("InlinedApi")
     override fun ActivityMainBinding.onCreate(savedInstanceState: Bundle?) {
-        setupNavigation()
+        setupNavigation(viewModel.state.value.openCrashesOnStartup)
 
         barView?.setOnItemReselectedListener {
             // Just do nothing
         }
         setupBarInsets()
 
-        if (!hasNotificationsPermission() && !viewModel.askedNotificationsPermission) {
+        showNotificationPermissionDialogIfNeeded(viewModel.state.value)
+
+        viewModel.sideEffects.collectWithLifecycle { sideEffect ->
+            when (sideEffect) {
+                MainSideEffect.OpenSetup -> navController.navigate(
+                    Directions.action_global_setupFragment,
+                )
+
+                else -> Unit // Handled by EffectHandler
+            }
+        }
+    }
+
+    private fun showNotificationPermissionDialogIfNeeded(state: MainState) {
+        if (!hasNotificationsPermission() && !state.askedNotificationsPermission) {
             MaterialAlertDialogBuilder(this@MainActivity)
                 .setIcon(Icons.ic_dialog_notification_important)
                 .setTitle(Strings.no_notification_permission)
@@ -96,24 +112,14 @@ class MainActivity :
                 .setNegativeButton(Strings.close, null)
                 .show()
 
-            viewModel.askedNotificationsPermission = true
-        }
-
-        viewModel.sideEffects.collectWithLifecycle { sideEffect ->
-            when (sideEffect) {
-                MainSideEffect.OpenSetup -> navController.navigate(
-                    Directions.action_global_setupFragment,
-                )
-
-                MainSideEffect.StartLoggingServiceIfNeeded -> Unit // Handled by EffectHandler
-            }
+            viewModel.send(MainCommand.MarkNotificationsPermissionAsked)
         }
     }
 
-    private fun ActivityMainBinding.setupNavigation() {
+    private fun ActivityMainBinding.setupNavigation(openCrashesOnStartup: Boolean) {
         navController.graph = navController.navInflater.inflate(NavGraphs.nav_graph).apply {
             setStartDestination(
-                startDestId = if (viewModel.openCrashesOnStartup) {
+                startDestId = if (openCrashesOnStartup) {
                     Directions.crashes
                 } else {
                     Directions.logs

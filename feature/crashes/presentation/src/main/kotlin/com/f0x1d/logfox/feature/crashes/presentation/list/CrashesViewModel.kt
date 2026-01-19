@@ -5,7 +5,6 @@ import com.f0x1d.logfox.core.tea.BaseStoreViewModel
 import com.f0x1d.logfox.feature.apps.picker.AppsPickerResultHandler
 import com.f0x1d.logfox.feature.apps.picker.InstalledApp
 import com.f0x1d.logfox.feature.crashes.api.domain.GetAllDisabledAppsFlowUseCase
-import com.f0x1d.logfox.feature.crashes.api.domain.UpdateCrashesSearchQueryUseCase
 import com.f0x1d.logfox.feature.database.model.AppCrash
 import com.f0x1d.logfox.feature.database.model.DisabledApp
 import com.f0x1d.logfox.feature.preferences.CrashesSort
@@ -21,19 +20,15 @@ internal class CrashesViewModel @Inject constructor(
     effectHandler: CrashesEffectHandler,
     searchEffectHandler: CrashesSearchEffectHandler,
     private val getAllDisabledAppsFlowUseCase: GetAllDisabledAppsFlowUseCase,
-    private val updateCrashesSearchQueryUseCase: UpdateCrashesSearchQueryUseCase,
 ) : BaseStoreViewModel<CrashesState, CrashesCommand, CrashesSideEffect>(
     initialState = CrashesState(),
     reducer = reducer,
     effectHandlers = listOf(effectHandler, searchEffectHandler),
-    initialSideEffect = CrashesSideEffect.LoadCrashes,
+    initialSideEffects = listOf(CrashesSideEffect.LoadCrashes),
 ),
     AppsPickerResultHandler {
 
-    val currentState: CrashesState get() = state.value
-
     fun updateQuery(query: String) {
-        updateCrashesSearchQueryUseCase(query)
         send(CrashesCommand.UpdateQuery(query))
     }
 

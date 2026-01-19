@@ -82,20 +82,15 @@ internal class CrashDetailsFragment :
 
         toolbar.setupBackButtonForNavController()
         toolbar.menu.apply {
-            findItem(R.id.notifications_item).setVisible(
-                notificationsChannelsAvailable &&
-                    viewModel.useSeparateNotificationsChannelsForCrashes,
-            )
-
             setClickListenerOn(R.id.info_item) {
-                viewModel.currentState.crash?.let { appCrash ->
+                viewModel.state.value.crash?.let { appCrash ->
                     Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
                         data = Uri.fromParts("package", appCrash.packageName, null)
                     }.let(::startActivity)
                 }
             }
             setClickListenerOn(R.id.notifications_item) {
-                viewModel.currentState.crash?.let { appCrash ->
+                viewModel.state.value.crash?.let { appCrash ->
                     Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS).apply {
                         putExtra(Settings.EXTRA_APP_PACKAGE, requireContext().packageName)
                         putExtra(Settings.EXTRA_CHANNEL_ID, appCrash.notificationChannelId)
@@ -103,8 +98,8 @@ internal class CrashDetailsFragment :
                 }
             }
             setClickListenerOn(R.id.blacklist_item) {
-                viewModel.currentState.crash?.let { appCrash ->
-                    if (viewModel.currentState.blacklisted == false) {
+                viewModel.state.value.crash?.let { appCrash ->
+                    if (viewModel.state.value.blacklisted == false) {
                         showAreYouSureDialog(
                             title = Strings.blacklist,
                             message = Strings.warning_blacklist,
@@ -118,7 +113,7 @@ internal class CrashDetailsFragment :
             }
             setClickListenerOn(R.id.delete_item) {
                 showAreYouSureDeleteDialog {
-                    viewModel.currentState.crash?.let(viewModel::deleteCrash)
+                    viewModel.state.value.crash?.let(viewModel::deleteCrash)
                     findNavController().popBackStack()
                 }
             }
@@ -148,16 +143,16 @@ internal class CrashDetailsFragment :
         )
 
         copyButton.setOnClickListener {
-            requireContext().copyText(viewModel.currentState.crashLog.orEmpty())
+            requireContext().copyText(viewModel.state.value.crashLog.orEmpty())
             snackbar(Strings.text_copied)
         }
 
         shareButton.setOnClickListener {
-            requireContext().shareIntent(viewModel.currentState.crashLog.orEmpty())
+            requireContext().shareIntent(viewModel.state.value.crashLog.orEmpty())
         }
 
         zipButton.setOnClickListener {
-            viewModel.currentState.crash?.let { appCrash ->
+            viewModel.state.value.crash?.let { appCrash ->
                 val pkg = appCrash.packageName.replace(".", "-")
                 val formattedDate = viewModel.formatForExport(appCrash.dateAndTime)
 
@@ -171,7 +166,10 @@ internal class CrashDetailsFragment :
     }
 
     override fun render(state: CrashDetailsState) {
-        state.crash?.let { binding.setupFor(it to state.crashLog) }
+        binding.toolbar.menu.findItem(R.id.notifications_item).isVisible =
+            notificationsChannelsAvailable && state.useSeparateNotificationsChannelsForCrashes
+
+        state.crash?.let { binding.setupFor(it, state.crashLog, state.wrapCrashLogLines) }
 
         binding.toolbar.menu.findItem(R.id.blacklist_item).apply {
             if (state.blacklisted == null) {
@@ -192,24 +190,24 @@ internal class CrashDetailsFragment :
     }
 
     @SuppressLint("InlinedApi")
-    private fun FragmentCrashDetailsBinding.setupFor(item: Pair<AppCrash, String?>) {
-        val (appCrash, crashLog) = item
-
+    private fun FragmentCrashDetailsBinding.setupFor(
+        appCrash: AppCrash,
+        crashLog: String?,
+        wrapCrashLogLines: Boolean,
+    ) {
         appLogo.loadIcon(appCrash.packageName)
         appName.text = appCrash.appName ?: getString(Strings.unknown)
         appPackage.text = appCrash.packageName
 
-        viewModel.wrapCrashLogLines.let { wrap ->
-            logText.isVisible = wrap
-            logTextScrollableContainer.isVisible = wrap.not()
-        }
+        logText.isVisible = wrapCrashLogLines
+        logTextScrollableContainer.isVisible = wrapCrashLogLines.not()
 
         logText.text = crashLog
         logTextScrollable.text = crashLog
     }
 
     private fun FragmentCrashDetailsBinding.searchInLog(text: String) {
-        var stackTrace = viewModel.currentState.crashLog ?: return
+        var stackTrace = viewModel.state.value.crashLog ?: return
         var query = text
 
         val span = stackTrace.toSpannable()

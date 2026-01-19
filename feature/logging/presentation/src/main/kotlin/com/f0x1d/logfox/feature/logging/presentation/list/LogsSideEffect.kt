@@ -7,6 +7,8 @@ sealed interface LogsSideEffect {
     // Business logic side effects - handled by EffectHandler
     data object LoadLogs : LogsSideEffect
 
+    data object ObservePreferences : LogsSideEffect
+
     data class PauseStateChanged(val paused: Boolean) : LogsSideEffect
 
     data class UpdateSelectedLogLines(val selectedLines: List<LogLine>) : LogsSideEffect

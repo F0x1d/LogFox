@@ -26,7 +26,9 @@ internal class CrashesReducer @Inject constructor() : Reducer<CrashesState, Cras
 
         is CrashesCommand.UpdateQuery -> state.copy(
             query = command.query,
-        ).noSideEffects()
+        ).withSideEffects(
+            CrashesSideEffect.UpdateSearchQuery(command.query),
+        )
 
         is CrashesCommand.UpdateSort -> state.withSideEffects(
             CrashesSideEffect.UpdateSortPreferences(

@@ -12,5 +12,5 @@ internal class PreferencesServiceViewModel @Inject constructor(
     initialState = PreferencesServiceState(),
     reducer = reducer,
     effectHandlers = listOf(effectHandler),
-    initialSideEffect = PreferencesServiceSideEffect.LoadPreferences,
+    initialSideEffects = listOf(PreferencesServiceSideEffect.LoadPreferences),
 )

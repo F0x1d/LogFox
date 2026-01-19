@@ -174,8 +174,8 @@ internal class CrashesFragment :
     }
 
     private fun showSortDialog() {
-        var selectedSortType = viewModel.currentState.currentSort
-        var sortInReversedOrder = viewModel.currentState.sortInReversedOrder
+        var selectedSortType = viewModel.state.value.currentSort
+        var sortInReversedOrder = viewModel.state.value.sortInReversedOrder
 
         val dialogBinding = DialogSortingBinding.inflate(layoutInflater)
         CrashesSort.entries.map { type ->
@@ -194,7 +194,7 @@ internal class CrashesFragment :
             dialogBinding.rgSorting.apply {
                 addView(button)
 
-                if (button.tag == viewModel.currentState.currentSort) {
+                if (button.tag == viewModel.state.value.currentSort) {
                     check(button.id)
                 }
             }

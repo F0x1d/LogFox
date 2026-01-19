@@ -12,5 +12,5 @@ internal class FiltersViewModel @Inject constructor(
     initialState = FiltersState(),
     reducer = reducer,
     effectHandlers = listOf(effectHandler),
-    initialSideEffect = FiltersSideEffect.LoadFilters,
+    initialSideEffects = listOf(FiltersSideEffect.LoadFilters),
 )

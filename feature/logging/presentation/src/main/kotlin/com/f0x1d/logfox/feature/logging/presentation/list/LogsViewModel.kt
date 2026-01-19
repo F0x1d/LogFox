@@ -16,30 +16,32 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class LogsViewModel @Inject constructor(
-    @ApplicationContext private val context: Context,
-    @FileUri val fileUri: Uri?,
+    @ApplicationContext context: Context,
+    @FileUri fileUri: Uri?,
     reducer: LogsReducer,
     effectHandler: LogsEffectHandler,
-    private val getResumeLoggingWithBottomTouchUseCase: GetResumeLoggingWithBottomTouchUseCase,
-    private val getLogsTextSizeUseCase: GetLogsTextSizeUseCase,
-    private val getLogsExpandedUseCase: GetLogsExpandedUseCase,
     private val formatLogLineUseCase: FormatLogLineUseCase,
+    getResumeLoggingWithBottomTouchUseCase: GetResumeLoggingWithBottomTouchUseCase,
+    getLogsTextSizeUseCase: GetLogsTextSizeUseCase,
+    getLogsExpandedUseCase: GetLogsExpandedUseCase,
     dateTimeFormatter: DateTimeFormatter,
 ) : BaseStoreViewModel<LogsState, LogsCommand, LogsSideEffect>(
-    initialState = LogsState(),
+    initialState = LogsState(
+        viewingFile = fileUri != null,
+        viewingFileName = fileUri?.readFileName(context),
+        resumeLoggingWithBottomTouch = getResumeLoggingWithBottomTouchUseCase(),
+        logsTextSize = getLogsTextSizeUseCase().toFloat(),
+        logsExpanded = getLogsExpandedUseCase(),
+        logsFormat = formatLogLineUseCase.showLogValues(),
+    ),
     reducer = reducer,
     effectHandlers = listOf(effectHandler),
-    initialSideEffect = LogsSideEffect.LoadLogs,
+    initialSideEffects = listOf(
+        LogsSideEffect.LoadLogs,
+        LogsSideEffect.ObservePreferences,
+    ),
 ),
     DateTimeFormatter by dateTimeFormatter {
-
-    val viewingFile = fileUri != null
-    val viewingFileName = fileUri?.readFileName(context)
-
-    val resumeLoggingWithBottomTouch get() = getResumeLoggingWithBottomTouchUseCase()
-    val logsTextSize get() = getLogsTextSizeUseCase().toFloat()
-    val logsExpanded get() = getLogsExpandedUseCase()
-    val logsFormat get() = formatLogLineUseCase.showLogValues()
 
     fun getSelectedItemsContent(): String = state.value
         .selectedItems

@@ -2,6 +2,7 @@ package com.f0x1d.logfox.feature.logging.presentation.list
 
 import com.f0x1d.logfox.feature.database.model.UserFilter
 import com.f0x1d.logfox.feature.logging.api.model.LogLine
+import com.f0x1d.logfox.feature.logging.api.model.ShowLogValues
 
 data class LogsState(
     val logs: List<LogLine> = emptyList(),
@@ -10,4 +11,10 @@ data class LogsState(
     val query: String? = null,
     val filters: List<UserFilter> = emptyList(),
     val selectedItems: Set<LogLine> = emptySet(),
+    val viewingFile: Boolean,
+    val viewingFileName: String?,
+    val resumeLoggingWithBottomTouch: Boolean,
+    val logsTextSize: Float,
+    val logsExpanded: Boolean,
+    val logsFormat: ShowLogValues,
 )

@@ -14,6 +14,7 @@ import com.f0x1d.logfox.feature.logging.api.domain.GetLogsFlowUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.GetQueryFlowUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.UpdateSelectedLogLinesUseCase
 import com.f0x1d.logfox.feature.logging.api.model.LogLine
+import com.f0x1d.logfox.feature.logging.api.model.ShowLogValues
 import com.f0x1d.logfox.feature.logging.presentation.di.FileUri
 import com.f0x1d.logfox.feature.preferences.data.LogsSettingsRepository
 import com.f0x1d.logfox.feature.recordings.api.domain.CreateRecordingFromLinesUseCase
@@ -106,6 +107,62 @@ internal class LogsEffectHandler @Inject constructor(
                     }
             }
 
+            is LogsSideEffect.ObservePreferences -> {
+                combine(
+                    logsSettingsRepository.resumeLoggingWithBottomTouch(),
+                    logsSettingsRepository.logsTextSize(),
+                    logsSettingsRepository.logsExpanded(),
+                    logsSettingsRepository.showLogDate(),
+                    logsSettingsRepository.showLogTime(),
+                ) { resumeLoggingWithBottomTouch, logsTextSize, logsExpanded, showDate, showTime ->
+                    PreferencesDataPart1(
+                        resumeLoggingWithBottomTouch = resumeLoggingWithBottomTouch,
+                        logsTextSize = logsTextSize.toFloat(),
+                        logsExpanded = logsExpanded,
+                        showLogDate = showDate,
+                        showLogTime = showTime,
+                    )
+                }.combine(
+                    combine(
+                        logsSettingsRepository.showLogUid(),
+                        logsSettingsRepository.showLogPid(),
+                        logsSettingsRepository.showLogTid(),
+                        logsSettingsRepository.showLogPackage(),
+                        logsSettingsRepository.showLogTag(),
+                    ) { showUid, showPid, showTid, showPackage, showTag ->
+                        PreferencesDataPart2(
+                            showLogUid = showUid,
+                            showLogPid = showPid,
+                            showLogTid = showTid,
+                            showLogPackage = showPackage,
+                            showLogTag = showTag,
+                        )
+                    },
+                ) { part1, part2 ->
+                    part1 to part2
+                }.combine(
+                    logsSettingsRepository.showLogContent(),
+                ) { (part1, part2), showContent ->
+                    LogsCommand.PreferencesUpdated(
+                        resumeLoggingWithBottomTouch = part1.resumeLoggingWithBottomTouch,
+                        logsTextSize = part1.logsTextSize,
+                        logsExpanded = part1.logsExpanded,
+                        logsFormat = ShowLogValues(
+                            date = part1.showLogDate,
+                            time = part1.showLogTime,
+                            uid = part2.showLogUid,
+                            pid = part2.showLogPid,
+                            tid = part2.showLogTid,
+                            packageName = part2.showLogPackage,
+                            tag = part2.showLogTag,
+                            content = showContent,
+                        ),
+                    )
+                }.collect { command ->
+                    onCommand(command)
+                }
+            }
+
             is LogsSideEffect.PauseStateChanged -> {
                 pausedFlow.value = effect.paused
             }
@@ -152,5 +209,21 @@ internal class LogsEffectHandler @Inject constructor(
         val query: String? = null,
         val paused: Boolean = false,
         val passing: Boolean = true,
+    )
+
+    private data class PreferencesDataPart1(
+        val resumeLoggingWithBottomTouch: Boolean,
+        val logsTextSize: Float,
+        val logsExpanded: Boolean,
+        val showLogDate: Boolean,
+        val showLogTime: Boolean,
+    )
+
+    private data class PreferencesDataPart2(
+        val showLogUid: Boolean,
+        val showLogPid: Boolean,
+        val showLogTid: Boolean,
+        val showLogPackage: Boolean,
+        val showLogTag: Boolean,
     )
 }

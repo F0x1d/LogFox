@@ -9,15 +9,18 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class AppCrashesViewModel @Inject constructor(
-    @PackageName val packageName: String,
-    @AppName val appName: String?,
+    @PackageName packageName: String,
+    @AppName appName: String?,
     reducer: AppCrashesReducer,
     effectHandler: AppCrashesEffectHandler,
 ) : BaseStoreViewModel<AppCrashesState, AppCrashesCommand, AppCrashesSideEffect>(
-    initialState = AppCrashesState(),
+    initialState = AppCrashesState(
+        packageName = packageName,
+        appName = appName,
+    ),
     reducer = reducer,
     effectHandlers = listOf(effectHandler),
-    initialSideEffect = AppCrashesSideEffect.LoadCrashes,
+    initialSideEffects = listOf(AppCrashesSideEffect.LoadCrashes),
 ) {
     fun deleteCrash(appCrash: AppCrash) {
         send(AppCrashesCommand.DeleteCrash(appCrash))

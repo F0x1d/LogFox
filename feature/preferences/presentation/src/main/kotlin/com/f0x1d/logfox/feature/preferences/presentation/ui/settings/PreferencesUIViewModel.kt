@@ -14,5 +14,5 @@ constructor(
     initialState = PreferencesUIState(),
     reducer = reducer,
     effectHandlers = listOf(effectHandler),
-    initialSideEffect = PreferencesUISideEffect.LoadPreferences,
+    initialSideEffects = listOf(PreferencesUISideEffect.LoadPreferences),
 )

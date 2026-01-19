@@ -9,23 +9,23 @@ import com.f0x1d.logfox.core.tea.EffectHandler
 import com.f0x1d.logfox.feature.crashes.api.domain.CheckAppDisabledUseCase
 import com.f0x1d.logfox.feature.crashes.api.domain.DeleteCrashUseCase
 import com.f0x1d.logfox.feature.crashes.api.domain.GetCrashByIdFlowUseCase
-import com.f0x1d.logfox.feature.crashes.api.domain.IsAppDisabledFlowUseCase
 import com.f0x1d.logfox.feature.crashes.presentation.details.di.CrashId
+import com.f0x1d.logfox.feature.preferences.data.CrashesSettingsRepository
 import com.f0x1d.logfox.feature.preferences.data.ServiceSettingsRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-internal class CrashDetailsEffectHandler
-@Inject
-constructor(
+internal class CrashDetailsEffectHandler @Inject constructor(
     @CrashId private val crashId: Long,
     private val getCrashByIdFlowUseCase: GetCrashByIdFlowUseCase,
     private val deleteCrashUseCase: DeleteCrashUseCase,
     private val checkAppDisabledUseCase: CheckAppDisabledUseCase,
+    private val crashesSettingsRepository: CrashesSettingsRepository,
     private val serviceSettingsRepository: ServiceSettingsRepository,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
     private val application: Application,
@@ -57,6 +57,20 @@ constructor(
                             onCommand(CrashDetailsCommand.CrashLoaded(crash, crashLog))
                         }
                     }
+            }
+
+            is CrashDetailsSideEffect.ObservePreferences -> {
+                combine(
+                    crashesSettingsRepository.wrapCrashLogLines(),
+                    crashesSettingsRepository.useSeparateNotificationsChannelsForCrashes(),
+                ) { wrapCrashLogLines, useSeparateNotificationsChannelsForCrashes ->
+                    CrashDetailsCommand.PreferencesUpdated(
+                        wrapCrashLogLines = wrapCrashLogLines,
+                        useSeparateNotificationsChannelsForCrashes = useSeparateNotificationsChannelsForCrashes,
+                    )
+                }.collect { command ->
+                    onCommand(command)
+                }
             }
 
             is CrashDetailsSideEffect.ExportCrashToZip -> {

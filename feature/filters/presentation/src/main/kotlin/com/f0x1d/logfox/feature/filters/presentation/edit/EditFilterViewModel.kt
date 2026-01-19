@@ -16,7 +16,7 @@ internal class EditFilterViewModel @Inject constructor(
     initialState = EditFilterState(),
     reducer = reducer,
     effectHandlers = listOf(effectHandler),
-    initialSideEffect = EditFilterSideEffect.LoadFilter(filterId),
+    initialSideEffects = listOf(EditFilterSideEffect.LoadFilter(filterId)),
 ),
     AppsPickerResultHandler {
 

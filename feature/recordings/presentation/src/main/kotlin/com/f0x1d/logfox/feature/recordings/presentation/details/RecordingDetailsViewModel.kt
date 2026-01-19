@@ -14,6 +14,6 @@ internal class RecordingDetailsViewModel @Inject constructor(
     initialState = RecordingDetailsState(),
     reducer = reducer,
     effectHandlers = listOf(effectHandler),
-    initialSideEffect = RecordingDetailsSideEffect.LoadRecording,
+    initialSideEffects = listOf(RecordingDetailsSideEffect.LoadRecording),
 ),
     DateTimeFormatter by dateTimeFormatter

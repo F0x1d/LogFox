@@ -7,6 +7,8 @@ sealed interface CrashesSideEffect {
     // Business logic side effects
     data object LoadCrashes : CrashesSideEffect
 
+    data class UpdateSearchQuery(val query: String) : CrashesSideEffect
+
     data class UpdateSortPreferences(val sortType: CrashesSort, val sortInReversedOrder: Boolean) : CrashesSideEffect
 
     data class DeleteCrashesByPackageName(val appCrash: AppCrash) : CrashesSideEffect

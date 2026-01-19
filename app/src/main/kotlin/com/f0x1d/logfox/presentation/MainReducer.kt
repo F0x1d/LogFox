@@ -11,12 +11,14 @@ internal class MainReducer @Inject constructor() : Reducer<MainState, MainComman
         state: MainState,
         command: MainCommand,
     ): ReduceResult<MainState, MainSideEffect> = when (command) {
-        MainCommand.Load -> state.withSideEffects(
-            MainSideEffect.StartLoggingServiceIfNeeded,
-        )
-
         MainCommand.ShowSetup -> state.withSideEffects(
             MainSideEffect.OpenSetup,
+        )
+
+        MainCommand.MarkNotificationsPermissionAsked -> state.copy(
+            askedNotificationsPermission = true,
+        ).withSideEffects(
+            MainSideEffect.SaveNotificationsPermissionAsked,
         )
     }
 }
