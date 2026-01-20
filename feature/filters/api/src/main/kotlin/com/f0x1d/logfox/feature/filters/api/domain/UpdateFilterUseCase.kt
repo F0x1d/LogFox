@@ -7,6 +7,7 @@ interface UpdateFilterUseCase {
     suspend operator fun invoke(
         userFilter: UserFilter,
         including: Boolean,
+        enabled: Boolean,
         enabledLogLevels: List<LogLevel>,
         uid: String?,
         pid: String?,

@@ -43,6 +43,7 @@ internal class EditFilterEffectHandler @Inject constructor(
                 if (effect.filter == null) {
                     createFilterUseCase(
                         including = effect.including,
+                        enabled = effect.enabled,
                         enabledLogLevels = effect.enabledLogLevels,
                         uid = effect.uid,
                         pid = effect.pid,
@@ -55,6 +56,7 @@ internal class EditFilterEffectHandler @Inject constructor(
                     updateFilterUseCase(
                         userFilter = effect.filter,
                         including = effect.including,
+                        enabled = effect.enabled,
                         enabledLogLevels = effect.enabledLogLevels,
                         uid = effect.uid,
                         pid = effect.pid,

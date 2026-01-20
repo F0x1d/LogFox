@@ -30,6 +30,7 @@ internal class EditFilterReducer @Inject constructor(
             state.copy(
                 filter = command.filter,
                 including = command.filter.including,
+                enabled = command.filter.enabled,
                 enabledLogLevels = enabledLogLevels,
                 uid = command.filter.uid,
                 pid = command.filter.pid,
@@ -68,6 +69,10 @@ internal class EditFilterReducer @Inject constructor(
             state.copy(including = !state.including).noSideEffects()
         }
 
+        is EditFilterCommand.ToggleEnabled -> {
+            state.copy(enabled = !state.enabled).noSideEffects()
+        }
+
         is EditFilterCommand.FilterLevel -> {
             val newEnabledLogLevels = state.enabledLogLevels.toMutableList().apply {
                 this[command.which] = command.filtering
@@ -80,6 +85,7 @@ internal class EditFilterReducer @Inject constructor(
                 EditFilterSideEffect.SaveFilter(
                     filter = state.filter,
                     including = state.including,
+                    enabled = state.enabled,
                     enabledLogLevels = state.enabledLogLevels.toEnabledLogLevels(),
                     uid = state.uid,
                     pid = state.pid,

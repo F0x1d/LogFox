@@ -12,6 +12,7 @@ internal class UpdateFilterUseCaseImpl @Inject constructor(
     override suspend fun invoke(
         userFilter: UserFilter,
         including: Boolean,
+        enabled: Boolean,
         enabledLogLevels: List<LogLevel>,
         uid: String?,
         pid: String?,
@@ -22,6 +23,7 @@ internal class UpdateFilterUseCaseImpl @Inject constructor(
     ) = filtersRepository.update(
         userFilter = userFilter,
         including = including,
+        enabled = enabled,
         enabledLogLevels = enabledLogLevels,
         uid = uid,
         pid = pid,

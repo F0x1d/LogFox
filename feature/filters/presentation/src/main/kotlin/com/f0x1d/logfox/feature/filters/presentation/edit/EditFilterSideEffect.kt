@@ -10,6 +10,7 @@ sealed interface EditFilterSideEffect {
     data class SaveFilter(
         val filter: UserFilter?,
         val including: Boolean,
+        val enabled: Boolean,
         val enabledLogLevels: List<LogLevel>,
         val uid: String?,
         val pid: String?,

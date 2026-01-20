@@ -6,6 +6,7 @@ import com.f0x1d.logfox.feature.logging.api.model.LogLevel
 data class EditFilterState(
     val filter: UserFilter? = null,
     val including: Boolean = true,
+    val enabled: Boolean = true,
     val enabledLogLevels: List<Boolean> = List(LogLevel.entries.size) { false },
     val uid: String? = null,
     val pid: String? = null,

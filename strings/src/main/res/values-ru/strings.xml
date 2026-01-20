@@ -104,6 +104,9 @@
     <string name="fallback_to_default_terminal_desc">Когда выбранный логгер недоступен. Иначе LogFox будет бесконечно пытаться его использовать</string>
     <string name="including">Включая</string>
     <string name="excluding">Исключая</string>
+    <string name="enabled">Включён</string>
+    <string name="disabled">Отключён</string>
+    <string name="create_filter">Создать фильтр</string>
     <string name="package_name">Имя пакета</string>
     <string name="apps">Приложения</string>
     <string name="are_you_sure">Вы уверены?</string>

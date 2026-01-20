@@ -113,6 +113,8 @@
     <string name="fallback_to_default_terminal_desc">When selected one is not available. Otherwise LogFox will infinitely try to use it</string>
     <string name="including">Including</string>
     <string name="excluding">Excluding</string>
+    <string name="enabled">Enabled</string>
+    <string name="disabled">Disabled</string>
     <string name="package_name">Package name</string>
     <string name="apps">Apps</string>
     <string name="are_you_sure">Are you sure?</string>

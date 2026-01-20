@@ -10,6 +10,7 @@ interface FiltersRepository {
 
     suspend fun create(
         including: Boolean,
+        enabled: Boolean,
         enabledLogLevels: List<LogLevel>,
         uid: String?,
         pid: String?,
@@ -26,6 +27,7 @@ interface FiltersRepository {
     suspend fun update(
         userFilter: UserFilter,
         including: Boolean,
+        enabled: Boolean,
         enabledLogLevels: List<LogLevel>,
         uid: String?,
         pid: String?,

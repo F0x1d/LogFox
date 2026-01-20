@@ -23,6 +23,7 @@ internal class FiltersRepositoryImpl @Inject constructor(
 
     override suspend fun create(
         including: Boolean,
+        enabled: Boolean,
         enabledLogLevels: List<LogLevel>,
         uid: String?,
         pid: String?,
@@ -34,6 +35,7 @@ internal class FiltersRepositoryImpl @Inject constructor(
         listOf(
             UserFilter(
                 including = including,
+                enabled = enabled,
                 allowedLevels = enabledLogLevels,
                 uid = uid?.nullIfEmpty(),
                 pid = pid?.nullIfEmpty(),
@@ -56,6 +58,7 @@ internal class FiltersRepositoryImpl @Inject constructor(
     override suspend fun update(
         userFilter: UserFilter,
         including: Boolean,
+        enabled: Boolean,
         enabledLogLevels: List<LogLevel>,
         uid: String?,
         pid: String?,
@@ -66,6 +69,7 @@ internal class FiltersRepositoryImpl @Inject constructor(
     ) = update {
         userFilter.copy(
             including = including,
+            enabled = enabled,
             allowedLevels = enabledLogLevels,
             uid = uid?.nullIfEmpty(),
             pid = pid?.nullIfEmpty(),

@@ -59,6 +59,9 @@ internal class EditFilterFragment :
         includingButton.setOnClickListener {
             send(EditFilterCommand.ToggleIncluding)
         }
+        enabledButton.setOnClickListener {
+            send(EditFilterCommand.ToggleEnabled)
+        }
         logLevelsButton.setOnClickListener {
             showFilterDialog()
         }
@@ -89,6 +92,7 @@ internal class EditFilterFragment :
     override fun render(state: EditFilterState) {
         binding.apply {
             updateIncludingButton(state.including)
+            updateEnabledButton(state.enabled)
 
             setTextIfDifferent(uidText, state.uid.orEmpty())
             setTextIfDifferent(pidText, state.pid.orEmpty())
@@ -112,8 +116,29 @@ internal class EditFilterFragment :
         }
     }
 
-    private fun FragmentEditFilterBinding.updateIncludingButton(enabled: Boolean) = includingButton.run {
-        setIconResource(if (enabled) Icons.ic_add else Icons.ic_clear)
+    private fun FragmentEditFilterBinding.updateIncludingButton(including: Boolean) = includingButton.run {
+        setIconResource(if (including) Icons.ic_add else Icons.ic_clear)
+
+        ColorStateList.valueOf(
+            MaterialColors.getColor(
+                this,
+                if (including) {
+                    android.R.attr.colorPrimary
+                } else {
+                    androidx.appcompat.R.attr.colorError
+                },
+            ),
+        ).also {
+            iconTint = it
+            strokeColor = it
+            setTextColor(it)
+        }
+
+        setText(if (including) Strings.including else Strings.excluding)
+    }
+
+    private fun FragmentEditFilterBinding.updateEnabledButton(enabled: Boolean) = enabledButton.run {
+        setIconResource(if (enabled) Icons.ic_eye else Icons.ic_block)
 
         ColorStateList.valueOf(
             MaterialColors.getColor(
@@ -130,7 +155,7 @@ internal class EditFilterFragment :
             setTextColor(it)
         }
 
-        setText(if (enabled) Strings.including else Strings.excluding)
+        setText(if (enabled) Strings.enabled else Strings.disabled)
     }
 
     private fun showFilterDialog() {
