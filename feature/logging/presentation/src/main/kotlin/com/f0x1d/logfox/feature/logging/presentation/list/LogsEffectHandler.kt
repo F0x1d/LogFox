@@ -188,9 +188,7 @@ internal class LogsEffectHandler @Inject constructor(
             }
 
             // UI side effects - handled by Fragment
-            is LogsSideEffect.NavigateToRecordings,
-            is LogsSideEffect.CopyText,
-            -> {
+            else -> {
                 Unit
             }
         }

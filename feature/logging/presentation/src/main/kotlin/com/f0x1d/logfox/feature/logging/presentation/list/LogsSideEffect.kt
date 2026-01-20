@@ -24,5 +24,9 @@ sealed interface LogsSideEffect {
     // UI side effects - handled by Fragment
     data object NavigateToRecordings : LogsSideEffect
 
+    data object OpenFilters : LogsSideEffect
+
+    data class OpenEditFilter(val filterId: Long) : LogsSideEffect
+
     data class CopyText(val text: String) : LogsSideEffect
 }

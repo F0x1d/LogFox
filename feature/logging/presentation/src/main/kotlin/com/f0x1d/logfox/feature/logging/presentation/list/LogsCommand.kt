@@ -40,4 +40,6 @@ sealed interface LogsCommand {
     data object CopySelectedLogs : LogsCommand
 
     data class CopyFormattedText(val text: String) : LogsCommand
+
+    data object ToolbarClicked : LogsCommand
 }

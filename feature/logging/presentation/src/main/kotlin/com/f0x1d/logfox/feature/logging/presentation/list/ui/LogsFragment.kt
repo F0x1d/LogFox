@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -132,6 +133,10 @@ internal class LogsFragment :
             }
         }
 
+        toolbar.setOnClickListener {
+            send(LogsCommand.ToolbarClicked)
+        }
+
         logsRecycler.layoutManager = LinearLayoutManager(requireContext())
         logsRecycler.itemAnimator = null
         logsRecycler.recycledViewPool.setMaxRecycledViews(0, 50)
@@ -192,6 +197,17 @@ internal class LogsFragment :
         when (sideEffect) {
             is LogsSideEffect.NavigateToRecordings -> {
                 findNavController().navigate(Directions.action_global_recordingsFragment)
+            }
+
+            is LogsSideEffect.OpenFilters -> {
+                findNavController().navigate(Directions.action_logsFragment_to_filtersFragment)
+            }
+
+            is LogsSideEffect.OpenEditFilter -> {
+                findNavController().navigate(
+                    resId = Directions.action_filtersFragment_to_editFilterFragment,
+                    args = bundleOf("filter_id" to sideEffect.filterId),
+                )
             }
 
             is LogsSideEffect.CopyText -> {

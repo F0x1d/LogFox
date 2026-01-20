@@ -141,5 +141,14 @@ internal class LogsReducer @Inject constructor() : Reducer<LogsState, LogsComman
                 LogsSideEffect.CopyText(command.text),
             )
         }
+
+        is LogsCommand.ToolbarClicked -> {
+            val sideEffect = when {
+                state.filters.isEmpty() -> LogsSideEffect.OpenFilters
+                state.filters.size == 1 -> LogsSideEffect.OpenEditFilter(state.filters.first().id)
+                else -> LogsSideEffect.OpenEditFilter(state.filters.last().id)
+            }
+            state.withSideEffects(sideEffect)
+        }
     }
 }
