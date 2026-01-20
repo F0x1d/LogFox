@@ -11,4 +11,9 @@
         android:title="@android:string/copy"
         android:icon="@drawable/ic_copy" />
 
+    <item
+        android:id="@+id/create_filter_item"
+        android:title="@string/create_filter"
+        android:icon="@drawable/ic_filter" />
+
 </menu>

@@ -13,6 +13,7 @@ class LogViewHolder(
     binding: ItemLogBinding,
     private val selectedItem: (LogLine, Boolean) -> Unit,
     private val copyLog: (LogLine) -> Unit,
+    private val createFilter: (LogLine) -> Unit,
 ) : BaseViewHolder<LogLine, ItemLogBinding>(binding) {
 
     private val dateTimeFormatter = binding.root.context.dateTimeFormatter
@@ -34,6 +35,11 @@ class LogViewHolder(
 
                 R.id.copy_item -> {
                     copyLog(currentItem ?: return@setOnMenuItemClickListener false)
+                    true
+                }
+
+                R.id.create_filter_item -> {
+                    createFilter(currentItem ?: return@setOnMenuItemClickListener false)
                     true
                 }
 

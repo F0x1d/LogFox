@@ -150,5 +150,20 @@ internal class LogsReducer @Inject constructor() : Reducer<LogsState, LogsComman
             }
             state.withSideEffects(sideEffect)
         }
+
+        is LogsCommand.CreateFilterFromLog -> {
+            val logLine = command.logLine
+            state.withSideEffects(
+                LogsSideEffect.OpenEditFilterFromLogLine(
+                    uid = logLine.uid,
+                    pid = logLine.pid,
+                    tid = logLine.tid,
+                    packageName = logLine.packageName,
+                    tag = logLine.tag,
+                    content = logLine.content,
+                    level = logLine.level,
+                ),
+            )
+        }
     }
 }

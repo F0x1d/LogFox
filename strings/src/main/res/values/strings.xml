@@ -14,6 +14,7 @@
     <string name="app_crashed">%s crashed</string>
     <string name="start_on_boot">Start on boot</string>
     <string name="filter">Filter</string>
+    <string name="create_filter">Create filter</string>
     <string name="about_app">About app</string>
     <string name="root" translatable="false">Root</string>
     <string name="adb" translatable="false">ADB</string>

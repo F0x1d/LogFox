@@ -66,6 +66,40 @@
             android:name="filter_id"
             app:argType="long"
             android:defaultValue="-1L" />
+        <argument
+            android:name="log_uid"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <argument
+            android:name="log_pid"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <argument
+            android:name="log_tid"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <argument
+            android:name="log_package_name"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <argument
+            android:name="log_tag"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <argument
+            android:name="log_content"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <argument
+            android:name="log_level"
+            app:argType="integer"
+            android:defaultValue="-1" />
     </fragment>
     <action
         android:id="@+id/action_editFilterFragment_to_appsPickerFragment"

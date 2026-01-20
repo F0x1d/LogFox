@@ -1,6 +1,7 @@
 package com.f0x1d.logfox.feature.logging.presentation.list
 
 import android.net.Uri
+import com.f0x1d.logfox.feature.logging.api.model.LogLevel
 import com.f0x1d.logfox.feature.logging.api.model.LogLine
 
 sealed interface LogsSideEffect {
@@ -27,6 +28,16 @@ sealed interface LogsSideEffect {
     data object OpenFilters : LogsSideEffect
 
     data class OpenEditFilter(val filterId: Long) : LogsSideEffect
+
+    data class OpenEditFilterFromLogLine(
+        val uid: String,
+        val pid: String,
+        val tid: String,
+        val packageName: String?,
+        val tag: String,
+        val content: String,
+        val level: LogLevel,
+    ) : LogsSideEffect
 
     data class CopyText(val text: String) : LogsSideEffect
 }

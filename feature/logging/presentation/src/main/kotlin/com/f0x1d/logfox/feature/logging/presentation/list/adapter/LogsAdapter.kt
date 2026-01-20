@@ -12,6 +12,7 @@ import com.f0x1d.logfox.feature.logging.presentation.list.viewholder.LogViewHold
 class LogsAdapter(
     private val selectedItem: (LogLine, Boolean) -> Unit,
     private val copyLog: (LogLine) -> Unit,
+    private val createFilter: (LogLine) -> Unit,
 ) : BaseListAdapter<LogLine, ItemLogBinding>(diffCallback<LogLine>()) {
 
     val expandedStates = mutableMapOf<Long, Boolean>()
@@ -38,5 +39,6 @@ class LogsAdapter(
         binding = ItemLogBinding.inflate(layoutInflater, parent, false),
         selectedItem = selectedItem,
         copyLog = copyLog,
+        createFilter = createFilter,
     )
 }

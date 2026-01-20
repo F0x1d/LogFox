@@ -42,4 +42,6 @@ sealed interface LogsCommand {
     data class CopyFormattedText(val text: String) : LogsCommand
 
     data object ToolbarClicked : LogsCommand
+
+    data class CreateFilterFromLog(val logLine: LogLine) : LogsCommand
 }

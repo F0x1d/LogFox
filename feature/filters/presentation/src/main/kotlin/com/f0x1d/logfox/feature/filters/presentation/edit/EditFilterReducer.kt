@@ -4,18 +4,20 @@ import com.f0x1d.logfox.core.tea.ReduceResult
 import com.f0x1d.logfox.core.tea.Reducer
 import com.f0x1d.logfox.core.tea.noSideEffects
 import com.f0x1d.logfox.core.tea.withSideEffects
-import com.f0x1d.logfox.feature.filters.presentation.edit.di.FilterId
+import com.f0x1d.logfox.feature.filters.presentation.edit.di.EditFilterArgs
 import com.f0x1d.logfox.feature.logging.api.model.LogLevel
 import javax.inject.Inject
 
-internal class EditFilterReducer @Inject constructor(@FilterId private val filterId: Long?) : Reducer<EditFilterState, EditFilterCommand, EditFilterSideEffect> {
+internal class EditFilterReducer @Inject constructor(
+    private val args: EditFilterArgs,
+) : Reducer<EditFilterState, EditFilterCommand, EditFilterSideEffect> {
 
     override fun reduce(
         state: EditFilterState,
         command: EditFilterCommand,
     ): ReduceResult<EditFilterState, EditFilterSideEffect> = when (command) {
         is EditFilterCommand.Load -> {
-            state.withSideEffects(EditFilterSideEffect.LoadFilter(filterId))
+            state.withSideEffects(EditFilterSideEffect.LoadFilter(args.filterId))
         }
 
         is EditFilterCommand.FilterLoaded -> {

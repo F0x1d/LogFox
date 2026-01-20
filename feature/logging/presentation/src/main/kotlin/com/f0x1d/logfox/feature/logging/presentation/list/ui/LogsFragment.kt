@@ -60,6 +60,9 @@ internal class LogsFragment :
             copyLog = { logLine ->
                 send(LogsCommand.CopyLog(logLine))
             },
+            createFilter = { logLine ->
+                send(LogsCommand.CreateFilterFromLog(logLine))
+            },
         )
     }
 
@@ -207,6 +210,21 @@ internal class LogsFragment :
                 findNavController().navigate(
                     resId = Directions.action_filtersFragment_to_editFilterFragment,
                     args = bundleOf("filter_id" to sideEffect.filterId),
+                )
+            }
+
+            is LogsSideEffect.OpenEditFilterFromLogLine -> {
+                findNavController().navigate(
+                    resId = Directions.action_filtersFragment_to_editFilterFragment,
+                    args = bundleOf(
+                        "log_uid" to sideEffect.uid,
+                        "log_pid" to sideEffect.pid,
+                        "log_tid" to sideEffect.tid,
+                        "log_package_name" to sideEffect.packageName,
+                        "log_tag" to sideEffect.tag,
+                        "log_content" to sideEffect.content,
+                        "log_level" to sideEffect.level.ordinal,
+                    ),
                 )
             }
 
