@@ -141,8 +141,6 @@
     <string name="session_cache_lines_count">快取會話行數</string>
     <string name="session_cache_size_warning">快取會話儲存在 RAM 中，請確保所選行數不會溢位</string>
     <string name="export_logs_in_original_format">以原始格式匯出日誌</string>
-    <string name="support_chat">技術支援</string>
-    <string name="support_chat_desc">用於快速排除故障</string>
     <string name="type_crashes">%s 崩潰</string>
     <string name="crashes_of">%2$s 的 %1$s 崩潰</string>
     <string name="per_app_notifications_settings">每個應用的通知設定可在應用程式的崩潰詳細資訊和 LogFox 的系統設定中找到</string>

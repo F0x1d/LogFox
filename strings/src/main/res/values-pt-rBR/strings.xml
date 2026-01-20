@@ -148,8 +148,6 @@ blacklist: ignored apps
     <string name="session_cache_lines_count">Número de linhas da cache de sessões</string>
     <string name="session_cache_size_warning">A cache de sessões é mantida na RAM, então tenha certeza que não passe dos limites com o número escolhido</string>
     <string name="export_logs_in_original_format">Exportar registros no formato original</string>
-    <string name="support_chat">Chat de suporte</string>
-    <string name="support_chat_desc">Use para resolver problemas rapidamente</string>
     <string name="type_crashes">%s falhas</string>
     <string name="crashes_of">%s falhas de %s</string>
     <string name="per_app_notifications_settings">Configurações de notificações por app estão disponíveis nos detalhes da falha do app e nas configurações do sistema do LogFox</string>

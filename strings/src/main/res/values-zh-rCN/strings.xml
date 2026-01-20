@@ -141,8 +141,6 @@
     <string name="session_cache_lines_count">缓存会话行数</string>
     <string name="session_cache_size_warning">缓存会话保存在 RAM 中，请确保所选行数不会溢出</string>
     <string name="export_logs_in_original_format">以原始格式导出日志</string>
-    <string name="support_chat">技术支持</string>
-    <string name="support_chat_desc">用于快速排除故障</string>
     <string name="type_crashes">%s 崩溃</string>
     <string name="crashes_of">%2$s 的 %1$s 崩溃</string>
     <string name="per_app_notifications_settings">每个应用的通知设置可在应用程序的崩溃详细信息和 LogFox 的系统设置中找到</string>

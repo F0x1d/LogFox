@@ -29,15 +29,6 @@
         app:iconSpaceReserved="false"
         app:allowDividerAbove="false">
         <Preference
-            android:title="@string/support_chat"
-            android:summary="@string/support_chat_desc"
-            android:icon="@drawable/ic_settings_users">
-
-            <intent
-                android:action="android.intent.action.VIEW"
-                android:data="https://t.me/f0x1dsshit_chat" />
-        </Preference>
-        <Preference
             android:title="@string/releases"
             android:icon="@drawable/ic_settings_releases">
 
