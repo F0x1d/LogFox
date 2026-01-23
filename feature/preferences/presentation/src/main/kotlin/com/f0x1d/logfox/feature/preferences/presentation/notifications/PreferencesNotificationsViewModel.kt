@@ -8,10 +8,11 @@ import javax.inject.Inject
 @HiltViewModel
 internal class PreferencesNotificationsViewModel @Inject constructor(
     reducer: PreferencesNotificationsReducer,
+    effectHandler: PreferencesNotificationsEffectHandler,
 ) : BaseStoreViewModel<PreferencesNotificationsState, PreferencesNotificationsCommand, PreferencesNotificationsSideEffect>(
     initialState = PreferencesNotificationsState(
         notificationsChannelsAvailable = notificationsChannelsAvailable,
     ),
     reducer = reducer,
-    effectHandlers = emptyList(),
+    effectHandlers = listOf(effectHandler),
 )

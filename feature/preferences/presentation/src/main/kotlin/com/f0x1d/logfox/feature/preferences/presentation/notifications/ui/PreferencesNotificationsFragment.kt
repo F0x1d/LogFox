@@ -7,7 +7,6 @@ import android.provider.Settings
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.preference.Preference
-import com.f0x1d.logfox.core.context.hasNotificationsPermission
 import com.f0x1d.logfox.core.context.isHorizontalOrientation
 import com.f0x1d.logfox.core.ui.view.setupBackButtonForNavController
 import com.f0x1d.logfox.core.tea.BaseStorePreferenceFragment
@@ -68,11 +67,7 @@ internal class PreferencesNotificationsFragment :
 
     override fun onStart() {
         super.onStart()
-        send(
-            PreferencesNotificationsCommand.PermissionChecked(
-                hasPermission = requireContext().hasNotificationsPermission(),
-            ),
-        )
+        send(PreferencesNotificationsCommand.CheckPermission)
     }
 
     override fun render(state: PreferencesNotificationsState) {
@@ -108,6 +103,9 @@ internal class PreferencesNotificationsFragment :
                     },
                 )
             }
+
+            // Business logic side effects - handled by EffectHandler
+            is PreferencesNotificationsSideEffect.CheckPermission -> Unit
         }
     }
 }

@@ -13,7 +13,7 @@ internal class PreferencesNotificationsReducer @Inject constructor() : Reducer<P
         command: PreferencesNotificationsCommand,
     ): ReduceResult<PreferencesNotificationsState, PreferencesNotificationsSideEffect> = when (command) {
         is PreferencesNotificationsCommand.CheckPermission -> {
-            state.noSideEffects()
+            state.withSideEffects(PreferencesNotificationsSideEffect.CheckPermission)
         }
 
         is PreferencesNotificationsCommand.PermissionChecked -> {
