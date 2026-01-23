@@ -49,18 +49,14 @@ internal class CrashesFragment :
 
     private val adapter = CrashesAdapter(
         click = {
-            val (direction, args) = when (it.count) {
-                1 -> Directions.action_crashesFragment_to_crashDetailsFragment to bundleOf(
-                    "crash_id" to it.lastCrash.id,
-                )
-
-                else -> Directions.action_crashesFragment_to_appCrashesFragment to bundleOf(
-                    "package_name" to it.lastCrash.packageName,
-                    "app_name" to it.lastCrash.appName,
-                )
-            }
-
-            findNavController().navigate(direction, args)
+            send(
+                CrashesCommand.CrashClicked(
+                    crashId = it.lastCrash.id,
+                    count = it.count,
+                    packageName = it.lastCrash.packageName,
+                    appName = it.lastCrash.appName,
+                ),
+            )
         },
         delete = {
             showAreYouSureDeleteDialog {
@@ -70,12 +66,7 @@ internal class CrashesFragment :
     )
     private val searchedAdapter = CrashesAdapter(
         click = {
-            findNavController().navigate(
-                resId = Directions.action_crashesFragment_to_crashDetailsFragment,
-                args = bundleOf(
-                    "crash_id" to it.lastCrash.id,
-                ),
-            )
+            send(CrashesCommand.SearchedCrashClicked(it.lastCrash.id))
         },
         delete = {
             showAreYouSureDeleteDialog {
@@ -112,9 +103,7 @@ internal class CrashesFragment :
                 showSortDialog()
             }
             setClickListenerOn(R.id.blacklist_item) {
-                findNavController().navigate(
-                    Directions.action_crashesFragment_to_appsPickerFragment,
-                )
+                send(CrashesCommand.OpenBlacklist)
             }
             setClickListenerOn(R.id.clear_item) {
                 showAreYouSureClearDialog {
@@ -169,8 +158,31 @@ internal class CrashesFragment :
     }
 
     override fun handleSideEffect(sideEffect: CrashesSideEffect) {
-        // Business logic side effects are handled by EffectHandler
-        // UI side effects would be handled here
+        when (sideEffect) {
+            is CrashesSideEffect.NavigateToCrashDetails -> {
+                findNavController().navigate(
+                    resId = Directions.action_crashesFragment_to_crashDetailsFragment,
+                    args = bundleOf("crash_id" to sideEffect.crashId),
+                )
+            }
+
+            is CrashesSideEffect.NavigateToAppCrashes -> {
+                findNavController().navigate(
+                    resId = Directions.action_crashesFragment_to_appCrashesFragment,
+                    args = bundleOf(
+                        "package_name" to sideEffect.packageName,
+                        "app_name" to sideEffect.appName,
+                    ),
+                )
+            }
+
+            is CrashesSideEffect.NavigateToBlacklist -> {
+                findNavController().navigate(Directions.action_crashesFragment_to_appsPickerFragment)
+            }
+
+            // Business logic side effects are handled by EffectHandler
+            else -> Unit
+        }
     }
 
     private fun showSortDialog() {

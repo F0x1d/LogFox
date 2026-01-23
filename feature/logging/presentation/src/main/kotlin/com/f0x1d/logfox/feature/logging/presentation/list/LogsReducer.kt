@@ -165,5 +165,17 @@ internal class LogsReducer @Inject constructor() : Reducer<LogsState, LogsComman
                 ),
             )
         }
+
+        is LogsCommand.OpenSearch -> {
+            state.withSideEffects(LogsSideEffect.NavigateToSearch)
+        }
+
+        is LogsCommand.OpenFiltersScreen -> {
+            state.withSideEffects(LogsSideEffect.OpenFilters)
+        }
+
+        is LogsCommand.OpenExtendedCopy -> {
+            state.withSideEffects(LogsSideEffect.NavigateToExtendedCopy)
+        }
     }
 }

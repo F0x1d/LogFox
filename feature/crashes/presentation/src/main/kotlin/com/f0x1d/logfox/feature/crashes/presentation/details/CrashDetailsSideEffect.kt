@@ -17,4 +17,5 @@ sealed interface CrashDetailsSideEffect {
 
     // UI side effects
     data class CopyText(val text: String) : CrashDetailsSideEffect
+    data object Close : CrashDetailsSideEffect
 }

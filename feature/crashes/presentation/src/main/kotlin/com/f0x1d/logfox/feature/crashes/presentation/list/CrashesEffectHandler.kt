@@ -104,6 +104,11 @@ constructor(
                     else -> checkAppDisabledUseCase(effect.packageName, effect.disabled)
                 }
             }
+
+            // UI side effects - handled by Fragment
+            is CrashesSideEffect.NavigateToCrashDetails -> Unit
+            is CrashesSideEffect.NavigateToAppCrashes -> Unit
+            is CrashesSideEffect.NavigateToBlacklist -> Unit
         }
     }
 }

@@ -41,6 +41,9 @@ internal class AppCrashesEffectHandler @Inject constructor(
             is AppCrashesSideEffect.DeleteCrash -> {
                 deleteCrashUseCase(effect.appCrash)
             }
+
+            // UI side effects - handled by Fragment
+            is AppCrashesSideEffect.NavigateToCrashDetails -> Unit
         }
     }
 }

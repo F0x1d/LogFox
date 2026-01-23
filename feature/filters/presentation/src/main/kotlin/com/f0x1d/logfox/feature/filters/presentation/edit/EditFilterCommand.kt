@@ -24,4 +24,7 @@ sealed interface EditFilterCommand {
 
     // App picker result
     data class AppSelected(val packageName: String) : EditFilterCommand
+
+    // Navigation
+    data object SelectApp : EditFilterCommand
 }

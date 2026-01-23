@@ -78,6 +78,9 @@ internal class RecordingDetailsEffectHandler @Inject constructor(
                     updateRecordingTitleUseCase(effect.recording, effect.title)
                 }
             }
+
+            // UI side effects - handled by Fragment
+            is RecordingDetailsSideEffect.NavigateToViewRecording -> Unit
         }
     }
 }

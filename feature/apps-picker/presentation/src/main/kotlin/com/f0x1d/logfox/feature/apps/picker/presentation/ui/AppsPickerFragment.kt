@@ -36,11 +36,7 @@ class AppsPickerFragment : Fragment() {
     private val listener by lazy {
         AppsPickerScreenListener(
             onBackClicked = { viewModel.send(AppsPickerCommand.BackPressed) },
-            onAppClicked = {
-                if (resultHandler?.onAppSelected(it) == true) {
-                    findNavController().popBackStack()
-                }
-            },
+            onAppClicked = { viewModel.send(AppsPickerCommand.AppClicked(it)) },
             onAppChecked = { app, checked -> resultHandler?.onAppChecked(app, checked) },
             onSearchActiveChanged = { viewModel.send(AppsPickerCommand.SearchActiveChanged(it)) },
             onQueryChanged = { viewModel.send(AppsPickerCommand.QueryChanged(it)) },
@@ -94,6 +90,12 @@ class AppsPickerFragment : Fragment() {
         when (sideEffect) {
             is AppsPickerSideEffect.PopBackStack -> {
                 findNavController().popBackStack()
+            }
+
+            is AppsPickerSideEffect.HandleAppSelection -> {
+                if (resultHandler?.onAppSelected(sideEffect.app) == true) {
+                    findNavController().popBackStack()
+                }
             }
 
             // Business logic side effects are handled by EffectHandler

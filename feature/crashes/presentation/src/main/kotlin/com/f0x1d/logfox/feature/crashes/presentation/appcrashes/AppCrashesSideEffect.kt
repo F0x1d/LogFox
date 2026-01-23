@@ -7,4 +7,7 @@ sealed interface AppCrashesSideEffect {
     data object LoadCrashes : AppCrashesSideEffect
 
     data class DeleteCrash(val appCrash: AppCrash) : AppCrashesSideEffect
+
+    // UI side effects
+    data class NavigateToCrashDetails(val crashId: Long) : AppCrashesSideEffect
 }

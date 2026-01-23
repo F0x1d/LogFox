@@ -9,10 +9,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.doAfterTextChanged
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
+import com.f0x1d.logfox.core.tea.BaseStoreFragment
 import com.f0x1d.logfox.core.ui.icons.Icons
 import com.f0x1d.logfox.core.ui.view.setClickListenerOn
 import com.f0x1d.logfox.core.ui.view.setupBackButtonForNavController
-import com.f0x1d.logfox.core.tea.BaseStoreFragment
 import com.f0x1d.logfox.feature.filters.presentation.R
 import com.f0x1d.logfox.feature.filters.presentation.databinding.FragmentEditFilterBinding
 import com.f0x1d.logfox.feature.filters.presentation.edit.EditFilterCommand
@@ -67,14 +67,11 @@ internal class EditFilterFragment :
         }
 
         selectAppButton.setOnClickListener {
-            findNavController().navigate(
-                Directions.action_editFilterFragment_to_appsPickerFragment,
-            )
+            send(EditFilterCommand.SelectApp)
         }
 
         saveFab.setOnClickListener {
             send(EditFilterCommand.Save)
-            findNavController().popBackStack()
         }
 
         uidText.doAfterTextChanged { send(EditFilterCommand.UpdateUid(it?.toString().orEmpty())) }
@@ -109,6 +106,14 @@ internal class EditFilterFragment :
         when (sideEffect) {
             is EditFilterSideEffect.UpdatePackageNameField -> {
                 binding.packageNameText.setText(sideEffect.packageName)
+            }
+
+            is EditFilterSideEffect.NavigateToAppPicker -> {
+                findNavController().navigate(Directions.action_editFilterFragment_to_appsPickerFragment)
+            }
+
+            is EditFilterSideEffect.Close -> {
+                findNavController().popBackStack()
             }
 
             // Business logic side effects are handled by EffectHandler

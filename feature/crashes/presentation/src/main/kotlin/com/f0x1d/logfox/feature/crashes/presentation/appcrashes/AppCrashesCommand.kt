@@ -7,4 +7,6 @@ sealed interface AppCrashesCommand {
     data class CrashesLoaded(val crashes: List<AppCrashesCount>) : AppCrashesCommand
 
     data class DeleteCrash(val appCrash: AppCrash) : AppCrashesCommand
+
+    data class CrashClicked(val crashId: Long) : AppCrashesCommand
 }

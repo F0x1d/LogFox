@@ -70,6 +70,10 @@ internal class FiltersEffectHandler @Inject constructor(
             is FiltersSideEffect.DeleteFilter -> deleteFilterUseCase(effect.filter)
 
             is FiltersSideEffect.ClearAllFilters -> clearAllFiltersUseCase()
+
+            // UI side effects - handled by Fragment
+            is FiltersSideEffect.NavigateToEditFilter -> Unit
+            is FiltersSideEffect.NavigateToCreateFilter -> Unit
         }
     }
 }

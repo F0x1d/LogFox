@@ -23,4 +23,6 @@ sealed interface EditFilterSideEffect {
 
     // UI side effects - handled by Fragment
     data class UpdatePackageNameField(val packageName: String) : EditFilterSideEffect
+    data object NavigateToAppPicker : EditFilterSideEffect
+    data object Close : EditFilterSideEffect
 }

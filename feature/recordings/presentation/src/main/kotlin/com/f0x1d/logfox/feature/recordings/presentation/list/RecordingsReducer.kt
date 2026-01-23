@@ -59,5 +59,9 @@ internal class RecordingsReducer @Inject constructor() : Reducer<RecordingsState
         is RecordingsCommand.ShowSavingSnackbar -> {
             state.withSideEffects(RecordingsSideEffect.ShowSnackbar(command.text))
         }
+
+        is RecordingsCommand.OpenRecordingDetails -> {
+            state.withSideEffects(RecordingsSideEffect.OpenRecording(command.recording))
+        }
     }
 }

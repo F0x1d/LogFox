@@ -114,7 +114,6 @@ internal class CrashDetailsFragment :
             setClickListenerOn(R.id.delete_item) {
                 showAreYouSureDeleteDialog {
                     viewModel.state.value.crash?.let(viewModel::deleteCrash)
-                    findNavController().popBackStack()
                 }
             }
         }
@@ -188,6 +187,10 @@ internal class CrashDetailsFragment :
             is CrashDetailsSideEffect.CopyText -> {
                 requireContext().copyText(sideEffect.text)
                 snackbar(Strings.text_copied)
+            }
+
+            is CrashDetailsSideEffect.Close -> {
+                findNavController().popBackStack()
             }
 
             // Business logic side effects are handled by EffectHandler

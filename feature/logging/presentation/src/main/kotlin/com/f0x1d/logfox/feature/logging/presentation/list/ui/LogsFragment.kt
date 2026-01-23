@@ -104,18 +104,16 @@ internal class LogsFragment :
                 send(LogsCommand.SelectAll)
             }
             setClickListenerOn(R.id.search_item) {
-                findNavController().navigate(Directions.action_logsFragment_to_searchBottomSheet)
+                send(LogsCommand.OpenSearch)
             }
             setClickListenerOn(R.id.filters_item) {
-                findNavController().navigate(Directions.action_logsFragment_to_filtersFragment)
+                send(LogsCommand.OpenFiltersScreen)
             }
             setClickListenerOn(R.id.copy_selected_item) {
                 send(LogsCommand.CopySelectedLogs)
             }
             setClickListenerOn(R.id.extended_copy_selected_item) {
-                findNavController().navigate(
-                    Directions.action_logsFragment_to_logsExtendedCopyFragment,
-                )
+                send(LogsCommand.OpenExtendedCopy)
             }
             setClickListenerOn(R.id.selected_to_recording_item) {
                 send(LogsCommand.SelectedToRecording)
@@ -202,8 +200,16 @@ internal class LogsFragment :
                 findNavController().navigate(Directions.action_global_recordingsFragment)
             }
 
+            is LogsSideEffect.NavigateToSearch -> {
+                findNavController().navigate(Directions.action_logsFragment_to_searchBottomSheet)
+            }
+
             is LogsSideEffect.OpenFilters -> {
                 findNavController().navigate(Directions.action_logsFragment_to_filtersFragment)
+            }
+
+            is LogsSideEffect.NavigateToExtendedCopy -> {
+                findNavController().navigate(Directions.action_logsFragment_to_logsExtendedCopyFragment)
             }
 
             is LogsSideEffect.OpenEditFilter -> {

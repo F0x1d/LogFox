@@ -11,4 +11,6 @@ sealed interface FiltersCommand {
     data class Switch(val filter: UserFilter, val checked: Boolean) : FiltersCommand
     data class Delete(val filter: UserFilter) : FiltersCommand
     data object ClearAll : FiltersCommand
+    data class OpenFilter(val filterId: Long) : FiltersCommand
+    data object CreateNewFilter : FiltersCommand
 }

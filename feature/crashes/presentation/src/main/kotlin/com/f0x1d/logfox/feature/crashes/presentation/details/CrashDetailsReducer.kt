@@ -47,6 +47,7 @@ internal class CrashDetailsReducer @Inject constructor() : Reducer<CrashDetailsS
 
         is CrashDetailsCommand.DeleteCrash -> state.withSideEffects(
             CrashDetailsSideEffect.DeleteCrash(command.appCrash),
+            CrashDetailsSideEffect.Close,
         )
 
         is CrashDetailsCommand.CopyCrashLog -> {

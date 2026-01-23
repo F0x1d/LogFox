@@ -10,4 +10,5 @@ internal sealed interface AppsPickerSideEffect {
 
     // UI side effects
     data object PopBackStack : AppsPickerSideEffect
+    data class HandleAppSelection(val app: InstalledApp) : AppsPickerSideEffect
 }

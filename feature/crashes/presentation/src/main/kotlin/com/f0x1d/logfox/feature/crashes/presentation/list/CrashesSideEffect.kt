@@ -18,4 +18,9 @@ sealed interface CrashesSideEffect {
     data object ClearAllCrashes : CrashesSideEffect
 
     data class CheckAppDisabled(val packageName: String, val disabled: Boolean?) : CrashesSideEffect
+
+    // UI side effects - handled by Fragment
+    data class NavigateToCrashDetails(val crashId: Long) : CrashesSideEffect
+    data class NavigateToAppCrashes(val packageName: String, val appName: String?) : CrashesSideEffect
+    data object NavigateToBlacklist : CrashesSideEffect
 }

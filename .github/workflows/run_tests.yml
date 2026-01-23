@@ -7,7 +7,7 @@ on:
 
 jobs:
   test:
-    name: Run snapshot tests
+    name: Run Snapshot Tests
     runs-on: macos-latest
     steps:
       - name: Checkout
@@ -20,5 +20,5 @@ jobs:
           distribution: oracle
           cache: 'gradle'
 
-      - name: Run tests
+      - name: Run Snapshot Tests
         run: bash ./gradlew verifyRoborazziDebug

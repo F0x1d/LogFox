@@ -9,4 +9,5 @@ internal sealed interface AppsPickerCommand {
     data class QueryChanged(val query: String) : AppsPickerCommand
     data class AppsLoaded(val apps: ImmutableList<InstalledApp>) : AppsPickerCommand
     data class SearchedAppsUpdated(val apps: ImmutableList<InstalledApp>) : AppsPickerCommand
+    data class AppClicked(val app: InstalledApp) : AppsPickerCommand
 }

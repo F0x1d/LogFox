@@ -79,8 +79,10 @@ internal class EditFilterEffectHandler @Inject constructor(
                 }
             }
 
-            // UI side effects - not handled here
+            // UI side effects - handled by Fragment
             is EditFilterSideEffect.UpdatePackageNameField -> Unit
+            is EditFilterSideEffect.NavigateToAppPicker -> Unit
+            is EditFilterSideEffect.Close -> Unit
         }
     }
 }

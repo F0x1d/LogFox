@@ -45,5 +45,9 @@ internal class AppsPickerReducer @Inject constructor() : Reducer<AppsPickerState
         is AppsPickerCommand.SearchedAppsUpdated -> {
             state.copy(searchedApps = command.apps).noSideEffects()
         }
+
+        is AppsPickerCommand.AppClicked -> {
+            state.withSideEffects(AppsPickerSideEffect.HandleAppSelection(command.app))
+        }
     }
 }

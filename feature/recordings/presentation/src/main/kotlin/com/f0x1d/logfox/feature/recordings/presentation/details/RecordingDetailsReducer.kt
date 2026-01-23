@@ -54,5 +54,14 @@ internal class RecordingDetailsReducer @Inject constructor() : Reducer<Recording
                 state.noSideEffects()
             }
         }
+
+        is RecordingDetailsCommand.ViewRecording -> {
+            val recording = state.recording
+            if (recording != null) {
+                state.withSideEffects(RecordingDetailsSideEffect.NavigateToViewRecording(recording.file))
+            } else {
+                state.noSideEffects()
+            }
+        }
     }
 }

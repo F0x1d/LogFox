@@ -20,7 +20,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class SetupFragment : BaseComposeFragment() {
+internal class SetupFragment : BaseComposeFragment() {
 
     private val viewModel by viewModels<SetupViewModel>()
 

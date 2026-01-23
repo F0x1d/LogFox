@@ -39,5 +39,13 @@ internal class FiltersReducer @Inject constructor() : Reducer<FiltersState, Filt
         is FiltersCommand.ClearAll -> {
             state.withSideEffects(FiltersSideEffect.ClearAllFilters)
         }
+
+        is FiltersCommand.OpenFilter -> {
+            state.withSideEffects(FiltersSideEffect.NavigateToEditFilter(command.filterId))
+        }
+
+        is FiltersCommand.CreateNewFilter -> {
+            state.withSideEffects(FiltersSideEffect.NavigateToCreateFilter)
+        }
     }
 }

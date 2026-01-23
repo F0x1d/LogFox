@@ -44,4 +44,10 @@ sealed interface LogsCommand {
     data object ToolbarClicked : LogsCommand
 
     data class CreateFilterFromLog(val logLine: LogLine) : LogsCommand
+
+    data object OpenSearch : LogsCommand
+
+    data object OpenFiltersScreen : LogsCommand
+
+    data object OpenExtendedCopy : LogsCommand
 }

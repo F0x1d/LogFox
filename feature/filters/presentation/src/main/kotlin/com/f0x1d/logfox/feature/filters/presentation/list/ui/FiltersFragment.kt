@@ -10,11 +10,11 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.f0x1d.logfox.core.tea.BaseStoreFragment
 import com.f0x1d.logfox.core.ui.dialog.showAreYouSureClearDialog
 import com.f0x1d.logfox.core.ui.dialog.showAreYouSureDeleteDialog
 import com.f0x1d.logfox.core.ui.view.setClickListenerOn
 import com.f0x1d.logfox.core.ui.view.setupBackButtonForNavController
-import com.f0x1d.logfox.core.tea.BaseStoreFragment
 import com.f0x1d.logfox.feature.filters.presentation.R
 import com.f0x1d.logfox.feature.filters.presentation.databinding.FragmentFiltersBinding
 import com.f0x1d.logfox.feature.filters.presentation.list.FiltersCommand
@@ -39,10 +39,7 @@ internal class FiltersFragment :
 
     private val adapter = FiltersAdapter(
         click = {
-            findNavController().navigate(
-                resId = Directions.action_filtersFragment_to_editFilterFragment,
-                args = bundleOf("filter_id" to it.id),
-            )
+            send(FiltersCommand.OpenFilter(it.id))
         },
         delete = {
             showAreYouSureDeleteDialog {
@@ -88,7 +85,7 @@ internal class FiltersFragment :
         filtersRecycler.adapter = adapter
 
         addFab.setOnClickListener {
-            findNavController().navigate(Directions.action_filtersFragment_to_editFilterFragment)
+            send(FiltersCommand.CreateNewFilter)
         }
     }
 
@@ -98,7 +95,20 @@ internal class FiltersFragment :
     }
 
     override fun handleSideEffect(sideEffect: FiltersSideEffect) {
-        // All side effects are business logic, handled by EffectHandler
-        // No UI side effects for this screen
+        when (sideEffect) {
+            is FiltersSideEffect.NavigateToEditFilter -> {
+                findNavController().navigate(
+                    resId = Directions.action_filtersFragment_to_editFilterFragment,
+                    args = bundleOf("filter_id" to sideEffect.filterId),
+                )
+            }
+
+            is FiltersSideEffect.NavigateToCreateFilter -> {
+                findNavController().navigate(Directions.action_filtersFragment_to_editFilterFragment)
+            }
+
+            // Business logic side effects - handled by EffectHandler
+            else -> Unit
+        }
     }
 }

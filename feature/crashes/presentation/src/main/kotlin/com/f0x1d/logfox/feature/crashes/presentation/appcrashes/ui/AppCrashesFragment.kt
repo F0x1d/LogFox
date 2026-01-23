@@ -37,12 +37,7 @@ internal class AppCrashesFragment :
 
     private val adapter = CrashesAdapter(
         click = {
-            findNavController().navigate(
-                resId = Directions.action_appCrashesFragment_to_crashDetailsFragment,
-                args = bundleOf(
-                    "crash_id" to it.lastCrash.id,
-                ),
-            )
+            send(AppCrashesCommand.CrashClicked(it.lastCrash.id))
         },
         delete = {
             showAreYouSureDeleteDialog {
@@ -86,7 +81,16 @@ internal class AppCrashesFragment :
     }
 
     override fun handleSideEffect(sideEffect: AppCrashesSideEffect) {
-        // Business logic side effects are handled by EffectHandler
-        // UI side effects would be handled here
+        when (sideEffect) {
+            is AppCrashesSideEffect.NavigateToCrashDetails -> {
+                findNavController().navigate(
+                    resId = Directions.action_appCrashesFragment_to_crashDetailsFragment,
+                    args = bundleOf("crash_id" to sideEffect.crashId),
+                )
+            }
+
+            // Business logic side effects are handled by EffectHandler
+            else -> Unit
+        }
     }
 }

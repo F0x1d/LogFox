@@ -9,4 +9,5 @@ sealed interface RecordingDetailsCommand {
     data class ExportFile(val uri: Uri) : RecordingDetailsCommand
     data class ExportZipFile(val uri: Uri) : RecordingDetailsCommand
     data class UpdateTitle(val title: String) : RecordingDetailsCommand
+    data object ViewRecording : RecordingDetailsCommand
 }

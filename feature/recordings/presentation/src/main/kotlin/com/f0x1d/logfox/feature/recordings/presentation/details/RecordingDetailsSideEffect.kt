@@ -10,5 +10,6 @@ sealed interface RecordingDetailsSideEffect {
     data class ExportZipFile(val uri: Uri, val recording: LogRecording) : RecordingDetailsSideEffect
     data class UpdateTitle(val title: String, val recording: LogRecording) : RecordingDetailsSideEffect
 
-    // UI (handled by Fragment) - none for this screen
+    // UI (handled by Fragment)
+    data class NavigateToViewRecording(val file: java.io.File) : RecordingDetailsSideEffect
 }

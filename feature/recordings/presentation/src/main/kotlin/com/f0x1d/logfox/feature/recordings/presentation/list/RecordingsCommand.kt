@@ -19,4 +19,7 @@ sealed interface RecordingsCommand {
     data class RecordingEnded(val recording: LogRecording?) : RecordingsCommand
     data class SaveAllCompleted(val recording: LogRecording) : RecordingsCommand
     data class ShowSavingSnackbar(val text: String) : RecordingsCommand
+
+    // Navigation
+    data class OpenRecordingDetails(val recording: LogRecording) : RecordingsCommand
 }

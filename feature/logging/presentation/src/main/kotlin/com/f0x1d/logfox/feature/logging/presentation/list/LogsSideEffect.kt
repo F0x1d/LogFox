@@ -40,4 +40,8 @@ sealed interface LogsSideEffect {
     ) : LogsSideEffect
 
     data class CopyText(val text: String) : LogsSideEffect
+
+    data object NavigateToSearch : LogsSideEffect
+
+    data object NavigateToExtendedCopy : LogsSideEffect
 }

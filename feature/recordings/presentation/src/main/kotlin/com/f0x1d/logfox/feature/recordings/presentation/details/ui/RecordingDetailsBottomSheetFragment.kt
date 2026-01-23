@@ -10,8 +10,8 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.f0x1d.logfox.core.context.asUri
 import com.f0x1d.logfox.core.context.shareFileIntent
-import com.f0x1d.logfox.core.ui.view.applyExtendedTextWatcher
 import com.f0x1d.logfox.core.tea.BaseStoreBottomSheetFragment
+import com.f0x1d.logfox.core.ui.view.applyExtendedTextWatcher
 import com.f0x1d.logfox.feature.recordings.presentation.databinding.SheetRecordingDetailsBinding
 import com.f0x1d.logfox.feature.recordings.presentation.details.RecordingDetailsCommand
 import com.f0x1d.logfox.feature.recordings.presentation.details.RecordingDetailsSideEffect
@@ -55,14 +55,7 @@ internal class RecordingDetailsBottomSheetFragment :
         savedInstanceState: Bundle?,
     ) {
         viewButton.setOnClickListener {
-            viewModel.state.value.recording?.let { logRecording ->
-                findNavController().navigate(
-                    resId = Directions.action_global_logsFragment_from_recordingBottomSheet,
-                    args = bundleOf(
-                        "file_uri" to logRecording.file.asUri(requireContext()),
-                    ),
-                )
-            }
+            send(RecordingDetailsCommand.ViewRecording)
         }
 
         exportButton.setOnClickListener {
@@ -99,7 +92,16 @@ internal class RecordingDetailsBottomSheetFragment :
     }
 
     override fun handleSideEffect(sideEffect: RecordingDetailsSideEffect) {
-        // All side effects for this screen are business logic, handled by EffectHandler
-        // No UI side effects to handle here
+        when (sideEffect) {
+            is RecordingDetailsSideEffect.NavigateToViewRecording -> {
+                findNavController().navigate(
+                    resId = Directions.action_global_logsFragment_from_recordingBottomSheet,
+                    args = bundleOf("file_uri" to sideEffect.file.asUri(requireContext())),
+                )
+            }
+
+            // Business logic side effects are handled by EffectHandler
+            else -> Unit
+        }
     }
 }
