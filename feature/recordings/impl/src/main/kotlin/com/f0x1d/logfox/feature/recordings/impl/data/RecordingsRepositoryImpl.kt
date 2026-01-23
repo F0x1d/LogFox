@@ -8,7 +8,7 @@ import com.f0x1d.logfox.feature.database.data.LogRecordingRepository
 import com.f0x1d.logfox.feature.database.model.LogRecording
 import com.f0x1d.logfox.feature.datetime.api.DateTimeFormatter
 import com.f0x1d.logfox.feature.logging.api.data.LoggingRepository
-import com.f0x1d.logfox.feature.logging.api.domain.FormatLogLineUseCase
+import com.f0x1d.logfox.feature.logging.api.data.LogLineFormatterRepository
 import com.f0x1d.logfox.feature.logging.api.model.LogLine
 import com.f0x1d.logfox.feature.preferences.data.TerminalSettingsRepository
 import com.f0x1d.logfox.feature.recordings.api.data.RecordingsRepository
@@ -31,7 +31,7 @@ internal class RecordingsRepositoryImpl @Inject constructor(
     private val logRecordingRepository: LogRecordingRepository,
     private val dateTimeFormatter: DateTimeFormatter,
     private val loggingRepository: LoggingRepository,
-    private val formatLogLineUseCase: FormatLogLineUseCase,
+    private val logLineFormatterRepository: LogLineFormatterRepository,
     private val terminalSettingsRepository: TerminalSettingsRepository,
     private val terminals: Map<TerminalType, @JvmSuppressWildcards Terminal>,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
@@ -51,19 +51,28 @@ internal class RecordingsRepositoryImpl @Inject constructor(
 
         try {
             FileOutputStream(recordingFile, true).use { out ->
+                val batch = mutableListOf<String>()
+
                 loggingRepository
                     .dumpLogs(
                         terminals.getValue(terminalSettingsRepository.selectedTerminalType().value),
                     )
                     .collect { line ->
-                        // It is on IO!
-                        val original = formatLogLineUseCase(
+                        batch += logLineFormatterRepository.format(
                             logLine = line,
                             formatDate = dateTimeFormatter::formatDate,
                             formatTime = dateTimeFormatter::formatTime,
                         )
-                        out.write((original + "\n").encodeToByteArray())
+
+                        if (batch.size >= BATCH_SIZE) {
+                            out.write((batch.joinToString("\n") + "\n").encodeToByteArray())
+                            batch.clear()
+                        }
                     }
+
+                if (batch.isNotEmpty()) {
+                    out.write((batch.joinToString("\n") + "\n").encodeToByteArray())
+                }
             }
         } catch (e: IOException) {
             withContext(mainDispatcher) {
@@ -93,7 +102,7 @@ internal class RecordingsRepositoryImpl @Inject constructor(
 
         recordingFile.writeText(
             lines.joinToString("\n") {
-                formatLogLineUseCase(
+                logLineFormatterRepository.format(
                     logLine = it,
                     formatDate = dateTimeFormatter::formatDate,
                     formatTime = dateTimeFormatter::formatTime,
@@ -143,5 +152,9 @@ internal class RecordingsRepositoryImpl @Inject constructor(
     override suspend fun clear() = withContext(ioDispatcher) {
         getAll().forEach { it.deleteFile() }
         logRecordingRepository.deleteAll()
+    }
+
+    private companion object {
+        const val BATCH_SIZE = 100
     }
 }

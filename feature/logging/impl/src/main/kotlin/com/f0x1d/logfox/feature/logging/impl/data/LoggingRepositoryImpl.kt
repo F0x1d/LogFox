@@ -22,9 +22,7 @@ import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
 import com.f0x1d.logfox.feature.logging.api.model.LogLine as LogLineFactory
 
-internal class LoggingRepositoryImpl
-@Inject
-constructor(
+internal class LoggingRepositoryImpl @Inject constructor(
     @ApplicationContext private val context: Context,
     private val serviceSettingsRepository: ServiceSettingsRepository,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,

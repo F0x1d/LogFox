@@ -7,8 +7,8 @@ import kotlinx.coroutines.flow.StateFlow
 
 internal interface RecordingLocalDataSource {
     val recordingState: StateFlow<RecordingState>
-    val reader: suspend (LogLine) -> Unit
 
+    suspend fun processLogLine(logLine: LogLine)
     suspend fun record()
     suspend fun pause()
     suspend fun resume()

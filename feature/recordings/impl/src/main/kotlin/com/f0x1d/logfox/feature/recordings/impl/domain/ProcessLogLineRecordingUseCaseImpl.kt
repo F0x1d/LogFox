@@ -9,6 +9,6 @@ internal class ProcessLogLineRecordingUseCaseImpl @Inject constructor(
     private val recordingLocalDataSource: RecordingLocalDataSource,
 ) : ProcessLogLineRecordingUseCase {
     override suspend fun invoke(logLine: LogLine) {
-        recordingLocalDataSource.reader(logLine)
+        recordingLocalDataSource.processLogLine(logLine)
     }
 }
