@@ -25,6 +25,7 @@ import com.f0x1d.logfox.navigation.Directions
 import com.google.android.material.color.MaterialColors
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
+import dev.chrisbanes.insetter.applyInsetter
 
 @AndroidEntryPoint
 internal class EditFilterFragment :
@@ -49,6 +50,26 @@ internal class EditFilterFragment :
     override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) = FragmentEditFilterBinding.inflate(inflater, container, false)
 
     override fun FragmentEditFilterBinding.onViewCreated(view: View, savedInstanceState: Bundle?) {
+        saveFab.applyInsetter {
+            type(
+                navigationBars = true,
+                ime = true,
+            ) {
+                margin(
+                    vertical = true,
+                    animated = true,
+                )
+            }
+        }
+        scrollView.applyInsetter {
+            type(
+                navigationBars = true,
+                ime = true,
+            ) {
+                padding(vertical = true)
+            }
+        }
+
         toolbar.setupBackButtonForNavController()
         toolbar.menu.apply {
             setClickListenerOn(R.id.export_item) {

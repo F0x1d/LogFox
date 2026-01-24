@@ -331,6 +331,7 @@ internal class LogsFragment :
         visibleDuringSelection(R.id.selected_item)
         visibleOnlyInDefault(R.id.clear_item)
         visibleOnlyInDefault(R.id.restart_logging_item)
+        visibleOnlyInDefault(R.id.exit_item)
 
         title = when {
             selecting -> resources.getQuantityString(Plurals.selected_count, count, count)

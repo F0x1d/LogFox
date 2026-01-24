@@ -24,6 +24,7 @@ import com.f0x1d.logfox.feature.filters.presentation.list.FiltersViewModel
 import com.f0x1d.logfox.feature.filters.presentation.list.adapter.FiltersAdapter
 import com.f0x1d.logfox.navigation.Directions
 import dagger.hilt.android.AndroidEntryPoint
+import dev.chrisbanes.insetter.applyInsetter
 
 @AndroidEntryPoint
 internal class FiltersFragment :
@@ -66,6 +67,17 @@ internal class FiltersFragment :
     override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) = FragmentFiltersBinding.inflate(inflater, container, false)
 
     override fun FragmentFiltersBinding.onViewCreated(view: View, savedInstanceState: Bundle?) {
+        addFab.applyInsetter {
+            type(navigationBars = true) {
+                margin(vertical = true)
+            }
+        }
+        filtersRecycler.applyInsetter {
+            type(navigationBars = true) {
+                padding(vertical = true)
+            }
+        }
+
         toolbar.setupBackButtonForNavController()
         toolbar.menu.apply {
             setClickListenerOn(R.id.clear_item) {
