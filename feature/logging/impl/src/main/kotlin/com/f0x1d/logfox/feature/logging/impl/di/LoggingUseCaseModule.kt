@@ -1,7 +1,11 @@
 package com.f0x1d.logfox.feature.logging.impl.di
 
+import com.f0x1d.logfox.feature.logging.api.domain.AddLogLineUseCase
+import com.f0x1d.logfox.feature.logging.api.domain.ClearLogsUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.FormatLogLineUseCase
+import com.f0x1d.logfox.feature.logging.api.domain.GetLastLogIdUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.GetLogsFlowUseCase
+import com.f0x1d.logfox.feature.logging.api.domain.GetLogsSnapshotUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.GetPausedFlowUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.GetQueryFlowUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.GetSelectedLogLinesFlowUseCase
@@ -12,8 +16,12 @@ import com.f0x1d.logfox.feature.logging.api.domain.UpdateLogsUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.UpdatePausedUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.UpdateQueryUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.UpdateSelectedLogLinesUseCase
+import com.f0x1d.logfox.feature.logging.impl.domain.AddLogLineUseCaseImpl
+import com.f0x1d.logfox.feature.logging.impl.domain.ClearLogsUseCaseImpl
 import com.f0x1d.logfox.feature.logging.impl.domain.FormatLogLineUseCaseImpl
+import com.f0x1d.logfox.feature.logging.impl.domain.GetLastLogIdUseCaseImpl
 import com.f0x1d.logfox.feature.logging.impl.domain.GetLogsFlowUseCaseImpl
+import com.f0x1d.logfox.feature.logging.impl.domain.GetLogsSnapshotUseCaseImpl
 import com.f0x1d.logfox.feature.logging.impl.domain.GetPausedFlowUseCaseImpl
 import com.f0x1d.logfox.feature.logging.impl.domain.GetQueryFlowUseCaseImpl
 import com.f0x1d.logfox.feature.logging.impl.domain.GetSelectedLogLinesFlowUseCaseImpl
@@ -72,4 +80,16 @@ internal interface LoggingUseCaseModule {
 
     @Binds
     fun bindUpdatePausedUseCase(impl: UpdatePausedUseCaseImpl): UpdatePausedUseCase
+
+    @Binds
+    fun bindAddLogLineUseCase(impl: AddLogLineUseCaseImpl): AddLogLineUseCase
+
+    @Binds
+    fun bindClearLogsUseCase(impl: ClearLogsUseCaseImpl): ClearLogsUseCase
+
+    @Binds
+    fun bindGetLogsSnapshotUseCase(impl: GetLogsSnapshotUseCaseImpl): GetLogsSnapshotUseCase
+
+    @Binds
+    fun bindGetLastLogIdUseCase(impl: GetLastLogIdUseCaseImpl): GetLastLogIdUseCase
 }

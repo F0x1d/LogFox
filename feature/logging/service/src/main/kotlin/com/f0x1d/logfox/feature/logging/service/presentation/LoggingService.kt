@@ -12,43 +12,13 @@ import com.f0x1d.logfox.core.context.OPEN_APP_INTENT_ID
 import com.f0x1d.logfox.core.context.activityManager
 import com.f0x1d.logfox.core.context.makeServicePendingIntent
 import com.f0x1d.logfox.core.context.toast
-import com.f0x1d.logfox.core.di.DefaultDispatcher
+import com.f0x1d.logfox.core.tea.Store
 import com.f0x1d.logfox.core.ui.icons.Icons
-import com.f0x1d.logfox.feature.crashes.api.domain.ProcessLogLineCrashesUseCase
-import com.f0x1d.logfox.feature.database.model.UserFilter
-import com.f0x1d.logfox.feature.filters.api.domain.GetAllEnabledFiltersFlowUseCase
-import com.f0x1d.logfox.feature.filters.api.model.suits
-import com.f0x1d.logfox.feature.logging.api.domain.StartLoggingUseCase
-import com.f0x1d.logfox.feature.logging.api.domain.UpdateLogsUseCase
-import com.f0x1d.logfox.feature.logging.api.model.LogLine
 import com.f0x1d.logfox.feature.notifications.api.LOGGING_STATUS_CHANNEL_ID
-import com.f0x1d.logfox.feature.preferences.domain.logs.GetLogsDisplayLimitUseCase
-import com.f0x1d.logfox.feature.preferences.domain.logs.GetLogsUpdateIntervalUseCase
-import com.f0x1d.logfox.feature.preferences.domain.terminal.ShouldFallbackToDefaultTerminalUseCase
-import com.f0x1d.logfox.feature.recordings.api.domain.NotifyLoggingStoppedUseCase
-import com.f0x1d.logfox.feature.recordings.api.domain.ProcessLogLineRecordingUseCase
 import com.f0x1d.logfox.feature.strings.Strings
-import com.f0x1d.logfox.feature.terminals.domain.ExitTerminalUseCase
-import com.f0x1d.logfox.feature.terminals.domain.GetDefaultTerminalUseCase
-import com.f0x1d.logfox.feature.terminals.domain.GetSelectedTerminalUseCase
-import com.f0x1d.logfox.feature.terminals.exception.TerminalNotSupportedException
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.NonCancellable
-import kotlinx.coroutines.cancelAndJoin
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
-import kotlinx.coroutines.withContext
 import timber.log.Timber
-import java.util.LinkedList
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -57,73 +27,35 @@ class LoggingService : LifecycleService() {
     companion object {
         const val ACTION_RESTART_LOGGING = "logfox.RESTART_LOGGING"
         const val ACTION_CLEAR_LOGS = "logfox.CLEAR_LOGS"
-
         const val ACTION_KILL_SERVICE = "logfox.KILL_SERVICE"
     }
 
     private val binder = LocalBinder()
 
     @Inject
-    lateinit var startLoggingUseCase: StartLoggingUseCase
-
-    @Inject
-    lateinit var updateLogsUseCase: UpdateLogsUseCase
-
-    @Inject
-    lateinit var processLogLineCrashesUseCase: ProcessLogLineCrashesUseCase
-
-    @Inject
-    lateinit var processLogLineRecordingUseCase: ProcessLogLineRecordingUseCase
-
-    @Inject
-    lateinit var notifyLoggingStoppedUseCase: NotifyLoggingStoppedUseCase
-
-    @Inject
-    lateinit var getAllEnabledFiltersFlowUseCase: GetAllEnabledFiltersFlowUseCase
-
-    @Inject
-    lateinit var getSelectedTerminalUseCase: GetSelectedTerminalUseCase
-
-    @Inject
-    lateinit var getDefaultTerminalUseCase: GetDefaultTerminalUseCase
-
-    @Inject
-    lateinit var exitTerminalUseCase: ExitTerminalUseCase
-
-    @Inject
-    lateinit var getLogsUpdateIntervalUseCase: GetLogsUpdateIntervalUseCase
-
-    @Inject
-    lateinit var getLogsDisplayLimitUseCase: GetLogsDisplayLimitUseCase
-
-    @Inject
-    lateinit var shouldFallbackToDefaultTerminalUseCase: ShouldFallbackToDefaultTerminalUseCase
-
-    @Inject
     lateinit var mainActivityPendingIntentProvider: MainActivityPendingIntentProvider
 
     @Inject
-    @DefaultDispatcher
-    lateinit var defaultDispatcher: CoroutineDispatcher
+    internal lateinit var storeFactory: LoggingServiceStoreFactory
 
-    private val logs = LinkedList<LogLine>()
-    private val logsMutex = Mutex()
-    private var loggingJob: Job? = null
-
-    private lateinit var filtersState: StateFlow<List<UserFilter>>
+    private lateinit var store: Store<LoggingServiceState, LoggingServiceCommand, LoggingServiceSideEffect>
 
     override fun onCreate() {
         super.onCreate()
 
         startForeground(-1, notification())
-        startLogging()
 
-        filtersState = getAllEnabledFiltersFlowUseCase()
-            .stateIn(
-                scope = lifecycleScope,
-                started = SharingStarted.Eagerly,
-                initialValue = emptyList(),
-            )
+        store = storeFactory.create(lifecycleScope)
+
+        // Observe side effects for UI handling
+        lifecycleScope.launch {
+            store.sideEffects.collect { sideEffect ->
+                handleSideEffect(sideEffect)
+            }
+        }
+
+        // Start logging
+        store.send(LoggingServiceCommand.StartLogging)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -131,105 +63,31 @@ class LoggingService : LifecycleService() {
 
         Timber.d("got command ${intent?.action}")
         when (intent?.action) {
-            ACTION_RESTART_LOGGING -> restartLogging()
+            ACTION_RESTART_LOGGING -> store.send(LoggingServiceCommand.RestartLogging)
             ACTION_CLEAR_LOGS -> clearLogs()
-            ACTION_KILL_SERVICE -> killApp()
+            ACTION_KILL_SERVICE -> store.send(LoggingServiceCommand.KillService)
         }
 
         return START_NOT_STICKY
     }
 
-    private fun startLogging() {
-        Timber.d("startLogging")
-        if (loggingJob?.isActive == true) return
+    private fun clearLogs() {
+        store.send(LoggingServiceCommand.ClearLogs)
+    }
 
-        var loggingTerminal = getSelectedTerminalUseCase()
-
-        Timber.d("selected terminal $loggingTerminal")
-
-        loggingJob = lifecycleScope.launch {
-            try {
-                launch {
-                    while (true) {
-                        delay(getLogsUpdateIntervalUseCase())
-
-                        logsMutex.withLock {
-                            Timber.d("sending update logs to store")
-                            updateLogsUseCase(logs)
-                        }
-                    }
-                }
-
-                while (true) {
-                    Timber.d("in loop starting")
-
-                    startLoggingUseCase(
-                        terminal = loggingTerminal,
-                        startingId = logs.lastOrNull()?.id ?: 0,
-                    ).catch { throwable ->
-                        Timber.e("logging flow threw smth ${throwable.localizedMessage}")
-
-                        if (throwable is TerminalNotSupportedException) {
-                            if (shouldFallbackToDefaultTerminalUseCase()) {
-                                toast(Strings.terminal_unavailable_falling_back)
-
-                                exitTerminalUseCase(loggingTerminal)
-                                loggingTerminal = getDefaultTerminalUseCase()
-                            } else {
-                                delay(10000) // waiting for 10sec before new attempt
-                            }
-                        } else if (throwable !is CancellationException) {
-                            toast(getString(Strings.error, throwable.localizedMessage))
-                            throwable.printStackTrace()
-
-                            delay(10000) // waiting for 10sec before new attempt
-                        }
-                    }.collect { logLine ->
-                        withContext(defaultDispatcher) {
-                            logsMutex.withLock {
-                                logs.add(logLine)
-
-                                while (logs.size > getLogsDisplayLimitUseCase()) {
-                                    logs.removeFirst()
-                                }
-                            }
-
-                            processLogLineCrashesUseCase(logLine)
-
-                            if (logLine.suits(filtersState.value)) {
-                                processLogLineRecordingUseCase(logLine)
-                            }
-                        }
-                    }
-                }
-            } finally {
-                Timber.d("finally block")
-                withContext(NonCancellable) {
-                    notifyLoggingStoppedUseCase()
-                    clearLogs().join()
-
-                    exitTerminalUseCase(loggingTerminal)
-                }
+    private fun handleSideEffect(sideEffect: LoggingServiceSideEffect) {
+        when (sideEffect) {
+            is LoggingServiceSideEffect.ShowToast -> {
+                toast(sideEffect.message)
             }
+
+            is LoggingServiceSideEffect.PerformKillService -> {
+                killApp()
+            }
+
+            // Business logic side effects - handled by EffectHandler, ignored here
+            else -> Unit
         }
-    }
-
-    private fun restartLogging() = lifecycleScope.launch {
-        Timber.d("restaring logs")
-
-        loggingJob?.cancelAndJoin()
-        Timber.d("cancelled loggingJob")
-
-        startLogging()
-    }
-
-    private fun clearLogs() = lifecycleScope.launch {
-        Timber.d("clearing logs")
-        logsMutex.withLock {
-            logs.clear()
-        }
-
-        updateLogsUseCase(emptyList())
     }
 
     private fun notification() = NotificationCompat.Builder(this, LOGGING_STATUS_CHANNEL_ID)
@@ -246,11 +104,10 @@ class LoggingService : LifecycleService() {
         )
         .build()
 
-    private fun killApp() = lifecycleScope.launch {
+    private fun killApp() {
         Timber.d("killing app")
 
-        loggingJob?.cancelAndJoin()
-        Timber.d("cancelled loggingJob and now can stop app")
+        store.cancel()
 
         activityManager.appTasks.forEach {
             it.finishAndRemoveTask()
@@ -258,6 +115,11 @@ class LoggingService : LifecycleService() {
 
         ServiceCompat.stopForeground(this@LoggingService, ServiceCompat.STOP_FOREGROUND_REMOVE)
         stopSelf()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        store.cancel()
     }
 
     override fun onBind(intent: Intent): IBinder {

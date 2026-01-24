@@ -54,5 +54,7 @@ class Store<State, Command, SideEffect>(
     fun cancel() {
         jobs.values.forEach { it.cancel() }
         jobs.clear()
+
+        effectHandlers.forEach { it.close() }
     }
 }

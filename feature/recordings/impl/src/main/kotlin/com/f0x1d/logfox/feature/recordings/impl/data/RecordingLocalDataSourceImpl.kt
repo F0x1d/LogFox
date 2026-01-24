@@ -4,7 +4,10 @@ import android.content.Context
 import com.f0x1d.logfox.core.di.IODispatcher
 import com.f0x1d.logfox.feature.database.data.LogRecordingRepository
 import com.f0x1d.logfox.feature.database.model.LogRecording
+import com.f0x1d.logfox.feature.database.model.UserFilter
 import com.f0x1d.logfox.feature.datetime.api.DateTimeFormatter
+import com.f0x1d.logfox.feature.filters.api.domain.GetAllEnabledFiltersFlowUseCase
+import com.f0x1d.logfox.feature.filters.api.model.suits
 import com.f0x1d.logfox.feature.logging.api.data.LogLineFormatterRepository
 import com.f0x1d.logfox.feature.logging.api.model.LogLine
 import com.f0x1d.logfox.feature.preferences.data.LogsSettingsRepository
@@ -12,9 +15,13 @@ import com.f0x1d.logfox.feature.recordings.api.data.RecordingState
 import com.f0x1d.logfox.feature.strings.Strings
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
@@ -30,8 +37,14 @@ internal class RecordingLocalDataSourceImpl @Inject constructor(
     private val logLineFormatterRepository: LogLineFormatterRepository,
     private val logsSettingsRepository: LogsSettingsRepository,
     private val notificationsLocalDataSource: RecordingNotificationsLocalDataSource,
+    private val getAllEnabledFiltersFlowUseCase: GetAllEnabledFiltersFlowUseCase,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : RecordingLocalDataSource {
+
+    private val scope = CoroutineScope(ioDispatcher + SupervisorJob())
+
+    private val enabledFilters = MutableStateFlow<List<UserFilter>>(emptyList())
+    private var filtersCollectionJob: Job? = null
 
     private val recordingsDir = File("${context.filesDir.absolutePath}/recordings").apply {
         if (!exists()) mkdirs()
@@ -61,8 +74,24 @@ internal class RecordingLocalDataSourceImpl @Inject constructor(
             )
         }
 
+        startFiltersCollection()
+
         state.update { RecordingState.RECORDING }
         notificationsLocalDataSource.sendRecordingNotification()
+    }
+
+    private fun startFiltersCollection() {
+        filtersCollectionJob?.cancel()
+        filtersCollectionJob = scope.launch {
+            getAllEnabledFiltersFlowUseCase().collect { filters ->
+                enabledFilters.value = filters
+            }
+        }
+    }
+
+    private fun stopFiltersCollection() {
+        filtersCollectionJob?.cancel()
+        filtersCollectionJob = null
     }
 
     override suspend fun pause() = withContext(ioDispatcher) {
@@ -77,6 +106,7 @@ internal class RecordingLocalDataSourceImpl @Inject constructor(
 
     override suspend fun end(): LogRecording? = withContext(ioDispatcher) {
         state.update { RecordingState.SAVING }
+        stopFiltersCollection()
         dumpLines()
         notificationsLocalDataSource.cancelRecordingNotification()
 
@@ -107,6 +137,7 @@ internal class RecordingLocalDataSourceImpl @Inject constructor(
 
     override suspend fun processLogLine(logLine: LogLine) {
         if (state.value != RecordingState.RECORDING) return
+        if (!logLine.suits(enabledFilters.value)) return
 
         val shouldDump = linesMutex.withLock {
             recordedLines.add(logLine)

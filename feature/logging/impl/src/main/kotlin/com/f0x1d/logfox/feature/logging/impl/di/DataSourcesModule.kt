@@ -1,5 +1,7 @@
 package com.f0x1d.logfox.feature.logging.impl.di
 
+import com.f0x1d.logfox.feature.logging.impl.data.LogsBufferDataSource
+import com.f0x1d.logfox.feature.logging.impl.data.LogsBufferDataSourceImpl
 import com.f0x1d.logfox.feature.logging.impl.data.LogsDataSource
 import com.f0x1d.logfox.feature.logging.impl.data.LogsDataSourceImpl
 import com.f0x1d.logfox.feature.logging.impl.data.PausedDataSource
@@ -16,6 +18,9 @@ import dagger.hilt.components.SingletonComponent
 @Module
 @InstallIn(SingletonComponent::class)
 internal interface DataSourcesModule {
+
+    @Binds
+    fun bindLogsBufferDataSource(logsBufferDataSourceImpl: LogsBufferDataSourceImpl): LogsBufferDataSource
 
     @Binds
     fun bindLogsDataSource(logsDataSourceImpl: LogsDataSourceImpl): LogsDataSource
