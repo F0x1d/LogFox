@@ -6,15 +6,18 @@ import com.f0x1d.logfox.feature.crashes.impl.data.CrashDataSource
 import com.f0x1d.logfox.feature.database.model.AppCrash
 import com.f0x1d.logfox.feature.database.model.CrashType
 import com.f0x1d.logfox.feature.logging.api.model.LogLine
+import com.f0x1d.logfox.feature.preferences.data.LogsSettingsRepository
 
 internal abstract class BaseCrashDataSource(
     private val appInfoDataSource: AppInfoDataSource,
     private val crashCollectorDataSource: CrashCollectorDataSource,
+    private val logsSettingsRepository: LogsSettingsRepository,
 ) : CrashDataSource {
 
     protected abstract val crashType: CrashType
 
     private var collecting = false
+    private var collectionStartTime = 0L
     private var firstLine: LogLine? = null
     private val collectedLines = mutableListOf<LogLine>()
 
@@ -25,8 +28,17 @@ internal abstract class BaseCrashDataSource(
     open fun filterLines(lines: MutableList<LogLine>) = Unit
 
     open fun shouldContinueCollecting(line: LogLine): Boolean {
+        // Continue if within time window (crashes can have interleaved output)
+        val timeWindowMs = logsSettingsRepository.logsUpdateInterval().value + TIME_BUFFER_MS
+        if (collectionStartTime + timeWindowMs > System.currentTimeMillis()) return true
+
+        // Fall back to PID checking
         val first = firstLine ?: return false
-        return first.pid == line.pid && first.tid == line.tid
+        return first.pid == line.pid
+    }
+
+    private companion object {
+        const val TIME_BUFFER_MS = 1000L
     }
 
     override suspend fun process(line: LogLine) {
@@ -46,6 +58,7 @@ internal abstract class BaseCrashDataSource(
     private fun tryStartCollecting(line: LogLine) {
         if (isFirstLine(line)) {
             collecting = true
+            collectionStartTime = System.currentTimeMillis()
             firstLine = line
             collectedLines.clear()
             collectedLines.add(line)

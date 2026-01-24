@@ -7,24 +7,19 @@ import com.f0x1d.logfox.feature.database.model.CrashType
 import com.f0x1d.logfox.feature.logging.api.model.LogLine
 import com.f0x1d.logfox.feature.preferences.data.LogsSettingsRepository
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 internal class JNICrashDataSource @Inject constructor(
     appInfoDataSource: AppInfoDataSource,
     crashCollectorDataSource: CrashCollectorDataSource,
-    private val logsSettingsRepository: LogsSettingsRepository,
-) : BaseCrashDataSource(appInfoDataSource, crashCollectorDataSource) {
+    logsSettingsRepository: LogsSettingsRepository,
+) : BaseCrashDataSource(appInfoDataSource, crashCollectorDataSource, logsSettingsRepository) {
 
     override val crashType = CrashType.JNI
 
-    private var collectionStartTime = 0L
-
-    override fun isFirstLine(line: LogLine): Boolean {
-        val isFirst = line.isDebugTag && line.content == CRASH_HEADER
-        if (isFirst) {
-            collectionStartTime = System.currentTimeMillis()
-        }
-        return isFirst
-    }
+    override fun isFirstLine(line: LogLine): Boolean =
+        line.isDebugTag && line.content == CRASH_HEADER
 
     override fun filterLines(lines: MutableList<LogLine>) {
         lines.removeAll { !it.isDebugTag }
@@ -34,11 +29,6 @@ internal class JNICrashDataSource @Inject constructor(
         // Stop if a new crash starts
         if (line.isDebugTag && line.content == CRASH_HEADER) return false
 
-        // Continue if within time window (JNI crashes can have interleaved output)
-        val timeWindowMs = logsSettingsRepository.logsUpdateInterval().value + TIME_BUFFER_MS
-        if (collectionStartTime + timeWindowMs > System.currentTimeMillis()) return true
-
-        // Fall back to default pid/tid checking
         return super.shouldContinueCollecting(line)
     }
 
@@ -67,7 +57,6 @@ internal class JNICrashDataSource @Inject constructor(
         const val CRASH_HEADER = "*** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***"
         const val PACKAGE_START_MARKER = ">>> "
         const val PACKAGE_END_MARKER = " <<<"
-        const val TIME_BUFFER_MS = 1000L
         const val UNKNOWN_PACKAGE = "unknown"
     }
 }
