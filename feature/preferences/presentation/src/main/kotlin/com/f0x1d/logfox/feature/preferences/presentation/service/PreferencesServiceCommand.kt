@@ -7,7 +7,6 @@ internal sealed interface PreferencesServiceCommand {
 
     data class TerminalSelected(val type: TerminalType) : PreferencesServiceCommand
     data class StartOnBootChanged(val enabled: Boolean) : PreferencesServiceCommand
-    data class ShowLogsFromAppLaunchChanged(val enabled: Boolean) : PreferencesServiceCommand
     data object ConfirmRestartLogging : PreferencesServiceCommand
 
     // Commands from effect handler

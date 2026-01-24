@@ -27,7 +27,9 @@ internal class LogsBufferDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun getAll(): List<LogLine> = mutex.withLock { buffer.toList() }
+    override suspend fun getAll(): List<LogLine> = withContext(defaultDispatcher) {
+        mutex.withLock { buffer.toList() }
+    }
 
     override suspend fun clear() = withContext(defaultDispatcher) {
         mutex.withLock {
@@ -35,5 +37,7 @@ internal class LogsBufferDataSourceImpl @Inject constructor(
         }
     }
 
-    override fun lastId(): Long = buffer.lastOrNull()?.id ?: 0L
+    override suspend fun lastId(): Long = withContext(defaultDispatcher) {
+        mutex.withLock { buffer.lastOrNull()?.id ?: 0L }
+    }
 }

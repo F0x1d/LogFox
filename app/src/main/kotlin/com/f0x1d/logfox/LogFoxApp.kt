@@ -17,16 +17,15 @@ import com.google.android.material.color.DynamicColorsOptions
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 import javax.inject.Inject
+import javax.inject.Provider
 
 @HiltAndroidApp
-class LogFoxApp :
-    Application(),
-    ImageLoaderFactory {
+class LogFoxApp : Application(), ImageLoaderFactory {
     @Inject
     lateinit var uiSettingsRepository: UISettingsRepository
 
     @Inject
-    lateinit var imageLoader: ImageLoader
+    lateinit var imageLoaderProvider: Provider<ImageLoader>
 
     @Inject
     lateinit var timberFileTree: TimberFileTree
@@ -78,7 +77,7 @@ class LogFoxApp :
         }
     }
 
-    override fun newImageLoader(): ImageLoader = imageLoader
+    override fun newImageLoader(): ImageLoader = imageLoaderProvider.get()
 
     companion object {
         private const val LOGGING_ENABLED = false

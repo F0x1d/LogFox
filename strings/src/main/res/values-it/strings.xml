@@ -130,7 +130,6 @@
     <string name="no_crashes">Al momento non ci sono arresti anomali</string>
     <string name="no_recordings">Al momento non ci sono registrazioni</string>
     <string name="no_filters">Al momento non ci sono filtri</string>
-    <string name="show_logs_from_app_launch">Mostra solo i log visualizzati dal lancio dell\'app</string>
     <string name="save_all_logs">Salva tutti i registri</string>
     <string name="saving_logs">Salvataggio dei registri, l\'operazione potrebbe richiedere del tempo…</string>
     <string name="error_saving_logs">Errore durante il salvataggio dei registri</string>

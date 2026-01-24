@@ -4,7 +4,6 @@ import android.content.Context
 import com.f0x1d.logfox.core.di.IODispatcher
 import com.f0x1d.logfox.feature.logging.api.data.LoggingRepository
 import com.f0x1d.logfox.feature.logging.api.model.LogLine
-import com.f0x1d.logfox.feature.preferences.data.ServiceSettingsRepository
 import com.f0x1d.logfox.feature.terminals.base.Terminal
 import com.f0x1d.logfox.feature.terminals.exception.TerminalNotSupportedException
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -24,16 +23,12 @@ import com.f0x1d.logfox.feature.logging.api.model.LogLine as LogLineFactory
 
 internal class LoggingRepositoryImpl @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val serviceSettingsRepository: ServiceSettingsRepository,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : LoggingRepository {
     override fun startLogging(terminal: Terminal, startingId: Long): Flow<LogLine> = flow {
-        val command =
-            LoggingRepository.COMMAND +
-                when (serviceSettingsRepository.showLogsFromAppLaunch().value) {
-                    true -> LoggingRepository.SHOW_LOGS_FROM_NOW_FLAGS
-                    else -> emptyArray()
-                }
+        // On restart (startingId > 0), always use -T 1 to avoid re-reading old logs
+        // On initial start, respect the showLogsFromAppLaunch setting
+        val command = LoggingRepository.COMMAND + LoggingRepository.SHOW_LOGS_FROM_NOW_FLAGS
 
         emitLines(
             terminal = terminal,
@@ -72,7 +67,7 @@ internal class LoggingRepositoryImpl @Inject constructor(
             Timber.d("started scope")
 
             process.output.bufferedReader().use { reader ->
-                var droppedFirst = !serviceSettingsRepository.showLogsFromAppLaunch().value
+                var droppedFirst = false
                 // avoiding getting the same line after logging restart because of
                 // WARNING: -T 0 invalid, setting to 1
                 Timber.d("got reader")

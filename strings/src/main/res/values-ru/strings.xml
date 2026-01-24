@@ -133,7 +133,6 @@
     <string name="no_crashes">Сейчас сбоев нет</string>
     <string name="no_recordings">Сейчас записей нет</string>
     <string name="no_filters">Сейчас фильтров нет</string>
-    <string name="show_logs_from_app_launch">Показывать только логи, появившиеся с момента запуска приложения</string>
     <string name="save_all_logs">Сохранить все логи</string>
     <string name="saving_logs">Сохраняем логи, это может занять много времени…</string>
     <string name="error_saving_logs">Ошибка при сохранении логов</string>

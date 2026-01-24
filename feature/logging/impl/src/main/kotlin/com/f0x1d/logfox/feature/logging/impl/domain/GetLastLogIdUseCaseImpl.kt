@@ -7,5 +7,5 @@ import javax.inject.Inject
 internal class GetLastLogIdUseCaseImpl @Inject constructor(
     private val logsBufferDataSource: LogsBufferDataSource,
 ) : GetLastLogIdUseCase {
-    override fun invoke(): Long = logsBufferDataSource.lastId()
+    override suspend fun invoke(): Long = logsBufferDataSource.lastId()
 }

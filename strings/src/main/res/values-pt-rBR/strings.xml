@@ -137,7 +137,6 @@ blacklist: ignored apps
     <string name="no_crashes">Não há falhas no momento</string>
     <string name="no_recordings">Não há gravações no momento</string>
     <string name="no_filters">Não há filtros no momento</string>
-    <string name="show_logs_from_app_launch">Mostrar apenas os registros que apareceram depois que o app foi aberto</string>
     <string name="save_all_logs">Salvar todos os registros</string>
     <string name="saving_logs">Salvando os registros, isso pode demorar um pouco…</string>
     <string name="error_saving_logs">Erro ao salvar os registros</string>
