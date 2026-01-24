@@ -11,5 +11,6 @@ dependencies {
     implementation(projects.feature.preferences.api)
     implementation(projects.feature.terminals.api)
 
+    implementation(libs.androidx.documentfile)
     implementation(libs.timber)
 }

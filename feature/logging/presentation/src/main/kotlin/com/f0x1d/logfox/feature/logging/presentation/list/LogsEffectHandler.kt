@@ -14,6 +14,7 @@ import com.f0x1d.logfox.feature.logging.api.domain.GetLogsFlowUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.GetPausedFlowUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.GetQueryFlowUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.GetShowLogValuesFlowUseCase
+import com.f0x1d.logfox.feature.logging.api.domain.ReadLogFileUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.UpdatePausedUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.UpdateSelectedLogLinesUseCase
 import com.f0x1d.logfox.feature.logging.api.model.LogLine
@@ -50,6 +51,7 @@ internal class LogsEffectHandler @Inject constructor(
     private val formatLogLineUseCase: FormatLogLineUseCase,
     private val getPausedFlowUseCase: GetPausedFlowUseCase,
     private val updatePausedUseCase: UpdatePausedUseCase,
+    private val readLogFileUseCase: ReadLogFileUseCase,
     private val dateTimeFormatter: DateTimeFormatter,
     @DefaultDispatcher private val defaultDispatcher: CoroutineDispatcher,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
@@ -61,10 +63,12 @@ internal class LogsEffectHandler @Inject constructor(
         when (effect) {
             is LogsSideEffect.LoadLogs -> {
                 combine(
-                    fileUri?.readFileContentsAsFlow(
-                        context = context,
-                        logsDisplayLimit = getLogsDisplayLimitUseCase(),
-                    ) ?: getLogsFlowUseCase(),
+                    fileUri?.let {
+                        readLogFileUseCase(
+                            uri = it,
+                            logsDisplayLimit = getLogsDisplayLimitUseCase(),
+                        )
+                    } ?: getLogsFlowUseCase(),
                     getAllEnabledFiltersFlowUseCase(),
                     getQueryFlowUseCase(),
                     if (!viewingFile) getPausedFlowUseCase() else flowOf(false),

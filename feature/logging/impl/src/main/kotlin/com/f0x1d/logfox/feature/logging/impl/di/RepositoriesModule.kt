@@ -1,13 +1,16 @@
 package com.f0x1d.logfox.feature.logging.impl.di
 
 import com.f0x1d.logfox.feature.logging.api.data.LogLineFormatterRepository
+import com.f0x1d.logfox.feature.logging.api.data.LogLineParser
 import com.f0x1d.logfox.feature.logging.api.data.LoggingRepository
 import com.f0x1d.logfox.feature.logging.impl.data.LogLineFormatterRepositoryImpl
+import com.f0x1d.logfox.feature.logging.impl.data.LogLineParserImpl
 import com.f0x1d.logfox.feature.logging.impl.data.LoggingRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -19,5 +22,9 @@ internal interface RepositoriesModule {
     ): LogLineFormatterRepository
 
     @Binds
-    fun bindLoggingRepository(loggingRepositoryImpl: LoggingRepositoryImpl): LoggingRepository
+    fun bindLoggingRepository(impl: LoggingRepositoryImpl): LoggingRepository
+
+    @Binds
+    @Singleton
+    fun bindLogLineParser(impl: LogLineParserImpl): LogLineParser
 }

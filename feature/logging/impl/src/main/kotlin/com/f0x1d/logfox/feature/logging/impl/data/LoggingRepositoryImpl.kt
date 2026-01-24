@@ -1,12 +1,11 @@
 package com.f0x1d.logfox.feature.logging.impl.data
 
-import android.content.Context
 import com.f0x1d.logfox.core.di.IODispatcher
+import com.f0x1d.logfox.feature.logging.api.data.LogLineParser
 import com.f0x1d.logfox.feature.logging.api.data.LoggingRepository
 import com.f0x1d.logfox.feature.logging.api.model.LogLine
 import com.f0x1d.logfox.feature.terminals.base.Terminal
 import com.f0x1d.logfox.feature.terminals.exception.TerminalNotSupportedException
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -19,10 +18,9 @@ import timber.log.Timber
 import java.io.BufferedReader
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
-import com.f0x1d.logfox.feature.logging.api.model.LogLine as LogLineFactory
 
 internal class LoggingRepositoryImpl @Inject constructor(
-    @ApplicationContext private val context: Context,
+    private val logLineParser: LogLineParser,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : LoggingRepository {
     override fun startLogging(terminal: Terminal, startingId: Long): Flow<LogLine> = flow {
@@ -78,12 +76,10 @@ internal class LoggingRepositoryImpl @Inject constructor(
                         val line = reader.readLineCancellable()
                         Timber.d("got line $line")
 
-                        val logLine =
-                            LogLineFactory(
-                                id = idsCounter++,
-                                line = line,
-                                context = context,
-                            )
+                        val logLine = logLineParser.parse(
+                            id = idsCounter++,
+                            line = line,
+                        )
                         Timber.d("successfully parsed $line to $logLine")
 
                         if (droppedFirst.not()) {

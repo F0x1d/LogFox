@@ -1,5 +1,7 @@
 package com.f0x1d.logfox.feature.logging.impl.di
 
+import com.f0x1d.logfox.feature.logging.impl.data.LogFileDataSource
+import com.f0x1d.logfox.feature.logging.impl.data.LogFileDataSourceImpl
 import com.f0x1d.logfox.feature.logging.impl.data.LogsBufferDataSource
 import com.f0x1d.logfox.feature.logging.impl.data.LogsBufferDataSourceImpl
 import com.f0x1d.logfox.feature.logging.impl.data.LogsDataSource
@@ -35,4 +37,7 @@ internal interface DataSourcesModule {
 
     @Binds
     fun bindPausedDataSource(pausedDataSourceImpl: PausedDataSourceImpl): PausedDataSource
+
+    @Binds
+    fun bindLogFileDataSource(impl: LogFileDataSourceImpl): LogFileDataSource
 }
