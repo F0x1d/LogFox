@@ -2,7 +2,7 @@ package com.f0x1d.logfox.feature.preferences
 
 import androidx.annotation.Keep
 import androidx.annotation.StringRes
-import com.f0x1d.logfox.feature.database.model.AppCrashesCount
+import com.f0x1d.logfox.feature.crashes.api.model.AppCrashesCount
 import com.f0x1d.logfox.feature.strings.Strings
 
 @Keep

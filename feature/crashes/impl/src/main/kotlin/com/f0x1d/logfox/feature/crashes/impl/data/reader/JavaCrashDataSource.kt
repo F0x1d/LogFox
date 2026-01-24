@@ -1,9 +1,9 @@
 package com.f0x1d.logfox.feature.crashes.impl.data.reader
 
+import com.f0x1d.logfox.feature.crashes.api.model.CrashType
 import com.f0x1d.logfox.feature.crashes.impl.data.AppInfoDataSource
 import com.f0x1d.logfox.feature.crashes.impl.data.CrashCollectorDataSource
 import com.f0x1d.logfox.feature.crashes.impl.data.reader.base.BaseCrashDataSource
-import com.f0x1d.logfox.feature.database.model.CrashType
 import com.f0x1d.logfox.feature.logging.api.model.LogLine
 import com.f0x1d.logfox.feature.preferences.data.LogsSettingsRepository
 import javax.inject.Inject
@@ -17,6 +17,8 @@ internal class JavaCrashDataSource @Inject constructor(
 ) : BaseCrashDataSource(appInfoDataSource, crashCollectorDataSource, logsSettingsRepository) {
 
     override val crashType = CrashType.JAVA
+
+    override val timeBufferMs: Long = 0
 
     override fun isFirstLine(line: LogLine): Boolean =
         line.tag == TAG && line.content.startsWith(FATAL_EXCEPTION_PREFIX)

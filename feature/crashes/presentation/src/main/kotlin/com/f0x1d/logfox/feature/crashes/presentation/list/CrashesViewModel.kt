@@ -5,8 +5,8 @@ import com.f0x1d.logfox.core.tea.BaseStoreViewModel
 import com.f0x1d.logfox.feature.apps.picker.AppsPickerResultHandler
 import com.f0x1d.logfox.feature.apps.picker.InstalledApp
 import com.f0x1d.logfox.feature.crashes.api.domain.GetAllDisabledAppsFlowUseCase
-import com.f0x1d.logfox.feature.database.model.AppCrash
-import com.f0x1d.logfox.feature.database.model.DisabledApp
+import com.f0x1d.logfox.feature.crashes.api.model.AppCrash
+import com.f0x1d.logfox.feature.crashes.api.model.DisabledApp
 import com.f0x1d.logfox.feature.preferences.CrashesSort
 import com.f0x1d.logfox.feature.strings.Strings
 import dagger.hilt.android.lifecycle.HiltViewModel

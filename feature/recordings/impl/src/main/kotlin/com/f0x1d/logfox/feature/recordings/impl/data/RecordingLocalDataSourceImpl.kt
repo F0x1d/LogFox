@@ -2,16 +2,17 @@ package com.f0x1d.logfox.feature.recordings.impl.data
 
 import android.content.Context
 import com.f0x1d.logfox.core.di.IODispatcher
-import com.f0x1d.logfox.feature.database.data.LogRecordingRepository
-import com.f0x1d.logfox.feature.database.model.LogRecording
-import com.f0x1d.logfox.feature.database.model.UserFilter
+import com.f0x1d.logfox.feature.database.data.LogRecordingDataSource
 import com.f0x1d.logfox.feature.datetime.api.DateTimeFormatter
 import com.f0x1d.logfox.feature.filters.api.domain.GetAllEnabledFiltersFlowUseCase
+import com.f0x1d.logfox.feature.filters.api.model.UserFilter
 import com.f0x1d.logfox.feature.filters.api.model.suits
 import com.f0x1d.logfox.feature.logging.api.data.LogLineFormatterRepository
 import com.f0x1d.logfox.feature.logging.api.model.LogLine
 import com.f0x1d.logfox.feature.preferences.data.LogsSettingsRepository
 import com.f0x1d.logfox.feature.recordings.api.data.RecordingState
+import com.f0x1d.logfox.feature.recordings.api.model.LogRecording
+import com.f0x1d.logfox.feature.recordings.impl.mapper.toEntity
 import com.f0x1d.logfox.feature.strings.Strings
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
@@ -32,7 +33,7 @@ import javax.inject.Singleton
 @Singleton
 internal class RecordingLocalDataSourceImpl @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val logRecordingRepository: LogRecordingRepository,
+    private val logRecordingDataSource: LogRecordingDataSource,
     private val dateTimeFormatter: DateTimeFormatter,
     private val logLineFormatterRepository: LogLineFormatterRepository,
     private val logsSettingsRepository: LogsSettingsRepository,
@@ -113,11 +114,11 @@ internal class RecordingLocalDataSourceImpl @Inject constructor(
         val file = recordingFile ?: return@withContext null
 
         val logRecording = LogRecording(
-            title = "${context.getString(Strings.record_file)} ${logRecordingRepository.count() + 1}",
+            title = "${context.getString(Strings.record_file)} ${logRecordingDataSource.count() + 1}",
             dateAndTime = recordingTime,
             file = file,
         ).let {
-            it.copy(id = logRecordingRepository.insert(it))
+            it.copy(id = logRecordingDataSource.insert(it.toEntity()))
         }
 
         state.update { RecordingState.IDLE }

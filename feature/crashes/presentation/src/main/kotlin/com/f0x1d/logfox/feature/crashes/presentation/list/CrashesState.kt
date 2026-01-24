@@ -1,6 +1,6 @@
 package com.f0x1d.logfox.feature.crashes.presentation.list
 
-import com.f0x1d.logfox.feature.database.model.AppCrashesCount
+import com.f0x1d.logfox.feature.crashes.api.model.AppCrashesCount
 import com.f0x1d.logfox.feature.preferences.CrashesSort
 
 data class CrashesState(

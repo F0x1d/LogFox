@@ -1,9 +1,9 @@
 package com.f0x1d.logfox.feature.crashes.impl.data.reader
 
+import com.f0x1d.logfox.feature.crashes.api.model.CrashType
 import com.f0x1d.logfox.feature.crashes.impl.data.AppInfoDataSource
 import com.f0x1d.logfox.feature.crashes.impl.data.CrashCollectorDataSource
 import com.f0x1d.logfox.feature.crashes.impl.data.reader.base.BaseCrashDataSource
-import com.f0x1d.logfox.feature.database.model.CrashType
 import com.f0x1d.logfox.feature.logging.api.model.LogLine
 import com.f0x1d.logfox.feature.preferences.data.LogsSettingsRepository
 import javax.inject.Inject

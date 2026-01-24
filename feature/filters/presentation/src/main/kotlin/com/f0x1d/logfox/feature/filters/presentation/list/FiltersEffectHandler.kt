@@ -3,12 +3,12 @@ package com.f0x1d.logfox.feature.filters.presentation.list
 import android.content.Context
 import com.f0x1d.logfox.core.di.IODispatcher
 import com.f0x1d.logfox.core.tea.EffectHandler
-import com.f0x1d.logfox.feature.database.model.UserFilter
 import com.f0x1d.logfox.feature.filters.api.domain.ClearAllFiltersUseCase
 import com.f0x1d.logfox.feature.filters.api.domain.CreateAllFiltersUseCase
 import com.f0x1d.logfox.feature.filters.api.domain.DeleteFilterUseCase
 import com.f0x1d.logfox.feature.filters.api.domain.GetAllFiltersFlowUseCase
 import com.f0x1d.logfox.feature.filters.api.domain.SwitchFilterUseCase
+import com.f0x1d.logfox.feature.filters.api.model.UserFilter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.qualifiers.ApplicationContext

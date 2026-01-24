@@ -13,7 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.f0x1d.logfox.core.ui.compose.BaseComposeFragment
 import com.f0x1d.logfox.core.ui.dialog.showAreYouSureClearDialog
 import com.f0x1d.logfox.core.ui.dialog.showAreYouSureDeleteDialog
-import com.f0x1d.logfox.feature.database.model.LogRecording
+import com.f0x1d.logfox.feature.recordings.api.model.LogRecording
 import com.f0x1d.logfox.feature.recordings.presentation.list.RecordingsCommand
 import com.f0x1d.logfox.feature.recordings.presentation.list.RecordingsSideEffect
 import com.f0x1d.logfox.feature.recordings.presentation.list.RecordingsViewModel

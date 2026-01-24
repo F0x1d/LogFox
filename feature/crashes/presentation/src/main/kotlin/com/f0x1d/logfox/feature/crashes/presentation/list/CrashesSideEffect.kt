@@ -1,6 +1,6 @@
 package com.f0x1d.logfox.feature.crashes.presentation.list
 
-import com.f0x1d.logfox.feature.database.model.AppCrash
+import com.f0x1d.logfox.feature.crashes.api.model.AppCrash
 import com.f0x1d.logfox.feature.preferences.CrashesSort
 
 sealed interface CrashesSideEffect {

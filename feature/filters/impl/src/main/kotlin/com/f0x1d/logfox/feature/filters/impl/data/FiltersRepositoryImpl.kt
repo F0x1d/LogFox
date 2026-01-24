@@ -1,23 +1,27 @@
 package com.f0x1d.logfox.feature.filters.impl.data
 
 import com.f0x1d.logfox.core.di.IODispatcher
-import com.f0x1d.logfox.feature.database.data.UserFilterRepository
-import com.f0x1d.logfox.feature.database.model.UserFilter
+import com.f0x1d.logfox.feature.database.data.UserFilterDataSource
 import com.f0x1d.logfox.feature.filters.api.data.FiltersRepository
+import com.f0x1d.logfox.feature.filters.api.model.UserFilter
+import com.f0x1d.logfox.feature.filters.impl.mapper.toDomain
+import com.f0x1d.logfox.feature.filters.impl.mapper.toEntity
 import com.f0x1d.logfox.feature.logging.api.model.LogLevel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 internal class FiltersRepositoryImpl @Inject constructor(
-    private val userFilterRepository: UserFilterRepository,
+    private val userFilterDataSource: UserFilterDataSource,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : FiltersRepository {
 
-    override fun getAllEnabledAsFlow(): Flow<List<UserFilter>> = userFilterRepository.getAllEnabledAsFlow()
+    override fun getAllEnabledAsFlow(): Flow<List<UserFilter>> = userFilterDataSource.getAllEnabledAsFlow()
+        .map { list -> list.map { it.toDomain() } }
         .distinctUntilChanged()
         .flowOn(ioDispatcher)
 
@@ -48,7 +52,7 @@ internal class FiltersRepositoryImpl @Inject constructor(
     )
 
     override suspend fun createAll(userFilters: List<UserFilter>) = withContext(ioDispatcher) {
-        userFilterRepository.insert(userFilters)
+        userFilterDataSource.insert(userFilters.map { it.toEntity() })
     }
 
     override suspend fun switch(userFilter: UserFilter, checked: Boolean) = update {
@@ -82,30 +86,33 @@ internal class FiltersRepositoryImpl @Inject constructor(
 
     private suspend fun update(newValue: () -> UserFilter) = update(newValue())
 
-    override fun getAllAsFlow(): Flow<List<UserFilter>> = userFilterRepository.getAllAsFlow()
+    override fun getAllAsFlow(): Flow<List<UserFilter>> = userFilterDataSource.getAllAsFlow()
+        .map { list -> list.map { it.toDomain() } }
         .distinctUntilChanged()
         .flowOn(ioDispatcher)
 
-    override fun getByIdAsFlow(id: Long): Flow<UserFilter?> = userFilterRepository.getByIdAsFlow(id).flowOn(ioDispatcher)
+    override fun getByIdAsFlow(id: Long): Flow<UserFilter?> = userFilterDataSource.getByIdAsFlow(id)
+        .map { it?.toDomain() }
+        .flowOn(ioDispatcher)
 
     override suspend fun getAll(): List<UserFilter> = withContext(ioDispatcher) {
-        userFilterRepository.getAll()
+        userFilterDataSource.getAll().map { it.toDomain() }
     }
 
     override suspend fun getById(id: Long): UserFilter? = withContext(ioDispatcher) {
-        userFilterRepository.getById(id)
+        userFilterDataSource.getById(id)?.toDomain()
     }
 
     override suspend fun update(item: UserFilter) = withContext(ioDispatcher) {
-        userFilterRepository.update(item)
+        userFilterDataSource.update(item.toEntity())
     }
 
     override suspend fun delete(item: UserFilter) = withContext(ioDispatcher) {
-        userFilterRepository.delete(item)
+        userFilterDataSource.delete(item.toEntity())
     }
 
     override suspend fun clear() = withContext(ioDispatcher) {
-        userFilterRepository.deleteAll()
+        userFilterDataSource.deleteAll()
     }
 
     private fun String.nullIfEmpty() = ifEmpty { null }

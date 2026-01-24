@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.f0x1d.logfox.core.recycler.adapter.BaseListAdapter
 import com.f0x1d.logfox.core.recycler.diffCallback
-import com.f0x1d.logfox.feature.database.model.UserFilter
+import com.f0x1d.logfox.feature.filters.api.model.UserFilter
 import com.f0x1d.logfox.feature.filters.presentation.databinding.ItemFilterBinding
 import com.f0x1d.logfox.feature.filters.presentation.list.viewholder.FilterViewHolder
 

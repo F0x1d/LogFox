@@ -1,7 +1,7 @@
 package com.f0x1d.logfox.feature.recordings.presentation.list
 
-import com.f0x1d.logfox.feature.database.model.LogRecording
 import com.f0x1d.logfox.feature.recordings.api.data.RecordingState
+import com.f0x1d.logfox.feature.recordings.api.model.LogRecording
 
 sealed interface RecordingsCommand {
     data object Load : RecordingsCommand

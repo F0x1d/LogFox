@@ -1,7 +1,7 @@
 package com.f0x1d.logfox.feature.recordings.presentation.details
 
 import android.net.Uri
-import com.f0x1d.logfox.feature.database.model.LogRecording
+import com.f0x1d.logfox.feature.recordings.api.model.LogRecording
 
 sealed interface RecordingDetailsSideEffect {
     // Business logic (handled by EffectHandler)

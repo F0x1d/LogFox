@@ -1,6 +1,6 @@
 package com.f0x1d.logfox.feature.crashes.api.data
 
-import com.f0x1d.logfox.feature.database.model.AppCrash
+import com.f0x1d.logfox.feature.crashes.api.model.AppCrash
 import kotlinx.coroutines.flow.Flow
 
 interface CrashesRepository {

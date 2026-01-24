@@ -19,7 +19,7 @@ import com.f0x1d.logfox.core.ui.view.invalidateNavigationButton
 import com.f0x1d.logfox.core.ui.view.setClickListenerOn
 import com.f0x1d.logfox.core.ui.view.setupBackButtonForNavController
 import com.f0x1d.logfox.core.ui.view.setupCloseButton
-import com.f0x1d.logfox.feature.database.model.UserFilter
+import com.f0x1d.logfox.feature.filters.api.model.UserFilter
 import com.f0x1d.logfox.feature.logging.api.model.LogLine
 import com.f0x1d.logfox.feature.logging.api.presentation.LoggingServiceDelegate
 import com.f0x1d.logfox.feature.logging.presentation.R

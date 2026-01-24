@@ -1,7 +1,7 @@
 package com.f0x1d.logfox.feature.filters.presentation.edit
 
 import android.net.Uri
-import com.f0x1d.logfox.feature.database.model.UserFilter
+import com.f0x1d.logfox.feature.filters.api.model.UserFilter
 import com.f0x1d.logfox.feature.logging.api.model.LogLevel
 
 sealed interface EditFilterSideEffect {

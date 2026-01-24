@@ -5,8 +5,9 @@ plugins {
 android.namespace = "com.f0x1d.logfox.feature.recordings.api"
 
 dependencies {
+    api(projects.core.recycler)
+
     implementation(projects.feature.logging.api)
-    implementation(projects.feature.database.api)
     implementation(projects.feature.datetime.api)
     implementation(projects.feature.preferences.api)
 

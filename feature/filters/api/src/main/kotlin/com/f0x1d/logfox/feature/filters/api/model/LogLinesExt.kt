@@ -1,6 +1,5 @@
 package com.f0x1d.logfox.feature.filters.api.model
 
-import com.f0x1d.logfox.feature.database.model.UserFilter
 import com.f0x1d.logfox.feature.logging.api.model.LogLine
 
 fun LogLine.suits(filters: List<UserFilter>) = listOf(this)

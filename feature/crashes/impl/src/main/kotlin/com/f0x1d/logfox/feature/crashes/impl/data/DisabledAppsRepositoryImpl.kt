@@ -2,8 +2,10 @@ package com.f0x1d.logfox.feature.crashes.impl.data
 
 import com.f0x1d.logfox.core.di.IODispatcher
 import com.f0x1d.logfox.feature.crashes.api.data.DisabledAppsRepository
-import com.f0x1d.logfox.feature.database.data.DisabledAppRepository
-import com.f0x1d.logfox.feature.database.model.DisabledApp
+import com.f0x1d.logfox.feature.crashes.api.model.DisabledApp
+import com.f0x1d.logfox.feature.crashes.impl.mapper.toDomain
+import com.f0x1d.logfox.feature.crashes.impl.mapper.toEntity
+import com.f0x1d.logfox.feature.database.data.DisabledAppDataSource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -13,15 +15,15 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 internal class DisabledAppsRepositoryImpl @Inject constructor(
-    private val disabledAppRepository: DisabledAppRepository,
+    private val disabledAppDataSource: DisabledAppDataSource,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : DisabledAppsRepository {
 
     override suspend fun isDisabledFor(packageName: String): Boolean = withContext(ioDispatcher) {
-        disabledAppRepository.getByPackageName(packageName) != null
+        disabledAppDataSource.getByPackageName(packageName) != null
     }
 
-    override fun disabledForFlow(packageName: String): Flow<Boolean> = disabledAppRepository
+    override fun disabledForFlow(packageName: String): Flow<Boolean> = disabledAppDataSource
         .getByPackageNameAsFlow(packageName)
         .map { it != null }
         .flowOn(ioDispatcher)
@@ -29,41 +31,44 @@ internal class DisabledAppsRepositoryImpl @Inject constructor(
     override suspend fun checkApp(packageName: String) = checkApp(
         packageName = packageName,
         checked = withContext(ioDispatcher) {
-            disabledAppRepository.getByPackageName(packageName) == null
+            disabledAppDataSource.getByPackageName(packageName) == null
         },
     )
 
     override suspend fun checkApp(packageName: String, checked: Boolean) = withContext(ioDispatcher) {
         if (checked) {
-            disabledAppRepository.insert(DisabledApp(packageName = packageName))
+            disabledAppDataSource.insert(DisabledApp(packageName = packageName).toEntity())
         } else {
-            disabledAppRepository.deleteByPackageName(packageName)
+            disabledAppDataSource.deleteByPackageName(packageName)
         }
     }
 
-    override fun getAllAsFlow(): Flow<List<DisabledApp>> = disabledAppRepository.getAllAsFlow()
+    override fun getAllAsFlow(): Flow<List<DisabledApp>> = disabledAppDataSource.getAllAsFlow()
+        .map { list -> list.map { it.toDomain() } }
         .distinctUntilChanged()
         .flowOn(ioDispatcher)
 
-    override fun getByIdAsFlow(id: Long): Flow<DisabledApp?> = disabledAppRepository.getByIdAsFlow(id).flowOn(ioDispatcher)
+    override fun getByIdAsFlow(id: Long): Flow<DisabledApp?> = disabledAppDataSource.getByIdAsFlow(id)
+        .map { it?.toDomain() }
+        .flowOn(ioDispatcher)
 
     override suspend fun getAll(): List<DisabledApp> = withContext(ioDispatcher) {
-        disabledAppRepository.getAll()
+        disabledAppDataSource.getAll().map { it.toDomain() }
     }
 
     override suspend fun getById(id: Long): DisabledApp? = withContext(ioDispatcher) {
-        disabledAppRepository.getById(id)
+        disabledAppDataSource.getById(id)?.toDomain()
     }
 
     override suspend fun update(item: DisabledApp) = withContext(ioDispatcher) {
-        disabledAppRepository.update(item)
+        disabledAppDataSource.update(item.toEntity())
     }
 
     override suspend fun delete(item: DisabledApp) = withContext(ioDispatcher) {
-        disabledAppRepository.delete(item)
+        disabledAppDataSource.delete(item.toEntity())
     }
 
     override suspend fun clear() = withContext(ioDispatcher) {
-        disabledAppRepository.deleteAll()
+        disabledAppDataSource.deleteAll()
     }
 }

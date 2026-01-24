@@ -3,10 +3,10 @@ package com.f0x1d.logfox.feature.database.di
 import android.content.Context
 import androidx.room.Room
 import com.f0x1d.logfox.feature.database.AppDatabase
-import com.f0x1d.logfox.feature.database.dao.AppCrashDao
-import com.f0x1d.logfox.feature.database.dao.DisabledAppDao
-import com.f0x1d.logfox.feature.database.dao.LogRecordingDao
-import com.f0x1d.logfox.feature.database.dao.UserFilterDao
+import com.f0x1d.logfox.feature.database.data.dao.AppCrashDao
+import com.f0x1d.logfox.feature.database.data.dao.DisabledAppDao
+import com.f0x1d.logfox.feature.database.data.dao.LogRecordingDao
+import com.f0x1d.logfox.feature.database.data.dao.UserFilterDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

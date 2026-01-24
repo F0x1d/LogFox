@@ -4,7 +4,7 @@ import android.content.Context
 import com.f0x1d.logfox.core.di.IODispatcher
 import com.f0x1d.logfox.feature.crashes.api.data.CrashesRepository
 import com.f0x1d.logfox.feature.crashes.api.data.DisabledAppsRepository
-import com.f0x1d.logfox.feature.database.model.AppCrash
+import com.f0x1d.logfox.feature.crashes.api.model.AppCrash
 import com.f0x1d.logfox.feature.logging.api.model.LogLine
 import com.f0x1d.logfox.feature.preferences.data.CrashesSettingsRepository
 import dagger.hilt.android.qualifiers.ApplicationContext

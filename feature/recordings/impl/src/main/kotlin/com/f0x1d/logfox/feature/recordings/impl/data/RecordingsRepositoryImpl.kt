@@ -4,14 +4,16 @@ import android.content.Context
 import com.f0x1d.logfox.core.context.toast
 import com.f0x1d.logfox.core.di.IODispatcher
 import com.f0x1d.logfox.core.di.MainDispatcher
-import com.f0x1d.logfox.feature.database.data.LogRecordingRepository
-import com.f0x1d.logfox.feature.database.model.LogRecording
+import com.f0x1d.logfox.feature.database.data.LogRecordingDataSource
 import com.f0x1d.logfox.feature.datetime.api.DateTimeFormatter
-import com.f0x1d.logfox.feature.logging.api.data.LoggingRepository
 import com.f0x1d.logfox.feature.logging.api.data.LogLineFormatterRepository
+import com.f0x1d.logfox.feature.logging.api.data.LoggingRepository
 import com.f0x1d.logfox.feature.logging.api.model.LogLine
 import com.f0x1d.logfox.feature.preferences.data.TerminalSettingsRepository
 import com.f0x1d.logfox.feature.recordings.api.data.RecordingsRepository
+import com.f0x1d.logfox.feature.recordings.api.model.LogRecording
+import com.f0x1d.logfox.feature.recordings.impl.mapper.toDomain
+import com.f0x1d.logfox.feature.recordings.impl.mapper.toEntity
 import com.f0x1d.logfox.feature.strings.Strings
 import com.f0x1d.logfox.feature.terminals.base.Terminal
 import com.f0x1d.logfox.feature.terminals.base.TerminalType
@@ -20,6 +22,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
@@ -28,7 +31,7 @@ import javax.inject.Inject
 
 internal class RecordingsRepositoryImpl @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val logRecordingRepository: LogRecordingRepository,
+    private val logRecordingDataSource: LogRecordingDataSource,
     private val dateTimeFormatter: DateTimeFormatter,
     private val loggingRepository: LoggingRepository,
     private val logLineFormatterRepository: LogLineFormatterRepository,
@@ -84,11 +87,11 @@ internal class RecordingsRepositoryImpl @Inject constructor(
         LogRecording(
             title = "${context.getString(
                 Strings.record_file,
-            )} ${logRecordingRepository.count() + 1}",
+            )} ${logRecordingDataSource.count() + 1}",
             dateAndTime = recordingTime,
             file = recordingFile,
         ).let {
-            it.copy(id = logRecordingRepository.insert(it))
+            it.copy(id = logRecordingDataSource.insert(it.toEntity()))
         }
     }
 
@@ -113,10 +116,10 @@ internal class RecordingsRepositoryImpl @Inject constructor(
         LogRecording(
             title = "${context.getString(
                 Strings.record_file,
-            )} ${logRecordingRepository.count() + 1}",
+            )} ${logRecordingDataSource.count() + 1}",
             dateAndTime = recordingTime,
             file = recordingFile,
-        ).let { logRecordingRepository.insert(it) }
+        ).let { logRecordingDataSource.insert(it.toEntity()) }
     }
 
     override suspend fun updateTitle(logRecording: LogRecording, newTitle: String) = update(
@@ -125,33 +128,36 @@ internal class RecordingsRepositoryImpl @Inject constructor(
         ),
     )
 
-    override fun getAllAsFlow(): Flow<List<LogRecording>> = logRecordingRepository
+    override fun getAllAsFlow(): Flow<List<LogRecording>> = logRecordingDataSource
         .getAllAsFlow()
+        .map { list -> list.map { it.toDomain() } }
         .distinctUntilChanged()
         .flowOn(ioDispatcher)
 
-    override fun getByIdAsFlow(id: Long): Flow<LogRecording?> = logRecordingRepository.getByIdAsFlow(id).flowOn(ioDispatcher)
+    override fun getByIdAsFlow(id: Long): Flow<LogRecording?> = logRecordingDataSource.getByIdAsFlow(id)
+        .map { it?.toDomain() }
+        .flowOn(ioDispatcher)
 
     override suspend fun getAll(): List<LogRecording> = withContext(ioDispatcher) {
-        logRecordingRepository.getAll()
+        logRecordingDataSource.getAll().map { it.toDomain() }
     }
 
     override suspend fun getById(id: Long): LogRecording? = withContext(ioDispatcher) {
-        logRecordingRepository.getById(id)
+        logRecordingDataSource.getById(id)?.toDomain()
     }
 
     override suspend fun update(item: LogRecording) = withContext(ioDispatcher) {
-        logRecordingRepository.update(item)
+        logRecordingDataSource.update(item.toEntity())
     }
 
     override suspend fun delete(item: LogRecording) = withContext(ioDispatcher) {
         item.deleteFile()
-        logRecordingRepository.delete(item)
+        logRecordingDataSource.delete(item.toEntity())
     }
 
     override suspend fun clear() = withContext(ioDispatcher) {
         getAll().forEach { it.deleteFile() }
-        logRecordingRepository.deleteAll()
+        logRecordingDataSource.deleteAll()
     }
 
     private companion object {

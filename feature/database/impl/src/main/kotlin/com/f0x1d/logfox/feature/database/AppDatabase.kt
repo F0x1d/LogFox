@@ -7,24 +7,24 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.room.migration.AutoMigrationSpec
 import androidx.room.migration.Migration
-import com.f0x1d.logfox.feature.database.dao.AppCrashDao
-import com.f0x1d.logfox.feature.database.dao.DisabledAppDao
-import com.f0x1d.logfox.feature.database.dao.LogRecordingDao
-import com.f0x1d.logfox.feature.database.dao.UserFilterDao
+import com.f0x1d.logfox.feature.database.data.dao.AppCrashDao
+import com.f0x1d.logfox.feature.database.data.dao.DisabledAppDao
+import com.f0x1d.logfox.feature.database.data.dao.LogRecordingDao
+import com.f0x1d.logfox.feature.database.data.dao.UserFilterDao
 import com.f0x1d.logfox.feature.database.entity.AllowedLevelsConverter
-import com.f0x1d.logfox.feature.database.entity.AppCrashEntity
+import com.f0x1d.logfox.feature.database.entity.AppCrashRoomEntity
 import com.f0x1d.logfox.feature.database.entity.CrashTypeConverter
-import com.f0x1d.logfox.feature.database.entity.DisabledAppEntity
+import com.f0x1d.logfox.feature.database.entity.DisabledAppRoomEntity
 import com.f0x1d.logfox.feature.database.entity.FileConverter
-import com.f0x1d.logfox.feature.database.entity.LogRecordingEntity
-import com.f0x1d.logfox.feature.database.entity.UserFilterEntity
+import com.f0x1d.logfox.feature.database.entity.LogRecordingRoomEntity
+import com.f0x1d.logfox.feature.database.entity.UserFilterRoomEntity
 
 @Database(
     entities = [
-        AppCrashEntity::class,
-        LogRecordingEntity::class,
-        UserFilterEntity::class,
-        DisabledAppEntity::class,
+        AppCrashRoomEntity::class,
+        LogRecordingRoomEntity::class,
+        UserFilterRoomEntity::class,
+        DisabledAppRoomEntity::class,
     ],
     version = 17,
     autoMigrations = [

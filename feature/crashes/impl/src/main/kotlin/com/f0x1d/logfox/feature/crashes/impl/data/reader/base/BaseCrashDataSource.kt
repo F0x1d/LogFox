@@ -1,10 +1,10 @@
 package com.f0x1d.logfox.feature.crashes.impl.data.reader.base
 
+import com.f0x1d.logfox.feature.crashes.api.model.AppCrash
+import com.f0x1d.logfox.feature.crashes.api.model.CrashType
 import com.f0x1d.logfox.feature.crashes.impl.data.AppInfoDataSource
 import com.f0x1d.logfox.feature.crashes.impl.data.CrashCollectorDataSource
 import com.f0x1d.logfox.feature.crashes.impl.data.CrashDataSource
-import com.f0x1d.logfox.feature.database.model.AppCrash
-import com.f0x1d.logfox.feature.database.model.CrashType
 import com.f0x1d.logfox.feature.logging.api.model.LogLine
 import com.f0x1d.logfox.feature.preferences.data.LogsSettingsRepository
 
@@ -15,6 +15,7 @@ internal abstract class BaseCrashDataSource(
 ) : CrashDataSource {
 
     protected abstract val crashType: CrashType
+    protected open val timeBufferMs: Long = TIME_BUFFER_MS
 
     private var collecting = false
     private var collectionStartTime = 0L
@@ -29,16 +30,12 @@ internal abstract class BaseCrashDataSource(
 
     open fun shouldContinueCollecting(line: LogLine): Boolean {
         // Continue if within time window (crashes can have interleaved output)
-        val timeWindowMs = logsSettingsRepository.logsUpdateInterval().value + TIME_BUFFER_MS
+        val timeWindowMs = logsSettingsRepository.logsUpdateInterval().value + timeBufferMs
         if (collectionStartTime + timeWindowMs > System.currentTimeMillis()) return true
 
         // Fall back to PID checking
         val first = firstLine ?: return false
         return first.pid == line.pid
-    }
-
-    private companion object {
-        const val TIME_BUFFER_MS = 1000L
     }
 
     override suspend fun process(line: LogLine) {
@@ -89,4 +86,8 @@ internal abstract class BaseCrashDataSource(
         crashType = crashType,
         dateAndTime = lines.firstOrNull()?.dateAndTime ?: System.currentTimeMillis(),
     )
+
+    private companion object {
+        const val TIME_BUFFER_MS = 1000L
+    }
 }

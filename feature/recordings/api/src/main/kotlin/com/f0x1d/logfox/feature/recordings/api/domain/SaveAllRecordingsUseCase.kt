@@ -1,6 +1,6 @@
 package com.f0x1d.logfox.feature.recordings.api.domain
 
-import com.f0x1d.logfox.feature.database.model.LogRecording
+import com.f0x1d.logfox.feature.recordings.api.model.LogRecording
 
 interface SaveAllRecordingsUseCase {
     suspend operator fun invoke(): LogRecording

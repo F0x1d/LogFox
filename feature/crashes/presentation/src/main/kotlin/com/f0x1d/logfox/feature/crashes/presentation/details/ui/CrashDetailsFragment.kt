@@ -31,13 +31,13 @@ import com.f0x1d.logfox.core.ui.theme.Colors
 import com.f0x1d.logfox.core.ui.view.setClickListenerOn
 import com.f0x1d.logfox.core.ui.view.setupBackButtonForNavController
 import com.f0x1d.logfox.feature.crashes.api.data.notificationChannelId
+import com.f0x1d.logfox.feature.crashes.api.model.AppCrash
 import com.f0x1d.logfox.feature.crashes.presentation.R
 import com.f0x1d.logfox.feature.crashes.presentation.databinding.FragmentCrashDetailsBinding
 import com.f0x1d.logfox.feature.crashes.presentation.details.CrashDetailsCommand
 import com.f0x1d.logfox.feature.crashes.presentation.details.CrashDetailsSideEffect
 import com.f0x1d.logfox.feature.crashes.presentation.details.CrashDetailsState
 import com.f0x1d.logfox.feature.crashes.presentation.details.CrashDetailsViewModel
-import com.f0x1d.logfox.feature.database.model.AppCrash
 import com.f0x1d.logfox.feature.strings.Strings
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint

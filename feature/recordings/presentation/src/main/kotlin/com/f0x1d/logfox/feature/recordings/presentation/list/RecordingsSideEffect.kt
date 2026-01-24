@@ -1,6 +1,6 @@
 package com.f0x1d.logfox.feature.recordings.presentation.list
 
-import com.f0x1d.logfox.feature.database.model.LogRecording
+import com.f0x1d.logfox.feature.recordings.api.model.LogRecording
 
 sealed interface RecordingsSideEffect {
     // Business logic (handled by EffectHandler)

@@ -17,7 +17,7 @@ import com.f0x1d.logfox.core.context.notificationManagerCompat
 import com.f0x1d.logfox.core.copy.CopyReceiver
 import com.f0x1d.logfox.core.ui.icons.Icons
 import com.f0x1d.logfox.feature.crashes.api.data.notificationChannelId
-import com.f0x1d.logfox.feature.database.model.AppCrash
+import com.f0x1d.logfox.feature.crashes.api.model.AppCrash
 import com.f0x1d.logfox.feature.notifications.api.CRASHES_CHANNEL_GROUP_ID
 import com.f0x1d.logfox.feature.preferences.data.CrashesSettingsRepository
 import com.f0x1d.logfox.feature.strings.Strings

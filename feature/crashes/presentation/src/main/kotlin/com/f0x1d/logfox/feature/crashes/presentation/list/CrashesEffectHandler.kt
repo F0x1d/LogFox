@@ -8,7 +8,7 @@ import com.f0x1d.logfox.feature.crashes.api.domain.DeleteAllCrashesByPackageName
 import com.f0x1d.logfox.feature.crashes.api.domain.DeleteCrashUseCase
 import com.f0x1d.logfox.feature.crashes.api.domain.GetAllCrashesFlowUseCase
 import com.f0x1d.logfox.feature.crashes.api.domain.UpdateCrashesSearchQueryUseCase
-import com.f0x1d.logfox.feature.database.model.AppCrashesCount
+import com.f0x1d.logfox.feature.crashes.api.model.AppCrashesCount
 import com.f0x1d.logfox.feature.preferences.domain.crashes.GetCrashesSortReversedOrderFlowUseCase
 import com.f0x1d.logfox.feature.preferences.domain.crashes.GetCrashesSortTypeFlowUseCase
 import com.f0x1d.logfox.feature.preferences.domain.crashes.SetCrashesSortReversedOrderUseCase

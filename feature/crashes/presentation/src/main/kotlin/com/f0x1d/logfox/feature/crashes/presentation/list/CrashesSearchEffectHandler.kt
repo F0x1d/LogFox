@@ -4,7 +4,7 @@ import com.f0x1d.logfox.core.di.DefaultDispatcher
 import com.f0x1d.logfox.core.tea.EffectHandler
 import com.f0x1d.logfox.feature.crashes.api.domain.GetAllCrashesFlowUseCase
 import com.f0x1d.logfox.feature.crashes.api.domain.GetCrashesSearchQueryFlowUseCase
-import com.f0x1d.logfox.feature.database.model.AppCrashesCount
+import com.f0x1d.logfox.feature.crashes.api.model.AppCrashesCount
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
