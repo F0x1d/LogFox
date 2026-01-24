@@ -1,6 +1,6 @@
 package com.f0x1d.logfox.di
 
-import com.f0x1d.logfox.database.annotations.GsonSkip
+import com.f0x1d.logfox.core.utils.GsonSkip
 import com.google.gson.ExclusionStrategy
 import com.google.gson.FieldAttributes
 import com.google.gson.Gson
@@ -22,7 +22,7 @@ object GsonModule {
             object : ExclusionStrategy {
                 override fun shouldSkipField(f: FieldAttributes) = f.getAnnotation(GsonSkip::class.java) != null
                 override fun shouldSkipClass(clazz: Class<*>?) = false
-            }
+            },
         )
         .create()
 }

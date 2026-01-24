@@ -1,10 +1,16 @@
 package com.f0x1d.logfox.feature.logging.impl.di
 
-import com.f0x1d.logfox.feature.logging.api.data.LogsDataSource
-import com.f0x1d.logfox.feature.logging.api.data.QueryDataSource
-import com.f0x1d.logfox.feature.logging.api.data.SelectedLogLinesDataSource
+import com.f0x1d.logfox.feature.logging.impl.data.LogFileDataSource
+import com.f0x1d.logfox.feature.logging.impl.data.LogFileDataSourceImpl
+import com.f0x1d.logfox.feature.logging.impl.data.LogsBufferDataSource
+import com.f0x1d.logfox.feature.logging.impl.data.LogsBufferDataSourceImpl
+import com.f0x1d.logfox.feature.logging.impl.data.LogsDataSource
 import com.f0x1d.logfox.feature.logging.impl.data.LogsDataSourceImpl
+import com.f0x1d.logfox.feature.logging.impl.data.PausedDataSource
+import com.f0x1d.logfox.feature.logging.impl.data.PausedDataSourceImpl
+import com.f0x1d.logfox.feature.logging.impl.data.QueryDataSource
 import com.f0x1d.logfox.feature.logging.impl.data.QueryDataSourceImpl
+import com.f0x1d.logfox.feature.logging.impl.data.SelectedLogLinesDataSource
 import com.f0x1d.logfox.feature.logging.impl.data.SelectedLogLinesDataSourceImpl
 import dagger.Binds
 import dagger.Module
@@ -16,17 +22,22 @@ import dagger.hilt.components.SingletonComponent
 internal interface DataSourcesModule {
 
     @Binds
-    fun bindLogsDataSource(
-        logsDataSourceImpl: LogsDataSourceImpl,
-    ): LogsDataSource
+    fun bindLogsBufferDataSource(logsBufferDataSourceImpl: LogsBufferDataSourceImpl): LogsBufferDataSource
 
     @Binds
-    fun bindQueryDataSource(
-        queryDataSourceImpl: QueryDataSourceImpl,
-    ): QueryDataSource
+    fun bindLogsDataSource(logsDataSourceImpl: LogsDataSourceImpl): LogsDataSource
+
+    @Binds
+    fun bindQueryDataSource(queryDataSourceImpl: QueryDataSourceImpl): QueryDataSource
 
     @Binds
     fun bindSelectedLogLinesDataSource(
         selectedLogLinesDataSourceImpl: SelectedLogLinesDataSourceImpl,
     ): SelectedLogLinesDataSource
+
+    @Binds
+    fun bindPausedDataSource(pausedDataSourceImpl: PausedDataSourceImpl): PausedDataSource
+
+    @Binds
+    fun bindLogFileDataSource(impl: LogFileDataSourceImpl): LogFileDataSource
 }

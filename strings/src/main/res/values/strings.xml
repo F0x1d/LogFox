@@ -14,6 +14,7 @@
     <string name="app_crashed">%s crashed</string>
     <string name="start_on_boot">Start on boot</string>
     <string name="filter">Filter</string>
+    <string name="create_filter">Create filter</string>
     <string name="about_app">About app</string>
     <string name="root" translatable="false">Root</string>
     <string name="adb" translatable="false">ADB</string>
@@ -112,6 +113,8 @@
     <string name="fallback_to_default_terminal_desc">When selected one is not available. Otherwise LogFox will infinitely try to use it</string>
     <string name="including">Including</string>
     <string name="excluding">Excluding</string>
+    <string name="enabled">Enabled</string>
+    <string name="disabled">Disabled</string>
     <string name="package_name">Package name</string>
     <string name="apps">Apps</string>
     <string name="are_you_sure">Are you sure?</string>
@@ -150,8 +153,6 @@
     <string name="session_cache_lines_count">Session cache lines count</string>
     <string name="session_cache_size_warning">Session cache is kept in RAM, so make sure not to overflow it with chosen count</string>
     <string name="export_logs_in_original_format">Export logs in original format</string>
-    <string name="support_chat">Support chat</string>
-    <string name="support_chat_desc">Use for fast troubleshooting</string>
     <string name="type_crashes">%s crashes</string>
     <string name="crashes_of">%s crashes of %s</string>
     <string name="per_app_notifications_settings">Per app notifications settings are available in app\'s crash details and LogFox\'s system settings</string>

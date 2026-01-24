@@ -1,7 +1,7 @@
 package com.f0x1d.logfox.feature.apps.picker
 
 import android.content.Context
-import com.f0x1d.logfox.strings.Strings
+import com.f0x1d.logfox.feature.strings.Strings
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 

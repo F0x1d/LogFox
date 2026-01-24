@@ -1,11 +1,11 @@
 plugins {
-    id("logfox.android.feature.compose")
+    alias(libs.plugins.logfox.android.feature)
 }
 
-android.namespace = "com.f0x1d.logfox.feature.apps.picker"
+android.namespace = "com.f0x1d.logfox.feature.apps.picker.impl"
 
 dependencies {
-    implementation(projects.feature.appsPicker.api)
+    api(projects.feature.appsPicker.api)
 
-    implementation(libs.coil.compose)
+    implementation(libs.bundles.androidx)
 }

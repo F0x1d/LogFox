@@ -1,7 +1,7 @@
 package com.f0x1d.logfox.feature.logging.service.presentation
 
 import android.content.Context
-import com.f0x1d.logfox.arch.sendService
+import com.f0x1d.logfox.core.context.sendService
 import com.f0x1d.logfox.feature.logging.api.presentation.LoggingServiceDelegate
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject

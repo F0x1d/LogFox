@@ -1,0 +1,16 @@
+plugins {
+    alias(libs.plugins.logfox.android.feature)
+}
+
+android.namespace = "com.f0x1d.logfox.feature.setup.impl"
+
+dependencies {
+    api(projects.feature.setup.api)
+
+    implementation(projects.core.context)
+    implementation(projects.core.copy)
+    implementation(projects.feature.preferences.api)
+    implementation(projects.feature.terminals.api)
+
+    implementation(libs.bundles.androidx)
+}

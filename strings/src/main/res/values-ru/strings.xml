@@ -104,6 +104,9 @@
     <string name="fallback_to_default_terminal_desc">Когда выбранный логгер недоступен. Иначе LogFox будет бесконечно пытаться его использовать</string>
     <string name="including">Включая</string>
     <string name="excluding">Исключая</string>
+    <string name="enabled">Включён</string>
+    <string name="disabled">Отключён</string>
+    <string name="create_filter">Создать фильтр</string>
     <string name="package_name">Имя пакета</string>
     <string name="apps">Приложения</string>
     <string name="are_you_sure">Вы уверены?</string>
@@ -141,8 +144,6 @@
     <string name="session_cache_lines_count">Количество строк в кэше сессии</string>
     <string name="session_cache_size_warning">Кэш сессии хранится в оперативной памяти, так что не переполните её выбранным значением</string>
     <string name="export_logs_in_original_format">Экспортировать логи в исходном виде</string>
-    <string name="support_chat">Чат поддержки</string>
-    <string name="support_chat_desc">Используйте для быстрого решения проблем</string>
     <string name="type_crashes">%s сбои</string>
     <string name="crashes_of">%s сбои %s</string>
     <string name="per_app_notifications_settings">Настройки персонализированных уведомлений для приложений доступны в деталях сбоя и системных настройках LogFox</string>

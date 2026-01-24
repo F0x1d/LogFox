@@ -141,8 +141,6 @@
     <string name="session_cache_lines_count">Conteggio delle righe della cache di sessione</string>
     <string name="session_cache_size_warning">La cache della sessione viene mantenuta nella RAM, quindi assicurati di non sovraccaricarla con il conteggio scelto</string>
     <string name="export_logs_in_original_format">Esporta i log nel formato originale</string>
-    <string name="support_chat">Chat di supporto</string>
-    <string name="support_chat_desc">Utilizza per una rapida risoluzione dei problemi</string>
     <string name="type_crashes">%s arresti anomali</string>
     <string name="crashes_of">%s arresti anomali di %s</string>
     <string name="per_app_notifications_settings">Le impostazioni delle notifiche per app sono disponibili nei dettagli degli arresti anomali dell\'app e nelle impostazioni di sistema di LogFox</string>
