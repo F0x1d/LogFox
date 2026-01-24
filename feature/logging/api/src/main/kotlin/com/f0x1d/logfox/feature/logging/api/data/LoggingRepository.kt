@@ -10,10 +10,13 @@ interface LoggingRepository {
         val COMMAND = arrayOf("logcat", "-v", "uid", "-v", "epoch")
 
         val DUMP_FLAG = arrayOf("-d")
-        val SHOW_LOGS_FROM_NOW_FLAGS = arrayOf("-T", "1")
     }
 
-    fun startLogging(terminal: Terminal, startingId: Long = 0): Flow<LogLine>
+    fun startLogging(
+        terminal: Terminal,
+        startingId: Long = 0,
+        startLogsTime: Long? = null,
+    ): Flow<LogLine>
 
     fun dumpLogs(terminal: Terminal): Flow<LogLine>
 }

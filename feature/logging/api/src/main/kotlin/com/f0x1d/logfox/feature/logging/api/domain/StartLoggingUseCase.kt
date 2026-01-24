@@ -5,5 +5,9 @@ import com.f0x1d.logfox.feature.terminals.base.Terminal
 import kotlinx.coroutines.flow.Flow
 
 interface StartLoggingUseCase {
-    operator fun invoke(terminal: Terminal, startingId: Long = 0): Flow<LogLine>
+    operator fun invoke(
+        terminal: Terminal,
+        startingId: Long = 0,
+        lastLogTime: Long? = null,
+    ): Flow<LogLine>
 }

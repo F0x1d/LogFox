@@ -23,10 +23,20 @@ internal class LoggingRepositoryImpl @Inject constructor(
     private val logLineParser: LogLineParser,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : LoggingRepository {
-    override fun startLogging(terminal: Terminal, startingId: Long): Flow<LogLine> = flow {
-        // On restart (startingId > 0), always use -T 1 to avoid re-reading old logs
-        // On initial start, respect the showLogsFromAppLaunch setting
-        val command = LoggingRepository.COMMAND + LoggingRepository.SHOW_LOGS_FROM_NOW_FLAGS
+
+    override fun startLogging(
+        terminal: Terminal,
+        startingId: Long,
+        startLogsTime: Long?,
+    ): Flow<LogLine> = flow {
+        val formattedTimestamp = startLogsTime?.let { formatTimestampForLogcat(it) }
+
+        val command = LoggingRepository.COMMAND + if (formattedTimestamp == null) {
+            emptyArray()
+        } else {
+            arrayOf("-T", formattedTimestamp)
+        }
+        Timber.d("Starting logging with command: ${command.joinToString(" ")}")
 
         emitLines(
             terminal = terminal,
@@ -48,50 +58,45 @@ internal class LoggingRepositoryImpl @Inject constructor(
     private suspend fun FlowCollector<LogLine>.emitLines(
         terminal: Terminal,
         command: Array<String>,
-        startingId: Long = 0,
+        startingId: Long,
     ) {
         if (terminal.isSupported().not()) {
-            Timber.d("terminal $terminal is not supported")
+            Timber.d("Terminal $terminal is not supported")
             throw TerminalNotSupportedException()
         }
 
         val process = terminal.execute(*command) ?: throw TerminalNotSupportedException()
-        Timber.d("started process")
+        Timber.d("Started process")
 
         var idsCounter = startingId
-        Timber.d("starting with id $idsCounter")
+        Timber.d("Starting with id $idsCounter")
 
         try {
-            Timber.d("started scope")
+            Timber.d("Started scope")
 
             process.output.bufferedReader().use { reader ->
-                var droppedFirst = false
-                // avoiding getting the same line after logging restart because of
-                // WARNING: -T 0 invalid, setting to 1
-                Timber.d("got reader")
+                Timber.d("Got reader")
 
                 while (true) {
-                    withTimeout(10.seconds) {
-                        Timber.d("started awaiting line")
-                        val line = reader.readLineCancellable()
-                        Timber.d("got line $line")
-
-                        val logLine = logLineParser.parse(
-                            id = idsCounter++,
-                            line = line,
-                        )
-                        Timber.d("successfully parsed $line to $logLine")
-
-                        if (droppedFirst.not()) {
-                            droppedFirst = true
-                        } else {
-                            logLine?.let { emit(it) }
-                        }
+                    Timber.d("Started awaiting line")
+                    val line = withTimeout(10.seconds) {
+                        reader.readLineCancellable()
                     }
+                    Timber.d("Got line $line")
+
+                    val logLine = logLineParser.parse(
+                        id = idsCounter++,
+                        line = line,
+                    )
+                    Timber.d("Parsed $line to $logLine")
+
+                    if (logLine == null) continue
+
+                    emit(logLine)
                 }
             }
         } finally {
-            Timber.d("destroying process")
+            Timber.d("Destroying process")
             runCatching {
                 process.destroy()
             }
@@ -103,10 +108,15 @@ internal class LoggingRepositoryImpl @Inject constructor(
             if (ready()) {
                 return@withContext readLine()
             }
-
             delay(100L)
         }
 
         "not reachable"
+    }
+
+    private fun formatTimestampForLogcat(timeMillis: Long): String {
+        val seconds = timeMillis / 1000
+        val millis = timeMillis % 1000
+        return "$seconds.$millis"
     }
 }

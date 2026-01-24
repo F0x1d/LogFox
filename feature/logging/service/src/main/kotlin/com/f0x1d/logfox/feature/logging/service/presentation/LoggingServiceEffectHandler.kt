@@ -6,7 +6,7 @@ import com.f0x1d.logfox.core.tea.EffectHandler
 import com.f0x1d.logfox.feature.crashes.api.domain.ProcessLogLineCrashesUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.AddLogLineUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.ClearLogsUseCase
-import com.f0x1d.logfox.feature.logging.api.domain.GetLastLogIdUseCase
+import com.f0x1d.logfox.feature.logging.api.domain.GetLastLogUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.GetLogsSnapshotUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.StartLoggingUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.UpdateLogsUseCase
@@ -38,7 +38,7 @@ internal class LoggingServiceEffectHandler @Inject constructor(
     private val addLogLineUseCase: AddLogLineUseCase,
     private val clearLogsUseCase: ClearLogsUseCase,
     private val getLogsSnapshotUseCase: GetLogsSnapshotUseCase,
-    private val getLastLogIdUseCase: GetLastLogIdUseCase,
+    private val getLastLogUseCase: GetLastLogUseCase,
     private val updateLogsUseCase: UpdateLogsUseCase,
     private val processLogLineCrashesUseCase: ProcessLogLineCrashesUseCase,
     private val processLogLineRecordingUseCase: ProcessLogLineRecordingUseCase,
@@ -69,13 +69,15 @@ internal class LoggingServiceEffectHandler @Inject constructor(
 
             is LoggingServiceSideEffect.StartLogCollection -> {
                 Timber.d("Starting log collection with terminal: ${effect.terminal}")
-                val startingId = getLastLogIdUseCase()
+                val lastLog = getLastLogUseCase()
+                val startingId = lastLog?.id?.plus(1) ?: 0L
 
                 logCollectionJob?.cancel()
                 logCollectionJob = effectScope.launch {
                     startLoggingUseCase(
                         terminal = effect.terminal,
                         startingId = startingId,
+                        lastLogTime = lastLog?.dateAndTime,
                     ).catch { throwable ->
                         Timber.e(throwable, "Logging flow error")
                         if (throwable !is CancellationException) {

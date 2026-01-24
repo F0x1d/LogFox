@@ -6,5 +6,5 @@ internal interface LogsBufferDataSource {
     suspend fun add(logLine: LogLine, limit: Int)
     suspend fun getAll(): List<LogLine>
     suspend fun clear()
-    suspend fun lastId(): Long
+    suspend fun lastLog(): LogLine?
 }
