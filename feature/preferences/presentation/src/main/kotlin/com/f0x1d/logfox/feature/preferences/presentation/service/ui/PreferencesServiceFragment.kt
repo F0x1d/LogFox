@@ -43,6 +43,13 @@ internal class PreferencesServiceFragment :
                 true
             }
         }
+
+        findPreference<SwitchPreferenceCompat>("pref_show_logs_from_app_launch")?.apply {
+            setOnPreferenceChangeListener { _, newValue ->
+                send(PreferencesServiceCommand.ShowLogsFromAppLaunchChanged(newValue as Boolean))
+                true
+            }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

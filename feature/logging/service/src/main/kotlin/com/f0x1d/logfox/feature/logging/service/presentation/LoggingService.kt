@@ -20,6 +20,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
+import kotlin.system.exitProcess
 
 @AndroidEntryPoint
 class LoggingService : LifecycleService() {
@@ -115,6 +116,8 @@ class LoggingService : LifecycleService() {
 
         ServiceCompat.stopForeground(this@LoggingService, ServiceCompat.STOP_FOREGROUND_REMOVE)
         stopSelf()
+
+        exitProcess(0)
     }
 
     override fun onDestroy() {

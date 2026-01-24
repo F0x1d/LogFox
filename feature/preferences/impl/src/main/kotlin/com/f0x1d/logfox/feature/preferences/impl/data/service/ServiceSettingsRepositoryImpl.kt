@@ -13,5 +13,7 @@ internal class ServiceSettingsRepositoryImpl @Inject constructor(
 
     override fun startOnBoot(): PreferenceStateFlow<Boolean> = localDataSource.startOnBoot().asPreferenceStateFlow()
 
+    override fun showLogsFromAppLaunch(): PreferenceStateFlow<Boolean> = localDataSource.showLogsFromAppLaunch().asPreferenceStateFlow()
+
     override fun includeDeviceInfoInArchives(): PreferenceStateFlow<Boolean> = localDataSource.includeDeviceInfoInArchives().asPreferenceStateFlow()
 }

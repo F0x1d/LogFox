@@ -142,6 +142,7 @@
     <string name="no_crashes">There are currently no crashes</string>
     <string name="no_recordings">There are currently no recordings</string>
     <string name="no_filters">There are currently no filters</string>
+    <string name="show_logs_from_app_launch">Show only logs which have appeared since the app launch</string>
     <string name="save_all_logs">Save all logs</string>
     <string name="saving_logs">Saving logs, this may take some time…</string>
     <string name="error_saving_logs">Error saving logs</string>

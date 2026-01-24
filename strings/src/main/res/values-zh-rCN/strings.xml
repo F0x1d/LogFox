@@ -130,6 +130,7 @@
     <string name="no_crashes">目前没有崩溃记录</string>
     <string name="no_recordings">目前没有录制</string>
     <string name="no_filters">目前没有过滤器</string>
+    <string name="show_logs_from_app_launch">只显示 app 启动后的日志</string>
     <string name="save_all_logs">保存完整日志</string>
     <string name="saving_logs">正在保存日志，这可能需要一点时间…</string>
     <string name="error_saving_logs">保存日志时发生错误</string>

@@ -4,5 +4,6 @@ import com.fredporciuncula.flow.preferences.Preference
 
 internal interface ServiceSettingsLocalDataSource {
     fun startOnBoot(): Preference<Boolean>
+    fun showLogsFromAppLaunch(): Preference<Boolean>
     fun includeDeviceInfoInArchives(): Preference<Boolean>
 }

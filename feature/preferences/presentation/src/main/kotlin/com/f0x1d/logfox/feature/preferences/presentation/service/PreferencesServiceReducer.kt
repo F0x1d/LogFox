@@ -57,6 +57,14 @@ internal class PreferencesServiceReducer @Inject constructor() : Reducer<Prefere
             }
         }
 
+        is PreferencesServiceCommand.ShowLogsFromAppLaunchChanged -> {
+            if (!command.enabled) {
+                state.withSideEffects(PreferencesServiceSideEffect.RestartLogging)
+            } else {
+                state.noSideEffects()
+            }
+        }
+
         is PreferencesServiceCommand.ConfirmRestartLogging -> {
             state.withSideEffects(PreferencesServiceSideEffect.RestartLogging)
         }
