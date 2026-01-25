@@ -11,7 +11,7 @@ env:
   KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
 
 jobs:
-  extract-version:
+  extract_version:
     name: Extract Version
     runs-on: ubuntu-latest
     outputs:
@@ -33,12 +33,12 @@ jobs:
           echo "version_code=$VERSION_CODE" >> $GITHUB_OUTPUT
 
   build:
-    needs: extract-version
+    needs: extract_version
     uses: ./.github/workflows/build_apk_job.yml
     with:
       checkout_keystore: ${{ github.event.pull_request.user.login == github.repository_owner }}
-      version_name: ${{ needs.extract-version.outputs.version_name }}
-      version_code: ${{ needs.extract-version.outputs.version_code }}
+      version_name: ${{ needs.extract_version.outputs.version_name }}
+      version_code: ${{ needs.extract_version.outputs.version_code }}
     secrets: inherit
 
   send:
