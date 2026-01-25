@@ -1,9 +1,9 @@
-on:
-  workflow_dispatch:
+name: Release
 
+on:
   push:
-    branches:
-      - 'master'
+    tags:
+      - 'v*'
 
 env:
   KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
@@ -11,6 +11,46 @@ env:
   KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
 
 jobs:
+  extract-version:
+    name: Extract Version
+    runs-on: ubuntu-latest
+    outputs:
+      version_name: ${{ steps.extract.outputs.version_name }}
+      version_code: ${{ steps.extract.outputs.version_code }}
+    steps:
+      - name: Extract version from tag
+        id: extract
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          # Tag format: v2.2.0-70
+          VERSION_NAME="${TAG%-*}"
+          VERSION_CODE="${TAG##*-}"
+          echo "version_name=$VERSION_NAME" >> $GITHUB_OUTPUT
+          echo "version_code=$VERSION_CODE" >> $GITHUB_OUTPUT
+
   build:
+    needs: extract-version
     uses: ./.github/workflows/build_apk_job.yml
+    with:
+      version_name: ${{ w.outputs.version_name }}
+      version_code: ${{ needs.extract-version.outputs.version_code }}
     secrets: inherit
+
+  release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    needs: [extract-version, build]
+    permissions:
+      contents: write
+    steps:
+      - name: Download APK
+        uses: actions/download-artifact@v4
+        with:
+          name: logfox-release
+          path: ./apk
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ./apk/*.apk
+          generate_release_notes: true

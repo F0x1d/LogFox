@@ -12,22 +12,24 @@ android {
     defaultConfig {
         applicationId = logFoxPackageName
 
-        versionCode = 69
-        versionName = "2.1.1"
+        versionCode = providers
+            .environmentVariable("VERSION_CODE")
+            .orNull
+            ?.toIntOrNull()
+            ?: Int.MAX_VALUE
+        versionName = providers
+            .environmentVariable("VERSION_NAME")
+            .getOrElse("unknown")
     }
 
     buildFeatures {
         viewBinding = true
     }
 
-    val gitSha = providers
-        .environmentVariable("GIT_SHA")
-        .orElse("unknown")
-
     applicationVariants.configureEach {
         outputs.configureEach {
             if (this is BaseVariantOutputImpl) {
-                outputFileName = "LogFox-${versionName}-${name}-${gitSha.get()}.apk"
+                outputFileName = "LogFox-${versionName}-${name}.apk"
             }
         }
     }

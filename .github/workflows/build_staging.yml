@@ -11,10 +11,34 @@ env:
   KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
 
 jobs:
+  extract-version:
+    name: Extract Version
+    runs-on: ubuntu-latest
+    outputs:
+      version_name: ${{ steps.extract.outputs.version_name }}
+      version_code: ${{ steps.extract.outputs.version_code }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Extract version from latest tag
+        id: extract
+        run: |
+          LATEST_TAG=$(git describe --tags --abbrev=0)
+          VERSION_CODE="${LATEST_TAG##*-}"
+          VERSION_NAME="${GITHUB_SHA::7}"
+          echo "version_name=$VERSION_NAME" >> $GITHUB_OUTPUT
+          echo "version_code=$VERSION_CODE" >> $GITHUB_OUTPUT
+
   build:
+    needs: extract-version
     uses: ./.github/workflows/build_apk_job.yml
     with:
       checkout_keystore: ${{ github.event.pull_request.user.login == github.repository_owner }}
+      version_name: ${{ needs.extract-version.outputs.version_name }}
+      version_code: ${{ needs.extract-version.outputs.version_code }}
     secrets: inherit
 
   send:

@@ -8,11 +8,23 @@ on:
         required: false
         type: boolean
         default: true
+      version_name:
+        description: 'Version name for the APK'
+        required: false
+        type: string
+        default: ''
+      version_code:
+        description: 'Version code for the APK'
+        required: false
+        type: string
+        default: ''
 
 env:
   KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
   ALIAS: ${{ secrets.ALIAS }}
   KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+  VERSION_NAME: ${{ inputs.version_name }}
+  VERSION_CODE: ${{ inputs.version_code }}
 
 jobs:
   build:
@@ -36,9 +48,6 @@ jobs:
           repository: ${{ secrets.KEYSTORE_GIT_REPOSITORY }}
           token: ${{ secrets.KEYSTORE_ACCESS_TOKEN }}
           path: app/keystore
-
-      - name: Export short commit hash
-        run: echo "GIT_SHA=${GITHUB_SHA::7}" >> $GITHUB_ENV
 
       - name: Build APK
         run: bash ./gradlew assembleRelease --stacktrace --no-daemon
