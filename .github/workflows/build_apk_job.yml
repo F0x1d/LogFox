@@ -37,6 +37,9 @@ jobs:
           token: ${{ secrets.KEYSTORE_ACCESS_TOKEN }}
           path: app/keystore
 
+      - name: Export short commit hash
+        run: echo "GIT_SHA=${GITHUB_SHA::7}" >> $GITHUB_ENV
+
       - name: Build APK
         run: bash ./gradlew assembleRelease --stacktrace --no-daemon
 
@@ -45,4 +48,4 @@ jobs:
         with:
           name: logfox-release
           compression-level: 0
-          path: app/build/outputs/apk/release/app-release.apk 
+          path: app/build/outputs/apk/release/LogFox-*.apk

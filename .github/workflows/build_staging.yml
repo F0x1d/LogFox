@@ -27,10 +27,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: ${{ github.event.pull_request.head.ref }}
-          
-      - name: Export short commit hash
-        run: echo "GIT_SHA=${GITHUB_SHA::7}" >> $GITHUB_ENV
-     
+
       - name: Get the last commit message
         id: get_commit_msg
         run: |
@@ -40,7 +37,7 @@ jobs:
       - name: Download APK
         uses: actions/download-artifact@v4
         with:
-          name: LogFox-dev-${{ env.GIT_SHA }}
+          name: logfox-release
           path: ./apk
 
       - name: Send APK to Telegram
@@ -49,7 +46,7 @@ jobs:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
           format: markdown
-          document: ./apk/LogFox-*-dev-${{ env.GIT_SHA }}.apk
+          document: ./apk/LogFox-*.apk
           disable_web_page_preview: true
           message: |
             *${{ github.actor }}* committed to *${{ github.repository }}*

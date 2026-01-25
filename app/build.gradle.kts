@@ -1,3 +1,5 @@
+import com.android.build.gradle.internal.api.BaseVariantOutputImpl
+
 plugins {
     alias(libs.plugins.logfox.android.application)
     alias(libs.plugins.logfox.android.hilt)
@@ -18,10 +20,15 @@ android {
         viewBinding = true
     }
 
-    applicationVariants.all { variant ->
-        variant.outputs.all { output ->
-            val gitSha = System.getenv("GIT_SHA") ?: "local"
-            output.outputFileName.set("LogFox-${variant.versionName}-${variant.buildType.name}-$gitSha.apk")
+    val gitSha = providers
+        .environmentVariable("GIT_SHA")
+        .orElse("unknown")
+
+    applicationVariants.configureEach {
+        outputs.configureEach {
+            if (this is BaseVariantOutputImpl) {
+                outputFileName = "LogFox-${versionName}-${name}-${gitSha.get()}.apk"
+            }
         }
     }
 }
