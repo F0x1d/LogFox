@@ -18,10 +18,10 @@ android {
         viewBinding = true
     }
 
-    applicationVariants.all {
-        outputs.all {
+    applicationVariants.all { variant ->
+        variant.outputs.all { output ->
             val gitSha = System.getenv("GIT_SHA") ?: "local"
-            outputFileName = "LogFox-$versionName-${buildType.name}-$gitSha.apk"
+            output.outputFileName.set("LogFox-${variant.versionName}-${variant.buildType.name}-$gitSha.apk")
         }
     }
 }
