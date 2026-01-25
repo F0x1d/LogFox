@@ -38,6 +38,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: logfox-release
+          path: ./apk
 
       - name: Send APK to Telegram
         uses: appleboy/telegram-action@master
@@ -45,7 +46,7 @@ jobs:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
           format: markdown
-          document: app-release.apk
+          document: ./apk/LogFox-*.apk
           disable_web_page_preview: true
           message: |
             *${{ github.actor }}* committed to *${{ github.repository }}*
