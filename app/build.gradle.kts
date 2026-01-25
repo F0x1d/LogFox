@@ -17,6 +17,13 @@ android {
     buildFeatures {
         viewBinding = true
     }
+
+    applicationVariants.all {
+        outputs.all {
+            val gitSha = System.getenv("GIT_SHA") ?: "local"
+            outputFileName = "LogFox-$versionName-${buildType.name}-$gitSha.apk"
+        }
+    }
 }
 
 dependencies {
