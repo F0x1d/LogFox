@@ -6,10 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.widget.doAfterTextChanged
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
 import com.f0x1d.logfox.core.tea.BaseStoreFragment
+import com.f0x1d.logfox.core.ui.base.ext.doAfterTextChanged
 import com.f0x1d.logfox.core.ui.icons.Icons
 import com.f0x1d.logfox.core.ui.view.setClickListenerOn
 import com.f0x1d.logfox.core.ui.view.setupBackButtonForNavController
@@ -95,14 +95,14 @@ internal class EditFilterFragment :
             send(EditFilterCommand.Save)
         }
 
-        uidText.doAfterTextChanged { send(EditFilterCommand.UpdateUid(it?.toString().orEmpty())) }
-        pidText.doAfterTextChanged { send(EditFilterCommand.UpdatePid(it?.toString().orEmpty())) }
-        tidText.doAfterTextChanged { send(EditFilterCommand.UpdateTid(it?.toString().orEmpty())) }
-        packageNameText.doAfterTextChanged {
+        uidText.doAfterTextChanged(this@EditFilterFragment) { send(EditFilterCommand.UpdateUid(it?.toString().orEmpty())) }
+        pidText.doAfterTextChanged(this@EditFilterFragment) { send(EditFilterCommand.UpdatePid(it?.toString().orEmpty())) }
+        tidText.doAfterTextChanged(this@EditFilterFragment) { send(EditFilterCommand.UpdateTid(it?.toString().orEmpty())) }
+        packageNameText.doAfterTextChanged(this@EditFilterFragment) {
             send(EditFilterCommand.UpdatePackageName(it?.toString().orEmpty()))
         }
-        tagText.doAfterTextChanged { send(EditFilterCommand.UpdateTag(it?.toString().orEmpty())) }
-        contentText.doAfterTextChanged {
+        tagText.doAfterTextChanged(this@EditFilterFragment) { send(EditFilterCommand.UpdateTag(it?.toString().orEmpty())) }
+        contentText.doAfterTextChanged(this@EditFilterFragment) {
             send(EditFilterCommand.UpdateContent(it?.toString().orEmpty()))
         }
     }
@@ -125,10 +125,6 @@ internal class EditFilterFragment :
 
     override fun handleSideEffect(sideEffect: EditFilterSideEffect) {
         when (sideEffect) {
-            is EditFilterSideEffect.UpdatePackageNameField -> {
-                binding.packageNameText.setText(sideEffect.packageName)
-            }
-
             is EditFilterSideEffect.NavigateToAppPicker -> {
                 findNavController().navigate(Directions.action_editFilterFragment_to_appsPickerFragment)
             }

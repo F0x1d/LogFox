@@ -107,11 +107,6 @@ internal class EditFilterReducer @Inject constructor(
             )
         }
 
-        is EditFilterCommand.AppSelected -> {
-            state.copy(packageName = command.packageName)
-                .withSideEffects(EditFilterSideEffect.UpdatePackageNameField(command.packageName))
-        }
-
         is EditFilterCommand.SelectApp -> {
             state.withSideEffects(EditFilterSideEffect.NavigateToAppPicker)
         }

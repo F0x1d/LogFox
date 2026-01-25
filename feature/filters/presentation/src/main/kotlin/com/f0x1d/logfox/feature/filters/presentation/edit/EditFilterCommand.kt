@@ -22,9 +22,6 @@ sealed interface EditFilterCommand {
     data object Save : EditFilterCommand
     data class Export(val uri: Uri) : EditFilterCommand
 
-    // App picker result
-    data class AppSelected(val packageName: String) : EditFilterCommand
-
     // Navigation
     data object SelectApp : EditFilterCommand
 }

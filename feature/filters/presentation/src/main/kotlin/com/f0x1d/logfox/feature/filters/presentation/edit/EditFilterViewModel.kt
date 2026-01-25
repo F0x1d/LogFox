@@ -26,7 +26,7 @@ internal class EditFilterViewModel @Inject constructor(
     AppsPickerResultHandler {
 
     override fun onAppSelected(app: InstalledApp): Boolean {
-        send(EditFilterCommand.AppSelected(app.packageName))
+        send(EditFilterCommand.UpdatePackageName(app.packageName))
         return true
     }
 }

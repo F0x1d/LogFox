@@ -22,7 +22,6 @@ sealed interface EditFilterSideEffect {
     data class ExportFilter(val uri: Uri, val filter: UserFilter?) : EditFilterSideEffect
 
     // UI side effects - handled by Fragment
-    data class UpdatePackageNameField(val packageName: String) : EditFilterSideEffect
     data object NavigateToAppPicker : EditFilterSideEffect
     data object Close : EditFilterSideEffect
 }
