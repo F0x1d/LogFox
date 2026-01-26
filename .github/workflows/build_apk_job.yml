@@ -50,7 +50,7 @@ jobs:
           path: app/keystore
 
       - name: Build APK
-        run: bash ./gradlew assembleRelease --stacktrace --no-daemon
+        run: bash ./gradlew :app:assembleRelease --stacktrace --no-daemon
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
