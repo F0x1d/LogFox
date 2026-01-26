@@ -3,6 +3,7 @@ package com.f0x1d.logfox.feature.logging.impl.di
 import com.f0x1d.logfox.feature.logging.api.domain.AddLogLineUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.ClearLogsUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.FormatLogLineUseCase
+import com.f0x1d.logfox.feature.logging.api.domain.GetCaseSensitiveFlowUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.GetFileNameUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.GetLastLogUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.GetLogsFlowUseCase
@@ -14,6 +15,7 @@ import com.f0x1d.logfox.feature.logging.api.domain.GetShowLogValuesFlowUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.GetShowLogValuesUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.ReadLogFileUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.StartLoggingUseCase
+import com.f0x1d.logfox.feature.logging.api.domain.UpdateCaseSensitiveUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.UpdateLogsUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.UpdatePausedUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.UpdateQueryUseCase
@@ -21,6 +23,7 @@ import com.f0x1d.logfox.feature.logging.api.domain.UpdateSelectedLogLinesUseCase
 import com.f0x1d.logfox.feature.logging.impl.domain.AddLogLineUseCaseImpl
 import com.f0x1d.logfox.feature.logging.impl.domain.ClearLogsUseCaseImpl
 import com.f0x1d.logfox.feature.logging.impl.domain.FormatLogLineUseCaseImpl
+import com.f0x1d.logfox.feature.logging.impl.domain.GetCaseSensitiveFlowUseCaseImpl
 import com.f0x1d.logfox.feature.logging.impl.domain.GetFileNameUseCaseImpl
 import com.f0x1d.logfox.feature.logging.impl.domain.GetLastLogUseCaseImpl
 import com.f0x1d.logfox.feature.logging.impl.domain.GetLogsFlowUseCaseImpl
@@ -32,6 +35,7 @@ import com.f0x1d.logfox.feature.logging.impl.domain.GetShowLogValuesFlowUseCaseI
 import com.f0x1d.logfox.feature.logging.impl.domain.GetShowLogValuesUseCaseImpl
 import com.f0x1d.logfox.feature.logging.impl.domain.ReadLogFileUseCaseImpl
 import com.f0x1d.logfox.feature.logging.impl.domain.StartLoggingUseCaseImpl
+import com.f0x1d.logfox.feature.logging.impl.domain.UpdateCaseSensitiveUseCaseImpl
 import com.f0x1d.logfox.feature.logging.impl.domain.UpdateLogsUseCaseImpl
 import com.f0x1d.logfox.feature.logging.impl.domain.UpdatePausedUseCaseImpl
 import com.f0x1d.logfox.feature.logging.impl.domain.UpdateQueryUseCaseImpl
@@ -102,4 +106,10 @@ internal interface LoggingUseCaseModule {
 
     @Binds
     fun bindGetFileNameUseCase(impl: GetFileNameUseCaseImpl): GetFileNameUseCase
+
+    @Binds
+    fun bindGetCaseSensitiveFlowUseCase(impl: GetCaseSensitiveFlowUseCaseImpl): GetCaseSensitiveFlowUseCase
+
+    @Binds
+    fun bindUpdateCaseSensitiveUseCase(impl: UpdateCaseSensitiveUseCaseImpl): UpdateCaseSensitiveUseCase
 }

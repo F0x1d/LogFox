@@ -6,11 +6,18 @@ fun LogLine.suits(filters: List<UserFilter>) = listOf(this)
     .filterAndSearch(filters)
     .isNotEmpty()
 
-fun List<LogLine>.filterAndSearch(filters: List<UserFilter>, query: String? = null) = filterByExtendedFilters(filters).let {
+fun List<LogLine>.filterAndSearch(
+    filters: List<UserFilter>,
+    query: String? = null,
+    caseSensitive: Boolean = true,
+) = filterByExtendedFilters(filters).let {
     if (query == null) {
         it
     } else {
-        it.filter { logLine -> logLine.tag.contains(query) || logLine.content.contains(query) }
+        it.filter { logLine ->
+            logLine.tag.contains(query, ignoreCase = !caseSensitive) ||
+                logLine.content.contains(query, ignoreCase = !caseSensitive)
+        }
     }
 }
 

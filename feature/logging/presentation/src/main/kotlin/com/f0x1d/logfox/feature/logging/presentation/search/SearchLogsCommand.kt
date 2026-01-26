@@ -5,5 +5,9 @@ sealed interface SearchLogsCommand {
 
     data class QueryLoaded(val query: String?) : SearchLogsCommand
 
+    data class CaseSensitiveLoaded(val caseSensitive: Boolean) : SearchLogsCommand
+
     data class UpdateQuery(val query: String?) : SearchLogsCommand
+
+    data object ToggleCaseSensitive : SearchLogsCommand
 }

@@ -11,14 +11,20 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-internal class QueryDataSourceImpl @Inject constructor(
+internal class SearchDataSourceImpl @Inject constructor(
     @DefaultDispatcher private val defaultDispatcher: CoroutineDispatcher,
-) : QueryDataSource {
+) : SearchDataSource {
     private val mutableQuery = MutableStateFlow<String?>(null)
+    private val mutableCaseSensitive = MutableStateFlow(false)
 
     override val query: Flow<String?> get() = mutableQuery.asStateFlow()
+    override val caseSensitive: Flow<Boolean> get() = mutableCaseSensitive.asStateFlow()
 
     override suspend fun updateQuery(query: String?) = withContext(defaultDispatcher) {
         mutableQuery.update { query }
+    }
+
+    override suspend fun updateCaseSensitive(caseSensitive: Boolean) = withContext(defaultDispatcher) {
+        mutableCaseSensitive.update { caseSensitive }
     }
 }
