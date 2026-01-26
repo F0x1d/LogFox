@@ -170,4 +170,5 @@
     <string name="warning_blacklist">Are you sure want to add this app to blacklist? LogFox does not observe crashes for blacklisted apps</string>
     <string name="monet" translatable="false">Monet</string>
     <string name="share_logs">Share logs</string>
+    <string name="case_sensitive">Case sensitive</string>
 </resources>

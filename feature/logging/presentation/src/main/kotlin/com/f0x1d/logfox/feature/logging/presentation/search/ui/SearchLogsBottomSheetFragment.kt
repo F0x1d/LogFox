@@ -46,12 +46,17 @@ internal class SearchLogsBottomSheetFragment :
             }
         }
 
+        caseSensitiveCheckbox.setOnClickListener {
+            send(SearchLogsCommand.ToggleCaseSensitive)
+        }
+
         queryText.requestFocus()
     }
 
     override fun render(state: SearchLogsState) {
         binding.queryText.setText(state.query)
         binding.clearSearchButton.isVisible = state.query != null
+        binding.caseSensitiveCheckbox.isChecked = state.caseSensitive
     }
 
     override fun handleSideEffect(sideEffect: SearchLogsSideEffect) {

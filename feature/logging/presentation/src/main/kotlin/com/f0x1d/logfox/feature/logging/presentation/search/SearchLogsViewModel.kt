@@ -12,5 +12,8 @@ internal class SearchLogsViewModel @Inject constructor(
     initialState = SearchLogsState(),
     reducer = reducer,
     effectHandlers = listOf(effectHandler),
-    initialSideEffects = listOf(SearchLogsSideEffect.LoadQuery),
+    initialSideEffects = listOf(
+        SearchLogsSideEffect.LoadQuery,
+        SearchLogsSideEffect.LoadCaseSensitive,
+    ),
 )

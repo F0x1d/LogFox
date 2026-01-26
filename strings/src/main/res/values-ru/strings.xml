@@ -159,4 +159,5 @@
     <string name="add_to_blacklist">Добавить в черный список</string>
     <string name="remove_from_blacklist">Убрать из черного списка</string>
     <string name="share_logs">Поделиться логами</string>
+    <string name="case_sensitive">С учётом регистра</string>
 </resources>

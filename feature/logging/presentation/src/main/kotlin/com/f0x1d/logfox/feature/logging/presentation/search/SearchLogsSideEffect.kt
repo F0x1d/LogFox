@@ -6,6 +6,10 @@ sealed interface SearchLogsSideEffect {
 
     data class SaveQuery(val query: String?) : SearchLogsSideEffect
 
+    data object LoadCaseSensitive : SearchLogsSideEffect
+
+    data class SaveCaseSensitive(val caseSensitive: Boolean) : SearchLogsSideEffect
+
     // UI side effects - handled by Fragment
     data object Dismiss : SearchLogsSideEffect
 }

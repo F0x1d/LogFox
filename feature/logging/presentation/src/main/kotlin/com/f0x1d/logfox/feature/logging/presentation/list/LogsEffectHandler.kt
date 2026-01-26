@@ -10,6 +10,7 @@ import com.f0x1d.logfox.feature.filters.api.domain.GetAllEnabledFiltersFlowUseCa
 import com.f0x1d.logfox.feature.filters.api.model.UserFilter
 import com.f0x1d.logfox.feature.filters.api.model.filterAndSearch
 import com.f0x1d.logfox.feature.logging.api.domain.FormatLogLineUseCase
+import com.f0x1d.logfox.feature.logging.api.domain.GetCaseSensitiveFlowUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.GetLogsFlowUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.GetPausedFlowUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.GetQueryFlowUseCase
@@ -40,6 +41,7 @@ internal class LogsEffectHandler @Inject constructor(
     @FileUri private val fileUri: Uri?,
     private val getLogsFlowUseCase: GetLogsFlowUseCase,
     private val getQueryFlowUseCase: GetQueryFlowUseCase,
+    private val getCaseSensitiveFlowUseCase: GetCaseSensitiveFlowUseCase,
     private val getAllEnabledFiltersFlowUseCase: GetAllEnabledFiltersFlowUseCase,
     private val updateSelectedLogLinesUseCase: UpdateSelectedLogLinesUseCase,
     private val createRecordingFromLinesUseCase: CreateRecordingFromLinesUseCase,
@@ -71,12 +73,14 @@ internal class LogsEffectHandler @Inject constructor(
                     } ?: getLogsFlowUseCase(),
                     getAllEnabledFiltersFlowUseCase(),
                     getQueryFlowUseCase(),
+                    getCaseSensitiveFlowUseCase(),
                     if (!viewingFile) getPausedFlowUseCase() else flowOf(false),
-                ) { logs, filters, query, paused ->
+                ) { logs, filters, query, caseSensitive, paused ->
                     LogsData(
                         logs = logs,
                         filters = filters,
                         query = query,
+                        caseSensitive = caseSensitive,
                         paused = paused,
                     )
                 }.scan(LogsData()) { accumulator, data ->
@@ -86,6 +90,7 @@ internal class LogsEffectHandler @Inject constructor(
                         }
 
                         data.query != accumulator.query ||
+                            data.caseSensitive != accumulator.caseSensitive ||
                             data.filters != accumulator.filters -> {
                             data.copy(
                                 logs = accumulator.logs,
@@ -106,6 +111,7 @@ internal class LogsEffectHandler @Inject constructor(
                         logs = data.logs.filterAndSearch(
                             filters = data.filters,
                             query = data.query,
+                            caseSensitive = data.caseSensitive,
                         ),
                     )
                 }.flowOn(defaultDispatcher)
@@ -202,6 +208,7 @@ internal class LogsEffectHandler @Inject constructor(
         val logs: List<LogLine> = emptyList(),
         val filters: List<UserFilter> = emptyList(),
         val query: String? = null,
+        val caseSensitive: Boolean = false,
         val paused: Boolean = false,
         val passing: Boolean = true,
     )
