@@ -11,6 +11,7 @@ dependencies {
     implementation(projects.core.di)
     implementation(projects.core.context)
     implementation(projects.core.copy)
+    implementation(projects.core.io)
     implementation(projects.feature.database.api)
     implementation(projects.feature.navigation.api)
     implementation(projects.feature.preferences.api)

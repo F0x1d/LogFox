@@ -1,9 +1,11 @@
 package com.f0x1d.logfox.feature.crashes.impl.di
 
 import com.f0x1d.logfox.feature.crashes.api.data.CrashDetectingRepository
+import com.f0x1d.logfox.feature.crashes.api.data.CrashExportRepository
 import com.f0x1d.logfox.feature.crashes.api.data.CrashesRepository
 import com.f0x1d.logfox.feature.crashes.api.data.DisabledAppsRepository
 import com.f0x1d.logfox.feature.crashes.impl.data.CrashDetectingRepositoryImpl
+import com.f0x1d.logfox.feature.crashes.impl.data.CrashExportRepositoryImpl
 import com.f0x1d.logfox.feature.crashes.impl.data.CrashesRepositoryImpl
 import com.f0x1d.logfox.feature.crashes.impl.data.DisabledAppsRepositoryImpl
 import dagger.Binds
@@ -29,4 +31,9 @@ internal interface RepositoriesModule {
     fun bindCrashDetectingRepository(
         impl: CrashDetectingRepositoryImpl,
     ): CrashDetectingRepository
+
+    @Binds
+    fun bindCrashExportRepository(
+        impl: CrashExportRepositoryImpl,
+    ): CrashExportRepository
 }

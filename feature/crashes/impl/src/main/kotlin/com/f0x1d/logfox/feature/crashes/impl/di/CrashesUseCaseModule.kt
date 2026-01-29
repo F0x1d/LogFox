@@ -3,6 +3,8 @@ package com.f0x1d.logfox.feature.crashes.impl.di
 import com.f0x1d.logfox.feature.crashes.api.domain.ClearAllCrashesUseCase
 import com.f0x1d.logfox.feature.crashes.api.domain.DeleteAllCrashesByPackageNameUseCase
 import com.f0x1d.logfox.feature.crashes.api.domain.DeleteCrashUseCase
+import com.f0x1d.logfox.feature.crashes.api.domain.ExportCrashToFileUseCase
+import com.f0x1d.logfox.feature.crashes.api.domain.ExportCrashToZipUseCase
 import com.f0x1d.logfox.feature.crashes.api.domain.GetAllCrashesFlowUseCase
 import com.f0x1d.logfox.feature.crashes.api.domain.GetCrashByIdFlowUseCase
 import com.f0x1d.logfox.feature.crashes.api.domain.GetCrashesSearchQueryFlowUseCase
@@ -11,6 +13,8 @@ import com.f0x1d.logfox.feature.crashes.api.domain.UpdateCrashesSearchQueryUseCa
 import com.f0x1d.logfox.feature.crashes.impl.domain.ClearAllCrashesUseCaseImpl
 import com.f0x1d.logfox.feature.crashes.impl.domain.DeleteAllCrashesByPackageNameUseCaseImpl
 import com.f0x1d.logfox.feature.crashes.impl.domain.DeleteCrashUseCaseImpl
+import com.f0x1d.logfox.feature.crashes.impl.domain.ExportCrashToFileUseCaseImpl
+import com.f0x1d.logfox.feature.crashes.impl.domain.ExportCrashToZipUseCaseImpl
 import com.f0x1d.logfox.feature.crashes.impl.domain.GetAllCrashesFlowUseCaseImpl
 import com.f0x1d.logfox.feature.crashes.impl.domain.GetCrashByIdFlowUseCaseImpl
 import com.f0x1d.logfox.feature.crashes.impl.domain.GetCrashesSearchQueryFlowUseCaseImpl
@@ -56,4 +60,14 @@ internal interface CrashesUseCaseModule {
     fun bindProcessLogLineCrashesUseCase(
         impl: ProcessLogLineCrashesUseCaseImpl,
     ): ProcessLogLineCrashesUseCase
+
+    @Binds
+    fun bindExportCrashToFileUseCase(
+        impl: ExportCrashToFileUseCaseImpl,
+    ): ExportCrashToFileUseCase
+
+    @Binds
+    fun bindExportCrashToZipUseCase(
+        impl: ExportCrashToZipUseCaseImpl,
+    ): ExportCrashToZipUseCase
 }

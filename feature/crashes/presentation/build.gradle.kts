@@ -20,7 +20,6 @@ dependencies {
     implementation(projects.core.recycler)
     implementation(projects.core.tea.android)
     implementation(projects.core.di)
-    implementation(projects.core.io)
     implementation(projects.core.compat)
     implementation(projects.core.context)
     implementation(projects.core.copy)
