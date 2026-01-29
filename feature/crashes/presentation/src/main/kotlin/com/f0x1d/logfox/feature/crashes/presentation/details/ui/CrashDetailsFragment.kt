@@ -59,7 +59,14 @@ internal class CrashDetailsFragment :
     private val zipCrashLauncher = registerForActivityResult(
         ActivityResultContracts.CreateDocument("application/zip"),
     ) {
-        viewModel.exportCrashToZip(it ?: return@registerForActivityResult)
+        it?.let { uri -> send(CrashDetailsCommand.ExportCrashToZip(uri)) }
+    }
+
+    // no plain because android will append .txt itself
+    private val exportCrashLauncher = registerForActivityResult(
+        ActivityResultContracts.CreateDocument("text/*"),
+    ) {
+        it?.let { uri -> send(CrashDetailsCommand.ExportCrashToFile(uri)) }
     }
 
     private val closeSearchOnBackPressedCallback = object : OnBackPressedCallback(false) {
@@ -142,20 +149,19 @@ internal class CrashDetailsFragment :
         )
 
         copyButton.setOnClickListener {
-            viewModel.send(CrashDetailsCommand.CopyCrashLog)
+            send(CrashDetailsCommand.CopyCrashLog)
         }
 
         shareButton.setOnClickListener {
             requireContext().shareIntent(viewModel.state.value.crashLog.orEmpty())
         }
 
-        zipButton.setOnClickListener {
-            viewModel.state.value.crash?.let { appCrash ->
-                val pkg = appCrash.packageName.replace(".", "-")
-                val formattedDate = viewModel.formatForExport(appCrash.dateAndTime)
+        exportButton.setOnClickListener {
+            send(CrashDetailsCommand.ExportCrashToFileClicked)
+        }
 
-                zipCrashLauncher.launch("crash-$pkg-$formattedDate.zip")
-            }
+        zipButton.setOnClickListener {
+            send(CrashDetailsCommand.ExportCrashToZipClicked)
         }
 
         requireActivity().onBackPressedDispatcher.apply {
@@ -191,6 +197,14 @@ internal class CrashDetailsFragment :
 
             is CrashDetailsSideEffect.Close -> {
                 findNavController().popBackStack()
+            }
+
+            is CrashDetailsSideEffect.LaunchFileExportPicker -> {
+                exportCrashLauncher.launch(sideEffect.filename)
+            }
+
+            is CrashDetailsSideEffect.LaunchZipExportPicker -> {
+                zipCrashLauncher.launch(sideEffect.filename)
             }
 
             // Business logic side effects are handled by EffectHandler

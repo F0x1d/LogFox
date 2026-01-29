@@ -11,6 +11,8 @@ sealed interface CrashDetailsSideEffect {
 
     data class ExportCrashToZip(val uri: Uri, val appCrash: AppCrash, val crashLog: String?) : CrashDetailsSideEffect
 
+    data class ExportCrashToFile(val uri: Uri, val crashLog: String?) : CrashDetailsSideEffect
+
     data class ChangeBlacklist(val appCrash: AppCrash) : CrashDetailsSideEffect
 
     data class DeleteCrash(val appCrash: AppCrash) : CrashDetailsSideEffect
@@ -18,4 +20,6 @@ sealed interface CrashDetailsSideEffect {
     // UI side effects
     data class CopyText(val text: String) : CrashDetailsSideEffect
     data object Close : CrashDetailsSideEffect
+    data class LaunchFileExportPicker(val filename: String) : CrashDetailsSideEffect
+    data class LaunchZipExportPicker(val filename: String) : CrashDetailsSideEffect
 }
