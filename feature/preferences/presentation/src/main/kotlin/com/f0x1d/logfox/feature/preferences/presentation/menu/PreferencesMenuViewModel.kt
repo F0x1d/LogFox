@@ -17,7 +17,7 @@ internal class PreferencesMenuViewModel @Inject constructor(
         val packageInfo = packageManager.getPackageInfo(context.packageName, 0)
         PreferencesMenuState(
             versionName = packageInfo.versionName ?: "",
-            versionCode = packageInfo.longVersionCode.toInt(),
+            versionCode = packageInfo.versionCode,
             isDebug = BuildConfig.DEBUG,
         )
     },
