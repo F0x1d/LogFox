@@ -1,6 +1,7 @@
 package com.f0x1d.logfox.feature.logging.presentation.list
 
 import android.content.Context
+import com.f0x1d.logfox.core.coroutines.combine
 import com.f0x1d.logfox.core.di.DefaultDispatcher
 import com.f0x1d.logfox.core.di.IODispatcher
 import com.f0x1d.logfox.core.tea.EffectHandler
@@ -20,7 +21,17 @@ import com.f0x1d.logfox.feature.logging.api.domain.UpdateSelectedLogLinesUseCase
 import com.f0x1d.logfox.feature.logging.api.model.LogLine
 import com.f0x1d.logfox.feature.logging.api.model.ShowLogValues
 import com.f0x1d.logfox.feature.logging.api.presentation.LoggingServiceDelegate
+import com.f0x1d.logfox.feature.logging.presentation.list.domain.ClearSelectionUseCase
+import com.f0x1d.logfox.feature.logging.presentation.list.domain.GetSelectedIdsUseCase
+import com.f0x1d.logfox.feature.logging.presentation.list.domain.ObserveExpandedOverridesUseCase
+import com.f0x1d.logfox.feature.logging.presentation.list.domain.ObserveSelectedIdsUseCase
+import com.f0x1d.logfox.feature.logging.presentation.list.domain.SelectAllItemsUseCase
+import com.f0x1d.logfox.feature.logging.presentation.list.domain.SetItemSelectedUseCase
+import com.f0x1d.logfox.feature.logging.presentation.list.domain.ToggleItemExpandedUseCase
+import com.f0x1d.logfox.feature.logging.presentation.list.domain.ToggleItemSelectedUseCase
+import com.f0x1d.logfox.feature.logging.presentation.list.model.toPresentationModel
 import com.f0x1d.logfox.feature.preferences.domain.logs.GetLogsExpandedFlowUseCase
+import com.f0x1d.logfox.feature.preferences.domain.logs.GetLogsExpandedUseCase
 import com.f0x1d.logfox.feature.preferences.domain.logs.GetLogsTextSizeFlowUseCase
 import com.f0x1d.logfox.feature.preferences.domain.logs.GetResumeLoggingWithBottomTouchFlowUseCase
 import com.f0x1d.logfox.feature.recordings.api.domain.CreateRecordingFromLinesUseCase
@@ -53,6 +64,15 @@ internal class LogsEffectHandler @Inject constructor(
     private val updatePausedUseCase: UpdatePausedUseCase,
     private val loggingServiceDelegate: LoggingServiceDelegate,
     private val dateTimeFormatter: DateTimeFormatter,
+    private val observeSelectedIdsUseCase: ObserveSelectedIdsUseCase,
+    private val getSelectedIdsUseCase: GetSelectedIdsUseCase,
+    private val toggleItemSelectedUseCase: ToggleItemSelectedUseCase,
+    private val setItemSelectedUseCase: SetItemSelectedUseCase,
+    private val selectAllItemsUseCase: SelectAllItemsUseCase,
+    private val clearSelectionUseCase: ClearSelectionUseCase,
+    private val observeExpandedOverridesUseCase: ObserveExpandedOverridesUseCase,
+    private val toggleItemExpandedUseCase: ToggleItemExpandedUseCase,
+    private val getLogsExpandedUseCase: GetLogsExpandedUseCase,
     @DefaultDispatcher private val defaultDispatcher: CoroutineDispatcher,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : EffectHandler<LogsSideEffect, LogsCommand> {
@@ -60,25 +80,22 @@ internal class LogsEffectHandler @Inject constructor(
     override suspend fun handle(effect: LogsSideEffect, onCommand: suspend (LogsCommand) -> Unit) {
         when (effect) {
             is LogsSideEffect.LoadLogs -> {
-                combine(
-                    combine(
-                        getLogsFlowUseCase(),
-                        getAllEnabledFiltersFlowUseCase(),
-                        getQueryFlowUseCase(),
-                        getCaseSensitiveFlowUseCase(),
-                        getPausedFlowUseCase(),
-                    ) { logs, filters, query, caseSensitive, paused ->
-                        LogsData(
-                            logs = logs,
-                            filters = filters,
-                            query = query,
-                            caseSensitive = caseSensitive,
-                            paused = paused,
-                        )
-                    },
+                val formattedLogsFlow = combine(
+                    getLogsFlowUseCase(),
+                    getAllEnabledFiltersFlowUseCase(),
+                    getQueryFlowUseCase(),
+                    getCaseSensitiveFlowUseCase(),
+                    getPausedFlowUseCase(),
                     getShowLogValuesFlowUseCase(),
-                ) { data, showLogValues ->
-                    data.copy(showLogValues = showLogValues)
+                ) { logs, filters, query, caseSensitive, paused, showLogValues ->
+                    LogsData(
+                        logs = logs,
+                        filters = filters,
+                        query = query,
+                        caseSensitive = caseSensitive,
+                        paused = paused,
+                        showLogValues = showLogValues,
+                    )
                 }.scan(LogsData()) { accumulator, data ->
                     when {
                         !data.paused || data.logs.isEmpty() -> {
@@ -112,9 +129,9 @@ internal class LogsEffectHandler @Inject constructor(
                         ),
                     )
                 }.map { data ->
-                    LogsCommand.LogsLoaded(
-                        logs = data.logs.map { line ->
-                            LogsCommand.LogsLoaded.FormattedLogLine(
+                    FormattedLogsData(
+                        formattedLogs = data.logs.map { line ->
+                            FormattedLogLine(
                                 logLine = line,
                                 displayText = line.formatOriginal(
                                     values = data.showLogValues,
@@ -127,42 +144,84 @@ internal class LogsEffectHandler @Inject constructor(
                         filters = data.filters,
                     )
                 }.flowOn(defaultDispatcher)
+
+                combine(
+                    formattedLogsFlow,
+                    observeSelectedIdsUseCase(),
+                    observeExpandedOverridesUseCase(),
+                    getLogsTextSizeFlowUseCase(),
+                    getLogsExpandedFlowUseCase(),
+                ) { logsData, selectedIds, expandedOverrides, textSize, logsExpanded ->
+                    LogsCommand.LogsLoaded(
+                        logs = logsData.formattedLogs.map { formatted ->
+                            formatted.logLine.toPresentationModel(
+                                displayText = formatted.displayText,
+                                expanded = expandedOverrides.getOrElse(formatted.logLine.id) { logsExpanded },
+                                selected = formatted.logLine.id in selectedIds,
+                                textSize = textSize.toFloat(),
+                            )
+                        },
+                        query = logsData.query,
+                        filters = logsData.filters,
+                        selecting = selectedIds.isNotEmpty(),
+                        selectedCount = selectedIds.size,
+                    )
+                }.flowOn(defaultDispatcher)
                     .collect { command ->
                         onCommand(command)
                     }
             }
 
             is LogsSideEffect.ObservePreferences -> {
-                combine(
-                    getResumeLoggingWithBottomTouchFlowUseCase(),
-                    getLogsTextSizeFlowUseCase(),
-                    getLogsExpandedFlowUseCase(),
-                    getShowLogValuesFlowUseCase(),
-                ) { resumeLoggingWithBottomTouch, logsTextSize, logsExpanded, logsFormat ->
-                    LogsCommand.PreferencesUpdated(
-                        resumeLoggingWithBottomTouch = resumeLoggingWithBottomTouch,
-                        logsTextSize = logsTextSize.toFloat(),
-                        logsExpanded = logsExpanded,
-                        logsFormat = logsFormat,
-                    )
-                }.collect { command ->
-                    onCommand(command)
+                getResumeLoggingWithBottomTouchFlowUseCase()
+                    .collect { value ->
+                        onCommand(LogsCommand.PreferencesUpdated(resumeLoggingWithBottomTouch = value))
+                    }
+            }
+
+            is LogsSideEffect.ObserveSelection -> {
+                observeSelectedIdsUseCase().collect { selectedIds ->
+                    val lines = getLogLinesByIdsUseCase(selectedIds)
+                    updateSelectedLogLinesUseCase(selectedLines = lines)
                 }
             }
 
-            is LogsSideEffect.PauseStateChanged -> {
+            is LogsSideEffect.ObservePausedState -> {
+                getPausedFlowUseCase().collect { paused ->
+                    onCommand(LogsCommand.PausedStateUpdated(paused))
+                }
+            }
+
+            is LogsSideEffect.UpdatePaused -> {
                 updatePausedUseCase(effect.paused)
             }
 
-            is LogsSideEffect.UpdateSelectedLogLines -> {
-                val lines = getLogLinesByIdsUseCase(effect.selectedIds)
-                updateSelectedLogLinesUseCase(selectedLines = lines)
+            is LogsSideEffect.ToggleItemSelection -> {
+                toggleItemSelectedUseCase(effect.logLineId)
+            }
+
+            is LogsSideEffect.SetItemSelected -> {
+                setItemSelectedUseCase(effect.logLineId, effect.selected)
+            }
+
+            is LogsSideEffect.SelectAllItems -> {
+                selectAllItemsUseCase(effect.allIds)
+            }
+
+            is LogsSideEffect.ClearSelection -> {
+                clearSelectionUseCase()
+            }
+
+            is LogsSideEffect.ToggleItemExpanded -> {
+                val defaultExpanded = getLogsExpandedUseCase()
+                toggleItemExpandedUseCase(effect.logLineId, defaultExpanded)
             }
 
             is LogsSideEffect.CreateRecordingFromLines -> {
                 withContext(defaultDispatcher) {
                     runCatching {
-                        val lines = getLogLinesByIdsUseCase(effect.lineIds)
+                        val lineIds = getSelectedIdsUseCase()
+                        val lines = getLogLinesByIdsUseCase(lineIds)
                             .sortedBy { it.dateAndTime }
                         createRecordingFromLinesUseCase(lines = lines)
                     }
@@ -172,7 +231,8 @@ internal class LogsEffectHandler @Inject constructor(
             is LogsSideEffect.ExportLogsTo -> {
                 withContext(ioDispatcher) {
                     runCatching {
-                        val lines = getLogLinesByIdsUseCase(effect.lineIds)
+                        val lineIds = getSelectedIdsUseCase()
+                        val lines = getLogLinesByIdsUseCase(lineIds)
                             .sortedBy { it.dateAndTime }
                         val content = lines.joinToString("\n") { line ->
                             formatLogLineUseCase(
@@ -200,7 +260,8 @@ internal class LogsEffectHandler @Inject constructor(
             }
 
             is LogsSideEffect.FormatAndCopyLogs -> {
-                val lines = getLogLinesByIdsUseCase(effect.lineIds)
+                val lineIds = getSelectedIdsUseCase()
+                val lines = getLogLinesByIdsUseCase(lineIds)
                     .sortedBy { it.dateAndTime }
                 val formattedText = lines.joinToString("\n") { line ->
                     formatLogLineUseCase(
@@ -248,5 +309,16 @@ internal class LogsEffectHandler @Inject constructor(
             tag = true,
             content = true,
         ),
+    )
+
+    private data class FormattedLogsData(
+        val formattedLogs: List<FormattedLogLine>,
+        val query: String?,
+        val filters: List<UserFilter>,
+    )
+
+    private data class FormattedLogLine(
+        val logLine: LogLine,
+        val displayText: CharSequence,
     )
 }

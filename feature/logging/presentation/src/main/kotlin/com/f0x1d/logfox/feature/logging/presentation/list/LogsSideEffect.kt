@@ -9,17 +9,29 @@ sealed interface LogsSideEffect {
 
     data object ObservePreferences : LogsSideEffect
 
-    data class PauseStateChanged(val paused: Boolean) : LogsSideEffect
+    data object ObserveSelection : LogsSideEffect
 
-    data class UpdateSelectedLogLines(val selectedIds: Set<Long>) : LogsSideEffect
+    data object ObservePausedState : LogsSideEffect
 
-    data class CreateRecordingFromLines(val lineIds: Set<Long>) : LogsSideEffect
+    data class UpdatePaused(val paused: Boolean) : LogsSideEffect
 
-    data class ExportLogsTo(val uri: Uri, val lineIds: Set<Long>) : LogsSideEffect
+    data class ToggleItemSelection(val logLineId: Long) : LogsSideEffect
+
+    data class SetItemSelected(val logLineId: Long, val selected: Boolean) : LogsSideEffect
+
+    data class SelectAllItems(val allIds: Set<Long>) : LogsSideEffect
+
+    data object ClearSelection : LogsSideEffect
+
+    data class ToggleItemExpanded(val logLineId: Long) : LogsSideEffect
+
+    data object CreateRecordingFromLines : LogsSideEffect
+
+    data class ExportLogsTo(val uri: Uri) : LogsSideEffect
 
     data class FormatAndCopyLog(val logLineId: Long) : LogsSideEffect
 
-    data class FormatAndCopyLogs(val lineIds: Set<Long>) : LogsSideEffect
+    data object FormatAndCopyLogs : LogsSideEffect
 
     // UI side effects - handled by Fragment
     data object NavigateToRecordings : LogsSideEffect

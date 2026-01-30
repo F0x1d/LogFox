@@ -19,6 +19,7 @@ dependencies {
     implementation(projects.core.ui.view)
     implementation(projects.core.recycler)
     implementation(projects.core.di)
+    implementation(projects.core.coroutines)
     implementation(projects.core.context)
     implementation(projects.core.copy)
     implementation(projects.feature.datetime.impl)

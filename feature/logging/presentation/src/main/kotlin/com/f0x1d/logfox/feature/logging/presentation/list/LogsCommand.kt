@@ -2,28 +2,22 @@ package com.f0x1d.logfox.feature.logging.presentation.list
 
 import android.net.Uri
 import com.f0x1d.logfox.feature.filters.api.model.UserFilter
-import com.f0x1d.logfox.feature.logging.api.model.LogLine
-import com.f0x1d.logfox.feature.logging.api.model.ShowLogValues
 import com.f0x1d.logfox.feature.logging.presentation.list.model.LogLineItem
 
 sealed interface LogsCommand {
     data class LogsLoaded(
-        val logs: List<FormattedLogLine>,
+        val logs: List<LogLineItem>,
         val query: String?,
         val filters: List<UserFilter>,
-    ) : LogsCommand {
-        data class FormattedLogLine(
-            val logLine: LogLine,
-            val displayText: CharSequence,
-        )
-    }
+        val selecting: Boolean,
+        val selectedCount: Int,
+    ) : LogsCommand
 
     data class PreferencesUpdated(
         val resumeLoggingWithBottomTouch: Boolean,
-        val logsTextSize: Float,
-        val logsExpanded: Boolean,
-        val logsFormat: ShowLogValues,
     ) : LogsCommand
+
+    data class ItemClicked(val logLineId: Long) : LogsCommand
 
     data class SelectLine(val logLineItem: LogLineItem, val selected: Boolean) : LogsCommand
 
@@ -62,6 +56,8 @@ sealed interface LogsCommand {
     data object ClearLogs : LogsCommand
 
     data object RestartLogging : LogsCommand
+
+    data class PausedStateUpdated(val paused: Boolean) : LogsCommand
 
     data object KillService : LogsCommand
 }

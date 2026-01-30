@@ -14,7 +14,9 @@ data class LogLineItem(
     val tag: String,
     val content: String,
     val displayText: CharSequence,
+    val expanded: Boolean,
     val selected: Boolean,
+    val textSize: Float,
 ) : Identifiable {
     override val id: Any get() = logLineId
 }

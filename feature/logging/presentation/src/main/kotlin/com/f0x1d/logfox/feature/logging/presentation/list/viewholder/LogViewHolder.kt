@@ -5,14 +5,14 @@ import androidx.appcompat.widget.PopupMenu
 import com.f0x1d.logfox.core.recycler.viewholder.BaseViewHolder
 import com.f0x1d.logfox.feature.logging.presentation.R
 import com.f0x1d.logfox.feature.logging.presentation.databinding.ItemLogBinding
-import com.f0x1d.logfox.feature.logging.presentation.list.adapter.LogsAdapter
 import com.f0x1d.logfox.feature.logging.presentation.list.model.LogLineItem
 
 class LogViewHolder(
     binding: ItemLogBinding,
-    private val selectedItem: (LogLineItem, Boolean) -> Unit,
-    private val copyLog: (LogLineItem) -> Unit,
-    private val createFilter: (LogLineItem) -> Unit,
+    private val onClick: (LogLineItem) -> Unit,
+    private val onSelectClick: (LogLineItem) -> Unit,
+    private val onCopyClick: (LogLineItem) -> Unit,
+    private val onCreateFilterClick: (LogLineItem) -> Unit,
 ) : BaseViewHolder<LogLineItem, ItemLogBinding>(binding) {
 
     private val popupMenu: PopupMenu = PopupMenu(
@@ -24,19 +24,21 @@ class LogViewHolder(
         setForceShowIcon(true)
 
         setOnMenuItemClickListener {
+            val item = currentItem ?: return@setOnMenuItemClickListener false
+
             when (it.itemId) {
                 R.id.select_item -> {
-                    selectItem()
+                    onSelectClick(item)
                     true
                 }
 
                 R.id.copy_item -> {
-                    copyLog(currentItem ?: return@setOnMenuItemClickListener false)
+                    onCopyClick(item)
                     true
                 }
 
                 R.id.create_filter_item -> {
-                    createFilter(currentItem ?: return@setOnMenuItemClickListener false)
+                    onCreateFilterClick(item)
                     true
                 }
 
@@ -48,66 +50,29 @@ class LogViewHolder(
     init {
         binding.apply {
             root.setOnClickListener {
-                val adapter = adapter<LogsAdapter>() ?: return@setOnClickListener
-
-                if (adapter.selecting) {
-                    selectItem()
-                } else {
-                    expandOrCollapseItem()
-                }
+                val item = currentItem ?: return@setOnClickListener
+                onClick(item)
             }
             root.setOnLongClickListener {
-                val adapter = adapter<LogsAdapter>() ?: return@setOnLongClickListener true
-
-                if (adapter.selecting) {
-                    expandOrCollapseItem()
-                } else {
-                    popupMenu.show()
-                }
-
+                popupMenu.show()
                 return@setOnLongClickListener true
             }
         }
     }
 
     override fun ItemLogBinding.bindTo(data: LogLineItem) {
-        adapter<LogsAdapter>()?.textSize?.also {
-            logText.textSize = it
-            levelView.textSize = it
-        }
+        logText.textSize = data.textSize
+        levelView.textSize = data.textSize
 
         logText.text = data.displayText
 
         levelView.logLevel = data.level
 
-        changeExpandedAndSelected(data)
+        logText.maxLines = if (data.expanded) Int.MAX_VALUE else 1
+        container.isSelected = data.selected
     }
 
     override fun ItemLogBinding.detach() {
         popupMenu.dismiss()
-    }
-
-    private fun selectItem() {
-        currentItem?.also {
-            selectedItem(it, !it.selected)
-        }
-    }
-
-    private fun ItemLogBinding.expandOrCollapseItem() = adapter<LogsAdapter>()?.apply {
-        expandedStates.apply {
-            currentItem?.also {
-                val newValue = getOrElse(it.logLineId) { logsExpanded }.not()
-
-                put(it.logLineId, newValue)
-                changeExpandedAndSelected(it)
-            }
-        }
-    }
-
-    private fun ItemLogBinding.changeExpandedAndSelected(item: LogLineItem) = adapter<LogsAdapter>()?.apply {
-        val expanded = expandedStates.getOrElse(item.logLineId) { logsExpanded }
-
-        logText.maxLines = if (expanded) Int.MAX_VALUE else 1
-        container.isSelected = item.selected
     }
 }

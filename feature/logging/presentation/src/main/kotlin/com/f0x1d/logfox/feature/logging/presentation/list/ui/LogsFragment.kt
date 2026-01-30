@@ -48,14 +48,17 @@ internal class LogsFragment :
 
     private val adapter by lazy {
         LogsAdapter(
-            selectedItem = { logLineItem, selected ->
-                send(LogsCommand.SelectLine(logLineItem, selected))
+            onClick = { item ->
+                send(LogsCommand.ItemClicked(item.logLineId))
             },
-            copyLog = { logLineItem ->
-                send(LogsCommand.CopyLog(logLineItem))
+            onSelectClick = { item ->
+                send(LogsCommand.SelectLine(item, true))
             },
-            createFilter = { logLineItem ->
-                send(LogsCommand.CreateFilterFromLog(logLineItem))
+            onCopyClick = { item ->
+                send(LogsCommand.CopyLog(item))
+            },
+            onCreateFilterClick = { item ->
+                send(LogsCommand.CreateFilterFromLog(item))
             },
         )
     }
@@ -170,12 +173,10 @@ internal class LogsFragment :
             filters = state.filters,
         )
         binding.processSelectedItems(
-            selectedItemIds = state.selectedItemIds,
+            selecting = state.selecting,
+            selectedCount = state.selectedCount,
         )
         binding.processPaused(paused = state.paused)
-
-        adapter.textSize = state.logsTextSize
-        adapter.logsExpanded = state.logsExpanded
 
         if (state.logsChanged) {
             binding.updateLogsList(items = state.logs)
@@ -265,16 +266,14 @@ internal class LogsFragment :
     }
 
     private fun FragmentLogsBinding.processSelectedItems(
-        selectedItemIds: Set<Long>,
+        selecting: Boolean,
+        selectedCount: Int,
     ) {
-        val selecting = selectedItemIds.isNotEmpty()
-
         clearSelectionOnBackPressedCallback.isEnabled = selecting
 
-        adapter.selecting = selecting
         setupToolbarForSelection(
             selecting = selecting,
-            count = selectedItemIds.size,
+            count = selectedCount,
         )
     }
 
