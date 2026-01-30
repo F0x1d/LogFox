@@ -39,6 +39,8 @@ jobs:
       checkout_keystore: ${{ github.event.pull_request.user.login == github.repository_owner }}
       version_name: ${{ needs.extract_version.outputs.version_name }}
       version_code: ${{ needs.extract_version.outputs.version_code }}
+      release_build: false
+      git_sha: ${{ github.sha }}
     secrets: inherit
 
   send:
