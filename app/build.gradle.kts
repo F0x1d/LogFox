@@ -29,7 +29,11 @@ android {
     applicationVariants.configureEach {
         outputs.configureEach {
             if (this is BaseVariantOutputImpl) {
-                outputFileName = "LogFox-${versionName}-${name}.apk"
+                 val shortCommit = providers.environmentVariable("GIT_SHA").orNull ?: "local"
+                 val releaseBuild = providers.environmentVariable("RELEASE_BUILD").orNull ?: "false"
+
+                 outputFileName = if (releaseBuild == "true") "LogFox-v${versionName}-release.apk"
+                 else "LogFox-v${versionName}-${shortCommit}-release.apk"
             }
         }
     }
