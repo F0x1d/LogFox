@@ -75,8 +75,6 @@ internal class LogsFragment :
         it?.let { uri -> send(LogsCommand.ExportSelectedTo(uri)) }
     }
 
-    private var lastPauseEventTimeMillis = 0L
-
     override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) = FragmentLogsBinding.inflate(inflater, container, false)
 
     override fun FragmentLogsBinding.onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -141,13 +139,10 @@ internal class LogsFragment :
             object : RecyclerView.OnScrollListener() {
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     if (viewModel.state.value.paused && !recyclerView.canScrollVertically(1)) {
-                        val enoughTimePassed =
-                            (System.currentTimeMillis() - lastPauseEventTimeMillis) > 300
-                        if (viewModel.state.value.resumeLoggingWithBottomTouch && enoughTimePassed) {
+                        if (viewModel.state.value.resumeLoggingWithBottomTouch) {
                             send(LogsCommand.Resume)
                         }
                     } else {
-                        lastPauseEventTimeMillis = System.currentTimeMillis()
                         send(LogsCommand.Pause)
                     }
                 }
@@ -179,7 +174,10 @@ internal class LogsFragment :
         binding.processPaused(paused = state.paused)
 
         if (state.logsChanged) {
-            binding.updateLogsList(items = state.logs)
+            binding.updateLogsList(
+                items = state.logs,
+                paused = state.paused,
+            )
         }
     }
 
@@ -286,7 +284,6 @@ internal class LogsFragment :
             scrollFab.show()
         } else {
             scrollFab.hide()
-            scrollLogToBottom()
         }
     }
 
@@ -331,7 +328,10 @@ internal class LogsFragment :
         }
     }
 
-    private fun FragmentLogsBinding.updateLogsList(items: List<LogLineItem>?) {
+    private fun FragmentLogsBinding.updateLogsList(
+        items: List<LogLineItem>?,
+        paused: Boolean,
+    ) {
         placeholderLayout.root.apply {
             if (items?.isEmpty() != false) {
                 animate()
@@ -344,9 +344,16 @@ internal class LogsFragment :
             }
         }
 
+        val layoutManager = logsRecycler.layoutManager as LinearLayoutManager
+        val savedState = layoutManager.onSaveInstanceState()
+
         adapter.submitList(null)
         adapter.submitList(items) {
-            scrollLogToBottom()
+            if (paused) {
+                layoutManager.onRestoreInstanceState(savedState)
+            } else {
+                scrollLogToBottom()
+            }
         }
     }
 
