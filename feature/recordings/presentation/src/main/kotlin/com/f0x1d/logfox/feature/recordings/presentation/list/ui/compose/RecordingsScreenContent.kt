@@ -54,7 +54,6 @@ import com.f0x1d.logfox.feature.recordings.presentation.list.ui.MockRecordingsSc
 import com.f0x1d.logfox.feature.recordings.presentation.list.ui.RecordingsScreenListener
 import com.f0x1d.logfox.feature.recordings.presentation.model.LogRecordingItem
 import com.f0x1d.logfox.feature.strings.Strings
-import java.io.File
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -251,15 +250,11 @@ internal val MockRecordingsState = RecordingsState(
         LogRecordingItem(
             recordingId = 0,
             title = "Cool",
-            dateAndTime = 0L,
-            file = File(""),
             formattedDate = "01/01/1970 00:00",
         ),
         LogRecordingItem(
             recordingId = 1,
             title = "Cool",
-            dateAndTime = 0L,
-            file = File(""),
             formattedDate = "01/01/1970 00:00",
         ),
     ),

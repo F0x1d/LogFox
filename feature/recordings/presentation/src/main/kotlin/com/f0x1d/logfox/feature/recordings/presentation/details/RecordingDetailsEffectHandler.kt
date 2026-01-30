@@ -1,31 +1,26 @@
 package com.f0x1d.logfox.feature.recordings.presentation.details
 
-import android.content.Context
-import com.f0x1d.logfox.core.context.deviceData
-import com.f0x1d.logfox.core.di.IODispatcher
-import com.f0x1d.logfox.core.io.exportToZip
-import com.f0x1d.logfox.core.io.putZipEntry
 import com.f0x1d.logfox.core.tea.EffectHandler
-import com.f0x1d.logfox.feature.preferences.domain.service.GetIncludeDeviceInfoInArchivesUseCase
+import com.f0x1d.logfox.feature.datetime.api.DateTimeFormatter
+import com.f0x1d.logfox.feature.recordings.api.domain.ExportRecordingFileUseCase
+import com.f0x1d.logfox.feature.recordings.api.domain.ExportRecordingZipUseCase
 import com.f0x1d.logfox.feature.recordings.api.domain.GetRecordingByIdFlowUseCase
 import com.f0x1d.logfox.feature.recordings.api.domain.UpdateRecordingTitleUseCase
 import com.f0x1d.logfox.feature.recordings.presentation.di.RecordingId
-import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 internal class RecordingDetailsEffectHandler @Inject constructor(
-    @ApplicationContext private val context: Context,
     @RecordingId private val recordingId: Long,
     private val getRecordingByIdFlowUseCase: GetRecordingByIdFlowUseCase,
     private val updateRecordingTitleUseCase: UpdateRecordingTitleUseCase,
-    private val getIncludeDeviceInfoInArchivesUseCase: GetIncludeDeviceInfoInArchivesUseCase,
-    @IODispatcher private val ioDispatcher: CoroutineDispatcher,
+    private val exportRecordingFileUseCase: ExportRecordingFileUseCase,
+    private val exportRecordingZipUseCase: ExportRecordingZipUseCase,
+    private val dateTimeFormatter: DateTimeFormatter,
 ) : EffectHandler<RecordingDetailsSideEffect, RecordingDetailsCommand> {
     private val titleUpdateMutex = Mutex()
 
@@ -43,34 +38,32 @@ internal class RecordingDetailsEffectHandler @Inject constructor(
                     }
             }
 
+            is RecordingDetailsSideEffect.PrepareFileExport -> {
+                val recording = getRecordingByIdFlowUseCase(recordingId).firstOrNull()
+                    ?: return
+                val filename = "${dateTimeFormatter.formatForExport(recording.dateAndTime)}.log"
+                onCommand(RecordingDetailsCommand.FileExportPickerReady(filename))
+            }
+
+            is RecordingDetailsSideEffect.PrepareZipExport -> {
+                val recording = getRecordingByIdFlowUseCase(recordingId).firstOrNull()
+                    ?: return
+                val filename = "${dateTimeFormatter.formatForExport(recording.dateAndTime)}.zip"
+                onCommand(RecordingDetailsCommand.ZipExportPickerReady(filename))
+            }
+
+            is RecordingDetailsSideEffect.PrepareShare -> {
+                val recording = getRecordingByIdFlowUseCase(recordingId).firstOrNull()
+                    ?: return
+                onCommand(RecordingDetailsCommand.ShareFileReady(recording.file))
+            }
+
             is RecordingDetailsSideEffect.ExportFile -> {
-                withContext(ioDispatcher) {
-                    context.contentResolver.openOutputStream(effect.uri)?.use { outputStream ->
-                        effect.file.inputStream().use { inputStream ->
-                            inputStream.copyTo(outputStream)
-                        }
-                    }
-                }
+                exportRecordingFileUseCase(recordingId, effect.uri)
             }
 
             is RecordingDetailsSideEffect.ExportZipFile -> {
-                withContext(ioDispatcher) {
-                    context.contentResolver.openOutputStream(effect.uri)?.use {
-                        it.exportToZip {
-                            if (getIncludeDeviceInfoInArchivesUseCase()) {
-                                putZipEntry(
-                                    "device.txt",
-                                    deviceData.encodeToByteArray(),
-                                )
-                            }
-
-                            putZipEntry(
-                                name = "recorded.log",
-                                file = effect.file,
-                            )
-                        }
-                    }
-                }
+                exportRecordingZipUseCase(recordingId, effect.uri)
             }
 
             is RecordingDetailsSideEffect.UpdateTitle -> {

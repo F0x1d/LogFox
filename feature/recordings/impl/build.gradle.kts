@@ -13,6 +13,7 @@ dependencies {
 
     implementation(projects.core.di)
     implementation(projects.core.context)
+    implementation(projects.core.io)
     implementation(projects.feature.database.api)
     implementation(projects.feature.datetime.api)
     implementation(projects.feature.preferences.api)

@@ -5,9 +5,12 @@ import android.net.Uri
 sealed interface RecordingDetailsSideEffect {
     // Business logic (handled by EffectHandler)
     data object LoadRecording : RecordingDetailsSideEffect
-    data class ExportFile(val uri: Uri, val file: java.io.File) : RecordingDetailsSideEffect
-    data class ExportZipFile(val uri: Uri, val file: java.io.File) : RecordingDetailsSideEffect
+    data class ExportFile(val uri: Uri) : RecordingDetailsSideEffect
+    data class ExportZipFile(val uri: Uri) : RecordingDetailsSideEffect
     data class UpdateTitle(val title: String, val recordingId: Long) : RecordingDetailsSideEffect
+    data object PrepareFileExport : RecordingDetailsSideEffect
+    data object PrepareZipExport : RecordingDetailsSideEffect
+    data object PrepareShare : RecordingDetailsSideEffect
 
     // UI (handled by Fragment)
     data class LaunchFileExportPicker(val filename: String) : RecordingDetailsSideEffect

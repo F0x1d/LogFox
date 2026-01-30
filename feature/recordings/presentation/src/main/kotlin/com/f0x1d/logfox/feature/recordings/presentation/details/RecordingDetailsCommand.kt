@@ -12,4 +12,7 @@ sealed interface RecordingDetailsCommand {
     data object ExportFileClicked : RecordingDetailsCommand
     data object ExportZipClicked : RecordingDetailsCommand
     data object ShareRecording : RecordingDetailsCommand
+    data class FileExportPickerReady(val filename: String) : RecordingDetailsCommand
+    data class ZipExportPickerReady(val filename: String) : RecordingDetailsCommand
+    data class ShareFileReady(val file: java.io.File) : RecordingDetailsCommand
 }

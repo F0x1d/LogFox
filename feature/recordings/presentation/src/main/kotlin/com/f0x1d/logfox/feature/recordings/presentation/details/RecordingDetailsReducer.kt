@@ -33,23 +33,11 @@ internal class RecordingDetailsReducer @Inject constructor(
         }
 
         is RecordingDetailsCommand.ExportFile -> {
-            val item = state.recordingItem
-            if (item != null) {
-                state.withSideEffects(RecordingDetailsSideEffect.ExportFile(command.uri, item.file))
-            } else {
-                state.noSideEffects()
-            }
+            state.withSideEffects(RecordingDetailsSideEffect.ExportFile(command.uri))
         }
 
         is RecordingDetailsCommand.ExportZipFile -> {
-            val item = state.recordingItem
-            if (item != null) {
-                state.withSideEffects(
-                    RecordingDetailsSideEffect.ExportZipFile(command.uri, item.file),
-                )
-            } else {
-                state.noSideEffects()
-            }
+            state.withSideEffects(RecordingDetailsSideEffect.ExportZipFile(command.uri))
         }
 
         is RecordingDetailsCommand.UpdateTitle -> {
@@ -65,36 +53,31 @@ internal class RecordingDetailsReducer @Inject constructor(
         }
 
         is RecordingDetailsCommand.ExportFileClicked -> {
-            val item = state.recordingItem
-            if (item != null) {
-                val filename = "${dateTimeFormatter.formatForExport(item.dateAndTime)}.log"
-                state.withSideEffects(
-                    RecordingDetailsSideEffect.LaunchFileExportPicker(filename = filename),
-                )
-            } else {
-                state.noSideEffects()
-            }
+            state.withSideEffects(RecordingDetailsSideEffect.PrepareFileExport)
         }
 
         is RecordingDetailsCommand.ExportZipClicked -> {
-            val item = state.recordingItem
-            if (item != null) {
-                val filename = "${dateTimeFormatter.formatForExport(item.dateAndTime)}.zip"
-                state.withSideEffects(
-                    RecordingDetailsSideEffect.LaunchZipExportPicker(filename = filename),
-                )
-            } else {
-                state.noSideEffects()
-            }
+            state.withSideEffects(RecordingDetailsSideEffect.PrepareZipExport)
         }
 
         is RecordingDetailsCommand.ShareRecording -> {
-            val item = state.recordingItem
-            if (item != null) {
-                state.withSideEffects(RecordingDetailsSideEffect.ShareFile(item.file))
-            } else {
-                state.noSideEffects()
-            }
+            state.withSideEffects(RecordingDetailsSideEffect.PrepareShare)
+        }
+
+        is RecordingDetailsCommand.FileExportPickerReady -> {
+            state.withSideEffects(
+                RecordingDetailsSideEffect.LaunchFileExportPicker(filename = command.filename),
+            )
+        }
+
+        is RecordingDetailsCommand.ZipExportPickerReady -> {
+            state.withSideEffects(
+                RecordingDetailsSideEffect.LaunchZipExportPicker(filename = command.filename),
+            )
+        }
+
+        is RecordingDetailsCommand.ShareFileReady -> {
+            state.withSideEffects(RecordingDetailsSideEffect.ShareFile(command.file))
         }
     }
 }
