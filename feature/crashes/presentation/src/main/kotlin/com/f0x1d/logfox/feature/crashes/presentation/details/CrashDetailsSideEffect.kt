@@ -18,7 +18,12 @@ sealed interface CrashDetailsSideEffect {
     data class DeleteCrash(val appCrash: AppCrash) : CrashDetailsSideEffect
 
     // UI side effects
+    data class OpenAppInfo(val packageName: String) : CrashDetailsSideEffect
+    data class OpenNotificationSettings(val channelId: String) : CrashDetailsSideEffect
+    data object ConfirmBlacklist : CrashDetailsSideEffect
+    data object ConfirmDelete : CrashDetailsSideEffect
     data class CopyText(val text: String) : CrashDetailsSideEffect
+    data class ShareCrashLog(val text: String) : CrashDetailsSideEffect
     data object Close : CrashDetailsSideEffect
     data class LaunchFileExportPicker(val filename: String) : CrashDetailsSideEffect
     data class LaunchZipExportPicker(val filename: String) : CrashDetailsSideEffect

@@ -1,7 +1,7 @@
 package com.f0x1d.logfox.feature.crashes.presentation.list
 
-import com.f0x1d.logfox.feature.crashes.api.model.AppCrash
 import com.f0x1d.logfox.feature.crashes.api.model.AppCrashesCount
+import com.f0x1d.logfox.feature.crashes.presentation.common.model.AppCrashesCountItem
 import com.f0x1d.logfox.feature.preferences.CrashesSort
 
 sealed interface CrashesCommand {
@@ -19,9 +19,9 @@ sealed interface CrashesCommand {
 
     data class UpdateSort(val sortType: CrashesSort, val sortInReversedOrder: Boolean) : CrashesCommand
 
-    data class DeleteCrashesByPackageName(val appCrash: AppCrash) : CrashesCommand
+    data class DeleteCrashesByPackageName(val item: AppCrashesCountItem) : CrashesCommand
 
-    data class DeleteCrash(val appCrash: AppCrash) : CrashesCommand
+    data class DeleteCrash(val item: AppCrashesCountItem) : CrashesCommand
 
     data object ClearCrashes : CrashesCommand
 

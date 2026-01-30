@@ -1,6 +1,5 @@
 package com.f0x1d.logfox.feature.crashes.presentation.list
 
-import com.f0x1d.logfox.feature.crashes.api.model.AppCrash
 import com.f0x1d.logfox.feature.preferences.CrashesSort
 
 sealed interface CrashesSideEffect {
@@ -11,9 +10,9 @@ sealed interface CrashesSideEffect {
 
     data class UpdateSortPreferences(val sortType: CrashesSort, val sortInReversedOrder: Boolean) : CrashesSideEffect
 
-    data class DeleteCrashesByPackageName(val appCrash: AppCrash) : CrashesSideEffect
+    data class DeleteCrashesByPackageName(val packageName: String) : CrashesSideEffect
 
-    data class DeleteCrash(val appCrash: AppCrash) : CrashesSideEffect
+    data class DeleteCrash(val crashId: Long) : CrashesSideEffect
 
     data object ClearAllCrashes : CrashesSideEffect
 

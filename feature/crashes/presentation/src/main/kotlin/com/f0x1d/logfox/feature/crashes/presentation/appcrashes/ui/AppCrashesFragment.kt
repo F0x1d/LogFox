@@ -37,11 +37,11 @@ internal class AppCrashesFragment :
 
     private val adapter = CrashesAdapter(
         click = {
-            send(AppCrashesCommand.CrashClicked(it.lastCrash.id))
+            send(AppCrashesCommand.CrashClicked(it.lastCrashId))
         },
         delete = {
             showAreYouSureDeleteDialog {
-                viewModel.deleteCrash(it.lastCrash)
+                send(AppCrashesCommand.DeleteCrash(it))
             }
         },
     )

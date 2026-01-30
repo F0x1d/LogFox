@@ -3,20 +3,17 @@ package com.f0x1d.logfox.feature.logging.presentation.list.viewholder
 import android.view.Gravity
 import androidx.appcompat.widget.PopupMenu
 import com.f0x1d.logfox.core.recycler.viewholder.BaseViewHolder
-import com.f0x1d.logfox.feature.datetime.impl.dateTimeFormatter
-import com.f0x1d.logfox.feature.logging.api.model.LogLine
 import com.f0x1d.logfox.feature.logging.presentation.R
 import com.f0x1d.logfox.feature.logging.presentation.databinding.ItemLogBinding
 import com.f0x1d.logfox.feature.logging.presentation.list.adapter.LogsAdapter
+import com.f0x1d.logfox.feature.logging.presentation.list.model.LogLineItem
 
 class LogViewHolder(
     binding: ItemLogBinding,
-    private val selectedItem: (LogLine, Boolean) -> Unit,
-    private val copyLog: (LogLine) -> Unit,
-    private val createFilter: (LogLine) -> Unit,
-) : BaseViewHolder<LogLine, ItemLogBinding>(binding) {
-
-    private val dateTimeFormatter = binding.root.context.dateTimeFormatter
+    private val selectedItem: (LogLineItem, Boolean) -> Unit,
+    private val copyLog: (LogLineItem) -> Unit,
+    private val createFilter: (LogLineItem) -> Unit,
+) : BaseViewHolder<LogLineItem, ItemLogBinding>(binding) {
 
     private val popupMenu: PopupMenu = PopupMenu(
         binding.root.context,
@@ -53,7 +50,7 @@ class LogViewHolder(
             root.setOnClickListener {
                 val adapter = adapter<LogsAdapter>() ?: return@setOnClickListener
 
-                if (adapter.selectedItems.isNotEmpty()) {
+                if (adapter.selecting) {
                     selectItem()
                 } else {
                     expandOrCollapseItem()
@@ -62,7 +59,7 @@ class LogViewHolder(
             root.setOnLongClickListener {
                 val adapter = adapter<LogsAdapter>() ?: return@setOnLongClickListener true
 
-                if (adapter.selectedItems.isNotEmpty()) {
+                if (adapter.selecting) {
                     expandOrCollapseItem()
                 } else {
                     popupMenu.show()
@@ -73,19 +70,13 @@ class LogViewHolder(
         }
     }
 
-    override fun ItemLogBinding.bindTo(data: LogLine) {
+    override fun ItemLogBinding.bindTo(data: LogLineItem) {
         adapter<LogsAdapter>()?.textSize?.also {
             logText.textSize = it
             levelView.textSize = it
         }
 
-        adapter<LogsAdapter>()?.logsFormat?.let { values ->
-            logText.text = data.formatOriginal(
-                values = values,
-                formatDate = dateTimeFormatter::formatDate,
-                formatTime = dateTimeFormatter::formatTime,
-            )
-        }
+        logText.text = data.displayText
 
         levelView.logLevel = data.level
 
@@ -96,28 +87,27 @@ class LogViewHolder(
         popupMenu.dismiss()
     }
 
-    private fun selectItem() = adapter<LogsAdapter>()?.selectedItems?.apply {
+    private fun selectItem() {
         currentItem?.also {
-            val newValue = any { logLine -> it.id == logLine.id }.not()
-            selectedItem(it, newValue)
+            selectedItem(it, !it.selected)
         }
     }
 
     private fun ItemLogBinding.expandOrCollapseItem() = adapter<LogsAdapter>()?.apply {
         expandedStates.apply {
             currentItem?.also {
-                val newValue = getOrElse(it.id) { logsExpanded }.not()
+                val newValue = getOrElse(it.logLineId) { logsExpanded }.not()
 
-                put(it.id, newValue)
+                put(it.logLineId, newValue)
                 changeExpandedAndSelected(it)
             }
         }
     }
 
-    private fun ItemLogBinding.changeExpandedAndSelected(logLine: LogLine) = adapter<LogsAdapter>()?.apply {
-        val expanded = expandedStates.getOrElse(logLine.id) { logsExpanded }
+    private fun ItemLogBinding.changeExpandedAndSelected(item: LogLineItem) = adapter<LogsAdapter>()?.apply {
+        val expanded = expandedStates.getOrElse(item.logLineId) { logsExpanded }
 
         logText.maxLines = if (expanded) Int.MAX_VALUE else 1
-        container.isSelected = selectedItems.contains(logLine)
+        container.isSelected = item.selected
     }
 }

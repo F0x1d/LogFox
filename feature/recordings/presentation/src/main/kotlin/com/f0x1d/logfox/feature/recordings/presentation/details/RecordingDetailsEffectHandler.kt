@@ -46,7 +46,7 @@ internal class RecordingDetailsEffectHandler @Inject constructor(
             is RecordingDetailsSideEffect.ExportFile -> {
                 withContext(ioDispatcher) {
                     context.contentResolver.openOutputStream(effect.uri)?.use { outputStream ->
-                        effect.recording.file.inputStream().use { inputStream ->
+                        effect.file.inputStream().use { inputStream ->
                             inputStream.copyTo(outputStream)
                         }
                     }
@@ -66,7 +66,7 @@ internal class RecordingDetailsEffectHandler @Inject constructor(
 
                             putZipEntry(
                                 name = "recorded.log",
-                                file = effect.recording.file,
+                                file = effect.file,
                             )
                         }
                     }
@@ -75,12 +75,14 @@ internal class RecordingDetailsEffectHandler @Inject constructor(
 
             is RecordingDetailsSideEffect.UpdateTitle -> {
                 titleUpdateMutex.withLock {
-                    updateRecordingTitleUseCase(effect.recording, effect.title)
+                    updateRecordingTitleUseCase(effect.recordingId, effect.title)
                 }
             }
 
             // UI side effects - handled by Fragment
-            is RecordingDetailsSideEffect.NavigateToViewRecording -> Unit
+            is RecordingDetailsSideEffect.LaunchFileExportPicker -> Unit
+            is RecordingDetailsSideEffect.LaunchZipExportPicker -> Unit
+            is RecordingDetailsSideEffect.ShareFile -> Unit
         }
     }
 }

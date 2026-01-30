@@ -2,6 +2,7 @@ package com.f0x1d.logfox.feature.recordings.presentation.list
 
 import com.f0x1d.logfox.feature.recordings.api.data.RecordingState
 import com.f0x1d.logfox.feature.recordings.api.model.LogRecording
+import com.f0x1d.logfox.feature.recordings.presentation.model.LogRecordingItem
 
 sealed interface RecordingsCommand {
     data object Load : RecordingsCommand
@@ -13,7 +14,7 @@ sealed interface RecordingsCommand {
     data object TogglePauseResume : RecordingsCommand
     data object ClearRecordings : RecordingsCommand
     data object SaveAll : RecordingsCommand
-    data class Delete(val recording: LogRecording) : RecordingsCommand
+    data class Delete(val item: LogRecordingItem) : RecordingsCommand
 
     // Result commands from effect handler
     data class RecordingEnded(val recording: LogRecording?) : RecordingsCommand
@@ -21,5 +22,5 @@ sealed interface RecordingsCommand {
     data class ShowSavingSnackbar(val text: String) : RecordingsCommand
 
     // Navigation
-    data class OpenRecordingDetails(val recording: LogRecording) : RecordingsCommand
+    data class OpenRecordingDetails(val item: LogRecordingItem) : RecordingsCommand
 }

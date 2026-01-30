@@ -1,12 +1,12 @@
 package com.f0x1d.logfox.feature.recordings.presentation.list.ui
 
 import androidx.compose.runtime.Immutable
-import com.f0x1d.logfox.feature.recordings.api.model.LogRecording
+import com.f0x1d.logfox.feature.recordings.presentation.model.LogRecordingItem
 
 @Immutable
 internal data class RecordingsScreenListener(
-    val onRecordingClick: (LogRecording) -> Unit,
-    val onRecordingDeleteClick: (LogRecording) -> Unit,
+    val onRecordingClick: (LogRecordingItem) -> Unit,
+    val onRecordingDeleteClick: (LogRecordingItem) -> Unit,
     val onStartStopClick: () -> Unit,
     val onPauseResumeClick: () -> Unit,
     val onClearClick: () -> Unit,

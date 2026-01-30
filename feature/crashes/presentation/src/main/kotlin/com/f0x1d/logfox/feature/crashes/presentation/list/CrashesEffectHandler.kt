@@ -87,11 +87,11 @@ constructor(
             }
 
             is CrashesSideEffect.DeleteCrashesByPackageName -> {
-                deleteAllCrashesByPackageNameUseCase(effect.appCrash)
+                deleteAllCrashesByPackageNameUseCase(effect.packageName)
             }
 
             is CrashesSideEffect.DeleteCrash -> {
-                deleteCrashUseCase(effect.appCrash)
+                deleteCrashUseCase(effect.crashId)
             }
 
             is CrashesSideEffect.ClearAllCrashes -> {

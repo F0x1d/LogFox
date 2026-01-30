@@ -7,13 +7,8 @@
     <fragment
         android:id="@+id/logsFragment"
         android:name="com.f0x1d.logfox.feature.logging.presentation.list.ui.LogsFragment"
-        android:label="LogsFragment" >
-        <argument
-            android:name="file_uri"
-            app:argType="android.net.Uri"
-            android:defaultValue="@null"
-            app:nullable="true" />
-    </fragment>
+        android:label="LogsFragment" />
+
     <action
         android:id="@+id/action_logsFragment_to_logsExtendedCopyFragment"
         app:destination="@id/logsExtendedCopyFragment"

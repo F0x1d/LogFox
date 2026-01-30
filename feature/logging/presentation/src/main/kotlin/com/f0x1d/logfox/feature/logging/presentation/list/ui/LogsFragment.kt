@@ -17,11 +17,8 @@ import com.f0x1d.logfox.core.tea.BaseStoreFragment
 import com.f0x1d.logfox.core.ui.icons.Icons
 import com.f0x1d.logfox.core.ui.view.invalidateNavigationButton
 import com.f0x1d.logfox.core.ui.view.setClickListenerOn
-import com.f0x1d.logfox.core.ui.view.setupBackButtonForNavController
 import com.f0x1d.logfox.core.ui.view.setupCloseButton
 import com.f0x1d.logfox.feature.filters.api.model.UserFilter
-import com.f0x1d.logfox.feature.logging.api.model.LogLine
-import com.f0x1d.logfox.feature.logging.api.presentation.LoggingServiceDelegate
 import com.f0x1d.logfox.feature.logging.presentation.R
 import com.f0x1d.logfox.feature.logging.presentation.databinding.FragmentLogsBinding
 import com.f0x1d.logfox.feature.logging.presentation.list.LogsCommand
@@ -29,13 +26,13 @@ import com.f0x1d.logfox.feature.logging.presentation.list.LogsSideEffect
 import com.f0x1d.logfox.feature.logging.presentation.list.LogsState
 import com.f0x1d.logfox.feature.logging.presentation.list.LogsViewModel
 import com.f0x1d.logfox.feature.logging.presentation.list.adapter.LogsAdapter
+import com.f0x1d.logfox.feature.logging.presentation.list.model.LogLineItem
 import com.f0x1d.logfox.feature.strings.Plurals
 import com.f0x1d.logfox.feature.strings.Strings
 import com.f0x1d.logfox.navigation.Directions
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import dev.chrisbanes.insetter.applyInsetter
-import javax.inject.Inject
 
 @AndroidEntryPoint
 internal class LogsFragment :
@@ -49,19 +46,16 @@ internal class LogsFragment :
 
     override val viewModel by viewModels<LogsViewModel>()
 
-    @Inject
-    lateinit var loggingServiceDelegate: LoggingServiceDelegate
-
     private val adapter by lazy {
         LogsAdapter(
-            selectedItem = { logLine, selected ->
-                send(LogsCommand.SelectLine(logLine, selected))
+            selectedItem = { logLineItem, selected ->
+                send(LogsCommand.SelectLine(logLineItem, selected))
             },
-            copyLog = { logLine ->
-                send(LogsCommand.CopyLog(logLine))
+            copyLog = { logLineItem ->
+                send(LogsCommand.CopyLog(logLineItem))
             },
-            createFilter = { logLine ->
-                send(LogsCommand.CreateFilterFromLog(logLine))
+            createFilter = { logLineItem ->
+                send(LogsCommand.CreateFilterFromLog(logLineItem))
             },
         )
     }
@@ -119,18 +113,16 @@ internal class LogsFragment :
                 send(LogsCommand.SelectedToRecording)
             }
             setClickListenerOn(R.id.export_selected_item) {
-                exportLogsLauncher.launch(
-                    "${viewModel.formatForExport(System.currentTimeMillis())}.log",
-                )
+                send(LogsCommand.ExportSelectedClicked)
             }
             setClickListenerOn(R.id.clear_item) {
-                loggingServiceDelegate.clearLogs()
+                send(LogsCommand.ClearLogs)
             }
             setClickListenerOn(R.id.restart_logging_item) {
-                loggingServiceDelegate.restartLogging()
+                send(LogsCommand.RestartLogging)
             }
             setClickListenerOn(R.id.exit_item) {
-                loggingServiceDelegate.killService()
+                send(LogsCommand.KillService)
             }
         }
 
@@ -176,18 +168,14 @@ internal class LogsFragment :
         binding.processQueryAndFilters(
             query = state.query,
             filters = state.filters,
-            viewingFile = state.viewingFile,
         )
         binding.processSelectedItems(
-            selectedItems = state.selectedItems,
-            viewingFile = state.viewingFile,
-            viewingFileName = state.viewingFileName,
+            selectedItemIds = state.selectedItemIds,
         )
         binding.processPaused(paused = state.paused)
 
         adapter.textSize = state.logsTextSize
         adapter.logsExpanded = state.logsExpanded
-        adapter.logsFormat = state.logsFormat
 
         if (state.logsChanged) {
             binding.updateLogsList(items = state.logs)
@@ -239,7 +227,10 @@ internal class LogsFragment :
                 snackbar(Strings.text_copied)
             }
 
-            // Business logic side effects - handled by EffectHandler
+            is LogsSideEffect.LaunchExportPicker -> {
+                exportLogsLauncher.launch(sideEffect.filename)
+            }
+
             else -> Unit
         }
     }
@@ -247,7 +238,6 @@ internal class LogsFragment :
     private fun FragmentLogsBinding.processQueryAndFilters(
         query: String?,
         filters: List<UserFilter>,
-        viewingFile: Boolean,
     ) {
         val subtitle = buildString {
             if (query != null) {
@@ -268,7 +258,6 @@ internal class LogsFragment :
         toolbar.subtitle = subtitle
         placeholderLayout.placeholderText.setText(
             when {
-                viewingFile -> Strings.no_logs
                 subtitle.isEmpty() -> Strings.waiting_for_logs
                 else -> Strings.all_logs_were_filtered_out
             },
@@ -276,20 +265,16 @@ internal class LogsFragment :
     }
 
     private fun FragmentLogsBinding.processSelectedItems(
-        selectedItems: Set<LogLine>,
-        viewingFile: Boolean,
-        viewingFileName: String?,
+        selectedItemIds: Set<Long>,
     ) {
-        val selecting = selectedItems.isNotEmpty()
+        val selecting = selectedItemIds.isNotEmpty()
 
         clearSelectionOnBackPressedCallback.isEnabled = selecting
 
-        adapter.selectedItems = selectedItems
+        adapter.selecting = selecting
         setupToolbarForSelection(
             selecting = selecting,
-            count = selectedItems.size,
-            viewingFile = viewingFile,
-            viewingFileName = viewingFileName,
+            count = selectedItemIds.size,
         )
     }
 
@@ -309,8 +294,6 @@ internal class LogsFragment :
     private fun FragmentLogsBinding.setupToolbarForSelection(
         selecting: Boolean,
         count: Int,
-        viewingFile: Boolean,
-        viewingFileName: String?,
     ) = toolbar.apply {
         val setVisibility = { itemId: Int, visible: Boolean ->
             menu.findItem(itemId).isVisible = visible
@@ -320,7 +303,7 @@ internal class LogsFragment :
         val visibleOnlyInDefault = { itemId: Int ->
             setVisibility(
                 itemId,
-                !selecting && !viewingFile,
+                !selecting,
             )
         }
 
@@ -335,7 +318,6 @@ internal class LogsFragment :
 
         title = when {
             selecting -> resources.getQuantityString(Plurals.selected_count, count, count)
-            viewingFile -> viewingFileName
             else -> getString(Strings.app_name)
         }
 
@@ -345,14 +327,12 @@ internal class LogsFragment :
             setNavigationOnClickListener {
                 send(LogsCommand.ClearSelection)
             }
-        } else if (viewingFile) {
-            setupBackButtonForNavController()
         } else {
             invalidateNavigationButton()
         }
     }
 
-    private fun FragmentLogsBinding.updateLogsList(items: List<LogLine>?) {
+    private fun FragmentLogsBinding.updateLogsList(items: List<LogLineItem>?) {
         placeholderLayout.root.apply {
             if (items?.isEmpty() != false) {
                 animate()

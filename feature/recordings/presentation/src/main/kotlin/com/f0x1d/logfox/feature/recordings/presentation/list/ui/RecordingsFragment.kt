@@ -13,7 +13,6 @@ import androidx.navigation.fragment.findNavController
 import com.f0x1d.logfox.core.ui.compose.BaseComposeFragment
 import com.f0x1d.logfox.core.ui.dialog.showAreYouSureClearDialog
 import com.f0x1d.logfox.core.ui.dialog.showAreYouSureDeleteDialog
-import com.f0x1d.logfox.feature.recordings.api.model.LogRecording
 import com.f0x1d.logfox.feature.recordings.presentation.list.RecordingsCommand
 import com.f0x1d.logfox.feature.recordings.presentation.list.RecordingsSideEffect
 import com.f0x1d.logfox.feature.recordings.presentation.list.RecordingsViewModel
@@ -40,7 +39,7 @@ internal class RecordingsFragment : BaseComposeFragment() {
                         snackbarHostState.showSnackbar(sideEffect.text)
                     }
 
-                    is RecordingsSideEffect.OpenRecording -> openDetails(sideEffect.recording)
+                    is RecordingsSideEffect.OpenRecording -> openDetails(sideEffect.recordingId)
 
                     // Business logic side effects - handled by EffectHandler, ignored here
                     else -> Unit
@@ -50,7 +49,7 @@ internal class RecordingsFragment : BaseComposeFragment() {
 
         val listener = remember {
             RecordingsScreenListener(
-                onRecordingClick = { it?.let { recording -> viewModel.send(RecordingsCommand.OpenRecordingDetails(recording)) } },
+                onRecordingClick = { viewModel.send(RecordingsCommand.OpenRecordingDetails(it)) },
                 onRecordingDeleteClick = {
                     showAreYouSureDeleteDialog {
                         viewModel.send(RecordingsCommand.Delete(it))
@@ -74,10 +73,10 @@ internal class RecordingsFragment : BaseComposeFragment() {
         )
     }
 
-    private fun openDetails(recording: LogRecording?) = recording?.id?.also {
+    private fun openDetails(recordingId: Long) {
         findNavController().navigate(
             resId = Directions.action_recordingsFragment_to_recordingBottomSheet,
-            args = bundleOf("recording_id" to it),
+            args = bundleOf("recording_id" to recordingId),
         )
     }
 }

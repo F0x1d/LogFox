@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.withContext
+import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -17,10 +18,16 @@ internal class LogsDataSourceImpl @Inject constructor(
 ) : LogsDataSource {
 
     private val mutableLogs = MutableStateFlow(emptyList<LogLine>())
+    private val logsById = ConcurrentHashMap<Long, LogLine>()
 
     override val logs: Flow<List<LogLine>> get() = mutableLogs.asStateFlow()
 
+    override fun getByIds(ids: Set<Long>): List<LogLine> =
+        ids.mapNotNull { logsById[it] }
+
     override suspend fun updateLogs(logs: List<LogLine>) = withContext(defaultDispatcher) {
+        logsById.clear()
+        logs.forEach { logsById[it.id] = it }
         mutableLogs.update { logs.toMutableList() }
     }
 }

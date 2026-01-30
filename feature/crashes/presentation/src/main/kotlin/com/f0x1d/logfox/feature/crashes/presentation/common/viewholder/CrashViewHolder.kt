@@ -4,16 +4,15 @@ import android.annotation.SuppressLint
 import com.bumptech.glide.Glide
 import com.f0x1d.logfox.core.recycler.viewholder.BaseViewHolder
 import com.f0x1d.logfox.core.ui.glide.loadIcon
-import com.f0x1d.logfox.feature.crashes.api.model.AppCrashesCount
+import com.f0x1d.logfox.feature.crashes.presentation.common.model.AppCrashesCountItem
 import com.f0x1d.logfox.feature.crashes.presentation.databinding.ItemCrashBinding
 import com.f0x1d.logfox.feature.strings.Strings
-import java.util.Date
 
 class CrashViewHolder(
     binding: ItemCrashBinding,
-    click: (AppCrashesCount) -> Unit,
-    delete: (AppCrashesCount) -> Unit,
-) : BaseViewHolder<AppCrashesCount, ItemCrashBinding>(binding) {
+    click: (AppCrashesCountItem) -> Unit,
+    delete: (AppCrashesCountItem) -> Unit,
+) : BaseViewHolder<AppCrashesCountItem, ItemCrashBinding>(binding) {
 
     init {
         binding.apply {
@@ -27,19 +26,17 @@ class CrashViewHolder(
     }
 
     @SuppressLint("SetTextI18n")
-    override fun ItemCrashBinding.bindTo(data: AppCrashesCount) {
-        icon.loadIcon(data.lastCrash.packageName)
+    override fun ItemCrashBinding.bindTo(data: AppCrashesCountItem) {
+        icon.loadIcon(data.packageName)
 
-        title.text = data.lastCrash.appName ?: data.lastCrash.packageName
-
-        val localeString = Date(data.lastCrash.dateAndTime).toLocaleString()
+        title.text = data.appName ?: data.packageName
 
         dateText.text = when (data.count) {
-            1 -> "${data.lastCrash.crashType.readableName} • $localeString"
+            1 -> "${data.crashType.readableName} • ${data.formattedDate}"
 
             else -> "${root.context.getString(
                 Strings.crashes,
-            )}: ${data.count} • ${data.lastCrash.packageName}"
+            )}: ${data.count} • ${data.packageName}"
         }
     }
 

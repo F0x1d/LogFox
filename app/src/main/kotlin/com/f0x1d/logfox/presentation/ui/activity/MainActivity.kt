@@ -2,13 +2,11 @@ package com.f0x1d.logfox.presentation.ui.activity
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.constraintlayout.widget.ConstraintSet
-import androidx.core.os.bundleOf
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
@@ -130,35 +128,6 @@ class MainActivity :
         barView?.setupWithNavController(navController)
 
         navController.addOnDestinationChangedListener(this@MainActivity)
-    }
-
-    override fun onPostCreate(savedInstanceState: Bundle?) {
-        super.onPostCreate(savedInstanceState)
-        handleIntent(intent)
-    }
-
-    override fun onNewIntent(intent: Intent) {
-        super.onNewIntent(intent)
-        handleIntent(intent, onNewIntent = true)
-    }
-
-    private fun handleIntent(intent: Intent?, onNewIntent: Boolean = false) {
-        if (onNewIntent) {
-            if (navController.handleDeepLink(intent)) {
-                return
-            }
-        }
-
-        if (intent == null) return
-
-        if (intent.data == null) return
-
-        when (intent.action) {
-            Intent.ACTION_VIEW -> navController.navigate(
-                resId = Directions.action_global_logsFragment,
-                args = bundleOf("file_uri" to intent.data),
-            )
-        }
     }
 
     override fun onDestinationChanged(

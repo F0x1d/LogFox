@@ -49,13 +49,12 @@ import com.f0x1d.logfox.compose.designsystem.component.placeholder.ListPlacehold
 import com.f0x1d.logfox.compose.designsystem.theme.LogFoxTheme
 import com.f0x1d.logfox.core.ui.icons.Icons
 import com.f0x1d.logfox.feature.recordings.api.data.RecordingState
-import com.f0x1d.logfox.feature.recordings.api.model.LogRecording
 import com.f0x1d.logfox.feature.recordings.presentation.list.RecordingsState
 import com.f0x1d.logfox.feature.recordings.presentation.list.ui.MockRecordingsScreenListener
 import com.f0x1d.logfox.feature.recordings.presentation.list.ui.RecordingsScreenListener
+import com.f0x1d.logfox.feature.recordings.presentation.model.LogRecordingItem
 import com.f0x1d.logfox.feature.strings.Strings
 import java.io.File
-import java.util.Date
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -165,11 +164,11 @@ private fun RecordingsItems(
 
         itemsIndexed(
             items = state.recordings,
-            key = { _, item -> item.id },
+            key = { _, item -> item.recordingId },
         ) { index, item ->
             RecordingItem(
                 modifier = Modifier.animateItem(),
-                logRecording = item,
+                item = item,
                 onRecordingClick = listener.onRecordingClick,
                 onRecordingDeleteClick = listener.onRecordingDeleteClick,
             )
@@ -188,16 +187,16 @@ private fun RecordingsItems(
 
 @Composable
 private fun RecordingItem(
-    logRecording: LogRecording,
+    item: LogRecordingItem,
     modifier: Modifier = Modifier,
-    onRecordingClick: (LogRecording) -> Unit = { },
-    onRecordingDeleteClick: (LogRecording) -> Unit = { },
+    onRecordingClick: (LogRecordingItem) -> Unit = { },
+    onRecordingDeleteClick: (LogRecordingItem) -> Unit = { },
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
             .height(IntrinsicSize.Min)
-            .clickable { onRecordingClick(logRecording) }
+            .clickable { onRecordingClick(item) }
             .padding(
                 vertical = 10.dp,
                 horizontal = 10.dp,
@@ -220,7 +219,7 @@ private fun RecordingItem(
             verticalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterVertically),
         ) {
             Text(
-                text = logRecording.title,
+                text = item.title,
                 color = MaterialTheme.colorScheme.onSurface,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
@@ -228,18 +227,15 @@ private fun RecordingItem(
                 overflow = TextOverflow.Ellipsis,
             )
 
-            val dateText = remember(logRecording.dateAndTime) {
-                Date(logRecording.dateAndTime).toLocaleString()
-            }
             Text(
-                text = dateText,
+                text = item.formattedDate,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
         }
 
         IconButton(
-            onClick = { onRecordingDeleteClick(logRecording) },
+            onClick = { onRecordingDeleteClick(item) },
         ) {
             Icon(
                 painter = painterResource(Icons.ic_delete),
@@ -252,16 +248,19 @@ private fun RecordingItem(
 
 internal val MockRecordingsState = RecordingsState(
     recordings = listOf(
-        LogRecording(
+        LogRecordingItem(
+            recordingId = 0,
             title = "Cool",
             dateAndTime = 0L,
             file = File(""),
+            formattedDate = "01/01/1970 00:00",
         ),
-        LogRecording(
+        LogRecordingItem(
+            recordingId = 1,
             title = "Cool",
             dateAndTime = 0L,
             file = File(""),
-            id = 1,
+            formattedDate = "01/01/1970 00:00",
         ),
     ),
     recordingState = RecordingState.RECORDING,

@@ -20,7 +20,7 @@ interface CrashesRepository {
 
     suspend fun delete(item: AppCrash)
 
-    suspend fun deleteAllByPackageName(appCrash: AppCrash)
+    suspend fun deleteAllByPackageName(packageName: String)
 
     suspend fun clear()
 }

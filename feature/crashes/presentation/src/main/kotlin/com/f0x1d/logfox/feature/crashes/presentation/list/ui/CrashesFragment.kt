@@ -51,26 +51,26 @@ internal class CrashesFragment :
         click = {
             send(
                 CrashesCommand.CrashClicked(
-                    crashId = it.lastCrash.id,
+                    crashId = it.lastCrashId,
                     count = it.count,
-                    packageName = it.lastCrash.packageName,
-                    appName = it.lastCrash.appName,
+                    packageName = it.packageName,
+                    appName = it.appName,
                 ),
             )
         },
         delete = {
             showAreYouSureDeleteDialog {
-                viewModel.deleteCrashesByPackageName(it.lastCrash)
+                send(CrashesCommand.DeleteCrashesByPackageName(it))
             }
         },
     )
     private val searchedAdapter = CrashesAdapter(
         click = {
-            send(CrashesCommand.SearchedCrashClicked(it.lastCrash.id))
+            send(CrashesCommand.SearchedCrashClicked(it.lastCrashId))
         },
         delete = {
             showAreYouSureDeleteDialog {
-                viewModel.deleteCrash(it.lastCrash)
+                send(CrashesCommand.DeleteCrash(it))
             }
         },
     )
@@ -107,14 +107,14 @@ internal class CrashesFragment :
             }
             setClickListenerOn(R.id.clear_item) {
                 showAreYouSureClearDialog {
-                    viewModel.clearCrashes()
+                    send(CrashesCommand.ClearCrashes)
                 }
             }
         }
 
         searchView.apply {
             editText.doAfterTextChanged { text ->
-                viewModel.updateQuery(text?.toString().orEmpty())
+                send(CrashesCommand.UpdateQuery(text?.toString().orEmpty()))
             }
 
             addTransitionListener { _, _, newState ->
@@ -221,10 +221,10 @@ internal class CrashesFragment :
             .setTitle(Strings.sort)
             .setView(dialogBinding.root)
             .setPositiveButton(android.R.string.ok) { _, _ ->
-                viewModel.updateSort(
+                send(CrashesCommand.UpdateSort(
                     sortType = selectedSortType,
                     sortInReversedOrder = sortInReversedOrder,
-                )
+                ))
             }
             .show()
     }

@@ -1,7 +1,6 @@
 package com.f0x1d.logfox.feature.crashes.presentation.details
 
 import com.f0x1d.logfox.core.tea.BaseStoreViewModel
-import com.f0x1d.logfox.feature.crashes.api.model.AppCrash
 import com.f0x1d.logfox.feature.preferences.domain.crashes.GetUseSeparateNotificationsChannelsForCrashesUseCase
 import com.f0x1d.logfox.feature.preferences.domain.crashes.GetWrapCrashLogLinesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,13 +24,4 @@ internal class CrashDetailsViewModel @Inject constructor(
         CrashDetailsSideEffect.LoadCrash,
         CrashDetailsSideEffect.ObservePreferences,
     ),
-) {
-
-    fun changeBlacklist(appCrash: AppCrash) {
-        send(CrashDetailsCommand.ChangeBlacklist(appCrash))
-    }
-
-    fun deleteCrash(appCrash: AppCrash) {
-        send(CrashDetailsCommand.DeleteCrash(appCrash))
-    }
-}
+)

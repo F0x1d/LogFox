@@ -4,9 +4,13 @@ import com.f0x1d.logfox.core.tea.ReduceResult
 import com.f0x1d.logfox.core.tea.Reducer
 import com.f0x1d.logfox.core.tea.noSideEffects
 import com.f0x1d.logfox.core.tea.withSideEffects
+import com.f0x1d.logfox.feature.datetime.api.DateTimeFormatter
+import com.f0x1d.logfox.feature.recordings.presentation.model.toPresentationModel
 import javax.inject.Inject
 
-internal class RecordingsReducer @Inject constructor() : Reducer<RecordingsState, RecordingsCommand, RecordingsSideEffect> {
+internal class RecordingsReducer @Inject constructor(
+    private val dateTimeFormatter: DateTimeFormatter,
+) : Reducer<RecordingsState, RecordingsCommand, RecordingsSideEffect> {
 
     override fun reduce(
         state: RecordingsState,
@@ -18,7 +22,11 @@ internal class RecordingsReducer @Inject constructor() : Reducer<RecordingsState
 
         is RecordingsCommand.RecordingsLoaded -> {
             state.copy(
-                recordings = command.recordings,
+                recordings = command.recordings.map { recording ->
+                    recording.toPresentationModel(
+                        formattedDate = "${dateTimeFormatter.formatDate(recording.dateAndTime)} ${dateTimeFormatter.formatTime(recording.dateAndTime)}",
+                    )
+                },
                 recordingState = command.recordingState,
             ).noSideEffects()
         }
@@ -40,20 +48,21 @@ internal class RecordingsReducer @Inject constructor() : Reducer<RecordingsState
         }
 
         is RecordingsCommand.Delete -> {
-            state.withSideEffects(RecordingsSideEffect.DeleteRecording(command.recording))
+            state.withSideEffects(RecordingsSideEffect.DeleteRecording(command.item.recordingId))
         }
 
         is RecordingsCommand.RecordingEnded -> {
             val recording = command.recording
-            if (recording != null) {
-                state.withSideEffects(RecordingsSideEffect.OpenRecording(recording))
+            val recordingId = recording?.id
+            if (recordingId != null) {
+                state.withSideEffects(RecordingsSideEffect.OpenRecording(recordingId))
             } else {
                 state.noSideEffects()
             }
         }
 
         is RecordingsCommand.SaveAllCompleted -> {
-            state.withSideEffects(RecordingsSideEffect.OpenRecording(command.recording))
+            state.withSideEffects(RecordingsSideEffect.OpenRecording(command.recording.id))
         }
 
         is RecordingsCommand.ShowSavingSnackbar -> {
@@ -61,7 +70,7 @@ internal class RecordingsReducer @Inject constructor() : Reducer<RecordingsState
         }
 
         is RecordingsCommand.OpenRecordingDetails -> {
-            state.withSideEffects(RecordingsSideEffect.OpenRecording(command.recording))
+            state.withSideEffects(RecordingsSideEffect.OpenRecording(command.item.recordingId))
         }
     }
 }

@@ -4,9 +4,14 @@ import com.f0x1d.logfox.core.tea.ReduceResult
 import com.f0x1d.logfox.core.tea.Reducer
 import com.f0x1d.logfox.core.tea.noSideEffects
 import com.f0x1d.logfox.core.tea.withSideEffects
+import com.f0x1d.logfox.feature.crashes.api.model.AppCrashesCount
+import com.f0x1d.logfox.feature.crashes.presentation.common.model.toPresentationModel
+import com.f0x1d.logfox.feature.datetime.api.DateTimeFormatter
 import javax.inject.Inject
 
-internal class CrashesReducer @Inject constructor() : Reducer<CrashesState, CrashesCommand, CrashesSideEffect> {
+internal class CrashesReducer @Inject constructor(
+    private val dateTimeFormatter: DateTimeFormatter,
+) : Reducer<CrashesState, CrashesCommand, CrashesSideEffect> {
 
     override fun reduce(
         state: CrashesState,
@@ -15,13 +20,13 @@ internal class CrashesReducer @Inject constructor() : Reducer<CrashesState, Cras
         is CrashesCommand.Load -> state.withSideEffects(CrashesSideEffect.LoadCrashes)
 
         is CrashesCommand.CrashesLoaded -> state.copy(
-            crashes = command.crashes,
+            crashes = command.crashes.map { it.toPresentationModel(it.formattedDate()) },
             currentSort = command.sortType,
             sortInReversedOrder = command.sortInReversedOrder,
         ).noSideEffects()
 
         is CrashesCommand.SearchedCrashesLoaded -> state.copy(
-            searchedCrashes = command.searchedCrashes,
+            searchedCrashes = command.searchedCrashes.map { it.toPresentationModel(it.formattedDate()) },
         ).noSideEffects()
 
         is CrashesCommand.UpdateQuery -> state.copy(
@@ -38,11 +43,11 @@ internal class CrashesReducer @Inject constructor() : Reducer<CrashesState, Cras
         )
 
         is CrashesCommand.DeleteCrashesByPackageName -> state.withSideEffects(
-            CrashesSideEffect.DeleteCrashesByPackageName(command.appCrash),
+            CrashesSideEffect.DeleteCrashesByPackageName(command.item.packageName),
         )
 
         is CrashesCommand.DeleteCrash -> state.withSideEffects(
-            CrashesSideEffect.DeleteCrash(command.appCrash),
+            CrashesSideEffect.DeleteCrash(command.item.lastCrashId),
         )
 
         is CrashesCommand.ClearCrashes -> state.withSideEffects(
@@ -72,4 +77,7 @@ internal class CrashesReducer @Inject constructor() : Reducer<CrashesState, Cras
             CrashesSideEffect.NavigateToBlacklist,
         )
     }
+
+    private fun AppCrashesCount.formattedDate() =
+        "${dateTimeFormatter.formatDate(lastCrash.dateAndTime)} ${dateTimeFormatter.formatTime(lastCrash.dateAndTime)}"
 }

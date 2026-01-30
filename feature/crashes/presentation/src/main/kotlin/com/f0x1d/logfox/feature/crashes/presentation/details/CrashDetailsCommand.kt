@@ -13,6 +13,18 @@ sealed interface CrashDetailsCommand {
         val useSeparateNotificationsChannelsForCrashes: Boolean,
     ) : CrashDetailsCommand
 
+    data object OpenAppInfoClicked : CrashDetailsCommand
+
+    data object OpenNotificationSettingsClicked : CrashDetailsCommand
+
+    data object BlacklistClicked : CrashDetailsCommand
+
+    data object ConfirmBlacklist : CrashDetailsCommand
+
+    data object DeleteClicked : CrashDetailsCommand
+
+    data object ConfirmDelete : CrashDetailsCommand
+
     data object ExportCrashToFileClicked : CrashDetailsCommand
 
     data object ExportCrashToZipClicked : CrashDetailsCommand
@@ -21,9 +33,9 @@ sealed interface CrashDetailsCommand {
 
     data class ExportCrashToZip(val uri: Uri) : CrashDetailsCommand
 
-    data class ChangeBlacklist(val appCrash: AppCrash) : CrashDetailsCommand
-
-    data class DeleteCrash(val appCrash: AppCrash) : CrashDetailsCommand
-
     data object CopyCrashLog : CrashDetailsCommand
+
+    data object ShareCrashLog : CrashDetailsCommand
+
+    data class SearchInLog(val query: String) : CrashDetailsCommand
 }

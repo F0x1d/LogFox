@@ -80,7 +80,7 @@ internal class RecordingsEffectHandler @Inject constructor(
             }
 
             is RecordingsSideEffect.DeleteRecording -> {
-                deleteRecordingUseCase(effect.recording)
+                deleteRecordingUseCase(effect.recordingId)
             }
 
             // UI side effects - handled by Fragment, ignored here

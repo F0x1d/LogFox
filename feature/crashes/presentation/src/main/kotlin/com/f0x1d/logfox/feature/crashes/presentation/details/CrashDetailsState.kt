@@ -8,4 +8,6 @@ data class CrashDetailsState(
     val blacklisted: Boolean? = null,
     val wrapCrashLogLines: Boolean,
     val useSeparateNotificationsChannelsForCrashes: Boolean,
+    val searchQuery: String = "",
+    val searchMatchRanges: List<IntRange> = emptyList(),
 )
