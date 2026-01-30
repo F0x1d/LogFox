@@ -22,7 +22,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          tags: true
+          fetch-tags: true
 
       - name: Extract version from latest tag
         id: extract
@@ -32,11 +32,13 @@ jobs:
             VERSION_NAME="${GITHUB_SHA::7}"
             VERSION_CODE="0"
           else
-            VERSION_NAME="${LATEST_TAG%-*}"
+            VERSION_NAME="${LATEST_TAG#v}"
             VERSION_CODE="${LATEST_TAG##*-}"
           fi
+          SHORT_SHA="${GITHUB_SHA::7}"
           echo "version_name=$VERSION_NAME" >> $GITHUB_OUTPUT
           echo "version_code=$VERSION_CODE" >> $GITHUB_OUTPUT
+          echo "short_commit=$SHORT_SHA" >> $GITHUB_OUTPUT
 
   build:
     needs: extract_version
