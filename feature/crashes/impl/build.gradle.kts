@@ -7,6 +7,7 @@ android.namespace = "com.f0x1d.logfox.feature.crashes.impl"
 dependencies {
     implementation(projects.feature.logging.api)
     implementation(projects.feature.notifications.api)
+    implementation(projects.feature.export.api)
     implementation(projects.strings)
     implementation(projects.core.di)
     implementation(projects.core.context)

@@ -61,6 +61,8 @@ dependencies {
     implementation(projects.feature.appsPicker.impl)
     implementation(projects.feature.appsPicker.presentation)
 
+    implementation(projects.feature.export.impl)
+
     implementation(projects.feature.crashes.impl)
     implementation(projects.feature.crashes.presentation)
 

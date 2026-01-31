@@ -1,26 +1,19 @@
 package com.f0x1d.logfox.feature.filters.presentation.edit
 
-import android.content.Context
-import com.f0x1d.logfox.core.di.IODispatcher
 import com.f0x1d.logfox.core.tea.EffectHandler
 import com.f0x1d.logfox.feature.filters.api.domain.CreateFilterUseCase
+import com.f0x1d.logfox.feature.filters.api.domain.ExportFiltersToUriUseCase
 import com.f0x1d.logfox.feature.filters.api.domain.GetFilterByIdFlowUseCase
 import com.f0x1d.logfox.feature.filters.api.domain.UpdateFilterUseCase
-import com.google.gson.Gson
-import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.take
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 internal class EditFilterEffectHandler @Inject constructor(
-    @ApplicationContext private val context: Context,
     private val getFilterByIdFlowUseCase: GetFilterByIdFlowUseCase,
     private val createFilterUseCase: CreateFilterUseCase,
     private val updateFilterUseCase: UpdateFilterUseCase,
-    private val gson: Gson,
-    @IODispatcher private val ioDispatcher: CoroutineDispatcher,
+    private val exportFiltersToUriUseCase: ExportFiltersToUriUseCase,
 ) : EffectHandler<EditFilterSideEffect, EditFilterCommand> {
 
     override suspend fun handle(
@@ -69,14 +62,7 @@ internal class EditFilterEffectHandler @Inject constructor(
             }
 
             is EditFilterSideEffect.ExportFilter -> {
-                withContext(ioDispatcher) {
-                    runCatching {
-                        context.contentResolver.openOutputStream(effect.uri)?.use { outputStream ->
-                            val filters = listOfNotNull(effect.filter)
-                            outputStream.write(gson.toJson(filters).encodeToByteArray())
-                        }
-                    }
-                }
+                exportFiltersToUriUseCase(effect.uri, listOfNotNull(effect.filter))
             }
 
             // UI side effects - handled by Fragment

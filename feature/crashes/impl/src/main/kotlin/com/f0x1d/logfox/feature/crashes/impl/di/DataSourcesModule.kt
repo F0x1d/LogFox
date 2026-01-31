@@ -5,8 +5,6 @@ import com.f0x1d.logfox.feature.crashes.impl.data.AppInfoDataSourceImpl
 import com.f0x1d.logfox.feature.crashes.impl.data.CrashCollectorDataSource
 import com.f0x1d.logfox.feature.crashes.impl.data.CrashCollectorDataSourceImpl
 import com.f0x1d.logfox.feature.crashes.impl.data.CrashDataSource
-import com.f0x1d.logfox.feature.crashes.impl.data.CrashExportLocalDataSource
-import com.f0x1d.logfox.feature.crashes.impl.data.CrashExportLocalDataSourceImpl
 import com.f0x1d.logfox.feature.crashes.impl.data.CrashesNotificationsLocalDataSource
 import com.f0x1d.logfox.feature.crashes.impl.data.CrashesNotificationsLocalDataSourceImpl
 import com.f0x1d.logfox.feature.crashes.impl.data.CrashesSearchLocalDataSource
@@ -40,11 +38,6 @@ internal interface DataSourcesModule {
     fun bindAppInfoDataSource(
         impl: AppInfoDataSourceImpl,
     ): AppInfoDataSource
-
-    @Binds
-    fun bindCrashExportLocalDataSource(
-        impl: CrashExportLocalDataSourceImpl,
-    ): CrashExportLocalDataSource
 
     @Binds
     @Singleton

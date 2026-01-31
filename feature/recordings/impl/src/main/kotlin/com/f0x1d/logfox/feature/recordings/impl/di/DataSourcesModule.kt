@@ -1,7 +1,5 @@
 package com.f0x1d.logfox.feature.recordings.impl.di
 
-import com.f0x1d.logfox.feature.recordings.impl.data.RecordingExportDataSource
-import com.f0x1d.logfox.feature.recordings.impl.data.RecordingExportDataSourceImpl
 import com.f0x1d.logfox.feature.recordings.impl.data.RecordingLocalDataSource
 import com.f0x1d.logfox.feature.recordings.impl.data.RecordingLocalDataSourceImpl
 import com.f0x1d.logfox.feature.recordings.impl.data.RecordingNotificationsLocalDataSource
@@ -24,9 +22,4 @@ internal interface DataSourcesModule {
     fun bindRecordingNotificationsLocalDataSource(
         impl: RecordingNotificationsLocalDataSourceImpl,
     ): RecordingNotificationsLocalDataSource
-
-    @Binds
-    fun bindRecordingExportDataSource(
-        impl: RecordingExportDataSourceImpl,
-    ): RecordingExportDataSource
 }
