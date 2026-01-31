@@ -8,6 +8,8 @@ dependencies {
     api(projects.feature.logging.api)
 
     implementation(projects.core.di)
+    implementation(projects.feature.export.api)
+    implementation(projects.feature.datetime.api)
     implementation(projects.feature.preferences.api)
     implementation(projects.feature.terminals.api)
 

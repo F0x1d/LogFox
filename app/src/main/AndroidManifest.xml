@@ -29,31 +29,6 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".presentation.ui.activity.OpenFileActivity"
-            android:documentLaunchMode="always"
-            android:excludeFromRecents="true"
-            android:theme="@style/Theme.LogFox.Translucent"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="content"/>
-                <data android:mimeType="*/*" />
-                <data android:pathPattern=".*\\.log" />
-                <data android:pathPattern=".*\\..*\\.log" />
-                <data android:pathPattern=".*\\..*\\..*\\.log" />
-                <data android:pathPattern=".*\\..*\\..*\\..*\\.log" />
-                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\.log" />
-                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\.log" />
-                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\.log" />
-                <data android:host="*" />
-            </intent-filter>
-        </activity>
-
         <receiver android:name=".receiver.BootReceiver" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>

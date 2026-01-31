@@ -8,7 +8,7 @@ import coil.fetch.FetchResult
 import coil.fetch.Fetcher
 import coil.request.Options
 import com.f0x1d.logfox.core.di.IODispatcher
-import com.f0x1d.logfox.feature.apps.picker.InstalledApp
+import com.f0x1d.logfox.feature.apps.picker.api.InstalledApp
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext

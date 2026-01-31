@@ -38,11 +38,11 @@ internal class CrashesReducer @Inject constructor() : Reducer<CrashesState, Cras
         )
 
         is CrashesCommand.DeleteCrashesByPackageName -> state.withSideEffects(
-            CrashesSideEffect.DeleteCrashesByPackageName(command.appCrash),
+            CrashesSideEffect.DeleteCrashesByPackageName(command.packageName),
         )
 
         is CrashesCommand.DeleteCrash -> state.withSideEffects(
-            CrashesSideEffect.DeleteCrash(command.appCrash),
+            CrashesSideEffect.DeleteCrash(command.crashId),
         )
 
         is CrashesCommand.ClearCrashes -> state.withSideEffects(

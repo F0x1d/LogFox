@@ -4,17 +4,17 @@ import com.f0x1d.logfox.feature.filters.api.model.UserFilter
 import com.f0x1d.logfox.feature.logging.api.model.LogLine
 import com.f0x1d.logfox.feature.logging.api.model.ShowLogValues
 
-data class LogsState(
-    val logs: List<LogLine> = emptyList(),
-    val logsChanged: Boolean = true,
-    val paused: Boolean = false,
-    val query: String? = null,
-    val filters: List<UserFilter> = emptyList(),
-    val selectedItems: Set<LogLine> = emptySet(),
-    val viewingFile: Boolean,
-    val viewingFileName: String?,
-    val resumeLoggingWithBottomTouch: Boolean,
-    val logsTextSize: Float,
+internal data class LogsState(
+    val logs: List<LogLine>,
+    val paused: Boolean,
+    val query: String?,
+    val caseSensitive: Boolean,
+    val filters: List<UserFilter>,
+    val showLogValues: ShowLogValues,
+    val selectedIds: Set<Long>,
+    val expandedOverrides: Map<Long, Boolean>,
     val logsExpanded: Boolean,
-    val logsFormat: ShowLogValues,
+    val textSize: Int,
+    val logsChanged: Boolean,
+    val resumeLoggingWithBottomTouch: Boolean,
 )

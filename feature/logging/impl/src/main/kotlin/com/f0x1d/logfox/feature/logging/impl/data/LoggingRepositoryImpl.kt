@@ -4,8 +4,8 @@ import com.f0x1d.logfox.core.di.IODispatcher
 import com.f0x1d.logfox.feature.logging.api.data.LogLineParser
 import com.f0x1d.logfox.feature.logging.api.data.LoggingRepository
 import com.f0x1d.logfox.feature.logging.api.model.LogLine
-import com.f0x1d.logfox.feature.terminals.base.Terminal
-import com.f0x1d.logfox.feature.terminals.exception.TerminalNotSupportedException
+import com.f0x1d.logfox.feature.terminals.api.base.Terminal
+import com.f0x1d.logfox.feature.terminals.api.exception.TerminalNotSupportedException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow

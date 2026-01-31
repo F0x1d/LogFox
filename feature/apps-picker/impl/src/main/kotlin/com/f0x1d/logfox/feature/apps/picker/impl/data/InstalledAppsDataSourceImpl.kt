@@ -1,17 +1,15 @@
 package com.f0x1d.logfox.feature.apps.picker.impl.data
 
 import android.content.Context
-import com.f0x1d.logfox.feature.apps.picker.InstalledApp
+import com.f0x1d.logfox.feature.apps.picker.api.InstalledApp
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.toImmutableList
 import javax.inject.Inject
 
 internal class InstalledAppsDataSourceImpl @Inject constructor(
     @ApplicationContext private val context: Context,
 ) : InstalledAppsDataSource {
 
-    override fun getInstalledApps(): ImmutableList<InstalledApp> = context.packageManager
+    override fun getInstalledApps(): List<InstalledApp> = context.packageManager
         .getInstalledPackages(0)
         .map { packageInfo ->
             InstalledApp(
@@ -20,5 +18,4 @@ internal class InstalledAppsDataSourceImpl @Inject constructor(
             )
         }
         .sortedBy(InstalledApp::title)
-        .toImmutableList()
 }

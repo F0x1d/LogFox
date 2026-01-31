@@ -3,9 +3,9 @@ package com.f0x1d.logfox.feature.crashes.impl.data
 import com.f0x1d.logfox.core.di.IODispatcher
 import com.f0x1d.logfox.feature.crashes.api.data.CrashesRepository
 import com.f0x1d.logfox.feature.crashes.api.model.AppCrash
-import com.f0x1d.logfox.feature.crashes.impl.mapper.toDomain
+import com.f0x1d.logfox.feature.crashes.impl.mapper.toDomainModel
 import com.f0x1d.logfox.feature.crashes.impl.mapper.toEntity
-import com.f0x1d.logfox.feature.database.data.AppCrashDataSource
+import com.f0x1d.logfox.feature.database.api.data.AppCrashDataSource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -21,20 +21,20 @@ internal class CrashesRepositoryImpl @Inject constructor(
 ) : CrashesRepository {
 
     override fun getAllAsFlow(): Flow<List<AppCrash>> = appCrashDataSource.getAllAsFlow()
-        .map { list -> list.map { it.toDomain() } }
+        .map { list -> list.map { it.toDomainModel() } }
         .distinctUntilChanged()
         .flowOn(ioDispatcher)
 
     override fun getByIdAsFlow(id: Long): Flow<AppCrash?> = appCrashDataSource.getByIdAsFlow(id)
-        .map { it?.toDomain() }
+        .map { it?.toDomainModel() }
         .flowOn(ioDispatcher)
 
     override suspend fun getAll(): List<AppCrash> = withContext(ioDispatcher) {
-        appCrashDataSource.getAll().map { it.toDomain() }
+        appCrashDataSource.getAll().map { it.toDomainModel() }
     }
 
     override suspend fun getById(id: Long): AppCrash? = withContext(ioDispatcher) {
-        appCrashDataSource.getById(id)?.toDomain()
+        appCrashDataSource.getById(id)?.toDomainModel()
     }
 
     override suspend fun getAllByDateAndTime(
@@ -44,20 +44,20 @@ internal class CrashesRepositoryImpl @Inject constructor(
         appCrashDataSource.getAllByDateAndTime(
             dateAndTime = dateAndTime,
             packageName = packageName,
-        ).map { it.toDomain() }
+        ).map { it.toDomainModel() }
     }
 
     override suspend fun insert(appCrash: AppCrash): Long = withContext(ioDispatcher) {
         appCrashDataSource.insert(appCrash.toEntity())
     }
 
-    override suspend fun deleteAllByPackageName(appCrash: AppCrash) = withContext(ioDispatcher) {
-        appCrashDataSource.getAllByPackageName(appCrash.packageName).forEach {
-            it.toDomain().deleteAssociatedFiles()
-            notificationsLocalDataSource.cancelCrashNotificationFor(it.toDomain())
+    override suspend fun deleteAllByPackageName(packageName: String) = withContext(ioDispatcher) {
+        appCrashDataSource.getAllByPackageName(packageName).forEach {
+            it.toDomainModel().deleteAssociatedFiles()
+            notificationsLocalDataSource.cancelCrashNotificationFor(it.toDomainModel())
         }
 
-        appCrashDataSource.deleteByPackageName(appCrash.packageName)
+        appCrashDataSource.deleteByPackageName(packageName)
     }
 
     override suspend fun update(item: AppCrash) = withContext(ioDispatcher) {

@@ -1,7 +1,7 @@
 package com.f0x1d.logfox.feature.preferences.impl.data.logs
 
 import android.content.Context
-import com.f0x1d.logfox.feature.preferences.data.LogsSettingsRepository
+import com.f0x1d.logfox.feature.preferences.api.data.LogsSettingsRepository
 import com.f0x1d.logfox.feature.preferences.impl.base.BasePreferences
 import com.fredporciuncula.flow.preferences.Preference
 import dagger.hilt.android.qualifiers.ApplicationContext

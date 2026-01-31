@@ -28,7 +28,7 @@ import com.f0x1d.logfox.compose.base.preview.DayNightPreview
 import com.f0x1d.logfox.compose.designsystem.component.button.RichButton
 import com.f0x1d.logfox.compose.designsystem.theme.LogFoxTheme
 import com.f0x1d.logfox.core.ui.icons.Icons
-import com.f0x1d.logfox.feature.setup.presentation.SetupState
+import com.f0x1d.logfox.feature.setup.presentation.SetupViewState
 import com.f0x1d.logfox.feature.setup.presentation.ui.MockSetupScreenListener
 import com.f0x1d.logfox.feature.setup.presentation.ui.SetupScreenListener
 import com.f0x1d.logfox.feature.strings.Strings
@@ -36,7 +36,7 @@ import com.f0x1d.logfox.feature.strings.Strings
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun SetupScreenContent(
-    state: SetupState = SetupState(),
+    state: SetupViewState,
     listener: SetupScreenListener = MockSetupScreenListener,
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
 ) {
@@ -160,14 +160,14 @@ const val SetupAdbDialogTestTag = "SetupAdbDialog"
 @DayNightPreview
 @Composable
 private fun SetupScreenContentPreview() = LogFoxTheme {
-    SetupScreenContent()
+    SetupScreenContent(state = SetupViewState(showAdbDialog = false, adbCommand = ""))
 }
 
 @DayNightPreview
 @Composable
 private fun SetupScreenContentWithDialogPreview() = LogFoxTheme {
     SetupScreenContent(
-        state = SetupState(
+        state = SetupViewState(
             showAdbDialog = true,
             adbCommand = "HESOYAM",
         ),

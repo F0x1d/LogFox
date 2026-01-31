@@ -1,6 +1,6 @@
 package com.f0x1d.logfox.feature.preferences.presentation.service
 
-import com.f0x1d.logfox.feature.terminals.base.TerminalType
+import com.f0x1d.logfox.feature.terminals.api.base.TerminalType
 
 internal sealed interface PreferencesServiceSideEffect {
     // Business logic side effects - handled by EffectHandler

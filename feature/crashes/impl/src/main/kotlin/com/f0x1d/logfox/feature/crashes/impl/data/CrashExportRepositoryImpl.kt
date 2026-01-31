@@ -2,18 +2,20 @@ package com.f0x1d.logfox.feature.crashes.impl.data
 
 import android.net.Uri
 import com.f0x1d.logfox.core.context.deviceData
+import com.f0x1d.logfox.core.io.putZipEntry
 import com.f0x1d.logfox.feature.crashes.api.data.CrashExportRepository
 import com.f0x1d.logfox.feature.crashes.api.model.AppCrash
-import com.f0x1d.logfox.feature.preferences.data.ServiceSettingsRepository
+import com.f0x1d.logfox.feature.export.api.data.ExportRepository
+import com.f0x1d.logfox.feature.preferences.api.data.ServiceSettingsRepository
 import javax.inject.Inject
 
 internal class CrashExportRepositoryImpl @Inject constructor(
-    private val crashExportLocalDataSource: CrashExportLocalDataSource,
+    private val exportRepository: ExportRepository,
     private val serviceSettingsRepository: ServiceSettingsRepository,
 ) : CrashExportRepository {
 
     override suspend fun exportToFile(uri: Uri, crashLog: String) {
-        crashExportLocalDataSource.writeToFile(uri, crashLog)
+        exportRepository.writeContentToUri(uri, crashLog)
     }
 
     override suspend fun exportToZip(uri: Uri, appCrash: AppCrash, crashLog: String?) {
@@ -23,11 +25,27 @@ internal class CrashExportRepositoryImpl @Inject constructor(
             null
         }
 
-        crashExportLocalDataSource.writeToZip(
-            uri = uri,
-            deviceInfo = deviceInfo,
-            crashLog = crashLog,
-            logDumpFile = appCrash.logDumpFile,
-        )
+        exportRepository.writeZipToUri(uri) {
+            if (deviceInfo != null) {
+                putZipEntry(
+                    name = "device.txt",
+                    content = deviceInfo.encodeToByteArray(),
+                )
+            }
+
+            if (crashLog != null) {
+                putZipEntry(
+                    name = "crash.log",
+                    content = crashLog.encodeToByteArray(),
+                )
+            }
+
+            appCrash.logDumpFile?.let { file ->
+                putZipEntry(
+                    name = "dump.log",
+                    file = file,
+                )
+            }
+        }
     }
 }

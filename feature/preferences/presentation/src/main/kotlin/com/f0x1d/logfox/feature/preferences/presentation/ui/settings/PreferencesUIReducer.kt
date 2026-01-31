@@ -4,8 +4,8 @@ import com.f0x1d.logfox.core.tea.ReduceResult
 import com.f0x1d.logfox.core.tea.Reducer
 import com.f0x1d.logfox.core.tea.noSideEffects
 import com.f0x1d.logfox.core.tea.withSideEffects
-import com.f0x1d.logfox.feature.preferences.data.DateTimeSettingsRepository
-import com.f0x1d.logfox.feature.preferences.data.LogsSettingsRepository
+import com.f0x1d.logfox.feature.preferences.api.data.DateTimeSettingsRepository
+import com.f0x1d.logfox.feature.preferences.api.data.LogsSettingsRepository
 import javax.inject.Inject
 
 internal class PreferencesUIReducer
@@ -25,7 +25,14 @@ constructor() : Reducer<PreferencesUIState, PreferencesUICommand, PreferencesUIS
                     nightTheme = command.nightTheme,
                     dateFormat = command.dateFormat,
                     timeFormat = command.timeFormat,
-                    showLogValues = command.showLogValues,
+                    showLogDate = command.showLogDate,
+                    showLogTime = command.showLogTime,
+                    showLogUid = command.showLogUid,
+                    showLogPid = command.showLogPid,
+                    showLogTid = command.showLogTid,
+                    showLogPackage = command.showLogPackage,
+                    showLogTag = command.showLogTag,
+                    showLogContent = command.showLogContent,
                     logsUpdateInterval = command.logsUpdateInterval,
                     logsTextSize = command.logsTextSize,
                     logsDisplayLimit = command.logsDisplayLimit,

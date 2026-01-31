@@ -1,7 +1,7 @@
 package com.f0x1d.logfox.di
 
 import com.f0x1d.logfox.core.ui.base.DynamicColorAvailabilityProvider
-import com.f0x1d.logfox.feature.preferences.data.UISettingsRepository
+import com.f0x1d.logfox.feature.preferences.api.data.UISettingsRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

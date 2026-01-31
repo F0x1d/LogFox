@@ -61,6 +61,8 @@ dependencies {
     implementation(projects.feature.appsPicker.impl)
     implementation(projects.feature.appsPicker.presentation)
 
+    implementation(projects.feature.export.impl)
+
     implementation(projects.feature.crashes.impl)
     implementation(projects.feature.crashes.presentation)
 
@@ -69,7 +71,6 @@ dependencies {
 
     implementation(projects.feature.logging.impl)
     implementation(projects.feature.logging.presentation)
-    implementation(projects.feature.logging.service)
 
     implementation(projects.feature.recordings.impl)
     implementation(projects.feature.recordings.presentation)

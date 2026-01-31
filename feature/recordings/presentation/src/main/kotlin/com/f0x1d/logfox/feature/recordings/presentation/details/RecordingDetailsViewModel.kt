@@ -1,7 +1,6 @@
 package com.f0x1d.logfox.feature.recordings.presentation.details
 
 import com.f0x1d.logfox.core.tea.BaseStoreViewModel
-import com.f0x1d.logfox.feature.datetime.api.DateTimeFormatter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -9,11 +8,14 @@ import javax.inject.Inject
 internal class RecordingDetailsViewModel @Inject constructor(
     reducer: RecordingDetailsReducer,
     effectHandler: RecordingDetailsEffectHandler,
-    dateTimeFormatter: DateTimeFormatter,
-) : BaseStoreViewModel<RecordingDetailsState, RecordingDetailsCommand, RecordingDetailsSideEffect>(
-    initialState = RecordingDetailsState(),
+    viewStateMapper: RecordingDetailsViewStateMapper,
+) : BaseStoreViewModel<RecordingDetailsViewState, RecordingDetailsState, RecordingDetailsCommand, RecordingDetailsSideEffect>(
+    initialState = RecordingDetailsState(
+        recording = null,
+        currentTitle = null,
+    ),
     reducer = reducer,
     effectHandlers = listOf(effectHandler),
+    viewStateMapper = viewStateMapper,
     initialSideEffects = listOf(RecordingDetailsSideEffect.LoadRecording),
-),
-    DateTimeFormatter by dateTimeFormatter
+)

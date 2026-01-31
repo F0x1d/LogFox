@@ -26,6 +26,5 @@ dependencies {
     implementation(libs.bundles.androidx.navigation)
     implementation(libs.material)
     implementation(libs.androidx.hilt.navigation.fragment)
-    implementation(libs.gson)
     implementation(libs.insetter)
 }

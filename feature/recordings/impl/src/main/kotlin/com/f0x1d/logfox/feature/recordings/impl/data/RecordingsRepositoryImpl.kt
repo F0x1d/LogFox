@@ -4,19 +4,19 @@ import android.content.Context
 import com.f0x1d.logfox.core.context.toast
 import com.f0x1d.logfox.core.di.IODispatcher
 import com.f0x1d.logfox.core.di.MainDispatcher
-import com.f0x1d.logfox.feature.database.data.LogRecordingDataSource
+import com.f0x1d.logfox.feature.database.api.data.LogRecordingDataSource
 import com.f0x1d.logfox.feature.datetime.api.DateTimeFormatter
 import com.f0x1d.logfox.feature.logging.api.data.LogLineFormatterRepository
 import com.f0x1d.logfox.feature.logging.api.data.LoggingRepository
 import com.f0x1d.logfox.feature.logging.api.model.LogLine
-import com.f0x1d.logfox.feature.preferences.data.TerminalSettingsRepository
+import com.f0x1d.logfox.feature.preferences.api.data.TerminalSettingsRepository
 import com.f0x1d.logfox.feature.recordings.api.data.RecordingsRepository
 import com.f0x1d.logfox.feature.recordings.api.model.LogRecording
-import com.f0x1d.logfox.feature.recordings.impl.mapper.toDomain
+import com.f0x1d.logfox.feature.recordings.impl.mapper.toDomainModel
 import com.f0x1d.logfox.feature.recordings.impl.mapper.toEntity
 import com.f0x1d.logfox.feature.strings.Strings
-import com.f0x1d.logfox.feature.terminals.base.Terminal
-import com.f0x1d.logfox.feature.terminals.base.TerminalType
+import com.f0x1d.logfox.feature.terminals.api.base.Terminal
+import com.f0x1d.logfox.feature.terminals.api.base.TerminalType
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
@@ -122,28 +122,27 @@ internal class RecordingsRepositoryImpl @Inject constructor(
         ).let { logRecordingDataSource.insert(it.toEntity()) }
     }
 
-    override suspend fun updateTitle(logRecording: LogRecording, newTitle: String) = update(
-        logRecording.copy(
-            title = newTitle,
-        ),
-    )
+    override suspend fun updateTitle(recordingId: Long, newTitle: String) {
+        val recording = getById(recordingId) ?: return
+        update(recording.copy(title = newTitle))
+    }
 
     override fun getAllAsFlow(): Flow<List<LogRecording>> = logRecordingDataSource
         .getAllAsFlow()
-        .map { list -> list.map { it.toDomain() } }
+        .map { list -> list.map { it.toDomainModel() } }
         .distinctUntilChanged()
         .flowOn(ioDispatcher)
 
     override fun getByIdAsFlow(id: Long): Flow<LogRecording?> = logRecordingDataSource.getByIdAsFlow(id)
-        .map { it?.toDomain() }
+        .map { it?.toDomainModel() }
         .flowOn(ioDispatcher)
 
     override suspend fun getAll(): List<LogRecording> = withContext(ioDispatcher) {
-        logRecordingDataSource.getAll().map { it.toDomain() }
+        logRecordingDataSource.getAll().map { it.toDomainModel() }
     }
 
     override suspend fun getById(id: Long): LogRecording? = withContext(ioDispatcher) {
-        logRecordingDataSource.getById(id)?.toDomain()
+        logRecordingDataSource.getById(id)?.toDomainModel()
     }
 
     override suspend fun update(item: LogRecording) = withContext(ioDispatcher) {

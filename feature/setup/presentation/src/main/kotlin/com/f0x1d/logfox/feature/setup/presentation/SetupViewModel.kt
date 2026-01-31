@@ -8,8 +8,10 @@ import javax.inject.Inject
 internal class SetupViewModel @Inject constructor(
     reducer: SetupReducer,
     effectHandler: SetupEffectHandler,
-) : BaseStoreViewModel<SetupState, SetupCommand, SetupSideEffect>(
-    initialState = SetupState(),
+    viewStateMapper: SetupViewStateMapper,
+) : BaseStoreViewModel<SetupViewState, SetupState, SetupCommand, SetupSideEffect>(
+    initialState = SetupState(showAdbDialog = false, adbCommand = ""),
     reducer = reducer,
     effectHandlers = listOf(effectHandler),
+    viewStateMapper = viewStateMapper,
 )

@@ -3,7 +3,7 @@ package com.f0x1d.logfox.feature.crashes.presentation.details
 import android.net.Uri
 import com.f0x1d.logfox.feature.crashes.api.model.AppCrash
 
-sealed interface CrashDetailsSideEffect {
+internal sealed interface CrashDetailsSideEffect {
     // Business logic side effects
     data object LoadCrash : CrashDetailsSideEffect
 
@@ -18,7 +18,12 @@ sealed interface CrashDetailsSideEffect {
     data class DeleteCrash(val appCrash: AppCrash) : CrashDetailsSideEffect
 
     // UI side effects
+    data class OpenAppInfo(val packageName: String) : CrashDetailsSideEffect
+    data class OpenNotificationSettings(val channelId: String) : CrashDetailsSideEffect
+    data object ConfirmBlacklist : CrashDetailsSideEffect
+    data object ConfirmDelete : CrashDetailsSideEffect
     data class CopyText(val text: String) : CrashDetailsSideEffect
+    data class ShareCrashLog(val text: String) : CrashDetailsSideEffect
     data object Close : CrashDetailsSideEffect
     data class LaunchFileExportPicker(val filename: String) : CrashDetailsSideEffect
     data class LaunchZipExportPicker(val filename: String) : CrashDetailsSideEffect

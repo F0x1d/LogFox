@@ -24,23 +24,11 @@ internal class RecordingDetailsReducer @Inject constructor() : Reducer<Recording
         }
 
         is RecordingDetailsCommand.ExportFile -> {
-            val recording = state.recording
-            if (recording != null) {
-                state.withSideEffects(RecordingDetailsSideEffect.ExportFile(command.uri, recording))
-            } else {
-                state.noSideEffects()
-            }
+            state.withSideEffects(RecordingDetailsSideEffect.ExportFile(command.uri))
         }
 
         is RecordingDetailsCommand.ExportZipFile -> {
-            val recording = state.recording
-            if (recording != null) {
-                state.withSideEffects(
-                    RecordingDetailsSideEffect.ExportZipFile(command.uri, recording),
-                )
-            } else {
-                state.noSideEffects()
-            }
+            state.withSideEffects(RecordingDetailsSideEffect.ExportZipFile(command.uri))
         }
 
         is RecordingDetailsCommand.UpdateTitle -> {
@@ -48,20 +36,39 @@ internal class RecordingDetailsReducer @Inject constructor() : Reducer<Recording
             if (recording != null) {
                 state.copy(currentTitle = command.title)
                     .withSideEffects(
-                        RecordingDetailsSideEffect.UpdateTitle(command.title, recording),
+                        RecordingDetailsSideEffect.UpdateTitle(command.title, recording.id),
                     )
             } else {
                 state.noSideEffects()
             }
         }
 
-        is RecordingDetailsCommand.ViewRecording -> {
-            val recording = state.recording
-            if (recording != null) {
-                state.withSideEffects(RecordingDetailsSideEffect.NavigateToViewRecording(recording.file))
-            } else {
-                state.noSideEffects()
-            }
+        is RecordingDetailsCommand.ExportFileClicked -> {
+            state.withSideEffects(RecordingDetailsSideEffect.PrepareFileExport)
+        }
+
+        is RecordingDetailsCommand.ExportZipClicked -> {
+            state.withSideEffects(RecordingDetailsSideEffect.PrepareZipExport)
+        }
+
+        is RecordingDetailsCommand.ShareRecording -> {
+            state.withSideEffects(RecordingDetailsSideEffect.PrepareShare)
+        }
+
+        is RecordingDetailsCommand.FileExportPickerReady -> {
+            state.withSideEffects(
+                RecordingDetailsSideEffect.LaunchFileExportPicker(filename = command.filename),
+            )
+        }
+
+        is RecordingDetailsCommand.ZipExportPickerReady -> {
+            state.withSideEffects(
+                RecordingDetailsSideEffect.LaunchZipExportPicker(filename = command.filename),
+            )
+        }
+
+        is RecordingDetailsCommand.ShareFileReady -> {
+            state.withSideEffects(RecordingDetailsSideEffect.ShareFile(command.file))
         }
     }
 }

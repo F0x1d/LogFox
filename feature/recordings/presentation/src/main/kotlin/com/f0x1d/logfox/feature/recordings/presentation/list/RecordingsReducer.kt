@@ -40,20 +40,21 @@ internal class RecordingsReducer @Inject constructor() : Reducer<RecordingsState
         }
 
         is RecordingsCommand.Delete -> {
-            state.withSideEffects(RecordingsSideEffect.DeleteRecording(command.recording))
+            state.withSideEffects(RecordingsSideEffect.DeleteRecording(command.recordingId))
         }
 
         is RecordingsCommand.RecordingEnded -> {
             val recording = command.recording
-            if (recording != null) {
-                state.withSideEffects(RecordingsSideEffect.OpenRecording(recording))
+            val recordingId = recording?.id
+            if (recordingId != null) {
+                state.withSideEffects(RecordingsSideEffect.OpenRecording(recordingId))
             } else {
                 state.noSideEffects()
             }
         }
 
         is RecordingsCommand.SaveAllCompleted -> {
-            state.withSideEffects(RecordingsSideEffect.OpenRecording(command.recording))
+            state.withSideEffects(RecordingsSideEffect.OpenRecording(command.recording.id))
         }
 
         is RecordingsCommand.ShowSavingSnackbar -> {
@@ -61,7 +62,7 @@ internal class RecordingsReducer @Inject constructor() : Reducer<RecordingsState
         }
 
         is RecordingsCommand.OpenRecordingDetails -> {
-            state.withSideEffects(RecordingsSideEffect.OpenRecording(command.recording))
+            state.withSideEffects(RecordingsSideEffect.OpenRecording(command.recordingId))
         }
     }
 }

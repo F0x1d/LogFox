@@ -1,7 +1,7 @@
 package com.f0x1d.logfox.feature.preferences.impl.domain.notifications
 
-import com.f0x1d.logfox.feature.preferences.data.NotificationsSettingsRepository
-import com.f0x1d.logfox.feature.preferences.domain.notifications.SetAskedNotificationsPermissionUseCase
+import com.f0x1d.logfox.feature.preferences.api.data.NotificationsSettingsRepository
+import com.f0x1d.logfox.feature.preferences.api.domain.notifications.SetAskedNotificationsPermissionUseCase
 import javax.inject.Inject
 
 internal class SetAskedNotificationsPermissionUseCaseImpl @Inject constructor(

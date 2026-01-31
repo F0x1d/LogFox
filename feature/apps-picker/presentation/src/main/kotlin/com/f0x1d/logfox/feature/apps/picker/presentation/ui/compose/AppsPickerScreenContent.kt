@@ -40,19 +40,15 @@ import com.f0x1d.logfox.compose.base.preview.DayNightPreview
 import com.f0x1d.logfox.compose.designsystem.component.button.NavigationBackButton
 import com.f0x1d.logfox.compose.designsystem.component.search.TopSearchBar
 import com.f0x1d.logfox.compose.designsystem.theme.LogFoxTheme
-import com.f0x1d.logfox.feature.apps.picker.InstalledApp
-import com.f0x1d.logfox.feature.apps.picker.presentation.AppsPickerState
+import com.f0x1d.logfox.feature.apps.picker.api.InstalledApp
+import com.f0x1d.logfox.feature.apps.picker.presentation.AppsPickerViewState
 import com.f0x1d.logfox.feature.apps.picker.presentation.ui.AppsPickerScreenListener
 import com.f0x1d.logfox.feature.apps.picker.presentation.ui.MockAppsPickerScreenListener
 import com.f0x1d.logfox.feature.strings.Strings
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.ImmutableSet
-import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.persistentSetOf
 
 @Composable
 internal fun AppsPickerScreenContent(
-    state: AppsPickerState = AppsPickerState(),
+    state: AppsPickerViewState,
     listener: AppsPickerScreenListener = MockAppsPickerScreenListener,
 ) {
     CompositionLocalProvider(
@@ -87,7 +83,7 @@ internal fun AppsPickerScreenContent(
 
 @Composable
 private fun AppsSearchBar(
-    state: AppsPickerState,
+    state: AppsPickerViewState,
     listener: AppsPickerScreenListener,
     modifier: Modifier = Modifier,
 ) {
@@ -132,8 +128,8 @@ private fun LoadingContent(modifier: Modifier = Modifier) {
 
 @Composable
 private fun AppsContent(
-    items: ImmutableList<InstalledApp>,
-    checkedItems: ImmutableSet<String>,
+    items: List<InstalledApp>,
+    checkedItems: Set<String>,
     listener: AppsPickerScreenListener,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
@@ -223,15 +219,19 @@ internal fun AppContent(
     }
 }
 
-internal val MockApps = persistentListOf(
+internal val MockApps = listOf(
     InstalledApp("LogFox", "com.f0x1d.logfox"),
     InstalledApp("Sense", "com.f0x1d.sense"),
 )
-internal val MockAppsPickerState = AppsPickerState(
+internal val MockAppsPickerState = AppsPickerViewState(
+    topBarTitle = "Apps",
     apps = MockApps,
+    checkedAppPackageNames = setOf(MockApps.first().packageName),
     searchedApps = MockApps,
-    checkedAppPackageNames = persistentSetOf(MockApps.first().packageName),
+    multiplySelectionEnabled = true,
     isLoading = false,
+    searchActive = false,
+    query = "",
 )
 
 @DayNightPreview

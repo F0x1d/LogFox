@@ -3,7 +3,7 @@ package com.f0x1d.logfox.feature.datetime.impl
 import android.content.Context
 import android.icu.text.SimpleDateFormat
 import com.f0x1d.logfox.feature.datetime.api.DateTimeFormatter
-import com.f0x1d.logfox.feature.preferences.data.DateTimeSettingsRepository
+import com.f0x1d.logfox.feature.preferences.api.data.DateTimeSettingsRepository
 import com.f0x1d.logfox.feature.strings.Strings
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.Locale

@@ -17,7 +17,7 @@ internal class AppCrashesReducer @Inject constructor() : Reducer<AppCrashesState
         ).noSideEffects()
 
         is AppCrashesCommand.DeleteCrash -> state.withSideEffects(
-            AppCrashesSideEffect.DeleteCrash(command.appCrash),
+            AppCrashesSideEffect.DeleteCrash(command.crashId),
         )
 
         is AppCrashesCommand.CrashClicked -> state.withSideEffects(

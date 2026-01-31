@@ -8,9 +8,13 @@ import javax.inject.Inject
 internal class LogsExtendedCopyViewModel @Inject constructor(
     reducer: LogsExtendedCopyReducer,
     effectHandler: LogsExtendedCopyEffectHandler,
-) : BaseStoreViewModel<LogsExtendedCopyState, LogsExtendedCopyCommand, LogsExtendedCopySideEffect>(
-    initialState = LogsExtendedCopyState(),
+    viewStateMapper: LogsExtendedCopyViewStateMapper,
+) : BaseStoreViewModel<LogsExtendedCopyViewState, LogsExtendedCopyState, LogsExtendedCopyCommand, LogsExtendedCopySideEffect>(
+    initialState = LogsExtendedCopyState(
+        text = null,
+    ),
     reducer = reducer,
     effectHandlers = listOf(effectHandler),
+    viewStateMapper = viewStateMapper,
     initialSideEffects = listOf(LogsExtendedCopySideEffect.LoadSelectedLines),
 )

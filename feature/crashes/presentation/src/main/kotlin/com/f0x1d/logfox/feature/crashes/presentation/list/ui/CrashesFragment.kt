@@ -26,9 +26,10 @@ import com.f0x1d.logfox.feature.crashes.presentation.list.CrashesCommand
 import com.f0x1d.logfox.feature.crashes.presentation.list.CrashesSideEffect
 import com.f0x1d.logfox.feature.crashes.presentation.list.CrashesState
 import com.f0x1d.logfox.feature.crashes.presentation.list.CrashesViewModel
-import com.f0x1d.logfox.feature.preferences.CrashesSort
+import com.f0x1d.logfox.feature.crashes.presentation.list.CrashesViewState
+import com.f0x1d.logfox.feature.navigation.api.Directions
+import com.f0x1d.logfox.feature.preferences.api.CrashesSort
 import com.f0x1d.logfox.feature.strings.Strings
-import com.f0x1d.logfox.navigation.Directions
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import com.google.android.material.search.SearchView
@@ -39,6 +40,7 @@ import dev.chrisbanes.insetter.applyInsetter
 internal class CrashesFragment :
     BaseStoreFragment<
         FragmentCrashesBinding,
+        CrashesViewState,
         CrashesState,
         CrashesCommand,
         CrashesSideEffect,
@@ -51,26 +53,26 @@ internal class CrashesFragment :
         click = {
             send(
                 CrashesCommand.CrashClicked(
-                    crashId = it.lastCrash.id,
+                    crashId = it.lastCrashId,
                     count = it.count,
-                    packageName = it.lastCrash.packageName,
-                    appName = it.lastCrash.appName,
+                    packageName = it.packageName,
+                    appName = it.appName,
                 ),
             )
         },
         delete = {
             showAreYouSureDeleteDialog {
-                viewModel.deleteCrashesByPackageName(it.lastCrash)
+                send(CrashesCommand.DeleteCrashesByPackageName(it.packageName))
             }
         },
     )
     private val searchedAdapter = CrashesAdapter(
         click = {
-            send(CrashesCommand.SearchedCrashClicked(it.lastCrash.id))
+            send(CrashesCommand.SearchedCrashClicked(it.lastCrashId))
         },
         delete = {
             showAreYouSureDeleteDialog {
-                viewModel.deleteCrash(it.lastCrash)
+                send(CrashesCommand.DeleteCrash(it.lastCrashId))
             }
         },
     )
@@ -107,14 +109,14 @@ internal class CrashesFragment :
             }
             setClickListenerOn(R.id.clear_item) {
                 showAreYouSureClearDialog {
-                    viewModel.clearCrashes()
+                    send(CrashesCommand.ClearCrashes)
                 }
             }
         }
 
         searchView.apply {
             editText.doAfterTextChanged { text ->
-                viewModel.updateQuery(text?.toString().orEmpty())
+                send(CrashesCommand.UpdateQuery(text?.toString().orEmpty()))
             }
 
             addTransitionListener { _, _, newState ->
@@ -150,7 +152,7 @@ internal class CrashesFragment :
         }
     }
 
-    override fun render(state: CrashesState) {
+    override fun render(state: CrashesViewState) {
         binding.placeholderLayout.root.isVisible = state.crashes.isEmpty()
 
         adapter.submitList(state.crashes)
@@ -221,10 +223,10 @@ internal class CrashesFragment :
             .setTitle(Strings.sort)
             .setView(dialogBinding.root)
             .setPositiveButton(android.R.string.ok) { _, _ ->
-                viewModel.updateSort(
+                send(CrashesCommand.UpdateSort(
                     sortType = selectedSortType,
                     sortInReversedOrder = sortInReversedOrder,
-                )
+                ))
             }
             .show()
     }

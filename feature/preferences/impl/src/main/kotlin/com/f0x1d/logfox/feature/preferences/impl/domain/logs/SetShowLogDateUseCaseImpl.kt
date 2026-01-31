@@ -1,7 +1,7 @@
 package com.f0x1d.logfox.feature.preferences.impl.domain.logs
 
-import com.f0x1d.logfox.feature.preferences.data.LogsSettingsRepository
-import com.f0x1d.logfox.feature.preferences.domain.logs.SetShowLogDateUseCase
+import com.f0x1d.logfox.feature.preferences.api.data.LogsSettingsRepository
+import com.f0x1d.logfox.feature.preferences.api.domain.logs.SetShowLogDateUseCase
 import javax.inject.Inject
 
 internal class SetShowLogDateUseCaseImpl @Inject constructor(

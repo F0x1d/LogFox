@@ -1,9 +1,9 @@
 package com.f0x1d.logfox.feature.crashes.impl.mapper
 
 import com.f0x1d.logfox.feature.crashes.api.model.DisabledApp
-import com.f0x1d.logfox.feature.database.entity.DisabledAppEntity
+import com.f0x1d.logfox.feature.database.api.entity.DisabledAppEntity
 
-internal fun DisabledAppEntity.toDomain() = DisabledApp(
+internal fun DisabledAppEntity.toDomainModel() = DisabledApp(
     id = id,
     packageName = packageName,
 )

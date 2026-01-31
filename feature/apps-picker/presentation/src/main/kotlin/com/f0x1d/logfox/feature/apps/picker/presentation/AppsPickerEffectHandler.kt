@@ -2,8 +2,8 @@ package com.f0x1d.logfox.feature.apps.picker.presentation
 
 import com.f0x1d.logfox.core.di.DefaultDispatcher
 import com.f0x1d.logfox.core.tea.EffectHandler
-import com.f0x1d.logfox.feature.apps.picker.domain.FilterAppsUseCase
-import com.f0x1d.logfox.feature.apps.picker.domain.GetInstalledAppsUseCase
+import com.f0x1d.logfox.feature.apps.picker.api.domain.FilterAppsUseCase
+import com.f0x1d.logfox.feature.apps.picker.api.domain.GetInstalledAppsUseCase
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import javax.inject.Inject

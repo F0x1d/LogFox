@@ -4,73 +4,106 @@ import com.f0x1d.logfox.core.tea.ReduceResult
 import com.f0x1d.logfox.core.tea.Reducer
 import com.f0x1d.logfox.core.tea.noSideEffects
 import com.f0x1d.logfox.core.tea.withSideEffects
+import com.f0x1d.logfox.feature.datetime.api.DateTimeFormatter
+import com.f0x1d.logfox.feature.logging.api.model.LogLine
 import javax.inject.Inject
 
-internal class LogsReducer @Inject constructor() : Reducer<LogsState, LogsCommand, LogsSideEffect> {
+internal class LogsReducer @Inject constructor(
+    private val dateTimeFormatter: DateTimeFormatter,
+) : Reducer<LogsState, LogsCommand, LogsSideEffect> {
 
     override fun reduce(
         state: LogsState,
         command: LogsCommand,
     ): ReduceResult<LogsState, LogsSideEffect> = when (command) {
         is LogsCommand.LogsLoaded -> {
-            state.copy(
-                logs = command.logs,
-                query = command.query,
-                filters = command.filters,
-                logsChanged = true,
-            ).noSideEffects()
+            if (state.paused) {
+                val paramsChanged = command.query != state.query ||
+                    command.filters != state.filters ||
+                    command.caseSensitive != state.caseSensitive ||
+                    command.showLogValues != state.showLogValues
+
+                if (paramsChanged) {
+                    state.copy(
+                        query = command.query,
+                        caseSensitive = command.caseSensitive,
+                        filters = command.filters,
+                        showLogValues = command.showLogValues,
+                        logsChanged = true,
+                    ).noSideEffects()
+                } else {
+                    state.noSideEffects()
+                }
+            } else {
+                state.copy(
+                    logs = command.logs,
+                    query = command.query,
+                    caseSensitive = command.caseSensitive,
+                    filters = command.filters,
+                    showLogValues = command.showLogValues,
+                    logsChanged = true,
+                ).noSideEffects()
+            }
         }
 
         is LogsCommand.PreferencesUpdated -> {
             state.copy(
                 resumeLoggingWithBottomTouch = command.resumeLoggingWithBottomTouch,
-                logsTextSize = command.logsTextSize,
+                textSize = command.textSize,
                 logsExpanded = command.logsExpanded,
-                logsFormat = command.logsFormat,
-                logsChanged = false,
+                logsChanged = command.textSize != state.textSize ||
+                    command.logsExpanded != state.logsExpanded,
             ).noSideEffects()
         }
 
-        is LogsCommand.SelectLine -> {
-            val newSelectedItems = state.selectedItems.toMutableSet().apply {
-                if (command.selected) {
-                    add(command.logLine)
-                } else {
-                    remove(command.logLine)
+        is LogsCommand.ItemClicked -> {
+            if (state.selectedIds.isNotEmpty()) {
+                val newIds = state.selectedIds.toggle(command.logLineId)
+                state.copy(selectedIds = newIds, logsChanged = true)
+                    .withSideEffects(LogsSideEffect.SyncSelectedLines(state.logsByIds(newIds)))
+            } else {
+                val currentExpanded = state.expandedOverrides.getOrElse(command.logLineId) {
+                    state.logsExpanded
                 }
+                state.copy(
+                    expandedOverrides = state.expandedOverrides + (command.logLineId to !currentExpanded),
+                    logsChanged = true,
+                ).noSideEffects()
             }
-            state.copy(
-                selectedItems = newSelectedItems,
-                logsChanged = false,
-            ).withSideEffects(
-                LogsSideEffect.UpdateSelectedLogLines(
-                    selectedLines = newSelectedItems.sortedBy { it.dateAndTime },
-                ),
-            )
+        }
+
+        is LogsCommand.SelectLine -> {
+            val newIds = if (command.selected) {
+                state.selectedIds + command.logLineId
+            } else {
+                state.selectedIds - command.logLineId
+            }
+            state.copy(selectedIds = newIds, logsChanged = true)
+                .withSideEffects(LogsSideEffect.SyncSelectedLines(state.logsByIds(newIds)))
         }
 
         is LogsCommand.SelectAll -> {
-            val newSelectedItems = if (state.selectedItems.containsAll(state.logs)) {
-                emptySet()
-            } else {
-                state.logs.toSet()
-            }
-            state.copy(
-                selectedItems = newSelectedItems,
-                logsChanged = false,
-            ).withSideEffects(
-                LogsSideEffect.UpdateSelectedLogLines(
-                    selectedLines = newSelectedItems.sortedBy { it.dateAndTime },
-                ),
-            )
+            val newIds = if (state.selectedIds == command.visibleIds) emptySet() else command.visibleIds
+            state.copy(selectedIds = newIds, logsChanged = true)
+                .withSideEffects(LogsSideEffect.SyncSelectedLines(state.logsByIds(newIds)))
+        }
+
+        is LogsCommand.ClearSelection -> {
+            state.copy(selectedIds = emptySet(), logsChanged = true)
+                .withSideEffects(LogsSideEffect.SyncSelectedLines(emptyList()))
         }
 
         is LogsCommand.SelectedToRecording -> {
             state.withSideEffects(
-                LogsSideEffect.CreateRecordingFromLines(
-                    lines = state.selectedItems.sortedBy { it.dateAndTime },
-                ),
+                LogsSideEffect.CreateRecordingFromLines(lines = state.selectedLines()),
                 LogsSideEffect.NavigateToRecordings,
+            )
+        }
+
+        is LogsCommand.ExportSelectedClicked -> {
+            val filename = "${dateTimeFormatter.formatForExport(System.currentTimeMillis())}.log"
+            state.withSideEffects(
+                LogsSideEffect.LaunchExportPicker(filename = filename),
             )
         }
 
@@ -78,27 +111,23 @@ internal class LogsReducer @Inject constructor() : Reducer<LogsState, LogsComman
             state.withSideEffects(
                 LogsSideEffect.ExportLogsTo(
                     uri = command.uri,
-                    lines = state.selectedItems.sortedBy { it.dateAndTime },
+                    lines = state.selectedLines(),
                 ),
             )
         }
 
         is LogsCommand.SwitchState -> {
-            val newPaused = !state.paused
             state.copy(
-                paused = newPaused,
-                logsChanged = false,
-            ).withSideEffects(LogsSideEffect.PauseStateChanged(newPaused))
+                paused = !state.paused,
+                logsChanged = state.paused,
+            ).noSideEffects()
         }
 
         is LogsCommand.Pause -> {
             if (state.paused) {
                 state.noSideEffects()
             } else {
-                state.copy(
-                    paused = true,
-                    logsChanged = false,
-                ).withSideEffects(LogsSideEffect.PauseStateChanged(true))
+                state.copy(paused = true, logsChanged = false).noSideEffects()
             }
         }
 
@@ -106,33 +135,22 @@ internal class LogsReducer @Inject constructor() : Reducer<LogsState, LogsComman
             if (!state.paused) {
                 state.noSideEffects()
             } else {
-                state.copy(
-                    paused = false,
-                    logsChanged = false,
-                ).withSideEffects(LogsSideEffect.PauseStateChanged(false))
+                state.copy(paused = false, logsChanged = true).noSideEffects()
             }
         }
 
-        is LogsCommand.ClearSelection -> {
-            state.copy(
-                selectedItems = emptySet(),
-                logsChanged = false,
-            ).withSideEffects(
-                LogsSideEffect.UpdateSelectedLogLines(selectedLines = emptyList()),
-            )
-        }
-
         is LogsCommand.CopyLog -> {
+            val logLine = state.logs
+                .firstOrNull { it.id == command.logLineId }
+                ?: return@reduce state.noSideEffects()
             state.withSideEffects(
-                LogsSideEffect.FormatAndCopyLog(command.logLine),
+                LogsSideEffect.FormatAndCopyLog(logLine),
             )
         }
 
         is LogsCommand.CopySelectedLogs -> {
             state.withSideEffects(
-                LogsSideEffect.FormatAndCopyLogs(
-                    logLines = state.selectedItems.sortedBy { it.dateAndTime },
-                ),
+                LogsSideEffect.FormatAndCopyLogs(lines = state.selectedLines()),
             )
         }
 
@@ -152,7 +170,9 @@ internal class LogsReducer @Inject constructor() : Reducer<LogsState, LogsComman
         }
 
         is LogsCommand.CreateFilterFromLog -> {
-            val logLine = command.logLine
+            val logLine = state.logs
+                .firstOrNull { it.id == command.logLineId }
+                ?: return@reduce state.noSideEffects()
             state.withSideEffects(
                 LogsSideEffect.OpenEditFilterFromLogLine(
                     uid = logLine.uid,
@@ -177,5 +197,26 @@ internal class LogsReducer @Inject constructor() : Reducer<LogsState, LogsComman
         is LogsCommand.OpenExtendedCopy -> {
             state.withSideEffects(LogsSideEffect.NavigateToExtendedCopy)
         }
+
+        is LogsCommand.ClearLogs -> {
+            state.withSideEffects(LogsSideEffect.ClearLogs)
+        }
+
+        is LogsCommand.RestartLogging -> {
+            state.withSideEffects(LogsSideEffect.RestartLogging)
+        }
+
+        is LogsCommand.KillService -> {
+            state.withSideEffects(LogsSideEffect.KillService)
+        }
     }
+
+    private fun LogsState.selectedLines(): List<LogLine> =
+        logsByIds(selectedIds)
+
+    private fun LogsState.logsByIds(ids: Set<Long>): List<LogLine> =
+        logs.filter { it.id in ids }.sortedBy { it.dateAndTime }
+
+    private fun Set<Long>.toggle(id: Long): Set<Long> =
+        if (id in this) this - id else this + id
 }

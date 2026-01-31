@@ -2,13 +2,11 @@ package com.f0x1d.logfox.presentation.ui.activity
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.constraintlayout.widget.ConstraintSet
-import androidx.core.os.bundleOf
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
@@ -26,13 +24,13 @@ import com.f0x1d.logfox.core.context.isHorizontalOrientation
 import com.f0x1d.logfox.core.ui.base.activity.BaseActivity
 import com.f0x1d.logfox.core.ui.icons.Icons
 import com.f0x1d.logfox.databinding.ActivityMainBinding
+import com.f0x1d.logfox.feature.navigation.api.Directions
+import com.f0x1d.logfox.feature.navigation.api.NavGraphs
 import com.f0x1d.logfox.feature.strings.Strings
-import com.f0x1d.logfox.navigation.Directions
-import com.f0x1d.logfox.navigation.NavGraphs
 import com.f0x1d.logfox.presentation.MainCommand
 import com.f0x1d.logfox.presentation.MainSideEffect
-import com.f0x1d.logfox.presentation.MainState
 import com.f0x1d.logfox.presentation.MainViewModel
+import com.f0x1d.logfox.presentation.MainViewState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -97,7 +95,7 @@ class MainActivity :
         }
     }
 
-    private fun showNotificationPermissionDialogIfNeeded(state: MainState) {
+    private fun showNotificationPermissionDialogIfNeeded(state: MainViewState) {
         if (!hasNotificationsPermission() && !state.askedNotificationsPermission) {
             MaterialAlertDialogBuilder(this@MainActivity)
                 .setIcon(Icons.ic_dialog_notification_important)
@@ -130,35 +128,6 @@ class MainActivity :
         barView?.setupWithNavController(navController)
 
         navController.addOnDestinationChangedListener(this@MainActivity)
-    }
-
-    override fun onPostCreate(savedInstanceState: Bundle?) {
-        super.onPostCreate(savedInstanceState)
-        handleIntent(intent)
-    }
-
-    override fun onNewIntent(intent: Intent) {
-        super.onNewIntent(intent)
-        handleIntent(intent, onNewIntent = true)
-    }
-
-    private fun handleIntent(intent: Intent?, onNewIntent: Boolean = false) {
-        if (onNewIntent) {
-            if (navController.handleDeepLink(intent)) {
-                return
-            }
-        }
-
-        if (intent == null) return
-
-        if (intent.data == null) return
-
-        when (intent.action) {
-            Intent.ACTION_VIEW -> navController.navigate(
-                resId = Directions.action_global_logsFragment,
-                args = bundleOf("file_uri" to intent.data),
-            )
-        }
     }
 
     override fun onDestinationChanged(

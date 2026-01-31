@@ -15,14 +15,13 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.findNavController
 import com.f0x1d.logfox.compose.designsystem.theme.LogFoxTheme
-import com.f0x1d.logfox.feature.apps.picker.AppsPickerResultHandler
+import com.f0x1d.logfox.feature.apps.picker.api.AppsPickerResultHandler
 import com.f0x1d.logfox.feature.apps.picker.presentation.AppsPickerCommand
 import com.f0x1d.logfox.feature.apps.picker.presentation.AppsPickerSideEffect
-import com.f0x1d.logfox.feature.apps.picker.presentation.AppsPickerState
 import com.f0x1d.logfox.feature.apps.picker.presentation.AppsPickerViewModel
+import com.f0x1d.logfox.feature.apps.picker.presentation.AppsPickerViewState
 import com.f0x1d.logfox.feature.apps.picker.presentation.ui.compose.AppsPickerScreenContent
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
@@ -43,14 +42,14 @@ class AppsPickerFragment : Fragment() {
         )
     }
 
-    private val uiState: Flow<AppsPickerState> by lazy {
+    private val uiState: Flow<AppsPickerViewState> by lazy {
         resultHandler?.let { handler ->
             combine(viewModel.state, handler.checkedAppPackageNames) { state, checkedApps ->
                 state to checkedApps
             }.map { (state, checkedAppPackageNames) ->
                 state.copy(
                     topBarTitle = handler.providePickerTopAppBarTitle(requireContext()),
-                    checkedAppPackageNames = checkedAppPackageNames.toImmutableSet(),
+                    checkedAppPackageNames = checkedAppPackageNames.toSet(),
                     multiplySelectionEnabled = handler.supportsMultiplySelection,
                 )
             }
@@ -72,7 +71,18 @@ class AppsPickerFragment : Fragment() {
 
     @Composable
     private fun FragmentContent() {
-        val state by uiState.collectAsStateWithLifecycle(initialValue = AppsPickerState())
+        val state by uiState.collectAsStateWithLifecycle(
+            initialValue = AppsPickerViewState(
+                topBarTitle = "",
+                apps = emptyList(),
+                checkedAppPackageNames = emptySet(),
+                searchedApps = emptyList(),
+                multiplySelectionEnabled = true,
+                isLoading = true,
+                searchActive = false,
+                query = "",
+            ),
+        )
 
         LaunchedEffect(viewModel) {
             viewModel.sideEffects.collect { sideEffect ->

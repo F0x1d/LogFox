@@ -17,30 +17,29 @@ import com.f0x1d.logfox.core.tea.BaseStoreFragment
 import com.f0x1d.logfox.core.ui.icons.Icons
 import com.f0x1d.logfox.core.ui.view.invalidateNavigationButton
 import com.f0x1d.logfox.core.ui.view.setClickListenerOn
-import com.f0x1d.logfox.core.ui.view.setupBackButtonForNavController
 import com.f0x1d.logfox.core.ui.view.setupCloseButton
 import com.f0x1d.logfox.feature.filters.api.model.UserFilter
-import com.f0x1d.logfox.feature.logging.api.model.LogLine
-import com.f0x1d.logfox.feature.logging.api.presentation.LoggingServiceDelegate
 import com.f0x1d.logfox.feature.logging.presentation.R
 import com.f0x1d.logfox.feature.logging.presentation.databinding.FragmentLogsBinding
 import com.f0x1d.logfox.feature.logging.presentation.list.LogsCommand
 import com.f0x1d.logfox.feature.logging.presentation.list.LogsSideEffect
 import com.f0x1d.logfox.feature.logging.presentation.list.LogsState
 import com.f0x1d.logfox.feature.logging.presentation.list.LogsViewModel
+import com.f0x1d.logfox.feature.logging.presentation.list.LogsViewState
 import com.f0x1d.logfox.feature.logging.presentation.list.adapter.LogsAdapter
+import com.f0x1d.logfox.feature.logging.presentation.list.model.LogLineItem
+import com.f0x1d.logfox.feature.navigation.api.Directions
 import com.f0x1d.logfox.feature.strings.Plurals
 import com.f0x1d.logfox.feature.strings.Strings
-import com.f0x1d.logfox.navigation.Directions
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import dev.chrisbanes.insetter.applyInsetter
-import javax.inject.Inject
 
 @AndroidEntryPoint
 internal class LogsFragment :
     BaseStoreFragment<
         FragmentLogsBinding,
+        LogsViewState,
         LogsState,
         LogsCommand,
         LogsSideEffect,
@@ -49,19 +48,19 @@ internal class LogsFragment :
 
     override val viewModel by viewModels<LogsViewModel>()
 
-    @Inject
-    lateinit var loggingServiceDelegate: LoggingServiceDelegate
-
     private val adapter by lazy {
         LogsAdapter(
-            selectedItem = { logLine, selected ->
-                send(LogsCommand.SelectLine(logLine, selected))
+            onClick = { item ->
+                send(LogsCommand.ItemClicked(item.logLineId))
             },
-            copyLog = { logLine ->
-                send(LogsCommand.CopyLog(logLine))
+            onSelectClick = { item ->
+                send(LogsCommand.SelectLine(item.logLineId, true))
             },
-            createFilter = { logLine ->
-                send(LogsCommand.CreateFilterFromLog(logLine))
+            onCopyClick = { item ->
+                send(LogsCommand.CopyLog(item.logLineId))
+            },
+            onCreateFilterClick = { item ->
+                send(LogsCommand.CreateFilterFromLog(item.logLineId))
             },
         )
     }
@@ -77,8 +76,6 @@ internal class LogsFragment :
     ) {
         it?.let { uri -> send(LogsCommand.ExportSelectedTo(uri)) }
     }
-
-    private var lastPauseEventTimeMillis = 0L
 
     override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) = FragmentLogsBinding.inflate(inflater, container, false)
 
@@ -101,7 +98,8 @@ internal class LogsFragment :
                 send(LogsCommand.SwitchState)
             }
             setClickListenerOn(R.id.select_all_item) {
-                send(LogsCommand.SelectAll)
+                val visibleIds = adapter.currentList.mapTo(mutableSetOf()) { it.logLineId }
+                send(LogsCommand.SelectAll(visibleIds))
             }
             setClickListenerOn(R.id.search_item) {
                 send(LogsCommand.OpenSearch)
@@ -119,18 +117,16 @@ internal class LogsFragment :
                 send(LogsCommand.SelectedToRecording)
             }
             setClickListenerOn(R.id.export_selected_item) {
-                exportLogsLauncher.launch(
-                    "${viewModel.formatForExport(System.currentTimeMillis())}.log",
-                )
+                send(LogsCommand.ExportSelectedClicked)
             }
             setClickListenerOn(R.id.clear_item) {
-                loggingServiceDelegate.clearLogs()
+                send(LogsCommand.ClearLogs)
             }
             setClickListenerOn(R.id.restart_logging_item) {
-                loggingServiceDelegate.restartLogging()
+                send(LogsCommand.RestartLogging)
             }
             setClickListenerOn(R.id.exit_item) {
-                loggingServiceDelegate.killService()
+                send(LogsCommand.KillService)
             }
         }
 
@@ -146,13 +142,10 @@ internal class LogsFragment :
             object : RecyclerView.OnScrollListener() {
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     if (viewModel.state.value.paused && !recyclerView.canScrollVertically(1)) {
-                        val enoughTimePassed =
-                            (System.currentTimeMillis() - lastPauseEventTimeMillis) > 300
-                        if (viewModel.state.value.resumeLoggingWithBottomTouch && enoughTimePassed) {
+                        if (viewModel.state.value.resumeLoggingWithBottomTouch) {
                             send(LogsCommand.Resume)
                         }
                     } else {
-                        lastPauseEventTimeMillis = System.currentTimeMillis()
                         send(LogsCommand.Pause)
                     }
                 }
@@ -172,25 +165,22 @@ internal class LogsFragment :
         }
     }
 
-    override fun render(state: LogsState) {
+    override fun render(state: LogsViewState) {
         binding.processQueryAndFilters(
             query = state.query,
             filters = state.filters,
-            viewingFile = state.viewingFile,
         )
         binding.processSelectedItems(
-            selectedItems = state.selectedItems,
-            viewingFile = state.viewingFile,
-            viewingFileName = state.viewingFileName,
+            selecting = state.selecting,
+            selectedCount = state.selectedCount,
         )
         binding.processPaused(paused = state.paused)
 
-        adapter.textSize = state.logsTextSize
-        adapter.logsExpanded = state.logsExpanded
-        adapter.logsFormat = state.logsFormat
-
         if (state.logsChanged) {
-            binding.updateLogsList(items = state.logs)
+            binding.updateLogsList(
+                items = state.logs,
+                paused = state.paused,
+            )
         }
     }
 
@@ -239,7 +229,10 @@ internal class LogsFragment :
                 snackbar(Strings.text_copied)
             }
 
-            // Business logic side effects - handled by EffectHandler
+            is LogsSideEffect.LaunchExportPicker -> {
+                exportLogsLauncher.launch(sideEffect.filename)
+            }
+
             else -> Unit
         }
     }
@@ -247,7 +240,6 @@ internal class LogsFragment :
     private fun FragmentLogsBinding.processQueryAndFilters(
         query: String?,
         filters: List<UserFilter>,
-        viewingFile: Boolean,
     ) {
         val subtitle = buildString {
             if (query != null) {
@@ -268,7 +260,6 @@ internal class LogsFragment :
         toolbar.subtitle = subtitle
         placeholderLayout.placeholderText.setText(
             when {
-                viewingFile -> Strings.no_logs
                 subtitle.isEmpty() -> Strings.waiting_for_logs
                 else -> Strings.all_logs_were_filtered_out
             },
@@ -276,20 +267,14 @@ internal class LogsFragment :
     }
 
     private fun FragmentLogsBinding.processSelectedItems(
-        selectedItems: Set<LogLine>,
-        viewingFile: Boolean,
-        viewingFileName: String?,
+        selecting: Boolean,
+        selectedCount: Int,
     ) {
-        val selecting = selectedItems.isNotEmpty()
-
         clearSelectionOnBackPressedCallback.isEnabled = selecting
 
-        adapter.selectedItems = selectedItems
         setupToolbarForSelection(
             selecting = selecting,
-            count = selectedItems.size,
-            viewingFile = viewingFile,
-            viewingFileName = viewingFileName,
+            count = selectedCount,
         )
     }
 
@@ -302,15 +287,12 @@ internal class LogsFragment :
             scrollFab.show()
         } else {
             scrollFab.hide()
-            scrollLogToBottom()
         }
     }
 
     private fun FragmentLogsBinding.setupToolbarForSelection(
         selecting: Boolean,
         count: Int,
-        viewingFile: Boolean,
-        viewingFileName: String?,
     ) = toolbar.apply {
         val setVisibility = { itemId: Int, visible: Boolean ->
             menu.findItem(itemId).isVisible = visible
@@ -320,7 +302,7 @@ internal class LogsFragment :
         val visibleOnlyInDefault = { itemId: Int ->
             setVisibility(
                 itemId,
-                !selecting && !viewingFile,
+                !selecting,
             )
         }
 
@@ -335,7 +317,6 @@ internal class LogsFragment :
 
         title = when {
             selecting -> resources.getQuantityString(Plurals.selected_count, count, count)
-            viewingFile -> viewingFileName
             else -> getString(Strings.app_name)
         }
 
@@ -345,16 +326,17 @@ internal class LogsFragment :
             setNavigationOnClickListener {
                 send(LogsCommand.ClearSelection)
             }
-        } else if (viewingFile) {
-            setupBackButtonForNavController()
         } else {
             invalidateNavigationButton()
         }
     }
 
-    private fun FragmentLogsBinding.updateLogsList(items: List<LogLine>?) {
+    private fun FragmentLogsBinding.updateLogsList(
+        items: List<LogLineItem>,
+        paused: Boolean,
+    ) {
         placeholderLayout.root.apply {
-            if (items?.isEmpty() != false) {
+            if (items.isEmpty()) {
                 animate()
                     .alpha(1f)
                     .setStartDelay(1000)
@@ -365,9 +347,16 @@ internal class LogsFragment :
             }
         }
 
+        val layoutManager = logsRecycler.layoutManager as LinearLayoutManager
+        val savedState = layoutManager.onSaveInstanceState()
+
         adapter.submitList(null)
         adapter.submitList(items) {
-            scrollLogToBottom()
+            if (paused) {
+                layoutManager.onRestoreInstanceState(savedState)
+            } else {
+                scrollLogToBottom()
+            }
         }
     }
 

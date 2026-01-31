@@ -6,7 +6,7 @@ import com.f0x1d.logfox.feature.crashes.api.data.CrashesRepository
 import com.f0x1d.logfox.feature.crashes.api.data.DisabledAppsRepository
 import com.f0x1d.logfox.feature.crashes.api.model.AppCrash
 import com.f0x1d.logfox.feature.logging.api.model.LogLine
-import com.f0x1d.logfox.feature.preferences.data.CrashesSettingsRepository
+import com.f0x1d.logfox.feature.preferences.api.data.CrashesSettingsRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext

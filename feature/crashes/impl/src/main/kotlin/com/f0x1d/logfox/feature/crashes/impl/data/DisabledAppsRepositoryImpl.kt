@@ -3,9 +3,9 @@ package com.f0x1d.logfox.feature.crashes.impl.data
 import com.f0x1d.logfox.core.di.IODispatcher
 import com.f0x1d.logfox.feature.crashes.api.data.DisabledAppsRepository
 import com.f0x1d.logfox.feature.crashes.api.model.DisabledApp
-import com.f0x1d.logfox.feature.crashes.impl.mapper.toDomain
+import com.f0x1d.logfox.feature.crashes.impl.mapper.toDomainModel
 import com.f0x1d.logfox.feature.crashes.impl.mapper.toEntity
-import com.f0x1d.logfox.feature.database.data.DisabledAppDataSource
+import com.f0x1d.logfox.feature.database.api.data.DisabledAppDataSource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -44,20 +44,20 @@ internal class DisabledAppsRepositoryImpl @Inject constructor(
     }
 
     override fun getAllAsFlow(): Flow<List<DisabledApp>> = disabledAppDataSource.getAllAsFlow()
-        .map { list -> list.map { it.toDomain() } }
+        .map { list -> list.map { it.toDomainModel() } }
         .distinctUntilChanged()
         .flowOn(ioDispatcher)
 
     override fun getByIdAsFlow(id: Long): Flow<DisabledApp?> = disabledAppDataSource.getByIdAsFlow(id)
-        .map { it?.toDomain() }
+        .map { it?.toDomainModel() }
         .flowOn(ioDispatcher)
 
     override suspend fun getAll(): List<DisabledApp> = withContext(ioDispatcher) {
-        disabledAppDataSource.getAll().map { it.toDomain() }
+        disabledAppDataSource.getAll().map { it.toDomainModel() }
     }
 
     override suspend fun getById(id: Long): DisabledApp? = withContext(ioDispatcher) {
-        disabledAppDataSource.getById(id)?.toDomain()
+        disabledAppDataSource.getById(id)?.toDomainModel()
     }
 
     override suspend fun update(item: DisabledApp) = withContext(ioDispatcher) {

@@ -4,9 +4,12 @@ import com.f0x1d.logfox.feature.recordings.api.domain.ClearAllRecordingsUseCase
 import com.f0x1d.logfox.feature.recordings.api.domain.CreateRecordingFromLinesUseCase
 import com.f0x1d.logfox.feature.recordings.api.domain.DeleteRecordingUseCase
 import com.f0x1d.logfox.feature.recordings.api.domain.EndRecordingUseCase
+import com.f0x1d.logfox.feature.recordings.api.domain.ExportRecordingFileUseCase
+import com.f0x1d.logfox.feature.recordings.api.domain.ExportRecordingZipUseCase
 import com.f0x1d.logfox.feature.recordings.api.domain.GetAllRecordingsFlowUseCase
 import com.f0x1d.logfox.feature.recordings.api.domain.GetRecordingByIdFlowUseCase
 import com.f0x1d.logfox.feature.recordings.api.domain.GetRecordingStateFlowUseCase
+import com.f0x1d.logfox.feature.recordings.api.domain.GetRecordingStateUseCase
 import com.f0x1d.logfox.feature.recordings.api.domain.NotifyLoggingStoppedUseCase
 import com.f0x1d.logfox.feature.recordings.api.domain.PauseRecordingUseCase
 import com.f0x1d.logfox.feature.recordings.api.domain.ProcessLogLineRecordingUseCase
@@ -18,9 +21,12 @@ import com.f0x1d.logfox.feature.recordings.impl.domain.ClearAllRecordingsUseCase
 import com.f0x1d.logfox.feature.recordings.impl.domain.CreateRecordingFromLinesUseCaseImpl
 import com.f0x1d.logfox.feature.recordings.impl.domain.DeleteRecordingUseCaseImpl
 import com.f0x1d.logfox.feature.recordings.impl.domain.EndRecordingUseCaseImpl
+import com.f0x1d.logfox.feature.recordings.impl.domain.ExportRecordingFileUseCaseImpl
+import com.f0x1d.logfox.feature.recordings.impl.domain.ExportRecordingZipUseCaseImpl
 import com.f0x1d.logfox.feature.recordings.impl.domain.GetAllRecordingsFlowUseCaseImpl
 import com.f0x1d.logfox.feature.recordings.impl.domain.GetRecordingByIdFlowUseCaseImpl
 import com.f0x1d.logfox.feature.recordings.impl.domain.GetRecordingStateFlowUseCaseImpl
+import com.f0x1d.logfox.feature.recordings.impl.domain.GetRecordingStateUseCaseImpl
 import com.f0x1d.logfox.feature.recordings.impl.domain.NotifyLoggingStoppedUseCaseImpl
 import com.f0x1d.logfox.feature.recordings.impl.domain.PauseRecordingUseCaseImpl
 import com.f0x1d.logfox.feature.recordings.impl.domain.ProcessLogLineRecordingUseCaseImpl
@@ -94,4 +100,19 @@ internal interface RecordingsUseCaseModule {
     fun bindGetRecordingStateFlowUseCase(
         impl: GetRecordingStateFlowUseCaseImpl,
     ): GetRecordingStateFlowUseCase
+
+    @Binds
+    fun bindExportRecordingFileUseCase(
+        impl: ExportRecordingFileUseCaseImpl,
+    ): ExportRecordingFileUseCase
+
+    @Binds
+    fun bindExportRecordingZipUseCase(
+        impl: ExportRecordingZipUseCaseImpl,
+    ): ExportRecordingZipUseCase
+
+    @Binds
+    fun bindGetRecordingStateUseCase(
+        impl: GetRecordingStateUseCaseImpl,
+    ): GetRecordingStateUseCase
 }

@@ -8,9 +8,20 @@ import javax.inject.Inject
 internal class AppsPickerViewModel @Inject constructor(
     reducer: AppsPickerReducer,
     effectHandler: AppsPickerEffectHandler,
-) : BaseStoreViewModel<AppsPickerState, AppsPickerCommand, AppsPickerSideEffect>(
-    initialState = AppsPickerState(),
+    viewStateMapper: AppsPickerViewStateMapper,
+) : BaseStoreViewModel<AppsPickerViewState, AppsPickerState, AppsPickerCommand, AppsPickerSideEffect>(
+    initialState = AppsPickerState(
+        topBarTitle = "Apps",
+        apps = emptyList(),
+        checkedAppPackageNames = emptySet(),
+        searchedApps = emptyList(),
+        multiplySelectionEnabled = true,
+        isLoading = true,
+        searchActive = false,
+        query = "",
+    ),
     reducer = reducer,
     effectHandlers = listOf(effectHandler),
+    viewStateMapper = viewStateMapper,
     initialSideEffects = listOf(AppsPickerSideEffect.LoadApps),
 )

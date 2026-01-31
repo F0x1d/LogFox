@@ -1,12 +1,12 @@
 package com.f0x1d.logfox.feature.crashes.presentation.list
 
 import com.f0x1d.logfox.feature.crashes.api.model.AppCrashesCount
-import com.f0x1d.logfox.feature.preferences.CrashesSort
+import com.f0x1d.logfox.feature.preferences.api.CrashesSort
 
-data class CrashesState(
-    val crashes: List<AppCrashesCount> = emptyList(),
-    val searchedCrashes: List<AppCrashesCount> = emptyList(),
-    val currentSort: CrashesSort = CrashesSort.NEW,
-    val sortInReversedOrder: Boolean = false,
-    val query: String? = null,
+internal data class CrashesState(
+    val crashes: List<AppCrashesCount>,
+    val searchedCrashes: List<AppCrashesCount>,
+    val currentSort: CrashesSort,
+    val sortInReversedOrder: Boolean,
+    val query: String?,
 )

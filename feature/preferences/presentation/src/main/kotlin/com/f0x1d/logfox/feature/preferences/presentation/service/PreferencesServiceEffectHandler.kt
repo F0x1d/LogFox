@@ -3,10 +3,10 @@ package com.f0x1d.logfox.feature.preferences.presentation.service
 import android.content.Context
 import com.f0x1d.logfox.core.tea.EffectHandler
 import com.f0x1d.logfox.feature.logging.api.presentation.LoggingServiceDelegate
-import com.f0x1d.logfox.feature.preferences.domain.terminal.GetSelectedTerminalTypeFlowUseCase
-import com.f0x1d.logfox.feature.preferences.domain.terminal.SetSelectedTerminalTypeUseCase
-import com.f0x1d.logfox.feature.terminals.base.Terminal
-import com.f0x1d.logfox.feature.terminals.base.TerminalType
+import com.f0x1d.logfox.feature.preferences.api.domain.terminal.GetSelectedTerminalTypeFlowUseCase
+import com.f0x1d.logfox.feature.preferences.api.domain.terminal.SetSelectedTerminalTypeUseCase
+import com.f0x1d.logfox.feature.terminals.api.base.Terminal
+import com.f0x1d.logfox.feature.terminals.api.base.TerminalType
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 

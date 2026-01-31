@@ -61,7 +61,7 @@ sealed interface AuthSideEffect {
 The reducer takes state and a command, returning new state and a list of side effects. Reducer is a **pure function** - no side effects allowed.
 
 ```kotlin
-// Interface - in core/tea module, public
+// Interface - in core/tea/base module, public
 interface Reducer<State, Command, SideEffect> {
     fun reduce(state: State, command: Command): ReduceResult<State, SideEffect>
 }
@@ -109,14 +109,18 @@ internal class AuthReducer : Reducer<AuthState, AuthCommand, AuthSideEffect> {
 ```
 
 ### EffectHandler Interface
-Effect handlers process side effects and send feedback via `onCommand` suspend function. The `onCommand` **MUST be suspend** and internally uses `withContext(Dispatchers.Main)` to ensure thread safety since `Store.send()` must be called from Main thread.
+Effect handlers process side effects and send feedback via `onCommand` suspend function. The `onCommand` **MUST be suspend** and internally uses `withContext(Dispatchers.Main.immediate)` to ensure thread safety since `Store.send()` must be called from Main thread.
 
 Multiple effect handlers can be specified, each with its own role.
 
+EffectHandler extends `Closeable`. The default `close()` is a no-op, but it can be overridden to release resources (e.g., cancel internal jobs). `Store.cancel()` calls `close()` on all effect handlers.
+
 ```kotlin
-// Interface - in core/tea module, public
-interface EffectHandler<SideEffect, Command> {
+// Interface - in core/tea/base module, public
+interface EffectHandler<SideEffect, Command>: Closeable {
     suspend fun handle(effect: SideEffect, onCommand: suspend (Command) -> Unit)
+
+    override fun close() = Unit
 }
 
 // Network-related effect handler - feature name prefix, internal (NO Impl suffix)
@@ -140,9 +144,8 @@ internal class AuthNetworkEffectHandler @Inject constructor(
                 logoutUseCase()
             }
 
-            else -> {
-                // Handled by different effect handler or UI
-            }
+            // Handled by different effect handler or UI
+            else -> Unit
         }
     }
 }
@@ -163,9 +166,8 @@ internal class AuthPersistenceEffectHandler @Inject constructor(
                 }
             }
 
-            else -> {
-                // Handled by different effect handler or UI
-            }
+            // Handled by different effect handler or UI
+            else -> Unit
         }
     }
 }
@@ -175,7 +177,7 @@ internal class AuthPersistenceEffectHandler @Inject constructor(
 The store orchestrates state, reducer, and effect handlers. Must support cancellation via coroutine job management. **`send()` must be called only from Main thread.**
 
 ```kotlin
-// In core/tea module, public
+// In core/tea/base module, public
 class Store<State, Command, SideEffect>(
     initialState: State,
     private val reducer: Reducer<State, Command, SideEffect>,
@@ -223,20 +225,36 @@ class Store<State, Command, SideEffect>(
     fun cancel() {
         jobs.values.forEach { it.cancel() }
         jobs.clear()
+
+        effectHandlers.forEach { it.close() }
     }
 }
 ```
 
-### BaseStoreViewModel
-Base ViewModel that integrates Store with Android lifecycle.
+### ViewStateMapper Interface
+ViewStateMapper is a **mandatory** interface that transforms internal domain State into a presentation-ready ViewState. Every feature MUST have a ViewState and a ViewStateMapper - there is no opt-out.
 
 ```kotlin
-// In core/tea module, public
-abstract class BaseStoreViewModel<State, Command, SideEffect>(
+// In core/tea/base module, public
+interface ViewStateMapper<State, ViewState> {
+    fun map(state: State): ViewState
+}
+```
+
+Even for simple features where State maps 1:1 to ViewState, the mapper must exist. The mapper keeps the boundary clean and makes it trivial to add derived fields later.
+
+### BaseStoreViewModel
+Base ViewModel that integrates Store with Android lifecycle. The ViewModel maps internal State to ViewState via the ViewStateMapper and exposes the mapped `StateFlow<ViewState>`.
+
+```kotlin
+// In core/tea/android module, public
+abstract class BaseStoreViewModel<ViewState, State, Command, SideEffect>(
     initialState: State,
     reducer: Reducer<State, Command, SideEffect>,
     effectHandlers: List<EffectHandler<SideEffect, Command>>,
+    viewStateMapper: ViewStateMapper<State, ViewState>,
     initialSideEffects: List<SideEffect> = emptyList(),
+    viewStateMappingDispatcher: CoroutineDispatcher = Dispatchers.Main.immediate,
 ) : ViewModel() {
 
     private val store = Store(
@@ -246,7 +264,14 @@ abstract class BaseStoreViewModel<State, Command, SideEffect>(
         scope = viewModelScope,
     )
 
-    val state: StateFlow<State> = store.state
+    val state: StateFlow<ViewState> = store.state
+        .map { viewStateMapper.map(it) }
+        .flowOn(viewStateMappingDispatcher)
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Eagerly,
+            initialValue = viewStateMapper.map(initialState),
+        )
     val sideEffects: SharedFlow<SideEffect> = store.sideEffects
 
     init {
@@ -254,7 +279,7 @@ abstract class BaseStoreViewModel<State, Command, SideEffect>(
             effectHandlers.forEach { handler ->
                 viewModelScope.launch {
                     handler.handle(effect) { cmd ->
-                        withContext(Dispatchers.Main) {
+                        withContext(Dispatchers.Main.immediate) {
                             send(cmd)
                         }
                     }
@@ -274,8 +299,14 @@ abstract class BaseStoreViewModel<State, Command, SideEffect>(
 }
 ```
 
+**Key points:**
+- `ViewState` is the **first** type parameter
+- `state` exposes `StateFlow<ViewState>`, not `StateFlow<State>` - the mapping happens inside the ViewModel
+- `viewStateMappingDispatcher` defaults to `Dispatchers.Main.immediate` but can be overridden (e.g., to `Dispatchers.Default`) for expensive mapping operations
+- Fragments/Composables render `ViewState` directly - they do NOT inject the mapper
+
 ### Feature ViewModel
-Feature-specific ViewModel that extends BaseStoreViewModel.
+Feature-specific ViewModel that extends BaseStoreViewModel. The first type parameter is always ViewState.
 
 ```kotlin
 // Feature ViewModel - internal visibility
@@ -284,10 +315,12 @@ internal class AuthViewModel @Inject constructor(
     reducer: AuthReducer,
     networkEffectHandler: AuthNetworkEffectHandler,
     persistenceEffectHandler: AuthPersistenceEffectHandler,
-) : BaseStoreViewModel<AuthState, AuthCommand, AuthSideEffect>(
+    viewStateMapper: AuthViewStateMapper,
+) : BaseStoreViewModel<AuthViewState, AuthState, AuthCommand, AuthSideEffect>(
     initialState = AuthState(),
     reducer = reducer,
     effectHandlers = listOf(networkEffectHandler, persistenceEffectHandler),
+    viewStateMapper = viewStateMapper,
     initialSideEffects = listOf(
         AuthSideEffect.LoadUser,
         AuthSideEffect.ObservePreferences,
@@ -295,9 +328,125 @@ internal class AuthViewModel @Inject constructor(
 )
 ```
 
+### ViewState Pattern (MANDATORY)
+
+Every feature MUST have both a **State** (internal domain state managed by the Reducer) and a **ViewState** (presentation-ready state consumed by the UI). The **ViewStateMapper** transforms State into ViewState inside the ViewModel — the Fragment/Composable only sees ViewState.
+
+#### Components
+
+**State** holds domain-centric data managed by the Reducer:
+
+```kotlin
+internal data class ItemsState(
+    val items: List<FormattedItem>? = null,
+    val selectedIds: Set<Long> = emptySet(),
+    val expandedOverrides: Map<Long, Boolean> = emptyMap(),
+    val defaultExpanded: Boolean = false,
+    val textSize: Int = 14,
+    val itemsChanged: Boolean = true,
+    // ... other domain fields
+)
+```
+
+**ViewState** holds presentation-ready data for the Fragment:
+
+```kotlin
+internal data class ItemsViewState(
+    val items: List<ItemPresentationModel>? = null,
+    val itemsChanged: Boolean = true,
+    val selecting: Boolean = false,
+    val selectedCount: Int = 0,
+    // ... other UI fields
+)
+```
+
+**ViewStateMapper** implements the `ViewStateMapper<State, ViewState>` interface from `core/tea`, `@Inject`-constructed, `internal` visibility:
+
+```kotlin
+internal class ItemsViewStateMapper @Inject constructor() : ViewStateMapper<ItemsState, ItemsViewState> {
+
+    override fun map(state: ItemsState): ItemsViewState = ItemsViewState(
+        items = state.items?.map { formatted ->
+            formatted.toPresentationModel(
+                expanded = state.expandedOverrides.getOrElse(formatted.id) { state.defaultExpanded },
+                selected = formatted.id in state.selectedIds,
+                textSize = state.textSize.toFloat(),
+            )
+        },
+        itemsChanged = state.itemsChanged,
+        selecting = state.selectedIds.isNotEmpty(),
+        selectedCount = state.selectedIds.size,
+    )
+}
+```
+
+For simple features where State maps nearly 1:1 to ViewState, the mapper is still required but trivial:
+
+```kotlin
+internal class SearchLogsViewStateMapper @Inject constructor() : ViewStateMapper<SearchLogsState, SearchLogsViewState> {
+    override fun map(state: SearchLogsState): SearchLogsViewState = SearchLogsViewState(
+        query = state.query.orEmpty(),
+        caseSensitive = state.caseSensitive,
+    )
+}
+```
+
+#### Integration
+
+The **ViewModel** takes `ViewState` as its first type parameter and accepts `viewStateMapper` in the constructor. The ViewModel maps State -> ViewState internally and exposes `StateFlow<ViewState>`:
+
+```kotlin
+@HiltViewModel
+internal class ItemsViewModel @Inject constructor(
+    reducer: ItemsReducer,
+    effectHandler: ItemsEffectHandler,
+    viewStateMapper: ItemsViewStateMapper,
+) : BaseStoreViewModel<ItemsViewState, ItemsState, ItemsCommand, ItemsSideEffect>(
+    initialState = ItemsState(),
+    reducer = reducer,
+    effectHandlers = listOf(effectHandler),
+    viewStateMapper = viewStateMapper,
+    initialSideEffects = listOf(ItemsSideEffect.LoadItems),
+)
+```
+
+The **Fragment** renders `ViewState` directly — it does NOT inject the mapper:
+
+```kotlin
+@AndroidEntryPoint
+internal class ItemsFragment : BaseStoreFragment<
+    FragmentItemsBinding,
+    ItemsViewState,
+    ItemsState,
+    ItemsCommand,
+    ItemsSideEffect,
+    ItemsViewModel,
+    >() {
+
+    override val viewModel by viewModels<ItemsViewModel>()
+
+    override fun render(state: ItemsViewState) {
+        binding.processList(state.items, state.itemsChanged)
+        binding.processSelection(state.selecting, state.selectedCount)
+    }
+}
+```
+
+#### Key Rules
+- **State** MUST NOT contain presentation models — use domain models or intermediate formatted models
+- **ViewState** MUST NOT be the TEA State type — it is derived, not managed by the Store
+- **ViewStateMapper** implements `ViewStateMapper<State, ViewState>` interface from `core/tea`
+- **ViewStateMapper** MUST be a pure function (no side effects, no mutable state) — mapping runs on `viewStateMappingDispatcher` (defaults to `Dispatchers.Main.immediate`)
+- For expensive mapping operations, override `viewStateMappingDispatcher` in the ViewModel constructor (e.g., pass `Dispatchers.Default`)
+- The expensive work (filtering, formatting, IO) stays in the **EffectHandler** on background dispatchers
+- The cheap work (applying selection/expanded/textSize to pre-formatted items) happens in the **mapper**
+- Selection, expansion, and similar UI-local state lives **directly in State**, managed by the **Reducer** as pure functions — no presentation-layer repositories or use cases
+- When the Reducer modifies selection state that needs external sync, it emits a SideEffect carrying the data (e.g., `SyncSelectedLines(selectedIds)`) rather than relying on an internal repository
+
 ### Type Alias for Convenience
 ```kotlin
 typealias AuthStore = Store<AuthState, AuthCommand, AuthSideEffect>
+typealias AuthStoreViewModel = BaseStoreViewModel<AuthViewState, AuthState, AuthCommand, AuthSideEffect>
 ```
 
 ---
@@ -336,6 +485,9 @@ Data         ─────────┘
 | Repository Implementation | `Impl` suffix (e.g., `AuthRepositoryImpl`) | `internal` (in impl module) |
 | Reducer | Feature name + `Reducer` (e.g., `AuthReducer`) | `internal` |
 | EffectHandler | Feature name + role + `EffectHandler` (e.g., `AuthNetworkEffectHandler`) | `internal` |
+| State | Feature name + `State` (e.g., `AuthState`) | `internal` |
+| ViewState | Feature name + `ViewState` (e.g., `AuthViewState`) | `internal` |
+| ViewStateMapper | Feature name + `ViewStateMapper` (e.g., `AuthViewStateMapper`) | `internal` |
 
 **Exception for Reducers and Effect Handlers:**
 Reducers and Effect Handlers do NOT use the `Impl` suffix because they already include the feature name in their title (e.g., `AuthReducer`, `AuthNetworkEffectHandler`). This makes the naming more concise while still being clear.
@@ -538,24 +690,41 @@ class ParentFragment : BaseFragment<...>() {
 ```
 
 ### Base Fragment Classes
-Base classes abstract away Flow collection boilerplate. Feature fragments only need to implement `render()` and `handleSideEffect()`.
+Base classes abstract away Flow collection boilerplate. Feature fragments only need to implement `render()` and `handleSideEffect()`. There are three base fragment variants in `core/tea/android`:
+
+- **BaseStoreFragment** — for regular fragments with ViewBinding
+- **BaseStoreBottomSheetFragment** — for bottom sheet dialog fragments with ViewBinding
+- **BaseStorePreferenceFragment** — for preference fragments (no ViewBinding)
+
+All three follow the same type parameter pattern and API.
 
 ```kotlin
-// In core/ui module - Base Fragment for TEA architecture
-abstract class BaseStoreFragment<VB : ViewBinding, State, Command, SideEffect, VM : BaseStoreViewModel<State, Command, SideEffect>> : Fragment() {
+// In core/tea/android module - Base Fragment for TEA architecture
+abstract class BaseStoreFragment<
+    VB : ViewBinding,
+    ViewState,
+    State,
+    Command,
+    SideEffect,
+    VM : BaseStoreViewModel<ViewState, State, Command, SideEffect>,
+    > : Fragment() {
 
     private var _binding: VB? = null
     protected val binding: VB get() = _binding!!
 
     protected abstract val viewModel: VM
 
-    abstract fun createBinding(inflater: LayoutInflater, container: ViewGroup?): VB
+    /**
+     * Create the ViewBinding for this fragment.
+     */
+    abstract fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?): VB
 
     /**
      * Render state to UI. Called on every state change.
      * Must be idempotent - same state = same UI.
+     * Receives ViewState (already mapped from domain State by the ViewModel).
      */
-    abstract fun render(state: State)
+    abstract fun render(state: ViewState)
 
     /**
      * Handle side effects (navigation, snackbars, etc.)
@@ -563,17 +732,26 @@ abstract class BaseStoreFragment<VB : ViewBinding, State, Command, SideEffect, V
      */
     abstract fun handleSideEffect(sideEffect: SideEffect)
 
+    /**
+     * Called after view is created but before state collection starts.
+     * Override to set up views, click listeners, etc.
+     * The receiver is the ViewBinding - no need to prefix with `binding.`.
+     */
+    protected open fun VB.onViewCreated(view: View, savedInstanceState: Bundle?) = Unit
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        _binding = createBinding(inflater, container)
+        _binding = inflateBinding(inflater, container)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.onViewCreated(view, savedInstanceState)
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -597,30 +775,81 @@ abstract class BaseStoreFragment<VB : ViewBinding, State, Command, SideEffect, V
 }
 ```
 
+#### BaseStoreBottomSheetFragment
+Same API as BaseStoreFragment but extends `BottomSheetDialogFragment`:
+
+```kotlin
+// In core/tea/android module
+abstract class BaseStoreBottomSheetFragment<
+    VB : ViewBinding,
+    ViewState,
+    State,
+    Command,
+    SideEffect,
+    VM : BaseStoreViewModel<ViewState, State, Command, SideEffect>,
+    > : BottomSheetDialogFragment() {
+    // Same API: inflateBinding, render, handleSideEffect, VB.onViewCreated, send
+}
+```
+
+#### BaseStorePreferenceFragment
+For preference screens. No ViewBinding — uses PreferenceFragmentCompat's built-in preference XML inflation.
+
+```kotlin
+// In core/tea/android module
+abstract class BaseStorePreferenceFragment<
+    ViewState,
+    State,
+    Command,
+    SideEffect,
+    VM : BaseStoreViewModel<ViewState, State, Command, SideEffect>,
+    > : PreferenceFragmentCompat() {
+
+    protected abstract val viewModel: VM
+
+    abstract fun render(state: ViewState)
+    abstract fun handleSideEffect(sideEffect: SideEffect)
+
+    // send() convenience method available
+}
+```
+
+**Key differences from the old API:**
+- **6 type parameters** (added `ViewState` as second): `<VB, ViewState, State, Command, SideEffect, VM>`
+- `render()` receives **ViewState**, not State — the mapping is done in the ViewModel
+- `inflateBinding()` replaces `createBinding()`
+- `VB.onViewCreated()` is an extension function on the binding — override it instead of overriding `onViewCreated()` directly. The binding is the receiver so you can access views directly without `binding.` prefix
+
 ### Feature Fragment Example
 ```kotlin
-// Container Fragment - extends BaseStoreFragment, only implements render and handleSideEffect
+// Container Fragment - extends BaseStoreFragment with 6 type params
 @AndroidEntryPoint
-class AuthFragment : BaseStoreFragment<FragmentAuthBinding, AuthState, AuthCommand, AuthSideEffect, AuthViewModel>() {
+internal class AuthFragment :
+    BaseStoreFragment<
+        FragmentAuthBinding,
+        AuthViewState,
+        AuthState,
+        AuthCommand,
+        AuthSideEffect,
+        AuthViewModel,
+        >() {
 
-    override val viewModel: AuthViewModel by viewModels()
+    override val viewModel by viewModels<AuthViewModel>()
 
-    override fun createBinding(
+    override fun inflateBinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
-    ): FragmentAuthBinding = FragmentAuthBinding.inflate(inflater, container, false)
+    ) = FragmentAuthBinding.inflate(inflater, container, false)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        // Setup event listeners - send commands to ViewModel
-        binding.loginView.onEmailChanged = { send(AuthCommand.EmailChanged(it)) }
-        binding.loginView.onPasswordChanged = { send(AuthCommand.PasswordChanged(it)) }
-        binding.loginView.onLoginClick = { send(AuthCommand.LoginTapped) }
+    // Setup event listeners in VB.onViewCreated - binding is the receiver
+    override fun FragmentAuthBinding.onViewCreated(view: View, savedInstanceState: Bundle?) {
+        loginView.onEmailChanged = { send(AuthCommand.EmailChanged(it)) }
+        loginView.onPasswordChanged = { send(AuthCommand.PasswordChanged(it)) }
+        loginView.onLoginClick = { send(AuthCommand.LoginTapped) }
     }
 
-    override fun render(state: AuthState) {
-        // Pure rendering - same state = same UI
+    override fun render(state: AuthViewState) {
+        // Pure rendering - same ViewState = same UI
         binding.loginView.bind(state)
     }
 
@@ -634,7 +863,44 @@ class AuthFragment : BaseStoreFragment<FragmentAuthBinding, AuthState, AuthComma
                 Snackbar.make(binding.root, sideEffect.message, Snackbar.LENGTH_SHORT).show()
             }
             // Business logic side effects - handled by EffectHandlers, ignore here
-            else -> {}
+            else -> Unit
+        }
+    }
+}
+```
+
+### Feature BottomSheet Fragment Example
+```kotlin
+@AndroidEntryPoint
+internal class SearchLogsBottomSheetFragment :
+    BaseStoreBottomSheetFragment<
+        SheetSearchBinding,
+        SearchLogsViewState,
+        SearchLogsState,
+        SearchLogsCommand,
+        SearchLogsSideEffect,
+        SearchLogsViewModel,
+        >() {
+
+    override val viewModel by viewModels<SearchLogsViewModel>()
+
+    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) =
+        SheetSearchBinding.inflate(inflater, container, false)
+
+    override fun SheetSearchBinding.onViewCreated(view: View, savedInstanceState: Bundle?) {
+        // Setup click listeners using the binding receiver
+        searchButton.setOnClickListener { send(SearchLogsCommand.UpdateQuery(queryText.text?.toString())) }
+    }
+
+    override fun render(state: SearchLogsViewState) {
+        binding.queryText.setText(state.query)
+        binding.caseSensitiveCheckbox.isChecked = state.caseSensitive
+    }
+
+    override fun handleSideEffect(sideEffect: SearchLogsSideEffect) {
+        when (sideEffect) {
+            is SearchLogsSideEffect.Dismiss -> dismiss()
+            else -> Unit
         }
     }
 }
@@ -742,6 +1008,7 @@ fun LoginContentWrong() {
 ### Compose: Container Screen Example
 ```kotlin
 // Container - the only composable that can hold ViewModel and handle lifecycle
+// state is already ViewState (mapped by the ViewModel)
 @Composable
 fun AuthScreen(
     viewModel: AuthViewModel = hiltViewModel(),
@@ -756,7 +1023,7 @@ fun AuthScreen(
                 is AuthSideEffect.NavigateToHome -> onNavigateToHome()
                 is AuthSideEffect.ShowError -> { /* show snackbar */ }
                 // Business logic side effects - handled by EffectHandlers, ignore here
-                else -> {}
+                else -> Unit
             }
         }
     }
@@ -968,18 +1235,18 @@ feature/auth/
 - **NO implementations, NO DI annotations**
 
 ```kotlin
-// feature/auth/api/src/main/kotlin/com/example/feature/auth/AuthRepository.kt
+// feature/auth/api/src/main/kotlin/com/f0x1d/logfox/feature/auth/api/AuthRepository.kt
 interface AuthRepository {
     suspend fun login(email: String, password: String): User
     val isAuthenticated: Flow<Boolean>
 }
 
-// feature/auth/api/src/main/kotlin/com/example/feature/auth/LoginUseCase.kt
+// feature/auth/api/src/main/kotlin/com/f0x1d/logfox/feature/auth/api/LoginUseCase.kt
 interface LoginUseCase {
     suspend operator fun invoke(email: String, password: String): Result<User>
 }
 
-// feature/auth/api/src/main/kotlin/com/example/feature/auth/User.kt
+// feature/auth/api/src/main/kotlin/com/f0x1d/logfox/feature/auth/api/User.kt
 data class User(
     val id: String,
     val email: String,
@@ -995,7 +1262,7 @@ data class User(
 - Pure Kotlin when possible, Android when needed
 
 ```kotlin
-// feature/auth/impl/src/main/kotlin/com/example/feature/auth/AuthRepositoryImpl.kt
+// feature/auth/impl/src/main/kotlin/com/f0x1d/logfox/feature/auth/impl/AuthRepositoryImpl.kt
 internal class AuthRepositoryImpl @Inject constructor(
     private val remoteDataSource: AuthRemoteDataSource,
     private val localDataSource: AuthLocalDataSource,
@@ -1003,7 +1270,7 @@ internal class AuthRepositoryImpl @Inject constructor(
     // Implementation...
 }
 
-// feature/auth/impl/src/main/kotlin/com/example/feature/auth/di/AuthModule.kt
+// feature/auth/impl/src/main/kotlin/com/f0x1d/logfox/feature/auth/impl/di/AuthModule.kt
 @Module
 @InstallIn(SingletonComponent::class)
 internal interface AuthModule {
@@ -1017,24 +1284,31 @@ internal interface AuthModule {
 
 #### presentation module (OPTIONAL)
 - Contains UI components (Views/Composables) and ViewModels
+- Contains TEA components: State, ViewState, ViewStateMapper, Command, SideEffect, Reducer, EffectHandler
 - **Depends ONLY on api module** - NEVER on impl
 - Android library module (required for UI components)
 - Uses `logfox.android.feature.compose` for Compose UI
 
 ```kotlin
-// feature/auth/presentation/src/main/kotlin/com/example/feature/auth/AuthViewModel.kt
+// feature/auth/presentation/src/main/kotlin/com/f0x1d/logfox/feature/auth/presentation/AuthViewModel.kt
 @HiltViewModel
 internal class AuthViewModel @Inject constructor(
-    private val loginUseCase: LoginUseCase, // From api module
-) : ViewModel() {
-    // Implementation...
-}
+    reducer: AuthReducer,
+    effectHandler: AuthEffectHandler,
+    viewStateMapper: AuthViewStateMapper,
+) : BaseStoreViewModel<AuthViewState, AuthState, AuthCommand, AuthSideEffect>(
+    initialState = AuthState(),
+    reducer = reducer,
+    effectHandlers = listOf(effectHandler),
+    viewStateMapper = viewStateMapper,
+)
 
-// feature/auth/presentation/src/main/kotlin/com/example/feature/auth/AuthScreen.kt
+// feature/auth/presentation/src/main/kotlin/com/f0x1d/logfox/feature/auth/presentation/AuthScreen.kt
 @Composable
 fun AuthScreen(
     viewModel: AuthViewModel = hiltViewModel(),
 ) {
+    val state by viewModel.state.collectAsStateWithLifecycle() // Already ViewState
     // Implementation...
 }
 ```
@@ -1045,10 +1319,13 @@ Sometimes modules don't need the full 3-module structure:
 #### Core utility modules (no interfaces to expose)
 ```
 core/tea/
-└── build.gradle.kts    # Contains Store, Reducer, EffectHandler, BaseStoreViewModel
+├── base/
+│   └── build.gradle.kts    # Pure Kotlin JVM - Store, Reducer, ReduceResult, EffectHandler, ViewStateMapper
+└── android/
+    └── build.gradle.kts    # Android - BaseStoreViewModel, BaseStoreFragment, BaseStoreBottomSheetFragment, BaseStorePreferenceFragment
 
 core/ui/
-└── build.gradle.kts    # Contains BaseStoreFragment, BaseActivity, theme
+└── build.gradle.kts    # Contains BaseActivity, theme
 
 core/common/
 └── build.gradle.kts    # Contains common extensions, utilities
@@ -1179,17 +1456,13 @@ internal interface AuthDataSourceModule {
 ```
 
 ### TEA Components Binding
+Note: Reducers, EffectHandlers, and ViewStateMappers are `@Inject`-constructed and used directly in the ViewModel constructor — they do NOT need DI module bindings in most cases. Hilt can construct them directly.
+
+DI module bindings are only needed when:
+- You need to provide a `List<EffectHandler<...>>` for multiple effect handlers
+- You want to bind to the generic interface type (e.g., `Reducer<State, Command, SideEffect>`)
+
 ```kotlin
-// In feature/auth/presentation module
-@Module
-@InstallIn(ViewModelComponent::class)
-internal interface AuthTEAModule {
-
-    // Reducer - unscoped, new instance per ViewModel
-    @Binds
-    fun bindAuthReducer(impl: AuthReducer): Reducer<AuthState, AuthCommand, AuthSideEffect>
-}
-
 // For multiple effect handlers, provide as List
 @Module
 @InstallIn(ViewModelComponent::class)
@@ -1204,6 +1477,17 @@ internal object AuthEffectHandlersModule {
         persistenceHandler,
     )
 }
+```
+
+In practice, most ViewModels inject the concrete Reducer, EffectHandler, and ViewStateMapper types directly:
+
+```kotlin
+@HiltViewModel
+internal class AuthViewModel @Inject constructor(
+    reducer: AuthReducer,                    // concrete type, no binding needed
+    effectHandler: AuthEffectHandler,        // concrete type, no binding needed
+    viewStateMapper: AuthViewStateMapper,    // concrete type, no binding needed
+) : BaseStoreViewModel<AuthViewState, AuthState, AuthCommand, AuthSideEffect>(...)
 ```
 
 ### Scopes and Lifecycle
@@ -1321,7 +1605,7 @@ fun AuthScreen(
                 AuthSideEffect.NavigateToRegister -> onNavigateToRegister()
                 is AuthSideEffect.NavigateToForgotPassword -> { /* navigate */ }
                 is AuthSideEffect.ShowError -> { /* show snackbar */ }
-                else -> {} // Business logic handled by EffectHandlers
+                else -> Unit // Business logic handled by EffectHandlers
             }
         }
     }
@@ -1345,7 +1629,7 @@ override fun handleSideEffect(sideEffect: AuthSideEffect) {
         is AuthSideEffect.ShowError -> {
             Snackbar.make(binding.root, sideEffect.message, Snackbar.LENGTH_SHORT).show()
         }
-        else -> {} // Business logic handled by EffectHandlers
+        else -> Unit // Business logic handled by EffectHandlers
     }
 }
 ```
@@ -1445,7 +1729,7 @@ domain/usecase/
 
 ```
 app/
-├── src/main/kotlin/com/example/app/
+├── src/main/kotlin/com/f0x1d/logfox/
 │   ├── App.kt                    # Application class
 │   ├── MainActivity.kt           # Main activity
 │   └── navigation/
@@ -1453,40 +1737,46 @@ app/
 
 core/
 ├── tea/
-│   └── src/main/kotlin/com/example/core/tea/
-│       ├── Store.kt                  # TEA Store implementation
-│       ├── Reducer.kt                # Reducer interface
-│       ├── ReduceResult.kt           # ReduceResult data class
-│       ├── EffectHandler.kt          # EffectHandler interface
-│       └── BaseStoreViewModel.kt     # Base ViewModel for TEA
+│   ├── base/
+│   │   └── src/main/kotlin/com/f0x1d/logfox/core/tea/
+│   │       ├── Store.kt                  # TEA Store implementation
+│   │       ├── Reducer.kt                # Reducer interface
+│   │       ├── ReduceResult.kt           # ReduceResult data class
+│   │       ├── EffectHandler.kt          # EffectHandler interface (extends Closeable)
+│   │       └── ViewStateMapper.kt        # ViewStateMapper interface
+│   └── android/
+│       └── src/main/kotlin/com/f0x1d/logfox/core/tea/
+│           ├── BaseStoreViewModel.kt             # Base ViewModel for TEA
+│           ├── BaseStoreFragment.kt              # Base Fragment for TEA
+│           ├── BaseStoreBottomSheetFragment.kt   # Base BottomSheet for TEA
+│           └── BaseStorePreferenceFragment.kt    # Base PreferenceFragment for TEA
 ├── ui/
-│   └── src/main/kotlin/com/example/core/ui/
-│       ├── BaseStoreFragment.kt      # Base Fragment for TEA
+│   └── src/main/kotlin/com/f0x1d/logfox/core/ui/
 │       ├── BaseFragment.kt           # Simple base Fragment
 │       └── theme/
 │           ├── Theme.kt
 │           └── Color.kt
 ├── network/
 │   ├── api/
-│   │   └── src/main/kotlin/com/example/core/network/
+│   │   └── src/main/kotlin/com/f0x1d/logfox/core/network/api/
 │   │       ├── HttpClient.kt         # Interface
 │   │       └── NetworkError.kt       # Sealed class
 │   └── impl/
-│       └── src/main/kotlin/com/example/core/network/
+│       └── src/main/kotlin/com/f0x1d/logfox/core/network/impl/
 │           ├── HttpClientImpl.kt     # Implementation
 │           └── di/
 │               └── NetworkModule.kt  # Hilt module
 ├── persistence/
 │   ├── api/
-│   │   └── src/main/kotlin/com/example/core/persistence/
+│   │   └── src/main/kotlin/com/f0x1d/logfox/core/persistence/api/
 │   │       └── DataStoreClient.kt    # Interface
 │   └── impl/
-│       └── src/main/kotlin/com/example/core/persistence/
+│       └── src/main/kotlin/com/f0x1d/logfox/core/persistence/impl/
 │           ├── DataStoreClientImpl.kt
 │           └── di/
 │               └── PersistenceModule.kt
 └── common/
-    └── src/main/kotlin/com/example/core/common/
+    └── src/main/kotlin/com/f0x1d/logfox/core/common/
         └── extensions/
             ├── FlowExtensions.kt
             └── ContextExtensions.kt
@@ -1494,13 +1784,13 @@ core/
 feature/
 ├── auth/
 │   ├── api/
-│   │   └── src/main/kotlin/com/example/feature/auth/
+│   │   └── src/main/kotlin/com/f0x1d/logfox/feature/auth/api/
 │   │       ├── AuthRepository.kt
 │   │       ├── LoginUseCase.kt
 │   │       ├── LogoutUseCase.kt
 │   │       └── User.kt
 │   ├── impl/
-│   │   └── src/main/kotlin/com/example/feature/auth/
+│   │   └── src/main/kotlin/com/f0x1d/logfox/feature/auth/impl/
 │   │       ├── AuthRepositoryImpl.kt
 │   │       ├── LoginUseCaseImpl.kt
 │   │       ├── LogoutUseCaseImpl.kt
@@ -1517,18 +1807,20 @@ feature/
 │   │       └── di/
 │   │           └── AuthModule.kt
 │   └── presentation/
-│       └── src/main/kotlin/com/example/feature/auth/
-│           ├── AuthViewModel.kt          # Feature ViewModel
-│           ├── AuthState.kt              # UI State
-│           ├── AuthCommand.kt            # User actions / feedback commands
-│           ├── AuthSideEffect.kt         # Side effects (business + UI)
-│           ├── AuthReducer.kt            # Pure reducer function
-│           ├── AuthNetworkEffectHandler.kt    # Network side effect handler
+│       └── src/main/kotlin/com/f0x1d/logfox/feature/auth/presentation/
+│           ├── AuthViewModel.kt              # Feature ViewModel
+│           ├── AuthState.kt                  # Internal domain State
+│           ├── AuthViewState.kt              # Presentation-ready ViewState
+│           ├── AuthViewStateMapper.kt        # State -> ViewState mapper (implements ViewStateMapper)
+│           ├── AuthCommand.kt                # User actions / feedback commands
+│           ├── AuthSideEffect.kt             # Side effects (business + UI)
+│           ├── AuthReducer.kt                # Pure reducer function
+│           ├── AuthNetworkEffectHandler.kt   # Network side effect handler
 │           ├── AuthPersistenceEffectHandler.kt # Persistence side effect handler
-│           ├── AuthScreen.kt             # Container composable
-│           ├── AuthFragment.kt           # Container fragment (if using Views)
+│           ├── AuthScreen.kt                 # Container composable
+│           ├── AuthFragment.kt               # Container fragment (if using Views)
 │           └── component/
-│               ├── LoginContent.kt       # Passive composable
+│               ├── LoginContent.kt           # Passive composable
 │               └── RegisterContent.kt
 ├── profile/
 │   ├── api/
@@ -1541,14 +1833,45 @@ feature/
 ```
 
 ### Package Naming
+
+**Critical Rule:** Every api, impl, and presentation Gradle module MUST include its module type as a package segment. The package pattern is:
+
 ```
-com.example.app                         # :app module
-com.example.core.network                # :core:network:api and :core:network:impl
-com.example.core.persistence            # :core:persistence:api and :core:persistence:impl
-com.example.core.ui                     # :core:ui
-com.example.feature.auth                # :feature:auth:api, impl, and presentation
-com.example.feature.profile             # :feature:profile:api, impl, and presentation
+com.f0x1d.logfox.<module-type>.<module-name>.<api|impl|presentation>[.subpackage]
 ```
+
+Where:
+- `<module-type>` is `feature` or `core`
+- `<module-name>` is the feature/core name (e.g., `auth`, `logging`, `preferences`)
+- `<api|impl|presentation>` corresponds to the Gradle sub-module
+
+**Examples:**
+
+| Gradle module | Package root |
+|---|---|
+| `:app` | `com.f0x1d.logfox` |
+| `:feature:auth:api` | `com.f0x1d.logfox.feature.auth.api` |
+| `:feature:auth:impl` | `com.f0x1d.logfox.feature.auth.impl` |
+| `:feature:auth:presentation` | `com.f0x1d.logfox.feature.auth.presentation` |
+| `:core:preferences:api` | `com.f0x1d.logfox.core.preferences.api` |
+| `:core:preferences:impl` | `com.f0x1d.logfox.core.preferences.impl` |
+| `:core:ui:base` | `com.f0x1d.logfox.core.ui` (standalone, no api/impl split) |
+
+Sub-packages within each module follow naturally:
+```
+com.f0x1d.logfox.feature.auth.api.data          # repository interfaces
+com.f0x1d.logfox.feature.auth.api.domain         # use case interfaces
+com.f0x1d.logfox.feature.auth.api.model          # domain models
+com.f0x1d.logfox.feature.auth.impl.data          # repository implementations, data sources
+com.f0x1d.logfox.feature.auth.impl.di            # Hilt modules
+com.f0x1d.logfox.feature.auth.impl.domain        # use case implementations
+com.f0x1d.logfox.feature.auth.presentation.ui    # fragments, screens
+```
+
+**Why this matters:**
+- Prevents package collisions between api and impl modules (e.g., both having a `data` sub-package)
+- Makes it immediately obvious from an import which module a class belongs to
+- The `android.namespace` in `build.gradle.kts` MUST match the package root (e.g., `com.f0x1d.logfox.feature.auth.api`)
 
 ---
 
@@ -1556,16 +1879,21 @@ com.example.feature.profile             # :feature:profile:api, impl, and presen
 
 1. **TEA Pattern**: State is immutable, Commands trigger state changes via Reducer, SideEffects handled by both EffectHandlers (business) and UI (navigation/toast)
 2. **Reducer**: Pure function, takes State + Command, returns new State + SideEffects. NO side effects allowed in reducer
-3. **EffectHandler**: Handles SideEffects asynchronously, `onCommand` is **suspend** and uses `withContext(Main)` to call `Store.send()`
+3. **EffectHandler**: Handles SideEffects asynchronously, `onCommand` is **suspend** and uses `withContext(Dispatchers.Main.immediate)` to call `Store.send()`. Extends `Closeable` for resource cleanup
 4. **Store.send()**: MUST be called only from Main thread
 5. **SideEffects**: Serve dual purpose - business logic (handled by EffectHandlers) and UI actions (handled by Fragment/Composable)
-6. **Use Cases**: Must use `invoke` operator, return `Result<T>` for failable operations
-7. **Repositories**: Methods can throw, expose `Flow` for reactive data
-8. **Data Sources**: Internal to impl module, never exposed outside
-9. **Views**: Passive, only display data and trigger events via lambdas
-10. **BaseStoreFragment**: Abstract away Flow collection, feature fragments only implement `render()` and `handleSideEffect()`
-11. **Modularization**: api/impl/presentation structure, presentation depends ONLY on api
-12. **DI**: Use Hilt `@Binds` for interfaces, singleton for shared state
-13. **Navigation**: SideEffect-based, handled in container components
-14. **File Structure**: One type per file, file name matches type name
-15. **Convention Plugins**: Use appropriate plugin for each module type
+6. **ViewState is MANDATORY**: Every feature has State (domain, managed by Reducer) and ViewState (presentation, derived by ViewStateMapper). ViewStateMapper implements `ViewStateMapper<State, ViewState>` interface from `core/tea`
+7. **BaseStoreViewModel**: 4 type params `<ViewState, State, Command, SideEffect>`, maps State -> ViewState internally, exposes `StateFlow<ViewState>`
+8. **BaseStoreFragment**: 6 type params `<VB, ViewState, State, Command, SideEffect, VM>`, renders ViewState, uses `inflateBinding()` and `VB.onViewCreated()`
+9. **Base Fragment Variants**: `BaseStoreFragment`, `BaseStoreBottomSheetFragment`, `BaseStorePreferenceFragment` - all in `core/tea/android`
+10. **core/tea module split**: `core/tea/base/` (pure Kotlin JVM - Store, Reducer, ReduceResult, EffectHandler, ViewStateMapper) and `core/tea/android/` (Android - BaseStoreViewModel, BaseStoreFragment, etc.)
+11. **Use Cases**: Must use `invoke` operator, return `Result<T>` for failable operations
+12. **Repositories**: Methods can throw, expose `Flow` for reactive data
+13. **Data Sources**: Internal to impl module, never exposed outside
+14. **Views**: Passive, only display data and trigger events via lambdas
+15. **Modularization**: api/impl/presentation structure, presentation depends ONLY on api
+16. **DI**: Use Hilt `@Binds` for interfaces, singleton for shared state. TEA components (Reducer, EffectHandler, ViewStateMapper) are `@Inject`-constructed and used directly - no DI binding needed unless providing a list
+17. **Navigation**: SideEffect-based, handled in container components
+18. **File Structure**: One type per file, file name matches type name
+19. **Convention Plugins**: Use appropriate plugin for each module type
+20. **Package Naming**: Every api/impl/presentation module MUST include its module type as a package segment: `com.f0x1d.logfox.<feature|core>.<name>.<api|impl|presentation>`. The `android.namespace` in `build.gradle.kts` MUST match this package root

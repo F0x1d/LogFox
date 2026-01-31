@@ -19,6 +19,7 @@ import com.f0x1d.logfox.feature.preferences.presentation.ui.settings.Preferences
 import com.f0x1d.logfox.feature.preferences.presentation.ui.settings.PreferencesUISideEffect
 import com.f0x1d.logfox.feature.preferences.presentation.ui.settings.PreferencesUIState
 import com.f0x1d.logfox.feature.preferences.presentation.ui.settings.PreferencesUIViewModel
+import com.f0x1d.logfox.feature.preferences.presentation.ui.settings.PreferencesUIViewState
 import com.f0x1d.logfox.feature.strings.Strings
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -28,6 +29,7 @@ import dev.chrisbanes.insetter.applyInsetter
 @AndroidEntryPoint
 internal class PreferencesUIFragment :
     BaseStorePreferenceFragment<
+        PreferencesUIViewState,
         PreferencesUIState,
         PreferencesUICommand,
         PreferencesUISideEffect,
@@ -99,7 +101,18 @@ internal class PreferencesUIFragment :
                         Strings.tag,
                         Strings.content,
                     ).fillWithStrings(requireContext()),
-                    viewModel.state.value.showLogValues.asArray,
+                    viewModel.state.value.run {
+                        booleanArrayOf(
+                            showLogDate,
+                            showLogTime,
+                            showLogUid,
+                            showLogPid,
+                            showLogTid,
+                            showLogPackage,
+                            showLogTag,
+                            showLogContent,
+                        )
+                    },
                 ) { _, which, checked ->
                     send(PreferencesUICommand.LogsFormatChanged(which, checked))
                 }.setPositiveButton(Strings.close, null)
@@ -180,7 +193,7 @@ internal class PreferencesUIFragment :
         }
     }
 
-    override fun render(state: PreferencesUIState) {
+    override fun render(state: PreferencesUIViewState) {
         findPreference<Preference>("pref_night_theme")?.summary =
             filledThemeSettings.getOrNull(state.nightTheme) ?: getString(Strings.follow_system)
         findPreference<Preference>("pref_date_format")?.summary = state.dateFormat

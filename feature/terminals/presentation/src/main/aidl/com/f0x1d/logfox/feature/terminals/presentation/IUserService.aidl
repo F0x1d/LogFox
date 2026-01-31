@@ -1,6 +1,6 @@
 package com.f0x1d.logfox.feature.terminals.presentation;
 
-import com.f0x1d.logfox.feature.terminals.model.TerminalResult;
+import com.f0x1d.logfox.feature.terminals.api.model.TerminalResult;
 
 interface IUserService {
     void destroy() = 16777114;

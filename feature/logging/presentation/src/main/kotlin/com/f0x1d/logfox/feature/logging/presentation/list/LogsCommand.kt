@@ -5,27 +5,34 @@ import com.f0x1d.logfox.feature.filters.api.model.UserFilter
 import com.f0x1d.logfox.feature.logging.api.model.LogLine
 import com.f0x1d.logfox.feature.logging.api.model.ShowLogValues
 
-sealed interface LogsCommand {
+internal sealed interface LogsCommand {
     data class LogsLoaded(
         val logs: List<LogLine>,
         val query: String?,
+        val caseSensitive: Boolean,
         val filters: List<UserFilter>,
+        val showLogValues: ShowLogValues,
     ) : LogsCommand
 
     data class PreferencesUpdated(
         val resumeLoggingWithBottomTouch: Boolean,
-        val logsTextSize: Float,
+        val textSize: Int,
         val logsExpanded: Boolean,
-        val logsFormat: ShowLogValues,
     ) : LogsCommand
 
-    data class SelectLine(val logLine: LogLine, val selected: Boolean) : LogsCommand
+    data class ItemClicked(val logLineId: Long) : LogsCommand
 
-    data object SelectAll : LogsCommand
+    data class SelectLine(val logLineId: Long, val selected: Boolean) : LogsCommand
+
+    data class SelectAll(val visibleIds: Set<Long>) : LogsCommand
+
+    data object ClearSelection : LogsCommand
 
     data object SelectedToRecording : LogsCommand
 
     data class ExportSelectedTo(val uri: Uri) : LogsCommand
+
+    data object ExportSelectedClicked : LogsCommand
 
     data object SwitchState : LogsCommand
 
@@ -33,9 +40,7 @@ sealed interface LogsCommand {
 
     data object Resume : LogsCommand
 
-    data object ClearSelection : LogsCommand
-
-    data class CopyLog(val logLine: LogLine) : LogsCommand
+    data class CopyLog(val logLineId: Long) : LogsCommand
 
     data object CopySelectedLogs : LogsCommand
 
@@ -43,11 +48,17 @@ sealed interface LogsCommand {
 
     data object ToolbarClicked : LogsCommand
 
-    data class CreateFilterFromLog(val logLine: LogLine) : LogsCommand
+    data class CreateFilterFromLog(val logLineId: Long) : LogsCommand
 
     data object OpenSearch : LogsCommand
 
     data object OpenFiltersScreen : LogsCommand
 
     data object OpenExtendedCopy : LogsCommand
+
+    data object ClearLogs : LogsCommand
+
+    data object RestartLogging : LogsCommand
+
+    data object KillService : LogsCommand
 }

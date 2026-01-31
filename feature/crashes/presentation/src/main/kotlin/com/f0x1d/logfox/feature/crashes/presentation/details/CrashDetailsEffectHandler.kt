@@ -7,8 +7,8 @@ import com.f0x1d.logfox.feature.crashes.api.domain.ExportCrashToFileUseCase
 import com.f0x1d.logfox.feature.crashes.api.domain.ExportCrashToZipUseCase
 import com.f0x1d.logfox.feature.crashes.api.domain.GetCrashByIdFlowUseCase
 import com.f0x1d.logfox.feature.crashes.presentation.details.di.CrashId
-import com.f0x1d.logfox.feature.preferences.domain.crashes.GetUseSeparateNotificationsChannelsForCrashesFlowUseCase
-import com.f0x1d.logfox.feature.preferences.domain.crashes.GetWrapCrashLogLinesFlowUseCase
+import com.f0x1d.logfox.feature.preferences.api.domain.crashes.GetUseSeparateNotificationsChannelsForCrashesFlowUseCase
+import com.f0x1d.logfox.feature.preferences.api.domain.crashes.GetWrapCrashLogLinesFlowUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
@@ -79,11 +79,16 @@ internal class CrashDetailsEffectHandler @Inject constructor(
             }
 
             is CrashDetailsSideEffect.DeleteCrash -> {
-                deleteCrashUseCase(effect.appCrash)
+                deleteCrashUseCase(effect.appCrash.id)
             }
 
             // UI side effects - handled by Fragment
+            is CrashDetailsSideEffect.OpenAppInfo -> Unit
+            is CrashDetailsSideEffect.OpenNotificationSettings -> Unit
+            is CrashDetailsSideEffect.ConfirmBlacklist -> Unit
+            is CrashDetailsSideEffect.ConfirmDelete -> Unit
             is CrashDetailsSideEffect.CopyText -> Unit
+            is CrashDetailsSideEffect.ShareCrashLog -> Unit
             is CrashDetailsSideEffect.Close -> Unit
             is CrashDetailsSideEffect.LaunchFileExportPicker -> Unit
             is CrashDetailsSideEffect.LaunchZipExportPicker -> Unit

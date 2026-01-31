@@ -9,10 +9,10 @@ import com.f0x1d.logfox.feature.crashes.api.domain.DeleteCrashUseCase
 import com.f0x1d.logfox.feature.crashes.api.domain.GetAllCrashesFlowUseCase
 import com.f0x1d.logfox.feature.crashes.api.domain.UpdateCrashesSearchQueryUseCase
 import com.f0x1d.logfox.feature.crashes.api.model.AppCrashesCount
-import com.f0x1d.logfox.feature.preferences.domain.crashes.GetCrashesSortReversedOrderFlowUseCase
-import com.f0x1d.logfox.feature.preferences.domain.crashes.GetCrashesSortTypeFlowUseCase
-import com.f0x1d.logfox.feature.preferences.domain.crashes.SetCrashesSortReversedOrderUseCase
-import com.f0x1d.logfox.feature.preferences.domain.crashes.SetCrashesSortTypeUseCase
+import com.f0x1d.logfox.feature.preferences.api.domain.crashes.GetCrashesSortReversedOrderFlowUseCase
+import com.f0x1d.logfox.feature.preferences.api.domain.crashes.GetCrashesSortTypeFlowUseCase
+import com.f0x1d.logfox.feature.preferences.api.domain.crashes.SetCrashesSortReversedOrderUseCase
+import com.f0x1d.logfox.feature.preferences.api.domain.crashes.SetCrashesSortTypeUseCase
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -87,11 +87,11 @@ constructor(
             }
 
             is CrashesSideEffect.DeleteCrashesByPackageName -> {
-                deleteAllCrashesByPackageNameUseCase(effect.appCrash)
+                deleteAllCrashesByPackageNameUseCase(effect.packageName)
             }
 
             is CrashesSideEffect.DeleteCrash -> {
-                deleteCrashUseCase(effect.appCrash)
+                deleteCrashUseCase(effect.crashId)
             }
 
             is CrashesSideEffect.ClearAllCrashes -> {

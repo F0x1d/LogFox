@@ -1,8 +1,8 @@
 package com.f0x1d.logfox.feature.setup.impl.domain
 
-import com.f0x1d.logfox.feature.preferences.data.TerminalSettingsRepository
+import com.f0x1d.logfox.feature.preferences.api.data.TerminalSettingsRepository
 import com.f0x1d.logfox.feature.setup.api.domain.SelectTerminalUseCase
-import com.f0x1d.logfox.feature.terminals.base.TerminalType
+import com.f0x1d.logfox.feature.terminals.api.base.TerminalType
 import javax.inject.Inject
 
 internal class SelectTerminalUseCaseImpl @Inject constructor(

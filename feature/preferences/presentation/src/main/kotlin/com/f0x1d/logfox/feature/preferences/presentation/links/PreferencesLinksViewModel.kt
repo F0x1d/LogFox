@@ -5,9 +5,12 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-internal class PreferencesLinksViewModel @Inject constructor(reducer: PreferencesLinksReducer) :
-    BaseStoreViewModel<PreferencesLinksState, PreferencesLinksCommand, PreferencesLinksSideEffect>(
+internal class PreferencesLinksViewModel @Inject constructor(
+    reducer: PreferencesLinksReducer,
+    viewStateMapper: PreferencesLinksViewStateMapper,
+) : BaseStoreViewModel<PreferencesLinksViewState, PreferencesLinksState, PreferencesLinksCommand, PreferencesLinksSideEffect>(
         initialState = PreferencesLinksState,
         reducer = reducer,
         effectHandlers = emptyList(),
+        viewStateMapper = viewStateMapper,
     )

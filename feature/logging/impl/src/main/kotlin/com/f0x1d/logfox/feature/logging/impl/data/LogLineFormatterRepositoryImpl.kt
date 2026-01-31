@@ -3,7 +3,7 @@ package com.f0x1d.logfox.feature.logging.impl.data
 import com.f0x1d.logfox.feature.logging.api.data.LogLineFormatterRepository
 import com.f0x1d.logfox.feature.logging.api.model.LogLine
 import com.f0x1d.logfox.feature.logging.api.model.ShowLogValues
-import com.f0x1d.logfox.feature.preferences.data.LogsSettingsRepository
+import com.f0x1d.logfox.feature.preferences.api.data.LogsSettingsRepository
 import javax.inject.Inject
 
 internal class LogLineFormatterRepositoryImpl @Inject constructor(

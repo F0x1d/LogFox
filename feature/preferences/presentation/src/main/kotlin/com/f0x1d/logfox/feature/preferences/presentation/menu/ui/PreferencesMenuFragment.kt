@@ -8,13 +8,14 @@ import androidx.preference.Preference
 import com.f0x1d.logfox.core.context.isHorizontalOrientation
 import com.f0x1d.logfox.core.context.shareFileIntent
 import com.f0x1d.logfox.core.tea.BaseStorePreferenceFragment
+import com.f0x1d.logfox.feature.navigation.api.Directions
 import com.f0x1d.logfox.feature.preferences.presentation.R
 import com.f0x1d.logfox.feature.preferences.presentation.menu.PreferencesMenuCommand
 import com.f0x1d.logfox.feature.preferences.presentation.menu.PreferencesMenuSideEffect
 import com.f0x1d.logfox.feature.preferences.presentation.menu.PreferencesMenuState
 import com.f0x1d.logfox.feature.preferences.presentation.menu.PreferencesMenuViewModel
+import com.f0x1d.logfox.feature.preferences.presentation.menu.PreferencesMenuViewState
 import com.f0x1d.logfox.feature.strings.Strings
-import com.f0x1d.logfox.navigation.Directions
 import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
 import dev.chrisbanes.insetter.applyInsetter
@@ -22,6 +23,7 @@ import dev.chrisbanes.insetter.applyInsetter
 @AndroidEntryPoint
 internal class PreferencesMenuFragment :
     BaseStorePreferenceFragment<
+        PreferencesMenuViewState,
         PreferencesMenuState,
         PreferencesMenuCommand,
         PreferencesMenuSideEffect,
@@ -76,7 +78,7 @@ internal class PreferencesMenuFragment :
         }
     }
 
-    override fun render(state: PreferencesMenuState) {
+    override fun render(state: PreferencesMenuViewState) {
         findPreference<Preference>("pref_settings_app_version")?.apply {
             title = "${state.versionName} (${state.versionCode})"
         }

@@ -25,8 +25,11 @@ class ExtendedTextWatcher(
     }
 
     fun setText(text: String?) {
+        if (editText.text?.toString() == text) return
+
         enabled = false
         editText.setText(text)
+        editText.setSelection(editText.length())
         enabled = true
     }
 }

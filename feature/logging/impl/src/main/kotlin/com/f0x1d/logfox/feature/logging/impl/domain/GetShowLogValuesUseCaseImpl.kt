@@ -2,7 +2,7 @@ package com.f0x1d.logfox.feature.logging.impl.domain
 
 import com.f0x1d.logfox.feature.logging.api.domain.GetShowLogValuesUseCase
 import com.f0x1d.logfox.feature.logging.api.model.ShowLogValues
-import com.f0x1d.logfox.feature.preferences.data.LogsSettingsRepository
+import com.f0x1d.logfox.feature.preferences.api.data.LogsSettingsRepository
 import javax.inject.Inject
 
 internal class GetShowLogValuesUseCaseImpl @Inject constructor(

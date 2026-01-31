@@ -1,10 +1,10 @@
 package com.f0x1d.logfox.feature.filters.impl.data
 
 import com.f0x1d.logfox.core.di.IODispatcher
-import com.f0x1d.logfox.feature.database.data.UserFilterDataSource
+import com.f0x1d.logfox.feature.database.api.data.UserFilterDataSource
 import com.f0x1d.logfox.feature.filters.api.data.FiltersRepository
 import com.f0x1d.logfox.feature.filters.api.model.UserFilter
-import com.f0x1d.logfox.feature.filters.impl.mapper.toDomain
+import com.f0x1d.logfox.feature.filters.impl.mapper.toDomainModel
 import com.f0x1d.logfox.feature.filters.impl.mapper.toEntity
 import com.f0x1d.logfox.feature.logging.api.model.LogLevel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -21,7 +21,7 @@ internal class FiltersRepositoryImpl @Inject constructor(
 ) : FiltersRepository {
 
     override fun getAllEnabledAsFlow(): Flow<List<UserFilter>> = userFilterDataSource.getAllEnabledAsFlow()
-        .map { list -> list.map { it.toDomain() } }
+        .map { list -> list.map { it.toDomainModel() } }
         .distinctUntilChanged()
         .flowOn(ioDispatcher)
 
@@ -87,20 +87,20 @@ internal class FiltersRepositoryImpl @Inject constructor(
     private suspend fun update(newValue: () -> UserFilter) = update(newValue())
 
     override fun getAllAsFlow(): Flow<List<UserFilter>> = userFilterDataSource.getAllAsFlow()
-        .map { list -> list.map { it.toDomain() } }
+        .map { list -> list.map { it.toDomainModel() } }
         .distinctUntilChanged()
         .flowOn(ioDispatcher)
 
     override fun getByIdAsFlow(id: Long): Flow<UserFilter?> = userFilterDataSource.getByIdAsFlow(id)
-        .map { it?.toDomain() }
+        .map { it?.toDomainModel() }
         .flowOn(ioDispatcher)
 
     override suspend fun getAll(): List<UserFilter> = withContext(ioDispatcher) {
-        userFilterDataSource.getAll().map { it.toDomain() }
+        userFilterDataSource.getAll().map { it.toDomainModel() }
     }
 
     override suspend fun getById(id: Long): UserFilter? = withContext(ioDispatcher) {
-        userFilterDataSource.getById(id)?.toDomain()
+        userFilterDataSource.getById(id)?.toDomainModel()
     }
 
     override suspend fun update(item: UserFilter) = withContext(ioDispatcher) {

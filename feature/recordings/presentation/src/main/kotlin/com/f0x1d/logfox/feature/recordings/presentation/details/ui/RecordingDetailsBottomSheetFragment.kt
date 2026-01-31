@@ -5,10 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
-import com.f0x1d.logfox.core.context.asUri
 import com.f0x1d.logfox.core.context.shareFileIntent
 import com.f0x1d.logfox.core.tea.BaseStoreBottomSheetFragment
 import com.f0x1d.logfox.core.ui.view.applyExtendedTextWatcher
@@ -17,14 +14,14 @@ import com.f0x1d.logfox.feature.recordings.presentation.details.RecordingDetails
 import com.f0x1d.logfox.feature.recordings.presentation.details.RecordingDetailsSideEffect
 import com.f0x1d.logfox.feature.recordings.presentation.details.RecordingDetailsState
 import com.f0x1d.logfox.feature.recordings.presentation.details.RecordingDetailsViewModel
-import com.f0x1d.logfox.navigation.Directions
+import com.f0x1d.logfox.feature.recordings.presentation.details.RecordingDetailsViewState
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.Date
 
 @AndroidEntryPoint
 internal class RecordingDetailsBottomSheetFragment :
     BaseStoreBottomSheetFragment<
         SheetRecordingDetailsBinding,
+        RecordingDetailsViewState,
         RecordingDetailsState,
         RecordingDetailsCommand,
         RecordingDetailsSideEffect,
@@ -54,28 +51,16 @@ internal class RecordingDetailsBottomSheetFragment :
         view: View,
         savedInstanceState: Bundle?,
     ) {
-        viewButton.setOnClickListener {
-            send(RecordingDetailsCommand.ViewRecording)
-        }
-
         exportButton.setOnClickListener {
-            viewModel.state.value.recording?.let { logRecording ->
-                logExportLauncher.launch(
-                    "${viewModel.formatForExport(logRecording.dateAndTime)}.log",
-                )
-            }
+            send(RecordingDetailsCommand.ExportFileClicked)
         }
 
         shareButton.setOnClickListener {
-            viewModel.state.value.recording?.let { logRecording ->
-                requireContext().shareFileIntent(logRecording.file)
-            }
+            send(RecordingDetailsCommand.ShareRecording)
         }
 
         zipButton.setOnClickListener {
-            viewModel.state.value.recording?.let { logRecording ->
-                zipLogLauncher.launch("${viewModel.formatForExport(logRecording.dateAndTime)}.zip")
-            }
+            send(RecordingDetailsCommand.ExportZipClicked)
         }
 
         textWatcher = title.applyExtendedTextWatcher {
@@ -83,21 +68,26 @@ internal class RecordingDetailsBottomSheetFragment :
         }
     }
 
-    override fun render(state: RecordingDetailsState) {
+    override fun render(state: RecordingDetailsViewState) {
         textWatcher?.setText(state.currentTitle.orEmpty())
 
-        val logRecording = state.recording ?: return
+        state.recordingItem ?: return
 
-        binding.timeText.text = Date(logRecording.dateAndTime).toLocaleString()
+        binding.timeText.text = state.recordingItem.formattedDate
     }
 
     override fun handleSideEffect(sideEffect: RecordingDetailsSideEffect) {
         when (sideEffect) {
-            is RecordingDetailsSideEffect.NavigateToViewRecording -> {
-                findNavController().navigate(
-                    resId = Directions.action_global_logsFragment_from_recordingBottomSheet,
-                    args = bundleOf("file_uri" to sideEffect.file.asUri(requireContext())),
-                )
+            is RecordingDetailsSideEffect.LaunchFileExportPicker -> {
+                logExportLauncher.launch(sideEffect.filename)
+            }
+
+            is RecordingDetailsSideEffect.LaunchZipExportPicker -> {
+                zipLogLauncher.launch(sideEffect.filename)
+            }
+
+            is RecordingDetailsSideEffect.ShareFile -> {
+                requireContext().shareFileIntent(sideEffect.file)
             }
 
             // Business logic side effects are handled by EffectHandler

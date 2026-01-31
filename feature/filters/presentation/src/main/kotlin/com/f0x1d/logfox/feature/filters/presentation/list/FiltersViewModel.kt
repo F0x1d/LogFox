@@ -8,9 +8,11 @@ import javax.inject.Inject
 internal class FiltersViewModel @Inject constructor(
     reducer: FiltersReducer,
     effectHandler: FiltersEffectHandler,
-) : BaseStoreViewModel<FiltersState, FiltersCommand, FiltersSideEffect>(
-    initialState = FiltersState(),
+    viewStateMapper: FiltersViewStateMapper,
+) : BaseStoreViewModel<FiltersViewState, FiltersState, FiltersCommand, FiltersSideEffect>(
+    initialState = FiltersState(filters = emptyList()),
     reducer = reducer,
     effectHandlers = listOf(effectHandler),
+    viewStateMapper = viewStateMapper,
     initialSideEffects = listOf(FiltersSideEffect.LoadFilters),
 )

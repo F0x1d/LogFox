@@ -1,7 +1,7 @@
 package com.f0x1d.logfox.feature.preferences.impl.data.datetime
 
 import android.content.Context
-import com.f0x1d.logfox.feature.preferences.data.DateTimeSettingsRepository
+import com.f0x1d.logfox.feature.preferences.api.data.DateTimeSettingsRepository
 import com.f0x1d.logfox.feature.preferences.impl.base.BasePreferences
 import com.fredporciuncula.flow.preferences.Preference
 import dagger.hilt.android.qualifiers.ApplicationContext

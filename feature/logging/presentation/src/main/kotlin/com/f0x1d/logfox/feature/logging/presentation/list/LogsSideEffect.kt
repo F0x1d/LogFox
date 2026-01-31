@@ -4,15 +4,13 @@ import android.net.Uri
 import com.f0x1d.logfox.feature.logging.api.model.LogLevel
 import com.f0x1d.logfox.feature.logging.api.model.LogLine
 
-sealed interface LogsSideEffect {
+internal sealed interface LogsSideEffect {
     // Business logic side effects - handled by EffectHandler
     data object LoadLogs : LogsSideEffect
 
     data object ObservePreferences : LogsSideEffect
 
-    data class PauseStateChanged(val paused: Boolean) : LogsSideEffect
-
-    data class UpdateSelectedLogLines(val selectedLines: List<LogLine>) : LogsSideEffect
+    data class SyncSelectedLines(val lines: List<LogLine>) : LogsSideEffect
 
     data class CreateRecordingFromLines(val lines: List<LogLine>) : LogsSideEffect
 
@@ -20,7 +18,7 @@ sealed interface LogsSideEffect {
 
     data class FormatAndCopyLog(val logLine: LogLine) : LogsSideEffect
 
-    data class FormatAndCopyLogs(val logLines: List<LogLine>) : LogsSideEffect
+    data class FormatAndCopyLogs(val lines: List<LogLine>) : LogsSideEffect
 
     // UI side effects - handled by Fragment
     data object NavigateToRecordings : LogsSideEffect
@@ -44,4 +42,12 @@ sealed interface LogsSideEffect {
     data object NavigateToSearch : LogsSideEffect
 
     data object NavigateToExtendedCopy : LogsSideEffect
+
+    data class LaunchExportPicker(val filename: String) : LogsSideEffect
+
+    data object ClearLogs : LogsSideEffect
+
+    data object RestartLogging : LogsSideEffect
+
+    data object KillService : LogsSideEffect
 }

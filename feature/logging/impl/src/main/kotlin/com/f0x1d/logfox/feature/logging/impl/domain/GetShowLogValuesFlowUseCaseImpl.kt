@@ -2,7 +2,7 @@ package com.f0x1d.logfox.feature.logging.impl.domain
 
 import com.f0x1d.logfox.feature.logging.api.domain.GetShowLogValuesFlowUseCase
 import com.f0x1d.logfox.feature.logging.api.model.ShowLogValues
-import com.f0x1d.logfox.feature.preferences.data.LogsSettingsRepository
+import com.f0x1d.logfox.feature.preferences.api.data.LogsSettingsRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import javax.inject.Inject

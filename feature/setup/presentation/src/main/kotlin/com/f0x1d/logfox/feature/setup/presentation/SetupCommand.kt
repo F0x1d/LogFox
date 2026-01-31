@@ -1,6 +1,6 @@
 package com.f0x1d.logfox.feature.setup.presentation
 
-sealed interface SetupCommand {
+internal sealed interface SetupCommand {
     data object RootClicked : SetupCommand
     data object AdbClicked : SetupCommand
     data object ShizukuClicked : SetupCommand

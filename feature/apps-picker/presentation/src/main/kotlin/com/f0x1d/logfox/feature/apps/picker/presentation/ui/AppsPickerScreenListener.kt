@@ -1,6 +1,6 @@
 package com.f0x1d.logfox.feature.apps.picker.presentation.ui
 
-import com.f0x1d.logfox.feature.apps.picker.InstalledApp
+import com.f0x1d.logfox.feature.apps.picker.api.InstalledApp
 
 data class AppsPickerScreenListener(
     val onBackClicked: () -> Unit,

@@ -3,7 +3,7 @@ package com.f0x1d.logfox.feature.filters.presentation.list
 import android.net.Uri
 import com.f0x1d.logfox.feature.filters.api.model.UserFilter
 
-sealed interface FiltersCommand {
+internal sealed interface FiltersCommand {
     data object Load : FiltersCommand
     data class FiltersLoaded(val filters: List<UserFilter>) : FiltersCommand
     data class Import(val uri: Uri) : FiltersCommand

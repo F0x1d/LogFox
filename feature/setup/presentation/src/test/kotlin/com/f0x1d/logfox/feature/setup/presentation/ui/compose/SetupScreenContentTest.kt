@@ -7,7 +7,7 @@ import androidx.compose.runtime.setValue
 import com.f0x1d.logfox.compose.designsystem.theme.LogFoxTheme
 import com.f0x1d.logfox.core.tests.compose.clickOn
 import com.f0x1d.logfox.core.tests.screenshot.ScreenshotTest
-import com.f0x1d.logfox.feature.setup.presentation.SetupState
+import com.f0x1d.logfox.feature.setup.presentation.SetupViewState
 import com.f0x1d.logfox.feature.setup.presentation.ui.MockSetupScreenListener
 import org.junit.Test
 
@@ -16,14 +16,14 @@ class SetupScreenContentTest : ScreenshotTest() {
     @Test
     fun shouldShowSetupScreenContent() = screenshotTestOf {
         LogFoxTheme {
-            SetupScreenContent()
+            SetupScreenContent(state = SetupViewState(showAdbDialog = false, adbCommand = ""))
         }
     }
 
     @Test
     fun shouldShowDarkSetupScreenContent() = screenshotTestOf {
         LogFoxTheme(darkTheme = true) {
-            SetupScreenContent()
+            SetupScreenContent(state = SetupViewState(showAdbDialog = false, adbCommand = ""))
         }
     }
 
@@ -33,7 +33,7 @@ class SetupScreenContentTest : ScreenshotTest() {
     ) {
         LogFoxTheme {
             SetupScreenContent(
-                state = SetupState(
+                state = SetupViewState(
                     showAdbDialog = true,
                     adbCommand = OG_BUDA_ISKS,
                 ),
@@ -47,7 +47,7 @@ class SetupScreenContentTest : ScreenshotTest() {
         whatToCapture = { SetupAdbDialogTestTag.node() },
     ) {
         var state by remember {
-            mutableStateOf(SetupState())
+            mutableStateOf(SetupViewState(showAdbDialog = false, adbCommand = ""))
         }
 
         LogFoxTheme {

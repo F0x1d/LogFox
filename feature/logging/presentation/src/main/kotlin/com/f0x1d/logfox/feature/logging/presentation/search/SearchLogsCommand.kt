@@ -1,6 +1,6 @@
 package com.f0x1d.logfox.feature.logging.presentation.search
 
-sealed interface SearchLogsCommand {
+internal sealed interface SearchLogsCommand {
     data object Load : SearchLogsCommand
 
     data class QueryLoaded(val query: String?) : SearchLogsCommand

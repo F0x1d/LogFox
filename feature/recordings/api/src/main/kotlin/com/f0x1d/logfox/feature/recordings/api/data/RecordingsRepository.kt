@@ -8,7 +8,7 @@ interface RecordingsRepository {
     suspend fun saveAll(): LogRecording
     suspend fun createRecordingFrom(lines: List<LogLine>)
 
-    suspend fun updateTitle(logRecording: LogRecording, newTitle: String)
+    suspend fun updateTitle(recordingId: Long, newTitle: String)
 
     fun getAllAsFlow(): Flow<List<LogRecording>>
 

@@ -3,8 +3,8 @@ package com.f0x1d.logfox.feature.setup.impl.domain
 import android.Manifest
 import android.content.Context
 import com.f0x1d.logfox.feature.setup.api.domain.ExecuteGrantViaShizukuUseCase
-import com.f0x1d.logfox.feature.terminals.base.Terminal
-import com.f0x1d.logfox.feature.terminals.di.ShizukuTerminal
+import com.f0x1d.logfox.feature.terminals.api.base.Terminal
+import com.f0x1d.logfox.feature.terminals.api.di.ShizukuTerminal
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 

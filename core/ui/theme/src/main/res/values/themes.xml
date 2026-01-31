@@ -64,12 +64,4 @@
         <item name="fontFamily">@font/google_sans</item>
         <item name="android:fontFamily">@font/google_sans</item>
     </style>
-
-    <style name="Theme.LogFox.Translucent" parent="Theme.LogFox">
-        <item name="android:navigationBarColor">@android:color/transparent</item>
-        <item name="android:windowAnimationStyle">@null</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:windowDisablePreview">true</item>
-        <item name="android:windowIsTranslucent">true</item>
-    </style>
 </resources>

@@ -16,9 +16,10 @@ import com.f0x1d.logfox.feature.crashes.presentation.appcrashes.AppCrashesComman
 import com.f0x1d.logfox.feature.crashes.presentation.appcrashes.AppCrashesSideEffect
 import com.f0x1d.logfox.feature.crashes.presentation.appcrashes.AppCrashesState
 import com.f0x1d.logfox.feature.crashes.presentation.appcrashes.AppCrashesViewModel
+import com.f0x1d.logfox.feature.crashes.presentation.appcrashes.AppCrashesViewState
 import com.f0x1d.logfox.feature.crashes.presentation.common.adapter.CrashesAdapter
 import com.f0x1d.logfox.feature.crashes.presentation.databinding.FragmentAppCrashesBinding
-import com.f0x1d.logfox.navigation.Directions
+import com.f0x1d.logfox.feature.navigation.api.Directions
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import dev.chrisbanes.insetter.applyInsetter
@@ -27,6 +28,7 @@ import dev.chrisbanes.insetter.applyInsetter
 internal class AppCrashesFragment :
     BaseStoreFragment<
         FragmentAppCrashesBinding,
+        AppCrashesViewState,
         AppCrashesState,
         AppCrashesCommand,
         AppCrashesSideEffect,
@@ -37,11 +39,11 @@ internal class AppCrashesFragment :
 
     private val adapter = CrashesAdapter(
         click = {
-            send(AppCrashesCommand.CrashClicked(it.lastCrash.id))
+            send(AppCrashesCommand.CrashClicked(it.lastCrashId))
         },
         delete = {
             showAreYouSureDeleteDialog {
-                viewModel.deleteCrash(it.lastCrash)
+                send(AppCrashesCommand.DeleteCrash(it.lastCrashId))
             }
         },
     )
@@ -75,7 +77,7 @@ internal class AppCrashesFragment :
         }
     }
 
-    override fun render(state: AppCrashesState) {
+    override fun render(state: AppCrashesViewState) {
         binding.toolbar.title = state.appName ?: state.packageName
         adapter.submitList(state.crashes)
     }

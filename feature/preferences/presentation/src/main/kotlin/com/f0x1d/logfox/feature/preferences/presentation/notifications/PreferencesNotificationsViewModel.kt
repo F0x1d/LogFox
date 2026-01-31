@@ -9,10 +9,13 @@ import javax.inject.Inject
 internal class PreferencesNotificationsViewModel @Inject constructor(
     reducer: PreferencesNotificationsReducer,
     effectHandler: PreferencesNotificationsEffectHandler,
-) : BaseStoreViewModel<PreferencesNotificationsState, PreferencesNotificationsCommand, PreferencesNotificationsSideEffect>(
+    viewStateMapper: PreferencesNotificationsViewStateMapper,
+) : BaseStoreViewModel<PreferencesNotificationsViewState, PreferencesNotificationsState, PreferencesNotificationsCommand, PreferencesNotificationsSideEffect>(
     initialState = PreferencesNotificationsState(
+        hasNotificationsPermission = true,
         notificationsChannelsAvailable = notificationsChannelsAvailable,
     ),
     reducer = reducer,
     effectHandlers = listOf(effectHandler),
+    viewStateMapper = viewStateMapper,
 )

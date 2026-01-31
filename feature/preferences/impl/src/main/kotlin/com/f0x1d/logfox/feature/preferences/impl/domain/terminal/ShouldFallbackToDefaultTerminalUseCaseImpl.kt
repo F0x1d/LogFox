@@ -1,7 +1,7 @@
 package com.f0x1d.logfox.feature.preferences.impl.domain.terminal
 
-import com.f0x1d.logfox.feature.preferences.data.TerminalSettingsRepository
-import com.f0x1d.logfox.feature.preferences.domain.terminal.ShouldFallbackToDefaultTerminalUseCase
+import com.f0x1d.logfox.feature.preferences.api.data.TerminalSettingsRepository
+import com.f0x1d.logfox.feature.preferences.api.domain.terminal.ShouldFallbackToDefaultTerminalUseCase
 import javax.inject.Inject
 
 internal class ShouldFallbackToDefaultTerminalUseCaseImpl @Inject constructor(
