@@ -1,4 +1,4 @@
-package com.f0x1d.logfox.feature.logging.service.presentation
+package com.f0x1d.logfox.feature.logging.presentation.service
 
 import android.content.Context
 import com.f0x1d.logfox.core.context.sendService

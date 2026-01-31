@@ -3,7 +3,7 @@ package com.f0x1d.logfox.di.logs
 import android.app.PendingIntent
 import android.content.Context
 import com.f0x1d.logfox.core.context.makeActivityPendingIntent
-import com.f0x1d.logfox.feature.logging.service.presentation.MainActivityPendingIntentProvider
+import com.f0x1d.logfox.feature.logging.presentation.service.MainActivityPendingIntentProvider
 import com.f0x1d.logfox.presentation.ui.activity.MainActivity
 import dagger.Binds
 import dagger.Module

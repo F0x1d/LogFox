@@ -1,7 +1,7 @@
-package com.f0x1d.logfox.feature.logging.service.di
+package com.f0x1d.logfox.feature.logging.presentation.service.di
 
 import com.f0x1d.logfox.feature.logging.api.presentation.LoggingServiceDelegate
-import com.f0x1d.logfox.feature.logging.service.presentation.LoggingServiceDelegateImpl
+import com.f0x1d.logfox.feature.logging.presentation.service.LoggingServiceDelegateImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

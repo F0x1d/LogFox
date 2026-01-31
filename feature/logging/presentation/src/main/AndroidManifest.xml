@@ -6,7 +6,7 @@
 
     <application>
         <service
-            android:name="com.f0x1d.logfox.feature.logging.service.presentation.LoggingService"
+            android:name="com.f0x1d.logfox.feature.logging.presentation.service.LoggingService"
             android:foregroundServiceType="specialUse"
             android:exported="false">
 

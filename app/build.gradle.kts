@@ -69,7 +69,6 @@ dependencies {
 
     implementation(projects.feature.logging.impl)
     implementation(projects.feature.logging.presentation)
-    implementation(projects.feature.logging.service)
 
     implementation(projects.feature.recordings.impl)
     implementation(projects.feature.recordings.presentation)

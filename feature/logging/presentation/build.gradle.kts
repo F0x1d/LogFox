@@ -11,8 +11,12 @@ dependencies {
     implementation(projects.feature.logging.api)
     implementation(projects.feature.filters.api)
     implementation(projects.feature.recordings.api)
+    implementation(projects.feature.crashes.api)
+    implementation(projects.feature.notifications.api)
     implementation(projects.feature.database.api)
     implementation(projects.feature.preferences.api)
+    implementation(projects.feature.terminals.api)
+    implementation(projects.core.tea.base)
     implementation(projects.core.tea.android)
     implementation(projects.core.ui.base)
     implementation(projects.core.ui.icons)
@@ -31,4 +35,5 @@ dependencies {
     implementation(libs.bundles.androidx.navigation)
     implementation(libs.material)
     implementation(libs.insetter)
+    implementation(libs.timber)
 }

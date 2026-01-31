@@ -1,4 +1,4 @@
-package com.f0x1d.logfox.feature.logging.service.presentation
+package com.f0x1d.logfox.feature.logging.presentation.service
 
 import android.content.Intent
 import android.os.Binder

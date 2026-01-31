@@ -6,7 +6,7 @@ import android.content.Intent
 import com.f0x1d.logfox.core.compat.startForegroundServiceAvailable
 import com.f0x1d.logfox.core.context.hasPermissionToReadLogs
 import com.f0x1d.logfox.core.context.toast
-import com.f0x1d.logfox.feature.logging.service.presentation.LoggingService
+import com.f0x1d.logfox.feature.logging.presentation.service.LoggingService
 import com.f0x1d.logfox.feature.preferences.domain.service.GetStartOnBootUseCase
 import com.f0x1d.logfox.feature.preferences.domain.terminal.GetSelectedTerminalTypeUseCase
 import com.f0x1d.logfox.feature.strings.Strings

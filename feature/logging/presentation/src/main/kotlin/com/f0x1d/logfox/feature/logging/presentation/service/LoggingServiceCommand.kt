@@ -1,6 +1,5 @@
-package com.f0x1d.logfox.feature.logging.service.presentation
+package com.f0x1d.logfox.feature.logging.presentation.service
 
-import com.f0x1d.logfox.feature.logging.api.model.LogLine
 import com.f0x1d.logfox.feature.terminals.base.Terminal
 
 internal sealed interface LoggingServiceCommand {
