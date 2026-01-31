@@ -37,8 +37,10 @@ android {
                      .orElse(providers.environmentVariable("RELEASE_BUILD"))
                      .orNull ?: "false"
 
-                 outputFileName = if (releaseBuild == "true") "LogFox-v${versionName}-release.apk"
-                 else "LogFox-v${versionName}-${shortCommit}-release.apk"
+                 outputFileName = if (releaseBuild == "true" || versionName.contains(shortCommit))
+                     "LogFox-v${versionName}-release.apk"
+                 else
+                     "LogFox-v${versionName}-${shortCommit}-release.apk"
             }
         }
     }
