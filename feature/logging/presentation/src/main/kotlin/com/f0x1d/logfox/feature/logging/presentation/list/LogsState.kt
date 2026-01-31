@@ -5,7 +5,7 @@ import com.f0x1d.logfox.feature.logging.api.model.LogLine
 import com.f0x1d.logfox.feature.logging.api.model.ShowLogValues
 
 internal data class LogsState(
-    val logs: List<LogLine>?,
+    val logs: List<LogLine>,
     val paused: Boolean,
     val query: String?,
     val caseSensitive: Boolean,

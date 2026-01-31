@@ -332,11 +332,11 @@ internal class LogsFragment :
     }
 
     private fun FragmentLogsBinding.updateLogsList(
-        items: List<LogLineItem>?,
+        items: List<LogLineItem>,
         paused: Boolean,
     ) {
         placeholderLayout.root.apply {
-            if (items?.isEmpty() != false) {
+            if (items.isEmpty()) {
                 animate()
                     .alpha(1f)
                     .setStartDelay(1000)

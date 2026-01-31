@@ -11,14 +11,14 @@ internal class LogsViewStateMapper @Inject constructor(
 ) : ViewStateMapper<LogsState, LogsViewState> {
 
     override fun map(state: LogsState): LogsViewState {
-        val filteredLogs = state.logs?.filterAndSearch(
+        val filteredLogs = state.logs.filterAndSearch(
             filters = state.filters,
             query = state.query,
             caseSensitive = state.caseSensitive,
         )
 
         return LogsViewState(
-            logs = filteredLogs?.map { line ->
+            logs = filteredLogs.map { line ->
                 line.toPresentationModel(
                     displayText = line.formatOriginal(
                         values = state.showLogValues,

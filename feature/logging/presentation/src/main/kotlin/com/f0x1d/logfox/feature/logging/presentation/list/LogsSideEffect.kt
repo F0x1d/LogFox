@@ -2,6 +2,7 @@ package com.f0x1d.logfox.feature.logging.presentation.list
 
 import android.net.Uri
 import com.f0x1d.logfox.feature.logging.api.model.LogLevel
+import com.f0x1d.logfox.feature.logging.api.model.LogLine
 
 internal sealed interface LogsSideEffect {
     // Business logic side effects - handled by EffectHandler
@@ -9,15 +10,15 @@ internal sealed interface LogsSideEffect {
 
     data object ObservePreferences : LogsSideEffect
 
-    data class SyncSelectedLines(val selectedIds: Set<Long>) : LogsSideEffect
+    data class SyncSelectedLines(val lines: List<LogLine>) : LogsSideEffect
 
-    data class CreateRecordingFromLines(val selectedIds: Set<Long>) : LogsSideEffect
+    data class CreateRecordingFromLines(val lines: List<LogLine>) : LogsSideEffect
 
-    data class ExportLogsTo(val uri: Uri, val selectedIds: Set<Long>) : LogsSideEffect
+    data class ExportLogsTo(val uri: Uri, val lines: List<LogLine>) : LogsSideEffect
 
-    data class FormatAndCopyLog(val logLineId: Long) : LogsSideEffect
+    data class FormatAndCopyLog(val logLine: LogLine) : LogsSideEffect
 
-    data class FormatAndCopyLogs(val selectedIds: Set<Long>) : LogsSideEffect
+    data class FormatAndCopyLogs(val lines: List<LogLine>) : LogsSideEffect
 
     // UI side effects - handled by Fragment
     data object NavigateToRecordings : LogsSideEffect

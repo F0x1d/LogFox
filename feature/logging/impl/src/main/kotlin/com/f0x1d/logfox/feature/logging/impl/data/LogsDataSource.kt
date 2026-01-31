@@ -6,7 +6,5 @@ import kotlinx.coroutines.flow.Flow
 internal interface LogsDataSource {
     val logs: Flow<List<LogLine>>
 
-    fun getByIds(ids: Set<Long>): List<LogLine>
-
     suspend fun updateLogs(logs: List<LogLine>)
 }

@@ -26,7 +26,7 @@ internal class LogsViewModel @Inject constructor(
     @DefaultDispatcher defaultDispatcher: CoroutineDispatcher,
 ) : BaseStoreViewModel<LogsViewState, LogsState, LogsCommand, LogsSideEffect>(
     initialState = LogsState(
-        logs = null,
+        logs = emptyList(),
         paused = false,
         query = getQueryUseCase(),
         caseSensitive = getCaseSensitiveUseCase(),

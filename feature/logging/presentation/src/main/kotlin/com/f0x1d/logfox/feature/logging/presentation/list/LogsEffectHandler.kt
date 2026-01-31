@@ -6,7 +6,6 @@ import com.f0x1d.logfox.feature.filters.api.domain.GetAllEnabledFiltersFlowUseCa
 import com.f0x1d.logfox.feature.logging.api.domain.ExportLogsToUriUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.FormatLogLineUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.GetCaseSensitiveFlowUseCase
-import com.f0x1d.logfox.feature.logging.api.domain.GetLogLinesByIdsUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.GetLogsFlowUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.GetQueryFlowUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.GetShowLogValuesFlowUseCase
@@ -26,7 +25,6 @@ internal class LogsEffectHandler @Inject constructor(
     private val getAllEnabledFiltersFlowUseCase: GetAllEnabledFiltersFlowUseCase,
     private val updateSelectedLogLinesUseCase: UpdateSelectedLogLinesUseCase,
     private val createRecordingFromLinesUseCase: CreateRecordingFromLinesUseCase,
-    private val getLogLinesByIdsUseCase: GetLogLinesByIdsUseCase,
     private val getShowLogValuesFlowUseCase: GetShowLogValuesFlowUseCase,
     private val getResumeLoggingWithBottomTouchFlowUseCase: GetResumeLoggingWithBottomTouchFlowUseCase,
     private val getLogsTextSizeFlowUseCase: GetLogsTextSizeFlowUseCase,
@@ -76,25 +74,20 @@ internal class LogsEffectHandler @Inject constructor(
             }
 
             is LogsSideEffect.SyncSelectedLines -> {
-                val lines = getLogLinesByIdsUseCase(effect.selectedIds)
-                updateSelectedLogLinesUseCase(selectedLines = lines)
+                updateSelectedLogLinesUseCase(selectedLines = effect.lines)
             }
 
             is LogsSideEffect.CreateRecordingFromLines -> {
-                val lines = getLogLinesByIdsUseCase(effect.selectedIds)
-                createRecordingFromLinesUseCase(lines = lines)
+                createRecordingFromLinesUseCase(lines = effect.lines)
             }
 
             is LogsSideEffect.ExportLogsTo -> {
-                val lines = getLogLinesByIdsUseCase(effect.selectedIds)
-                exportLogsToUriUseCase(lines, effect.uri)
+                exportLogsToUriUseCase(effect.lines, effect.uri)
             }
 
             is LogsSideEffect.FormatAndCopyLog -> {
-                val logLine = getLogLinesByIdsUseCase(setOf(effect.logLineId))
-                    .firstOrNull() ?: return@handle
                 val formattedText = formatLogLineUseCase(
-                    logLine = logLine,
+                    logLine = effect.logLine,
                     formatDate = dateTimeFormatter::formatDate,
                     formatTime = dateTimeFormatter::formatTime,
                 )
@@ -102,8 +95,7 @@ internal class LogsEffectHandler @Inject constructor(
             }
 
             is LogsSideEffect.FormatAndCopyLogs -> {
-                val lines = getLogLinesByIdsUseCase(effect.selectedIds)
-                val formattedText = lines.joinToString("\n") { line ->
+                val formattedText = effect.lines.joinToString("\n") { line ->
                     formatLogLineUseCase(
                         logLine = line,
                         formatDate = dateTimeFormatter::formatDate,
