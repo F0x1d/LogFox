@@ -5,7 +5,7 @@ import javax.inject.Inject
 
 internal class SearchLogsViewStateMapper @Inject constructor() : ViewStateMapper<SearchLogsState, SearchLogsViewState> {
     override fun map(state: SearchLogsState): SearchLogsViewState = SearchLogsViewState(
-        query = state.query.orEmpty(),
+        query = state.query,
         caseSensitive = state.caseSensitive,
     )
 }
