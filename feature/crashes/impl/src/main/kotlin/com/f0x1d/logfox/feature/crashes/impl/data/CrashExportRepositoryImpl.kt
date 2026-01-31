@@ -15,7 +15,14 @@ internal class CrashExportRepositoryImpl @Inject constructor(
 ) : CrashExportRepository {
 
     override suspend fun exportToFile(uri: Uri, crashLog: String) {
-        exportRepository.writeContentToUri(uri, crashLog)
+        val content = buildString {
+            if (serviceSettingsRepository.includeDeviceInfoInArchives().value) {
+                appendLine(deviceData)
+                appendLine()
+            }
+            append(crashLog)
+        }
+        exportRepository.writeContentToUri(uri, content)
     }
 
     override suspend fun exportToZip(uri: Uri, appCrash: AppCrash, crashLog: String?) {

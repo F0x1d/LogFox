@@ -14,6 +14,10 @@ internal class ExportRepositoryImpl @Inject constructor(
         localDataSource.writeContentToUri(uri, content)
     }
 
+    override suspend fun writeContentAndFileToUri(uri: Uri, content: String, file: File) {
+        localDataSource.writeContentAndFileToUri(uri, content, file)
+    }
+
     override suspend fun copyFileToUri(uri: Uri, file: File) {
         localDataSource.copyFileToUri(uri, file)
     }
