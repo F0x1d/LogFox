@@ -22,8 +22,8 @@ jobs:
         id: extract
         run: |
           TAG="${GITHUB_REF_NAME}"
-          # Tag format: v2.2.0-70
-          VERSION_NAME="${TAG%-*}"
+          VERSION_NAME="${TAG#v}"
+          VERSION_NAME="${VERSION_NAME%-*}"
           VERSION_CODE="${TAG##*-}"
           echo "version_name=$VERSION_NAME" >> $GITHUB_OUTPUT
           echo "version_code=$VERSION_CODE" >> $GITHUB_OUTPUT
