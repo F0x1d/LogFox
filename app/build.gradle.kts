@@ -30,7 +30,8 @@ android {
             if (this is BaseVariantOutputImpl) {
                  val shortCommit = providers.gradleProperty("GIT_SHA")
                      .orElse(providers.environmentVariable("GIT_SHA"))
-                     .orNull ?: "local"
+                     .orNull
+                     ?.take(7) ?: "local"
 
                  val releaseBuild = providers.gradleProperty("RELEASE_BUILD")
                      .orElse(providers.environmentVariable("RELEASE_BUILD"))
