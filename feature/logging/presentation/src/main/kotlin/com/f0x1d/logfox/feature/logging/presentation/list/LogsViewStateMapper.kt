@@ -10,7 +10,7 @@ internal class LogsViewStateMapper @Inject constructor(
 ) {
 
     fun map(state: LogsState): LogsViewState {
-        val filteredLogs = state.visibleLogs?.filterAndSearch(
+        val filteredLogs = state.logs?.filterAndSearch(
             filters = state.filters,
             query = state.query,
             caseSensitive = state.caseSensitive,

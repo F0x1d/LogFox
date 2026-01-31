@@ -5,7 +5,6 @@ import com.f0x1d.logfox.core.tea.Reducer
 import com.f0x1d.logfox.core.tea.noSideEffects
 import com.f0x1d.logfox.core.tea.withSideEffects
 import com.f0x1d.logfox.feature.datetime.api.DateTimeFormatter
-import com.f0x1d.logfox.feature.filters.api.model.filterAndSearch
 import javax.inject.Inject
 
 internal class LogsReducer @Inject constructor(
@@ -83,15 +82,7 @@ internal class LogsReducer @Inject constructor(
         }
 
         is LogsCommand.SelectAll -> {
-            val allIds = state.visibleLogs
-                ?.filterAndSearch(
-                    filters = state.filters,
-                    query = state.query,
-                    caseSensitive = state.caseSensitive,
-                )
-                ?.mapTo(mutableSetOf()) { it.id }
-                ?: emptySet()
-            val newIds = if (state.selectedIds == allIds) emptySet() else allIds
+            val newIds = if (state.selectedIds == command.visibleIds) emptySet() else command.visibleIds
             state.copy(selectedIds = newIds, logsChanged = true)
                 .withSideEffects(LogsSideEffect.SyncSelectedLines(newIds))
         }
@@ -125,11 +116,9 @@ internal class LogsReducer @Inject constructor(
         }
 
         is LogsCommand.SwitchState -> {
-            val newPaused = !state.paused
             state.copy(
-                paused = newPaused,
-                pausedLogs = if (newPaused) state.logs else null,
-                logsChanged = !newPaused,
+                paused = !state.paused,
+                logsChanged = state.paused,
             ).noSideEffects()
         }
 
@@ -137,11 +126,7 @@ internal class LogsReducer @Inject constructor(
             if (state.paused) {
                 state.noSideEffects()
             } else {
-                state.copy(
-                    paused = true,
-                    pausedLogs = state.logs,
-                    logsChanged = false,
-                ).noSideEffects()
+                state.copy(paused = true, logsChanged = false).noSideEffects()
             }
         }
 
@@ -149,11 +134,7 @@ internal class LogsReducer @Inject constructor(
             if (!state.paused) {
                 state.noSideEffects()
             } else {
-                state.copy(
-                    paused = false,
-                    pausedLogs = null,
-                    logsChanged = true,
-                ).noSideEffects()
+                state.copy(paused = false, logsChanged = true).noSideEffects()
             }
         }
 
@@ -185,7 +166,7 @@ internal class LogsReducer @Inject constructor(
         }
 
         is LogsCommand.CreateFilterFromLog -> {
-            val logLine = state.visibleLogs
+            val logLine = state.logs
                 ?.firstOrNull { it.id == command.logLineId }
                 ?: return@reduce state.noSideEffects()
             state.withSideEffects(

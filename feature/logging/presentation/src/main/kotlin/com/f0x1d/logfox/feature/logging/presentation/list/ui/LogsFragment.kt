@@ -102,7 +102,8 @@ internal class LogsFragment :
                 send(LogsCommand.SwitchState)
             }
             setClickListenerOn(R.id.select_all_item) {
-                send(LogsCommand.SelectAll)
+                val visibleIds = adapter.currentList.mapTo(mutableSetOf()) { it.logLineId }
+                send(LogsCommand.SelectAll(visibleIds))
             }
             setClickListenerOn(R.id.search_item) {
                 send(LogsCommand.OpenSearch)

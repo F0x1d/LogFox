@@ -1,6 +1,9 @@
 package com.f0x1d.logfox.feature.logging.presentation.list
 
 import com.f0x1d.logfox.core.tea.BaseStoreViewModel
+import com.f0x1d.logfox.feature.logging.api.domain.GetCaseSensitiveUseCase
+import com.f0x1d.logfox.feature.logging.api.domain.GetQueryUseCase
+import com.f0x1d.logfox.feature.logging.api.domain.GetShowLogValuesUseCase
 import com.f0x1d.logfox.feature.preferences.domain.logs.GetLogsExpandedUseCase
 import com.f0x1d.logfox.feature.preferences.domain.logs.GetLogsTextSizeUseCase
 import com.f0x1d.logfox.feature.preferences.domain.logs.GetResumeLoggingWithBottomTouchUseCase
@@ -14,11 +17,23 @@ internal class LogsViewModel @Inject constructor(
     getResumeLoggingWithBottomTouchUseCase: GetResumeLoggingWithBottomTouchUseCase,
     getLogsExpandedUseCase: GetLogsExpandedUseCase,
     getLogsTextSizeUseCase: GetLogsTextSizeUseCase,
+    getShowLogValuesUseCase: GetShowLogValuesUseCase,
+    getQueryUseCase: GetQueryUseCase,
+    getCaseSensitiveUseCase: GetCaseSensitiveUseCase,
 ) : BaseStoreViewModel<LogsState, LogsCommand, LogsSideEffect>(
     initialState = LogsState(
-        resumeLoggingWithBottomTouch = getResumeLoggingWithBottomTouchUseCase(),
+        logs = null,
+        paused = false,
+        query = getQueryUseCase(),
+        caseSensitive = getCaseSensitiveUseCase(),
+        filters = emptyList(),
+        showLogValues = getShowLogValuesUseCase(),
+        selectedIds = emptySet(),
+        expandedOverrides = emptyMap(),
         logsExpanded = getLogsExpandedUseCase(),
         textSize = getLogsTextSizeUseCase(),
+        logsChanged = true,
+        resumeLoggingWithBottomTouch = getResumeLoggingWithBottomTouchUseCase(),
     ),
     reducer = reducer,
     effectHandlers = listOf(effectHandler),

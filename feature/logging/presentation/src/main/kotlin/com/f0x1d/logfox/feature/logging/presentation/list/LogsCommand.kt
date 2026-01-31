@@ -24,7 +24,7 @@ sealed interface LogsCommand {
 
     data class SelectLine(val logLineId: Long, val selected: Boolean) : LogsCommand
 
-    data object SelectAll : LogsCommand
+    data class SelectAll(val visibleIds: Set<Long>) : LogsCommand
 
     data object ClearSelection : LogsCommand
 
