@@ -35,7 +35,6 @@ jobs:
       version_name: ${{ needs.extract_version.outputs.version_name }}
       version_code: ${{ needs.extract_version.outputs.version_code }}
       release_build: true
-      git_sha: ${{ github.sha }}
     secrets: inherit
 
   release:
