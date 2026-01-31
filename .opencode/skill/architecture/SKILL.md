@@ -295,6 +295,99 @@ internal class AuthViewModel @Inject constructor(
 )
 ```
 
+### ViewState Pattern (for Complex Features)
+
+For complex features where the TEA State holds domain-level data and the UI needs a different representation, use a separate **ViewState** with a **ViewStateMapper**.
+
+#### When to Use
+- The State contains domain data (IDs, raw models, maps of overrides) that the UI doesn't render directly
+- The UI needs derived/computed presentation models (e.g., items with `selected`, `expanded`, `textSize` applied)
+- Presentation-layer repositories or use cases would otherwise be needed just to manage UI-local state (selection, expansion, etc.) — move that state into the TEA State instead and derive the ViewState
+
+#### When NOT to Use
+- Simple features where the State already maps 1:1 to what the UI renders — just use State directly
+
+#### Components
+
+**State** holds domain-centric data managed by the Reducer:
+
+```kotlin
+data class ItemsState(
+    val items: List<FormattedItem>? = null,
+    val selectedIds: Set<Long> = emptySet(),
+    val expandedOverrides: Map<Long, Boolean> = emptyMap(),
+    val defaultExpanded: Boolean = false,
+    val textSize: Int = 14,
+    val itemsChanged: Boolean = true,
+    // ... other domain fields
+)
+```
+
+**ViewState** holds presentation-ready data for the Fragment:
+
+```kotlin
+data class ItemsViewState(
+    val items: List<ItemPresentationModel>? = null,
+    val itemsChanged: Boolean = true,
+    val selecting: Boolean = false,
+    val selectedCount: Int = 0,
+    // ... other UI fields
+)
+```
+
+**ViewStateMapper** is a pure mapper class, `@Inject`-constructed, `internal` visibility:
+
+```kotlin
+internal class ItemsViewStateMapper @Inject constructor() {
+
+    fun map(state: ItemsState): ItemsViewState = ItemsViewState(
+        items = state.items?.map { formatted ->
+            formatted.toPresentationModel(
+                expanded = state.expandedOverrides.getOrElse(formatted.id) { state.defaultExpanded },
+                selected = formatted.id in state.selectedIds,
+                textSize = state.textSize.toFloat(),
+            )
+        },
+        itemsChanged = state.itemsChanged,
+        selecting = state.selectedIds.isNotEmpty(),
+        selectedCount = state.selectedIds.size,
+    )
+}
+```
+
+#### Integration
+
+The **ViewModel** stays as `BaseStoreViewModel<State, Command, SideEffect>` — no changes needed. The State type parameter is the domain State, not ViewState.
+
+The **Fragment** stays as `BaseStoreFragment<..., State, ...>`. It injects the mapper and calls it inside `render()`:
+
+```kotlin
+@AndroidEntryPoint
+internal class ItemsFragment : BaseStoreFragment<..., ItemsState, ItemsCommand, ItemsSideEffect, ItemsViewModel>() {
+
+    override val viewModel by viewModels<ItemsViewModel>()
+
+    @Inject
+    lateinit var viewStateMapper: ItemsViewStateMapper
+
+    override fun render(state: ItemsState) {
+        val viewState = viewStateMapper.map(state)
+
+        binding.processList(viewState.items, viewState.itemsChanged)
+        binding.processSelection(viewState.selecting, viewState.selectedCount)
+    }
+}
+```
+
+#### Key Rules
+- **State** MUST NOT contain presentation models — use domain models or intermediate formatted models
+- **ViewState** MUST NOT be the TEA State type — it is derived, not managed by the Store
+- **ViewStateMapper** MUST be a pure function (no side effects, no state) — mapping runs on the main thread so it must be fast
+- The expensive work (filtering, formatting, IO) stays in the **EffectHandler** on background dispatchers
+- The cheap work (applying selection/expanded/textSize to pre-formatted items) happens in the **mapper**
+- Selection, expansion, and similar UI-local state lives **directly in State**, managed by the **Reducer** as pure functions — no presentation-layer repositories or use cases
+- When the Reducer modifies selection state that needs external sync, it emits a SideEffect carrying the data (e.g., `SyncSelectedLines(selectedIds)`) rather than relying on an internal repository
+
 ### Type Alias for Convenience
 ```kotlin
 typealias AuthStore = Store<AuthState, AuthCommand, AuthSideEffect>

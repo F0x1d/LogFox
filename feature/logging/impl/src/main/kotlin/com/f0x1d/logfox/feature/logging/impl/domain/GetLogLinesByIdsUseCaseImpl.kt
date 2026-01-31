@@ -8,5 +8,6 @@ import javax.inject.Inject
 internal class GetLogLinesByIdsUseCaseImpl @Inject constructor(
     private val logsDataSource: LogsDataSource,
 ) : GetLogLinesByIdsUseCase {
-    override fun invoke(ids: Set<Long>): List<LogLine> = logsDataSource.getByIds(ids)
+    override fun invoke(ids: Set<Long>): List<LogLine> =
+        logsDataSource.getByIds(ids).sortedBy { it.dateAndTime }
 }

@@ -4,8 +4,6 @@ import com.f0x1d.logfox.feature.logging.impl.data.LogsBufferDataSource
 import com.f0x1d.logfox.feature.logging.impl.data.LogsBufferDataSourceImpl
 import com.f0x1d.logfox.feature.logging.impl.data.LogsDataSource
 import com.f0x1d.logfox.feature.logging.impl.data.LogsDataSourceImpl
-import com.f0x1d.logfox.feature.logging.impl.data.PausedDataSource
-import com.f0x1d.logfox.feature.logging.impl.data.PausedDataSourceImpl
 import com.f0x1d.logfox.feature.logging.impl.data.SearchDataSource
 import com.f0x1d.logfox.feature.logging.impl.data.SearchDataSourceImpl
 import com.f0x1d.logfox.feature.logging.impl.data.SelectedLogLinesDataSource
@@ -32,7 +30,4 @@ internal interface DataSourcesModule {
     fun bindSelectedLogLinesDataSource(
         selectedLogLinesDataSourceImpl: SelectedLogLinesDataSourceImpl,
     ): SelectedLogLinesDataSource
-
-    @Binds
-    fun bindPausedDataSource(pausedDataSourceImpl: PausedDataSourceImpl): PausedDataSource
 }

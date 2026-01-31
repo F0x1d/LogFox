@@ -2,30 +2,37 @@ package com.f0x1d.logfox.feature.logging.presentation.list
 
 import android.net.Uri
 import com.f0x1d.logfox.feature.filters.api.model.UserFilter
-import com.f0x1d.logfox.feature.logging.presentation.list.model.LogLineItem
+import com.f0x1d.logfox.feature.logging.api.model.LogLine
+import com.f0x1d.logfox.feature.logging.api.model.ShowLogValues
 
 sealed interface LogsCommand {
     data class LogsLoaded(
-        val logs: List<LogLineItem>,
+        val logs: List<LogLine>,
         val query: String?,
+        val caseSensitive: Boolean,
         val filters: List<UserFilter>,
-        val selecting: Boolean,
-        val selectedCount: Int,
+        val showLogValues: ShowLogValues,
     ) : LogsCommand
 
     data class PreferencesUpdated(
         val resumeLoggingWithBottomTouch: Boolean,
+        val textSize: Int,
+        val logsExpanded: Boolean,
     ) : LogsCommand
 
     data class ItemClicked(val logLineId: Long) : LogsCommand
 
-    data class SelectLine(val logLineItem: LogLineItem, val selected: Boolean) : LogsCommand
+    data class SelectLine(val logLineId: Long, val selected: Boolean) : LogsCommand
 
     data object SelectAll : LogsCommand
+
+    data object ClearSelection : LogsCommand
 
     data object SelectedToRecording : LogsCommand
 
     data class ExportSelectedTo(val uri: Uri) : LogsCommand
+
+    data object ExportSelectedClicked : LogsCommand
 
     data object SwitchState : LogsCommand
 
@@ -33,9 +40,7 @@ sealed interface LogsCommand {
 
     data object Resume : LogsCommand
 
-    data object ClearSelection : LogsCommand
-
-    data class CopyLog(val logLineItem: LogLineItem) : LogsCommand
+    data class CopyLog(val logLineId: Long) : LogsCommand
 
     data object CopySelectedLogs : LogsCommand
 
@@ -43,7 +48,7 @@ sealed interface LogsCommand {
 
     data object ToolbarClicked : LogsCommand
 
-    data class CreateFilterFromLog(val logLineItem: LogLineItem) : LogsCommand
+    data class CreateFilterFromLog(val logLineId: Long) : LogsCommand
 
     data object OpenSearch : LogsCommand
 
@@ -51,13 +56,9 @@ sealed interface LogsCommand {
 
     data object OpenExtendedCopy : LogsCommand
 
-    data object ExportSelectedClicked : LogsCommand
-
     data object ClearLogs : LogsCommand
 
     data object RestartLogging : LogsCommand
-
-    data class PausedStateUpdated(val paused: Boolean) : LogsCommand
 
     data object KillService : LogsCommand
 }

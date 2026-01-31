@@ -24,6 +24,8 @@ import com.f0x1d.logfox.feature.logging.presentation.databinding.FragmentLogsBin
 import com.f0x1d.logfox.feature.logging.presentation.list.LogsCommand
 import com.f0x1d.logfox.feature.logging.presentation.list.LogsSideEffect
 import com.f0x1d.logfox.feature.logging.presentation.list.LogsState
+import com.f0x1d.logfox.feature.logging.presentation.list.LogsViewState
+import com.f0x1d.logfox.feature.logging.presentation.list.LogsViewStateMapper
 import com.f0x1d.logfox.feature.logging.presentation.list.LogsViewModel
 import com.f0x1d.logfox.feature.logging.presentation.list.adapter.LogsAdapter
 import com.f0x1d.logfox.feature.logging.presentation.list.model.LogLineItem
@@ -33,6 +35,7 @@ import com.f0x1d.logfox.navigation.Directions
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import dev.chrisbanes.insetter.applyInsetter
+import javax.inject.Inject
 
 @AndroidEntryPoint
 internal class LogsFragment :
@@ -46,19 +49,22 @@ internal class LogsFragment :
 
     override val viewModel by viewModels<LogsViewModel>()
 
+    @Inject
+    lateinit var viewStateMapper: LogsViewStateMapper
+
     private val adapter by lazy {
         LogsAdapter(
             onClick = { item ->
                 send(LogsCommand.ItemClicked(item.logLineId))
             },
             onSelectClick = { item ->
-                send(LogsCommand.SelectLine(item, true))
+                send(LogsCommand.SelectLine(item.logLineId, true))
             },
             onCopyClick = { item ->
-                send(LogsCommand.CopyLog(item))
+                send(LogsCommand.CopyLog(item.logLineId))
             },
             onCreateFilterClick = { item ->
-                send(LogsCommand.CreateFilterFromLog(item))
+                send(LogsCommand.CreateFilterFromLog(item.logLineId))
             },
         )
     }
@@ -163,20 +169,22 @@ internal class LogsFragment :
     }
 
     override fun render(state: LogsState) {
+        val viewState = viewStateMapper.map(state)
+
         binding.processQueryAndFilters(
-            query = state.query,
-            filters = state.filters,
+            query = viewState.query,
+            filters = viewState.filters,
         )
         binding.processSelectedItems(
-            selecting = state.selecting,
-            selectedCount = state.selectedCount,
+            selecting = viewState.selecting,
+            selectedCount = viewState.selectedCount,
         )
-        binding.processPaused(paused = state.paused)
+        binding.processPaused(paused = viewState.paused)
 
-        if (state.logsChanged) {
+        if (viewState.logsChanged) {
             binding.updateLogsList(
-                items = state.logs,
-                paused = state.paused,
+                items = viewState.logs,
+                paused = viewState.paused,
             )
         }
     }
