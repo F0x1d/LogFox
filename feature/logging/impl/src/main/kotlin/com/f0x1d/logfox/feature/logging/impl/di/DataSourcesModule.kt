@@ -1,5 +1,7 @@
 package com.f0x1d.logfox.feature.logging.impl.di
 
+import com.f0x1d.logfox.feature.logging.impl.data.LogExportDataSource
+import com.f0x1d.logfox.feature.logging.impl.data.LogExportDataSourceImpl
 import com.f0x1d.logfox.feature.logging.impl.data.LogsBufferDataSource
 import com.f0x1d.logfox.feature.logging.impl.data.LogsBufferDataSourceImpl
 import com.f0x1d.logfox.feature.logging.impl.data.LogsDataSource
@@ -30,4 +32,7 @@ internal interface DataSourcesModule {
     fun bindSelectedLogLinesDataSource(
         selectedLogLinesDataSourceImpl: SelectedLogLinesDataSourceImpl,
     ): SelectedLogLinesDataSource
+
+    @Binds
+    fun bindLogExportDataSource(impl: LogExportDataSourceImpl): LogExportDataSource
 }

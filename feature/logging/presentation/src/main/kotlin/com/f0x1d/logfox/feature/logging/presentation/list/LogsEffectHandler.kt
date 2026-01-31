@@ -1,11 +1,9 @@
 package com.f0x1d.logfox.feature.logging.presentation.list
 
-import android.content.Context
-import com.f0x1d.logfox.core.di.DefaultDispatcher
-import com.f0x1d.logfox.core.di.IODispatcher
 import com.f0x1d.logfox.core.tea.EffectHandler
 import com.f0x1d.logfox.feature.datetime.api.DateTimeFormatter
 import com.f0x1d.logfox.feature.filters.api.domain.GetAllEnabledFiltersFlowUseCase
+import com.f0x1d.logfox.feature.logging.api.domain.ExportLogsToUriUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.FormatLogLineUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.GetCaseSensitiveFlowUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.GetLogLinesByIdsUseCase
@@ -18,14 +16,10 @@ import com.f0x1d.logfox.feature.preferences.domain.logs.GetLogsExpandedFlowUseCa
 import com.f0x1d.logfox.feature.preferences.domain.logs.GetLogsTextSizeFlowUseCase
 import com.f0x1d.logfox.feature.preferences.domain.logs.GetResumeLoggingWithBottomTouchFlowUseCase
 import com.f0x1d.logfox.feature.recordings.api.domain.CreateRecordingFromLinesUseCase
-import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 internal class LogsEffectHandler @Inject constructor(
-    @ApplicationContext private val context: Context,
     private val getLogsFlowUseCase: GetLogsFlowUseCase,
     private val getQueryFlowUseCase: GetQueryFlowUseCase,
     private val getCaseSensitiveFlowUseCase: GetCaseSensitiveFlowUseCase,
@@ -38,10 +32,9 @@ internal class LogsEffectHandler @Inject constructor(
     private val getLogsTextSizeFlowUseCase: GetLogsTextSizeFlowUseCase,
     private val getLogsExpandedFlowUseCase: GetLogsExpandedFlowUseCase,
     private val formatLogLineUseCase: FormatLogLineUseCase,
+    private val exportLogsToUriUseCase: ExportLogsToUriUseCase,
     private val loggingServiceDelegate: LoggingServiceDelegate,
     private val dateTimeFormatter: DateTimeFormatter,
-    @DefaultDispatcher private val defaultDispatcher: CoroutineDispatcher,
-    @IODispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : EffectHandler<LogsSideEffect, LogsCommand> {
 
     override suspend fun handle(effect: LogsSideEffect, onCommand: suspend (LogsCommand) -> Unit) {
@@ -88,30 +81,13 @@ internal class LogsEffectHandler @Inject constructor(
             }
 
             is LogsSideEffect.CreateRecordingFromLines -> {
-                withContext(defaultDispatcher) {
-                    runCatching {
-                        val lines = getLogLinesByIdsUseCase(effect.selectedIds)
-                        createRecordingFromLinesUseCase(lines = lines)
-                    }
-                }
+                val lines = getLogLinesByIdsUseCase(effect.selectedIds)
+                createRecordingFromLinesUseCase(lines = lines)
             }
 
             is LogsSideEffect.ExportLogsTo -> {
-                withContext(ioDispatcher) {
-                    runCatching {
-                        val lines = getLogLinesByIdsUseCase(effect.selectedIds)
-                        val content = lines.joinToString("\n") { line ->
-                            formatLogLineUseCase(
-                                logLine = line,
-                                formatDate = dateTimeFormatter::formatDate,
-                                formatTime = dateTimeFormatter::formatTime,
-                            )
-                        }
-                        context.contentResolver.openOutputStream(effect.uri)?.use {
-                            it.write(content.encodeToByteArray())
-                        }
-                    }
-                }
+                val lines = getLogLinesByIdsUseCase(effect.selectedIds)
+                exportLogsToUriUseCase(lines, effect.uri)
             }
 
             is LogsSideEffect.FormatAndCopyLog -> {
