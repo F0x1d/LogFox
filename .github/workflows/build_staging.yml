@@ -17,6 +17,7 @@ jobs:
     outputs:
       version_name: ${{ steps.extract.outputs.version_name }}
       version_code: ${{ steps.extract.outputs.version_code }}
+      short_commit: ${{ steps.extract.outputs.short_commit }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -41,6 +42,7 @@ jobs:
           fi
           echo "version_name=$VERSION_NAME" >> $GITHUB_OUTPUT
           echo "version_code=$VERSION_CODE" >> $GITHUB_OUTPUT
+          echo "short_commit=$SHORT_SHA" >> $GITHUB_OUTPUT
 
   build:
     needs: extract_version
@@ -50,7 +52,7 @@ jobs:
       version_name: ${{ needs.extract_version.outputs.version_name }}
       version_code: ${{ needs.extract_version.outputs.version_code }}
       release_build: false
-      git_sha: ${{ github.sha }}
+      git_sha: ${{ needs.extract_version.outputs.short_commit }}
     secrets: inherit
 
   send:
