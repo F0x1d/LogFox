@@ -27,9 +27,9 @@ import com.f0x1d.logfox.feature.crashes.presentation.list.CrashesSideEffect
 import com.f0x1d.logfox.feature.crashes.presentation.list.CrashesState
 import com.f0x1d.logfox.feature.crashes.presentation.list.CrashesViewModel
 import com.f0x1d.logfox.feature.crashes.presentation.list.CrashesViewState
-import com.f0x1d.logfox.feature.preferences.CrashesSort
+import com.f0x1d.logfox.feature.navigation.api.Directions
+import com.f0x1d.logfox.feature.preferences.api.CrashesSort
 import com.f0x1d.logfox.feature.strings.Strings
-import com.f0x1d.logfox.navigation.Directions
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import com.google.android.material.search.SearchView

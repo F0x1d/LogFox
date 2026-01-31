@@ -1,6 +1,6 @@
 package com.f0x1d.logfox.feature.crashes.presentation.list
 
-import com.f0x1d.logfox.feature.preferences.CrashesSort
+import com.f0x1d.logfox.feature.preferences.api.CrashesSort
 
 internal sealed interface CrashesSideEffect {
     // Business logic side effects

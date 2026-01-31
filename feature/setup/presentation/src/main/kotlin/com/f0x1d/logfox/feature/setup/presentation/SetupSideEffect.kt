@@ -1,7 +1,7 @@
 package com.f0x1d.logfox.feature.setup.presentation
 
 import androidx.annotation.StringRes
-import com.f0x1d.logfox.feature.terminals.base.TerminalType
+import com.f0x1d.logfox.feature.terminals.api.base.TerminalType
 
 internal sealed interface SetupSideEffect {
     // Business logic side effects (handled by EffectHandler)

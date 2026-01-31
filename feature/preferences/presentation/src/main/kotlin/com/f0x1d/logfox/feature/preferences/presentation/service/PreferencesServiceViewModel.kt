@@ -1,7 +1,7 @@
 package com.f0x1d.logfox.feature.preferences.presentation.service
 
 import com.f0x1d.logfox.core.tea.BaseStoreViewModel
-import com.f0x1d.logfox.feature.terminals.base.TerminalType
+import com.f0x1d.logfox.feature.terminals.api.base.TerminalType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

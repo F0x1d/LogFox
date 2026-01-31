@@ -16,14 +16,14 @@ class SetupScreenContentTest : ScreenshotTest() {
     @Test
     fun shouldShowSetupScreenContent() = screenshotTestOf {
         LogFoxTheme {
-            SetupScreenContent()
+            SetupScreenContent(state = SetupViewState(showAdbDialog = false, adbCommand = ""))
         }
     }
 
     @Test
     fun shouldShowDarkSetupScreenContent() = screenshotTestOf {
         LogFoxTheme(darkTheme = true) {
-            SetupScreenContent()
+            SetupScreenContent(state = SetupViewState(showAdbDialog = false, adbCommand = ""))
         }
     }
 

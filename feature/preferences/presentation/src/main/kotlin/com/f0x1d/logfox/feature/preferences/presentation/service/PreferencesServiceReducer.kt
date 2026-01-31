@@ -5,7 +5,7 @@ import com.f0x1d.logfox.core.tea.ReduceResult
 import com.f0x1d.logfox.core.tea.Reducer
 import com.f0x1d.logfox.core.tea.noSideEffects
 import com.f0x1d.logfox.core.tea.withSideEffects
-import com.f0x1d.logfox.feature.terminals.base.TerminalType
+import com.f0x1d.logfox.feature.terminals.api.base.TerminalType
 import javax.inject.Inject
 
 internal class PreferencesServiceReducer @Inject constructor() : Reducer<PreferencesServiceState, PreferencesServiceCommand, PreferencesServiceSideEffect> {

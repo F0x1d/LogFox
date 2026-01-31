@@ -5,7 +5,7 @@ import com.f0x1d.logfox.core.tea.Reducer
 import com.f0x1d.logfox.core.tea.noSideEffects
 import com.f0x1d.logfox.core.tea.withSideEffects
 import com.f0x1d.logfox.feature.strings.Strings
-import com.f0x1d.logfox.feature.terminals.base.TerminalType
+import com.f0x1d.logfox.feature.terminals.api.base.TerminalType
 import javax.inject.Inject
 
 internal class SetupReducer @Inject constructor() : Reducer<SetupState, SetupCommand, SetupSideEffect> {

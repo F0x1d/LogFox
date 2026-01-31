@@ -18,7 +18,7 @@ import com.f0x1d.logfox.feature.preferences.presentation.service.PreferencesServ
 import com.f0x1d.logfox.feature.preferences.presentation.service.PreferencesServiceViewModel
 import com.f0x1d.logfox.feature.preferences.presentation.service.PreferencesServiceViewState
 import com.f0x1d.logfox.feature.strings.Strings
-import com.f0x1d.logfox.feature.terminals.base.TerminalType
+import com.f0x1d.logfox.feature.terminals.api.base.TerminalType
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint

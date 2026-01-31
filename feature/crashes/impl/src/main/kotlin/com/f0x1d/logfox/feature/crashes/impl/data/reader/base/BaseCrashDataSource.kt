@@ -6,7 +6,7 @@ import com.f0x1d.logfox.feature.crashes.impl.data.AppInfoDataSource
 import com.f0x1d.logfox.feature.crashes.impl.data.CrashCollectorDataSource
 import com.f0x1d.logfox.feature.crashes.impl.data.CrashDataSource
 import com.f0x1d.logfox.feature.logging.api.model.LogLine
-import com.f0x1d.logfox.feature.preferences.data.LogsSettingsRepository
+import com.f0x1d.logfox.feature.preferences.api.data.LogsSettingsRepository
 
 internal abstract class BaseCrashDataSource(
     private val appInfoDataSource: AppInfoDataSource,

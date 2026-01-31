@@ -1,7 +1,7 @@
 package com.f0x1d.logfox.feature.apps.picker.impl.di
 
-import com.f0x1d.logfox.feature.apps.picker.domain.FilterAppsUseCase
-import com.f0x1d.logfox.feature.apps.picker.domain.GetInstalledAppsUseCase
+import com.f0x1d.logfox.feature.apps.picker.api.domain.FilterAppsUseCase
+import com.f0x1d.logfox.feature.apps.picker.api.domain.GetInstalledAppsUseCase
 import com.f0x1d.logfox.feature.apps.picker.impl.data.InstalledAppsDataSource
 import com.f0x1d.logfox.feature.apps.picker.impl.data.InstalledAppsDataSourceImpl
 import com.f0x1d.logfox.feature.apps.picker.impl.domain.FilterAppsUseCaseImpl

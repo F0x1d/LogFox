@@ -24,9 +24,9 @@ import com.f0x1d.logfox.core.context.isHorizontalOrientation
 import com.f0x1d.logfox.core.ui.base.activity.BaseActivity
 import com.f0x1d.logfox.core.ui.icons.Icons
 import com.f0x1d.logfox.databinding.ActivityMainBinding
+import com.f0x1d.logfox.feature.navigation.api.Directions
+import com.f0x1d.logfox.feature.navigation.api.NavGraphs
 import com.f0x1d.logfox.feature.strings.Strings
-import com.f0x1d.logfox.navigation.Directions
-import com.f0x1d.logfox.navigation.NavGraphs
 import com.f0x1d.logfox.presentation.MainCommand
 import com.f0x1d.logfox.presentation.MainSideEffect
 import com.f0x1d.logfox.presentation.MainViewModel

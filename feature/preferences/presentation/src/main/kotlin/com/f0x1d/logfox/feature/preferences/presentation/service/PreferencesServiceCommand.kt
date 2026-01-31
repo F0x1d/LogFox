@@ -1,6 +1,6 @@
 package com.f0x1d.logfox.feature.preferences.presentation.service
 
-import com.f0x1d.logfox.feature.terminals.base.TerminalType
+import com.f0x1d.logfox.feature.terminals.api.base.TerminalType
 
 internal sealed interface PreferencesServiceCommand {
     data object Load : PreferencesServiceCommand

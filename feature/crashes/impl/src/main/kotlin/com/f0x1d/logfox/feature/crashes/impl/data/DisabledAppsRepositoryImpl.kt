@@ -5,7 +5,7 @@ import com.f0x1d.logfox.feature.crashes.api.data.DisabledAppsRepository
 import com.f0x1d.logfox.feature.crashes.api.model.DisabledApp
 import com.f0x1d.logfox.feature.crashes.impl.mapper.toDomainModel
 import com.f0x1d.logfox.feature.crashes.impl.mapper.toEntity
-import com.f0x1d.logfox.feature.database.data.DisabledAppDataSource
+import com.f0x1d.logfox.feature.database.api.data.DisabledAppDataSource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged

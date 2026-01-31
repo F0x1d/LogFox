@@ -2,14 +2,14 @@ package com.f0x1d.logfox.feature.recordings.impl.data
 
 import android.content.Context
 import com.f0x1d.logfox.core.di.IODispatcher
-import com.f0x1d.logfox.feature.database.data.LogRecordingDataSource
+import com.f0x1d.logfox.feature.database.api.data.LogRecordingDataSource
 import com.f0x1d.logfox.feature.datetime.api.DateTimeFormatter
 import com.f0x1d.logfox.feature.filters.api.domain.GetAllEnabledFiltersFlowUseCase
 import com.f0x1d.logfox.feature.filters.api.model.UserFilter
 import com.f0x1d.logfox.feature.filters.api.model.suits
 import com.f0x1d.logfox.feature.logging.api.data.LogLineFormatterRepository
 import com.f0x1d.logfox.feature.logging.api.model.LogLine
-import com.f0x1d.logfox.feature.preferences.data.LogsSettingsRepository
+import com.f0x1d.logfox.feature.preferences.api.data.LogsSettingsRepository
 import com.f0x1d.logfox.feature.recordings.api.data.RecordingState
 import com.f0x1d.logfox.feature.recordings.api.model.LogRecording
 import com.f0x1d.logfox.feature.recordings.impl.mapper.toEntity

@@ -18,11 +18,11 @@ import com.f0x1d.logfox.core.copy.CopyReceiver
 import com.f0x1d.logfox.core.ui.icons.Icons
 import com.f0x1d.logfox.feature.crashes.api.data.notificationChannelId
 import com.f0x1d.logfox.feature.crashes.api.model.AppCrash
+import com.f0x1d.logfox.feature.navigation.api.Directions
+import com.f0x1d.logfox.feature.navigation.api.NavGraphs
 import com.f0x1d.logfox.feature.notifications.api.CRASHES_CHANNEL_GROUP_ID
-import com.f0x1d.logfox.feature.preferences.data.CrashesSettingsRepository
+import com.f0x1d.logfox.feature.preferences.api.data.CrashesSettingsRepository
 import com.f0x1d.logfox.feature.strings.Strings
-import com.f0x1d.logfox.navigation.Directions
-import com.f0x1d.logfox.navigation.NavGraphs
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 

@@ -23,7 +23,7 @@ import com.f0x1d.logfox.feature.filters.presentation.list.FiltersState
 import com.f0x1d.logfox.feature.filters.presentation.list.FiltersViewModel
 import com.f0x1d.logfox.feature.filters.presentation.list.FiltersViewState
 import com.f0x1d.logfox.feature.filters.presentation.list.adapter.FiltersAdapter
-import com.f0x1d.logfox.navigation.Directions
+import com.f0x1d.logfox.feature.navigation.api.Directions
 import dagger.hilt.android.AndroidEntryPoint
 import dev.chrisbanes.insetter.applyInsetter
 

@@ -1,6 +1,6 @@
 package com.f0x1d.logfox.feature.logging.presentation.service
 
-import com.f0x1d.logfox.feature.terminals.base.Terminal
+import com.f0x1d.logfox.feature.terminals.api.base.Terminal
 
 internal sealed interface LoggingServiceSideEffect {
     // Business logic (handled by EffectHandler)

@@ -3,8 +3,8 @@ package com.f0x1d.logfox.feature.logging.impl.domain
 import com.f0x1d.logfox.feature.logging.api.data.LoggingRepository
 import com.f0x1d.logfox.feature.logging.api.domain.StartLoggingUseCase
 import com.f0x1d.logfox.feature.logging.api.model.LogLine
-import com.f0x1d.logfox.feature.preferences.data.ServiceSettingsRepository
-import com.f0x1d.logfox.feature.terminals.base.Terminal
+import com.f0x1d.logfox.feature.preferences.api.data.ServiceSettingsRepository
+import com.f0x1d.logfox.feature.terminals.api.base.Terminal
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

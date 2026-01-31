@@ -40,7 +40,7 @@ import com.f0x1d.logfox.compose.base.preview.DayNightPreview
 import com.f0x1d.logfox.compose.designsystem.component.button.NavigationBackButton
 import com.f0x1d.logfox.compose.designsystem.component.search.TopSearchBar
 import com.f0x1d.logfox.compose.designsystem.theme.LogFoxTheme
-import com.f0x1d.logfox.feature.apps.picker.InstalledApp
+import com.f0x1d.logfox.feature.apps.picker.api.InstalledApp
 import com.f0x1d.logfox.feature.apps.picker.presentation.AppsPickerViewState
 import com.f0x1d.logfox.feature.apps.picker.presentation.ui.AppsPickerScreenListener
 import com.f0x1d.logfox.feature.apps.picker.presentation.ui.MockAppsPickerScreenListener

@@ -3,7 +3,7 @@ package com.f0x1d.logfox.feature.preferences.impl.data.terminal
 import android.content.Context
 import androidx.core.content.edit
 import com.f0x1d.logfox.feature.preferences.impl.base.BasePreferences
-import com.f0x1d.logfox.feature.terminals.base.TerminalType
+import com.f0x1d.logfox.feature.terminals.api.base.TerminalType
 import com.fredporciuncula.flow.preferences.Preference
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject

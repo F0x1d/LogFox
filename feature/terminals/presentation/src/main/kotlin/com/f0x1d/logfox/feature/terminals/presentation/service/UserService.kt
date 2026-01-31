@@ -5,7 +5,7 @@ import android.os.ParcelFileDescriptor
 import android.os.ParcelFileDescriptor.AutoCloseInputStream
 import android.os.ParcelFileDescriptor.AutoCloseOutputStream
 import androidx.annotation.Keep
-import com.f0x1d.logfox.feature.terminals.model.TerminalResult
+import com.f0x1d.logfox.feature.terminals.api.model.TerminalResult
 import com.f0x1d.logfox.feature.terminals.presentation.IUserService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

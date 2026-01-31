@@ -1,7 +1,7 @@
 package com.f0x1d.logfox.feature.apps.picker.impl.domain
 
-import com.f0x1d.logfox.feature.apps.picker.InstalledApp
-import com.f0x1d.logfox.feature.apps.picker.domain.GetInstalledAppsUseCase
+import com.f0x1d.logfox.feature.apps.picker.api.InstalledApp
+import com.f0x1d.logfox.feature.apps.picker.api.domain.GetInstalledAppsUseCase
 import com.f0x1d.logfox.feature.apps.picker.impl.data.InstalledAppsDataSource
 import javax.inject.Inject
 

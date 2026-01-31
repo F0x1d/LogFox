@@ -19,7 +19,7 @@ import com.f0x1d.logfox.feature.crashes.presentation.appcrashes.AppCrashesViewMo
 import com.f0x1d.logfox.feature.crashes.presentation.appcrashes.AppCrashesViewState
 import com.f0x1d.logfox.feature.crashes.presentation.common.adapter.CrashesAdapter
 import com.f0x1d.logfox.feature.crashes.presentation.databinding.FragmentAppCrashesBinding
-import com.f0x1d.logfox.navigation.Directions
+import com.f0x1d.logfox.feature.navigation.api.Directions
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import dev.chrisbanes.insetter.applyInsetter

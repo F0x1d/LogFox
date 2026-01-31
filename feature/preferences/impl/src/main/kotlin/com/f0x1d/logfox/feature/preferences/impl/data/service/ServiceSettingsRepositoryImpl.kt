@@ -1,8 +1,8 @@
 package com.f0x1d.logfox.feature.preferences.impl.data.service
 
-import com.f0x1d.logfox.core.preferences.PreferenceStateFlow
-import com.f0x1d.logfox.core.preferences.asPreferenceStateFlow
-import com.f0x1d.logfox.feature.preferences.data.ServiceSettingsRepository
+import com.f0x1d.logfox.core.preferences.api.PreferenceStateFlow
+import com.f0x1d.logfox.core.preferences.impl.asPreferenceStateFlow
+import com.f0x1d.logfox.feature.preferences.api.data.ServiceSettingsRepository
 import javax.inject.Inject
 import javax.inject.Singleton
 

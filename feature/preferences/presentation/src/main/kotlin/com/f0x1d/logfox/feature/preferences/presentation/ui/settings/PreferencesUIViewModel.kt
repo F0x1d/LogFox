@@ -1,20 +1,20 @@
 package com.f0x1d.logfox.feature.preferences.presentation.ui.settings
 
 import com.f0x1d.logfox.core.tea.BaseStoreViewModel
-import com.f0x1d.logfox.feature.preferences.domain.datetime.GetDateFormatUseCase
-import com.f0x1d.logfox.feature.preferences.domain.datetime.GetTimeFormatUseCase
-import com.f0x1d.logfox.feature.preferences.domain.logs.GetLogsDisplayLimitUseCase
-import com.f0x1d.logfox.feature.preferences.domain.logs.GetLogsTextSizeUseCase
-import com.f0x1d.logfox.feature.preferences.domain.logs.GetLogsUpdateIntervalUseCase
-import com.f0x1d.logfox.feature.preferences.domain.logs.GetShowLogContentUseCase
-import com.f0x1d.logfox.feature.preferences.domain.logs.GetShowLogDateUseCase
-import com.f0x1d.logfox.feature.preferences.domain.logs.GetShowLogPackageUseCase
-import com.f0x1d.logfox.feature.preferences.domain.logs.GetShowLogPidUseCase
-import com.f0x1d.logfox.feature.preferences.domain.logs.GetShowLogTagUseCase
-import com.f0x1d.logfox.feature.preferences.domain.logs.GetShowLogTidUseCase
-import com.f0x1d.logfox.feature.preferences.domain.logs.GetShowLogTimeUseCase
-import com.f0x1d.logfox.feature.preferences.domain.logs.GetShowLogUidUseCase
-import com.f0x1d.logfox.feature.preferences.domain.ui.GetNightThemeUseCase
+import com.f0x1d.logfox.feature.preferences.api.domain.datetime.GetDateFormatUseCase
+import com.f0x1d.logfox.feature.preferences.api.domain.datetime.GetTimeFormatUseCase
+import com.f0x1d.logfox.feature.preferences.api.domain.logs.GetLogsDisplayLimitUseCase
+import com.f0x1d.logfox.feature.preferences.api.domain.logs.GetLogsTextSizeUseCase
+import com.f0x1d.logfox.feature.preferences.api.domain.logs.GetLogsUpdateIntervalUseCase
+import com.f0x1d.logfox.feature.preferences.api.domain.logs.GetShowLogContentUseCase
+import com.f0x1d.logfox.feature.preferences.api.domain.logs.GetShowLogDateUseCase
+import com.f0x1d.logfox.feature.preferences.api.domain.logs.GetShowLogPackageUseCase
+import com.f0x1d.logfox.feature.preferences.api.domain.logs.GetShowLogPidUseCase
+import com.f0x1d.logfox.feature.preferences.api.domain.logs.GetShowLogTagUseCase
+import com.f0x1d.logfox.feature.preferences.api.domain.logs.GetShowLogTidUseCase
+import com.f0x1d.logfox.feature.preferences.api.domain.logs.GetShowLogTimeUseCase
+import com.f0x1d.logfox.feature.preferences.api.domain.logs.GetShowLogUidUseCase
+import com.f0x1d.logfox.feature.preferences.api.domain.ui.GetNightThemeUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

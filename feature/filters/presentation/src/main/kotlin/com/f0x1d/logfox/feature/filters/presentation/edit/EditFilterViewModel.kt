@@ -1,8 +1,8 @@
 package com.f0x1d.logfox.feature.filters.presentation.edit
 
 import com.f0x1d.logfox.core.tea.BaseStoreViewModel
-import com.f0x1d.logfox.feature.apps.picker.AppsPickerResultHandler
-import com.f0x1d.logfox.feature.apps.picker.InstalledApp
+import com.f0x1d.logfox.feature.apps.picker.api.AppsPickerResultHandler
+import com.f0x1d.logfox.feature.apps.picker.api.InstalledApp
 import com.f0x1d.logfox.feature.filters.presentation.edit.di.EditFilterArgs
 import com.f0x1d.logfox.feature.logging.api.model.LogLevel
 import dagger.hilt.android.lifecycle.HiltViewModel

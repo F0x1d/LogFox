@@ -5,7 +5,7 @@ import com.f0x1d.logfox.feature.crashes.api.data.CrashesRepository
 import com.f0x1d.logfox.feature.crashes.api.model.AppCrash
 import com.f0x1d.logfox.feature.crashes.impl.mapper.toDomainModel
 import com.f0x1d.logfox.feature.crashes.impl.mapper.toEntity
-import com.f0x1d.logfox.feature.database.data.AppCrashDataSource
+import com.f0x1d.logfox.feature.database.api.data.AppCrashDataSource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged

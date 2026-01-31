@@ -1,7 +1,7 @@
 package com.f0x1d.logfox.feature.apps.picker.impl.data
 
 import android.content.Context
-import com.f0x1d.logfox.feature.apps.picker.InstalledApp
+import com.f0x1d.logfox.feature.apps.picker.api.InstalledApp
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 

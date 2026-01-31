@@ -5,9 +5,9 @@ import com.f0x1d.logfox.core.tea.BaseStoreViewModel
 import com.f0x1d.logfox.feature.logging.api.domain.GetCaseSensitiveUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.GetQueryUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.GetShowLogValuesUseCase
-import com.f0x1d.logfox.feature.preferences.domain.logs.GetLogsExpandedUseCase
-import com.f0x1d.logfox.feature.preferences.domain.logs.GetLogsTextSizeUseCase
-import com.f0x1d.logfox.feature.preferences.domain.logs.GetResumeLoggingWithBottomTouchUseCase
+import com.f0x1d.logfox.feature.preferences.api.domain.logs.GetLogsExpandedUseCase
+import com.f0x1d.logfox.feature.preferences.api.domain.logs.GetLogsTextSizeUseCase
+import com.f0x1d.logfox.feature.preferences.api.domain.logs.GetResumeLoggingWithBottomTouchUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject

@@ -15,7 +15,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.findNavController
 import com.f0x1d.logfox.compose.designsystem.theme.LogFoxTheme
-import com.f0x1d.logfox.feature.apps.picker.AppsPickerResultHandler
+import com.f0x1d.logfox.feature.apps.picker.api.AppsPickerResultHandler
 import com.f0x1d.logfox.feature.apps.picker.presentation.AppsPickerCommand
 import com.f0x1d.logfox.feature.apps.picker.presentation.AppsPickerSideEffect
 import com.f0x1d.logfox.feature.apps.picker.presentation.AppsPickerViewModel

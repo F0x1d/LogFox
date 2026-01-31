@@ -1,7 +1,7 @@
 package com.f0x1d.logfox.feature.filters.impl.data
 
 import com.f0x1d.logfox.core.di.IODispatcher
-import com.f0x1d.logfox.feature.database.data.UserFilterDataSource
+import com.f0x1d.logfox.feature.database.api.data.UserFilterDataSource
 import com.f0x1d.logfox.feature.filters.api.data.FiltersRepository
 import com.f0x1d.logfox.feature.filters.api.model.UserFilter
 import com.f0x1d.logfox.feature.filters.impl.mapper.toDomainModel

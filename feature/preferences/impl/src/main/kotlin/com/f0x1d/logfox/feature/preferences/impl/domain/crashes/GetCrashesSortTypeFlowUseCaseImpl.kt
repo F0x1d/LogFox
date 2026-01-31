@@ -1,8 +1,8 @@
 package com.f0x1d.logfox.feature.preferences.impl.domain.crashes
 
-import com.f0x1d.logfox.feature.preferences.CrashesSort
-import com.f0x1d.logfox.feature.preferences.data.CrashesSettingsRepository
-import com.f0x1d.logfox.feature.preferences.domain.crashes.GetCrashesSortTypeFlowUseCase
+import com.f0x1d.logfox.feature.preferences.api.CrashesSort
+import com.f0x1d.logfox.feature.preferences.api.data.CrashesSettingsRepository
+import com.f0x1d.logfox.feature.preferences.api.domain.crashes.GetCrashesSortTypeFlowUseCase
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

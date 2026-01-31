@@ -1235,18 +1235,18 @@ feature/auth/
 - **NO implementations, NO DI annotations**
 
 ```kotlin
-// feature/auth/api/src/main/kotlin/com/example/feature/auth/AuthRepository.kt
+// feature/auth/api/src/main/kotlin/com/f0x1d/logfox/feature/auth/api/AuthRepository.kt
 interface AuthRepository {
     suspend fun login(email: String, password: String): User
     val isAuthenticated: Flow<Boolean>
 }
 
-// feature/auth/api/src/main/kotlin/com/example/feature/auth/LoginUseCase.kt
+// feature/auth/api/src/main/kotlin/com/f0x1d/logfox/feature/auth/api/LoginUseCase.kt
 interface LoginUseCase {
     suspend operator fun invoke(email: String, password: String): Result<User>
 }
 
-// feature/auth/api/src/main/kotlin/com/example/feature/auth/User.kt
+// feature/auth/api/src/main/kotlin/com/f0x1d/logfox/feature/auth/api/User.kt
 data class User(
     val id: String,
     val email: String,
@@ -1262,7 +1262,7 @@ data class User(
 - Pure Kotlin when possible, Android when needed
 
 ```kotlin
-// feature/auth/impl/src/main/kotlin/com/example/feature/auth/AuthRepositoryImpl.kt
+// feature/auth/impl/src/main/kotlin/com/f0x1d/logfox/feature/auth/impl/AuthRepositoryImpl.kt
 internal class AuthRepositoryImpl @Inject constructor(
     private val remoteDataSource: AuthRemoteDataSource,
     private val localDataSource: AuthLocalDataSource,
@@ -1270,7 +1270,7 @@ internal class AuthRepositoryImpl @Inject constructor(
     // Implementation...
 }
 
-// feature/auth/impl/src/main/kotlin/com/example/feature/auth/di/AuthModule.kt
+// feature/auth/impl/src/main/kotlin/com/f0x1d/logfox/feature/auth/impl/di/AuthModule.kt
 @Module
 @InstallIn(SingletonComponent::class)
 internal interface AuthModule {
@@ -1290,7 +1290,7 @@ internal interface AuthModule {
 - Uses `logfox.android.feature.compose` for Compose UI
 
 ```kotlin
-// feature/auth/presentation/src/main/kotlin/com/example/feature/auth/AuthViewModel.kt
+// feature/auth/presentation/src/main/kotlin/com/f0x1d/logfox/feature/auth/presentation/AuthViewModel.kt
 @HiltViewModel
 internal class AuthViewModel @Inject constructor(
     reducer: AuthReducer,
@@ -1303,7 +1303,7 @@ internal class AuthViewModel @Inject constructor(
     viewStateMapper = viewStateMapper,
 )
 
-// feature/auth/presentation/src/main/kotlin/com/example/feature/auth/AuthScreen.kt
+// feature/auth/presentation/src/main/kotlin/com/f0x1d/logfox/feature/auth/presentation/AuthScreen.kt
 @Composable
 fun AuthScreen(
     viewModel: AuthViewModel = hiltViewModel(),
@@ -1729,7 +1729,7 @@ domain/usecase/
 
 ```
 app/
-├── src/main/kotlin/com/example/app/
+├── src/main/kotlin/com/f0x1d/logfox/
 │   ├── App.kt                    # Application class
 │   ├── MainActivity.kt           # Main activity
 │   └── navigation/
@@ -1738,45 +1738,45 @@ app/
 core/
 ├── tea/
 │   ├── base/
-│   │   └── src/main/kotlin/com/example/core/tea/
+│   │   └── src/main/kotlin/com/f0x1d/logfox/core/tea/
 │   │       ├── Store.kt                  # TEA Store implementation
 │   │       ├── Reducer.kt                # Reducer interface
 │   │       ├── ReduceResult.kt           # ReduceResult data class
 │   │       ├── EffectHandler.kt          # EffectHandler interface (extends Closeable)
 │   │       └── ViewStateMapper.kt        # ViewStateMapper interface
 │   └── android/
-│       └── src/main/kotlin/com/example/core/tea/
+│       └── src/main/kotlin/com/f0x1d/logfox/core/tea/
 │           ├── BaseStoreViewModel.kt             # Base ViewModel for TEA
 │           ├── BaseStoreFragment.kt              # Base Fragment for TEA
 │           ├── BaseStoreBottomSheetFragment.kt   # Base BottomSheet for TEA
 │           └── BaseStorePreferenceFragment.kt    # Base PreferenceFragment for TEA
 ├── ui/
-│   └── src/main/kotlin/com/example/core/ui/
+│   └── src/main/kotlin/com/f0x1d/logfox/core/ui/
 │       ├── BaseFragment.kt           # Simple base Fragment
 │       └── theme/
 │           ├── Theme.kt
 │           └── Color.kt
 ├── network/
 │   ├── api/
-│   │   └── src/main/kotlin/com/example/core/network/
+│   │   └── src/main/kotlin/com/f0x1d/logfox/core/network/api/
 │   │       ├── HttpClient.kt         # Interface
 │   │       └── NetworkError.kt       # Sealed class
 │   └── impl/
-│       └── src/main/kotlin/com/example/core/network/
+│       └── src/main/kotlin/com/f0x1d/logfox/core/network/impl/
 │           ├── HttpClientImpl.kt     # Implementation
 │           └── di/
 │               └── NetworkModule.kt  # Hilt module
 ├── persistence/
 │   ├── api/
-│   │   └── src/main/kotlin/com/example/core/persistence/
+│   │   └── src/main/kotlin/com/f0x1d/logfox/core/persistence/api/
 │   │       └── DataStoreClient.kt    # Interface
 │   └── impl/
-│       └── src/main/kotlin/com/example/core/persistence/
+│       └── src/main/kotlin/com/f0x1d/logfox/core/persistence/impl/
 │           ├── DataStoreClientImpl.kt
 │           └── di/
 │               └── PersistenceModule.kt
 └── common/
-    └── src/main/kotlin/com/example/core/common/
+    └── src/main/kotlin/com/f0x1d/logfox/core/common/
         └── extensions/
             ├── FlowExtensions.kt
             └── ContextExtensions.kt
@@ -1784,13 +1784,13 @@ core/
 feature/
 ├── auth/
 │   ├── api/
-│   │   └── src/main/kotlin/com/example/feature/auth/
+│   │   └── src/main/kotlin/com/f0x1d/logfox/feature/auth/api/
 │   │       ├── AuthRepository.kt
 │   │       ├── LoginUseCase.kt
 │   │       ├── LogoutUseCase.kt
 │   │       └── User.kt
 │   ├── impl/
-│   │   └── src/main/kotlin/com/example/feature/auth/
+│   │   └── src/main/kotlin/com/f0x1d/logfox/feature/auth/impl/
 │   │       ├── AuthRepositoryImpl.kt
 │   │       ├── LoginUseCaseImpl.kt
 │   │       ├── LogoutUseCaseImpl.kt
@@ -1807,7 +1807,7 @@ feature/
 │   │       └── di/
 │   │           └── AuthModule.kt
 │   └── presentation/
-│       └── src/main/kotlin/com/example/feature/auth/
+│       └── src/main/kotlin/com/f0x1d/logfox/feature/auth/presentation/
 │           ├── AuthViewModel.kt              # Feature ViewModel
 │           ├── AuthState.kt                  # Internal domain State
 │           ├── AuthViewState.kt              # Presentation-ready ViewState
@@ -1833,14 +1833,45 @@ feature/
 ```
 
 ### Package Naming
+
+**Critical Rule:** Every api, impl, and presentation Gradle module MUST include its module type as a package segment. The package pattern is:
+
 ```
-com.example.app                         # :app module
-com.example.core.network                # :core:network:api and :core:network:impl
-com.example.core.persistence            # :core:persistence:api and :core:persistence:impl
-com.example.core.ui                     # :core:ui
-com.example.feature.auth                # :feature:auth:api, impl, and presentation
-com.example.feature.profile             # :feature:profile:api, impl, and presentation
+com.f0x1d.logfox.<module-type>.<module-name>.<api|impl|presentation>[.subpackage]
 ```
+
+Where:
+- `<module-type>` is `feature` or `core`
+- `<module-name>` is the feature/core name (e.g., `auth`, `logging`, `preferences`)
+- `<api|impl|presentation>` corresponds to the Gradle sub-module
+
+**Examples:**
+
+| Gradle module | Package root |
+|---|---|
+| `:app` | `com.f0x1d.logfox` |
+| `:feature:auth:api` | `com.f0x1d.logfox.feature.auth.api` |
+| `:feature:auth:impl` | `com.f0x1d.logfox.feature.auth.impl` |
+| `:feature:auth:presentation` | `com.f0x1d.logfox.feature.auth.presentation` |
+| `:core:preferences:api` | `com.f0x1d.logfox.core.preferences.api` |
+| `:core:preferences:impl` | `com.f0x1d.logfox.core.preferences.impl` |
+| `:core:ui:base` | `com.f0x1d.logfox.core.ui` (standalone, no api/impl split) |
+
+Sub-packages within each module follow naturally:
+```
+com.f0x1d.logfox.feature.auth.api.data          # repository interfaces
+com.f0x1d.logfox.feature.auth.api.domain         # use case interfaces
+com.f0x1d.logfox.feature.auth.api.model          # domain models
+com.f0x1d.logfox.feature.auth.impl.data          # repository implementations, data sources
+com.f0x1d.logfox.feature.auth.impl.di            # Hilt modules
+com.f0x1d.logfox.feature.auth.impl.domain        # use case implementations
+com.f0x1d.logfox.feature.auth.presentation.ui    # fragments, screens
+```
+
+**Why this matters:**
+- Prevents package collisions between api and impl modules (e.g., both having a `data` sub-package)
+- Makes it immediately obvious from an import which module a class belongs to
+- The `android.namespace` in `build.gradle.kts` MUST match the package root (e.g., `com.f0x1d.logfox.feature.auth.api`)
 
 ---
 
@@ -1865,3 +1896,4 @@ com.example.feature.profile             # :feature:profile:api, impl, and presen
 17. **Navigation**: SideEffect-based, handled in container components
 18. **File Structure**: One type per file, file name matches type name
 19. **Convention Plugins**: Use appropriate plugin for each module type
+20. **Package Naming**: Every api/impl/presentation module MUST include its module type as a package segment: `com.f0x1d.logfox.<feature|core>.<name>.<api|impl|presentation>`. The `android.namespace` in `build.gradle.kts` MUST match this package root

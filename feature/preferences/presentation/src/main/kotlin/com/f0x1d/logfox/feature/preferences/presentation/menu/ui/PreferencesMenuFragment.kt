@@ -8,6 +8,7 @@ import androidx.preference.Preference
 import com.f0x1d.logfox.core.context.isHorizontalOrientation
 import com.f0x1d.logfox.core.context.shareFileIntent
 import com.f0x1d.logfox.core.tea.BaseStorePreferenceFragment
+import com.f0x1d.logfox.feature.navigation.api.Directions
 import com.f0x1d.logfox.feature.preferences.presentation.R
 import com.f0x1d.logfox.feature.preferences.presentation.menu.PreferencesMenuCommand
 import com.f0x1d.logfox.feature.preferences.presentation.menu.PreferencesMenuSideEffect
@@ -15,7 +16,6 @@ import com.f0x1d.logfox.feature.preferences.presentation.menu.PreferencesMenuSta
 import com.f0x1d.logfox.feature.preferences.presentation.menu.PreferencesMenuViewModel
 import com.f0x1d.logfox.feature.preferences.presentation.menu.PreferencesMenuViewState
 import com.f0x1d.logfox.feature.strings.Strings
-import com.f0x1d.logfox.navigation.Directions
 import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
 import dev.chrisbanes.insetter.applyInsetter

@@ -1,6 +1,6 @@
 package com.f0x1d.logfox.feature.apps.picker.presentation
 
-import com.f0x1d.logfox.feature.apps.picker.InstalledApp
+import com.f0x1d.logfox.feature.apps.picker.api.InstalledApp
 
 internal sealed interface AppsPickerCommand {
     data object BackPressed : AppsPickerCommand

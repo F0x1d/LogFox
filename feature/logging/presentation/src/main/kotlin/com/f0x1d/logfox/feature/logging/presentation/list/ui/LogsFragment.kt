@@ -24,13 +24,13 @@ import com.f0x1d.logfox.feature.logging.presentation.databinding.FragmentLogsBin
 import com.f0x1d.logfox.feature.logging.presentation.list.LogsCommand
 import com.f0x1d.logfox.feature.logging.presentation.list.LogsSideEffect
 import com.f0x1d.logfox.feature.logging.presentation.list.LogsState
-import com.f0x1d.logfox.feature.logging.presentation.list.LogsViewState
 import com.f0x1d.logfox.feature.logging.presentation.list.LogsViewModel
+import com.f0x1d.logfox.feature.logging.presentation.list.LogsViewState
 import com.f0x1d.logfox.feature.logging.presentation.list.adapter.LogsAdapter
 import com.f0x1d.logfox.feature.logging.presentation.list.model.LogLineItem
+import com.f0x1d.logfox.feature.navigation.api.Directions
 import com.f0x1d.logfox.feature.strings.Plurals
 import com.f0x1d.logfox.feature.strings.Strings
-import com.f0x1d.logfox.navigation.Directions
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import dev.chrisbanes.insetter.applyInsetter

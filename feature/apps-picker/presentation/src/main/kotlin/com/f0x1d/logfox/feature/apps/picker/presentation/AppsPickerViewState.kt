@@ -1,7 +1,7 @@
 package com.f0x1d.logfox.feature.apps.picker.presentation
 
 import androidx.compose.runtime.Immutable
-import com.f0x1d.logfox.feature.apps.picker.InstalledApp
+import com.f0x1d.logfox.feature.apps.picker.api.InstalledApp
 
 @Immutable
 internal data class AppsPickerViewState(

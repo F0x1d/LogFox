@@ -2,8 +2,8 @@ package com.f0x1d.logfox.feature.crashes.impl.mapper
 
 import com.f0x1d.logfox.feature.crashes.api.model.AppCrash
 import com.f0x1d.logfox.feature.crashes.api.model.CrashType
-import com.f0x1d.logfox.feature.database.entity.AppCrashEntity
-import com.f0x1d.logfox.feature.database.entity.CrashType as EntityCrashType
+import com.f0x1d.logfox.feature.database.api.entity.AppCrashEntity
+import com.f0x1d.logfox.feature.database.api.entity.CrashType as EntityCrashType
 
 internal fun AppCrashEntity.toDomainModel() = AppCrash(
     id = id,

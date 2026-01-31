@@ -1,7 +1,7 @@
 package com.f0x1d.logfox.feature.recordings.impl.domain
 
 import android.net.Uri
-import com.f0x1d.logfox.feature.preferences.domain.service.GetIncludeDeviceInfoInArchivesUseCase
+import com.f0x1d.logfox.feature.preferences.api.domain.service.GetIncludeDeviceInfoInArchivesUseCase
 import com.f0x1d.logfox.feature.recordings.api.data.RecordingsRepository
 import com.f0x1d.logfox.feature.recordings.api.domain.ExportRecordingZipUseCase
 import com.f0x1d.logfox.feature.recordings.impl.data.RecordingExportDataSource

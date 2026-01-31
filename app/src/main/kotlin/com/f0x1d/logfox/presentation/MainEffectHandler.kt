@@ -6,7 +6,7 @@ import com.f0x1d.logfox.core.compat.startForegroundServiceAvailable
 import com.f0x1d.logfox.core.context.hasPermissionToReadLogs
 import com.f0x1d.logfox.core.tea.EffectHandler
 import com.f0x1d.logfox.feature.logging.presentation.service.LoggingService
-import com.f0x1d.logfox.feature.preferences.domain.notifications.SetAskedNotificationsPermissionUseCase
+import com.f0x1d.logfox.feature.preferences.api.domain.notifications.SetAskedNotificationsPermissionUseCase
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 

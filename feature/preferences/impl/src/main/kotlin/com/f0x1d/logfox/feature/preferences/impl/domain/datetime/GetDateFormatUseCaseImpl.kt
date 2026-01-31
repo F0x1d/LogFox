@@ -1,7 +1,7 @@
 package com.f0x1d.logfox.feature.preferences.impl.domain.datetime
 
-import com.f0x1d.logfox.feature.preferences.data.DateTimeSettingsRepository
-import com.f0x1d.logfox.feature.preferences.domain.datetime.GetDateFormatUseCase
+import com.f0x1d.logfox.feature.preferences.api.data.DateTimeSettingsRepository
+import com.f0x1d.logfox.feature.preferences.api.domain.datetime.GetDateFormatUseCase
 import javax.inject.Inject
 
 internal class GetDateFormatUseCaseImpl @Inject constructor(

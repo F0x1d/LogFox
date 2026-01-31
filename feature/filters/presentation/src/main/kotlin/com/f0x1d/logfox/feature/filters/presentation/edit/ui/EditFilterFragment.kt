@@ -21,8 +21,8 @@ import com.f0x1d.logfox.feature.filters.presentation.edit.EditFilterState
 import com.f0x1d.logfox.feature.filters.presentation.edit.EditFilterViewModel
 import com.f0x1d.logfox.feature.filters.presentation.edit.EditFilterViewState
 import com.f0x1d.logfox.feature.logging.api.model.LogLevel
+import com.f0x1d.logfox.feature.navigation.api.Directions
 import com.f0x1d.logfox.feature.strings.Strings
-import com.f0x1d.logfox.navigation.Directions
 import com.google.android.material.color.MaterialColors
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint

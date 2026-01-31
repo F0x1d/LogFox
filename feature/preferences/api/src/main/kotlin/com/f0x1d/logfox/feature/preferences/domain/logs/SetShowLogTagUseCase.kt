@@ -1,5 +1,0 @@
-package com.f0x1d.logfox.feature.preferences.domain.logs
-
-interface SetShowLogTagUseCase {
-    operator fun invoke(show: Boolean)
-}
