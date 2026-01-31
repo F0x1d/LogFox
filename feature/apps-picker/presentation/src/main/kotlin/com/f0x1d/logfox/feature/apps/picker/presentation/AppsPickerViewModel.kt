@@ -2,8 +2,6 @@ package com.f0x1d.logfox.feature.apps.picker.presentation
 
 import com.f0x1d.logfox.core.tea.BaseStoreViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.persistentSetOf
 import javax.inject.Inject
 
 @HiltViewModel
@@ -14,9 +12,9 @@ internal class AppsPickerViewModel @Inject constructor(
 ) : BaseStoreViewModel<AppsPickerViewState, AppsPickerState, AppsPickerCommand, AppsPickerSideEffect>(
     initialState = AppsPickerState(
         topBarTitle = "Apps",
-        apps = persistentListOf(),
-        checkedAppPackageNames = persistentSetOf(),
-        searchedApps = persistentListOf(),
+        apps = emptyList(),
+        checkedAppPackageNames = emptySet(),
+        searchedApps = emptyList(),
         multiplySelectionEnabled = true,
         isLoading = true,
         searchActive = false,

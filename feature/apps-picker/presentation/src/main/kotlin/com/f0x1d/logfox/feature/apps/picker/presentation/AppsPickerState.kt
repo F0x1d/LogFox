@@ -1,14 +1,14 @@
 package com.f0x1d.logfox.feature.apps.picker.presentation
 
+import androidx.compose.runtime.Immutable
 import com.f0x1d.logfox.feature.apps.picker.InstalledApp
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.ImmutableSet
 
+@Immutable
 internal data class AppsPickerState(
     val topBarTitle: String,
-    val apps: ImmutableList<InstalledApp>,
-    val checkedAppPackageNames: ImmutableSet<String>,
-    val searchedApps: ImmutableList<InstalledApp>,
+    val apps: List<InstalledApp>,
+    val checkedAppPackageNames: Set<String>,
+    val searchedApps: List<InstalledApp>,
     val multiplySelectionEnabled: Boolean,
     val isLoading: Boolean,
     val searchActive: Boolean,

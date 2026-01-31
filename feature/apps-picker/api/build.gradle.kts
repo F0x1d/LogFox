@@ -8,5 +8,4 @@ dependencies {
     implementation(projects.strings)
 
     implementation(libs.bundles.androidx)
-    api(libs.kotlinx.immutable.collections)
 }

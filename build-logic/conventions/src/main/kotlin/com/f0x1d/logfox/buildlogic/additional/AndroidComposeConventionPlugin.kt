@@ -1,11 +1,8 @@
 package com.f0x1d.logfox.buildlogic.additional
 
-import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.api.dsl.CommonExtension
-import com.android.build.api.dsl.LibraryExtension
 import com.f0x1d.logfox.buildlogic.extensions.bundle
 import com.f0x1d.logfox.buildlogic.extensions.implementation
-import com.f0x1d.logfox.buildlogic.extensions.library
 import com.f0x1d.logfox.buildlogic.extensions.pluginId
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -17,15 +14,11 @@ class AndroidComposeConventionPlugin : Plugin<Project> {
             apply(pluginId("compose-compiler"))
         }
 
-        listOf(
-            LibraryExtension::class.java,
-            ApplicationExtension::class.java,
-        ).forEach { extensionClass ->
-            extensions.findByType(extensionClass)?.enableCompose()
+        extensions.configure(CommonExtension::class.java) {
+            enableCompose()
         }
 
         dependencies {
-            implementation(library("kotlinx-immutable-collections"))
             implementation(bundle("androidx-compose"))
         }
     }

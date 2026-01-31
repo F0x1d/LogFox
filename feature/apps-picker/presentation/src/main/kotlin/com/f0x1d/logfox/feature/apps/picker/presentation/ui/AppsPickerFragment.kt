@@ -22,9 +22,6 @@ import com.f0x1d.logfox.feature.apps.picker.presentation.AppsPickerViewModel
 import com.f0x1d.logfox.feature.apps.picker.presentation.AppsPickerViewState
 import com.f0x1d.logfox.feature.apps.picker.presentation.ui.compose.AppsPickerScreenContent
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.persistentSetOf
-import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
@@ -52,7 +49,7 @@ class AppsPickerFragment : Fragment() {
             }.map { (state, checkedAppPackageNames) ->
                 state.copy(
                     topBarTitle = handler.providePickerTopAppBarTitle(requireContext()),
-                    checkedAppPackageNames = checkedAppPackageNames.toImmutableSet(),
+                    checkedAppPackageNames = checkedAppPackageNames.toSet(),
                     multiplySelectionEnabled = handler.supportsMultiplySelection,
                 )
             }
@@ -77,9 +74,9 @@ class AppsPickerFragment : Fragment() {
         val state by uiState.collectAsStateWithLifecycle(
             initialValue = AppsPickerViewState(
                 topBarTitle = "",
-                apps = persistentListOf(),
-                checkedAppPackageNames = persistentSetOf(),
-                searchedApps = persistentListOf(),
+                apps = emptyList(),
+                checkedAppPackageNames = emptySet(),
+                searchedApps = emptyList(),
                 multiplySelectionEnabled = true,
                 isLoading = true,
                 searchActive = false,
