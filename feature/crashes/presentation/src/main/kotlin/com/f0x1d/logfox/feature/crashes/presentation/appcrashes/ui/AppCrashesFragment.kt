@@ -28,6 +28,7 @@ internal class AppCrashesFragment :
     BaseStoreFragment<
         FragmentAppCrashesBinding,
         AppCrashesState,
+        AppCrashesState,
         AppCrashesCommand,
         AppCrashesSideEffect,
         AppCrashesViewModel,

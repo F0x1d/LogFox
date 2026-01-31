@@ -20,6 +20,7 @@ import dev.chrisbanes.insetter.applyInsetter
 internal class PreferencesLinksFragment :
     BaseStorePreferenceFragment<
         PreferencesLinksState,
+        PreferencesLinksState,
         PreferencesLinksCommand,
         PreferencesLinksSideEffect,
         PreferencesLinksViewModel,

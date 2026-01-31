@@ -22,6 +22,7 @@ internal class RecordingDetailsBottomSheetFragment :
     BaseStoreBottomSheetFragment<
         SheetRecordingDetailsBinding,
         RecordingDetailsState,
+        RecordingDetailsState,
         RecordingDetailsCommand,
         RecordingDetailsSideEffect,
         RecordingDetailsViewModel,

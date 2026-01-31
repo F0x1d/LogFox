@@ -1,6 +1,7 @@
 package com.f0x1d.logfox.feature.preferences.presentation.ui.settings
 
 import com.f0x1d.logfox.core.tea.BaseStoreViewModel
+import com.f0x1d.logfox.core.tea.ViewStateMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -10,9 +11,10 @@ internal class PreferencesUIViewModel
 constructor(
     reducer: PreferencesUIReducer,
     effectHandler: PreferencesUIEffectHandler,
-) : BaseStoreViewModel<PreferencesUIState, PreferencesUICommand, PreferencesUISideEffect>(
+) : BaseStoreViewModel<PreferencesUIState, PreferencesUIState, PreferencesUICommand, PreferencesUISideEffect>(
     initialState = PreferencesUIState(),
     reducer = reducer,
     effectHandlers = listOf(effectHandler),
+    viewStateMapper = ViewStateMapper.identity(),
     initialSideEffects = listOf(PreferencesUISideEffect.LoadPreferences),
 )

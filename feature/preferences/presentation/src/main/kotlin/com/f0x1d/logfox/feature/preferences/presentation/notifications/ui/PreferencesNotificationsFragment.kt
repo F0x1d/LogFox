@@ -25,6 +25,7 @@ import dev.chrisbanes.insetter.applyInsetter
 internal class PreferencesNotificationsFragment :
     BaseStorePreferenceFragment<
         PreferencesNotificationsState,
+        PreferencesNotificationsState,
         PreferencesNotificationsCommand,
         PreferencesNotificationsSideEffect,
         PreferencesNotificationsViewModel,

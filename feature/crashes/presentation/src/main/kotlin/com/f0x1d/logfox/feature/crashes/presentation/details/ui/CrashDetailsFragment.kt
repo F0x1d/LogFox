@@ -47,6 +47,7 @@ internal class CrashDetailsFragment :
     BaseStoreFragment<
         FragmentCrashDetailsBinding,
         CrashDetailsState,
+        CrashDetailsState,
         CrashDetailsCommand,
         CrashDetailsSideEffect,
         CrashDetailsViewModel,

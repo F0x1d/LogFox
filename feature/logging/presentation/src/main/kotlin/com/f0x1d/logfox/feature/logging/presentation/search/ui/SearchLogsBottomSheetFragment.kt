@@ -20,6 +20,7 @@ internal class SearchLogsBottomSheetFragment :
     BaseStoreBottomSheetFragment<
         SheetSearchBinding,
         SearchLogsState,
+        SearchLogsState,
         SearchLogsCommand,
         SearchLogsSideEffect,
         SearchLogsViewModel,

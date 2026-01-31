@@ -1,6 +1,7 @@
 package com.f0x1d.logfox.feature.crashes.presentation.details
 
 import com.f0x1d.logfox.core.tea.BaseStoreViewModel
+import com.f0x1d.logfox.core.tea.ViewStateMapper
 import com.f0x1d.logfox.feature.preferences.domain.crashes.GetUseSeparateNotificationsChannelsForCrashesUseCase
 import com.f0x1d.logfox.feature.preferences.domain.crashes.GetWrapCrashLogLinesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,13 +14,14 @@ internal class CrashDetailsViewModel @Inject constructor(
     blacklistEffectHandler: CrashDetailsBlacklistEffectHandler,
     getWrapCrashLogLinesUseCase: GetWrapCrashLogLinesUseCase,
     getUseSeparateNotificationsChannelsForCrashesUseCase: GetUseSeparateNotificationsChannelsForCrashesUseCase,
-) : BaseStoreViewModel<CrashDetailsState, CrashDetailsCommand, CrashDetailsSideEffect>(
+) : BaseStoreViewModel<CrashDetailsState, CrashDetailsState, CrashDetailsCommand, CrashDetailsSideEffect>(
     initialState = CrashDetailsState(
         wrapCrashLogLines = getWrapCrashLogLinesUseCase(),
         useSeparateNotificationsChannelsForCrashes = getUseSeparateNotificationsChannelsForCrashesUseCase(),
     ),
     reducer = reducer,
     effectHandlers = listOf(effectHandler, blacklistEffectHandler),
+    viewStateMapper = ViewStateMapper.identity(),
     initialSideEffects = listOf(
         CrashDetailsSideEffect.LoadCrash,
         CrashDetailsSideEffect.ObservePreferences,

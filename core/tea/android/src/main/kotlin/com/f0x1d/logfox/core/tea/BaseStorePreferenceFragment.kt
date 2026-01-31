@@ -16,16 +16,18 @@ import kotlinx.coroutines.launch
  * - Automatic side effect handling via [handleSideEffect]
  * - Convenience [send] method for dispatching commands
  *
- * @param State immutable state type
+ * @param ViewState presentation state type rendered by this fragment
+ * @param State internal domain state type managed by the store
  * @param Command user actions or system events that can modify state
  * @param SideEffect side effects for UI actions (navigation, toasts) or business logic
  * @param VM ViewModel type extending [BaseStoreViewModel]
  */
 abstract class BaseStorePreferenceFragment<
+    ViewState,
     State,
     Command,
     SideEffect,
-    VM : BaseStoreViewModel<State, Command, SideEffect>,
+    VM : BaseStoreViewModel<ViewState, State, Command, SideEffect>,
     > : PreferenceFragmentCompat() {
 
     /**
@@ -37,7 +39,7 @@ abstract class BaseStorePreferenceFragment<
      * Render state to UI. Called on every state change.
      * Must be idempotent - same state = same UI.
      */
-    abstract fun render(state: State)
+    abstract fun render(state: ViewState)
 
     /**
      * Handle side effects (navigation, snackbars, etc.)

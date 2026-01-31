@@ -27,6 +27,7 @@ import dev.chrisbanes.insetter.applyInsetter
 internal class PreferencesServiceFragment :
     BaseStorePreferenceFragment<
         PreferencesServiceState,
+        PreferencesServiceState,
         PreferencesServiceCommand,
         PreferencesServiceSideEffect,
         PreferencesServiceViewModel,

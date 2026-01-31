@@ -29,6 +29,7 @@ import dev.chrisbanes.insetter.applyInsetter
 internal class PreferencesUIFragment :
     BaseStorePreferenceFragment<
         PreferencesUIState,
+        PreferencesUIState,
         PreferencesUICommand,
         PreferencesUISideEffect,
         PreferencesUIViewModel,

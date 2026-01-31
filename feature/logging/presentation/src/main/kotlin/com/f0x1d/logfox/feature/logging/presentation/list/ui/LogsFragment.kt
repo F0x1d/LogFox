@@ -25,7 +25,6 @@ import com.f0x1d.logfox.feature.logging.presentation.list.LogsCommand
 import com.f0x1d.logfox.feature.logging.presentation.list.LogsSideEffect
 import com.f0x1d.logfox.feature.logging.presentation.list.LogsState
 import com.f0x1d.logfox.feature.logging.presentation.list.LogsViewState
-import com.f0x1d.logfox.feature.logging.presentation.list.LogsViewStateMapper
 import com.f0x1d.logfox.feature.logging.presentation.list.LogsViewModel
 import com.f0x1d.logfox.feature.logging.presentation.list.adapter.LogsAdapter
 import com.f0x1d.logfox.feature.logging.presentation.list.model.LogLineItem
@@ -35,12 +34,12 @@ import com.f0x1d.logfox.navigation.Directions
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import dev.chrisbanes.insetter.applyInsetter
-import javax.inject.Inject
 
 @AndroidEntryPoint
 internal class LogsFragment :
     BaseStoreFragment<
         FragmentLogsBinding,
+        LogsViewState,
         LogsState,
         LogsCommand,
         LogsSideEffect,
@@ -48,9 +47,6 @@ internal class LogsFragment :
         >() {
 
     override val viewModel by viewModels<LogsViewModel>()
-
-    @Inject
-    lateinit var viewStateMapper: LogsViewStateMapper
 
     private val adapter by lazy {
         LogsAdapter(
@@ -169,23 +165,21 @@ internal class LogsFragment :
         }
     }
 
-    override fun render(state: LogsState) {
-        val viewState = viewStateMapper.map(state)
-
+    override fun render(state: LogsViewState) {
         binding.processQueryAndFilters(
-            query = viewState.query,
-            filters = viewState.filters,
+            query = state.query,
+            filters = state.filters,
         )
         binding.processSelectedItems(
-            selecting = viewState.selecting,
-            selectedCount = viewState.selectedCount,
+            selecting = state.selecting,
+            selectedCount = state.selectedCount,
         )
-        binding.processPaused(paused = viewState.paused)
+        binding.processPaused(paused = state.paused)
 
-        if (viewState.logsChanged) {
+        if (state.logsChanged) {
             binding.updateLogsList(
-                items = viewState.logs,
-                paused = viewState.paused,
+                items = state.logs,
+                paused = state.paused,
             )
         }
     }

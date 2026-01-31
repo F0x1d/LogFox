@@ -1,6 +1,7 @@
 package com.f0x1d.logfox.feature.logging.presentation.search
 
 import com.f0x1d.logfox.core.tea.BaseStoreViewModel
+import com.f0x1d.logfox.core.tea.ViewStateMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -8,10 +9,11 @@ import javax.inject.Inject
 internal class SearchLogsViewModel @Inject constructor(
     reducer: SearchLogsReducer,
     effectHandler: SearchLogsEffectHandler,
-) : BaseStoreViewModel<SearchLogsState, SearchLogsCommand, SearchLogsSideEffect>(
+) : BaseStoreViewModel<SearchLogsState, SearchLogsState, SearchLogsCommand, SearchLogsSideEffect>(
     initialState = SearchLogsState(),
     reducer = reducer,
     effectHandlers = listOf(effectHandler),
+    viewStateMapper = ViewStateMapper.identity(),
     initialSideEffects = listOf(
         SearchLogsSideEffect.LoadQuery,
         SearchLogsSideEffect.LoadCaseSensitive,

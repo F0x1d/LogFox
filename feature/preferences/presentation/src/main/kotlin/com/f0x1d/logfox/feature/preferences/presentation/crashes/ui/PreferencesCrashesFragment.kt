@@ -20,6 +20,7 @@ import dev.chrisbanes.insetter.applyInsetter
 internal class PreferencesCrashesFragment :
     BaseStorePreferenceFragment<
         PreferencesCrashesState,
+        PreferencesCrashesState,
         PreferencesCrashesCommand,
         PreferencesCrashesSideEffect,
         PreferencesCrashesViewModel,

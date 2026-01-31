@@ -2,6 +2,7 @@ package com.f0x1d.logfox.feature.crashes.presentation.list
 
 import android.content.Context
 import com.f0x1d.logfox.core.tea.BaseStoreViewModel
+import com.f0x1d.logfox.core.tea.ViewStateMapper
 import com.f0x1d.logfox.feature.apps.picker.AppsPickerResultHandler
 import com.f0x1d.logfox.feature.apps.picker.InstalledApp
 import com.f0x1d.logfox.feature.crashes.api.domain.GetAllDisabledAppsFlowUseCase
@@ -18,10 +19,11 @@ internal class CrashesViewModel @Inject constructor(
     effectHandler: CrashesEffectHandler,
     searchEffectHandler: CrashesSearchEffectHandler,
     private val getAllDisabledAppsFlowUseCase: GetAllDisabledAppsFlowUseCase,
-) : BaseStoreViewModel<CrashesState, CrashesCommand, CrashesSideEffect>(
+) : BaseStoreViewModel<CrashesState, CrashesState, CrashesCommand, CrashesSideEffect>(
     initialState = CrashesState(),
     reducer = reducer,
     effectHandlers = listOf(effectHandler, searchEffectHandler),
+    viewStateMapper = ViewStateMapper.identity(),
     initialSideEffects = listOf(CrashesSideEffect.LoadCrashes),
 ),
     AppsPickerResultHandler {

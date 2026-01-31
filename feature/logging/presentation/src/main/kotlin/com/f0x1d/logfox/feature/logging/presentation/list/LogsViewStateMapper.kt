@@ -1,5 +1,6 @@
 package com.f0x1d.logfox.feature.logging.presentation.list
 
+import com.f0x1d.logfox.core.tea.ViewStateMapper
 import com.f0x1d.logfox.feature.datetime.api.DateTimeFormatter
 import com.f0x1d.logfox.feature.filters.api.model.filterAndSearch
 import com.f0x1d.logfox.feature.logging.presentation.list.model.toPresentationModel
@@ -7,9 +8,9 @@ import javax.inject.Inject
 
 internal class LogsViewStateMapper @Inject constructor(
     private val dateTimeFormatter: DateTimeFormatter,
-) {
+) : ViewStateMapper<LogsState, LogsViewState> {
 
-    fun map(state: LogsState): LogsViewState {
+    override fun map(state: LogsState): LogsViewState {
         val filteredLogs = state.logs?.filterAndSearch(
             filters = state.filters,
             query = state.query,

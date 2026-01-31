@@ -32,6 +32,7 @@ internal class EditFilterFragment :
     BaseStoreFragment<
         FragmentEditFilterBinding,
         EditFilterState,
+        EditFilterState,
         EditFilterCommand,
         EditFilterSideEffect,
         EditFilterViewModel,

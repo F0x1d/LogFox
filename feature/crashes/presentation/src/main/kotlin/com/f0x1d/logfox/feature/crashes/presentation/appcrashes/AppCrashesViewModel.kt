@@ -1,6 +1,7 @@
 package com.f0x1d.logfox.feature.crashes.presentation.appcrashes
 
 import com.f0x1d.logfox.core.tea.BaseStoreViewModel
+import com.f0x1d.logfox.core.tea.ViewStateMapper
 import com.f0x1d.logfox.feature.crashes.presentation.appcrashes.di.AppName
 import com.f0x1d.logfox.feature.crashes.presentation.appcrashes.di.PackageName
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -12,12 +13,13 @@ internal class AppCrashesViewModel @Inject constructor(
     @AppName appName: String?,
     reducer: AppCrashesReducer,
     effectHandler: AppCrashesEffectHandler,
-) : BaseStoreViewModel<AppCrashesState, AppCrashesCommand, AppCrashesSideEffect>(
+) : BaseStoreViewModel<AppCrashesState, AppCrashesState, AppCrashesCommand, AppCrashesSideEffect>(
     initialState = AppCrashesState(
         packageName = packageName,
         appName = appName,
     ),
     reducer = reducer,
     effectHandlers = listOf(effectHandler),
+    viewStateMapper = ViewStateMapper.identity(),
     initialSideEffects = listOf(AppCrashesSideEffect.LoadCrashes),
 )

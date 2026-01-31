@@ -14,13 +14,14 @@ import javax.inject.Inject
 internal class LogsViewModel @Inject constructor(
     reducer: LogsReducer,
     effectHandler: LogsEffectHandler,
+    viewStateMapper: LogsViewStateMapper,
     getResumeLoggingWithBottomTouchUseCase: GetResumeLoggingWithBottomTouchUseCase,
     getLogsExpandedUseCase: GetLogsExpandedUseCase,
     getLogsTextSizeUseCase: GetLogsTextSizeUseCase,
     getShowLogValuesUseCase: GetShowLogValuesUseCase,
     getQueryUseCase: GetQueryUseCase,
     getCaseSensitiveUseCase: GetCaseSensitiveUseCase,
-) : BaseStoreViewModel<LogsState, LogsCommand, LogsSideEffect>(
+) : BaseStoreViewModel<LogsViewState, LogsState, LogsCommand, LogsSideEffect>(
     initialState = LogsState(
         logs = null,
         paused = false,
@@ -37,6 +38,7 @@ internal class LogsViewModel @Inject constructor(
     ),
     reducer = reducer,
     effectHandlers = listOf(effectHandler),
+    viewStateMapper = viewStateMapper,
     initialSideEffects = listOf(
         LogsSideEffect.LoadLogs,
         LogsSideEffect.ObservePreferences,

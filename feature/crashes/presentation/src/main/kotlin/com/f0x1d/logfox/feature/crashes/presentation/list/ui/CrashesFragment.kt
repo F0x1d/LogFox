@@ -40,6 +40,7 @@ internal class CrashesFragment :
     BaseStoreFragment<
         FragmentCrashesBinding,
         CrashesState,
+        CrashesState,
         CrashesCommand,
         CrashesSideEffect,
         CrashesViewModel,

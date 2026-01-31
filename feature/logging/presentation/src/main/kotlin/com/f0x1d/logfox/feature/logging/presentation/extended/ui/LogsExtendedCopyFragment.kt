@@ -20,6 +20,7 @@ internal class LogsExtendedCopyFragment :
     BaseStoreFragment<
         FragmentLogsExtendedCopyBinding,
         LogsExtendedCopyState,
+        LogsExtendedCopyState,
         LogsExtendedCopyCommand,
         LogsExtendedCopySideEffect,
         LogsExtendedCopyViewModel,

@@ -23,6 +23,7 @@ import dev.chrisbanes.insetter.applyInsetter
 internal class PreferencesMenuFragment :
     BaseStorePreferenceFragment<
         PreferencesMenuState,
+        PreferencesMenuState,
         PreferencesMenuCommand,
         PreferencesMenuSideEffect,
         PreferencesMenuViewModel,

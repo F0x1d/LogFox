@@ -31,6 +31,7 @@ internal class FiltersFragment :
     BaseStoreFragment<
         FragmentFiltersBinding,
         FiltersState,
+        FiltersState,
         FiltersCommand,
         FiltersSideEffect,
         FiltersViewModel,

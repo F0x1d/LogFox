@@ -1,6 +1,7 @@
 package com.f0x1d.logfox.feature.filters.presentation.edit
 
 import com.f0x1d.logfox.core.tea.BaseStoreViewModel
+import com.f0x1d.logfox.core.tea.ViewStateMapper
 import com.f0x1d.logfox.feature.apps.picker.AppsPickerResultHandler
 import com.f0x1d.logfox.feature.apps.picker.InstalledApp
 import com.f0x1d.logfox.feature.filters.presentation.edit.di.EditFilterArgs
@@ -13,10 +14,11 @@ internal class EditFilterViewModel @Inject constructor(
     args: EditFilterArgs,
     reducer: EditFilterReducer,
     effectHandler: EditFilterEffectHandler,
-) : BaseStoreViewModel<EditFilterState, EditFilterCommand, EditFilterSideEffect>(
+) : BaseStoreViewModel<EditFilterState, EditFilterState, EditFilterCommand, EditFilterSideEffect>(
     initialState = args.toInitialState(),
     reducer = reducer,
     effectHandlers = listOf(effectHandler),
+    viewStateMapper = ViewStateMapper.identity(),
     initialSideEffects = buildList {
         if (args.hasValidFilterId) {
             add(EditFilterSideEffect.LoadFilter(args.filterId))
