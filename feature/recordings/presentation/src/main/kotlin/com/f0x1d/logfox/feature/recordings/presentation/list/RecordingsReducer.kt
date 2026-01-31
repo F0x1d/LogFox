@@ -4,13 +4,9 @@ import com.f0x1d.logfox.core.tea.ReduceResult
 import com.f0x1d.logfox.core.tea.Reducer
 import com.f0x1d.logfox.core.tea.noSideEffects
 import com.f0x1d.logfox.core.tea.withSideEffects
-import com.f0x1d.logfox.feature.datetime.api.DateTimeFormatter
-import com.f0x1d.logfox.feature.recordings.presentation.model.toPresentationModel
 import javax.inject.Inject
 
-internal class RecordingsReducer @Inject constructor(
-    private val dateTimeFormatter: DateTimeFormatter,
-) : Reducer<RecordingsState, RecordingsCommand, RecordingsSideEffect> {
+internal class RecordingsReducer @Inject constructor() : Reducer<RecordingsState, RecordingsCommand, RecordingsSideEffect> {
 
     override fun reduce(
         state: RecordingsState,
@@ -22,11 +18,7 @@ internal class RecordingsReducer @Inject constructor(
 
         is RecordingsCommand.RecordingsLoaded -> {
             state.copy(
-                recordings = command.recordings.map { recording ->
-                    recording.toPresentationModel(
-                        formattedDate = "${dateTimeFormatter.formatDate(recording.dateAndTime)} ${dateTimeFormatter.formatTime(recording.dateAndTime)}",
-                    )
-                },
+                recordings = command.recordings,
                 recordingState = command.recordingState,
             ).noSideEffects()
         }
@@ -48,7 +40,7 @@ internal class RecordingsReducer @Inject constructor(
         }
 
         is RecordingsCommand.Delete -> {
-            state.withSideEffects(RecordingsSideEffect.DeleteRecording(command.item.recordingId))
+            state.withSideEffects(RecordingsSideEffect.DeleteRecording(command.recordingId))
         }
 
         is RecordingsCommand.RecordingEnded -> {
@@ -70,7 +62,7 @@ internal class RecordingsReducer @Inject constructor(
         }
 
         is RecordingsCommand.OpenRecordingDetails -> {
-            state.withSideEffects(RecordingsSideEffect.OpenRecording(command.item.recordingId))
+            state.withSideEffects(RecordingsSideEffect.OpenRecording(command.recordingId))
         }
     }
 }

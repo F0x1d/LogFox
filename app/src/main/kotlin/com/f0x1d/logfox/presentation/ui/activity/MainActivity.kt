@@ -29,8 +29,8 @@ import com.f0x1d.logfox.navigation.Directions
 import com.f0x1d.logfox.navigation.NavGraphs
 import com.f0x1d.logfox.presentation.MainCommand
 import com.f0x1d.logfox.presentation.MainSideEffect
-import com.f0x1d.logfox.presentation.MainState
 import com.f0x1d.logfox.presentation.MainViewModel
+import com.f0x1d.logfox.presentation.MainViewState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -95,7 +95,7 @@ class MainActivity :
         }
     }
 
-    private fun showNotificationPermissionDialogIfNeeded(state: MainState) {
+    private fun showNotificationPermissionDialogIfNeeded(state: MainViewState) {
         if (!hasNotificationsPermission() && !state.askedNotificationsPermission) {
             MaterialAlertDialogBuilder(this@MainActivity)
                 .setIcon(Icons.ic_dialog_notification_important)

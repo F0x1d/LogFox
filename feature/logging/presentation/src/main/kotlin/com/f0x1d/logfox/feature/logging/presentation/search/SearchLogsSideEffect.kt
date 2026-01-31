@@ -1,6 +1,6 @@
 package com.f0x1d.logfox.feature.logging.presentation.search
 
-sealed interface SearchLogsSideEffect {
+internal sealed interface SearchLogsSideEffect {
     // Business logic side effects - handled by EffectHandler
     data object LoadQuery : SearchLogsSideEffect
 

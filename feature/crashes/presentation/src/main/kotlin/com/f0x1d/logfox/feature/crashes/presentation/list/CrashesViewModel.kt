@@ -2,11 +2,11 @@ package com.f0x1d.logfox.feature.crashes.presentation.list
 
 import android.content.Context
 import com.f0x1d.logfox.core.tea.BaseStoreViewModel
-import com.f0x1d.logfox.core.tea.ViewStateMapper
 import com.f0x1d.logfox.feature.apps.picker.AppsPickerResultHandler
 import com.f0x1d.logfox.feature.apps.picker.InstalledApp
 import com.f0x1d.logfox.feature.crashes.api.domain.GetAllDisabledAppsFlowUseCase
 import com.f0x1d.logfox.feature.crashes.api.model.DisabledApp
+import com.f0x1d.logfox.feature.preferences.CrashesSort
 import com.f0x1d.logfox.feature.strings.Strings
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -18,12 +18,19 @@ internal class CrashesViewModel @Inject constructor(
     reducer: CrashesReducer,
     effectHandler: CrashesEffectHandler,
     searchEffectHandler: CrashesSearchEffectHandler,
-    private val getAllDisabledAppsFlowUseCase: GetAllDisabledAppsFlowUseCase,
-) : BaseStoreViewModel<CrashesState, CrashesState, CrashesCommand, CrashesSideEffect>(
-    initialState = CrashesState(),
+    viewStateMapper: CrashesViewStateMapper,
+    getAllDisabledAppsFlowUseCase: GetAllDisabledAppsFlowUseCase,
+) : BaseStoreViewModel<CrashesViewState, CrashesState, CrashesCommand, CrashesSideEffect>(
+    initialState = CrashesState(
+        crashes = emptyList(),
+        searchedCrashes = emptyList(),
+        currentSort = CrashesSort.NEW,
+        sortInReversedOrder = false,
+        query = null,
+    ),
     reducer = reducer,
     effectHandlers = listOf(effectHandler, searchEffectHandler),
-    viewStateMapper = ViewStateMapper.identity(),
+    viewStateMapper = viewStateMapper,
     initialSideEffects = listOf(CrashesSideEffect.LoadCrashes),
 ),
     AppsPickerResultHandler {

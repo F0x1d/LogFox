@@ -5,7 +5,7 @@ import com.f0x1d.logfox.feature.filters.api.model.UserFilter
 import com.f0x1d.logfox.feature.logging.api.model.LogLine
 import com.f0x1d.logfox.feature.logging.api.model.ShowLogValues
 
-sealed interface LogsCommand {
+internal sealed interface LogsCommand {
     data class LogsLoaded(
         val logs: List<LogLine>,
         val query: String?,

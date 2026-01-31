@@ -3,7 +3,7 @@ package com.f0x1d.logfox.feature.logging.presentation.list
 import android.net.Uri
 import com.f0x1d.logfox.feature.logging.api.model.LogLevel
 
-sealed interface LogsSideEffect {
+internal sealed interface LogsSideEffect {
     // Business logic side effects - handled by EffectHandler
     data object LoadLogs : LogsSideEffect
 

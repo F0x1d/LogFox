@@ -49,10 +49,10 @@ internal class RecordingsFragment : BaseComposeFragment() {
 
         val listener = remember {
             RecordingsScreenListener(
-                onRecordingClick = { viewModel.send(RecordingsCommand.OpenRecordingDetails(it)) },
+                onRecordingClick = { viewModel.send(RecordingsCommand.OpenRecordingDetails(it.recordingId)) },
                 onRecordingDeleteClick = {
                     showAreYouSureDeleteDialog {
-                        viewModel.send(RecordingsCommand.Delete(it))
+                        viewModel.send(RecordingsCommand.Delete(it.recordingId))
                     }
                 },
                 onStartStopClick = { viewModel.send(RecordingsCommand.ToggleStartStop) },

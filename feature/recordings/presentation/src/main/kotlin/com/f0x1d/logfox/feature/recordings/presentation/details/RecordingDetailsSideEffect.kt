@@ -2,7 +2,7 @@ package com.f0x1d.logfox.feature.recordings.presentation.details
 
 import android.net.Uri
 
-sealed interface RecordingDetailsSideEffect {
+internal sealed interface RecordingDetailsSideEffect {
     // Business logic (handled by EffectHandler)
     data object LoadRecording : RecordingDetailsSideEffect
     data class ExportFile(val uri: Uri) : RecordingDetailsSideEffect

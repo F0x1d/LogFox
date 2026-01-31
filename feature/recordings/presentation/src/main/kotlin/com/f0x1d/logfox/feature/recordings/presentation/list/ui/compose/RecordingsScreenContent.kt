@@ -49,7 +49,7 @@ import com.f0x1d.logfox.compose.designsystem.component.placeholder.ListPlacehold
 import com.f0x1d.logfox.compose.designsystem.theme.LogFoxTheme
 import com.f0x1d.logfox.core.ui.icons.Icons
 import com.f0x1d.logfox.feature.recordings.api.data.RecordingState
-import com.f0x1d.logfox.feature.recordings.presentation.list.RecordingsState
+import com.f0x1d.logfox.feature.recordings.presentation.list.RecordingsViewState
 import com.f0x1d.logfox.feature.recordings.presentation.list.ui.MockRecordingsScreenListener
 import com.f0x1d.logfox.feature.recordings.presentation.list.ui.RecordingsScreenListener
 import com.f0x1d.logfox.feature.recordings.presentation.model.LogRecordingItem
@@ -59,7 +59,7 @@ import com.f0x1d.logfox.feature.strings.Strings
 @Composable
 internal fun RecordingsScreenContent(
     modifier: Modifier = Modifier,
-    state: RecordingsState = RecordingsState(),
+    state: RecordingsViewState,
     listener: RecordingsScreenListener = MockRecordingsScreenListener,
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
 ) {
@@ -131,7 +131,7 @@ private fun TopRecordingsBar(
 
 @Composable
 private fun RecordingsItems(
-    state: RecordingsState,
+    state: RecordingsViewState,
     listener: RecordingsScreenListener,
     contentPadding: PaddingValues,
     modifier: Modifier = Modifier,
@@ -245,7 +245,7 @@ private fun RecordingItem(
     }
 }
 
-internal val MockRecordingsState = RecordingsState(
+internal val MockRecordingsState = RecordingsViewState(
     recordings = listOf(
         LogRecordingItem(
             recordingId = 0,

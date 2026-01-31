@@ -8,14 +8,15 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.preference.Preference
 import com.f0x1d.logfox.core.context.isHorizontalOrientation
-import com.f0x1d.logfox.core.ui.view.setupBackButtonForNavController
 import com.f0x1d.logfox.core.tea.BaseStorePreferenceFragment
+import com.f0x1d.logfox.core.ui.view.setupBackButtonForNavController
 import com.f0x1d.logfox.feature.notifications.api.LOGGING_STATUS_CHANNEL_ID
 import com.f0x1d.logfox.feature.preferences.presentation.R
 import com.f0x1d.logfox.feature.preferences.presentation.notifications.PreferencesNotificationsCommand
 import com.f0x1d.logfox.feature.preferences.presentation.notifications.PreferencesNotificationsSideEffect
 import com.f0x1d.logfox.feature.preferences.presentation.notifications.PreferencesNotificationsState
 import com.f0x1d.logfox.feature.preferences.presentation.notifications.PreferencesNotificationsViewModel
+import com.f0x1d.logfox.feature.preferences.presentation.notifications.PreferencesNotificationsViewState
 import com.f0x1d.logfox.feature.strings.Strings
 import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,7 +25,7 @@ import dev.chrisbanes.insetter.applyInsetter
 @AndroidEntryPoint
 internal class PreferencesNotificationsFragment :
     BaseStorePreferenceFragment<
-        PreferencesNotificationsState,
+        PreferencesNotificationsViewState,
         PreferencesNotificationsState,
         PreferencesNotificationsCommand,
         PreferencesNotificationsSideEffect,
@@ -71,7 +72,7 @@ internal class PreferencesNotificationsFragment :
         send(PreferencesNotificationsCommand.CheckPermission)
     }
 
-    override fun render(state: PreferencesNotificationsState) {
+    override fun render(state: PreferencesNotificationsViewState) {
         findPreference<Preference>("pref_logging_notification")?.apply {
             isVisible = state.notificationsChannelsAvailable
         }

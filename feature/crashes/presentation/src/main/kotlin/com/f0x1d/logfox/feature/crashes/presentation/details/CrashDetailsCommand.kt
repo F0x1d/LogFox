@@ -3,7 +3,7 @@ package com.f0x1d.logfox.feature.crashes.presentation.details
 import android.net.Uri
 import com.f0x1d.logfox.feature.crashes.api.model.AppCrash
 
-sealed interface CrashDetailsCommand {
+internal sealed interface CrashDetailsCommand {
     data class CrashLoaded(val crash: AppCrash, val crashLog: String?) : CrashDetailsCommand
 
     data class BlacklistStatusLoaded(val blacklisted: Boolean?) : CrashDetailsCommand

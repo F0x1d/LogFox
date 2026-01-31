@@ -1,6 +1,6 @@
 package com.f0x1d.logfox.feature.crashes.presentation.appcrashes
 
-sealed interface AppCrashesSideEffect {
+internal sealed interface AppCrashesSideEffect {
     // Business logic side effects
     data object LoadCrashes : AppCrashesSideEffect
 

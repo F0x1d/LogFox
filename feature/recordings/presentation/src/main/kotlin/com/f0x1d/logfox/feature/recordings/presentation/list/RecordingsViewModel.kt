@@ -1,7 +1,7 @@
 package com.f0x1d.logfox.feature.recordings.presentation.list
 
 import com.f0x1d.logfox.core.tea.BaseStoreViewModel
-import com.f0x1d.logfox.core.tea.ViewStateMapper
+import com.f0x1d.logfox.feature.recordings.api.domain.GetRecordingStateUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -9,10 +9,15 @@ import javax.inject.Inject
 internal class RecordingsViewModel @Inject constructor(
     reducer: RecordingsReducer,
     effectHandler: RecordingsEffectHandler,
-) : BaseStoreViewModel<RecordingsState, RecordingsState, RecordingsCommand, RecordingsSideEffect>(
-    initialState = RecordingsState(),
+    viewStateMapper: RecordingsViewStateMapper,
+    getRecordingStateUseCase: GetRecordingStateUseCase,
+) : BaseStoreViewModel<RecordingsViewState, RecordingsState, RecordingsCommand, RecordingsSideEffect>(
+    initialState = RecordingsState(
+        recordings = emptyList(),
+        recordingState = getRecordingStateUseCase(),
+    ),
     reducer = reducer,
     effectHandlers = listOf(effectHandler),
-    viewStateMapper = ViewStateMapper.identity(),
+    viewStateMapper = viewStateMapper,
     initialSideEffects = listOf(RecordingsSideEffect.LoadRecordings),
 )

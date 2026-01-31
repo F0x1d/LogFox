@@ -19,6 +19,7 @@ import com.f0x1d.logfox.feature.filters.presentation.edit.EditFilterCommand
 import com.f0x1d.logfox.feature.filters.presentation.edit.EditFilterSideEffect
 import com.f0x1d.logfox.feature.filters.presentation.edit.EditFilterState
 import com.f0x1d.logfox.feature.filters.presentation.edit.EditFilterViewModel
+import com.f0x1d.logfox.feature.filters.presentation.edit.EditFilterViewState
 import com.f0x1d.logfox.feature.logging.api.model.LogLevel
 import com.f0x1d.logfox.feature.strings.Strings
 import com.f0x1d.logfox.navigation.Directions
@@ -31,7 +32,7 @@ import dev.chrisbanes.insetter.applyInsetter
 internal class EditFilterFragment :
     BaseStoreFragment<
         FragmentEditFilterBinding,
-        EditFilterState,
+        EditFilterViewState,
         EditFilterState,
         EditFilterCommand,
         EditFilterSideEffect,
@@ -108,7 +109,7 @@ internal class EditFilterFragment :
         }
     }
 
-    override fun render(state: EditFilterState) {
+    override fun render(state: EditFilterViewState) {
         binding.apply {
             updateIncludingButton(state.including)
             updateEnabledButton(state.enabled)

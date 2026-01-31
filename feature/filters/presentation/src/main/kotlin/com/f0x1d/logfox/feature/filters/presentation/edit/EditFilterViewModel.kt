@@ -1,7 +1,6 @@
 package com.f0x1d.logfox.feature.filters.presentation.edit
 
 import com.f0x1d.logfox.core.tea.BaseStoreViewModel
-import com.f0x1d.logfox.core.tea.ViewStateMapper
 import com.f0x1d.logfox.feature.apps.picker.AppsPickerResultHandler
 import com.f0x1d.logfox.feature.apps.picker.InstalledApp
 import com.f0x1d.logfox.feature.filters.presentation.edit.di.EditFilterArgs
@@ -14,11 +13,12 @@ internal class EditFilterViewModel @Inject constructor(
     args: EditFilterArgs,
     reducer: EditFilterReducer,
     effectHandler: EditFilterEffectHandler,
-) : BaseStoreViewModel<EditFilterState, EditFilterState, EditFilterCommand, EditFilterSideEffect>(
+    viewStateMapper: EditFilterViewStateMapper,
+) : BaseStoreViewModel<EditFilterViewState, EditFilterState, EditFilterCommand, EditFilterSideEffect>(
     initialState = args.toInitialState(),
     reducer = reducer,
     effectHandlers = listOf(effectHandler),
-    viewStateMapper = ViewStateMapper.identity(),
+    viewStateMapper = viewStateMapper,
     initialSideEffects = buildList {
         if (args.hasValidFilterId) {
             add(EditFilterSideEffect.LoadFilter(args.filterId))
@@ -34,7 +34,18 @@ internal class EditFilterViewModel @Inject constructor(
 }
 
 private fun EditFilterArgs.toInitialState(): EditFilterState {
-    if (!hasInitialData) return EditFilterState()
+    if (!hasInitialData) return EditFilterState(
+        filter = null,
+        including = true,
+        enabled = true,
+        enabledLogLevels = List(LogLevel.entries.size) { false },
+        uid = null,
+        pid = null,
+        tid = null,
+        packageName = null,
+        tag = null,
+        content = null,
+    )
 
     val enabledLogLevels = MutableList(LogLevel.entries.size) { false }
     if (level != null && level >= 0 && level < LogLevel.entries.size) {
@@ -42,6 +53,9 @@ private fun EditFilterArgs.toInitialState(): EditFilterState {
     }
 
     return EditFilterState(
+        filter = null,
+        including = true,
+        enabled = true,
         enabledLogLevels = enabledLogLevels,
         uid = uid,
         pid = pid,

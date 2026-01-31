@@ -4,7 +4,7 @@ import android.net.Uri
 import com.f0x1d.logfox.feature.filters.api.model.UserFilter
 import com.f0x1d.logfox.feature.logging.api.model.LogLevel
 
-sealed interface EditFilterSideEffect {
+internal sealed interface EditFilterSideEffect {
     // Business logic side effects - handled by EffectHandler
     data class LoadFilter(val filterId: Long?) : EditFilterSideEffect
     data class SaveFilter(

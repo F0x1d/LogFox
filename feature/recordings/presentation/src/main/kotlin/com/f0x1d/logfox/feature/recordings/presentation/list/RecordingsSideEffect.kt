@@ -1,6 +1,6 @@
 package com.f0x1d.logfox.feature.recordings.presentation.list
 
-sealed interface RecordingsSideEffect {
+internal sealed interface RecordingsSideEffect {
     // Business logic (handled by EffectHandler)
     data object LoadRecordings : RecordingsSideEffect
     data object ToggleStartStop : RecordingsSideEffect

@@ -21,6 +21,7 @@ import com.f0x1d.logfox.feature.filters.presentation.list.FiltersCommand
 import com.f0x1d.logfox.feature.filters.presentation.list.FiltersSideEffect
 import com.f0x1d.logfox.feature.filters.presentation.list.FiltersState
 import com.f0x1d.logfox.feature.filters.presentation.list.FiltersViewModel
+import com.f0x1d.logfox.feature.filters.presentation.list.FiltersViewState
 import com.f0x1d.logfox.feature.filters.presentation.list.adapter.FiltersAdapter
 import com.f0x1d.logfox.navigation.Directions
 import dagger.hilt.android.AndroidEntryPoint
@@ -30,7 +31,7 @@ import dev.chrisbanes.insetter.applyInsetter
 internal class FiltersFragment :
     BaseStoreFragment<
         FragmentFiltersBinding,
-        FiltersState,
+        FiltersViewState,
         FiltersState,
         FiltersCommand,
         FiltersSideEffect,
@@ -102,7 +103,7 @@ internal class FiltersFragment :
         }
     }
 
-    override fun render(state: FiltersState) {
+    override fun render(state: FiltersViewState) {
         binding.placeholderLayout.root.isVisible = state.filters.isEmpty()
         adapter.submitList(state.filters)
     }

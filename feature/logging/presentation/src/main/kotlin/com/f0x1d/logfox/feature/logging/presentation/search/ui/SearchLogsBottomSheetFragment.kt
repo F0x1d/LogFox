@@ -13,13 +13,14 @@ import com.f0x1d.logfox.feature.logging.presentation.search.SearchLogsCommand
 import com.f0x1d.logfox.feature.logging.presentation.search.SearchLogsSideEffect
 import com.f0x1d.logfox.feature.logging.presentation.search.SearchLogsState
 import com.f0x1d.logfox.feature.logging.presentation.search.SearchLogsViewModel
+import com.f0x1d.logfox.feature.logging.presentation.search.SearchLogsViewState
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 internal class SearchLogsBottomSheetFragment :
     BaseStoreBottomSheetFragment<
         SheetSearchBinding,
-        SearchLogsState,
+        SearchLogsViewState,
         SearchLogsState,
         SearchLogsCommand,
         SearchLogsSideEffect,
@@ -54,7 +55,7 @@ internal class SearchLogsBottomSheetFragment :
         queryText.requestFocus()
     }
 
-    override fun render(state: SearchLogsState) {
+    override fun render(state: SearchLogsViewState) {
         binding.queryText.setText(state.query)
         binding.clearSearchButton.isVisible = state.query != null
         binding.caseSensitiveCheckbox.isChecked = state.caseSensitive

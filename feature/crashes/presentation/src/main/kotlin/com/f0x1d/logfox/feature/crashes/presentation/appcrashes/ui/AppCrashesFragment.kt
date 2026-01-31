@@ -16,6 +16,7 @@ import com.f0x1d.logfox.feature.crashes.presentation.appcrashes.AppCrashesComman
 import com.f0x1d.logfox.feature.crashes.presentation.appcrashes.AppCrashesSideEffect
 import com.f0x1d.logfox.feature.crashes.presentation.appcrashes.AppCrashesState
 import com.f0x1d.logfox.feature.crashes.presentation.appcrashes.AppCrashesViewModel
+import com.f0x1d.logfox.feature.crashes.presentation.appcrashes.AppCrashesViewState
 import com.f0x1d.logfox.feature.crashes.presentation.common.adapter.CrashesAdapter
 import com.f0x1d.logfox.feature.crashes.presentation.databinding.FragmentAppCrashesBinding
 import com.f0x1d.logfox.navigation.Directions
@@ -27,7 +28,7 @@ import dev.chrisbanes.insetter.applyInsetter
 internal class AppCrashesFragment :
     BaseStoreFragment<
         FragmentAppCrashesBinding,
-        AppCrashesState,
+        AppCrashesViewState,
         AppCrashesState,
         AppCrashesCommand,
         AppCrashesSideEffect,
@@ -42,7 +43,7 @@ internal class AppCrashesFragment :
         },
         delete = {
             showAreYouSureDeleteDialog {
-                send(AppCrashesCommand.DeleteCrash(it))
+                send(AppCrashesCommand.DeleteCrash(it.lastCrashId))
             }
         },
     )
@@ -76,7 +77,7 @@ internal class AppCrashesFragment :
         }
     }
 
-    override fun render(state: AppCrashesState) {
+    override fun render(state: AppCrashesViewState) {
         binding.toolbar.title = state.appName ?: state.packageName
         adapter.submitList(state.crashes)
     }

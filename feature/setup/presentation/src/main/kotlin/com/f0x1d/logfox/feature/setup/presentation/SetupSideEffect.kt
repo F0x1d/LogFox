@@ -3,7 +3,7 @@ package com.f0x1d.logfox.feature.setup.presentation
 import androidx.annotation.StringRes
 import com.f0x1d.logfox.feature.terminals.base.TerminalType
 
-sealed interface SetupSideEffect {
+internal sealed interface SetupSideEffect {
     // Business logic side effects (handled by EffectHandler)
     data object ExecuteRootCommand : SetupSideEffect
     data object ExecuteShizukuCommand : SetupSideEffect

@@ -1,7 +1,6 @@
 package com.f0x1d.logfox.feature.crashes.presentation.details
 
 import com.f0x1d.logfox.core.tea.BaseStoreViewModel
-import com.f0x1d.logfox.core.tea.ViewStateMapper
 import com.f0x1d.logfox.feature.preferences.domain.crashes.GetUseSeparateNotificationsChannelsForCrashesUseCase
 import com.f0x1d.logfox.feature.preferences.domain.crashes.GetWrapCrashLogLinesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -12,16 +11,22 @@ internal class CrashDetailsViewModel @Inject constructor(
     reducer: CrashDetailsReducer,
     effectHandler: CrashDetailsEffectHandler,
     blacklistEffectHandler: CrashDetailsBlacklistEffectHandler,
+    viewStateMapper: CrashDetailsViewStateMapper,
     getWrapCrashLogLinesUseCase: GetWrapCrashLogLinesUseCase,
     getUseSeparateNotificationsChannelsForCrashesUseCase: GetUseSeparateNotificationsChannelsForCrashesUseCase,
-) : BaseStoreViewModel<CrashDetailsState, CrashDetailsState, CrashDetailsCommand, CrashDetailsSideEffect>(
+) : BaseStoreViewModel<CrashDetailsViewState, CrashDetailsState, CrashDetailsCommand, CrashDetailsSideEffect>(
     initialState = CrashDetailsState(
+        crash = null,
+        crashLog = null,
+        blacklisted = null,
         wrapCrashLogLines = getWrapCrashLogLinesUseCase(),
         useSeparateNotificationsChannelsForCrashes = getUseSeparateNotificationsChannelsForCrashesUseCase(),
+        searchQuery = "",
+        searchMatchRanges = emptyList(),
     ),
     reducer = reducer,
     effectHandlers = listOf(effectHandler, blacklistEffectHandler),
-    viewStateMapper = ViewStateMapper.identity(),
+    viewStateMapper = viewStateMapper,
     initialSideEffects = listOf(
         CrashDetailsSideEffect.LoadCrash,
         CrashDetailsSideEffect.ObservePreferences,

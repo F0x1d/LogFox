@@ -3,7 +3,7 @@ package com.f0x1d.logfox.feature.filters.presentation.list
 import android.net.Uri
 import com.f0x1d.logfox.feature.filters.api.model.UserFilter
 
-sealed interface FiltersSideEffect {
+internal sealed interface FiltersSideEffect {
     // Business logic side effects - handled by EffectHandler
     data object LoadFilters : FiltersSideEffect
     data class ImportFilters(val uri: Uri) : FiltersSideEffect

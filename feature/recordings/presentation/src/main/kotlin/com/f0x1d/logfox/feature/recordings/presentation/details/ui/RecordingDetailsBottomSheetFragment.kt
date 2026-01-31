@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import com.f0x1d.logfox.core.context.shareFileIntent
 import com.f0x1d.logfox.core.tea.BaseStoreBottomSheetFragment
 import com.f0x1d.logfox.core.ui.view.applyExtendedTextWatcher
@@ -15,13 +14,14 @@ import com.f0x1d.logfox.feature.recordings.presentation.details.RecordingDetails
 import com.f0x1d.logfox.feature.recordings.presentation.details.RecordingDetailsSideEffect
 import com.f0x1d.logfox.feature.recordings.presentation.details.RecordingDetailsState
 import com.f0x1d.logfox.feature.recordings.presentation.details.RecordingDetailsViewModel
+import com.f0x1d.logfox.feature.recordings.presentation.details.RecordingDetailsViewState
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 internal class RecordingDetailsBottomSheetFragment :
     BaseStoreBottomSheetFragment<
         SheetRecordingDetailsBinding,
-        RecordingDetailsState,
+        RecordingDetailsViewState,
         RecordingDetailsState,
         RecordingDetailsCommand,
         RecordingDetailsSideEffect,
@@ -68,7 +68,7 @@ internal class RecordingDetailsBottomSheetFragment :
         }
     }
 
-    override fun render(state: RecordingDetailsState) {
+    override fun render(state: RecordingDetailsViewState) {
         textWatcher?.setText(state.currentTitle.orEmpty())
 
         state.recordingItem ?: return

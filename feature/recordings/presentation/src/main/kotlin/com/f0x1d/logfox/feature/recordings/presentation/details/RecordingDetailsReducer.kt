@@ -4,13 +4,9 @@ import com.f0x1d.logfox.core.tea.ReduceResult
 import com.f0x1d.logfox.core.tea.Reducer
 import com.f0x1d.logfox.core.tea.noSideEffects
 import com.f0x1d.logfox.core.tea.withSideEffects
-import com.f0x1d.logfox.feature.datetime.api.DateTimeFormatter
-import com.f0x1d.logfox.feature.recordings.presentation.model.toPresentationModel
 import javax.inject.Inject
 
-internal class RecordingDetailsReducer @Inject constructor(
-    private val dateTimeFormatter: DateTimeFormatter,
-) : Reducer<RecordingDetailsState, RecordingDetailsCommand, RecordingDetailsSideEffect> {
+internal class RecordingDetailsReducer @Inject constructor() : Reducer<RecordingDetailsState, RecordingDetailsCommand, RecordingDetailsSideEffect> {
 
     override fun reduce(
         state: RecordingDetailsState,
@@ -21,13 +17,8 @@ internal class RecordingDetailsReducer @Inject constructor(
         }
 
         is RecordingDetailsCommand.RecordingLoaded -> {
-            val item = command.recording?.let {
-                it.toPresentationModel(
-                    formattedDate = "${dateTimeFormatter.formatDate(it.dateAndTime)} ${dateTimeFormatter.formatTime(it.dateAndTime)}",
-                )
-            }
             state.copy(
-                recordingItem = item,
+                recording = command.recording,
                 currentTitle = command.recording?.title,
             ).noSideEffects()
         }
@@ -41,11 +32,11 @@ internal class RecordingDetailsReducer @Inject constructor(
         }
 
         is RecordingDetailsCommand.UpdateTitle -> {
-            val item = state.recordingItem
-            if (item != null) {
+            val recording = state.recording
+            if (recording != null) {
                 state.copy(currentTitle = command.title)
                     .withSideEffects(
-                        RecordingDetailsSideEffect.UpdateTitle(command.title, item.recordingId),
+                        RecordingDetailsSideEffect.UpdateTitle(command.title, recording.id),
                     )
             } else {
                 state.noSideEffects()

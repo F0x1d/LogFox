@@ -2,7 +2,6 @@ package com.f0x1d.logfox.feature.preferences.presentation.ui.settings
 
 import androidx.appcompat.app.AppCompatDelegate
 import com.f0x1d.logfox.core.tea.EffectHandler
-import com.f0x1d.logfox.feature.logging.api.model.ShowLogValues
 import com.f0x1d.logfox.feature.preferences.domain.datetime.GetDateFormatFlowUseCase
 import com.f0x1d.logfox.feature.preferences.domain.datetime.GetTimeFormatFlowUseCase
 import com.f0x1d.logfox.feature.preferences.domain.datetime.SetDateFormatUseCase
@@ -104,21 +103,18 @@ internal class PreferencesUIEffectHandler @Inject constructor(
                         (showSecond, intervals),
                         displayLimit,
                     ->
-                    val showLogValues = ShowLogValues(
-                        date = showFirst[0] as Boolean,
-                        time = showFirst[1] as Boolean,
-                        uid = showFirst[2] as Boolean,
-                        pid = showFirst[3] as Boolean,
-                        tid = showFirst[4] as Boolean,
-                        packageName = showSecond[0] as Boolean,
-                        tag = showSecond[1] as Boolean,
-                        content = showSecond[2] as Boolean,
-                    )
                     PreferencesUICommand.PreferencesLoaded(
                         nightTheme = nightTheme,
                         dateFormat = dateFormat,
                         timeFormat = timeFormat,
-                        showLogValues = showLogValues,
+                        showLogDate = showFirst[0] as Boolean,
+                        showLogTime = showFirst[1] as Boolean,
+                        showLogUid = showFirst[2] as Boolean,
+                        showLogPid = showFirst[3] as Boolean,
+                        showLogTid = showFirst[4] as Boolean,
+                        showLogPackage = showSecond[0] as Boolean,
+                        showLogTag = showSecond[1] as Boolean,
+                        showLogContent = showSecond[2] as Boolean,
                         logsUpdateInterval = intervals.first,
                         logsTextSize = intervals.second,
                         logsDisplayLimit = displayLimit,

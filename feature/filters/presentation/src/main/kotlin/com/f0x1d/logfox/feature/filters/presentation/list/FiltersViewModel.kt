@@ -1,7 +1,6 @@
 package com.f0x1d.logfox.feature.filters.presentation.list
 
 import com.f0x1d.logfox.core.tea.BaseStoreViewModel
-import com.f0x1d.logfox.core.tea.ViewStateMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -9,10 +8,11 @@ import javax.inject.Inject
 internal class FiltersViewModel @Inject constructor(
     reducer: FiltersReducer,
     effectHandler: FiltersEffectHandler,
-) : BaseStoreViewModel<FiltersState, FiltersState, FiltersCommand, FiltersSideEffect>(
-    initialState = FiltersState(),
+    viewStateMapper: FiltersViewStateMapper,
+) : BaseStoreViewModel<FiltersViewState, FiltersState, FiltersCommand, FiltersSideEffect>(
+    initialState = FiltersState(filters = emptyList()),
     reducer = reducer,
     effectHandlers = listOf(effectHandler),
-    viewStateMapper = ViewStateMapper.identity(),
+    viewStateMapper = viewStateMapper,
     initialSideEffects = listOf(FiltersSideEffect.LoadFilters),
 )

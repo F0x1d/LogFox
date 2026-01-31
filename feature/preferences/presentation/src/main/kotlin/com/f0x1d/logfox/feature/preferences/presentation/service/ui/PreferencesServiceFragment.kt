@@ -16,6 +16,7 @@ import com.f0x1d.logfox.feature.preferences.presentation.service.PreferencesServ
 import com.f0x1d.logfox.feature.preferences.presentation.service.PreferencesServiceSideEffect
 import com.f0x1d.logfox.feature.preferences.presentation.service.PreferencesServiceState
 import com.f0x1d.logfox.feature.preferences.presentation.service.PreferencesServiceViewModel
+import com.f0x1d.logfox.feature.preferences.presentation.service.PreferencesServiceViewState
 import com.f0x1d.logfox.feature.strings.Strings
 import com.f0x1d.logfox.feature.terminals.base.TerminalType
 import com.google.android.material.appbar.MaterialToolbar
@@ -26,7 +27,7 @@ import dev.chrisbanes.insetter.applyInsetter
 @AndroidEntryPoint
 internal class PreferencesServiceFragment :
     BaseStorePreferenceFragment<
-        PreferencesServiceState,
+        PreferencesServiceViewState,
         PreferencesServiceState,
         PreferencesServiceCommand,
         PreferencesServiceSideEffect,
@@ -71,7 +72,7 @@ internal class PreferencesServiceFragment :
         }
     }
 
-    override fun render(state: PreferencesServiceState) {
+    override fun render(state: PreferencesServiceViewState) {
         if (state.terminalNames.isEmpty()) return
 
         findPreference<Preference>("pref_selected_terminal_index")?.apply {

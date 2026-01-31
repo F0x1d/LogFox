@@ -2,7 +2,6 @@ package com.f0x1d.logfox.feature.preferences.presentation.menu
 
 import android.content.Context
 import com.f0x1d.logfox.core.tea.BaseStoreViewModel
-import com.f0x1d.logfox.core.tea.ViewStateMapper
 import com.f0x1d.logfox.feature.preferences.presentation.BuildConfig
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -12,7 +11,8 @@ import javax.inject.Inject
 internal class PreferencesMenuViewModel @Inject constructor(
     @ApplicationContext context: Context,
     reducer: PreferencesMenuReducer,
-) : BaseStoreViewModel<PreferencesMenuState, PreferencesMenuState, PreferencesMenuCommand, PreferencesMenuSideEffect>(
+    viewStateMapper: PreferencesMenuViewStateMapper,
+) : BaseStoreViewModel<PreferencesMenuViewState, PreferencesMenuState, PreferencesMenuCommand, PreferencesMenuSideEffect>(
     initialState = run {
         val packageManager = context.packageManager
         val packageInfo = packageManager.getPackageInfo(context.packageName, 0)
@@ -24,5 +24,5 @@ internal class PreferencesMenuViewModel @Inject constructor(
     },
     reducer = reducer,
     effectHandlers = emptyList(),
-    viewStateMapper = ViewStateMapper.identity(),
+    viewStateMapper = viewStateMapper,
 )

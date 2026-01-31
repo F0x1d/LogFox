@@ -18,10 +18,12 @@ import com.f0x1d.logfox.compose.designsystem.theme.LogFoxTheme
 import com.f0x1d.logfox.feature.apps.picker.AppsPickerResultHandler
 import com.f0x1d.logfox.feature.apps.picker.presentation.AppsPickerCommand
 import com.f0x1d.logfox.feature.apps.picker.presentation.AppsPickerSideEffect
-import com.f0x1d.logfox.feature.apps.picker.presentation.AppsPickerState
 import com.f0x1d.logfox.feature.apps.picker.presentation.AppsPickerViewModel
+import com.f0x1d.logfox.feature.apps.picker.presentation.AppsPickerViewState
 import com.f0x1d.logfox.feature.apps.picker.presentation.ui.compose.AppsPickerScreenContent
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -43,7 +45,7 @@ class AppsPickerFragment : Fragment() {
         )
     }
 
-    private val uiState: Flow<AppsPickerState> by lazy {
+    private val uiState: Flow<AppsPickerViewState> by lazy {
         resultHandler?.let { handler ->
             combine(viewModel.state, handler.checkedAppPackageNames) { state, checkedApps ->
                 state to checkedApps
@@ -72,7 +74,18 @@ class AppsPickerFragment : Fragment() {
 
     @Composable
     private fun FragmentContent() {
-        val state by uiState.collectAsStateWithLifecycle(initialValue = AppsPickerState())
+        val state by uiState.collectAsStateWithLifecycle(
+            initialValue = AppsPickerViewState(
+                topBarTitle = "",
+                apps = persistentListOf(),
+                checkedAppPackageNames = persistentSetOf(),
+                searchedApps = persistentListOf(),
+                multiplySelectionEnabled = true,
+                isLoading = true,
+                searchActive = false,
+                query = "",
+            ),
+        )
 
         LaunchedEffect(viewModel) {
             viewModel.sideEffects.collect { sideEffect ->

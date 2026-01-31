@@ -5,13 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import com.f0x1d.logfox.core.ui.view.setupBackButtonForNavController
 import com.f0x1d.logfox.core.tea.BaseStoreFragment
+import com.f0x1d.logfox.core.ui.view.setupBackButtonForNavController
 import com.f0x1d.logfox.feature.logging.presentation.databinding.FragmentLogsExtendedCopyBinding
 import com.f0x1d.logfox.feature.logging.presentation.extended.LogsExtendedCopyCommand
 import com.f0x1d.logfox.feature.logging.presentation.extended.LogsExtendedCopySideEffect
 import com.f0x1d.logfox.feature.logging.presentation.extended.LogsExtendedCopyState
 import com.f0x1d.logfox.feature.logging.presentation.extended.LogsExtendedCopyViewModel
+import com.f0x1d.logfox.feature.logging.presentation.extended.LogsExtendedCopyViewState
 import dagger.hilt.android.AndroidEntryPoint
 import dev.chrisbanes.insetter.applyInsetter
 
@@ -19,7 +20,7 @@ import dev.chrisbanes.insetter.applyInsetter
 internal class LogsExtendedCopyFragment :
     BaseStoreFragment<
         FragmentLogsExtendedCopyBinding,
-        LogsExtendedCopyState,
+        LogsExtendedCopyViewState,
         LogsExtendedCopyState,
         LogsExtendedCopyCommand,
         LogsExtendedCopySideEffect,
@@ -42,7 +43,7 @@ internal class LogsExtendedCopyFragment :
         toolbar.setupBackButtonForNavController()
     }
 
-    override fun render(state: LogsExtendedCopyState) {
+    override fun render(state: LogsExtendedCopyViewState) {
         binding.logText.text = state.text
     }
 

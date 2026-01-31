@@ -37,6 +37,7 @@ import com.f0x1d.logfox.feature.crashes.presentation.details.CrashDetailsCommand
 import com.f0x1d.logfox.feature.crashes.presentation.details.CrashDetailsSideEffect
 import com.f0x1d.logfox.feature.crashes.presentation.details.CrashDetailsState
 import com.f0x1d.logfox.feature.crashes.presentation.details.CrashDetailsViewModel
+import com.f0x1d.logfox.feature.crashes.presentation.details.CrashDetailsViewState
 import com.f0x1d.logfox.feature.strings.Strings
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -46,7 +47,7 @@ import dev.chrisbanes.insetter.applyInsetter
 internal class CrashDetailsFragment :
     BaseStoreFragment<
         FragmentCrashDetailsBinding,
-        CrashDetailsState,
+        CrashDetailsViewState,
         CrashDetailsState,
         CrashDetailsCommand,
         CrashDetailsSideEffect,
@@ -146,7 +147,7 @@ internal class CrashDetailsFragment :
         }
     }
 
-    override fun render(state: CrashDetailsState) {
+    override fun render(state: CrashDetailsViewState) {
         binding.toolbar.menu.findItem(R.id.notifications_item).isVisible =
             notificationsChannelsAvailable && state.useSeparateNotificationsChannelsForCrashes
 

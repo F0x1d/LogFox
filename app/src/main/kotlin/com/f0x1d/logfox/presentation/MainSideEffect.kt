@@ -1,6 +1,6 @@
 package com.f0x1d.logfox.presentation
 
-sealed interface MainSideEffect {
+internal sealed interface MainSideEffect {
     data object StartLoggingServiceIfNeeded : MainSideEffect
     data object SaveNotificationsPermissionAsked : MainSideEffect
 

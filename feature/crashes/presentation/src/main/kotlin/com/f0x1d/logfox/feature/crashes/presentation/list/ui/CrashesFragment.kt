@@ -26,6 +26,7 @@ import com.f0x1d.logfox.feature.crashes.presentation.list.CrashesCommand
 import com.f0x1d.logfox.feature.crashes.presentation.list.CrashesSideEffect
 import com.f0x1d.logfox.feature.crashes.presentation.list.CrashesState
 import com.f0x1d.logfox.feature.crashes.presentation.list.CrashesViewModel
+import com.f0x1d.logfox.feature.crashes.presentation.list.CrashesViewState
 import com.f0x1d.logfox.feature.preferences.CrashesSort
 import com.f0x1d.logfox.feature.strings.Strings
 import com.f0x1d.logfox.navigation.Directions
@@ -39,7 +40,7 @@ import dev.chrisbanes.insetter.applyInsetter
 internal class CrashesFragment :
     BaseStoreFragment<
         FragmentCrashesBinding,
-        CrashesState,
+        CrashesViewState,
         CrashesState,
         CrashesCommand,
         CrashesSideEffect,
@@ -61,7 +62,7 @@ internal class CrashesFragment :
         },
         delete = {
             showAreYouSureDeleteDialog {
-                send(CrashesCommand.DeleteCrashesByPackageName(it))
+                send(CrashesCommand.DeleteCrashesByPackageName(it.packageName))
             }
         },
     )
@@ -71,7 +72,7 @@ internal class CrashesFragment :
         },
         delete = {
             showAreYouSureDeleteDialog {
-                send(CrashesCommand.DeleteCrash(it))
+                send(CrashesCommand.DeleteCrash(it.lastCrashId))
             }
         },
     )
@@ -151,7 +152,7 @@ internal class CrashesFragment :
         }
     }
 
-    override fun render(state: CrashesState) {
+    override fun render(state: CrashesViewState) {
         binding.placeholderLayout.root.isVisible = state.crashes.isEmpty()
 
         adapter.submitList(state.crashes)

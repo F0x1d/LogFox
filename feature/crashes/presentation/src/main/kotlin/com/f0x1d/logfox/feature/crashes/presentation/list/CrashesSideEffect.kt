@@ -2,7 +2,7 @@ package com.f0x1d.logfox.feature.crashes.presentation.list
 
 import com.f0x1d.logfox.feature.preferences.CrashesSort
 
-sealed interface CrashesSideEffect {
+internal sealed interface CrashesSideEffect {
     // Business logic side effects
     data object LoadCrashes : CrashesSideEffect
 

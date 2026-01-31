@@ -3,7 +3,7 @@ package com.f0x1d.logfox.feature.crashes.presentation.details
 import android.net.Uri
 import com.f0x1d.logfox.feature.crashes.api.model.AppCrash
 
-sealed interface CrashDetailsSideEffect {
+internal sealed interface CrashDetailsSideEffect {
     // Business logic side effects
     data object LoadCrash : CrashDetailsSideEffect
 
