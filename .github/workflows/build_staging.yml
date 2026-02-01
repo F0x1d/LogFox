@@ -17,20 +17,32 @@ jobs:
     outputs:
       version_name: ${{ steps.extract.outputs.version_name }}
       version_code: ${{ steps.extract.outputs.version_code }}
+      short_commit: ${{ steps.extract.outputs.short_commit }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          fetch-tags: true
 
       - name: Extract version from latest tag
         id: extract
         run: |
-          LATEST_TAG=$(git describe --tags --abbrev=0)
-          VERSION_CODE="${LATEST_TAG##*-}"
-          VERSION_NAME="${GITHUB_SHA::7}"
+          LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+          SHORT_SHA="${GITHUB_SHA::7}"
+
+          if [ -z "$LATEST_TAG" ]; then
+            VERSION_NAME="0.0.0-${SHORT_SHA}"
+            VERSION_CODE="1"
+          else
+            BASE_VERSION="${LATEST_TAG#v}"
+            BASE_VERSION="${BASE_VERSION%-*}"
+            VERSION_NAME="${BASE_VERSION}-${SHORT_SHA}"
+            VERSION_CODE="${LATEST_TAG##*-}"
+          fi
           echo "version_name=$VERSION_NAME" >> $GITHUB_OUTPUT
           echo "version_code=$VERSION_CODE" >> $GITHUB_OUTPUT
+          echo "short_commit=$SHORT_SHA" >> $GITHUB_OUTPUT
 
   build:
     needs: extract_version
@@ -38,6 +50,8 @@ jobs:
     with:
       version_name: ${{ needs.extract_version.outputs.version_name }}
       version_code: ${{ needs.extract_version.outputs.version_code }}
+      release_build: false
+      git_sha: ${{ needs.extract_version.outputs.short_commit }}
     secrets: inherit
 
   send:

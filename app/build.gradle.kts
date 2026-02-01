@@ -15,8 +15,7 @@ android {
         versionCode = providers
             .environmentVariable("VERSION_CODE")
             .orNull
-            ?.toIntOrNull()
-            ?: Int.MAX_VALUE
+            ?.toIntOrNull() ?: 1
         versionName = providers
             .environmentVariable("VERSION_NAME")
             .getOrElse("unknown")
@@ -29,7 +28,19 @@ android {
     applicationVariants.configureEach {
         outputs.configureEach {
             if (this is BaseVariantOutputImpl) {
-                outputFileName = "LogFox-${versionName}-${name}.apk"
+                 val shortCommit = providers.gradleProperty("GIT_SHA")
+                     .orElse(providers.environmentVariable("GIT_SHA"))
+                     .orNull
+                     ?.take(7) ?: "local"
+
+                 val releaseBuild = providers.gradleProperty("RELEASE_BUILD")
+                     .orElse(providers.environmentVariable("RELEASE_BUILD"))
+                     .orNull ?: "false"
+
+                 outputFileName = if (releaseBuild == "true" || versionName.contains(shortCommit))
+                     "LogFox-v${versionName}-release.apk"
+                 else
+                     "LogFox-v${versionName}-${shortCommit}-release.apk"
             }
         }
     }

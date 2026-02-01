@@ -18,6 +18,16 @@ on:
         required: false
         type: string
         default: ''
+      release_build:
+        description: 'Whether this is a release build'
+        required: false
+        type: boolean
+        default: false
+      git_sha:
+        description: 'Git short SHA for APK filename'
+        required: false
+        type: string
+        default: ''
 
 env:
   KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
@@ -50,7 +60,7 @@ jobs:
           path: app/keystore
 
       - name: Build APK
-        run: bash ./gradlew :app:assembleRelease --stacktrace --no-daemon
+        run: bash ./gradlew :app:assembleRelease -PGIT_SHA=${{ inputs.git_sha }} -PRELEASE_BUILD=${{ inputs.release_build }} --stacktrace --no-daemon
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
