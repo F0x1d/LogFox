@@ -9,6 +9,7 @@ import com.f0x1d.logfox.feature.crashes.api.domain.GetCrashByIdFlowUseCase
 import com.f0x1d.logfox.feature.crashes.presentation.details.di.CrashId
 import com.f0x1d.logfox.feature.preferences.api.domain.crashes.GetUseSeparateNotificationsChannelsForCrashesFlowUseCase
 import com.f0x1d.logfox.feature.preferences.api.domain.crashes.GetWrapCrashLogLinesFlowUseCase
+import com.f0x1d.logfox.feature.preferences.api.domain.crashes.SetWrapCrashLogLinesUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
@@ -22,6 +23,7 @@ internal class CrashDetailsEffectHandler @Inject constructor(
     private val exportCrashToFileUseCase: ExportCrashToFileUseCase,
     private val exportCrashToZipUseCase: ExportCrashToZipUseCase,
     private val getWrapCrashLogLinesFlowUseCase: GetWrapCrashLogLinesFlowUseCase,
+    private val setWrapCrashLogLinesUseCase: SetWrapCrashLogLinesUseCase,
     private val getUseSeparateNotificationsChannelsForCrashesFlowUseCase: GetUseSeparateNotificationsChannelsForCrashesFlowUseCase,
 ) : EffectHandler<CrashDetailsSideEffect, CrashDetailsCommand> {
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -50,6 +52,10 @@ internal class CrashDetailsEffectHandler @Inject constructor(
                             onCommand(CrashDetailsCommand.CrashLoaded(crash, crashLog))
                         }
                     }
+            }
+
+            is CrashDetailsSideEffect.SetWrapCrashLogLines -> {
+                setWrapCrashLogLinesUseCase(effect.wrap)
             }
 
             is CrashDetailsSideEffect.ObservePreferences -> {

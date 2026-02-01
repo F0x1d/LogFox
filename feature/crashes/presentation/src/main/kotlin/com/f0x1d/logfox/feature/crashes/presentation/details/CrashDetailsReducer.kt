@@ -25,6 +25,10 @@ internal class CrashDetailsReducer @Inject constructor(
             blacklisted = command.blacklisted,
         ).noSideEffects()
 
+        is CrashDetailsCommand.WrapLinesClicked -> state.withSideEffects(
+            CrashDetailsSideEffect.SetWrapCrashLogLines(wrap = !state.wrapCrashLogLines),
+        )
+
         is CrashDetailsCommand.PreferencesUpdated -> state.copy(
             wrapCrashLogLines = command.wrapCrashLogLines,
             useSeparateNotificationsChannelsForCrashes = command.useSeparateNotificationsChannelsForCrashes,

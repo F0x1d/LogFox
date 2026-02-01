@@ -13,6 +13,8 @@ internal sealed interface CrashDetailsCommand {
         val useSeparateNotificationsChannelsForCrashes: Boolean,
     ) : CrashDetailsCommand
 
+    data object WrapLinesClicked : CrashDetailsCommand
+
     data object OpenAppInfoClicked : CrashDetailsCommand
 
     data object OpenNotificationSettingsClicked : CrashDetailsCommand

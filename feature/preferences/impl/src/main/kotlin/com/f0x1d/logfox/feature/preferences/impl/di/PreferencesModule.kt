@@ -15,6 +15,7 @@ import com.f0x1d.logfox.feature.preferences.api.domain.crashes.GetUseSeparateNot
 import com.f0x1d.logfox.feature.preferences.api.domain.crashes.GetWrapCrashLogLinesFlowUseCase
 import com.f0x1d.logfox.feature.preferences.api.domain.crashes.GetWrapCrashLogLinesUseCase
 import com.f0x1d.logfox.feature.preferences.api.domain.crashes.SetCrashesSortReversedOrderUseCase
+import com.f0x1d.logfox.feature.preferences.api.domain.crashes.SetWrapCrashLogLinesUseCase
 import com.f0x1d.logfox.feature.preferences.api.domain.crashes.SetCrashesSortTypeUseCase
 import com.f0x1d.logfox.feature.preferences.api.domain.datetime.GetDateFormatFlowUseCase
 import com.f0x1d.logfox.feature.preferences.api.domain.datetime.GetDateFormatUseCase
@@ -100,6 +101,7 @@ import com.f0x1d.logfox.feature.preferences.impl.domain.crashes.GetWrapCrashLogL
 import com.f0x1d.logfox.feature.preferences.impl.domain.crashes.GetWrapCrashLogLinesUseCaseImpl
 import com.f0x1d.logfox.feature.preferences.impl.domain.crashes.SetCrashesSortReversedOrderUseCaseImpl
 import com.f0x1d.logfox.feature.preferences.impl.domain.crashes.SetCrashesSortTypeUseCaseImpl
+import com.f0x1d.logfox.feature.preferences.impl.domain.crashes.SetWrapCrashLogLinesUseCaseImpl
 import com.f0x1d.logfox.feature.preferences.impl.domain.datetime.GetDateFormatFlowUseCaseImpl
 import com.f0x1d.logfox.feature.preferences.impl.domain.datetime.GetDateFormatUseCaseImpl
 import com.f0x1d.logfox.feature.preferences.impl.domain.datetime.GetTimeFormatFlowUseCaseImpl
@@ -497,6 +499,11 @@ internal interface PreferencesModule {
     fun bindGetWrapCrashLogLinesFlowUseCase(
         impl: GetWrapCrashLogLinesFlowUseCaseImpl,
     ): GetWrapCrashLogLinesFlowUseCase
+
+    @Binds
+    fun bindSetWrapCrashLogLinesUseCase(
+        impl: SetWrapCrashLogLinesUseCaseImpl,
+    ): SetWrapCrashLogLinesUseCase
 
     @Binds
     fun bindGetUseSeparateNotificationsChannelsForCrashesFlowUseCase(

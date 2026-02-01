@@ -89,6 +89,9 @@ internal class CrashDetailsFragment :
 
         toolbar.setupBackButtonForNavController()
         toolbar.menu.apply {
+            setClickListenerOn(R.id.wrap_lines_item) {
+                send(CrashDetailsCommand.WrapLinesClicked)
+            }
             setClickListenerOn(R.id.info_item) {
                 send(CrashDetailsCommand.OpenAppInfoClicked)
             }
@@ -150,6 +153,8 @@ internal class CrashDetailsFragment :
     override fun render(state: CrashDetailsViewState) {
         binding.toolbar.menu.findItem(R.id.notifications_item).isVisible =
             notificationsChannelsAvailable && state.useSeparateNotificationsChannelsForCrashes
+
+        binding.toolbar.menu.findItem(R.id.wrap_lines_item).isChecked = state.wrapCrashLogLines
 
         state.crash?.let { binding.setupFor(it, state.crashLog, state.wrapCrashLogLines) }
 
