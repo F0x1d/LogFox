@@ -10,6 +10,12 @@
         app:actionViewClass="androidx.appcompat.widget.SearchView" />
 
     <item
+        android:id="@+id/wrap_lines_item"
+        android:title="@string/wrap_log_lines_in_details"
+        android:checkable="true"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/info_item"
         android:icon="@drawable/ic_info"
         android:title="@string/information"

@@ -9,6 +9,8 @@ internal sealed interface CrashDetailsSideEffect {
 
     data object ObservePreferences : CrashDetailsSideEffect
 
+    data class SetWrapCrashLogLines(val wrap: Boolean) : CrashDetailsSideEffect
+
     data class ExportCrashToZip(val uri: Uri, val appCrash: AppCrash, val crashLog: String?) : CrashDetailsSideEffect
 
     data class ExportCrashToFile(val uri: Uri, val crashLog: String?) : CrashDetailsSideEffect
