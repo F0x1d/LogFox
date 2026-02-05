@@ -30,6 +30,7 @@ jobs:
           echo "version_code=$VERSION_CODE" >> $GITHUB_OUTPUT
 
   build:
+    name: Build APK
     needs: extract_version
     uses: ./.github/workflows/build_apk_job.yml
     with:
