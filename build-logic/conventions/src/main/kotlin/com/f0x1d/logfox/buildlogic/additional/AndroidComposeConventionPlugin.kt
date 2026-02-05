@@ -6,6 +6,7 @@ import com.f0x1d.logfox.buildlogic.extensions.implementation
 import com.f0x1d.logfox.buildlogic.extensions.pluginId
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 
 class AndroidComposeConventionPlugin : Plugin<Project> {
@@ -14,16 +15,12 @@ class AndroidComposeConventionPlugin : Plugin<Project> {
             apply(pluginId("compose-compiler"))
         }
 
-        extensions.configure(CommonExtension::class.java) {
-            enableCompose()
+        extensions.configure<CommonExtension> {
+            buildFeatures.compose = true
         }
 
         dependencies {
             implementation(bundle("androidx-compose"))
         }
-    }
-
-    private fun CommonExtension<*, *, *, *, *, *>.enableCompose() {
-        buildFeatures.compose = true
     }
 }

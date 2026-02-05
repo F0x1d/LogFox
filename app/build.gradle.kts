@@ -1,4 +1,4 @@
-import com.android.build.gradle.internal.api.BaseVariantOutputImpl
+import com.android.build.api.variant.impl.VariantOutputImpl
 
 plugins {
     alias(libs.plugins.logfox.android.application)
@@ -25,12 +25,12 @@ android {
     buildFeatures {
         viewBinding = true
     }
+}
 
-    applicationVariants.configureEach {
-        outputs.configureEach {
-            if (this is BaseVariantOutputImpl) {
-                outputFileName = "LogFox-${versionName}-${name}.apk"
-            }
+androidComponents.onVariants { variant ->
+    variant.outputs.forEach { output ->
+        if (output is VariantOutputImpl) {
+            output.outputFileName.set("LogFox-${output.versionName.get()}-${variant.name}.apk")
         }
     }
 }
