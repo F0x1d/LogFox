@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flowOn
@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlin.time.Duration.Companion.seconds
 
 abstract class BaseStoreViewModel<ViewState, State, Command, SideEffect>(
     initialState: State,
@@ -38,7 +37,7 @@ abstract class BaseStoreViewModel<ViewState, State, Command, SideEffect>(
             started = SharingStarted.Eagerly,
             initialValue = viewStateMapper.map(initialState),
         )
-    val sideEffects: SharedFlow<SideEffect> = store.sideEffects
+    val sideEffects: Flow<SideEffect> = store.sideEffects
 
     init {
         initialSideEffects.forEach { effect ->

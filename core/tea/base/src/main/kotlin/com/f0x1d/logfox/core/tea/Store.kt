@@ -3,12 +3,12 @@ package com.f0x1d.logfox.core.tea
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.UUID
@@ -22,8 +22,8 @@ class Store<State, Command, SideEffect>(
     private val _state = MutableStateFlow(initialState)
     val state: StateFlow<State> = _state.asStateFlow()
 
-    private val _sideEffects = MutableSharedFlow<SideEffect>()
-    val sideEffects: SharedFlow<SideEffect> = _sideEffects.asSharedFlow()
+    private val _sideEffects = Channel<SideEffect>(capacity = Channel.UNLIMITED)
+    val sideEffects: Flow<SideEffect> = _sideEffects.receiveAsFlow()
 
     private val jobs = mutableMapOf<String, Job>()
 
@@ -32,9 +32,7 @@ class Store<State, Command, SideEffect>(
         _state.value = result.state
 
         result.sideEffects.forEach { sideEffect ->
-            scope.launch {
-                _sideEffects.emit(sideEffect)
-            }
+            _sideEffects.trySend(sideEffect)
 
             effectHandlers.forEach { handler ->
                 val jobId = UUID.randomUUID().toString()
@@ -55,6 +53,7 @@ class Store<State, Command, SideEffect>(
         jobs.values.forEach { it.cancel() }
         jobs.clear()
 
+        _sideEffects.close()
         effectHandlers.forEach { it.close() }
     }
 }
