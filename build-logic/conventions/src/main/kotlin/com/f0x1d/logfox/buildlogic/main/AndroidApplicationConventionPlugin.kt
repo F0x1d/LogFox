@@ -12,7 +12,6 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) = with(target) {
         with(pluginManager) {
             apply(pluginId("android-application"))
-            apply(pluginId("kotlin-android"))
         }
 
         extensions.configure<ApplicationExtension> {
