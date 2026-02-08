@@ -19,6 +19,7 @@ import com.f0x1d.logfox.feature.terminals.api.base.Terminal
 import com.f0x1d.logfox.feature.terminals.api.base.TerminalType
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
@@ -82,6 +83,8 @@ internal class RecordingsRepositoryImpl @Inject constructor(
                 context.toast(Strings.error_saving_logs)
             }
             e.printStackTrace()
+        } catch (_: TimeoutCancellationException) {
+            // Collection of logs finished!
         }
 
         LogRecording(

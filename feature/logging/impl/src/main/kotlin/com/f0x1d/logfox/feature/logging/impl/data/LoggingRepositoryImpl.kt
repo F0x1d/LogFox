@@ -17,6 +17,7 @@ import kotlinx.coroutines.withTimeout
 import timber.log.Timber
 import java.io.BufferedReader
 import javax.inject.Inject
+import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
 internal class LoggingRepositoryImpl @Inject constructor(
@@ -42,6 +43,7 @@ internal class LoggingRepositoryImpl @Inject constructor(
             terminal = terminal,
             command = command,
             startingId = startingId,
+            readLineTimeout = 10.seconds,
         )
     }.flowOn(ioDispatcher)
 
@@ -52,6 +54,7 @@ internal class LoggingRepositoryImpl @Inject constructor(
             terminal = terminal,
             command = command,
             startingId = 0,
+            readLineTimeout = 1.seconds,
         )
     }.flowOn(ioDispatcher)
 
@@ -59,6 +62,7 @@ internal class LoggingRepositoryImpl @Inject constructor(
         terminal: Terminal,
         command: Array<String>,
         startingId: Long,
+        readLineTimeout: Duration,
     ) {
         if (terminal.isSupported().not()) {
             Timber.d("Terminal $terminal is not supported")
@@ -79,7 +83,7 @@ internal class LoggingRepositoryImpl @Inject constructor(
 
                 while (true) {
                     Timber.d("Started awaiting line")
-                    val line = withTimeout(10.seconds) {
+                    val line = withTimeout(readLineTimeout) {
                         reader.readLineCancellable()
                     }
                     Timber.d("Got line $line")
