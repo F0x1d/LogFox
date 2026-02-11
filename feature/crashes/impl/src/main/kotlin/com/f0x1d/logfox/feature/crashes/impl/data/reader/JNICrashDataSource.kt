@@ -5,7 +5,6 @@ import com.f0x1d.logfox.feature.crashes.impl.data.AppInfoDataSource
 import com.f0x1d.logfox.feature.crashes.impl.data.CrashCollectorDataSource
 import com.f0x1d.logfox.feature.crashes.impl.data.reader.base.BaseCrashDataSource
 import com.f0x1d.logfox.feature.logging.api.model.LogLine
-import com.f0x1d.logfox.feature.preferences.api.data.LogsSettingsRepository
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -13,8 +12,7 @@ import javax.inject.Singleton
 internal class JNICrashDataSource @Inject constructor(
     appInfoDataSource: AppInfoDataSource,
     crashCollectorDataSource: CrashCollectorDataSource,
-    logsSettingsRepository: LogsSettingsRepository,
-) : BaseCrashDataSource(appInfoDataSource, crashCollectorDataSource, logsSettingsRepository) {
+) : BaseCrashDataSource(appInfoDataSource, crashCollectorDataSource) {
 
     override val crashType = CrashType.JNI
 

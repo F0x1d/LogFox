@@ -6,12 +6,10 @@ import com.f0x1d.logfox.feature.crashes.impl.data.AppInfoDataSource
 import com.f0x1d.logfox.feature.crashes.impl.data.CrashCollectorDataSource
 import com.f0x1d.logfox.feature.crashes.impl.data.CrashDataSource
 import com.f0x1d.logfox.feature.logging.api.model.LogLine
-import com.f0x1d.logfox.feature.preferences.api.data.LogsSettingsRepository
 
 internal abstract class BaseCrashDataSource(
     private val appInfoDataSource: AppInfoDataSource,
     private val crashCollectorDataSource: CrashCollectorDataSource,
-    private val logsSettingsRepository: LogsSettingsRepository,
 ) : CrashDataSource {
 
     protected abstract val crashType: CrashType
@@ -30,8 +28,7 @@ internal abstract class BaseCrashDataSource(
 
     open fun shouldContinueCollecting(line: LogLine): Boolean {
         // Continue if within time window (crashes can have interleaved output)
-        val timeWindowMs = logsSettingsRepository.logsUpdateInterval().value + timeBufferMs
-        if (collectionStartTime + timeWindowMs > System.currentTimeMillis()) return true
+        if (collectionStartTime + timeBufferMs > System.currentTimeMillis()) return true
 
         // Fall back to PID checking
         val first = firstLine ?: return false
