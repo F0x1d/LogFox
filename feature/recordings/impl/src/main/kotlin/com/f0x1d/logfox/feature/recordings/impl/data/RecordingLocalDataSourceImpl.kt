@@ -155,10 +155,8 @@ internal class RecordingLocalDataSourceImpl @Inject constructor(
             if (recordedLines.isEmpty()) return@withLock ""
 
             val formatted = recordedLines.joinToString("\n") {
-                logLineFormatterRepository.format(
+                logLineFormatterRepository.formatForExport(
                     logLine = it,
-                    formatDate = dateTimeFormatter::formatDate,
-                    formatTime = dateTimeFormatter::formatTime,
                 )
             }
             recordedLines.clear()

@@ -5,19 +5,18 @@ import com.f0x1d.logfox.feature.crashes.api.domain.CheckAppDisabledUseCase
 import com.f0x1d.logfox.feature.crashes.api.domain.DeleteCrashUseCase
 import com.f0x1d.logfox.feature.crashes.api.domain.ExportCrashToFileUseCase
 import com.f0x1d.logfox.feature.crashes.api.domain.ExportCrashToZipUseCase
-import com.f0x1d.logfox.feature.crashes.api.domain.GetCrashByIdFlowUseCase
+import com.f0x1d.logfox.feature.crashes.api.domain.GetCrashAndLogByIdFlowUseCase
 import com.f0x1d.logfox.feature.crashes.presentation.details.di.CrashId
 import com.f0x1d.logfox.feature.preferences.api.domain.crashes.GetUseSeparateNotificationsChannelsForCrashesFlowUseCase
 import com.f0x1d.logfox.feature.preferences.api.domain.crashes.GetWrapCrashLogLinesFlowUseCase
 import com.f0x1d.logfox.feature.preferences.api.domain.crashes.SetWrapCrashLogLinesUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 internal class CrashDetailsEffectHandler @Inject constructor(
     @CrashId private val crashId: Long,
-    private val getCrashByIdFlowUseCase: GetCrashByIdFlowUseCase,
+    private val getCrashAndLogByIdFlowUseCase: GetCrashAndLogByIdFlowUseCase,
     private val deleteCrashUseCase: DeleteCrashUseCase,
     private val checkAppDisabledUseCase: CheckAppDisabledUseCase,
     private val exportCrashToFileUseCase: ExportCrashToFileUseCase,
@@ -33,25 +32,11 @@ internal class CrashDetailsEffectHandler @Inject constructor(
     ) {
         when (effect) {
             is CrashDetailsSideEffect.LoadCrash -> {
-                getCrashByIdFlowUseCase(crashId)
-                    .map {
-                        when (it) {
-                            null -> {
-                                null
-                            }
-
-                            else -> {
-                                runCatching {
-                                    it to it.logFile?.readText()
-                                }.getOrNull()
-                            }
-                        }
+                getCrashAndLogByIdFlowUseCase(crashId).collect { value ->
+                    value?.let { (crash, crashLog) ->
+                        onCommand(CrashDetailsCommand.CrashLoaded(crash, crashLog))
                     }
-                    .collect { value ->
-                        value?.let { (crash, crashLog) ->
-                            onCommand(CrashDetailsCommand.CrashLoaded(crash, crashLog))
-                        }
-                    }
+                }
             }
 
             is CrashDetailsSideEffect.SetWrapCrashLogLines -> {
@@ -73,11 +58,11 @@ internal class CrashDetailsEffectHandler @Inject constructor(
             }
 
             is CrashDetailsSideEffect.ExportCrashToZip -> {
-                exportCrashToZipUseCase(effect.uri, effect.appCrash, effect.crashLog)
+                exportCrashToZipUseCase(crashId, effect.uri)
             }
 
             is CrashDetailsSideEffect.ExportCrashToFile -> {
-                exportCrashToFileUseCase(effect.uri, effect.crashLog.orEmpty())
+                exportCrashToFileUseCase(crashId, effect.uri)
             }
 
             is CrashDetailsSideEffect.ChangeBlacklist -> {

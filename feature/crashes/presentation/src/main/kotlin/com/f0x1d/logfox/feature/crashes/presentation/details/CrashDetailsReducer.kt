@@ -121,32 +121,19 @@ internal class CrashDetailsReducer @Inject constructor(
         }
 
         is CrashDetailsCommand.ExportCrashToFile -> {
-            val crashLog = state.crashLog
-            if (crashLog != null) {
-                state.withSideEffects(
-                    CrashDetailsSideEffect.ExportCrashToFile(
-                        uri = command.uri,
-                        crashLog = crashLog,
-                    ),
-                )
-            } else {
-                state.noSideEffects()
-            }
+            state.withSideEffects(
+                CrashDetailsSideEffect.ExportCrashToFile(
+                    uri = command.uri,
+                ),
+            )
         }
 
         is CrashDetailsCommand.ExportCrashToZip -> {
-            val appCrash = state.crash
-            if (appCrash != null) {
-                state.withSideEffects(
-                    CrashDetailsSideEffect.ExportCrashToZip(
-                        uri = command.uri,
-                        appCrash = appCrash,
-                        crashLog = state.crashLog,
-                    ),
-                )
-            } else {
-                state.noSideEffects()
-            }
+            state.withSideEffects(
+                CrashDetailsSideEffect.ExportCrashToZip(
+                    uri = command.uri,
+                ),
+            )
         }
 
         is CrashDetailsCommand.CopyCrashLog -> {

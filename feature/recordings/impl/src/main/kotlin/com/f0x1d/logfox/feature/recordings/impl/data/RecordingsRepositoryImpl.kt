@@ -62,10 +62,8 @@ internal class RecordingsRepositoryImpl @Inject constructor(
                         terminals.getValue(terminalSettingsRepository.selectedTerminalType().value),
                     )
                     .collect { line ->
-                        batch += logLineFormatterRepository.format(
+                        batch += logLineFormatterRepository.formatForExport(
                             logLine = line,
-                            formatDate = dateTimeFormatter::formatDate,
-                            formatTime = dateTimeFormatter::formatTime,
                         )
 
                         if (batch.size >= BATCH_SIZE) {
@@ -108,10 +106,8 @@ internal class RecordingsRepositoryImpl @Inject constructor(
 
         recordingFile.writeText(
             lines.joinToString("\n") {
-                logLineFormatterRepository.format(
+                logLineFormatterRepository.formatForExport(
                     logLine = it,
-                    formatDate = dateTimeFormatter::formatDate,
-                    formatTime = dateTimeFormatter::formatTime,
                 )
             },
         )

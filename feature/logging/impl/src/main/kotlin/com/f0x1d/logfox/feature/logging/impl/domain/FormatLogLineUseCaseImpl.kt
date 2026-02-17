@@ -11,11 +11,7 @@ internal class FormatLogLineUseCaseImpl @Inject constructor(
 
     override fun invoke(
         logLine: LogLine,
-        formatDate: (Long) -> String,
-        formatTime: (Long) -> String,
-    ): String = logLineFormatterRepository.format(
+    ): String = logLineFormatterRepository.formatForExport(
         logLine = logLine,
-        formatDate = formatDate,
-        formatTime = formatTime,
     )
 }

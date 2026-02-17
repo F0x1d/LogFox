@@ -1,5 +1,6 @@
 package com.f0x1d.logfox.feature.logging.impl.data
 
+import com.f0x1d.logfox.feature.datetime.api.DateTimeFormatter
 import com.f0x1d.logfox.feature.logging.api.data.LogLineFormatterRepository
 import com.f0x1d.logfox.feature.logging.api.model.LogLine
 import com.f0x1d.logfox.feature.logging.api.model.ShowLogValues
@@ -8,21 +9,26 @@ import javax.inject.Inject
 
 internal class LogLineFormatterRepositoryImpl @Inject constructor(
     private val logsSettingsRepository: LogsSettingsRepository,
+    private val dateTimeFormatter: DateTimeFormatter,
 ) : LogLineFormatterRepository {
 
-    override fun format(
-        logLine: LogLine,
-        formatDate: (Long) -> String,
-        formatTime: (Long) -> String,
-    ): String = if (logsSettingsRepository.exportLogsInOriginalFormat().value) {
-        logLine.originalContent
-    } else {
+    override fun formatForExport(logLine: LogLine): String =
+        if (logsSettingsRepository.exportLogsInOriginalFormat().value) {
+            logLine.originalContent
+        } else {
+            logLine.formatOriginal(
+                values = getShowLogValues(),
+                formatDate = dateTimeFormatter::formatDate,
+                formatTime = dateTimeFormatter::formatTime,
+            )
+        }
+
+    override fun formatOriginal(logLine: LogLine): String =
         logLine.formatOriginal(
             values = getShowLogValues(),
-            formatDate = formatDate,
-            formatTime = formatTime,
+            formatDate = dateTimeFormatter::formatDate,
+            formatTime = dateTimeFormatter::formatTime,
         )
-    }
 
     private fun getShowLogValues(): ShowLogValues = ShowLogValues(
         date = logsSettingsRepository.showLogDate().value,

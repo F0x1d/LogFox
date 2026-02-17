@@ -1,7 +1,6 @@
 package com.f0x1d.logfox.feature.logging.presentation.list
 
 import com.f0x1d.logfox.core.tea.EffectHandler
-import com.f0x1d.logfox.feature.datetime.api.DateTimeFormatter
 import com.f0x1d.logfox.feature.filters.api.domain.GetAllEnabledFiltersFlowUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.ExportLogsToUriUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.FormatLogLineUseCase
@@ -32,7 +31,6 @@ internal class LogsEffectHandler @Inject constructor(
     private val formatLogLineUseCase: FormatLogLineUseCase,
     private val exportLogsToUriUseCase: ExportLogsToUriUseCase,
     private val loggingServiceDelegate: LoggingServiceDelegate,
-    private val dateTimeFormatter: DateTimeFormatter,
 ) : EffectHandler<LogsSideEffect, LogsCommand> {
 
     override suspend fun handle(effect: LogsSideEffect, onCommand: suspend (LogsCommand) -> Unit) {
@@ -88,19 +86,13 @@ internal class LogsEffectHandler @Inject constructor(
             is LogsSideEffect.FormatAndCopyLog -> {
                 val formattedText = formatLogLineUseCase(
                     logLine = effect.logLine,
-                    formatDate = dateTimeFormatter::formatDate,
-                    formatTime = dateTimeFormatter::formatTime,
                 )
                 onCommand(LogsCommand.CopyFormattedText(formattedText))
             }
 
             is LogsSideEffect.FormatAndCopyLogs -> {
                 val formattedText = effect.lines.joinToString("\n") { line ->
-                    formatLogLineUseCase(
-                        logLine = line,
-                        formatDate = dateTimeFormatter::formatDate,
-                        formatTime = dateTimeFormatter::formatTime,
-                    )
+                    formatLogLineUseCase(line)
                 }
                 onCommand(LogsCommand.CopyFormattedText(formattedText))
             }
