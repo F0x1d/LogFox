@@ -64,6 +64,7 @@ import com.f0x1d.logfox.feature.preferences.api.domain.notifications.GetAskedNot
 import com.f0x1d.logfox.feature.preferences.api.domain.notifications.SetAskedNotificationsPermissionUseCase
 import com.f0x1d.logfox.feature.preferences.api.domain.service.GetIncludeDeviceInfoInArchivesUseCase
 import com.f0x1d.logfox.feature.preferences.api.domain.service.GetStartOnBootUseCase
+import com.f0x1d.logfox.feature.preferences.api.domain.service.GetStopLoggingOnBackExitUseCase
 import com.f0x1d.logfox.feature.preferences.api.domain.terminal.GetSelectedTerminalTypeFlowUseCase
 import com.f0x1d.logfox.feature.preferences.api.domain.terminal.GetSelectedTerminalTypeUseCase
 import com.f0x1d.logfox.feature.preferences.api.domain.terminal.SetSelectedTerminalTypeUseCase
@@ -149,6 +150,7 @@ import com.f0x1d.logfox.feature.preferences.impl.domain.notifications.GetAskedNo
 import com.f0x1d.logfox.feature.preferences.impl.domain.notifications.SetAskedNotificationsPermissionUseCaseImpl
 import com.f0x1d.logfox.feature.preferences.impl.domain.service.GetIncludeDeviceInfoInArchivesUseCaseImpl
 import com.f0x1d.logfox.feature.preferences.impl.domain.service.GetStartOnBootUseCaseImpl
+import com.f0x1d.logfox.feature.preferences.impl.domain.service.GetStopLoggingOnBackExitUseCaseImpl
 import com.f0x1d.logfox.feature.preferences.impl.domain.terminal.GetSelectedTerminalTypeFlowUseCaseImpl
 import com.f0x1d.logfox.feature.preferences.impl.domain.terminal.GetSelectedTerminalTypeUseCaseImpl
 import com.f0x1d.logfox.feature.preferences.impl.domain.terminal.SetSelectedTerminalTypeUseCaseImpl
@@ -576,4 +578,9 @@ internal interface PreferencesModule {
     fun bindGetIncludeDeviceInfoInArchivesUseCase(
         impl: GetIncludeDeviceInfoInArchivesUseCaseImpl,
     ): GetIncludeDeviceInfoInArchivesUseCase
+
+    @Binds
+    fun bindGetStopLoggingOnBackExitUseCase(
+        impl: GetStopLoggingOnBackExitUseCaseImpl,
+    ): GetStopLoggingOnBackExitUseCase
 }

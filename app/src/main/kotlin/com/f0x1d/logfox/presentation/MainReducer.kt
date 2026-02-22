@@ -20,5 +20,13 @@ internal class MainReducer @Inject constructor() : Reducer<MainState, MainComman
         ).withSideEffects(
             MainSideEffect.SaveNotificationsPermissionAsked,
         )
+
+        MainCommand.BackPressedAtRoot -> state.withSideEffects(
+            MainSideEffect.HandleBackExit,
+        )
+
+        MainCommand.FinishActivityRequested -> state.withSideEffects(
+            MainSideEffect.FinishActivity,
+        )
     }
 }

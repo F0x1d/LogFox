@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.constraintlayout.widget.ConstraintSet
@@ -76,6 +77,7 @@ class MainActivity :
     @SuppressLint("InlinedApi")
     override fun ActivityMainBinding.onCreate(savedInstanceState: Bundle?) {
         setupNavigation(viewModel.state.value.openCrashesOnStartup)
+        setupBackPressedHandling()
 
         barView?.setOnItemReselectedListener {
             // Just do nothing
@@ -90,9 +92,24 @@ class MainActivity :
                     Directions.action_global_setupFragment,
                 )
 
+                MainSideEffect.FinishActivity -> finish()
+
                 else -> Unit // Handled by EffectHandler
             }
         }
+    }
+
+    private fun setupBackPressedHandling() {
+        onBackPressedDispatcher.addCallback(
+            this,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (!navController.navigateUp()) {
+                        viewModel.send(MainCommand.BackPressedAtRoot)
+                    }
+                }
+            },
+        )
     }
 
     private fun showNotificationPermissionDialogIfNeeded(state: MainViewState) {

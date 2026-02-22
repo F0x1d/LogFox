@@ -28,9 +28,15 @@ internal class ServiceSettingsLocalDataSourceImpl @Inject constructor(
         defaultValue = true,
     )
 
+    override fun stopLoggingOnBackExit(): Preference<Boolean> = booleanPreference(
+        key = KEY_STOP_LOGGING_ON_BACK_EXIT,
+        defaultValue = false,
+    )
+
     private companion object {
         const val KEY_START_ON_BOOT = "pref_start_on_boot"
         const val KEY_SHOW_LOGS_FROM_APP_LAUNCH = "pref_show_logs_from_app_launch"
         const val KEY_INCLUDE_DEVICE_INFO = "pref_include_device_info_in_archives"
+        const val KEY_STOP_LOGGING_ON_BACK_EXIT = "pref_stop_logging_on_back_exit"
     }
 }

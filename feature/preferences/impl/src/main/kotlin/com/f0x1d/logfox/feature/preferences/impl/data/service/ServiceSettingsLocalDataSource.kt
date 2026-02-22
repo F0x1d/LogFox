@@ -6,4 +6,5 @@ internal interface ServiceSettingsLocalDataSource {
     fun startOnBoot(): Preference<Boolean>
     fun showLogsFromAppLaunch(): Preference<Boolean>
     fun includeDeviceInfoInArchives(): Preference<Boolean>
+    fun stopLoggingOnBackExit(): Preference<Boolean>
 }

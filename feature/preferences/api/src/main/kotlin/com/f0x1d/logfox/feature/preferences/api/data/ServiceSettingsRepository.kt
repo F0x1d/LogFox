@@ -6,4 +6,5 @@ interface ServiceSettingsRepository {
     fun startOnBoot(): PreferenceStateFlow<Boolean>
     fun showLogsFromAppLaunch(): PreferenceStateFlow<Boolean>
     fun includeDeviceInfoInArchives(): PreferenceStateFlow<Boolean>
+    fun stopLoggingOnBackExit(): PreferenceStateFlow<Boolean>
 }

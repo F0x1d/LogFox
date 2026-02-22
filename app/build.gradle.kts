@@ -88,4 +88,8 @@ dependencies {
 
     implementation(libs.bundles.androidx.navigation)
     implementation(libs.androidx.hilt.navigation.fragment)
+
+    testImplementation(libs.junit)
+    testImplementation(libs.robolectric)
+    testImplementation(libs.androidx.test.core)
 }
