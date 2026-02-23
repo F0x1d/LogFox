@@ -13,6 +13,7 @@ internal class CrashExportRepositoryImpl @Inject constructor(
     private val crashesRepository: CrashesRepository,
     private val exportRepository: ExportRepository,
     private val serviceSettingsRepository: ServiceSettingsRepository,
+    private val appInfoDataSource: AppInfoDataSource,
 ) : CrashExportRepository {
 
     override suspend fun exportToFile(crashId: Long, uri: Uri) {
@@ -21,6 +22,10 @@ internal class CrashExportRepositoryImpl @Inject constructor(
         val content = buildString {
             if (serviceSettingsRepository.includeDeviceInfoInArchives().value) {
                 appendLine(deviceData)
+                appendLine()
+            }
+            if (serviceSettingsRepository.includeAppInfoInExports().value) {
+                appendLine(appInfoDataSource.getAppInfo(appCrash.packageName).format())
                 appendLine()
             }
             appCrash.logFile?.readText()?.let { append(it) }
@@ -38,6 +43,12 @@ internal class CrashExportRepositoryImpl @Inject constructor(
             null
         }
 
+        val appInfo = if (serviceSettingsRepository.includeAppInfoInExports().value) {
+            appInfoDataSource.getAppInfo(appCrash.packageName).format()
+        } else {
+            null
+        }
+
         val logExtension = if (serviceSettingsRepository.exportLogsAsTxt().value) "txt" else "log"
 
         exportRepository.writeZipToUri(uri) {
@@ -45,6 +56,13 @@ internal class CrashExportRepositoryImpl @Inject constructor(
                 putZipEntry(
                     name = "device.txt",
                     content = deviceInfo.encodeToByteArray(),
+                )
+            }
+
+            if (appInfo != null) {
+                putZipEntry(
+                    name = "app.txt",
+                    content = appInfo.encodeToByteArray(),
                 )
             }
 

@@ -136,6 +136,7 @@
     <string name="exports">Exports</string>
     <string name="export_logs_as_txt">Export logs as .txt instead of .log</string>
     <string name="include_device_information_in_archives">Include device information in exported recordings and crashes</string>
+    <string name="include_app_information_in_exports">Include app information in exported crashes</string>
     <string name="to_recording">To recording</string>
     <string name="no_logs">There are currently no logs</string>
     <string name="waiting_for_logs">Waiting for logs</string>

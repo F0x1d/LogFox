@@ -66,6 +66,14 @@
             app:iconSpaceReserved="false" />
 
         <SwitchPreferenceCompat
+            android:title="@string/include_app_information_in_exports"
+            android:key="pref_include_app_info_in_exports"
+            android:defaultValue="true"
+            app:singleLineTitle="false"
+            app:widgetLayout="@layout/preference_material_switch"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
             android:title="@string/export_logs_as_txt"
             android:key="pref_export_logs_as_txt"
             android:defaultValue="false"
