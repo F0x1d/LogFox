@@ -133,7 +133,8 @@
     <string name="date_time">Date, time</string>
     <string name="date_format">Date format</string>
     <string name="time_format">Time format</string>
-    <string name="archives">Archives</string>
+    <string name="archives">Exports</string>
+    <string name="export_logs_as_txt">Export logs as .txt instead of .log</string>
     <string name="include_device_information_in_archives">Include device information in exported recordings and crashes</string>
     <string name="to_recording">To recording</string>
     <string name="no_logs">There are currently no logs</string>

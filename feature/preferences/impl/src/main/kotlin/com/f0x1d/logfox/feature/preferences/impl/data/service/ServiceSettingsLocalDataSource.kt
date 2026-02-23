@@ -7,4 +7,5 @@ internal interface ServiceSettingsLocalDataSource {
     fun showLogsFromAppLaunch(): Preference<Boolean>
     fun includeDeviceInfoInArchives(): Preference<Boolean>
     fun stopLoggingOnBackExit(): Preference<Boolean>
+    fun exportLogsAsTxt(): Preference<Boolean>
 }

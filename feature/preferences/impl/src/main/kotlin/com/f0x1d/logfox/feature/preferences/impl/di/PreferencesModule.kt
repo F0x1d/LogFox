@@ -62,6 +62,7 @@ import com.f0x1d.logfox.feature.preferences.api.domain.logs.SetShowLogTimeUseCas
 import com.f0x1d.logfox.feature.preferences.api.domain.logs.SetShowLogUidUseCase
 import com.f0x1d.logfox.feature.preferences.api.domain.notifications.GetAskedNotificationsPermissionUseCase
 import com.f0x1d.logfox.feature.preferences.api.domain.notifications.SetAskedNotificationsPermissionUseCase
+import com.f0x1d.logfox.feature.preferences.api.domain.service.GetExportLogsAsTxtUseCase
 import com.f0x1d.logfox.feature.preferences.api.domain.service.GetIncludeDeviceInfoInArchivesUseCase
 import com.f0x1d.logfox.feature.preferences.api.domain.service.GetStartOnBootUseCase
 import com.f0x1d.logfox.feature.preferences.api.domain.service.GetStopLoggingOnBackExitUseCase
@@ -148,6 +149,7 @@ import com.f0x1d.logfox.feature.preferences.impl.domain.logs.SetShowLogTimeUseCa
 import com.f0x1d.logfox.feature.preferences.impl.domain.logs.SetShowLogUidUseCaseImpl
 import com.f0x1d.logfox.feature.preferences.impl.domain.notifications.GetAskedNotificationsPermissionUseCaseImpl
 import com.f0x1d.logfox.feature.preferences.impl.domain.notifications.SetAskedNotificationsPermissionUseCaseImpl
+import com.f0x1d.logfox.feature.preferences.impl.domain.service.GetExportLogsAsTxtUseCaseImpl
 import com.f0x1d.logfox.feature.preferences.impl.domain.service.GetIncludeDeviceInfoInArchivesUseCaseImpl
 import com.f0x1d.logfox.feature.preferences.impl.domain.service.GetStartOnBootUseCaseImpl
 import com.f0x1d.logfox.feature.preferences.impl.domain.service.GetStopLoggingOnBackExitUseCaseImpl
@@ -583,4 +585,9 @@ internal interface PreferencesModule {
     fun bindGetStopLoggingOnBackExitUseCase(
         impl: GetStopLoggingOnBackExitUseCaseImpl,
     ): GetStopLoggingOnBackExitUseCase
+
+    @Binds
+    fun bindGetExportLogsAsTxtUseCase(
+        impl: GetExportLogsAsTxtUseCaseImpl,
+    ): GetExportLogsAsTxtUseCase
 }

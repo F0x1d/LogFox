@@ -4,13 +4,10 @@ import com.f0x1d.logfox.core.tea.ReduceResult
 import com.f0x1d.logfox.core.tea.Reducer
 import com.f0x1d.logfox.core.tea.noSideEffects
 import com.f0x1d.logfox.core.tea.withSideEffects
-import com.f0x1d.logfox.feature.datetime.api.DateTimeFormatter
 import com.f0x1d.logfox.feature.logging.api.model.LogLine
 import javax.inject.Inject
 
-internal class LogsReducer @Inject constructor(
-    private val dateTimeFormatter: DateTimeFormatter,
-) : Reducer<LogsState, LogsCommand, LogsSideEffect> {
+internal class LogsReducer @Inject constructor() : Reducer<LogsState, LogsCommand, LogsSideEffect> {
 
     override fun reduce(
         state: LogsState,
@@ -101,9 +98,12 @@ internal class LogsReducer @Inject constructor(
         }
 
         is LogsCommand.ExportSelectedClicked -> {
-            val filename = "${dateTimeFormatter.formatForExport(System.currentTimeMillis())}.log"
+            state.withSideEffects(LogsSideEffect.PrepareExport)
+        }
+
+        is LogsCommand.ExportPickerReady -> {
             state.withSideEffects(
-                LogsSideEffect.LaunchExportPicker(filename = filename),
+                LogsSideEffect.LaunchExportPicker(filename = command.filename),
             )
         }
 

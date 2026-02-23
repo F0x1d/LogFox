@@ -5,12 +5,9 @@ import com.f0x1d.logfox.core.tea.Reducer
 import com.f0x1d.logfox.core.tea.noSideEffects
 import com.f0x1d.logfox.core.tea.withSideEffects
 import com.f0x1d.logfox.feature.crashes.api.data.notificationChannelId
-import com.f0x1d.logfox.feature.datetime.api.DateTimeFormatter
 import javax.inject.Inject
 
-internal class CrashDetailsReducer @Inject constructor(
-    private val dateTimeFormatter: DateTimeFormatter,
-) : Reducer<CrashDetailsState, CrashDetailsCommand, CrashDetailsSideEffect> {
+internal class CrashDetailsReducer @Inject constructor() : Reducer<CrashDetailsState, CrashDetailsCommand, CrashDetailsSideEffect> {
 
     override fun reduce(
         state: CrashDetailsState,
@@ -98,8 +95,9 @@ internal class CrashDetailsReducer @Inject constructor(
             val appCrash = state.crash
             if (appCrash != null && state.crashLog != null) {
                 state.withSideEffects(
-                    CrashDetailsSideEffect.LaunchFileExportPicker(
-                        filename = exportFilename(appCrash.packageName, appCrash.dateAndTime, "log"),
+                    CrashDetailsSideEffect.PrepareFileExport(
+                        packageName = appCrash.packageName,
+                        dateAndTime = appCrash.dateAndTime,
                     ),
                 )
             } else {
@@ -111,13 +109,26 @@ internal class CrashDetailsReducer @Inject constructor(
             val appCrash = state.crash
             if (appCrash != null) {
                 state.withSideEffects(
-                    CrashDetailsSideEffect.LaunchZipExportPicker(
-                        filename = exportFilename(appCrash.packageName, appCrash.dateAndTime, "zip"),
+                    CrashDetailsSideEffect.PrepareZipExport(
+                        packageName = appCrash.packageName,
+                        dateAndTime = appCrash.dateAndTime,
                     ),
                 )
             } else {
                 state.noSideEffects()
             }
+        }
+
+        is CrashDetailsCommand.FileExportPickerReady -> {
+            state.withSideEffects(
+                CrashDetailsSideEffect.LaunchFileExportPicker(filename = command.filename),
+            )
+        }
+
+        is CrashDetailsCommand.ZipExportPickerReady -> {
+            state.withSideEffects(
+                CrashDetailsSideEffect.LaunchZipExportPicker(filename = command.filename),
+            )
         }
 
         is CrashDetailsCommand.ExportCrashToFile -> {
@@ -178,11 +189,5 @@ internal class CrashDetailsReducer @Inject constructor(
             }
             state.copy(searchQuery = query, searchMatchRanges = ranges).noSideEffects()
         }
-    }
-
-    private fun exportFilename(packageName: String, dateAndTime: Long, extension: String): String {
-        val pkg = packageName.replace(".", "-")
-        val formattedDate = dateTimeFormatter.formatForExport(dateAndTime)
-        return "crash-$pkg-$formattedDate.$extension"
     }
 }

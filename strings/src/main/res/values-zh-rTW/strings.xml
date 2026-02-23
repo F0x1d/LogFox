@@ -121,7 +121,8 @@
     <string name="date_time">日期與時間</string>
     <string name="date_format">日期格式</string>
     <string name="time_format">時間格式</string>
-    <string name="archives">壓縮檔案</string>
+    <string name="archives">匯出</string>
+    <string name="export_logs_as_txt">Export logs as .txt instead of .log</string>
     <string name="include_device_information_in_archives">在匯出的崩潰日誌和錄製中包含裝置資訊</string>
     <string name="to_recording">轉為錄製</string>
     <string name="no_logs">目前沒有日誌</string>

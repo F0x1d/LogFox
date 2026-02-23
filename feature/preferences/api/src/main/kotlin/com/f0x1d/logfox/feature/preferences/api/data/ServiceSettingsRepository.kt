@@ -7,4 +7,5 @@ interface ServiceSettingsRepository {
     fun showLogsFromAppLaunch(): PreferenceStateFlow<Boolean>
     fun includeDeviceInfoInArchives(): PreferenceStateFlow<Boolean>
     fun stopLoggingOnBackExit(): PreferenceStateFlow<Boolean>
+    fun exportLogsAsTxt(): PreferenceStateFlow<Boolean>
 }

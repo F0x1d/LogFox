@@ -20,6 +20,8 @@ internal sealed interface LogsSideEffect {
 
     data class FormatAndCopyLogs(val lines: List<LogLine>) : LogsSideEffect
 
+    data object PrepareExport : LogsSideEffect
+
     // UI side effects - handled by Fragment
     data object NavigateToRecordings : LogsSideEffect
 

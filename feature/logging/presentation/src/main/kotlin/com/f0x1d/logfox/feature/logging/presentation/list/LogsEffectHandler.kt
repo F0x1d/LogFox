@@ -1,6 +1,7 @@
 package com.f0x1d.logfox.feature.logging.presentation.list
 
 import com.f0x1d.logfox.core.tea.EffectHandler
+import com.f0x1d.logfox.feature.datetime.api.DateTimeFormatter
 import com.f0x1d.logfox.feature.filters.api.domain.GetAllEnabledFiltersFlowUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.ExportLogsToUriUseCase
 import com.f0x1d.logfox.feature.logging.api.domain.FormatLogLineUseCase
@@ -13,6 +14,7 @@ import com.f0x1d.logfox.feature.logging.api.presentation.LoggingServiceDelegate
 import com.f0x1d.logfox.feature.preferences.api.domain.logs.GetLogsExpandedFlowUseCase
 import com.f0x1d.logfox.feature.preferences.api.domain.logs.GetLogsTextSizeFlowUseCase
 import com.f0x1d.logfox.feature.preferences.api.domain.logs.GetResumeLoggingWithBottomTouchFlowUseCase
+import com.f0x1d.logfox.feature.preferences.api.domain.service.GetExportLogsAsTxtUseCase
 import com.f0x1d.logfox.feature.recordings.api.domain.CreateRecordingFromLinesUseCase
 import kotlinx.coroutines.flow.combine
 import javax.inject.Inject
@@ -31,6 +33,8 @@ internal class LogsEffectHandler @Inject constructor(
     private val formatLogLineUseCase: FormatLogLineUseCase,
     private val exportLogsToUriUseCase: ExportLogsToUriUseCase,
     private val loggingServiceDelegate: LoggingServiceDelegate,
+    private val getExportLogsAsTxtUseCase: GetExportLogsAsTxtUseCase,
+    private val dateTimeFormatter: DateTimeFormatter,
 ) : EffectHandler<LogsSideEffect, LogsCommand> {
 
     override suspend fun handle(effect: LogsSideEffect, onCommand: suspend (LogsCommand) -> Unit) {
@@ -81,6 +85,12 @@ internal class LogsEffectHandler @Inject constructor(
 
             is LogsSideEffect.ExportLogsTo -> {
                 exportLogsToUriUseCase(effect.lines, effect.uri)
+            }
+
+            is LogsSideEffect.PrepareExport -> {
+                val extension = if (getExportLogsAsTxtUseCase()) "txt" else "log"
+                val filename = "${dateTimeFormatter.formatForExport(System.currentTimeMillis())}.$extension"
+                onCommand(LogsCommand.ExportPickerReady(filename))
             }
 
             is LogsSideEffect.FormatAndCopyLog -> {

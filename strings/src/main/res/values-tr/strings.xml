@@ -121,7 +121,8 @@
     <string name="date_time">Tarih, zaman</string>
     <string name="date_format">Tarih formaıt</string>
     <string name="time_format">Zaman formatı</string>
-    <string name="archives">Arşivler</string>
+    <string name="archives">Dışa Aktarmalar</string>
+    <string name="export_logs_as_txt">Export logs as .txt instead of .log</string>
     <string name="include_device_information_in_archives">Include device information with exported recordings and crashes</string>
     <string name="to_recording">Kayıt için</string>
 </resources>

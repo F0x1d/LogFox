@@ -7,9 +7,11 @@ import com.f0x1d.logfox.feature.crashes.api.domain.ExportCrashToFileUseCase
 import com.f0x1d.logfox.feature.crashes.api.domain.ExportCrashToZipUseCase
 import com.f0x1d.logfox.feature.crashes.api.domain.GetCrashAndLogByIdFlowUseCase
 import com.f0x1d.logfox.feature.crashes.presentation.details.di.CrashId
+import com.f0x1d.logfox.feature.datetime.api.DateTimeFormatter
 import com.f0x1d.logfox.feature.preferences.api.domain.crashes.GetUseSeparateNotificationsChannelsForCrashesFlowUseCase
 import com.f0x1d.logfox.feature.preferences.api.domain.crashes.GetWrapCrashLogLinesFlowUseCase
 import com.f0x1d.logfox.feature.preferences.api.domain.crashes.SetWrapCrashLogLinesUseCase
+import com.f0x1d.logfox.feature.preferences.api.domain.service.GetExportLogsAsTxtUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.combine
 import javax.inject.Inject
@@ -24,6 +26,8 @@ internal class CrashDetailsEffectHandler @Inject constructor(
     private val getWrapCrashLogLinesFlowUseCase: GetWrapCrashLogLinesFlowUseCase,
     private val setWrapCrashLogLinesUseCase: SetWrapCrashLogLinesUseCase,
     private val getUseSeparateNotificationsChannelsForCrashesFlowUseCase: GetUseSeparateNotificationsChannelsForCrashesFlowUseCase,
+    private val getExportLogsAsTxtUseCase: GetExportLogsAsTxtUseCase,
+    private val dateTimeFormatter: DateTimeFormatter,
 ) : EffectHandler<CrashDetailsSideEffect, CrashDetailsCommand> {
     @OptIn(ExperimentalCoroutinesApi::class)
     override suspend fun handle(
@@ -57,6 +61,17 @@ internal class CrashDetailsEffectHandler @Inject constructor(
                 }
             }
 
+            is CrashDetailsSideEffect.PrepareFileExport -> {
+                val extension = if (getExportLogsAsTxtUseCase()) "txt" else "log"
+                val filename = exportFilename(effect.packageName, effect.dateAndTime, extension)
+                onCommand(CrashDetailsCommand.FileExportPickerReady(filename))
+            }
+
+            is CrashDetailsSideEffect.PrepareZipExport -> {
+                val filename = exportFilename(effect.packageName, effect.dateAndTime, "zip")
+                onCommand(CrashDetailsCommand.ZipExportPickerReady(filename))
+            }
+
             is CrashDetailsSideEffect.ExportCrashToZip -> {
                 exportCrashToZipUseCase(crashId, effect.uri)
             }
@@ -84,5 +99,11 @@ internal class CrashDetailsEffectHandler @Inject constructor(
             is CrashDetailsSideEffect.LaunchFileExportPicker -> Unit
             is CrashDetailsSideEffect.LaunchZipExportPicker -> Unit
         }
+    }
+
+    private fun exportFilename(packageName: String, dateAndTime: Long, extension: String): String {
+        val pkg = packageName.replace(".", "-")
+        val formattedDate = dateTimeFormatter.formatForExport(dateAndTime)
+        return "crash-$pkg-$formattedDate.$extension"
     }
 }

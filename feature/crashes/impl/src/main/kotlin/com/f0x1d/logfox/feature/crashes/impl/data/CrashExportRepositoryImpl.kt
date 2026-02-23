@@ -38,6 +38,8 @@ internal class CrashExportRepositoryImpl @Inject constructor(
             null
         }
 
+        val logExtension = if (serviceSettingsRepository.exportLogsAsTxt().value) "txt" else "log"
+
         exportRepository.writeZipToUri(uri) {
             if (deviceInfo != null) {
                 putZipEntry(
@@ -48,14 +50,14 @@ internal class CrashExportRepositoryImpl @Inject constructor(
 
             appCrash.logFile?.let { file ->
                 putZipEntry(
-                    name = "crash.log",
+                    name = "crash.$logExtension",
                     file = file,
                 )
             }
 
             appCrash.logDumpFile?.let { file ->
                 putZipEntry(
-                    name = "dump.log",
+                    name = "dump.$logExtension",
                     file = file,
                 )
             }

@@ -4,6 +4,7 @@ import android.net.Uri
 import com.f0x1d.logfox.core.context.deviceData
 import com.f0x1d.logfox.core.io.putZipEntry
 import com.f0x1d.logfox.feature.export.api.data.ExportRepository
+import com.f0x1d.logfox.feature.preferences.api.domain.service.GetExportLogsAsTxtUseCase
 import com.f0x1d.logfox.feature.preferences.api.domain.service.GetIncludeDeviceInfoInArchivesUseCase
 import com.f0x1d.logfox.feature.recordings.api.data.RecordingsRepository
 import com.f0x1d.logfox.feature.recordings.api.domain.ExportRecordingZipUseCase
@@ -13,11 +14,13 @@ internal class ExportRecordingZipUseCaseImpl @Inject constructor(
     private val recordingsRepository: RecordingsRepository,
     private val exportRepository: ExportRepository,
     private val getIncludeDeviceInfoInArchivesUseCase: GetIncludeDeviceInfoInArchivesUseCase,
+    private val getExportLogsAsTxtUseCase: GetExportLogsAsTxtUseCase,
 ) : ExportRecordingZipUseCase {
 
     override suspend fun invoke(recordingId: Long, uri: Uri) {
         val recording = recordingsRepository.getById(recordingId) ?: return
         val includeDeviceInfo = getIncludeDeviceInfoInArchivesUseCase()
+        val logExtension = if (getExportLogsAsTxtUseCase()) "txt" else "log"
 
         exportRepository.writeZipToUri(uri) {
             if (includeDeviceInfo) {
@@ -28,7 +31,7 @@ internal class ExportRecordingZipUseCaseImpl @Inject constructor(
             }
 
             putZipEntry(
-                name = "recorded.log",
+                name = "recorded.$logExtension",
                 file = recording.file,
             )
         }

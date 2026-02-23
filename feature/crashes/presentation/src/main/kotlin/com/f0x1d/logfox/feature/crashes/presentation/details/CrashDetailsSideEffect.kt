@@ -15,6 +15,10 @@ internal sealed interface CrashDetailsSideEffect {
 
     data class ExportCrashToFile(val uri: Uri) : CrashDetailsSideEffect
 
+    data class PrepareFileExport(val packageName: String, val dateAndTime: Long) : CrashDetailsSideEffect
+
+    data class PrepareZipExport(val packageName: String, val dateAndTime: Long) : CrashDetailsSideEffect
+
     data class ChangeBlacklist(val appCrash: AppCrash) : CrashDetailsSideEffect
 
     data class DeleteCrash(val appCrash: AppCrash) : CrashDetailsSideEffect

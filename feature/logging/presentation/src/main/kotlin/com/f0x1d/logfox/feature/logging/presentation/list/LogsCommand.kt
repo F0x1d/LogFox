@@ -34,6 +34,8 @@ internal sealed interface LogsCommand {
 
     data object ExportSelectedClicked : LogsCommand
 
+    data class ExportPickerReady(val filename: String) : LogsCommand
+
     data object SwitchState : LogsCommand
 
     data object Pause : LogsCommand

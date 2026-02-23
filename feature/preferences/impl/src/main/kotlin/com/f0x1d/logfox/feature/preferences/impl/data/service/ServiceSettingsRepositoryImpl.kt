@@ -18,4 +18,6 @@ internal class ServiceSettingsRepositoryImpl @Inject constructor(
     override fun includeDeviceInfoInArchives(): PreferenceStateFlow<Boolean> = localDataSource.includeDeviceInfoInArchives().asPreferenceStateFlow()
 
     override fun stopLoggingOnBackExit(): PreferenceStateFlow<Boolean> = localDataSource.stopLoggingOnBackExit().asPreferenceStateFlow()
+
+    override fun exportLogsAsTxt(): PreferenceStateFlow<Boolean> = localDataSource.exportLogsAsTxt().asPreferenceStateFlow()
 }

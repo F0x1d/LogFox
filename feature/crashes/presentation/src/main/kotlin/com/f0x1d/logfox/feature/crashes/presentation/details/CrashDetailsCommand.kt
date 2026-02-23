@@ -31,6 +31,10 @@ internal sealed interface CrashDetailsCommand {
 
     data object ExportCrashToZipClicked : CrashDetailsCommand
 
+    data class FileExportPickerReady(val filename: String) : CrashDetailsCommand
+
+    data class ZipExportPickerReady(val filename: String) : CrashDetailsCommand
+
     data class ExportCrashToFile(val uri: Uri) : CrashDetailsCommand
 
     data class ExportCrashToZip(val uri: Uri) : CrashDetailsCommand
