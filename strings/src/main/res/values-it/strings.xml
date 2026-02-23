@@ -121,7 +121,7 @@
     <string name="date_time">Data, ora</string>
     <string name="date_format">Formato data</string>
     <string name="time_format">Formato ora</string>
-    <string name="archives">Esportazioni</string>
+    <string name="exports">Esportazioni</string>
     <string name="export_logs_as_txt">Export logs as .txt instead of .log</string>
     <string name="include_device_information_in_archives">Includere informazioni sul dispositivo nelle registrazioni esportate e negli arresti anomali</string>
     <string name="to_recording">Per registrare</string>

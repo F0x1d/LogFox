@@ -53,7 +53,7 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="@string/archives"
+        android:title="@string/exports"
         app:iconSpaceReserved="false"
         app:allowDividerAbove="false">
 

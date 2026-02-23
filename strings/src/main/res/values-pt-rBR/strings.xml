@@ -128,7 +128,7 @@ blacklist: ignored apps
     <string name="date_time">Data, horário</string>
     <string name="date_format">Formato da data</string>
     <string name="time_format">Formato do horário</string>
-    <string name="archives">Exportações</string>
+    <string name="exports">Exportações</string>
     <string name="export_logs_as_txt">Export logs as .txt instead of .log</string>
     <string name="include_device_information_in_archives">Incluir informações sobre o dispositivo em gravações e falhas exportadas</string>
     <string name="to_recording">Para gravação</string>
