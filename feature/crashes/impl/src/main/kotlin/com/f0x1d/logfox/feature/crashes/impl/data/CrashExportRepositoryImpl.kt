@@ -5,8 +5,12 @@ import com.f0x1d.logfox.core.context.deviceData
 import com.f0x1d.logfox.core.io.putZipEntry
 import com.f0x1d.logfox.feature.crashes.api.data.CrashExportRepository
 import com.f0x1d.logfox.feature.crashes.api.data.CrashesRepository
+import com.f0x1d.logfox.feature.datetime.api.DateTimeFormatter
 import com.f0x1d.logfox.feature.export.api.data.ExportRepository
+import com.f0x1d.logfox.feature.logging.api.data.LogLineFormatterRepository
+import com.f0x1d.logfox.feature.logging.api.data.LogLineParser
 import com.f0x1d.logfox.feature.preferences.api.data.ServiceSettingsRepository
+import java.io.File
 import javax.inject.Inject
 
 internal class CrashExportRepositoryImpl @Inject constructor(
@@ -14,6 +18,9 @@ internal class CrashExportRepositoryImpl @Inject constructor(
     private val exportRepository: ExportRepository,
     private val serviceSettingsRepository: ServiceSettingsRepository,
     private val appInfoDataSource: AppInfoDataSource,
+    private val dateTimeFormatter: DateTimeFormatter,
+    private val logLineParser: LogLineParser,
+    private val logLineFormatterRepository: LogLineFormatterRepository,
 ) : CrashExportRepository {
 
     override suspend fun exportToFile(crashId: Long, uri: Uri) {
@@ -28,7 +35,7 @@ internal class CrashExportRepositoryImpl @Inject constructor(
                 appendLine(appInfoDataSource.getAppInfo(appCrash.packageName).format())
                 appendLine()
             }
-            appCrash.logFile?.readText()?.let { append(it) }
+            appCrash.logFile?.let { append(formatLogFileContent(it)) }
         }
 
         exportRepository.writeContentToUri(uri, content)
@@ -50,35 +57,45 @@ internal class CrashExportRepositoryImpl @Inject constructor(
         }
 
         val logExtension = if (serviceSettingsRepository.exportLogsAsTxt().value) "txt" else "log"
+        val suffix = dateTimeFormatter.formatForExport(appCrash.dateAndTime)
 
         exportRepository.writeZipToUri(uri) {
             if (deviceInfo != null) {
                 putZipEntry(
-                    name = "device.txt",
+                    name = "device_${suffix}.txt",
                     content = deviceInfo.encodeToByteArray(),
                 )
             }
 
             if (appInfo != null) {
                 putZipEntry(
-                    name = "app.txt",
+                    name = "app_${suffix}.txt",
                     content = appInfo.encodeToByteArray(),
                 )
             }
 
             appCrash.logFile?.let { file ->
                 putZipEntry(
-                    name = "crash.$logExtension",
-                    file = file,
+                    name = "crash_${suffix}.$logExtension",
+                    content = formatLogFileContent(file).encodeToByteArray(),
                 )
             }
 
             appCrash.logDumpFile?.let { file ->
                 putZipEntry(
-                    name = "dump.$logExtension",
-                    file = file,
+                    name = "dump_${suffix}.$logExtension",
+                    content = formatLogFileContent(file).encodeToByteArray(),
                 )
             }
         }
+    }
+
+    private fun formatLogFileContent(file: File): String {
+        val lines = file.readLines()
+        return lines.mapIndexed { index, line ->
+            logLineParser.parse(index.toLong(), line)?.let { logLine ->
+                logLineFormatterRepository.formatForExport(logLine)
+            } ?: line
+        }.joinToString("\n")
     }
 }

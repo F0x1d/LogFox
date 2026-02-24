@@ -6,6 +6,18 @@ You are the main workflow orchestrator. Your job is to run a full delivery loop 
 
 ---
 
+## CRITICAL RULES — read before every phase
+
+These rules are MANDATORY. Violating any of them is a workflow failure.
+
+1. **NEVER skip verification.** Every stage MUST go through Coder -> Verifier. No exceptions.
+2. **ALWAYS update the plan file after each step.** After coder finishes: check off `- [x] Implement: ...`. After verifier passes: check off `- [x] Verify: ...`. Do this YOURSELF (the orchestrator) using the Edit tool — do not delegate it.
+3. **ALWAYS update task tracking.** Use `TaskUpdate` to mark each stage `in_progress` before starting it and `completed` after its verification passes.
+4. **NEVER proceed to the next stage until the current stage's verification passes.**
+5. **NEVER proceed to Final Verification until ALL stages have both implementation AND verification checked off in the plan file.**
+
+---
+
 ## Workflow overview
 
 ```
@@ -15,7 +27,12 @@ User Task
 [1. PLAN] ──> code-researcher (read-only) ──> planner (plan + design files)
   |
   v
-[2. IMPLEMENT] ──> for each stage: coder (write code) -> verifier (check stage)
+[2. IMPLEMENT] ──> for each stage:
+                      coder (write code)
+                      -> YOU check off implement items in plan
+                      -> verifier (check stage)
+                      -> YOU check off verify items in plan
+                      -> YOU mark task completed
   |
   v
 [3. FINAL VERIFY] ──> final-verifier (holistic review)
@@ -107,15 +124,23 @@ After research completes, launch a Task subagent (subagent_type: `Plan`) with th
 >
 > **Return**: Plan file path, design file path, stage breakdown, key architecture constraints
 
-Present the plan to the user for approval before proceeding. Use TaskCreate to track each stage as a task item.
+### After planning completes — orchestrator actions (MANDATORY):
+
+1. Present the plan to the user for approval before proceeding
+2. Use `TaskCreate` to create a task for EACH stage in the plan (include stage number and description)
+3. Only proceed to Phase 2 after user approval
 
 ---
 
 ## Phase 2: Implementation Loop
 
-For each stage in the plan (in order), run this loop:
+**For each stage in the plan (in order), you MUST execute ALL of the following steps. Do NOT skip any step.**
 
-### Step 2a: Code
+### Step 2a: Mark stage in-progress
+
+Use `TaskUpdate` to set the current stage task to `in_progress`.
+
+### Step 2b: Code
 
 Launch a Task subagent (subagent_type: `general-purpose`) with this role:
 
@@ -138,9 +163,16 @@ Launch a Task subagent (subagent_type: `general-purpose`) with this role:
 >
 > **Return**: Files changed, what was implemented per item, known caveats to verify
 
-After the coder completes, update the plan file to check off implementation items (`- [x] Implement: ...`).
+### Step 2c: Check off implementation items (MANDATORY — orchestrator does this)
 
-### Step 2b: Verify Stage
+**Immediately** after the coder subagent returns, YOU (the orchestrator) MUST use the Edit tool to update the plan file:
+- Change `- [ ] Implement: ...` to `- [x] Implement: ...` for every item the coder completed in this stage
+
+**Do NOT proceed to verification until you have checked off the implementation items.**
+
+### Step 2d: Verify Stage (MANDATORY — NEVER SKIP THIS)
+
+**You MUST launch a verification subagent after EVERY stage. This is not optional.**
 
 Launch a Task subagent (subagent_type: `general-purpose`) with this role:
 
@@ -171,13 +203,32 @@ Launch a Task subagent (subagent_type: `general-purpose`) with this role:
 > - Exact reproduction commands and failing outputs
 > - Design compliance section (constraints checked, violations, blocking status)
 
-**If PASS**: Check off verification items for this stage (`- [x] Verify: ...`). Move to next stage.
+### Step 2e: Handle verification result (MANDATORY — orchestrator does this)
 
-**If FAIL**: Send the failure details back to the Coder subagent for the exact failing items. Re-run verification. Max 3 fix attempts per stage before escalating to the user.
+**If PASS:**
+1. Use the Edit tool to check off verification items in the plan: `- [ ] Verify: ...` → `- [x] Verify: ...`
+2. Use `TaskUpdate` to mark this stage task as `completed`
+3. Proceed to next stage (back to Step 2a)
+
+**If FAIL:**
+1. Send the failure details back to a new Coder subagent for the exact failing items
+2. After coder fixes, re-run verification (Step 2d) — do NOT skip re-verification
+3. Max 3 fix attempts per stage before escalating to the user
+
+### SELF-CHECK before moving to next stage:
+
+Before starting the next stage, verify:
+- [ ] Implementation items for current stage are checked off in plan file
+- [ ] Verification items for current stage are checked off in plan file
+- [ ] TaskUpdate was called to mark current stage as `completed`
+
+If any of these are not done, do them NOW before proceeding.
 
 ---
 
 ## Phase 3: Final Verification
+
+**Pre-check (MANDATORY):** Before launching the final verifier, read the plan file and confirm ALL checkboxes (both Implement and Verify) are checked off. If any are unchecked, go back and complete them first.
 
 After all stages pass, launch a Task subagent (subagent_type: `general-purpose`) with this role:
 
@@ -234,7 +285,8 @@ If max cycles reached without PASS, report remaining issues to the user.
 - Always pass full context to subagents: original task, constraints, previous verdicts, plan/design paths
 - Ensure plan includes concrete markdown checkboxes for every action
 - Ensure design file follows `.claude/templates/FEATURE_DESIGN_TEMPLATE.md`
-- Track progress using TaskCreate/TaskUpdate for each stage
+- **Track progress using TaskCreate/TaskUpdate for each stage — mark `in_progress` at start, `completed` after verification passes**
+- **Update plan file checkboxes after EVERY coder and verifier step — this is YOUR responsibility, not the subagent's**
 - Present the plan to the user for approval before starting implementation
 - Do NOT edit source code files directly - delegate all code changes to the Coder subagent
 - Do NOT run build/test commands directly - delegate to Verifier subagents
