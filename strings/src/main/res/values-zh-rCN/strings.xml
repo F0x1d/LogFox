@@ -107,10 +107,15 @@
     <string name="including">含有</string>
     <string name="excluding">排除</string>
     <string name="package_name">包名</string>
+    <string name="create_filter">创建过滤器</string>
+    <string name="enabled">已启用</string>
+    <string name="disabled">已禁用</string>
+    <string name="ui">用户界面</string>
     <string name="apps">应用</string>
     <string name="are_you_sure">你确定？</string>
     <string name="view">查看</string>
     <string name="scroll_to_bottom">滚动到底部</string>
+    <string name="case_sensitive">区分大小写</string>
     <string name="add">添加</string>
     <string name="crash_details">崩溃详情</string>
     <string name="app_icon">应用图标</string>
@@ -122,8 +127,9 @@
     <string name="date_format">日期格式</string>
     <string name="time_format">时间格式</string>
     <string name="exports">导出</string>
-    <string name="export_logs_as_txt">Export logs as .txt instead of .log</string>
+    <string name="export_logs_as_txt">将日志导出为 .txt 文件而不是 .log 文件</string>
     <string name="include_device_information_in_archives">在导出的崩溃日志和录制中包含设备信息</string>
+    <string name="include_app_information_in_exports">在导出的崩溃信息中包含应用信息</string>
     <string name="to_recording">转为录制</string>
     <string name="no_logs">目前没有日志</string>
     <string name="waiting_for_logs">等待日志加载</string>
@@ -132,6 +138,7 @@
     <string name="no_recordings">目前没有录制</string>
     <string name="no_filters">目前没有过滤器</string>
     <string name="show_logs_from_app_launch">只显示 app 启动后的日志</string>
+    <string name="stop_logging_on_back_exit">按下返回按钮退出时停止日志记录</string>
     <string name="save_all_logs">保存完整日志</string>
     <string name="saving_logs">正在保存日志，这可能需要一点时间…</string>
     <string name="error_saving_logs">保存日志时发生错误</string>
