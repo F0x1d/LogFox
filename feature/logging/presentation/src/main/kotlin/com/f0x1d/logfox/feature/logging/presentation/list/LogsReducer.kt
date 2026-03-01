@@ -199,7 +199,12 @@ internal class LogsReducer @Inject constructor() : Reducer<LogsState, LogsComman
         }
 
         is LogsCommand.ClearLogs -> {
-            state.withSideEffects(LogsSideEffect.ClearLogs)
+            state.copy(
+                logs = emptyList(),
+                selectedIds = emptySet(),
+                expandedOverrides = emptyMap(),
+                logsChanged = true,
+            ).withSideEffects(LogsSideEffect.ClearLogs)
         }
 
         is LogsCommand.RestartLogging -> {

@@ -19,8 +19,8 @@ internal class ExportRecordingZipUseCaseImpl @Inject constructor(
     private val dateTimeFormatter: DateTimeFormatter,
 ) : ExportRecordingZipUseCase {
 
-    override suspend fun invoke(recordingId: Long, uri: Uri) {
-        val recording = recordingsRepository.getById(recordingId) ?: return
+    override suspend fun invoke(recordingId: Long, uri: Uri) = runCatching {
+        val recording = recordingsRepository.getById(recordingId) ?: return@runCatching
         val includeDeviceInfo = getIncludeDeviceInfoInArchivesUseCase()
         val logExtension = if (getExportLogsAsTxtUseCase()) "txt" else "log"
         val suffix = dateTimeFormatter.formatForExport(recording.dateAndTime)
