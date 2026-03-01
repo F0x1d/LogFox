@@ -1,5 +1,7 @@
 package com.f0x1d.logfox.core.tea
 
+import android.annotation.SuppressLint
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +10,9 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.viewbinding.ViewBinding
+import com.f0x1d.logfox.core.ui.base.ext.enableEdgeToEdge
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.coroutines.launch
 
@@ -88,6 +93,16 @@ abstract class BaseStoreBottomSheetFragment<
                 launch { viewModel.sideEffects.collect { effect -> handleSideEffect(effect) } }
             }
         }
+    }
+
+    @SuppressLint("RestrictedApi")
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val dialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
+        dialog.window?.enableEdgeToEdge(isContrastEnforced = false)
+        dialog.behavior.skipCollapsed = true
+        dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+        dialog.behavior.disableShapeAnimations() // i love google https://github.com/material-components/material-components-android/pull/437
+        return dialog
     }
 
     override fun onDestroyView() {

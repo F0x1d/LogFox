@@ -19,5 +19,6 @@ dependencies {
     api(libs.androidx.preference)
     api(libs.material)
 
+    implementation(projects.core.ui.base)
     implementation(libs.androidx.compose.runtime)
 }
