@@ -11,7 +11,7 @@ import com.f0x1d.logfox.feature.datetime.api.DateTimeFormatter
 import com.f0x1d.logfox.feature.preferences.api.domain.crashes.GetUseSeparateNotificationsChannelsForCrashesFlowUseCase
 import com.f0x1d.logfox.feature.preferences.api.domain.crashes.GetWrapCrashLogLinesFlowUseCase
 import com.f0x1d.logfox.feature.preferences.api.domain.crashes.SetWrapCrashLogLinesUseCase
-import com.f0x1d.logfox.feature.preferences.api.domain.service.GetExportLogsAsTxtUseCase
+import com.f0x1d.logfox.feature.preferences.api.domain.service.GetLogFileExtensionUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.combine
 import javax.inject.Inject
@@ -26,7 +26,7 @@ internal class CrashDetailsEffectHandler @Inject constructor(
     private val getWrapCrashLogLinesFlowUseCase: GetWrapCrashLogLinesFlowUseCase,
     private val setWrapCrashLogLinesUseCase: SetWrapCrashLogLinesUseCase,
     private val getUseSeparateNotificationsChannelsForCrashesFlowUseCase: GetUseSeparateNotificationsChannelsForCrashesFlowUseCase,
-    private val getExportLogsAsTxtUseCase: GetExportLogsAsTxtUseCase,
+    private val getLogFileExtensionUseCase: GetLogFileExtensionUseCase,
     private val dateTimeFormatter: DateTimeFormatter,
 ) : EffectHandler<CrashDetailsSideEffect, CrashDetailsCommand> {
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -62,8 +62,7 @@ internal class CrashDetailsEffectHandler @Inject constructor(
             }
 
             is CrashDetailsSideEffect.PrepareFileExport -> {
-                val extension = if (getExportLogsAsTxtUseCase()) "txt" else "log"
-                val filename = exportFilename(effect.packageName, effect.dateAndTime, extension)
+                val filename = exportFilename(effect.packageName, effect.dateAndTime, getLogFileExtensionUseCase())
                 onCommand(CrashDetailsCommand.FileExportPickerReady(filename))
             }
 

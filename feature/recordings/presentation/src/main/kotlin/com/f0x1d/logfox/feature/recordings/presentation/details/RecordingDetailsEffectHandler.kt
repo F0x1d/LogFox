@@ -2,7 +2,7 @@ package com.f0x1d.logfox.feature.recordings.presentation.details
 
 import com.f0x1d.logfox.core.tea.EffectHandler
 import com.f0x1d.logfox.feature.datetime.api.DateTimeFormatter
-import com.f0x1d.logfox.feature.preferences.api.domain.service.GetExportLogsAsTxtUseCase
+import com.f0x1d.logfox.feature.preferences.api.domain.service.GetLogFileExtensionUseCase
 import com.f0x1d.logfox.feature.recordings.api.domain.ExportRecordingFileUseCase
 import com.f0x1d.logfox.feature.recordings.api.domain.ExportRecordingZipUseCase
 import com.f0x1d.logfox.feature.recordings.api.domain.GetRecordingByIdFlowUseCase
@@ -22,7 +22,7 @@ internal class RecordingDetailsEffectHandler @Inject constructor(
     private val exportRecordingFileUseCase: ExportRecordingFileUseCase,
     private val exportRecordingZipUseCase: ExportRecordingZipUseCase,
     private val dateTimeFormatter: DateTimeFormatter,
-    private val getExportLogsAsTxtUseCase: GetExportLogsAsTxtUseCase,
+    private val getLogFileExtensionUseCase: GetLogFileExtensionUseCase,
 ) : EffectHandler<RecordingDetailsSideEffect, RecordingDetailsCommand> {
     private val titleUpdateMutex = Mutex()
 
@@ -43,8 +43,7 @@ internal class RecordingDetailsEffectHandler @Inject constructor(
             is RecordingDetailsSideEffect.PrepareFileExport -> {
                 val recording = getRecordingByIdFlowUseCase(recordingId).firstOrNull()
                     ?: return
-                val extension = if (getExportLogsAsTxtUseCase()) "txt" else "log"
-                val filename = "${dateTimeFormatter.formatForExport(recording.dateAndTime)}.$extension"
+                val filename = "${dateTimeFormatter.formatForExport(recording.dateAndTime)}.${getLogFileExtensionUseCase()}"
                 onCommand(RecordingDetailsCommand.FileExportPickerReady(filename))
             }
 

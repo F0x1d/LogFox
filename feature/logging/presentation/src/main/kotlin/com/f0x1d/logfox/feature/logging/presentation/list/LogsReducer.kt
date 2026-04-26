@@ -116,6 +116,25 @@ internal class LogsReducer @Inject constructor() : Reducer<LogsState, LogsComman
             )
         }
 
+        is LogsCommand.SaveCurrentLogsClicked -> {
+            state.withSideEffects(LogsSideEffect.PrepareSaveCurrentLogs)
+        }
+
+        is LogsCommand.SaveCurrentPickerReady -> {
+            state.withSideEffects(
+                LogsSideEffect.LaunchSaveCurrentPicker(filename = command.filename),
+            )
+        }
+
+        is LogsCommand.SaveCurrentLogsTo -> {
+            state.withSideEffects(
+                LogsSideEffect.ExportLogsTo(
+                    uri = command.uri,
+                    lines = state.logs,
+                ),
+            )
+        }
+
         is LogsCommand.SwitchState -> {
             state.copy(
                 paused = !state.paused,

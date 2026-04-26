@@ -22,6 +22,8 @@ internal sealed interface LogsSideEffect {
 
     data object PrepareExport : LogsSideEffect
 
+    data object PrepareSaveCurrentLogs : LogsSideEffect
+
     // UI side effects - handled by Fragment
     data object NavigateToRecordings : LogsSideEffect
 
@@ -46,6 +48,8 @@ internal sealed interface LogsSideEffect {
     data object NavigateToExtendedCopy : LogsSideEffect
 
     data class LaunchExportPicker(val filename: String) : LogsSideEffect
+
+    data class LaunchSaveCurrentPicker(val filename: String) : LogsSideEffect
 
     data object ClearLogs : LogsSideEffect
 

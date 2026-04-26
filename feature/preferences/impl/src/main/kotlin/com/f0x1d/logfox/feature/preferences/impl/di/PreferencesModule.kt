@@ -62,7 +62,7 @@ import com.f0x1d.logfox.feature.preferences.api.domain.logs.SetShowLogTimeUseCas
 import com.f0x1d.logfox.feature.preferences.api.domain.logs.SetShowLogUidUseCase
 import com.f0x1d.logfox.feature.preferences.api.domain.notifications.GetAskedNotificationsPermissionUseCase
 import com.f0x1d.logfox.feature.preferences.api.domain.notifications.SetAskedNotificationsPermissionUseCase
-import com.f0x1d.logfox.feature.preferences.api.domain.service.GetExportLogsAsTxtUseCase
+import com.f0x1d.logfox.feature.preferences.api.domain.service.GetLogFileExtensionUseCase
 import com.f0x1d.logfox.feature.preferences.api.domain.service.GetIncludeAppInfoInExportsUseCase
 import com.f0x1d.logfox.feature.preferences.api.domain.service.GetIncludeDeviceInfoInArchivesUseCase
 import com.f0x1d.logfox.feature.preferences.api.domain.service.GetStartOnBootUseCase
@@ -150,7 +150,7 @@ import com.f0x1d.logfox.feature.preferences.impl.domain.logs.SetShowLogTimeUseCa
 import com.f0x1d.logfox.feature.preferences.impl.domain.logs.SetShowLogUidUseCaseImpl
 import com.f0x1d.logfox.feature.preferences.impl.domain.notifications.GetAskedNotificationsPermissionUseCaseImpl
 import com.f0x1d.logfox.feature.preferences.impl.domain.notifications.SetAskedNotificationsPermissionUseCaseImpl
-import com.f0x1d.logfox.feature.preferences.impl.domain.service.GetExportLogsAsTxtUseCaseImpl
+import com.f0x1d.logfox.feature.preferences.impl.domain.service.GetLogFileExtensionUseCaseImpl
 import com.f0x1d.logfox.feature.preferences.impl.domain.service.GetIncludeAppInfoInExportsUseCaseImpl
 import com.f0x1d.logfox.feature.preferences.impl.domain.service.GetIncludeDeviceInfoInArchivesUseCaseImpl
 import com.f0x1d.logfox.feature.preferences.impl.domain.service.GetStartOnBootUseCaseImpl
@@ -594,7 +594,7 @@ internal interface PreferencesModule {
     ): GetStopLoggingOnBackExitUseCase
 
     @Binds
-    fun bindGetExportLogsAsTxtUseCase(
-        impl: GetExportLogsAsTxtUseCaseImpl,
-    ): GetExportLogsAsTxtUseCase
+    fun bindGetLogFileExtensionUseCase(
+        impl: GetLogFileExtensionUseCaseImpl,
+    ): GetLogFileExtensionUseCase
 }

@@ -77,6 +77,12 @@ internal class LogsFragment :
         it?.let { uri -> send(LogsCommand.ExportSelectedTo(uri)) }
     }
 
+    private val saveCurrentLogsLauncher = registerForActivityResult(
+        ActivityResultContracts.CreateDocument("text/*"),
+    ) {
+        it?.let { uri -> send(LogsCommand.SaveCurrentLogsTo(uri)) }
+    }
+
     override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) = FragmentLogsBinding.inflate(inflater, container, false)
 
     override fun FragmentLogsBinding.onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -118,6 +124,9 @@ internal class LogsFragment :
             }
             setClickListenerOn(R.id.export_selected_item) {
                 send(LogsCommand.ExportSelectedClicked)
+            }
+            setClickListenerOn(R.id.save_current_log_item) {
+                send(LogsCommand.SaveCurrentLogsClicked)
             }
             setClickListenerOn(R.id.clear_item) {
                 send(LogsCommand.ClearLogs)
@@ -233,6 +242,10 @@ internal class LogsFragment :
                 exportLogsLauncher.launch(sideEffect.filename)
             }
 
+            is LogsSideEffect.LaunchSaveCurrentPicker -> {
+                saveCurrentLogsLauncher.launch(sideEffect.filename)
+            }
+
             else -> Unit
         }
     }
@@ -311,6 +324,7 @@ internal class LogsFragment :
         invisibleDuringSelection(R.id.search_item)
         invisibleDuringSelection(R.id.filters_item)
         visibleDuringSelection(R.id.selected_item)
+        visibleOnlyInDefault(R.id.save_current_log_item)
         visibleOnlyInDefault(R.id.clear_item)
         visibleOnlyInDefault(R.id.restart_logging_item)
         visibleOnlyInDefault(R.id.exit_item)

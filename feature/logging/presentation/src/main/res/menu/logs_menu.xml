@@ -54,6 +54,12 @@
     </item>
 
     <item
+        android:id="@+id/save_current_log_item"
+        android:icon="@drawable/ic_save"
+        android:title="@string/save_all_logs"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/clear_item"
         android:title="@string/clear"
         app:showAsAction="never" />
