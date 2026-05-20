@@ -1,10 +1,8 @@
 package com.f0x1d.logfox.core.ui.preference
 
-import android.view.LayoutInflater
-import android.view.inputmethod.InputMethodManager
-import androidx.core.content.getSystemService
 import androidx.preference.Preference
 import com.f0x1d.logfox.core.ui.dialog.databinding.DialogTextBinding
+import com.f0x1d.logfox.core.ui.dialog.showEditTextDialog
 import com.f0x1d.logfox.feature.strings.Strings
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
@@ -14,36 +12,13 @@ fun Preference.setupAsEditTextPreference(
     get: () -> String?,
     save: (String?) -> Unit,
 ) = setOnPreferenceClickListener {
-    val dialogBinding = DialogTextBinding.inflate(LayoutInflater.from(context))
-    setupViews(dialogBinding)
-
-    dialogBinding.text.setText(get())
-
-    MaterialAlertDialogBuilder(context)
-        .setTitle(title)
-        .setView(dialogBinding.root)
-        .setPositiveButton(android.R.string.ok) { _, _ ->
-            save(dialogBinding.text.text?.toString())
-        }
-        .setNegativeButton(Strings.close, null)
-        .apply(setupDialog)
-        .create()
-        .apply {
-            setOnShowListener {
-                dialogBinding.text.apply {
-                    requestFocus()
-                    setSelection(text?.length ?: 0)
-
-                    postDelayed({
-                        context.getSystemService<InputMethodManager>()?.showSoftInput(
-                            this,
-                            InputMethodManager.SHOW_IMPLICIT,
-                        )
-                    }, 100)
-                }
-            }
-        }
-        .show()
+    context.showEditTextDialog(
+        title = title,
+        initialText = get(),
+        setupViews = setupViews,
+        setupDialog = setupDialog,
+        onSave = save,
+    )
     return@setOnPreferenceClickListener true
 }
 

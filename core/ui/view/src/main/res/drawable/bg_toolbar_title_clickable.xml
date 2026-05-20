@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Background for a clickable/focusable toolbar title (Docs-style rename target).
+  Follows the Material 3 interaction-state spec:
+    hover  → state-layer fill (no ring)
+    focus  → state-layer fill + outline ring (accessibility)
+    press  → ripple from touch point (provided by the outer ripple wrapper)
+-->
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="?attr/colorControlHighlight">
+
+    <item android:id="@android:id/mask">
+        <shape android:shape="rectangle">
+            <solid android:color="@android:color/white" />
+            <corners android:radius="8dp" />
+        </shape>
+    </item>
+
+    <item>
+        <selector>
+            <!-- Focused: state layer + focus ring (M3 spec) -->
+            <item android:state_focused="true">
+                <layer-list>
+                    <item>
+                        <shape android:shape="rectangle">
+                            <solid android:color="?attr/colorControlHighlight" />
+                            <corners android:radius="8dp" />
+                        </shape>
+                    </item>
+                    <item>
+                        <shape android:shape="rectangle">
+                            <stroke android:width="2dp" android:color="?attr/colorPrimary" />
+                            <corners android:radius="8dp" />
+                        </shape>
+                    </item>
+                </layer-list>
+            </item>
+            <!-- Hovered: state layer only (M3 spec) -->
+            <item android:state_hovered="true">
+                <shape android:shape="rectangle">
+                    <solid android:color="?attr/colorControlHighlight" />
+                    <corners android:radius="8dp" />
+                </shape>
+            </item>
+            <!-- Default: transparent -->
+            <item>
+                <shape android:shape="rectangle">
+                    <solid android:color="@android:color/transparent" />
+                </shape>
+            </item>
+        </selector>
+    </item>
+</ripple>

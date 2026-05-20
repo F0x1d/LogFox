@@ -29,6 +29,7 @@ internal class EditFilterReducer @Inject constructor(
 
             state.copy(
                 filter = command.filter,
+                name = command.filter.name,
                 including = command.filter.including,
                 enabled = command.filter.enabled,
                 enabledLogLevels = enabledLogLevels,
@@ -39,6 +40,10 @@ internal class EditFilterReducer @Inject constructor(
                 tag = command.filter.tag,
                 content = command.filter.content,
             ).noSideEffects()
+        }
+
+        is EditFilterCommand.UpdateName -> {
+            state.copy(name = command.name).noSideEffects()
         }
 
         is EditFilterCommand.UpdateUid -> {
@@ -84,6 +89,7 @@ internal class EditFilterReducer @Inject constructor(
             state.withSideEffects(
                 EditFilterSideEffect.SaveFilter(
                     filter = state.filter,
+                    name = state.name,
                     including = state.including,
                     enabled = state.enabled,
                     enabledLogLevels = state.enabledLogLevels.toEnabledLogLevels(),

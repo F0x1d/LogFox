@@ -4,6 +4,7 @@ import com.f0x1d.logfox.feature.filters.api.model.UserFilter
 
 internal data class EditFilterViewState(
     val filter: UserFilter?,
+    val name: String?,
     val including: Boolean,
     val enabled: Boolean,
     val enabledLogLevels: List<Boolean>,

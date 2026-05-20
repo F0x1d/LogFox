@@ -6,6 +6,7 @@ import com.f0x1d.logfox.feature.logging.api.model.LogLevel
 
 data class UserFilter(
     @GsonSkip override val id: Long = 0,
+    val name: String? = null,
     val including: Boolean = true,
     val allowedLevels: List<LogLevel> = emptyList(),
     val uid: String? = null,

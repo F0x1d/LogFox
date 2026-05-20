@@ -8,6 +8,7 @@ internal sealed interface EditFilterCommand {
     data class FilterLoaded(val filter: UserFilter) : EditFilterCommand
 
     // Form field updates
+    data class UpdateName(val name: String) : EditFilterCommand
     data class UpdateUid(val uid: String) : EditFilterCommand
     data class UpdatePid(val pid: String) : EditFilterCommand
     data class UpdateTid(val tid: String) : EditFilterCommand

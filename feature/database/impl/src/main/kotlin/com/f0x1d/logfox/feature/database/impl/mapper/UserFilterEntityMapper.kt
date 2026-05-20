@@ -5,6 +5,7 @@ import com.f0x1d.logfox.feature.database.impl.entity.UserFilterRoomEntity
 
 internal fun UserFilterRoomEntity.toData() = UserFilterEntity(
     id = id,
+    name = name,
     including = including,
     allowedLevels = allowedLevels,
     uid = uid,
@@ -18,6 +19,7 @@ internal fun UserFilterRoomEntity.toData() = UserFilterEntity(
 
 internal fun UserFilterEntity.toRoom() = UserFilterRoomEntity(
     id = id,
+    name = name,
     including = including,
     allowedLevels = allowedLevels,
     uid = uid,

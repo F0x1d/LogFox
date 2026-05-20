@@ -15,7 +15,7 @@
         <com.google.android.material.appbar.MaterialToolbar
             style="@style/Widget.LogFox.Toolbar"
             android:id="@+id/toolbar"
-            app:title="@string/filter"
+            app:title="@string/filter_name_hint"
             app:menu="@menu/edit_filter_menu"
             app:navigationIcon="@drawable/ic_arrow_back" />
     </com.google.android.material.appbar.AppBarLayout>

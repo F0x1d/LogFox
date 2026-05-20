@@ -36,6 +36,7 @@ internal class EditFilterViewModel @Inject constructor(
 private fun EditFilterArgs.toInitialState(): EditFilterState {
     if (!hasInitialData) return EditFilterState(
         filter = null,
+        name = null,
         including = true,
         enabled = true,
         enabledLogLevels = List(LogLevel.entries.size) { false },
@@ -54,6 +55,7 @@ private fun EditFilterArgs.toInitialState(): EditFilterState {
 
     return EditFilterState(
         filter = null,
+        name = null,
         including = true,
         enabled = true,
         enabledLogLevels = enabledLogLevels,
