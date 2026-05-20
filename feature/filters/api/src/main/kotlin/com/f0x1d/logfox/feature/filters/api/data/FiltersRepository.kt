@@ -9,6 +9,7 @@ interface FiltersRepository {
     fun getAllEnabledAsFlow(): Flow<List<UserFilter>>
 
     suspend fun create(
+        name: String?,
         including: Boolean,
         enabled: Boolean,
         enabledLogLevels: List<LogLevel>,
@@ -26,6 +27,7 @@ interface FiltersRepository {
 
     suspend fun update(
         userFilter: UserFilter,
+        name: String?,
         including: Boolean,
         enabled: Boolean,
         enabledLogLevels: List<LogLevel>,

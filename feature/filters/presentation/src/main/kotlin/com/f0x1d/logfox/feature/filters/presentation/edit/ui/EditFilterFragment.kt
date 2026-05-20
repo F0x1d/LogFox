@@ -10,9 +10,11 @@ import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
 import com.f0x1d.logfox.core.tea.BaseStoreFragment
 import com.f0x1d.logfox.core.ui.base.ext.doAfterTextChanged
+import com.f0x1d.logfox.core.ui.dialog.showEditTextDialog
 import com.f0x1d.logfox.core.ui.icons.Icons
 import com.f0x1d.logfox.core.ui.view.setClickListenerOn
 import com.f0x1d.logfox.core.ui.view.setupBackButtonForNavController
+import com.f0x1d.logfox.core.ui.view.setupClickableTitle
 import com.f0x1d.logfox.feature.filters.presentation.R
 import com.f0x1d.logfox.feature.filters.presentation.databinding.FragmentEditFilterBinding
 import com.f0x1d.logfox.feature.filters.presentation.edit.EditFilterCommand
@@ -78,6 +80,9 @@ internal class EditFilterFragment :
                 exportFilterLauncher.launch("filter.json")
             }
         }
+        toolbar.setupClickableTitle(
+            background = com.f0x1d.logfox.core.ui.view.R.drawable.bg_toolbar_title_clickable,
+        ) { showRenameDialog() }
 
         includingButton.setOnClickListener {
             send(EditFilterCommand.ToggleIncluding)
@@ -114,6 +119,8 @@ internal class EditFilterFragment :
             updateIncludingButton(state.including)
             updateEnabledButton(state.enabled)
 
+            toolbar.title = state.name?.takeIf { it.isNotBlank() }
+                ?: getString(Strings.filter_name_hint)
             setTextIfDifferent(uidText, state.uid.orEmpty())
             setTextIfDifferent(pidText, state.pid.orEmpty())
             setTextIfDifferent(tidText, state.tid.orEmpty())
@@ -180,6 +187,14 @@ internal class EditFilterFragment :
         }
 
         setText(if (enabled) Strings.enabled else Strings.disabled)
+    }
+
+    private fun showRenameDialog() = requireContext().showEditTextDialog(
+        title = getString(Strings.rename_filter),
+        initialText = viewModel.state.value.name,
+        setupDialog = { setIcon(Icons.ic_dialog_text_fields) },
+    ) { newName ->
+        send(EditFilterCommand.UpdateName(newName.orEmpty()))
     }
 
     private fun showFilterDialog() {

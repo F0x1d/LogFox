@@ -34,6 +34,12 @@ class FilterViewHolder(
     }
 
     override fun ItemFilterBinding.bindTo(data: UserFilter) {
+        if (data.name.isNullOrBlank()) {
+            nameText.visibility = View.GONE
+        } else {
+            nameText.visibility = View.VISIBLE
+            nameText.text = data.name
+        }
         includingText.setText(if (data.including) Strings.including else Strings.excluding)
         allowedLevelsText.setTextOrMakeGoneIfEmpty(
             Strings.log_levels,

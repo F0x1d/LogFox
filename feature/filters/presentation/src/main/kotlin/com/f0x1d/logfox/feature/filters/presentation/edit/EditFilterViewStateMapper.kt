@@ -6,6 +6,7 @@ import javax.inject.Inject
 internal class EditFilterViewStateMapper @Inject constructor() : ViewStateMapper<EditFilterState, EditFilterViewState> {
     override fun map(state: EditFilterState) = EditFilterViewState(
         filter = state.filter,
+        name = state.name,
         including = state.including,
         enabled = state.enabled,
         enabledLogLevels = state.enabledLogLevels,

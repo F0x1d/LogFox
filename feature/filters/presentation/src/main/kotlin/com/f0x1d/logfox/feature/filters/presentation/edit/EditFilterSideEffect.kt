@@ -9,6 +9,7 @@ internal sealed interface EditFilterSideEffect {
     data class LoadFilter(val filterId: Long?) : EditFilterSideEffect
     data class SaveFilter(
         val filter: UserFilter?,
+        val name: String?,
         val including: Boolean,
         val enabled: Boolean,
         val enabledLogLevels: List<LogLevel>,
