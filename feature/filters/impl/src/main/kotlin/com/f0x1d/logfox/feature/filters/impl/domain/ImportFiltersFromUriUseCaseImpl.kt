@@ -12,12 +12,18 @@ import javax.inject.Inject
 internal class ImportFiltersFromUriUseCaseImpl @Inject constructor(
     private val exportRepository: ExportRepository,
     private val createAllFiltersUseCase: CreateAllFiltersUseCase,
-    private val gson: Gson,
+    gson: Gson,
 ) : ImportFiltersFromUriUseCase {
+
+    // Import-scoped Gson that upgrades legacy filter files (tag/content as plain strings). Kept off
+    // the shared app Gson so that registration stays an import concern.
+    private val importGson = gson.newBuilder()
+        .registerTypeAdapterFactory(UserFilterTypeAdapterFactory())
+        .create()
 
     override suspend fun invoke(uri: Uri): Result<Unit> = runCatching {
         val content = exportRepository.readContentFromUri(uri) ?: return@runCatching
-        val filters = gson.fromJson<List<UserFilter>>(
+        val filters = importGson.fromJson<List<UserFilter>>(
             content,
             object : TypeToken<List<UserFilter>>() {}.type,
         )

@@ -5,8 +5,10 @@ import android.view.View
 import android.widget.TextView
 import com.f0x1d.logfox.core.recycler.viewholder.BaseViewHolder
 import com.f0x1d.logfox.core.ui.view.OnlyUserCheckedChangeListener
+import com.f0x1d.logfox.feature.filters.api.model.MatchData
 import com.f0x1d.logfox.feature.filters.api.model.UserFilter
 import com.f0x1d.logfox.feature.filters.presentation.databinding.ItemFilterBinding
+import com.f0x1d.logfox.feature.filters.presentation.labelRes
 import com.f0x1d.logfox.feature.strings.Strings
 
 class FilterViewHolder(
@@ -51,8 +53,8 @@ class FilterViewHolder(
         pidText.setTextOrMakeGoneIfEmpty(Strings.pid, data.pid)
         tidText.setTextOrMakeGoneIfEmpty(Strings.tid, data.tid)
         packageNameText.setTextOrMakeGoneIfEmpty(Strings.package_name, data.packageName)
-        tagText.setTextOrMakeGoneIfEmpty(Strings.tag, data.tag)
-        contentText.setTextOrMakeGoneIfEmpty(Strings.content_contains, data.content)
+        tagText.setTextOrMakeGoneIfEmpty(Strings.tag, data.tag.displayValue())
+        contentText.setTextOrMakeGoneIfEmpty(Strings.content, data.content.displayValue())
 
         checkedListener.check(data.enabled)
     }
@@ -63,5 +65,12 @@ class FilterViewHolder(
         if (content != null) {
             text = Html.fromHtml("<b>${context.getString(prefix)}:</b> $content")
         }
+    }
+
+    // The pattern, suffixed with its match mode so the list conveys how the field is matched, not
+    // just its text.
+    private fun MatchData.displayValue(): String? {
+        val pattern = value ?: return null
+        return "$pattern (${itemView.context.getString(matchMode.labelRes())})"
     }
 }

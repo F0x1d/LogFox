@@ -3,6 +3,7 @@ package com.f0x1d.logfox.feature.filters.presentation.edit
 import com.f0x1d.logfox.core.tea.BaseStoreViewModel
 import com.f0x1d.logfox.feature.apps.picker.api.AppsPickerResultHandler
 import com.f0x1d.logfox.feature.apps.picker.api.InstalledApp
+import com.f0x1d.logfox.feature.filters.api.model.MatchMode
 import com.f0x1d.logfox.feature.filters.presentation.edit.di.EditFilterArgs
 import com.f0x1d.logfox.feature.logging.api.model.LogLevel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -34,8 +35,25 @@ internal class EditFilterViewModel @Inject constructor(
 }
 
 private fun EditFilterArgs.toInitialState(): EditFilterState {
+    if (!hasInitialData) return EditFilterState(
+        filter = null,
+        name = null,
+        including = true,
+        enabled = true,
+        enabledLogLevels = List(LogLevel.entries.size) { false },
+        uid = null,
+        pid = null,
+        tid = null,
+        packageName = null,
+        tag = null,
+        tagMatchMode = MatchMode.CONTAINS,
+        content = null,
+        contentMatchMode = MatchMode.CONTAINS,
+        isDirty = false,
+    )
+
     val enabledLogLevels = MutableList(LogLevel.entries.size) { false }
-    if (hasInitialData && level != null && level >= 0 && level < LogLevel.entries.size) {
+    if (level != null && level >= 0 && level < LogLevel.entries.size) {
         enabledLogLevels[level] = true
     }
 
@@ -50,10 +68,9 @@ private fun EditFilterArgs.toInitialState(): EditFilterState {
         tid = tid,
         packageName = packageName,
         tag = tag,
+        tagMatchMode = MatchMode.CONTAINS,
         content = content,
-        // Fields prefilled from a log line count as unsaved changes, so backing out prompts to
-        // discard; a blank new filter starts clean. An existing filter loads via FilterLoaded,
-        // which resets isDirty to false.
+        contentMatchMode = MatchMode.CONTAINS,
         isDirty = hasInitialData,
     )
 }

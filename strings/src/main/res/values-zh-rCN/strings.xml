@@ -49,7 +49,6 @@
     <string name="error">错误: %s</string>
     <string name="log_levels">Log 等级</string>
     <string name="tag">标签</string>
-    <string name="content_contains">包含</string>
     <string name="save">保存</string>
     <string name="filters">过滤器</string>
     <string name="create">创建</string>

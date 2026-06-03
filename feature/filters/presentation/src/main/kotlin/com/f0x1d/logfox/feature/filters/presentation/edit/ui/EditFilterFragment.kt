@@ -17,6 +17,7 @@ import com.f0x1d.logfox.core.ui.icons.Icons
 import com.f0x1d.logfox.core.ui.view.setClickListenerOn
 import com.f0x1d.logfox.core.ui.view.setupBackButton
 import com.f0x1d.logfox.core.ui.view.setupClickableTitle
+import com.f0x1d.logfox.feature.filters.api.model.MatchMode
 import com.f0x1d.logfox.feature.filters.presentation.R
 import com.f0x1d.logfox.feature.filters.presentation.databinding.FragmentEditFilterBinding
 import com.f0x1d.logfox.feature.filters.presentation.edit.EditFilterCommand
@@ -24,11 +25,13 @@ import com.f0x1d.logfox.feature.filters.presentation.edit.EditFilterSideEffect
 import com.f0x1d.logfox.feature.filters.presentation.edit.EditFilterState
 import com.f0x1d.logfox.feature.filters.presentation.edit.EditFilterViewModel
 import com.f0x1d.logfox.feature.filters.presentation.edit.EditFilterViewState
+import com.f0x1d.logfox.feature.filters.presentation.labelRes
 import com.f0x1d.logfox.feature.logging.api.model.LogLevel
 import com.f0x1d.logfox.feature.navigation.api.Directions
 import com.f0x1d.logfox.feature.strings.Strings
 import com.google.android.material.color.MaterialColors
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
 import dev.chrisbanes.insetter.applyInsetter
 
@@ -123,8 +126,14 @@ internal class EditFilterFragment :
             send(EditFilterCommand.UpdatePackageName(it?.toString().orEmpty()))
         }
         tagText.doAfterTextChanged(this@EditFilterFragment) { send(EditFilterCommand.UpdateTag(it?.toString().orEmpty())) }
+        tagLayout.setEndIconOnClickListener {
+            showMatchModeDialog(viewModel.state.value.tagMatchMode) { send(EditFilterCommand.SetTagMatchMode(it)) }
+        }
         contentText.doAfterTextChanged(this@EditFilterFragment) {
             send(EditFilterCommand.UpdateContent(it?.toString().orEmpty()))
+        }
+        contentLayout.setEndIconOnClickListener {
+            showMatchModeDialog(viewModel.state.value.contentMatchMode) { send(EditFilterCommand.SetContentMatchMode(it)) }
         }
     }
 
@@ -142,6 +151,12 @@ internal class EditFilterFragment :
             setTextIfDifferent(packageNameText, state.packageName.orEmpty())
             setTextIfDifferent(tagText, state.tag.orEmpty())
             setTextIfDifferent(contentText, state.content.orEmpty())
+
+            updateMatchModeIcon(tagLayout, state.tagMatchMode)
+            tagLayout.error = if (state.tagRegexError) getString(Strings.invalid_regex) else null
+            updateMatchModeIcon(contentLayout, state.contentMatchMode)
+            contentLayout.error = if (state.contentRegexError) getString(Strings.invalid_regex) else null
+            saveFab.isEnabled = state.canSave
 
             toolbar.menu.findItem(R.id.export_item).isVisible = state.filter != null
         }
@@ -234,6 +249,44 @@ internal class EditFilterFragment :
         setupDialog = { setIcon(Icons.ic_dialog_text_fields) },
     ) { newName ->
         send(EditFilterCommand.UpdateName(newName.orEmpty()))
+    }
+
+    // The end icon shows the active match mode's symbol (~ / .* / =) and opens the mode picker. The
+    // mode is conveyed by the symbol itself, so the icon keeps the normal control tint regardless of
+    // mode rather than highlighting some modes over others. Shared by the tag and content fields.
+    private fun updateMatchModeIcon(layout: TextInputLayout, matchMode: MatchMode) {
+        layout.setEndIconDrawable(matchMode.iconRes())
+        layout.setEndIconTintList(
+            ColorStateList.valueOf(
+                MaterialColors.getColor(layout, androidx.appcompat.R.attr.colorControlNormal),
+            ),
+        )
+    }
+
+    private fun MatchMode.iconRes() = when (this) {
+        MatchMode.CONTAINS -> Icons.ic_tilde
+        MatchMode.REGEX -> Icons.ic_regular_expression
+        MatchMode.EXACT -> Icons.ic_equal
+    }
+
+    // Lets the user pick how a string field (tag or content) is matched. EXACT is a first-class
+    // choice here, not just a migration artifact. Uses a single-choice dialog to match the app's
+    // other value pickers (theme, date format, log levels).
+    private fun showMatchModeDialog(current: MatchMode, onSelected: (MatchMode) -> Unit) {
+        // Item order matches MatchMode.entries, so the checked index is the mode's ordinal.
+        val modes = MatchMode.entries
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(Strings.match_mode)
+            .setIcon(Icons.ic_call_split)
+            .setSingleChoiceItems(
+                modes.map { getString(it.labelRes()) }.toTypedArray(),
+                modes.indexOf(current),
+            ) { dialog, which ->
+                onSelected(modes[which])
+                dialog.dismiss()
+            }
+            .setNegativeButton(Strings.close, null)
+            .show()
     }
 
     private fun showFilterDialog() {

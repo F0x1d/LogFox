@@ -13,7 +13,7 @@ data class UserFilter(
     val pid: String? = null,
     val tid: String? = null,
     val packageName: String? = null,
-    val tag: String? = null,
-    val content: String? = null,
+    val tag: MatchData = MatchData(),
+    val content: MatchData = MatchData(),
     @GsonSkip val enabled: Boolean = true,
 ) : Identifiable

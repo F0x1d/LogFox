@@ -17,6 +17,7 @@ import com.f0x1d.logfox.feature.database.impl.entity.CrashTypeConverter
 import com.f0x1d.logfox.feature.database.impl.entity.DisabledAppRoomEntity
 import com.f0x1d.logfox.feature.database.impl.entity.FileConverter
 import com.f0x1d.logfox.feature.database.impl.entity.LogRecordingRoomEntity
+import com.f0x1d.logfox.feature.database.impl.entity.MatchModeConverter
 import com.f0x1d.logfox.feature.database.impl.entity.UserFilterRoomEntity
 
 @Database(
@@ -26,7 +27,7 @@ import com.f0x1d.logfox.feature.database.impl.entity.UserFilterRoomEntity
         UserFilterRoomEntity::class,
         DisabledAppRoomEntity::class,
     ],
-    version = 18,
+    version = 20,
     autoMigrations = [
         AutoMigration(
             from = 12,
@@ -58,6 +59,7 @@ import com.f0x1d.logfox.feature.database.impl.entity.UserFilterRoomEntity
 @TypeConverters(
     CrashTypeConverter::class,
     AllowedLevelsConverter::class,
+    MatchModeConverter::class,
     FileConverter::class,
 )
 internal abstract class AppDatabase : RoomDatabase() {
@@ -103,6 +105,21 @@ internal abstract class AppDatabase : RoomDatabase() {
         }
         val MIGRATION_11_12 = Migration(11, 12) {
             it.execSQL("CREATE INDEX index_AppCrash_date_and_time ON AppCrash(date_and_time)")
+        }
+
+        // Adds the tag match mode column. Existing filters matched tags by exact equality, so they
+        // are marked EXACT (ordinal 2) to preserve that behavior; the new default for filters
+        // created/edited afterwards is CONTAINS (ordinal 0). The tag text itself is left untouched.
+        val MIGRATION_18_19 = Migration(18, 19) {
+            it.execSQL("ALTER TABLE UserFilter ADD COLUMN tag_match_mode INTEGER NOT NULL DEFAULT 0")
+            it.execSQL("UPDATE UserFilter SET tag_match_mode = 2 WHERE tag IS NOT NULL")
+        }
+
+        // Adds the content match mode column. Content has always matched by substring, which is
+        // exactly CONTAINS (ordinal 0), so the column default preserves existing behavior — no row
+        // update needed.
+        val MIGRATION_19_20 = Migration(19, 20) {
+            it.execSQL("ALTER TABLE UserFilter ADD COLUMN content_match_mode INTEGER NOT NULL DEFAULT 0")
         }
 
         @DeleteColumn(tableName = "AppCrash", columnName = "log_dump")

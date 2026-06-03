@@ -3,6 +3,7 @@ package com.f0x1d.logfox.feature.filters.impl.data
 import com.f0x1d.logfox.core.di.IODispatcher
 import com.f0x1d.logfox.feature.database.api.data.UserFilterDataSource
 import com.f0x1d.logfox.feature.filters.api.data.FiltersRepository
+import com.f0x1d.logfox.feature.filters.api.model.MatchData
 import com.f0x1d.logfox.feature.filters.api.model.UserFilter
 import com.f0x1d.logfox.feature.filters.impl.mapper.toDomainModel
 import com.f0x1d.logfox.feature.filters.impl.mapper.toEntity
@@ -34,8 +35,8 @@ internal class FiltersRepositoryImpl @Inject constructor(
         pid: String?,
         tid: String?,
         packageName: String?,
-        tag: String?,
-        content: String?,
+        tag: MatchData,
+        content: MatchData,
     ) = createAll(
         listOf(
             UserFilter(
@@ -47,8 +48,8 @@ internal class FiltersRepositoryImpl @Inject constructor(
                 pid = pid?.nullIfBlank(),
                 tid = tid?.nullIfBlank(),
                 packageName = packageName?.nullIfBlank(),
-                tag = tag?.nullIfBlank(),
-                content = content?.nullIfBlank(),
+                tag = tag.nullIfBlank(),
+                content = content.nullIfBlank(),
             ),
         ),
     )
@@ -71,8 +72,8 @@ internal class FiltersRepositoryImpl @Inject constructor(
         pid: String?,
         tid: String?,
         packageName: String?,
-        tag: String?,
-        content: String?,
+        tag: MatchData,
+        content: MatchData,
     ) = update {
         userFilter.copy(
             name = name?.nullIfBlank(),
@@ -83,8 +84,8 @@ internal class FiltersRepositoryImpl @Inject constructor(
             pid = pid?.nullIfBlank(),
             tid = tid?.nullIfBlank(),
             packageName = packageName?.nullIfBlank(),
-            tag = tag?.nullIfBlank(),
-            content = content?.nullIfBlank(),
+            tag = tag.nullIfBlank(),
+            content = content.nullIfBlank(),
         )
     }
 
@@ -120,4 +121,7 @@ internal class FiltersRepositoryImpl @Inject constructor(
     }
 
     private fun String.nullIfBlank() = takeIf { it.isNotBlank() }
+
+    // Normalize a blank pattern to null so a whitespace-only tag doesn't persist a stray match mode.
+    private fun MatchData.nullIfBlank() = copy(value = value?.nullIfBlank())
 }

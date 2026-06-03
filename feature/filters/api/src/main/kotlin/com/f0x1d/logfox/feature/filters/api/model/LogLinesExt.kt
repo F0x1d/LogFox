@@ -48,20 +48,15 @@ private fun List<LogLine>.filterByExtendedFilters(filters: List<UserFilter>): Li
     }
 }
 
+// Identity fields (uid/pid/tid/packageName) match by exact equality; the free-text fields
+// (tag/content) match by their MatchData mode (contains/regex/exact). A null/blank field is ignored.
 private fun UserFilter.lineSuits(logLine: LogLine) =
     (allowedLevels.isEmpty() || allowedLevels.contains(logLine.level)) &&
     uid.equalsOrTrueIfNull(logLine.uid) &&
     pid.equalsOrTrueIfNull(logLine.pid) &&
     tid.equalsOrTrueIfNull(logLine.tid) &&
     packageName.equalsOrTrueIfNull(logLine.packageName ?: "") &&
-    tag.equalsOrTrueIfNull(logLine.tag) &&
-    content.containsOrTrueIfNull(logLine.content)
+    tag.matches(logLine.tag) &&
+    content.matches(logLine.content)
 
 private fun String?.equalsOrTrueIfNull(other: String) = if (this == null) true else other == this
-private fun String?.containsOrTrueIfNull(other: String) = if (this ==
-    null
-) {
-    true
-} else {
-    other.contains(this)
-}

@@ -47,7 +47,6 @@
     <string name="error">Ошибка: %s</string>
     <string name="log_levels">Уровни логов</string>
     <string name="tag">Тэг</string>
-    <string name="content_contains">Текст содержит</string>
     <string name="save">Сохранить</string>
     <string name="filters">Фильтры</string>
     <string name="create">Создать</string>

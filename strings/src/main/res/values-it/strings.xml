@@ -47,7 +47,6 @@
     <string name="error">Errore: %s</string>
     <string name="log_levels">Livelli di registro</string>
     <string name="tag">Etichetta</string>
-    <string name="content_contains">Il contenuto contiene</string>
     <string name="save">Salva</string>
     <string name="filters">Filtri</string>
     <string name="create">Crea</string>

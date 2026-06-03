@@ -1,6 +1,7 @@
 package com.f0x1d.logfox.feature.filters.presentation.edit
 
 import android.net.Uri
+import com.f0x1d.logfox.feature.filters.api.model.MatchMode
 import com.f0x1d.logfox.feature.filters.api.model.UserFilter
 
 internal sealed interface EditFilterCommand {
@@ -14,7 +15,9 @@ internal sealed interface EditFilterCommand {
     data class UpdateTid(val tid: String) : EditFilterCommand
     data class UpdatePackageName(val packageName: String) : EditFilterCommand
     data class UpdateTag(val tag: String) : EditFilterCommand
+    data class SetTagMatchMode(val matchMode: MatchMode) : EditFilterCommand
     data class UpdateContent(val content: String) : EditFilterCommand
+    data class SetContentMatchMode(val matchMode: MatchMode) : EditFilterCommand
 
     // Actions
     data object ToggleIncluding : EditFilterCommand

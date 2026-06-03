@@ -4,6 +4,7 @@ import com.f0x1d.logfox.core.tea.ReduceResult
 import com.f0x1d.logfox.core.tea.Reducer
 import com.f0x1d.logfox.core.tea.noSideEffects
 import com.f0x1d.logfox.core.tea.withSideEffects
+import com.f0x1d.logfox.feature.filters.api.model.MatchData
 import com.f0x1d.logfox.feature.filters.presentation.edit.di.EditFilterArgs
 import com.f0x1d.logfox.feature.logging.api.model.LogLevel
 import javax.inject.Inject
@@ -37,8 +38,10 @@ internal class EditFilterReducer @Inject constructor(
                 pid = command.filter.pid,
                 tid = command.filter.tid,
                 packageName = command.filter.packageName,
-                tag = command.filter.tag,
-                content = command.filter.content,
+                tag = command.filter.tag.value,
+                tagMatchMode = command.filter.tag.matchMode,
+                content = command.filter.content.value,
+                contentMatchMode = command.filter.content.matchMode,
                 isDirty = false,
             ).noSideEffects()
         }
@@ -67,8 +70,16 @@ internal class EditFilterReducer @Inject constructor(
             state.copy(tag = command.tag, isDirty = true).noSideEffects()
         }
 
+        is EditFilterCommand.SetTagMatchMode -> {
+            state.copy(tagMatchMode = command.matchMode, isDirty = true).noSideEffects()
+        }
+
         is EditFilterCommand.UpdateContent -> {
             state.copy(content = command.content, isDirty = true).noSideEffects()
+        }
+
+        is EditFilterCommand.SetContentMatchMode -> {
+            state.copy(contentMatchMode = command.matchMode, isDirty = true).noSideEffects()
         }
 
         is EditFilterCommand.ToggleIncluding -> {
@@ -87,22 +98,29 @@ internal class EditFilterReducer @Inject constructor(
         }
 
         is EditFilterCommand.Save -> {
-            state.withSideEffects(
-                EditFilterSideEffect.SaveFilter(
-                    filter = state.filter,
-                    name = state.name,
-                    including = state.including,
-                    enabled = state.enabled,
-                    enabledLogLevels = state.enabledLogLevels.toEnabledLogLevels(),
-                    uid = state.uid,
-                    pid = state.pid,
-                    tid = state.tid,
-                    packageName = state.packageName,
-                    tag = state.tag,
-                    content = state.content,
-                ),
-                EditFilterSideEffect.Close,
-            )
+            val tag = MatchData(value = state.tag, matchMode = state.tagMatchMode)
+            val content = MatchData(value = state.content, matchMode = state.contentMatchMode)
+            // Refuse to save an invalid regex; the UI also blocks the FAB, this is defense in depth.
+            if (tag.isInvalidRegex || content.isInvalidRegex) {
+                state.noSideEffects()
+            } else {
+                state.withSideEffects(
+                    EditFilterSideEffect.SaveFilter(
+                        filter = state.filter,
+                        name = state.name,
+                        including = state.including,
+                        enabled = state.enabled,
+                        enabledLogLevels = state.enabledLogLevels.toEnabledLogLevels(),
+                        uid = state.uid,
+                        pid = state.pid,
+                        tid = state.tid,
+                        packageName = state.packageName,
+                        tag = tag,
+                        content = content,
+                    ),
+                    EditFilterSideEffect.Close,
+                )
+            }
         }
 
         is EditFilterCommand.Export -> {

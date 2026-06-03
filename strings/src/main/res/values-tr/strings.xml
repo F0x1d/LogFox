@@ -47,7 +47,6 @@
     <string name="error">Hata: %s</string>
     <string name="log_levels">Log seviyeleri</string>
     <string name="tag">Tag</string>
-    <string name="content_contains">İçerik şunları içerir</string>
     <string name="save">Kaydet</string>
     <string name="filters">Filtreler</string>
     <string name="create">Kaydet</string>

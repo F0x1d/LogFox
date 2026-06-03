@@ -33,6 +33,8 @@ internal object RoomModule {
             AppDatabase.MIGRATION_9_10,
             AppDatabase.MIGRATION_10_11,
             AppDatabase.MIGRATION_11_12,
+            AppDatabase.MIGRATION_18_19,
+            AppDatabase.MIGRATION_19_20,
         ).build()
 
     @Provides

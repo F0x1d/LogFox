@@ -135,7 +135,7 @@
             app:layout_constraintStart_toStartOf="@id/including_text"
             app:layout_constraintEnd_toEndOf="@id/including_text"
             app:layout_constraintBottom_toBottomOf="parent"
-            tools:text="@string/content_contains" />
+            tools:text="@string/content" />
 
         <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/enabled_box"

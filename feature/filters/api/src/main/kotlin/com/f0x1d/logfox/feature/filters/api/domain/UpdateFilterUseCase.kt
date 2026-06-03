@@ -1,5 +1,6 @@
 package com.f0x1d.logfox.feature.filters.api.domain
 
+import com.f0x1d.logfox.feature.filters.api.model.MatchData
 import com.f0x1d.logfox.feature.filters.api.model.UserFilter
 import com.f0x1d.logfox.feature.logging.api.model.LogLevel
 
@@ -14,7 +15,7 @@ interface UpdateFilterUseCase {
         pid: String?,
         tid: String?,
         packageName: String?,
-        tag: String?,
-        content: String?,
+        tag: MatchData,
+        content: MatchData,
     )
 }

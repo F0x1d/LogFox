@@ -12,6 +12,8 @@ data class UserFilterEntity(
     val tid: String? = null,
     val packageName: String? = null,
     val tag: String? = null,
+    val tagMatchMode: MatchMode = MatchMode.CONTAINS,
     val content: String? = null,
+    val contentMatchMode: MatchMode = MatchMode.CONTAINS,
     val enabled: Boolean = true,
 )

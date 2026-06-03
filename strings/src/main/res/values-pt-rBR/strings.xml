@@ -54,7 +54,6 @@ blacklist: ignored apps
     <string name="error">Erro: %s</string>
     <string name="log_levels">Níveis de registro</string>
     <string name="tag">Etiqueta</string>
-    <string name="content_contains">O conteúdo contém</string>
     <string name="save">Salvar</string>
     <string name="filters">Filtros</string>
     <string name="create">Criar</string>

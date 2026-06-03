@@ -13,7 +13,9 @@ internal fun UserFilterRoomEntity.toData() = UserFilterEntity(
     tid = tid,
     packageName = packageName,
     tag = tag,
+    tagMatchMode = tagMatchMode,
     content = content,
+    contentMatchMode = contentMatchMode,
     enabled = enabled,
 )
 
@@ -27,6 +29,9 @@ internal fun UserFilterEntity.toRoom() = UserFilterRoomEntity(
     tid = tid,
     packageName = packageName,
     tag = tag,
+    tagMatchMode = tagMatchMode,
     content = content,
+    contentMatchMode = contentMatchMode,
     enabled = enabled,
 )
+

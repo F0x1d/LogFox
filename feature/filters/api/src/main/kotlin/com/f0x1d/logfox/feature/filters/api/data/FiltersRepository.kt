@@ -1,5 +1,6 @@
 package com.f0x1d.logfox.feature.filters.api.data
 
+import com.f0x1d.logfox.feature.filters.api.model.MatchData
 import com.f0x1d.logfox.feature.filters.api.model.UserFilter
 import com.f0x1d.logfox.feature.logging.api.model.LogLevel
 import kotlinx.coroutines.flow.Flow
@@ -17,8 +18,8 @@ interface FiltersRepository {
         pid: String?,
         tid: String?,
         packageName: String?,
-        tag: String?,
-        content: String?,
+        tag: MatchData,
+        content: MatchData,
     )
 
     suspend fun createAll(userFilters: List<UserFilter>)
@@ -35,8 +36,8 @@ interface FiltersRepository {
         pid: String?,
         tid: String?,
         packageName: String?,
-        tag: String?,
-        content: String?,
+        tag: MatchData,
+        content: MatchData,
     )
 
     fun getAllAsFlow(): Flow<List<UserFilter>>

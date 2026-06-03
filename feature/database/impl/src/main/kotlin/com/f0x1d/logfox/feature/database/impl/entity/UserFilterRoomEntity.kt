@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverter
+import com.f0x1d.logfox.feature.database.api.entity.MatchMode
 import com.f0x1d.logfox.feature.logging.api.model.LogLevel
 
 @Entity(tableName = "UserFilter")
@@ -16,10 +17,21 @@ internal data class UserFilterRoomEntity(
     @ColumnInfo(name = "tid") val tid: String? = null,
     @ColumnInfo(name = "package_name") val packageName: String? = null,
     @ColumnInfo(name = "tag") val tag: String? = null,
+    @ColumnInfo(name = "tag_match_mode") val tagMatchMode: MatchMode = MatchMode.CONTAINS,
     @ColumnInfo(name = "content") val content: String? = null,
+    @ColumnInfo(name = "content_match_mode") val contentMatchMode: MatchMode = MatchMode.CONTAINS,
     @ColumnInfo(name = "enabled") val enabled: Boolean = true,
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
 )
+
+internal class MatchModeConverter {
+
+    @TypeConverter
+    fun toMatchMode(value: Int): MatchMode = enumValues<MatchMode>()[value]
+
+    @TypeConverter
+    fun fromMatchMode(value: MatchMode): Int = value.ordinal
+}
 
 internal class AllowedLevelsConverter {
 

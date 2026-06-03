@@ -60,7 +60,11 @@
     <string name="pid" translatable="false">PID</string>
     <string name="tid" translatable="false">TID</string>
     <string name="tag">Tag</string>
-    <string name="content_contains">Content contains</string>
+    <string name="invalid_regex">Invalid regex</string>
+    <string name="match_mode">Match mode</string>
+    <string name="match_mode_contains">Contains</string>
+    <string name="match_mode_regex">Regex</string>
+    <string name="match_mode_exact">Exact</string>
     <string name="save">Save</string>
     <string name="filters">Filters</string>
     <string name="create">Create</string>
