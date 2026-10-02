@@ -19,6 +19,7 @@ import com.f0x1d.logfox.feature.terminals.api.base.Terminal
 import com.f0x1d.logfox.feature.terminals.api.base.TerminalType
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -27,7 +28,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
-import java.io.IOException
 import javax.inject.Inject
 
 internal class RecordingsRepositoryImpl @Inject constructor(
@@ -76,22 +76,28 @@ internal class RecordingsRepositoryImpl @Inject constructor(
                     out.write((batch.joinToString("\n") + "\n").encodeToByteArray())
                 }
             }
-        } catch (e: IOException) {
+        } catch (_: TimeoutCancellationException) {
+            // Collection of logs finished!
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
             withContext(mainDispatcher) {
                 context.toast(Strings.error_saving_logs)
             }
             e.printStackTrace()
-        } catch (_: TimeoutCancellationException) {
-            // Collection of logs finished!
         }
 
-        LogRecording(
+        val logRecording = LogRecording(
             title = "${context.getString(
                 Strings.record_file,
             )} ${logRecordingDataSource.count() + 1}",
             dateAndTime = recordingTime,
             file = recordingFile,
-        ).let {
+        )
+
+        if (!recordingFile.exists()) return@withContext logRecording
+
+        logRecording.let {
             it.copy(id = logRecordingDataSource.insert(it.toEntity()))
         }
     }
@@ -104,13 +110,17 @@ internal class RecordingsRepositoryImpl @Inject constructor(
             "${dateTimeFormatter.formatForExport(recordingTime)}.log",
         )
 
-        recordingFile.writeText(
-            lines.joinToString("\n") {
-                logLineFormatterRepository.formatForExport(
-                    logLine = it,
-                )
-            },
-        )
+        val writeResult = runCatching {
+            recordingFile.writeText(
+                lines.joinToString("\n") {
+                    logLineFormatterRepository.formatForExport(
+                        logLine = it,
+                    )
+                },
+            )
+        }
+        writeResult.onFailure { it.printStackTrace() }
+        if (writeResult.isFailure || !recordingFile.exists()) return@withContext
 
         LogRecording(
             title = "${context.getString(

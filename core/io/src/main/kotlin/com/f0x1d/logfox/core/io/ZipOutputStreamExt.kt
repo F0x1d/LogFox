@@ -8,17 +8,22 @@ fun ZipOutputStream.putZipEntry(name: String, content: ByteArray) {
     val entry = ZipEntry(name)
     putNextEntry(entry)
 
-    write(content, 0, content.size)
-    closeEntry()
+    try {
+        write(content, 0, content.size)
+    } finally {
+        runCatching { closeEntry() }
+    }
 }
 
 fun ZipOutputStream.putZipEntry(name: String, file: File) {
     val entry = ZipEntry(name)
     putNextEntry(entry)
 
-    file.inputStream().use {
-        it.copyTo(this)
+    try {
+        file.inputStream().use {
+            it.copyTo(this)
+        }
+    } finally {
+        runCatching { closeEntry() }
     }
-
-    closeEntry()
 }

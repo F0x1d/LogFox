@@ -4,7 +4,6 @@ import com.f0x1d.logfox.feature.filters.api.model.UserFilter
 
 internal data class EditFilterState(
     val filter: UserFilter?,
-    val name: String?,
     val including: Boolean,
     val enabled: Boolean,
     val enabledLogLevels: List<Boolean>,
@@ -14,6 +13,4 @@ internal data class EditFilterState(
     val packageName: String?,
     val tag: String?,
     val content: String?,
-    // Flipped to true by the reducer on any edit; used to confirm before discarding unsaved changes.
-    val isDirty: Boolean = false,
 )

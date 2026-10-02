@@ -29,7 +29,6 @@ internal class EditFilterReducer @Inject constructor(
 
             state.copy(
                 filter = command.filter,
-                name = command.filter.name,
                 including = command.filter.including,
                 enabled = command.filter.enabled,
                 enabledLogLevels = enabledLogLevels,
@@ -39,58 +38,52 @@ internal class EditFilterReducer @Inject constructor(
                 packageName = command.filter.packageName,
                 tag = command.filter.tag,
                 content = command.filter.content,
-                isDirty = false,
             ).noSideEffects()
         }
 
-        is EditFilterCommand.UpdateName -> {
-            state.copy(name = command.name, isDirty = true).noSideEffects()
-        }
-
         is EditFilterCommand.UpdateUid -> {
-            state.copy(uid = command.uid, isDirty = true).noSideEffects()
+            state.copy(uid = command.uid).noSideEffects()
         }
 
         is EditFilterCommand.UpdatePid -> {
-            state.copy(pid = command.pid, isDirty = true).noSideEffects()
+            state.copy(pid = command.pid).noSideEffects()
         }
 
         is EditFilterCommand.UpdateTid -> {
-            state.copy(tid = command.tid, isDirty = true).noSideEffects()
+            state.copy(tid = command.tid).noSideEffects()
         }
 
         is EditFilterCommand.UpdatePackageName -> {
-            state.copy(packageName = command.packageName, isDirty = true).noSideEffects()
+            state.copy(packageName = command.packageName).noSideEffects()
         }
 
         is EditFilterCommand.UpdateTag -> {
-            state.copy(tag = command.tag, isDirty = true).noSideEffects()
+            state.copy(tag = command.tag).noSideEffects()
         }
 
         is EditFilterCommand.UpdateContent -> {
-            state.copy(content = command.content, isDirty = true).noSideEffects()
+            state.copy(content = command.content).noSideEffects()
         }
 
         is EditFilterCommand.ToggleIncluding -> {
-            state.copy(including = !state.including, isDirty = true).noSideEffects()
+            state.copy(including = !state.including).noSideEffects()
         }
 
         is EditFilterCommand.ToggleEnabled -> {
-            state.copy(enabled = !state.enabled, isDirty = true).noSideEffects()
+            state.copy(enabled = !state.enabled).noSideEffects()
         }
 
         is EditFilterCommand.FilterLevel -> {
             val newEnabledLogLevels = state.enabledLogLevels.toMutableList().apply {
                 this[command.which] = command.filtering
             }
-            state.copy(enabledLogLevels = newEnabledLogLevels, isDirty = true).noSideEffects()
+            state.copy(enabledLogLevels = newEnabledLogLevels).noSideEffects()
         }
 
         is EditFilterCommand.Save -> {
             state.withSideEffects(
                 EditFilterSideEffect.SaveFilter(
                     filter = state.filter,
-                    name = state.name,
                     including = state.including,
                     enabled = state.enabled,
                     enabledLogLevels = state.enabledLogLevels.toEnabledLogLevels(),
@@ -116,20 +109,6 @@ internal class EditFilterReducer @Inject constructor(
 
         is EditFilterCommand.SelectApp -> {
             state.withSideEffects(EditFilterSideEffect.NavigateToAppPicker)
-        }
-
-        is EditFilterCommand.AttemptClose -> {
-            state.withSideEffects(
-                if (state.isDirty) {
-                    EditFilterSideEffect.ConfirmDiscard
-                } else {
-                    EditFilterSideEffect.Close
-                },
-            )
-        }
-
-        is EditFilterCommand.AttemptCloseConfirmed -> {
-            state.withSideEffects(EditFilterSideEffect.Close)
         }
     }
 

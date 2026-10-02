@@ -53,35 +53,37 @@ internal class ShizukuTerminal @Inject constructor(
             .tag(context.getString(Strings.app_name))
     }
 
-    override suspend fun isSupported() = suspendCoroutine {
-        when {
-            !Shizuku.pingBinder() -> it.resume(false)
+    override suspend fun isSupported() = runCatching {
+        suspendCoroutine {
+            when {
+                !Shizuku.pingBinder() -> it.resume(false)
 
-            Shizuku.isPreV11() -> it.resume(false)
+                Shizuku.isPreV11() -> it.resume(false)
 
-            Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED -> it.resumeWithServiceBinding()
+                Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED -> it.resumeWithServiceBinding()
 
-            Shizuku.shouldShowRequestPermissionRationale() -> it.resume(false)
+                Shizuku.shouldShowRequestPermissionRationale() -> it.resume(false)
 
-            else -> {
-                val listener = object : Shizuku.OnRequestPermissionResultListener {
-                    override fun onRequestPermissionResult(requestCode: Int, grantResult: Int) {
-                        if (requestCode != SHIZUKU_PERMISSION_REQUEST_ID) return
+                else -> {
+                    val listener = object : Shizuku.OnRequestPermissionResultListener {
+                        override fun onRequestPermissionResult(requestCode: Int, grantResult: Int) {
+                            if (requestCode != SHIZUKU_PERMISSION_REQUEST_ID) return
 
-                        when (grantResult == PackageManager.PERMISSION_GRANTED) {
-                            true -> it.resumeWithServiceBinding()
-                            else -> it.resume(false)
+                            when (grantResult == PackageManager.PERMISSION_GRANTED) {
+                                true -> it.resumeWithServiceBinding()
+                                else -> it.resume(false)
+                            }
+
+                            Shizuku.removeRequestPermissionResultListener(this)
                         }
-
-                        Shizuku.removeRequestPermissionResultListener(this)
                     }
-                }
 
-                Shizuku.addRequestPermissionResultListener(listener)
-                Shizuku.requestPermission(SHIZUKU_PERMISSION_REQUEST_ID)
+                    Shizuku.addRequestPermissionResultListener(listener)
+                    Shizuku.requestPermission(SHIZUKU_PERMISSION_REQUEST_ID)
+                }
             }
         }
-    }
+    }.getOrDefault(false)
 
     private fun Continuation<Boolean>.resumeWithServiceBinding() {
         if (userService != null) {
@@ -123,10 +125,23 @@ internal class ShizukuTerminal @Inject constructor(
     override fun execute(vararg command: String) = userService?.run {
         val processId = execute(command.joinToString(" "))
 
+        val output = processOutput(processId)
+        val error = processError(processId)
+        val input = processInput(processId)
+
+        if (output == null || error == null || input == null) {
+            // Close already obtained descriptors to not leak them
+            runCatching { output?.close() }
+            runCatching { error?.close() }
+            runCatching { input?.close() }
+            destroyProcess(processId)
+            return@run null
+        }
+
         TerminalProcess(
-            output = AutoCloseInputStream(processOutput(processId) ?: return@run null),
-            error = AutoCloseInputStream(processError(processId) ?: return@run null),
-            input = AutoCloseOutputStream(processInput(processId) ?: return@run null),
+            output = AutoCloseInputStream(output),
+            error = AutoCloseInputStream(error),
+            input = AutoCloseOutputStream(input),
         ) {
             destroyProcess(processId)
         }

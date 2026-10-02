@@ -175,6 +175,7 @@ internal class CrashDetailsFragment :
                 val span = log.toSpannable()
                 val highlightColor = requireContext().getColor(Colors.md_theme_primaryContainer)
                 state.searchMatchRanges.forEach { range ->
+                    if (range.first >= span.length || range.last + 1 > span.length) return@forEach
                     span.setSpan(
                         BackgroundColorSpan(highlightColor),
                         range.first,

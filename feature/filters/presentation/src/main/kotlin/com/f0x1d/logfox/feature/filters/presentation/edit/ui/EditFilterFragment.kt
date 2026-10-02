@@ -5,18 +5,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
 import com.f0x1d.logfox.core.tea.BaseStoreFragment
 import com.f0x1d.logfox.core.ui.base.ext.doAfterTextChanged
-import com.f0x1d.logfox.core.ui.dialog.showAreYouSureDialog
-import com.f0x1d.logfox.core.ui.dialog.showEditTextDialog
 import com.f0x1d.logfox.core.ui.icons.Icons
 import com.f0x1d.logfox.core.ui.view.setClickListenerOn
-import com.f0x1d.logfox.core.ui.view.setupBackButton
-import com.f0x1d.logfox.core.ui.view.setupClickableTitle
+import com.f0x1d.logfox.core.ui.view.setupBackButtonForNavController
 import com.f0x1d.logfox.feature.filters.presentation.R
 import com.f0x1d.logfox.feature.filters.presentation.databinding.FragmentEditFilterBinding
 import com.f0x1d.logfox.feature.filters.presentation.edit.EditFilterCommand
@@ -53,22 +49,6 @@ internal class EditFilterFragment :
         uri?.let { send(EditFilterCommand.Export(it)) }
     }
 
-    // Enabled only while the form has unsaved changes; routes system/predictive back through TEA.
-    private val confirmDiscardOnBackPressedCallback = object : OnBackPressedCallback(false) {
-        override fun handleOnBackPressed() {
-            send(EditFilterCommand.AttemptClose)
-        }
-    }
-
-    // Setters that update each field without firing its text-changed callback, so rendering state
-    // back into the form is not mistaken for a user edit (which would mark the form dirty).
-    private lateinit var setUidText: (CharSequence?) -> Unit
-    private lateinit var setPidText: (CharSequence?) -> Unit
-    private lateinit var setTidText: (CharSequence?) -> Unit
-    private lateinit var setPackageNameText: (CharSequence?) -> Unit
-    private lateinit var setTagText: (CharSequence?) -> Unit
-    private lateinit var setContentText: (CharSequence?) -> Unit
-
     override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) = FragmentEditFilterBinding.inflate(inflater, container, false)
 
     override fun FragmentEditFilterBinding.onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -92,20 +72,12 @@ internal class EditFilterFragment :
             }
         }
 
-        toolbar.setupBackButton { send(EditFilterCommand.AttemptClose) }
+        toolbar.setupBackButtonForNavController()
         toolbar.menu.apply {
             setClickListenerOn(R.id.export_item) {
                 exportFilterLauncher.launch("filter.json")
             }
         }
-        toolbar.setupClickableTitle(
-            background = com.f0x1d.logfox.core.ui.view.R.drawable.bg_toolbar_title_clickable,
-        ) { showRenameDialog() }
-
-        requireActivity().onBackPressedDispatcher.addCallback(
-            viewLifecycleOwner,
-            confirmDiscardOnBackPressedCallback,
-        )
 
         includingButton.setOnClickListener {
             send(EditFilterCommand.ToggleIncluding)
@@ -125,32 +97,29 @@ internal class EditFilterFragment :
             send(EditFilterCommand.Save)
         }
 
-        setUidText = uidText.doAfterTextChanged(this@EditFilterFragment) { send(EditFilterCommand.UpdateUid(it?.toString().orEmpty())) }
-        setPidText = pidText.doAfterTextChanged(this@EditFilterFragment) { send(EditFilterCommand.UpdatePid(it?.toString().orEmpty())) }
-        setTidText = tidText.doAfterTextChanged(this@EditFilterFragment) { send(EditFilterCommand.UpdateTid(it?.toString().orEmpty())) }
-        setPackageNameText = packageNameText.doAfterTextChanged(this@EditFilterFragment) {
+        uidText.doAfterTextChanged(this@EditFilterFragment) { send(EditFilterCommand.UpdateUid(it?.toString().orEmpty())) }
+        pidText.doAfterTextChanged(this@EditFilterFragment) { send(EditFilterCommand.UpdatePid(it?.toString().orEmpty())) }
+        tidText.doAfterTextChanged(this@EditFilterFragment) { send(EditFilterCommand.UpdateTid(it?.toString().orEmpty())) }
+        packageNameText.doAfterTextChanged(this@EditFilterFragment) {
             send(EditFilterCommand.UpdatePackageName(it?.toString().orEmpty()))
         }
-        setTagText = tagText.doAfterTextChanged(this@EditFilterFragment) { send(EditFilterCommand.UpdateTag(it?.toString().orEmpty())) }
-        setContentText = contentText.doAfterTextChanged(this@EditFilterFragment) {
+        tagText.doAfterTextChanged(this@EditFilterFragment) { send(EditFilterCommand.UpdateTag(it?.toString().orEmpty())) }
+        contentText.doAfterTextChanged(this@EditFilterFragment) {
             send(EditFilterCommand.UpdateContent(it?.toString().orEmpty()))
         }
     }
 
     override fun render(state: EditFilterViewState) {
-        confirmDiscardOnBackPressedCallback.isEnabled = state.isDirty
-
         binding.apply {
             updateIncludingButton(state.including)
             updateEnabledButton(state.enabled)
-            updateTitle(state.name)
 
-            setTextIfDifferent(uidText, state.uid.orEmpty(), setUidText)
-            setTextIfDifferent(pidText, state.pid.orEmpty(), setPidText)
-            setTextIfDifferent(tidText, state.tid.orEmpty(), setTidText)
-            setTextIfDifferent(packageNameText, state.packageName.orEmpty(), setPackageNameText)
-            setTextIfDifferent(tagText, state.tag.orEmpty(), setTagText)
-            setTextIfDifferent(contentText, state.content.orEmpty(), setContentText)
+            setTextIfDifferent(uidText, state.uid.orEmpty())
+            setTextIfDifferent(pidText, state.pid.orEmpty())
+            setTextIfDifferent(tidText, state.tid.orEmpty())
+            setTextIfDifferent(packageNameText, state.packageName.orEmpty())
+            setTextIfDifferent(tagText, state.tag.orEmpty())
+            setTextIfDifferent(contentText, state.content.orEmpty())
 
             toolbar.menu.findItem(R.id.export_item).isVisible = state.filter != null
         }
@@ -166,32 +135,9 @@ internal class EditFilterFragment :
                 findNavController().popBackStack()
             }
 
-            is EditFilterSideEffect.ConfirmDiscard -> {
-                showAreYouSureDialog(
-                    title = Strings.discard_changes,
-                    message = Strings.discard_changes_message,
-                ) {
-                    send(EditFilterCommand.AttemptCloseConfirmed)
-                }
-            }
-
             // Business logic side effects are handled by EffectHandler
             else -> Unit
         }
-    }
-
-    private fun FragmentEditFilterBinding.updateTitle(name: String?) = toolbar.run {
-        title = name ?: getString(Strings.filter_name_hint)
-        setTitleTextColor(
-            MaterialColors.getColor(
-                this,
-                if (name == null) {
-                    android.R.attr.textColorHint
-                } else {
-                    com.google.android.material.R.attr.colorOnSurface
-                },
-            ),
-        )
     }
 
     private fun FragmentEditFilterBinding.updateIncludingButton(including: Boolean) = includingButton.run {
@@ -236,15 +182,6 @@ internal class EditFilterFragment :
         setText(if (enabled) Strings.enabled else Strings.disabled)
     }
 
-    private fun showRenameDialog() = requireContext().showEditTextDialog(
-        title = getString(Strings.rename_filter),
-        initialText = viewModel.state.value.name,
-        setupViews = { it.textLayout.setHint(Strings.filter_name) },
-        setupDialog = { setIcon(Icons.ic_dialog_text_fields) },
-    ) { newName ->
-        send(EditFilterCommand.UpdateName(newName.orEmpty()))
-    }
-
     private fun showFilterDialog() {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(Strings.log_levels)
@@ -259,15 +196,9 @@ internal class EditFilterFragment :
             .show()
     }
 
-    // Updates the field only when the value actually changed, via the watcher-suppressing setter so a
-    // render doesn't register as a user edit. The guard also avoids needlessly moving the cursor.
-    private fun setTextIfDifferent(
-        textView: android.widget.EditText,
-        text: String,
-        setText: (CharSequence?) -> Unit,
-    ) {
+    private fun setTextIfDifferent(textView: android.widget.EditText, text: String) {
         if (textView.text.toString() != text) {
-            setText(text)
+            textView.setText(text)
         }
     }
 }

@@ -22,9 +22,11 @@ import com.f0x1d.logfox.feature.terminals.api.exception.TerminalNotSupportedExce
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
@@ -51,7 +53,11 @@ internal class LoggingServiceEffectHandler @Inject constructor(
     @DefaultDispatcher private val defaultDispatcher: CoroutineDispatcher,
 ) : EffectHandler<LoggingServiceSideEffect, LoggingServiceCommand> {
 
-    private val effectScope = CoroutineScope(defaultDispatcher + SupervisorJob())
+    private val effectScope = CoroutineScope(
+        defaultDispatcher + SupervisorJob() + CoroutineExceptionHandler { _, e ->
+            Timber.e(e, "Unhandled effect scope error")
+        },
+    )
 
     private var logCollectionJob: Job? = null
     private var logUpdatesJob: Job? = null
@@ -89,10 +95,16 @@ internal class LoggingServiceEffectHandler @Inject constructor(
                             )
                         }
                     }.collect { logLine ->
-                        withContext(defaultDispatcher) {
-                            addLogLineUseCase(logLine)
-                            processLogLineCrashesUseCase(logLine)
-                            processLogLineRecordingUseCase(logLine)
+                        try {
+                            withContext(defaultDispatcher) {
+                                addLogLineUseCase(logLine)
+                                processLogLineCrashesUseCase(logLine)
+                                processLogLineRecordingUseCase(logLine)
+                            }
+                        } catch (e: CancellationException) {
+                            throw e
+                        } catch (e: Throwable) {
+                            Timber.e(e, "Failed to process log line")
                         }
                     }
 
@@ -189,6 +201,7 @@ internal class LoggingServiceEffectHandler @Inject constructor(
     }
 
     override fun close() {
+        effectScope.cancel()
         logCollectionJob?.cancel()
         logCollectionJob = null
         logUpdatesJob?.cancel()

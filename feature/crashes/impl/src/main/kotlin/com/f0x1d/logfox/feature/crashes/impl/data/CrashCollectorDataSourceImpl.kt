@@ -38,10 +38,18 @@ internal class CrashCollectorDataSourceImpl @Inject constructor(
 
         val crashLog = logLines.joinToString(separator = "\n") { it.originalContent }
 
-        val logFile = withContext(ioDispatcher) {
-            File(logsDir, "${appCrash.dateAndTime}-crash.log").apply {
-                writeText(crashLog)
-            }
+        val collecting = crashesSettingsRepository.collectingFor(appCrash.crashType.name)
+
+        val logFile = if (collecting) {
+            withContext(ioDispatcher) {
+                runCatching {
+                    File(logsDir, "${appCrash.dateAndTime}-crash.log").apply {
+                        writeText(crashLog)
+                    }
+                }.onFailure { it.printStackTrace() }.getOrNull()
+            } ?: return
+        } else {
+            null
         }
 
         val crashWithLog = appCrash.copy(
@@ -49,8 +57,13 @@ internal class CrashCollectorDataSourceImpl @Inject constructor(
             logDumpFile = null, // TODO: return log dumps!
         )
 
-        val finalCrash = if (crashesSettingsRepository.collectingFor(crashWithLog.crashType.name)) {
-            crashWithLog.copy(id = crashesRepository.insert(crashWithLog))
+        val finalCrash = if (collecting) {
+            runCatching {
+                crashWithLog.copy(id = crashesRepository.insert(crashWithLog))
+            }.onFailure { e ->
+                e.printStackTrace()
+                logFile?.delete()
+            }.getOrDefault(crashWithLog)
         } else {
             crashWithLog
         }

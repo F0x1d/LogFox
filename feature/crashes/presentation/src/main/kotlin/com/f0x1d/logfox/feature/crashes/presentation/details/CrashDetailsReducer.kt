@@ -172,16 +172,17 @@ internal class CrashDetailsReducer @Inject constructor() : Reducer<CrashDetailsS
         is CrashDetailsCommand.SearchInLog -> {
             val query = command.query
             val crashLog = state.crashLog.orEmpty()
-            val ranges = if (query.isNotEmpty()) {
-                val lowerLog = crashLog.lowercase(java.util.Locale.ENGLISH)
-                val lowerQuery = query.lowercase(java.util.Locale.ENGLISH)
+            val ranges = if (query.isNotEmpty() && query.length <= crashLog.length) {
+                // match on the original string: lowercasing can change its length
                 buildList {
                     var index = 0
-                    while (true) {
-                        index = lowerLog.indexOf(lowerQuery, index)
-                        if (index == -1) break
-                        add(index until index + lowerQuery.length)
-                        index += lowerQuery.length
+                    while (index <= crashLog.length - query.length) {
+                        if (crashLog.regionMatches(index, query, 0, query.length, ignoreCase = true)) {
+                            add(index until index + query.length)
+                            index += query.length
+                        } else {
+                            index++
+                        }
                     }
                 }
             } else {

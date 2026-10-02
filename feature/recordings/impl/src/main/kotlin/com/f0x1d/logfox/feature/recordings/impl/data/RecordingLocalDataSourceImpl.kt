@@ -54,8 +54,8 @@ internal class RecordingLocalDataSourceImpl @Inject constructor(
     private val state = MutableStateFlow(RecordingState.IDLE)
     override val recordingState: StateFlow<RecordingState> = state
 
-    private var recordingTime = 0L
-    private var recordingFile: File? = null
+    @Volatile private var recordingTime = 0L
+    @Volatile private var recordingFile: File? = null
     private val fileMutex = Mutex()
 
     private val recordedLines = mutableListOf<LogLine>()
@@ -106,24 +106,32 @@ internal class RecordingLocalDataSourceImpl @Inject constructor(
     }
 
     override suspend fun end(): LogRecording? = withContext(ioDispatcher) {
-        state.update { RecordingState.SAVING }
+        val claimedEnd = state.compareAndSet(RecordingState.RECORDING, RecordingState.SAVING) ||
+            state.compareAndSet(RecordingState.PAUSED, RecordingState.SAVING)
+        if (!claimedEnd) return@withContext null
+
         stopFiltersCollection()
-        dumpLines()
-        notificationsLocalDataSource.cancelRecordingNotification()
 
-        val file = recordingFile ?: return@withContext null
+        try {
+            dumpLines()
+            notificationsLocalDataSource.cancelRecordingNotification()
 
-        val logRecording = LogRecording(
-            title = "${context.getString(Strings.record_file)} ${logRecordingDataSource.count() + 1}",
-            dateAndTime = recordingTime,
-            file = file,
-        ).let {
-            it.copy(id = logRecordingDataSource.insert(it.toEntity()))
+            val file = fileMutex.withLock {
+                val current = recordingFile
+                recordingFile = null
+                current
+            } ?: return@withContext null
+
+            LogRecording(
+                title = "${context.getString(Strings.record_file)} ${logRecordingDataSource.count() + 1}",
+                dateAndTime = recordingTime,
+                file = file,
+            ).let {
+                it.copy(id = logRecordingDataSource.insert(it.toEntity()))
+            }
+        } finally {
+            state.update { RecordingState.IDLE }
         }
-
-        state.update { RecordingState.IDLE }
-
-        return@withContext logRecording
     }
 
     override suspend fun loggingStopped(): Unit = withContext(ioDispatcher) {
@@ -166,7 +174,11 @@ internal class RecordingLocalDataSourceImpl @Inject constructor(
 
         if (content.isNotEmpty()) {
             fileMutex.withLock {
-                recordingFile?.appendText(content + "\n")
+                runCatching {
+                    recordingFile?.appendText(content + "\n")
+                }.onFailure { e ->
+                    e.printStackTrace()
+                }
             }
         }
     }

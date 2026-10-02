@@ -101,6 +101,9 @@ internal class LoggingRepositoryImpl @Inject constructor(
             }
         } finally {
             Timber.d("Destroying process")
+            runCatching { process.output.close() }
+            runCatching { process.error.close() }
+            runCatching { process.input.close() }
             runCatching {
                 process.destroy()
             }

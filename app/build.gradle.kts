@@ -16,14 +16,42 @@ android {
             .environmentVariable("VERSION_CODE")
             .orNull
             ?.toIntOrNull()
-            ?: Int.MAX_VALUE
+            ?: 80
         versionName = providers
             .environmentVariable("VERSION_NAME")
-            .getOrElse("unknown")
+            .getOrElse("2.1.10")
     }
 
     buildFeatures {
         viewBinding = true
+    }
+
+    signingConfigs {
+        create("release") {
+            val storeFilePath = providers.environmentVariable("KEYSTORE_FILE").orNull
+            if (storeFilePath != null) {
+                storeFile = file(storeFilePath)
+                storePassword = providers.environmentVariable("KEYSTORE_PASSWORD").getOrElse("")
+                keyAlias = providers.environmentVariable("KEY_ALIAS").getOrElse("")
+                keyPassword = providers.environmentVariable("KEY_PASSWORD").getOrElse("")
+            } else {
+                // Fall back to the debug keystore so a local release build is installable
+                val debugKeystore = File(System.getProperty("user.home"), ".android/debug.keystore")
+                if (debugKeystore.exists()) {
+                    storeFile = debugKeystore
+                    storePassword = "android"
+                    keyAlias = "androiddebugkey"
+                    keyPassword = "android"
+                }
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            isMinifyEnabled = false
+            signingConfig = signingConfigs.getByName("release")
+        }
     }
 }
 

@@ -10,7 +10,6 @@ import org.gradle.kotlin.dsl.getByType
 internal val Project.libs get() = extensions.getByType<VersionCatalogsExtension>().named("libs")
 
 internal fun Project.version(alias: String): Int = libs.findVersion(alias).get().requiredVersion.toInt()
-internal fun Project.versionString(alias: String): String = libs.findVersion(alias).get().requiredVersion
 internal fun Project.pluginId(alias: String): String = libs.findPlugin(alias).get().get().pluginId
 internal fun Project.library(alias: String): Provider<MinimalExternalModuleDependency> = libs.findLibrary(alias).get()
 internal fun Project.bundle(alias: String): Provider<ExternalModuleDependencyBundle> = libs.findBundle(alias).get()

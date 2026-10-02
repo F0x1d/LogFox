@@ -17,8 +17,7 @@ internal class ExecuteGrantViaRootUseCaseImpl @Inject constructor(
         get() = arrayOf("pm", "grant", context.packageName, Manifest.permission.READ_LOGS)
 
     override suspend fun invoke(): Boolean = if (rootTerminal.isSupported()) {
-        rootTerminal.executeNow(*grantCommand)
-        true
+        rootTerminal.executeNow(*grantCommand).isSuccessful
     } else {
         false
     }

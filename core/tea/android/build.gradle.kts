@@ -21,4 +21,5 @@ dependencies {
 
     implementation(projects.core.ui.base)
     implementation(libs.androidx.compose.runtime)
+    implementation(libs.timber)
 }

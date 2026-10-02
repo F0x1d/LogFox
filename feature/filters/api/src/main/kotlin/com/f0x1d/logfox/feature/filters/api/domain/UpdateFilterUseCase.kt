@@ -6,7 +6,6 @@ import com.f0x1d.logfox.feature.logging.api.model.LogLevel
 interface UpdateFilterUseCase {
     suspend operator fun invoke(
         userFilter: UserFilter,
-        name: String?,
         including: Boolean,
         enabled: Boolean,
         enabledLogLevels: List<LogLevel>,

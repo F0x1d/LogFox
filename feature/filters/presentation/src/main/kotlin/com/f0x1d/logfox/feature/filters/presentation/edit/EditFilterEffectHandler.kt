@@ -35,7 +35,6 @@ internal class EditFilterEffectHandler @Inject constructor(
             is EditFilterSideEffect.SaveFilter -> {
                 if (effect.filter == null) {
                     createFilterUseCase(
-                        name = effect.name,
                         including = effect.including,
                         enabled = effect.enabled,
                         enabledLogLevels = effect.enabledLogLevels,
@@ -49,7 +48,6 @@ internal class EditFilterEffectHandler @Inject constructor(
                 } else {
                     updateFilterUseCase(
                         userFilter = effect.filter,
-                        name = effect.name,
                         including = effect.including,
                         enabled = effect.enabled,
                         enabledLogLevels = effect.enabledLogLevels,
@@ -70,7 +68,6 @@ internal class EditFilterEffectHandler @Inject constructor(
             // UI side effects - handled by Fragment
             is EditFilterSideEffect.NavigateToAppPicker -> Unit
             is EditFilterSideEffect.Close -> Unit
-            is EditFilterSideEffect.ConfirmDiscard -> Unit
         }
     }
 }

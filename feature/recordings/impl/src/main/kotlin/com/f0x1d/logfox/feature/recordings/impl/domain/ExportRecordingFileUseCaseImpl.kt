@@ -14,8 +14,9 @@ internal class ExportRecordingFileUseCaseImpl @Inject constructor(
     private val getIncludeDeviceInfoInArchivesUseCase: GetIncludeDeviceInfoInArchivesUseCase,
 ) : ExportRecordingFileUseCase {
 
-    override suspend fun invoke(recordingId: Long, uri: Uri) {
-        val recording = recordingsRepository.getById(recordingId) ?: return
+    override suspend fun invoke(recordingId: Long, uri: Uri) = runCatching {
+        val recording = recordingsRepository.getById(recordingId) ?: return@runCatching
+        if (!recording.file.exists()) return@runCatching
 
         if (getIncludeDeviceInfoInArchivesUseCase()) {
             val prefix = deviceData + "\n\n"

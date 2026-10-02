@@ -9,7 +9,6 @@ internal sealed interface EditFilterSideEffect {
     data class LoadFilter(val filterId: Long?) : EditFilterSideEffect
     data class SaveFilter(
         val filter: UserFilter?,
-        val name: String?,
         val including: Boolean,
         val enabled: Boolean,
         val enabledLogLevels: List<LogLevel>,
@@ -25,5 +24,4 @@ internal sealed interface EditFilterSideEffect {
     // UI side effects - handled by Fragment
     data object NavigateToAppPicker : EditFilterSideEffect
     data object Close : EditFilterSideEffect
-    data object ConfirmDiscard : EditFilterSideEffect
 }

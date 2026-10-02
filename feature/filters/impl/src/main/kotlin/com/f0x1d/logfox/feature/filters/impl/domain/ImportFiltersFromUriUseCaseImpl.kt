@@ -17,10 +17,22 @@ internal class ImportFiltersFromUriUseCaseImpl @Inject constructor(
 
     override suspend fun invoke(uri: Uri): Result<Unit> = runCatching {
         val content = exportRepository.readContentFromUri(uri) ?: return@runCatching
-        val filters = gson.fromJson<List<UserFilter>>(
+        val filters: List<UserFilter>? = gson.fromJson(
             content,
             object : TypeToken<List<UserFilter>>() {}.type,
         )
-        createAllFiltersUseCase(filters)
+
+        createAllFiltersUseCase(
+            filters.orEmpty()
+                .filterNotNull()
+                .map { filter ->
+                    // json may contain unknown levels or foreign ids/enabled fields
+                    filter.copy(
+                        id = 0,
+                        enabled = true,
+                        allowedLevels = filter.allowedLevels.orEmpty().filterNotNull(),
+                    )
+                },
+        )
     }
 }

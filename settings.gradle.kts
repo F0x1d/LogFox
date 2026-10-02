@@ -26,8 +26,8 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 include(":app")
 include(":strings")
 
-includeRecursive(File(rootDir, "core"))
-includeRecursive(File(rootDir, "feature"))
+includeRecursive(File("core"))
+includeRecursive(File("feature"))
 
 private fun includeRecursive(
     directory: File,

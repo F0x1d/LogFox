@@ -15,11 +15,6 @@
     <string name="start_on_boot">Start on boot</string>
     <string name="filter">Filter</string>
     <string name="create_filter">Create filter</string>
-    <string name="filter_name_hint">Untitled filter</string>
-    <string name="filter_name">Filter name</string>
-    <string name="rename_filter">Rename filter</string>
-    <string name="discard_changes">Discard changes?</string>
-    <string name="discard_changes_message">Your unsaved changes will be lost.</string>
     <string name="about_app">About app</string>
     <string name="root" translatable="false">Root</string>
     <string name="adb" translatable="false">ADB</string>

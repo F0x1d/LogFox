@@ -26,12 +26,14 @@ class TimberFileTree @Inject constructor(
 
     init {
         scope.launch {
-            logsFile.writeText("")
+            runCatching { logsFile.writeText("") }
 
             for (value in channel) {
-                logsFile.appendText(
-                    text = value + "\n",
-                )
+                runCatching {
+                    logsFile.appendText(
+                        text = value + "\n",
+                    )
+                }
             }
         }
     }

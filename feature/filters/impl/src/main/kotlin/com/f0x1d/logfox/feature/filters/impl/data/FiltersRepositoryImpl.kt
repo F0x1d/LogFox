@@ -26,7 +26,6 @@ internal class FiltersRepositoryImpl @Inject constructor(
         .flowOn(ioDispatcher)
 
     override suspend fun create(
-        name: String?,
         including: Boolean,
         enabled: Boolean,
         enabledLogLevels: List<LogLevel>,
@@ -39,16 +38,15 @@ internal class FiltersRepositoryImpl @Inject constructor(
     ) = createAll(
         listOf(
             UserFilter(
-                name = name?.nullIfBlank(),
                 including = including,
                 enabled = enabled,
                 allowedLevels = enabledLogLevels,
-                uid = uid?.nullIfBlank(),
-                pid = pid?.nullIfBlank(),
-                tid = tid?.nullIfBlank(),
-                packageName = packageName?.nullIfBlank(),
-                tag = tag?.nullIfBlank(),
-                content = content?.nullIfBlank(),
+                uid = uid?.nullIfEmpty(),
+                pid = pid?.nullIfEmpty(),
+                tid = tid?.nullIfEmpty(),
+                packageName = packageName?.nullIfEmpty(),
+                tag = tag?.nullIfEmpty(),
+                content = content?.nullIfEmpty(),
             ),
         ),
     )
@@ -63,7 +61,6 @@ internal class FiltersRepositoryImpl @Inject constructor(
 
     override suspend fun update(
         userFilter: UserFilter,
-        name: String?,
         including: Boolean,
         enabled: Boolean,
         enabledLogLevels: List<LogLevel>,
@@ -75,16 +72,15 @@ internal class FiltersRepositoryImpl @Inject constructor(
         content: String?,
     ) = update {
         userFilter.copy(
-            name = name?.nullIfBlank(),
             including = including,
             enabled = enabled,
             allowedLevels = enabledLogLevels,
-            uid = uid?.nullIfBlank(),
-            pid = pid?.nullIfBlank(),
-            tid = tid?.nullIfBlank(),
-            packageName = packageName?.nullIfBlank(),
-            tag = tag?.nullIfBlank(),
-            content = content?.nullIfBlank(),
+            uid = uid?.nullIfEmpty(),
+            pid = pid?.nullIfEmpty(),
+            tid = tid?.nullIfEmpty(),
+            packageName = packageName?.nullIfEmpty(),
+            tag = tag?.nullIfEmpty(),
+            content = content?.nullIfEmpty(),
         )
     }
 
@@ -119,5 +115,5 @@ internal class FiltersRepositoryImpl @Inject constructor(
         userFilterDataSource.deleteAll()
     }
 
-    private fun String.nullIfBlank() = takeIf { it.isNotBlank() }
+    private fun String.nullIfEmpty() = ifEmpty { null }
 }

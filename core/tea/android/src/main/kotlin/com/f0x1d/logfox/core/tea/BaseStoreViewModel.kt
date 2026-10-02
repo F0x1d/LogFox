@@ -2,6 +2,7 @@ package com.f0x1d.logfox.core.tea
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -12,6 +13,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 abstract class BaseStoreViewModel<ViewState, State, Command, SideEffect>(
     initialState: State,
@@ -43,10 +45,16 @@ abstract class BaseStoreViewModel<ViewState, State, Command, SideEffect>(
         initialSideEffects.forEach { effect ->
             effectHandlers.forEach { handler ->
                 viewModelScope.launch {
-                    handler.handle(effect) { cmd ->
-                        withContext(Dispatchers.Main.immediate) {
-                            send(cmd)
+                    try {
+                        handler.handle(effect) { cmd ->
+                            withContext(Dispatchers.Main.immediate) {
+                                send(cmd)
+                            }
                         }
+                    } catch (e: CancellationException) {
+                        throw e
+                    } catch (e: Throwable) {
+                        Timber.e(e, "Initial side effect failed: $effect")
                     }
                 }
             }

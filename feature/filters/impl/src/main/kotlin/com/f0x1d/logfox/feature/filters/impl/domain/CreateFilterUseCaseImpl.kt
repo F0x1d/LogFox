@@ -9,7 +9,6 @@ internal class CreateFilterUseCaseImpl @Inject constructor(
     private val filtersRepository: FiltersRepository,
 ) : CreateFilterUseCase {
     override suspend fun invoke(
-        name: String?,
         including: Boolean,
         enabled: Boolean,
         enabledLogLevels: List<LogLevel>,
@@ -20,7 +19,6 @@ internal class CreateFilterUseCaseImpl @Inject constructor(
         tag: String?,
         content: String?,
     ) = filtersRepository.create(
-        name = name,
         including = including,
         enabled = enabled,
         enabledLogLevels = enabledLogLevels,

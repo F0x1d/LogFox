@@ -8,7 +8,6 @@ import com.f0x1d.logfox.feature.logging.api.model.LogLevel
 
 @Entity(tableName = "UserFilter")
 internal data class UserFilterRoomEntity(
-    @ColumnInfo(name = "name") val name: String? = null,
     @ColumnInfo(name = "including") val including: Boolean = true,
     @ColumnInfo(name = "allowed_levels") val allowedLevels: List<LogLevel> = emptyList(),
     @ColumnInfo(name = "uid") val uid: String? = null,
@@ -27,8 +26,10 @@ internal class AllowedLevelsConverter {
     fun toAllowedLevels(data: String): List<LogLevel> = when (data.isEmpty()) {
         true -> emptyList()
 
-        else -> data.split(",").map {
-            enumValues<LogLevel>()[it.toInt()]
+        else -> data.split(",").mapNotNull { token ->
+            token.toIntOrNull()?.let { ordinal ->
+                enumValues<LogLevel>().getOrNull(ordinal)
+            }
         }
     }
 

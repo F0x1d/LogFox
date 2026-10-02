@@ -1,6 +1,8 @@
 package com.f0x1d.logfox.core.tea
 
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
@@ -36,15 +38,23 @@ class Store<State, Command, SideEffect>(
 
             effectHandlers.forEach { handler ->
                 val jobId = UUID.randomUUID().toString()
-                val job = scope.launch {
-                    handler.handle(sideEffect) { cmd ->
-                        withContext(Dispatchers.Main) {
-                            send(cmd)
+                val job = scope.launch(start = CoroutineStart.LAZY) {
+                    try {
+                        handler.handle(sideEffect) { cmd ->
+                            withContext(Dispatchers.Main) {
+                                send(cmd)
+                            }
                         }
+                    } catch (e: CancellationException) {
+                        throw e
+                    } catch (e: Throwable) {
+                        e.printStackTrace()
+                    } finally {
+                        jobs.remove(jobId)
                     }
-                    jobs.remove(jobId)
                 }
                 jobs[jobId] = job
+                job.start()
             }
         }
     }

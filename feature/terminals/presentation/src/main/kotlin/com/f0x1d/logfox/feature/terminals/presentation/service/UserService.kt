@@ -16,8 +16,11 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeoutOrNull
 import java.io.InputStream
 import java.io.OutputStream
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.atomic.AtomicLong
 import kotlin.system.exitProcess
 
 class UserService() : IUserService.Stub() {
@@ -25,8 +28,8 @@ class UserService() : IUserService.Stub() {
     private val serviceScopeJob = SupervisorJob()
     private val serviceScope = CoroutineScope(Dispatchers.IO + serviceScopeJob)
 
-    private var latestId = 0L
-    private val currentProcesses = HashMap<Long, Process>()
+    private val latestId = AtomicLong()
+    private val currentProcesses = ConcurrentHashMap<Long, Process>()
 
     // Needed for shizuku v13
     @Suppress("UNUSED_PARAMETER")
@@ -34,11 +37,15 @@ class UserService() : IUserService.Stub() {
     constructor(context: Context) : this()
 
     override fun destroy() {
-        serviceScope.cancel()
-        runBlocking { serviceScopeJob.join() }
-
+        // Destroy processes first: closes streams so pipe-copy coroutines can finish
         currentProcesses.values.forEach { process ->
             process.tryDestroy()
+        }
+        currentProcesses.clear()
+
+        serviceScope.cancel()
+        runBlocking {
+            withTimeoutOrNull(PROCESS_JOIN_TIMEOUT_MS) { serviceScopeJob.join() }
         }
 
         exitProcess(0)
@@ -63,7 +70,7 @@ class UserService() : IUserService.Stub() {
     }
 
     override fun execute(command: String?): Long {
-        val processId = latestId++
+        val processId = latestId.incrementAndGet()
 
         val process = Runtime.getRuntime().exec(command)
         currentProcesses[processId] = process
@@ -140,5 +147,9 @@ class UserService() : IUserService.Stub() {
 
     private fun Process.tryDestroy() = runCatching {
         destroy()
+    }
+
+    private companion object {
+        private const val PROCESS_JOIN_TIMEOUT_MS = 1_000L
     }
 }

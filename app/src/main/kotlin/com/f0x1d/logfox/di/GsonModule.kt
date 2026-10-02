@@ -24,5 +24,11 @@ object GsonModule {
                 override fun shouldSkipClass(clazz: Class<*>?) = false
             },
         )
+        .addDeserializationExclusionStrategy(
+            object : ExclusionStrategy {
+                override fun shouldSkipField(f: FieldAttributes) = f.getAnnotation(GsonSkip::class.java) != null
+                override fun shouldSkipClass(clazz: Class<*>?) = false
+            },
+        )
         .create()
 }
