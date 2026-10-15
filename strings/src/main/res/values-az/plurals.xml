@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="selected_count">
+        <item quantity="one">%d element seçilib</item>
+        <item quantity="other">%d element seçilib</item>
+    </plurals>
+    <plurals name="filters_count">
+        <item quantity="one">%d filtr</item>
+        <item quantity="other">%d filtr</item>
+    </plurals>
+</resources>
